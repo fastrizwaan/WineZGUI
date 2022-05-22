@@ -1,27 +1,73 @@
 #!/bin/bash
 
 if [ $# -eq 0 ];  then
-echo "Usage:"
-echo "$0 install"
-echo "$0 uninstall"
+  echo "Usage:"
+  echo "$0 install"
+  echo "$0 uninstall"
+  echo ""
+  echo "Examples:"
+  echo "$0 install --prefix=/usr/local"
+  echo "$0 install --flatpak --prefix=/app"
 exit
 fi
 
+# parse command line arguments
+for i in "$@"
+do
+case $i in
+    -p=*|--prefix=*)
+    INSTALL_PREFIX="${i#*=}"
+    ;;
+    --flatpak)
+    FLATPAK="true"
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+
+if [ -z "${INSTALL_PREFIX}" ]; then
+   INSTALL_PREFIX="/usr"
+fi
+
+if [ "${FLATPAK}" = "true" ]; then
+     echo setting prefix and paths for flatpak
+     INSTALL_PREFIX="/app"
+fi     
+##
+
 if [ "$1" = "install" ]; then
-  install -Dm644 ./assets/winezgui.svg       /usr/share/icons/hicolor/scalable/apps/
-  install -Dm644 ./assets/winezgui.desktop   /usr/share/applications/
-  install -Dm755 ./bin/winezgui              /usr/bin/
-  install -Dm755 ./bin/winezgui-create-prefix /usr/bin/
+  mkdir -p ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/
+  mkdir -p ${INSTALL_PREFIX}/share/applications/
+  mkdir -p ${INSTALL_PREFIX}/bin/
+  
+  install -Dvm644 ./assets/winezgui.svg        ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/
+  install -Dvm644 ./assets/winezgui.desktop    ${INSTALL_PREFIX}/share/applications/
+  install -Dvm755 ./bin/winezgui               ${INSTALL_PREFIX}/bin/
+  install -Dvm755 ./bin/winezgui-create-prefix ${INSTALL_PREFIX}/bin/
+  
+echo "
+rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
+rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop
+rm -vf ${INSTALL_PREFIX}/bin/winezgui
+rm -vf ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+"> ./uninstall
 
 elif [ "$1" = "uninstall" ]; then
-  rm /usr/share/icons/hicolor/scalable/apps/winezgui.svg
-  rm /usr/share/applications/winezgui.desktop
-  rm /usr/bin/winezgui
-  rm /usr/bin/winezgui-create-prefix
+ if [ -f ./uninstall ]; then
+    sh ./uninstall
+    rm ./uninstall
+ else
+    echo "not installed"
+ fi
 
 else
   echo "Usage:"
   echo "$0 install"
   echo "$0 uninstall"
-
+  echo ""
+  echo "Examples:"
+  echo "$0 install --prefix=/usr/local"
+  echo "$0 install --flatpak --prefix=/app"
 fi
