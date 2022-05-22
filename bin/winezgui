@@ -1,0 +1,182 @@
+#!/bin/bash
+
+# On 1st launch create default wine prefix
+export APPNAME=WineZGUI
+export WINEVER=$(wine --version|cut -f1 -d ' ')
+export WINEZGUIPREFIX=~/.local/share/winezgui
+export WINEPREFIX=${WINEZGUIPREFIX}/default
+export WINEARCH=win64
+#export WINEDLLOVERRIDES="mscoree,mshtml="
+export LD_LIBRARY_PATH=/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
+export PATH=$PATH:$(pwd)
+
+export ARGV="$@"
+#export WINEEXE="flatpak run org.winehq.Wine"
+export WINEEXE="/usr/bin/wine"
+export WINETRICKS="/usr/bin/winetricks"
+#export WINETRICKS="WINEPREFIX=${WINEPREFIX} flatpak run --command=winetricks org.winehq.Wine"
+
+
+# some games need to cd to the dir to work
+export base=$(basename "$1")
+export dire=$(dirname  "$1")
+
+#echo $base >> ~/Documents/debug.txt
+#echo $dire >> ~/Documents/debug.txt
+# Create kill shortcut for convenience
+mkdir -p "${WINEPREFIX}"
+
+
+   # sandboxify by rm links to user's ~/Documents ~/Downloads ~/Videos etc.
+   # to prevent games/programs from saving/writing to ~/Documents for backup purpose
+   if [ ! -f ${WINEPREFIX}/default.symlinks-removed ]; then
+    
+    WINEDLLOVERRIDES="mscoree,mshtml=" WINEPREFIX=${WINEPREFIX} wineboot -u && \
+    rm -rf ${WINEPREFIX}/drive_c/users/$USER/Desktop
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/Downloads
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/'My Documents'
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/'My Music'
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/'My Pictures'
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/'My Videos' 
+	  rm -rf ${WINEPREFIX}/drive_c/users/$USER/Templates
+
+	  #Create normal folders for the deleted symlinks
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/Desktop
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/Downloads
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/'My Documents'
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/'My Music'
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/'My Pictures'
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/'My Videos' 
+	  mkdir -p ${WINEPREFIX}/drive_c/users/$USER/Templates
+
+	  touch ${WINEPREFIX}/default.symlinks-removed
+   fi
+
+
+# flatpak-wine-gui.sh
+# for GUI Dialog
+if [ $# -eq 0 ];  then
+   echo "No arguments supplied; use --help"
+ 
+   choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=240 --height=300 \
+					 --list \
+					 --radiolist --column " " \
+					 --column "Action" \
+							  0 "Run Winetricks..." \
+							  0 "Install Custom DLLs..." \
+							  0 "Install Media Foundation Libraries" \
+							  0 "Launch Winecfg..." \
+						   TRUE "Open Explorer++" \
+						      0 "Open Shell..." \
+                              0 "Kill all Instances" \
+							  0 "Delete Bottle" \
+					 --text "Select Action for ${WINEPREFIX} " )
+
+   # exit when Cancel is clicked
+   [[ -z "$choice" ]] && exit 1
+   
+	if [ "$choice" = "Run Winetricks..." ]; then  
+	   WINEPREFIX=${WINEPREFIX} $WINETRICKS --gui
+
+    # mydlls
+	elif [ "$choice" = "Install Custom DLLs..." ]; then
+	mydlls=$(zenity --title "Install custom dlls - Paste your list " --text "or Press enter to install (xact xinput xna31 vcrun2003-2012 d3dx9 d9vk)" --entry)
+    if [ -z "$mydlls" ]; #if no dlls are given
+       then         
+       mydlls=(dotnet35 xna31 xinput xact faudio dxvk dotnet40 dotnet45 dotnet48 vcrun2003 vcrun2005 vcrun2008 vcrun2012 vcrun2015 corefonts mf quartz)
+    else   
+    mydlls=( $mydlls ) ; #convert string to array
+    fi
+    
+size=${#mydlls[*]}
+size=$(expr $size + 1) ;# add +1 for progress
+
+step=$(expr 100 / $size)
+prog=$(echo $step)
+echo $size $step ${mydlls[*]}
+
+	( for i in ${mydlls[*]};
+	  do
+    	echo $prog
+	    echo "# Installing $i..."
+	    WINEPREFIX=${WINEPREFIX} $WINETRICKS --unattended  $i
+      
+        prog=$(expr $prog + $step)
+	  done
+	  echo 100
+	  echo "# Done!"
+	) | zenity --width=340 --title "Installing Custom DLLs with Winetricks" --progress --auto-kill
+	
+	# Install Media Foundation Libraries
+	elif [ "$choice" = "Install Media Foundation Libraries" ]; then
+	   cd /app/mf-install && WINEPREFIX=${WINEPREFIX} sh mf-install.sh
+    
+	# winecfg
+	elif [ "$choice" = "Launch Winecfg..." ]; then
+	   WINEPREFIX=${WINEPREFIX} winecfg
+       
+    elif [ "$choice" = "Kill all Instances" ]; then
+	   killall -KILL wineserver
+    elif [ "$choice" = "Open Shell..." ]; then   
+       gnome-terminal -- bash #-c "WINEPREFIX=${WINEPREFIX}"
+	elif [ "$choice" = "Delete Bottle" ]; then
+	   rm -rfv ${WINEPREFIX}; 
+
+	elif [ "$choice" = "Open Explorer++" ]; then
+	   WINEPREFIX=${WINEPREFIX} $WINEEXE /app/explorer++/Explorer++.exe
+	   
+	else
+	   WINEPREFIX=${WINEPREFIX} $WINEEXE /app/explorer++/Explorer++.exe
+
+	fi
+    # /for GUI Dialog
+else
+
+
+   # Prompt to open with Bottle if already bottle is created
+   basefilename=$(basename "$1")
+   basefilename_underscore=$(echo $basefilename|tr ' ' '_')
+   echo $basefilename
+   ls ${WINEZGUIPREFIX}/${basefilename_underscore}/"$basefilename.sh"
+   
+   if [ -f  ${WINEZGUIPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh" ]; then
+   
+      choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
+	    				 --list \
+		    			 --radiolist --column " " \
+			    		 --column "Action" \
+						   0 "Run $basefilename using Default bottle" \
+						TRUE "Run $basefilename using existing $basename bottle" \
+						   0 "Run $basefilename configuration" \
+					 --text "Select Action for ${WINEPREFIX} " )
+   else
+   choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
+					 --list \
+					 --radiolist --column " " \
+					 --column "Action" \
+						   TRUE "Run $basefilename using Default bottle" \
+							  0 "Create Bottle for $basefilename" \
+					 --text "Select Action for ${WINEPREFIX} " )
+    fi
+   # exit when Cancel is clicked
+   [[ -z "$choice" ]] && exit 1
+   
+	if [ "$choice" = "Run $basefilename using Default bottle" ]; then  
+	   cd "$dire" 2>/dev/null;#go to the exe directory then run
+       WINEPREFIX=${WINEPREFIX} $WINEEXE "$@"
+
+    # Create bottle
+	elif [ "$choice" = "Create Bottle for $basefilename" ]; then
+         winezgui-create-prefix "$1"
+    elif [ "$choice" = "Run $basefilename using existing $basename bottle" ]; then
+	    # We replace "name with space" to "name_with_space"
+	    basefilename_underscore=$(echo $basefilename|tr ' ' '_')
+	    ${WINEZGUIPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh" "launch"
+	elif [ "$choice" = 	"Run $basefilename configuration" ]; then
+		basefilename_underscore=$(echo $basefilename|tr ' ' '_')
+	    ${WINEZGUIPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh"
+	fi
+	
+
+fi
+

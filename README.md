@@ -42,4 +42,10 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
     8. Kill Running Instances
     
 
+## SETUP
+```
+git clone https://github.com/fastrizwaan/WineZGUI.git
+cd WineZGUI
+sudo ./setup install ; #systemwide
+```
 

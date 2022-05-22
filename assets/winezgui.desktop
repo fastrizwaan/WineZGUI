@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=WineZGUI
+Exec=winezgui %F
+MimeType=application/x-ms-dos-executable;
+Icon=winezgui
+NoDisplay=false
+StartupNotify=true
+Categories=Emulator;
+
