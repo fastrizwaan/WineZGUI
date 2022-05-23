@@ -3,8 +3,8 @@
 # On 1st launch create default wine prefix
 export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
-export WINEPREFIX=$(realpath ~/.local/share/winezgui)
-export PREFIX=${WINEPREFIX}/default
+export WINEPREFIX=~/.local/share/winezgui
+export PREFIX=$(realpath ${WINEPREFIX}/default)
 export WINEARCH=win64
 #export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
