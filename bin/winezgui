@@ -3,8 +3,8 @@
 # On 1st launch create default wine prefix
 export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
-export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
-export PREFIXDIR="$WINEZPREFIX/default"
+export WINEZPREFIX="~/.local/share/winezgui"
+export PREFIXDIR="$(realpath -m $WINEZPREFIX/default)"
 export WINEARCH=win64
 #export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
@@ -140,9 +140,9 @@ else
    basefilename=$(basename "$1")
    basefilename_underscore=$(echo $basefilename|tr ' ' '_')
    echo $basefilename
-   ls ${WINEZPREFIX}/${basefilename_underscore}/"$basefilename.sh"
+   ls ${PREFIXDIR}/${basefilename_underscore}/"$basefilename.sh"
    
-   if [ -f  ${WINEZPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh" ]; then
+   if [ -f  ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh" ]; then
    
       choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
 	    				 --list \
@@ -174,10 +174,10 @@ else
     elif [ "$choice" = "Run $basefilename using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
 	    basefilename_underscore=$(echo $basefilename|tr ' ' '_')
-	    ${WINEZPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh" "launch"
+	    ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh" "launch"
 	elif [ "$choice" = 	"Run $basefilename configuration" ]; then
 		basefilename_underscore=$(echo $basefilename|tr ' ' '_')
-	    ${WINEZPREFIX}/${basefilename_underscore}/"$basefilename_underscore.sh"
+	    ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh"
 	fi
 	
 
