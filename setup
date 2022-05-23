@@ -27,11 +27,13 @@ case $i in
 esac
 done
 
-# Default commands for non flatpak install
+# Defaults for non flatpak install
 UIC="gtk-update-icon-cache"
 UDD="update-desktop-database ~/.local/share/applications/"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
+TMPDIR=/tmp
+WINEZGUIPREFIX=~/.local/share/winezgui
 
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
@@ -46,6 +48,8 @@ if [ "${FLATPAK}" = "true" ]; then
   UDD="flatpak-spawn --host update-desktop-database ~/.local/share/applications/"
   WINE_CMD="flatpak run --command=wine org.winehq.Wine"
   WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
+  TMPDIR="~/.var/app/io.github.WineZGUI/data/tmp"
+  WINEZGUIPREFIX="~/.var/app/io.github.WineZGUI/data/prefixes"
 fi     
 ##
 
@@ -65,7 +69,9 @@ if [ "$1" = "install" ]; then
   sed "s|RUN_UPDATE_DESKTOP_DATABASE=.*|RUN_UPDATE_DESKTOP_DATABASE=\"$UDD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  
+  sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINEZGUIPREFIX=.*|WINEZGUIPREFIX=\"$WINEZGUIPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINEZGUIPREFIX=.*|WINEZGUIPREFIX=\"$WINEZGUIPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
 echo "
 rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
 rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop

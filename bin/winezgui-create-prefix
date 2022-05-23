@@ -11,11 +11,13 @@
 export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export DESKTOPDIR=~/.local/share/applications/winezgui
-export WINEPREFIX=~/.local/share/winezgui
+export WINEZGUIPREFIX=~/.local/share/winezgui
+export WINEPREFIX=${WINEZGUIPREFIX}
 export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ~/.local/share/applications/"
-WINE_CMD=$(which wine)
-WINETRICKS_CMD=$(which winetricks)
+export WINE_CMD=$(which wine)
+export WINETRICKS_CMD=$(which winetricks)
+export TMPDIR=/tmp
 
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
@@ -31,6 +33,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 	# application shortcut folder
     mkdir -p "${WINEPREFIX}$myBaseNamePrefix"
     mkdir -p "$wineprefix_dir"
+    mkdir -p "$TMPDIR"
     # Function to verify if required program is installed.
     VerInst () {
 	if [ $? -eq 127 ]; then
@@ -42,12 +45,12 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     }
 
     # Extract icon and convert it to several png files of diferent quality, 
-    wrestool -x -t 14 "$myFile" > "/tmp/$myBaseName.ico" 2> /dev/null
+    wrestool -x -t 14 "$myFile" > "${TMPDIR}/$myBaseName.ico" 2> /dev/null
     VerInst icoutils
-    convert -alpha on "/tmp/$myBaseName.ico" "/tmp/$myBaseName.png" 2> /dev/null
+    convert -alpha on "${TMPDIR}/$myBaseName.ico" "${TMPDIR}/$myBaseName.png" 2> /dev/null
     VerInst imagemagick
     # Select the best png image file.
-    cp "$(ls -S -1 "/tmp/$myBaseName"*".png"  | head -n 1)" "$wineprefix_dir_dir.icon.png"
+    cp "$(ls -S -1 "${TMPDIR}/$myBaseName"*".png"  | head -n 1)" "$wineprefix_dir_dir.icon.png"
 
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
