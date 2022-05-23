@@ -45,7 +45,8 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 	    exit 1
 	fi
     }
-
+    # 1st cd to tmpdir
+    cd "$TMPDIR"
     # Extract icon and convert it to several png files of diferent quality, 
     wrestool -x -t 14 "$myFile" > "${TMPDIR}/$myBaseName.ico" 2> /dev/null
     echo wrestool: extracting icon
@@ -63,7 +64,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     echo TMPDIR=$TMPDIR
     echo list "${TMPDIR}/$myBaseName*.png"
     cp "$(ls -S -1 "${TMPDIR}/$myBaseName*.png"  | head -n 1)" "$wineprefix_dir_dir.icon.png"
-    rm -rf $TMPDIR ; #remove tmp directory after copying icon png
+    #rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
  --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
