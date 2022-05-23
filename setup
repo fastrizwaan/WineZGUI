@@ -34,6 +34,8 @@ fi
 if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
+  # Set flatpak command for flatpak-spawn
+#  sed -e "s|\(WINEEXE=\).*| \1\"flatapk-spawn run --command=wine\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
 fi     
 ##
 
@@ -46,6 +48,9 @@ if [ "$1" = "install" ]; then
   install -Dvm644 ./assets/winezgui.desktop    ${INSTALL_PREFIX}/share/applications/
   install -Dvm755 ./bin/winezgui               ${INSTALL_PREFIX}/bin/
   install -Dvm755 ./bin/winezgui-create-prefix ${INSTALL_PREFIX}/bin/
+  echo $INSTALL_PREFIX IS INSTALL_PREFIX
+  echo ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|g" -i ${INSTALL_PREFIX}/bin/winezgui
   
 echo "
 rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg

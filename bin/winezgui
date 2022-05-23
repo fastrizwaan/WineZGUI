@@ -9,7 +9,7 @@ export WINEARCH=win64
 #export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
 export PATH=$PATH:$(pwd)
-
+export BINDIR=/usr/bin
 export ARGV="$@"
 #export WINEEXE="flatpak run org.winehq.Wine"
 export WINEEXE="/usr/bin/wine"
@@ -167,7 +167,8 @@ else
 
     # Create bottle
 	elif [ "$choice" = "Create Bottle for $basefilename" ]; then
-         winezgui-create-prefix "$1"
+	       echo $(pwd) asd asd as 
+         $BINDIR/winezgui-create-prefix "$1"
     elif [ "$choice" = "Run $basefilename using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
 	    basefilename_underscore=$(echo $basefilename|tr ' ' '_')
