@@ -58,7 +58,7 @@ if [ "$1" = "install" ]; then
   echo ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|g" -i ${INSTALL_PREFIX}/bin/winezgui
   sed "s|RUN_UPDATE_ICON_CACHE=.*|RUN_UPDATE_ICON_CACHE=\"$UIC\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|RUN-UPDATE-DESKTOP-DATABASE=.*|RUN-UPDATE-DESKTOP-DATABASE=\"$UDD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|RUN_UPDATE_DESKTOP_DATABASE=.*|RUN_UPDATE_DESKTOP_DATABASE=\"$UDD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 echo "
 rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
 rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop
