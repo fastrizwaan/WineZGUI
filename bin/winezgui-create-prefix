@@ -64,8 +64,11 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ls $TMPDIR
     echo TMPDIR=$TMPDIR
     echo list "${TMPDIR}/$EXE_FILENAME*.png"
+    echo $PWD
+    pwd
     cp "$(ls -S -1 "${TMPDIR}/$EXE_FILENAME*.png"  | head -n 1)" \
        "${WINEPREFIX_SUBDIR}/${EXE_FILENAME_NO_SPACE}.icon.png" 
+    ls -S -1 "${TMPDIR}/$EXE_FILENAME*.png"  | head -n 1
     #rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
