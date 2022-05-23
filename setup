@@ -34,7 +34,7 @@ UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 TMPDIR=/tmp
-WINEZPREFIX="~/.local/share/winezgui"
+WINEZPREFIX="\$(realpath ~/.local/share/winezgui)"
 
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
@@ -50,7 +50,7 @@ if [ "${FLATPAK}" = "true" ]; then
   WINE_CMD="flatpak run --command=wine org.winehq.Wine"
   WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
   TMPDIR="~/.var/app/io.github.WineZGUI/data/tmp"
-  WINEZPREFIX="~/.var/app/io.github.WineZGUI/data/prefixes"
+  WINEZPREFIX="\$(~/.var/app/io.github.WineZGUI/data/prefixes)"
 fi     
 ##
 
