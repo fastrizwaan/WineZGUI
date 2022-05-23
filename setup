@@ -27,6 +27,10 @@ case $i in
 esac
 done
 
+# Default commands for non flatpak install
+UIC="gtk-update-icon-cache"
+UDD="update-desktop-database ~/.local/share/applications/"
+
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
 fi
@@ -36,6 +40,8 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_PREFIX="/app"
   # Set flatpak command for flatpak-spawn
 #  sed -e "s|\(WINEEXE=\).*| \1\"flatapk-spawn run --command=wine\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
+  UIC="flatpak-spawn --host gtk-update-icon-cache"
+  UDD="flatpak-spawn --host update-desktop-database ~/.local/share/applications/"
 fi     
 ##
 
@@ -51,7 +57,8 @@ if [ "$1" = "install" ]; then
   echo $INSTALL_PREFIX IS INSTALL_PREFIX
   echo ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|g" -i ${INSTALL_PREFIX}/bin/winezgui
-  
+  sed "s|RUN_UPDATE_ICON_CACHE=.*|RUN_UPDATE_ICON_CACHE=\"$UIC\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|RUN-UPDATE-DESKTOP-DATABASE=.*|RUN-UPDATE-DESKTOP-DATABASE=\"$UDD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 echo "
 rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
 rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop

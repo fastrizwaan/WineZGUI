@@ -12,7 +12,10 @@ export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export DESKTOPDIR=~/.local/share/applications/winezgui
 export WINEPREFIX=~/.local/share/winezgui
+export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
+export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ~/.local/share/applications/"
 
+        ${RUN_UPDATE_DESKTOP_DATABASE}
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
@@ -253,8 +256,8 @@ $category;"\\n"Icon="${WINEPREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.icon.
     ln -sfv ${WINEPREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop ${DESKTOPDIR}/"$myBaseName".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
-        gtk-update-icon-cache 
-        update-desktop-database ~/.local/share/applications/
+        ${RUN_UPDATE_ICON_CACHE}
+        ${RUN_UPDATE_DESKTOP_DATABASE}
         echo "Shortcut created sucessfuly on applications menu."
     	zenity --info --title="Shortcut created sucessfuly " --text="$myBaseName.desktop"
     fi
