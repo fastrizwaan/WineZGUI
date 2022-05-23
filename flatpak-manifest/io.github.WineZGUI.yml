@@ -1,0 +1,92 @@
+id: io.github.WineZGUI
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+base: org.winehq.Wine
+base-version: stable-21.08
+command: winezgui
+rename-icon: winezgui
+rename-desktop-file: winezgui.desktop
+finish-args:
+  - --allow=devel # For Wine crash handling
+  - --allow=multiarch
+  - --device=all
+  - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
+  - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
+  #- --env=WINEPREFIX=~/.local/share/winezgui
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-videos
+  - --filesystem=~/.local/share/winezgui
+  - --persist=~/.local/share/winezgui
+  - --talk-name=org.freedesktop.Flatpak
+  - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
+  - --socket=wayland
+  - --socket=x11
+  - --system-talk-name=org.freedesktop.NetworkManager
+  - --system-talk-name=org.freedesktop.UDisks2
+  - --talk-name=org.freedesktop.Notifications
+cleanup:
+  - '*.a'
+  - '*.la'
+  - /share/doc
+  - /share/man
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.VAAPI.Intel.i386
+  - org.winehq.Wine.DLLs
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+add-extensions:
+  com.valvesoftware.Steam.Utility:
+    subdirectories: true
+    directory: utils
+    versions: stable;beta;test;master
+    add-ld-path: lib
+    merge-dirs: share/vulkan/explicit_layer.d;share/vulkan/implicit_layer.d;
+    no-autodownload: true
+    autodelete: false
+
+modules:
+  - name: icoutils
+    build-options:
+      strip: true
+      no-debuginfo: true  
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
+        sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+
+  - name: ImageMagick
+    build-options:
+      strip: true
+      no-debuginfo: true  
+    config-opts:
+      - --enable-shared
+      - --disable-static
+      - --disable-docs
+      - --with-modules
+      - --with-threads
+      - --with-png
+    sources:
+      - type: archive
+        url: https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.0-34.tar.gz
+        sha256: 6a5bc9627ecff8cc35f99a7e10b395de6c02b4ddce46522e9d6362a90f7a1043      
+
+  - name: WineZGUI
+    buildsystem: simple
+    build-commands:
+      - ./setup install --flatpak --prefix=/app
+    sources:
+      - type: archive
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.03.tar.gz
+        sha256: 3c67eb71bf08c3fa652e6b7dea6f9af4a8a58be39d93869807af94926182ef50
