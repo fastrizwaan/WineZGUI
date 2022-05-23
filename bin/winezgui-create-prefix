@@ -10,10 +10,10 @@
 # ============================================================================ #
 export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
-export APPLICATIONSDIR=$(realpath ~/.local/share/applications)
+export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
 export WINEPREFIX=~/.local/share/winezgui
-export PREFIX=$(realpath ${WINEPREFIX})
+export PREFIX=$(realpath -m ${WINEPREFIX})
 export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
@@ -26,7 +26,7 @@ mkdir -vp "$TMPDIR"
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
     # Get the full path, the name and directory name of submited application file.
-    myFile=$(realpath "$1")
+    myFile=$(realpath -m "$1")
     myBaseName=$(basename "$myFile")
     myPath=$(dirname "$myFile")
 	  myBaseNamePrefix=$(echo $myBaseName|tr ' ' '_');
