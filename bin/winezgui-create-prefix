@@ -123,7 +123,7 @@ if [ "\$1" = "launch" ]; then
 export base=\$(basename "$myFile")
 export dire=\$(dirname "$myFile")
 cd "\$dire"
-\${WINE_CMD}  "\$base"
+${WINE_CMD}  "\$base"
 exit 0;
 fi
 # /Launch game from flatpak-wine-gui.sh
@@ -241,7 +241,8 @@ elif [ "\$choice" = "Launch $myBaseNamePrefix" ]; then
 export base=\$(basename "$myFile")
 export dire=\$(dirname "$myFile")
 cd "\$dire"
-\${WINE_CMD} "\$base"
+
+${WINE_CMD} "\$base"
 fi
 EOF
 
