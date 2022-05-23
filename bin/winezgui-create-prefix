@@ -148,7 +148,7 @@ export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
     fi
     
 cd "\$EXE_FILE_DIR"
-${WINE_CMD}  "\$EXE_FILE_NAME"
+\${WINE_CMD}  "\$EXE_FILE_NAME"
 exit 0;
 fi
 # /Launch game from flatpak-wine-gui.sh
