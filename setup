@@ -69,7 +69,7 @@ if [ "$1" = "install" ]; then
   sed "s|RUN_UPDATE_ICON_CACHE=.*|RUN_UPDATE_ICON_CACHE=\"$UIC\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|RUN_UPDATE_DESKTOP_DATABASE=.*|RUN_UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+#  sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" -i ${INSTALL_PREFIX}/bin/winezgui
