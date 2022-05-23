@@ -20,6 +20,7 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-pictures
   - --filesystem=xdg-videos
+  - --filesystem=/tmp
   - --filesystem=~/.local/share/winezgui
   - --persist=~/.local/share/winezgui
   - --talk-name=org.freedesktop.Flatpak
@@ -88,5 +89,5 @@ modules:
       - ./setup install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.03.tar.gz
-        sha256: 3c67eb71bf08c3fa652e6b7dea6f9af4a8a58be39d93869807af94926182ef50
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.04.tar.gz
+        sha256: c111c110749343596fc70bfa3966ea15693ea634cbbf6fd05cefa7c9a70a734b
