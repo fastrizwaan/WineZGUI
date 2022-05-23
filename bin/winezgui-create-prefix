@@ -49,7 +49,9 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # Extract icon and convert it to several png files of diferent quality, 
     wrestool -x -t 14 "$myFile" > "${TMPDIR}/$myBaseName.ico" 2> /dev/null
     VerInst icoutils
-    convert -alpha on "${TMPDIR}/$myBaseName.ico" "${TMPDIR}/$myBaseName.png" 2> /dev/null
+    # convert does not work inside flatpak
+    #convert -alpha on "${TMPDIR}/$myBaseName.ico" "${TMPDIR}/$myBaseName.png" 2> /dev/null
+    icotool -x "${TMPDIR}/$myBaseName.ico"
     VerInst imagemagick
     # Select the best png image file.\
     ls $TMPDIR
