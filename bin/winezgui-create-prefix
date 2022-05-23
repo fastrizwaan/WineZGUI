@@ -141,7 +141,7 @@ export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
 
 
     # if script is not run from sandbox
-    if [ $(which flatpak 2>/dev/null) ]; then
+    if [ \$(which flatpak 2>/dev/null) ]; then
         export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
     else 
         export WINE_CMD="\$(which wine)"
