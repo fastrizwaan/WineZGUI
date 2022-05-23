@@ -22,6 +22,14 @@ export TMPDIR="/tmp"
 
 mkdir -vp "$TMPDIR"
 
+
+    # if script is not run from sandbox
+    if [ \$(which flatpak 2>/dev/null) ]; then
+        export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
+    else 
+        export WINE_CMD="\$(which wine)"
+    fi
+    
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
@@ -140,13 +148,7 @@ export EXE_FILE_NAME=\$(basename "$EXE_FILE")
 export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
 
 
-    # if script is not run from sandbox
-    if [ \$(which flatpak 2>/dev/null) ]; then
-        export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
-    else 
-        export WINE_CMD="\$(which wine)"
-    fi
-    
+
 cd "\$EXE_FILE_DIR"
 \${WINE_CMD}  "\$EXE_FILE_NAME"
 exit 0;
@@ -268,7 +270,7 @@ export base=\$(basename "$EXE_FILE")
 export dire=\$(dirname "$EXE_FILE")
 cd "\$dire"
 
-${WINE_CMD} "\$base"
+\${WINE_CMD} "\$base"
 fi
 EOF
 
