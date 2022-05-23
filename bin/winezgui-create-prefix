@@ -23,12 +23,7 @@ export TMPDIR="/tmp"
 mkdir -vp "$TMPDIR"
 
 
-    # if script is not run from sandbox
-    if [ \$(which flatpak 2>/dev/null) ]; then
-        export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
-    else 
-        export WINE_CMD="\$(which wine)"
-    fi
+
     
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
@@ -112,6 +107,14 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 
 # Remove wine shortcuts before creating new wineprefix
 # rm -rfv ~/.var/app/org.winehq.flatpak-wine/data/applications/wine*
+
+
+    # if script is not run from sandbox
+    if [ \$(which flatpak 2>/dev/null) ]; then
+        export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
+    else 
+        export WINE_CMD="\$(which wine)"
+    fi
 
 echo   ***********************
 echo ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/$EXE_FILENAME_NO_SPACE.symlinks-removed
