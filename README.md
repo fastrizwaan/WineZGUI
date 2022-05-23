@@ -43,9 +43,26 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
     
 
 ## SETUP
+### Install WineZGUI
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup install ; #systemwide
 ```
+### Uninstall WineZGUI
+```
+sudo ./setup uninstall
+```
+
+## Requirements
+`wine` - main program
+`winetricks` - must have wine addon script
+`icoutils` - to extract icon from exe file
+`ImageMagick` - to convert .ico to .png
+
+
+## Install Requirement for your Linux OS
+### Fedora 36
+`sudo dnf install wine winetricks icoutils ImageMagick`
+
 
