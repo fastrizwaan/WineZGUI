@@ -10,11 +10,12 @@
 # ============================================================================ #
 export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
-export DESKTOPDIR=~/.local/share/applications/winezgui
-export WINEZGUIPREFIX=~/.local/share/winezgui
+export APPLICATIONSDIR=$(realpath ~/.local/share/applications)
+export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
+export WINEZGUIPREFIX=$(realpath ~/.local/share/winezgui)
 export WINEPREFIX=${WINEZGUIPREFIX}
 export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
-export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ~/.local/share/applications/"
+export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TMPDIR=/tmp
@@ -200,7 +201,7 @@ shortcut" --entry)
     fi
     export WINEVER=\$(wine --version|cut -f1 -d ' ')
     desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${WINEPREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
-	update-desktop-database ~/.local/share/applications/
+	update-desktop-database ${APPLICATIONSDIR}/
 	zenity --info --title="$myBaseName.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
 elif [ "\$choice" = "Change Icon..." ]; then
@@ -211,7 +212,7 @@ elif [ "\$choice" = "Change Icon..." ]; then
        exit;
      fi
      desktop-file-edit --set-icon="\$get_icon" \${DESKTOPDIR}/"$myBaseName".desktop 
-	 update-desktop-database ~/.local/share/applications/
+	 update-desktop-database ${APPLICATIONSDIR}/
 	 zenity --info --title="$myBaseName.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
 

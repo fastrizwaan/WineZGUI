@@ -28,12 +28,13 @@ esac
 done
 
 # Defaults for non flatpak install
+APPLICATIONSDIR=$(realpath ~/.local/share/applications)
 UIC="gtk-update-icon-cache"
-UDD="update-desktop-database ~/.local/share/applications/"
+UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 TMPDIR=/tmp
-WINEZGUIPREFIX=~/.local/share/winezgui
+WINEZGUIPREFIX=$(realpath ~/.local/share/winezgui)
 
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
@@ -45,11 +46,11 @@ if [ "${FLATPAK}" = "true" ]; then
   # Set flatpak command for flatpak-spawn
 #  sed -e "s|\(WINEEXE=\).*| \1\"flatapk-spawn run --command=wine\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
   UIC="flatpak-spawn --host gtk-update-icon-cache"
-  UDD="flatpak-spawn --host update-desktop-database ~/.local/share/applications/"
+  UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
   WINE_CMD="flatpak run --command=wine org.winehq.Wine"
   WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
-  TMPDIR="~/.var/app/io.github.WineZGUI/data/tmp"
-  WINEZGUIPREFIX="~/.var/app/io.github.WineZGUI/data/prefixes"
+  TMPDIR="$(realpath ~/.var/app/io.github.WineZGUI/data/tmp)"
+  WINEZGUIPREFIX="$(realpath  ~/.var/app/io.github.WineZGUI/data/prefixes)"
 fi     
 ##
 
