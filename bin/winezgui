@@ -167,7 +167,6 @@ else
 
     # Create bottle
 	elif [ "$choice" = "Create Bottle for $basefilename" ]; then
-	       echo $(pwd) asd asd as 
          $BINDIR/winezgui-create-prefix "$1"
     elif [ "$choice" = "Run $basefilename using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
