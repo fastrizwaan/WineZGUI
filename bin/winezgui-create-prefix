@@ -12,8 +12,8 @@ export APPNAME=WineZGUI
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
-export WINEPREFIX=$(realpath -m ~/.local/share/winezgui)
-export PREFIX=${WINEPREFIX}
+export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
+export PREFIXDIR=${WINEZPREFIX}
 export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
@@ -30,11 +30,11 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     myBaseName=$(basename "$myFile")
     myPath=$(dirname "$myFile")
 	  myBaseNamePrefix=$(echo $myBaseName|tr ' ' '_');
-    wineprefix_dir="${PREFIX}/$myBaseNamePrefix"    
+    wineprefix_dir="${PREFIXDIR}/$myBaseNamePrefix"    
     #put desktop/icon/link inside newly created prefix
 	  wineprefix_dir_dir="${wineprefix_dir}/${myBaseNamePrefix}"    
 	# application shortcut folder
-    mkdir -p  "${PREFIX}$myBaseNamePrefix"
+    mkdir -p  "${PREFIXDIR}$myBaseNamePrefix"
     mkdir -p  "$wineprefix_dir"
     # Function to verify if required program is installed.
     VerInst () {
@@ -74,14 +74,14 @@ shortcut" --entry)
 
 
 # try to add wineprefix for the game
-mkdir -p ${PREFIX}/
+mkdir -p ${PREFIXDIR}/
 mkdir -p ${DESKTOPDIR}/
 
 
 ###############################################
-cat << EOF > ${PREFIX}/$myBaseNamePrefix/$myBaseNamePrefix.sh
+cat << EOF > ${PREFIXDIR}/$myBaseNamePrefix/$myBaseNamePrefix.sh
 #!/bin/bash
-export PREFIX=${PREFIX}/$myBaseNamePrefix
+export PREFIX=${PREFIXDIR}/$myBaseNamePrefix
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
@@ -90,31 +90,31 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 # rm -rfv ~/.var/app/org.winehq.flatpak-wine/data/applications/wine*
 
 echo   ***********************
-echo ${PREFIX}/$myBaseNamePrefix/$myBaseNamePrefix.symlinks-removed
-ls ${PREFIX}/$myBaseNamePrefix/$myBaseNamePrefix.symlinks-removed
+echo ${PREFIXDIR}/$myBaseNamePrefix/$myBaseNamePrefix.symlinks-removed
+ls ${PREFIXDIR}/$myBaseNamePrefix/$myBaseNamePrefix.symlinks-removed
 echo 'testing empty'
    # Remove sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-   if [ ! -f ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.symlinks-removed  ]; then
+   if [ ! -f ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.symlinks-removed  ]; then
    
    
-    rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Desktop   
-    rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Downloads
-	  rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Documents'
-	  rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Music'
-	  rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Pictures'
-	  rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Videos' 
-	  rm ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Templates
+    rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Desktop   
+    rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Downloads
+	  rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Documents'
+	  rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Music'
+	  rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Pictures'
+	  rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Videos' 
+	  rm ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Templates
 
 	  #Create normal folders for the deleted symlinks
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Desktop
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Downloads
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Documents'
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Music'
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Pictures'
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/'My Videos' 
-	  mkdir -p ${PREFIX}/$myBaseNamePrefix/drive_c/users/\$USER/Templates
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Desktop
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Downloads
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Documents'
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Music'
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Pictures'
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/'My Videos' 
+	  mkdir -p ${PREFIXDIR}/$myBaseNamePrefix/drive_c/users/\$USER/Templates
 
-	  touch ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.symlinks-removed
+	  touch ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.symlinks-removed
    fi
 
    
@@ -200,7 +200,7 @@ shortcut" --entry)
        exit;
     fi
     export WINEVER=\$(wine --version|cut -f1 -d ' ')
-    desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
+    desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
 	update-desktop-database ${APPLICATIONSDIR}/
 	zenity --info --title="$myBaseName.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
@@ -221,22 +221,22 @@ elif [ "\$choice" = "Backup..." ]; then
      DATE=\$(date +'%Y%m%d')
      mkdir -p \$HOME/flatpak-wine70-backup;
 	 tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$myBaseNamePrefix-\$DATE.tar.gz" \
-			${PREFIX}/"$myBaseNamePrefix"          \
-			${PREFIX}/"$myBaseNamePrefix.sh"       \
-			${PREFIX}/"$myBaseNamePrefix.desktop"  \
-			${PREFIX}/"$myBaseNamePrefix.icon.png" \
+			${PREFIXDIR}/"$myBaseNamePrefix"          \
+			${PREFIXDIR}/"$myBaseNamePrefix.sh"       \
+			${PREFIXDIR}/"$myBaseNamePrefix.desktop"  \
+			${PREFIXDIR}/"$myBaseNamePrefix.icon.png" \
 	     && zenity --info --title="Bottle backed up: $myBaseNamePrefix" --text="flatpak-wine70-bottle-$myBaseNamePrefix-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
 
 
 
 elif [ "\$choice" = "Delete Bottle: $myBaseNamePrefix" ]; then
-rm -rfv ${PREFIX}/$myBaseNamePrefix; 
-rm -f "${PREFIX}/$myBaseName.desktop"
+rm -rfv ${PREFIXDIR}/$myBaseNamePrefix; 
+rm -f "${PREFIXDIR}/$myBaseName.desktop"
 rm -f "$wineprefix_dir.desktop" 
 rm -f "$wineprefix_dir.icon.png"
-rm -f ${PREFIX}/"$myBaseNamePrefix.sh"
+rm -f ${PREFIXDIR}/"$myBaseNamePrefix.sh"
 rm -f ${DESKTOPDIR}/$myBaseName.desktop
-rm -f ${PREFIX}/$myBaseNamePrefix.symlinks-removed
+rm -f ${PREFIXDIR}/$myBaseNamePrefix.symlinks-removed
 elif [ "\$choice" = "Launch $myBaseNamePrefix" ]; then
 export base=\$(basename "$myFile")
 export dire=\$(dirname "$myFile")
@@ -246,20 +246,20 @@ fi
 EOF
 
 ###############################################
-chmod +x ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.sh
+chmod +x ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.sh
 
     # Generate desktop entry specifications to be added to the application launcher.
-    deskEntry="[Desktop Entry]"\\n"Exec=bash -c ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.sh"\\n"Name=\
+    deskEntry="[Desktop Entry]"\\n"Exec=bash -c ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.sh"\\n"Name=\
 $PROGNAME"\\n"Path=$myPath"\\n"Type=Application"\\n"Categories=$appCategory\
-$category;"\\n"Icon="${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.icon.png""
+$category;"\\n"Icon="${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.icon.png""
     # Create a .desktop file and add desktop entries in it.
-    echo -e $deskEntry >"${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop"
-    echo "Keywords=flatpak; wine;" >> ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
+    echo -e $deskEntry >"${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop"
+    echo "Keywords=flatpak; wine;" >> ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
     
     # link the launcher  file to a shortcut on applications menu.
-    mkdir -p "${PREFIX}"
+    mkdir -p "${PREFIXDIR}"
     
-    ln -sfv ${PREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop ${DESKTOPDIR}/"$myBaseName".desktop
+    ln -sfv ${PREFIXDIR}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop ${DESKTOPDIR}/"$myBaseName".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${RUN_UPDATE_ICON_CACHE}
