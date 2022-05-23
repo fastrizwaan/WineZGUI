@@ -18,7 +18,7 @@ export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
-export TMPDIR=/tmp
+export TMPDIR="/tmp"
 
 mkdir -vp "$TMPDIR"
 
@@ -51,7 +51,9 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     VerInst icoutils
     convert -alpha on "${TMPDIR}/$myBaseName.ico" "${TMPDIR}/$myBaseName.png" 2> /dev/null
     VerInst imagemagick
-    # Select the best png image file.
+    # Select the best png image file.\
+    ls $TMPDIR
+    echo TMPDIR=$TMPDIR
     cp "$(ls -S -1 "${TMPDIR}/$myBaseName"*".png"  | head -n 1)" "$wineprefix_dir_dir.icon.png"
     rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     # Get the app category and shortcut name inputs from the user.

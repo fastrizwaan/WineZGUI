@@ -33,7 +33,7 @@ UIC="gtk-update-icon-cache"
 UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
-TMPDIR=/tmp
+TMPDIR="\$(realpath -m /tmp)"
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 
 if [ -z "${INSTALL_PREFIX}" ]; then
@@ -49,7 +49,7 @@ if [ "${FLATPAK}" = "true" ]; then
   UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
   WINE_CMD="flatpak run --command=wine org.winehq.Wine"
   WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
-  TMPDIR="~/.var/app/io.github.WineZGUI/data/tmp"
+  TMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
   WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
 fi     
 ##
