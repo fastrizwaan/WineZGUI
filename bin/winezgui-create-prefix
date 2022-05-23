@@ -42,12 +42,12 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     mkdir -p  "$WINEPREFIX_SUBDIR"
     # Function to verify if required program is installed.
     VerInst () {
-	if [ $? -eq 127 ]; then
-	    echo "$1 package is not installed."
-	    echo "Install it before running this script."
-	    echo "Aborting."
-	    exit 1
-	fi
+	              if [ $? -eq 127 ]; then
+	                  echo "$1 package is not installed."
+	                  echo "Install it before running this script."
+	                  echo "Aborting."
+	                  exit 1
+	              fi
     }
     # 1st cd to tmpdir
     cd "$TMPDIR"
@@ -69,8 +69,9 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     echo list "${TMPDIR}/$EXE_FILENAME*.png"
     echo $PWD
     pwd
-    cp "$(ls -S -1 "${TMPDIR}/$EXE_FILENAME*.png"  | head -n 1)" \
-       "${WINEPREFIX_SUBDIR}/${EXE_FILENAME_NO_SPACE}.icon.png" 
+    cp $(ls -S -1 ${TMPDIR}/${EXE_FILENAME}*.png  | head -n 1) \
+       ${WINEPREFIX_SUBDIR}/${EXE_FILENAME_NO_SPACE}.icon.png 
+       
     ls -S -1 "${TMPDIR}/$EXE_FILENAME*.png"  | head -n 1
     #rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     # Get the app category and shortcut name inputs from the user.
@@ -101,6 +102,7 @@ mkdir -p ${DESKTOPDIR}/
 cat << EOF > ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/$EXE_FILENAME_NO_SPACE.sh
 #!/bin/bash
 export PREFIX=${PREFIXDIR}/$EXE_FILENAME_NO_SPACE
+export WINEPREFIX=${PREFIX}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
