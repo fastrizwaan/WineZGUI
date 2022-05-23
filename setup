@@ -34,7 +34,7 @@ UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 TMPDIR=/tmp
-WINEPREFIX="~/.local/share/winezgui"
+WINEZPREFIX="~/.local/share/winezgui"
 
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
@@ -50,7 +50,7 @@ if [ "${FLATPAK}" = "true" ]; then
   WINE_CMD="flatpak run --command=wine org.winehq.Wine"
   WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
   TMPDIR="~/.var/app/io.github.WineZGUI/data/tmp"
-  WINEPREFIX="~/.var/app/io.github.WineZGUI/data/prefixes"
+  WINEZPREFIX="~/.var/app/io.github.WineZGUI/data/prefixes"
 fi     
 ##
 
@@ -71,11 +71,11 @@ if [ "$1" = "install" ]; then
   sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINEPREFIX=.*|WINEPREFIX=\"$WINEPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINEPREFIX=.*|WINEPREFIX=\"$WINEPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
+  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
 
 # debug
-echo WINEPREFIX=$WINEPREFIX
+echo WINEZPREFIX=$WINEZPREFIX
   
 echo "
 rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
