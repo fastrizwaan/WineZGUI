@@ -137,47 +137,48 @@ else
 
 
    # Prompt to open with Bottle if already bottle is created
-   basefilename=$(basename "$1")
-   basefilename_underscore=$(echo $basefilename|tr ' ' '_')
-   echo $basefilename
-   ls ${PREFIXDIR}/${basefilename_underscore}/"$basefilename.sh"
+   EXE_FILE=$(basename "$1")
+   EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
+   echo $EXE_FILE
+   ls ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILE.sh"
    
-   if [ -f  ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh" ]; then
+   # If existing prefix exists for the exe
+   if [ -f  ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh" ]; then
    
       choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
 	    				 --list \
 		    			 --radiolist --column " " \
 			    		 --column "Action" \
-						   0 "Run $basefilename using Default bottle" \
-						TRUE "Run $basefilename using existing $basename bottle" \
-						   0 "Run $basefilename configuration" \
+						   0 "Run $EXE_FILE using Default bottle" \
+						TRUE "Run $EXE_FILE using existing $basename bottle" \
+						   0 "Run $EXE_FILE configuration" \
 					 --text "Select Action for ${PREFIXDIR} " )
    else
    choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
 					 --list \
 					 --radiolist --column " " \
 					 --column "Action" \
-						   TRUE "Run $basefilename using Default bottle" \
-							  0 "Create Bottle for $basefilename" \
+						   TRUE "Run $EXE_FILE using Default bottle" \
+							  0 "Create Bottle for $EXE_FILE" \
 					 --text "Select Action for ${PREFIXDIR} " )
     fi
    # exit when Cancel is clicked
    [[ -z "$choice" ]] && exit 1
    
-	if [ "$choice" = "Run $basefilename using Default bottle" ]; then  
+	if [ "$choice" = "Run $EXE_FILE using Default bottle" ]; then  
 	   cd "$dire" 2>/dev/null;#go to the exe directory then run
        PREFIX=${PREFIXDIR} $WINEEXE "$@"
 
     # Create bottle
-	elif [ "$choice" = "Create Bottle for $basefilename" ]; then
+	elif [ "$choice" = "Create Bottle for $EXE_FILE" ]; then
          $BINDIR/winezgui-create-prefix "$1"
-    elif [ "$choice" = "Run $basefilename using existing $basename bottle" ]; then
+    elif [ "$choice" = "Run $EXE_FILE using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
-	    basefilename_underscore=$(echo $basefilename|tr ' ' '_')
-	    ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh" "launch"
-	elif [ "$choice" = 	"Run $basefilename configuration" ]; then
-		basefilename_underscore=$(echo $basefilename|tr ' ' '_')
-	    ${PREFIXDIR}/${basefilename_underscore}/"$basefilename_underscore.sh"
+	    EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
+	    ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh" "launch"
+	elif [ "$choice" = 	"Run $EXE_FILE configuration" ]; then
+		EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
+	    ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh"
 	fi
 	
 
