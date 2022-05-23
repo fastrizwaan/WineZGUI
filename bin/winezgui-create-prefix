@@ -19,6 +19,8 @@ export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TMPDIR=/tmp
 
+mkdir -vp "$TMPDIR"
+
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
@@ -31,9 +33,8 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     #put desktop/icon/link inside newly created prefix
 	  wineprefix_dir_dir="${wineprefix_dir}/${myBaseNamePrefix}"    
 	# application shortcut folder
-    mkdir -p "${WINEPREFIX}$myBaseNamePrefix"
-    mkdir -p "$wineprefix_dir"
-    mkdir -p "$TMPDIR"
+    mkdir -p  "${WINEPREFIX}$myBaseNamePrefix"
+    mkdir -p  "$wineprefix_dir"
     # Function to verify if required program is installed.
     VerInst () {
 	if [ $? -eq 127 ]; then
@@ -51,7 +52,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     VerInst imagemagick
     # Select the best png image file.
     cp "$(ls -S -1 "${TMPDIR}/$myBaseName"*".png"  | head -n 1)" "$wineprefix_dir_dir.icon.png"
-
+    rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
  --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
