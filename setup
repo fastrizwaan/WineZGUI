@@ -65,14 +65,14 @@ if [ "$1" = "install" ]; then
   install -Dvm755 ./bin/winezgui-create-prefix ${INSTALL_PREFIX}/bin/
   echo $INSTALL_PREFIX IS INSTALL_PREFIX
   echo ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|g" -i ${INSTALL_PREFIX}/bin/winezgui
-  sed "s|RUN_UPDATE_ICON_CACHE=.*|RUN_UPDATE_ICON_CACHE=\"$UIC\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|RUN_UPDATE_DESKTOP_DATABASE=.*|RUN_UPDATE_DESKTOP_DATABASE=\"$UDD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|" -i ${INSTALL_PREFIX}/bin/winezgui
+  sed "s|RUN_UPDATE_ICON_CACHE=.*|RUN_UPDATE_ICON_CACHE=\"$UIC\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|RUN_UPDATE_DESKTOP_DATABASE=.*|RUN_UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|g" -i ${INSTALL_PREFIX}/bin/winezgui
+  sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+  sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" -i ${INSTALL_PREFIX}/bin/winezgui
 
 # debug
 echo WINEZPREFIX=$WINEZPREFIX
