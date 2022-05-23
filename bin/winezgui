@@ -12,8 +12,8 @@ export PATH=$PATH:$(pwd)
 export BINDIR=/usr/bin
 export ARGV="$@"
 #export WINEEXE="flatpak run org.winehq.Wine"
-export WINEEXE="/usr/bin/wine"
-export WINETRICKS="/usr/bin/winetricks"
+export WINEEXE="$(which wine)"
+export WINETRICKS="$(which winetricks)"
 #export WINETRICKS="WINEPREFIX=${WINEPREFIX} flatpak run --command=winetricks org.winehq.Wine"
 
 
