@@ -193,7 +193,7 @@ shortcut" --entry)
        exit;
     fi
     export WINEVER=\$(wine --version|cut -f1 -d ' ')
-    desktop-file-edit --set-name="\$PROGNAME (\$WINEVER)" ${WINEPREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
+    desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${WINEPREFIX}/${myBaseNamePrefix}/${myBaseNamePrefix}.desktop
 	update-desktop-database ~/.local/share/applications/
 	zenity --info --title="$myBaseName.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
