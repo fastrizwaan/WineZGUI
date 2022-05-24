@@ -44,12 +44,13 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 	                  exit 1
 	              fi
     }
-      # Extract icon and convert it to several png files of diferent quality, 
-    wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NAME.ico" 2> /dev/null
-  
-    VerInst icoutils
-    # convert does not work inside flatpak
-    #convert -alpha on "${TMPDIR}/$EXE_NAME.ico" "${TMPDIR}/$EXE_NAME.png" 2> /dev/null
+    
+    # Extract icon and convert it to several png files of diferent quality, 
+      cd ${TMPDIR}
+      wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NAME.ico" 2> /dev/null
+      VerInst icoutils
+
+    
     icotool -x "${TMPDIR}/$EXE_NAME.ico" 2>/dev/null
     echo icotool: extracting png from ico:$EXE_NAME.ico
     ls -R "${TMPDIR}/" 
