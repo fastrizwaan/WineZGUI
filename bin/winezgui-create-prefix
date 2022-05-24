@@ -31,8 +31,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_PATH=$(dirname  "$EXE_FILE")
 	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
  	  EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
- 	  EXE_DATE=$(echo $EXE_NOSP|sed "s/\.exe/-$(date +%F)/g");
-    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_DATE"    
+    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"    
 	      
 	# application shortcut folder
     mkdir -p  "${WINEPREFIX_SUBDIR}"
@@ -172,7 +171,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
                        0    "Rename..." \
                        0    "Change Icon..." \
                        0    "Backup..." \
-                       0    "Delete Prefix: $EXE_DATE" \
+                       0    "Delete Prefix: $EXE_NOEXE" \
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
@@ -269,7 +268,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
       echo "fix me"
 
 
-  elif [ "\$choice" = "Delete Prefix: $EXE_DATE" ]; then
+  elif [ "\$choice" = "Delete Prefix: $EXE_NOEXE" ]; then
          rm -rfv ${WINEPREFIX_SUBDIR}; 
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
 

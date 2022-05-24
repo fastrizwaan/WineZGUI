@@ -16,7 +16,13 @@ export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
-
+    EXE_FILE=$(realpath -m "$1")
+    EXE_NAME=$(basename "$EXE_FILE")
+    EXE_PATH=$(dirname  "$EXE_FILE")
+	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
+ 	  EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
+    WINEPREFIX_SUBDIR="${WINEZPREFIX}/$EXE_NOEXE"    
+      
 # some games need to cd to the dir to work
 export base=$(basename "$1")
 export dire=$(dirname  "$1")
@@ -143,7 +149,7 @@ else
    ls ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILE.sh"
    
    # If existing prefix exists for the exe
-   if [ -f  ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh" ]; then
+   if [ -f  ${WINEZPREFIX}/${EXE_NOEXE}/"$EXE_NOEXE.sh" ]; then
    
       choice=$(zenity --title "${APPNAME} (${WINEVER})" --width=500 --height=300 \
 	    				 --list \
@@ -175,10 +181,10 @@ else
     elif [ "$choice" = "Run $EXE_FILE using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
 	    EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
-	    ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh" "launch"
+	    ${WINEZPREFIX}/${EXE_NOEXE}/"$EXE_NOEXE.sh" "launch"
 	elif [ "$choice" = 	"Run $EXE_FILE configuration" ]; then
 		EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
-	    ${WINEZPREFIX}/${EXE_FILENAME_NO_SPACE}/"$EXE_FILENAME_NO_SPACE.sh"
+	    ${EXE_NOEXE}/${EXE_NOEXE}/"$EXE_NOEXE.sh"
 	fi
 	
 
