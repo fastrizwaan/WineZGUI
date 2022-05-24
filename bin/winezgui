@@ -181,10 +181,10 @@ else
     elif [ "$choice" = "Run $EXE_FILE using existing $basename bottle" ]; then
 	    # We replace "name with space" to "name_with_space"
 	    EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
-	    ${WINEZPREFIX}/${EXE_NOEXE}/"$EXE_NOEXE.sh" "launch"
+	    ${WINEPREFIX_SUBDIR}/"$EXE_NOEXE.sh" "launch"
 	elif [ "$choice" = 	"Run $EXE_FILE configuration" ]; then
 		EXE_FILENAME_NO_SPACE=$(echo $EXE_FILE|tr ' ' '_')
-	    ${EXE_NOEXE}/${EXE_NOEXE}/"$EXE_NOEXE.sh"
+	    ${WINEPREFIX_SUBDIR}/"$EXE_NOEXE.sh"
 	fi
 	
 
