@@ -22,23 +22,18 @@ export TMPDIR="/tmp"
 
 mkdir -vp "$TMPDIR"
 
-
-
-    
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
     # Get the full path, the name and directory name of submited application file.
     EXE_FILE=$(realpath -m "$1")
-    EXE_FILENAME=$(basename "$EXE_FILE")
-    EXE_FILEPATH=$(dirname "$EXE_FILE")
-    # |sed 's/ //g'
-	  EXE_FILENAME_NO_SPACE=$(echo $EXE_FILENAME|tr ' ' '_');
-    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_FILENAME_NO_SPACE"    
-    #put desktop/icon/link inside newly created prefix
+    EXE_NAME=$(basename "$EXE_FILE")
+    EXE_PATH=$(dirname  "$EXE_FILE")
+	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
+ 	  EXE_DATE=$(echo $EXE_NOSP|sed "s/\.exe/$(date +%F)/g");
+    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_DATE"    
 	      
 	# application shortcut folder
-    mkdir -p  "${PREFIXDIR}$EXE_FILENAME_NO_SPACE"
     mkdir -p  "$WINEPREFIX_SUBDIR"
     # Function to verify if required program is installed.
     VerInst () {
@@ -49,31 +44,22 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 	                  exit 1
 	              fi
     }
-    # 1st cd to tmpdir
-    cd "$TMPDIR"
-    # Extract icon and convert it to several png files of diferent quality, 
-    wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_FILENAME.ico" 2> /dev/null
-    echo wrestool: extracting icon
-    ls "${TMPDIR}/$EXE_FILENAME.ico" 
+      # Extract icon and convert it to several png files of diferent quality, 
+    wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NAME.ico" 2> /dev/null
+  
     VerInst icoutils
     # convert does not work inside flatpak
-    #convert -alpha on "${TMPDIR}/$EXE_FILENAME.ico" "${TMPDIR}/$EXE_FILENAME.png" 2> /dev/null
-    icotool -x "${TMPDIR}/$EXE_FILENAME.ico" 2>/dev/null
-    echo icotool: extracting png from ico:$EXE_FILENAME.ico
+    #convert -alpha on "${TMPDIR}/$EXE_NAME.ico" "${TMPDIR}/$EXE_NAME.png" 2> /dev/null
+    icotool -x "${TMPDIR}/$EXE_NAME.ico" 2>/dev/null
+    echo icotool: extracting png from ico:$EXE_NAME.ico
     ls -R "${TMPDIR}/" 
     
-    VerInst imagemagick
     # Select the best png image file.\
-    ls $TMPDIR
-    echo TMPDIR=$TMPDIR
-    echo list "${TMPDIR}/$EXE_FILENAME*.png"
-    echo $PWD
-    pwd
-    cp $(ls -S -1 ${TMPDIR}/${EXE_FILENAME}*.png  | head -n 1) \
-       ${WINEPREFIX_SUBDIR}/${EXE_FILENAME_NO_SPACE}.icon.png 
+    cp $(ls -S -1 ${TMPDIR}/${EXE_NAME}*.png  | head -n 1) \
+       ${WINEPREFIX_SUBDIR}/${EXE_NOSP}.icon.png 
        
-    ls -S -1 "${TMPDIR}/$EXE_FILENAME*.png"  | head -n 1
-    #rm -rf $TMPDIR ; #remove tmp directory after copying icon png
+    rm -rf $TMPDIR ; #remove tmp directory after copying icon png
+    
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
  --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
@@ -87,7 +73,7 @@ shortcut" --entry)
 
     if [ ! "$PROGNAME" ]; #if no name is given use filename
        then         
-       PROGNAME=$(echo "$EXE_FILENAME (${WINEVER})"|sed 's/\.exe//g');     
+       PROGNAME=$(echo "$EXE_NAME (${WINEVER})"|sed 's/\.exe//g');     
     else 
        PROGNAME=$(echo "$PROGNAME (${WINEVER})");   
     fi
@@ -99,207 +85,221 @@ mkdir -p ${DESKTOPDIR}/
 
 
 ###############################################
-cat << EOF > ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/$EXE_FILENAME_NO_SPACE.sh
+cat << EOF > ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.sh
 #!/bin/bash
-export PREFIX=${PREFIXDIR}/$EXE_FILENAME_NO_SPACE
+export PREFIX=${WINEPREFIX_SUBDIR}
 export WINEPREFIX=${PREFIX}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
 
-# Remove wine shortcuts before creating new wineprefix
-# rm -rfv ~/.var/app/org.winehq.flatpak-wine/data/applications/wine*
-
 
     # if script is not run from sandbox
     if [ \$(which flatpak 2>/dev/null) ]; then
-        export WINE_CMD="flatpak run --command=wine org.winehq.Wine"
+        export WINE_CMD="flatpak          run --command=wine org.winehq.Wine"
+        export WINETRICKS_CMD="flatpak    run --command=winetricks org.winehq.Wine"
+        export WINECFG_CMD="flatpak       run --command=wine org.winehq.Wine winecfg"
+        export WINEEXPLORER_CMD="flatpak  run --command=wine org.winehq.Wine explorer"
+        export TERMINAL_CMD="gnome-terminal -- bash -c "flatpak run --command=bash org.winehq.Wine"
     else 
         export WINE_CMD="\$(which wine)"
+        export WINETRICKS_CMD="\$(which winetricks)"
+        export WINECFG_CMD="${WINE_CMD} winecfg"
+        export WINEEXPLORER_CMD="${WINE_CMD} explorer"
+        export TERMINAL_CMD="gnome-terminal -- bash"
     fi
 
-echo   ***********************
-echo ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/$EXE_FILENAME_NO_SPACE.symlinks-removed
-ls ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/$EXE_FILENAME_NO_SPACE.symlinks-removed
-echo 'testing empty'
-   # Remove sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-   if [ ! -f ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.symlinks-removed  ]; then
-   
-   
-    rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Desktop   
-    rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Downloads
-	  rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Documents'
-	  rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Music'
-	  rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Pictures'
-	  rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Videos' 
-	  rm ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Templates
+## Debug
+# echo ${PREFIXDIR}/$EXE_NOSP/$EXE_NOSP.symlinks-removed
+# ls   ${PREFIXDIR}/$EXE_NOSP/$EXE_NOSP.symlinks-removed
+# echo 'testing empty'
+## Debug
 
-	  #Create normal folders for the deleted symlinks
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Desktop
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Downloads
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Documents'
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Music'
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Pictures'
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/'My Videos' 
-	  mkdir -p ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE/drive_c/users/\$USER/Templates
+  # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
+  if [ ! -f ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.symlinks-removed  ]; then
 
-	  touch ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.symlinks-removed
-   fi
+       # Delete system linked links
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Desktop   
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Downloads
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Documents'
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Music'
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Pictures'
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Videos' 
+       rm ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Templates
 
-   
-# Launch game from flatpak-wine-gui.sh - Run with bottle
-if [ "\$1" = "launch" ]; then
-export EXE_FILE_NAME=\$(basename "$EXE_FILE")
-export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
+       #Create normal folders for the deleted symlinks
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Desktop
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Downloads
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Documents'
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Music'
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Pictures'
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/'My Videos' 
+       mkdir -p ${PREFIXDIR}/$EXE_NOSP/drive_c/users/\$USER/Templates
+
+       # Create file to check later
+     	 touch ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.symlinks-removed
+  fi
 
 
-
-cd "\$EXE_FILE_DIR"
-\${WINE_CMD}  "\$EXE_FILE_NAME"
-exit 0;
-fi
-# /Launch game from flatpak-wine-gui.sh
-
-
-choice=\$(zenity --title "$EXE_FILENAME_NO_SPACE: Choose!" --width=340 --height=400 \
-                 --list \
-                 --radiolist --column " " \
-                 --column "Action" \
-                          0 "Install Custom DLLs..." \
-                          TRUE "Launch $EXE_FILENAME_NO_SPACE" \
-                          0 "Run Winetricks..." \
-                          0 "Install Media Foundation Libraries" \
-						  0 "Launch Winecfg..." \
-                          0 "Open Explorer++..." \
-                          0 "Open Shell..." \
-						  0 "Rename..." \
-						  0 "Change Icon..." \
-						  0 "Backup..." \
-                          0 "Delete Bottle: $EXE_FILENAME_NO_SPACE" \
-                 --text "Select Action..." )
+### / Do we need this?
+#  # If asked to run an exe by winezgui using launch option
+#  if [ "\$1" = "launch" ]; then
+#       export EXE_FILE_NAME=\$(basename "$EXE_FILE")
+#       export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
+#       cd "\$EXE_FILE_DIR"
+#       \${WINE_CMD}  "\$EXE_FILE_NAME"
+#       exit 0;
+#  fi
+### / Do we need this?
 
 
-[[ -z "\$choice" ]] && exit 1
+  # EXE handling by providing dialog
+  choice=\$(zenity --title "$EXE_NOSP: Choose!" \
+                   --width=340 --height=500 \
+                   --list \
+                   --radiolist --column " " \
+                   --column "Action" \
+                       0    "Install Custom DLLs..." \
+                       TRUE "Launch $EXE_NOSP" \
+                       0    "Run Winetricks..." \
+                       0    "Install Media Foundation Libraries" \
+                       0    "Launch Winecfg..." \
+                       0    "Open Explorer++..." \
+                       0    "Open Shell..." \
+                       0    "Rename..." \
+                       0    "Change Icon..." \
+                       0    "Backup..." \
+                       0    "Delete Prefix: $EXE_NOSP" \
+                   --text "Select Action..." )
 
-if [ "\$choice" = "Run Winetricks..." ]; then  
-winetricks --gui
+  # If Cancel button is pressed, exit
+  [[ -z "\$choice" ]] && exit 1
 
-    # My_Dlls_install
+  # If Winetricks is selected
+  if [ "\$choice" = "Run Winetricks..." ]; then  
+       winetricks --gui
+
+  # Install Custom dependencies for Wine
 	elif [ "\$choice" = "Install Custom DLLs..." ]; then
-	mydlls=\$(zenity --title "Install custom dlls" --text "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" --entry)
-    if [ -z "\$mydlls" ]; #if no dlls are given
-       then         
-       mydlls=(xact xact_x64 xinput xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2012 vcrun2015 vcrun2019 d3dx9 d9vk faudio quartz dotnet48)
-    else
-    mydlls=( \$mydlls ) ; #convert string to array
-    fi
-size=\${#mydlls[*]}
-size=\$(expr \$size + 1) ;# add +1 for progress
-step=\$(expr 100 / \$size)
-step=\$(expr \$step + 1)
-prog=\$(echo \$step)
+	       DEPS=\$(zenity --title "Install custom dlls" \
+	                      --text  "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" \
+	                      --entry)
+         #If no DLLs are given, install default ones
+         if [ -z "\$DEPS" ]; then         
+              DEPS=(xact xact_x64 xinput xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2012 vcrun2015 vcrun2019 d3dx9 d9vk faudio quartz dotnet48)
+         else
+              DEPS=( \$DEPS ) ; #convert string to array
+         fi
 
-	( for i in \${mydlls[*]};
-	  do
-    	echo \$prog
-	    echo "# Installing \$i..."
-	    winetricks --force --unattended \$i
-      
-        prog=\$(expr \$prog + \$step)
-	  done
-	  echo 100
-	  echo "# Done!"
-	) | zenity --width=340 --title "$EXE_FILENAME_NO_SPACE: Installing Custom DLLs with Winetricks" --progress --auto-kill
+        # Show Progress
+        size=\${#DEPS[*]}
+        size=\$(expr \$size + 1) ;# add +1 for progress
+        step=\$(expr 100 / \$size)
+        step=\$(expr \$step + 1)
+        prog=\$(echo \$step)
 
-elif [ "\$choice" = "Install Media Foundation Libraries" ]; then
-flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
+	      ( for i in \${DEPS[*]};
+	        do
+          	echo \$prog
+	          echo "# Installing \$i..."
+	          \${WINETRICKS_CMD} --force --unattended \$i
+              prog=\$(expr \$prog + \$step)
+	        done
+	        echo 100
+	        echo "# Done!"
+	      ) | zenity --width=340 --title "$EXE_NOSP: Installing Custom DLLs with Winetricks" --progress --auto-kill
 
-elif [ "\$choice" = "Launch Winecfg..." ]; then
-winecfg
-elif [ "\$choice" = "Open Explorer++..." ]; then
-#wine /app/explorer++/Explorer++.exe
-wine explorer
-elif [ "\$choice" = "Open Shell..." ]; then   
- gnome-terminal -- bash
+  # PSEUDO CODE WORK HERE
+  # Download mf-install from github (create fastrizwan's mf-install)
+  elif [ "\$choice" = "Install Media Foundation Libraries" ]; then
+#  wget github.com/fastrizwaan/mf-install/release/mf-install.tar.gz
+#  tar -hxvf mf-install.tar.gz
+#  cd mf-install
+#  WINEPREFIX=${WINEZPREFIX-WHATEVER} mf-install
+#  AND FOR FLATPAK?
+#  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
+   echo "fix me"
+   
+  elif [ "\$choice" = "Launch Winecfg..." ]; then
+         ${WINECFG_CMD}
+    
+  elif [ "\$choice" = "Open Explorer++..." ]; then
+  #wine /app/explorer++/Explorer++.exe
+         ${WINEEXPLORER_CMD}
+  elif [ "\$choice" = "Open Shell..." ]; then   
+         ${TERMINAL_CMD}
  
-elif [ "\$choice" = "Rename..." ]; then
-     PROGNAME=\$(zenity --title "Rename shortcut" --text "Enter a name for your \
-shortcut" --entry)
+  elif [ "\$choice" = "Rename..." ]; then
+         PROGNAME=\$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
+       
+         if [ ! \$PROGNAME ]; then #if no name is given use filename
+              zenity --info --title="Shortcut... " --text="no Change"        
+              exit;
+         fi
+         
+         export WINEVER=\$(wine --version|cut -f1 -d ' ')
+         desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.desktop
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
+         zenity --info --title="$EXE_NAME.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
-    if [ ! \$PROGNAME ]; #if no name is given use filename
-       then 
-       zenity --info --title="Shortcut... " --text="no Change"        
-       exit;
-    fi
-    export WINEVER=\$(wine --version|cut -f1 -d ' ')
-    desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.desktop
-	update-desktop-database ${APPLICATIONSDIR}/
-	zenity --info --title="$EXE_FILENAME.desktop" --text="Shortcut renamed sucessfuly: \$appname"
+  elif [ "\$choice" = "Change Icon..." ]; then
+         get_icon=\$(zenity --file-selection --file-filter=""*.png" "*.jpg" "*.svg"")
+        if [ ! \$get_icon ]; then #if no icon is choosen
+           zenity --info --title="Icon... " --text="no Change"        
+           exit;
+        fi
+        
+        desktop-file-edit --set-icon="\$get_icon" \${DESKTOPDIR}/"$EXE_NAME".desktop 
+        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
+	      zenity --info --title="$EXE_NAME.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
-elif [ "\$choice" = "Change Icon..." ]; then
-     get_icon=\$(zenity --file-selection --file-filter=""*.png" "*.jpg" "*.svg"")
-     if [ ! \$get_icon ]; #if no icon is choosen
-       then 
-       zenity --info --title="Icon... " --text="no Change"        
-       exit;
-     fi
-     desktop-file-edit --set-icon="\$get_icon" \${DESKTOPDIR}/"$EXE_FILENAME".desktop 
-	 update-desktop-database ${APPLICATIONSDIR}/
-	 zenity --info --title="$EXE_FILENAME.desktop" --text="Icon Changed sucessfuly: \$get_icon"
-
-
-
-elif [ "\$choice" = "Backup..." ]; then
-     DATE=\$(date +'%Y%m%d')
-     mkdir -p \$HOME/flatpak-wine70-backup;
-	 tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_FILENAME_NO_SPACE-\$DATE.tar.gz" \
-			${PREFIXDIR}/"$EXE_FILENAME_NO_SPACE"          \
-			${PREFIXDIR}/"$EXE_FILENAME_NO_SPACE.sh"       \
-			${PREFIXDIR}/"$EXE_FILENAME_NO_SPACE.desktop"  \
-			${PREFIXDIR}/"$EXE_FILENAME_NO_SPACE.icon.png" \
-	     && zenity --info --title="Bottle backed up: $EXE_FILENAME_NO_SPACE" --text="flatpak-wine70-bottle-$EXE_FILENAME_NO_SPACE-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
-
+  # Ask user to where to save the backup
+  elif [ "\$choice" = "Backup..." ]; then
+#         DATE=\$(date +'%Y%m%d')
+#         mkdir -p \$HOME/flatpak-wine70-backup;
+#	 tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz" \
+#			${PREFIXDIR}/"$EXE_NOSP"          \
+#			${PREFIXDIR}/"$EXE_NOSP.sh"       \
+#			${PREFIXDIR}/"$EXE_NOSP.desktop"  \
+#			${PREFIXDIR}/"$EXE_NOSP.icon.png" \
+#	     && zenity --info --title="Bottle backed up: $EXE_NOSP" --text="flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
+      echo "fix me"
 
 
-elif [ "\$choice" = "Delete Bottle: $EXE_FILENAME_NO_SPACE" ]; then
-rm -rfv ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE; 
-rm -f "${PREFIXDIR}/$EXE_FILENAME.desktop"
-rm -f "$WINEPREFIX_SUBDIR.desktop" 
-rm -f "$WINEPREFIX_SUBDIR.icon.png"
-rm -f ${PREFIXDIR}/"$EXE_FILENAME_NO_SPACE.sh"
-rm -f ${DESKTOPDIR}/$EXE_FILENAME.desktop
-rm -f ${PREFIXDIR}/$EXE_FILENAME_NO_SPACE.symlinks-removed
+  elif [ "\$choice" = "Delete Prefix: $EXE_NOSP" ]; then
+         rm -rfv ${PREFIXDIR}/$EXE_NOSP; 
+         rm -rfv ${DESKTOPDIR}/$EXE_NAME.desktop
 
-elif [ "\$choice" = "Launch $EXE_FILENAME_NO_SPACE" ]; then
-export base=\$(basename "$EXE_FILE")
-export dire=\$(dirname "$EXE_FILE")
-cd "\$dire"
-
-\${WINE_CMD} "\$base"
-fi
+  elif [ "\$choice" = "Launch $EXE_NOSP" ]; then
+         export base=\$(basename "$EXE_FILE")
+         export dire=\$(dirname "$EXE_FILE")
+         
+         cd "\$dire"
+         \${WINE_CMD} "\$base"
+  fi
 EOF
 
 ###############################################
-chmod +x ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.sh
+chmod +x ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.sh
 
     # Generate desktop entry specifications to be added to the application launcher.
-    deskEntry="[Desktop Entry]"\\n"Exec=bash -c ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.sh"\\n"Name=\
-$PROGNAME"\\n"Path=$EXE_FILEPATH"\\n"Type=Application"\\n"Categories=$appCategory\
-$category;"\\n"Icon="${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.icon.png""
+    deskEntry="[Desktop Entry]"\\n"Exec=bash -c ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.sh"\\n"Name=\
+$PROGNAME"\\n"Path=$EXE_PATH"\\n"Type=Application"\\n"Categories=$appCategory\
+$category;"\\n"Icon="${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.icon.png""
     # Create a .desktop file and add desktop entries in it.
-    echo -e $deskEntry >"${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.desktop"
-    echo "Keywords=flatpak; wine;" >> ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.desktop
+    echo -e $deskEntry >"${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.desktop"
+    echo "Keywords=flatpak; wine;" >> ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.desktop
     
     # link the launcher  file to a shortcut on applications menu.
     mkdir -p "${PREFIXDIR}"
     
-    ln -sfv ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.desktop ${DESKTOPDIR}/"$EXE_FILENAME".desktop
+    ln -sfv ${PREFIXDIR}/${EXE_NOSP}/${EXE_NOSP}.desktop ${DESKTOPDIR}/"$EXE_NAME".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE}
         echo "Shortcut created sucessfuly on applications menu."
-    	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_FILENAME.desktop"
+    	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NAME.desktop"
     fi
 
 else 
