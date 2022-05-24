@@ -14,7 +14,9 @@ finish-args:
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
   - --filesystem=~/.local/share/applications
-  - --filesystem=host:ro
+  # Games need to write to their own directories
+  - --filesystem=host
+  # Launch Games from created desktop shorcuts
   - --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
@@ -64,5 +66,5 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.44.tar.gz
-        sha256: 49a5adc70f05b19c1e623c60907d5177684c9f80f4e324bc741958774fab329c
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.45.tar.gz
+        sha256: 37da68c5815ecc58c67864f966ce5a415973682a741284d7a2c18a232d968e0b
