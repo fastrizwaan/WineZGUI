@@ -20,7 +20,7 @@ export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TMPDIR="/tmp"
 
-mkdir -vp "$TMPDIR"
+
 
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
@@ -30,11 +30,13 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_NAME=$(basename "$EXE_FILE")
     EXE_PATH=$(dirname  "$EXE_FILE")
 	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
+ 	  EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
  	  EXE_DATE=$(echo $EXE_NOSP|sed "s/\.exe/-$(date +%F)/g");
     WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_DATE"    
 	      
 	# application shortcut folder
-    mkdir -p  "$WINEPREFIX_SUBDIR"
+    mkdir -p  "${WINEPREFIX_SUBDIR}"
+    mkdir -p  "${DESKTOPDIR}"
     # Function to verify if required program is installed.
     VerInst () {
 	              if [ $? -eq 127 ]; then
@@ -46,18 +48,19 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     }
     
     # Extract icon and convert it to several png files of diferent quality, 
-      cd ${TMPDIR}
-      wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NAME.ico" 2> /dev/null
-      VerInst icoutils
+     mkdir -vp ${TMPDIR}
+     cd ${TMPDIR}
+     wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
+     VerInst icoutils
 
     
-    icotool -x "${TMPDIR}/$EXE_NAME.ico" 2>/dev/null
-    echo icotool: extracting png from ico:$EXE_NAME.ico
+    icotool -x "${TMPDIR}/$EXE_NOEXE.ico" 2>/dev/null
+    echo icotool: extracting png from ico:$EXE_NOEXE.ico
     ls -R "${TMPDIR}/" 
     
     # Select the best png image file.\
-    cp $(ls -S -1 ${TMPDIR}/${EXE_NAME}*.png  | head -n 1) \
-       ${WINEPREFIX_SUBDIR}/${EXE_NOSP}.icon.png 
+    cp $(ls -S -1 ${TMPDIR}/${EXE_NOEXE}*.png  | head -n 1) \
+       ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.icon.png && \
        
     rm -rf $TMPDIR ; #remove tmp directory after copying icon png
     
@@ -69,27 +72,25 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
 
     VerInst zenity
-    PROGNAME=$(zenity --title "wine-create-shortcut" --text "Enter a name for your \
-shortcut" --entry)
+    
+    # Create Desktop Shortcut
+    # Ask for Name
+    PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
 
-    if [ ! "$PROGNAME" ]; #if no name is given use filename
+    if [ ! "$PROGNAME" ]; #if no name is given use exe filename
        then         
-       PROGNAME=$(echo "$EXE_NAME (${WINEVER})"|sed 's/\.exe//g');     
+       PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
        PROGNAME=$(echo "$PROGNAME (${WINEVER})");   
     fi
 
 
-# try to add wineprefix for the game
-mkdir -p ${PREFIXDIR}/
-mkdir -p ${DESKTOPDIR}/
-
-
+# Create Launch Script for the provided EXE file
 ###############################################
-cat << EOF > ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.sh
+cat << EOF > ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
 #!/bin/bash
 export PREFIX=${WINEPREFIX_SUBDIR}
-export WINEPREFIX=${PREFIX}
+export WINEPREFIX=${WINEPREFIX_SUBDIR}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
@@ -105,8 +106,8 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
     else 
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
-        export WINECFG_CMD="${WINE_CMD} winecfg"
-        export WINEEXPLORER_CMD="${WINE_CMD} explorer"
+        export WINECFG_CMD="$\{WINE_CMD} winecfg"
+        export WINEEXPLORER_CMD="\${WINE_CMD} explorer"
         export TERMINAL_CMD="gnome-terminal -- bash"
     fi
 
@@ -117,28 +118,28 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 ## Debug
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-  if [ ! -f ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.symlinks-removed  ]; then
+  if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
 
        # Delete system linked links
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Desktop   
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Downloads
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Documents'
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Music'
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Pictures'
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Videos' 
-       rm ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Templates
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Desktop   
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Downloads
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Documents'
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Music'
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Pictures'
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Videos' 
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Templates
 
        #Create normal folders for the deleted symlinks
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Desktop
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Downloads
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Documents'
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Music'
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Pictures'
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/'My Videos' 
-       mkdir -p ${PREFIXDIR}/$EXE_DATE/drive_c/users/\$USER/Templates
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Desktop
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Downloads
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Documents'
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Music'
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Pictures'
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/'My Videos' 
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Templates
 
        # Create file to check later
-     	 touch ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.symlinks-removed
+     	 touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
   fi
 
 
@@ -178,7 +179,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 
   # If Winetricks is selected
   if [ "\$choice" = "Run Winetricks..." ]; then  
-       winetricks --gui
+       \$WINETRICKS_CMD --gui
 
   # Install Custom dependencies for Wine
 	elif [ "\$choice" = "Install Custom DLLs..." ]; then
@@ -222,13 +223,13 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
    echo "fix me"
    
   elif [ "\$choice" = "Launch Winecfg..." ]; then
-         ${WINECFG_CMD}
+         \${WINECFG_CMD}
     
   elif [ "\$choice" = "Open Explorer++..." ]; then
   #wine /app/explorer++/Explorer++.exe
-         ${WINEEXPLORER_CMD}
+         \${WINEEXPLORER_CMD}
   elif [ "\$choice" = "Open Shell..." ]; then   
-         ${TERMINAL_CMD}
+         \${TERMINAL_CMD}
  
   elif [ "\$choice" = "Rename..." ]; then
          PROGNAME=\$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
@@ -239,9 +240,9 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
          fi
          
          export WINEVER=\$(wine --version|cut -f1 -d ' ')
-         desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.desktop
+         desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
-         zenity --info --title="$EXE_NAME.desktop" --text="Shortcut renamed sucessfuly: \$appname"
+         zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
   elif [ "\$choice" = "Change Icon..." ]; then
          get_icon=\$(zenity --file-selection --file-filter=""*.png" "*.jpg" "*.svg"")
@@ -250,9 +251,9 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
            exit;
         fi
         
-        desktop-file-edit --set-icon="\$get_icon" \${DESKTOPDIR}/"$EXE_NAME".desktop 
+        desktop-file-edit --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/"$EXE_NOEXE".desktop 
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
-	      zenity --info --title="$EXE_NAME.desktop" --text="Icon Changed sucessfuly: \$get_icon"
+	      zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
   # Ask user to where to save the backup
   elif [ "\$choice" = "Backup..." ]; then
@@ -268,10 +269,10 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 
 
   elif [ "\$choice" = "Delete Prefix: $EXE_NOSP" ]; then
-         rm -rfv ${PREFIXDIR}/$EXE_NOSP; 
-         rm -rfv ${DESKTOPDIR}/$EXE_NAME.desktop
+         rm -rfv ${WINEPREFIX_SUBDIR}; 
+         rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
 
-  elif [ "\$choice" = "Launch $EXE_NOSP" ]; then
+  elif [ "\$choice" = "Launch $EXE_NOEXE" ]; then
          export base=\$(basename "$EXE_FILE")
          export dire=\$(dirname "$EXE_FILE")
          
@@ -281,26 +282,28 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 EOF
 
 ###############################################
-chmod +x ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.sh
+chmod +x ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
 
-    # Generate desktop entry specifications to be added to the application launcher.
-    deskEntry="[Desktop Entry]"\\n"Exec=bash -c ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.sh"\\n"Name=\
-$PROGNAME"\\n"Path=$EXE_PATH"\\n"Type=Application"\\n"Categories=$appCategory\
-$category;"\\n"Icon="${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.icon.png""
-    # Create a .desktop file and add desktop entries in it.
-    echo -e $deskEntry >"${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.desktop"
-    echo "Keywords=flatpak; wine;" >> ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.desktop
-    
+# Generate desktop entry specifications to be added to the application launcher.
+echo "
+[Desktop Entry]
+Exec=bash -c ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
+Name=$PROGNAME
+Path=$EXE_PATH
+Type=Application
+Categories=$appCategory;
+Icon=${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.icon.png
+Keywords=wine; game; emulator;
+" > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
+
     # link the launcher  file to a shortcut on applications menu.
-    mkdir -p "${PREFIXDIR}"
-    
-    ln -sfv ${PREFIXDIR}/${EXE_DATE}/${EXE_NOSP}.desktop ${DESKTOPDIR}/"$EXE_NAME".desktop
+    ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop ${DESKTOPDIR}/"$EXE_NOEXE".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE}
         echo "Shortcut created sucessfuly on applications menu."
-    	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NAME.desktop"
+    	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NOEXE.desktop"
     fi
 
 else 
