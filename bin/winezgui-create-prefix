@@ -162,7 +162,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
                    --radiolist --column " " \
                    --column "Action" \
                        0    "Install Custom DLLs..." \
-                       TRUE "Launch $EXE_NOSP" \
+                       TRUE "Launch $EXE_NOEXE" \
                        0    "Run Winetricks..." \
                        0    "Install Media Foundation Libraries" \
                        0    "Launch Winecfg..." \
@@ -268,7 +268,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
       echo "fix me"
 
 
-  elif [ "\$choice" = "Delete Prefix: $EXE_NOSP" ]; then
+  elif [ "\$choice" = "Delete Prefix: $EXE_DATE" ]; then
          rm -rfv ${WINEPREFIX_SUBDIR}; 
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
 
@@ -293,7 +293,7 @@ Path=$EXE_PATH
 Type=Application
 Categories=$appCategory;
 Icon=${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.icon.png
-Keywords=wine; game; emulator;
+Keywords=wine; game; ${EXE_NOEXE};
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
