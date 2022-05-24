@@ -98,11 +98,11 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 
     # if script is not run from sandbox
     if [ \$(which flatpak 2>/dev/null) ]; then
-        export WINE_CMD="flatpak          run --command=wine org.winehq.Wine"
-        export WINETRICKS_CMD="flatpak    run --command=winetricks org.winehq.Wine"
-        export WINECFG_CMD="flatpak       run --command=wine org.winehq.Wine winecfg"
-        export WINEEXPLORER_CMD="flatpak  run --command=wine org.winehq.Wine explorer"
-        export TERMINAL_CMD="gnome-terminal -- bash -c 'flatpak run --command=bash org.winehq.Wine'"
+        export WINE_CMD="flatpak --filesystem=host:ro --command=wine run  org.winehq.Wine"
+        export WINETRICKS_CMD="flatpak --filesystem=host:ro --command=winetricks run org.winehq.Wine"
+        export WINECFG_CMD="flatpak --filesystem=host:ro --command=wine run org.winehq.Wine winecfg"
+        export WINEEXPLORER_CMD="flatpak --filesystem=host:ro --command=wine  run org.winehq.Wine explorer"
+        export TERMINAL_CMD="gnome-terminal -- bash -c 'flatpak --filesystem=host:ro --command=bash run org.winehq.Wine'"
     else 
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
