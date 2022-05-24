@@ -14,8 +14,8 @@ export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export PREFIXDIR=${WINEZPREFIX}
-export RUN_UPDATE_ICON_CACHE="gtk-update-icon-cache"
-export RUN_UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
+export UPDATE_ICON_CACHE="gtk-update-icon-cache"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TMPDIR="/tmp"
@@ -296,8 +296,8 @@ $category;"\\n"Icon="${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPA
     ln -sfv ${PREFIXDIR}/${EXE_FILENAME_NO_SPACE}/${EXE_FILENAME_NO_SPACE}.desktop ${DESKTOPDIR}/"$EXE_FILENAME".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
-        ${RUN_UPDATE_ICON_CACHE}
-        ${RUN_UPDATE_DESKTOP_DATABASE}
+        ${UPDATE_ICON_CACHE}
+        ${UPDATE_DESKTOP_DATABASE}
         echo "Shortcut created sucessfuly on applications menu."
     	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_FILENAME.desktop"
     fi
