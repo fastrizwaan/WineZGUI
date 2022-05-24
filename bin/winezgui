@@ -40,7 +40,11 @@ mkdir -pv "${PREFIXDIR}"
    # to prevent games/programs from saving/writing to ~/Documents for backup purpose
    if [ ! -f ${PREFIXDIR}/default.symlinks-removed ]; then
     
-    WINEDLLOVERRIDES="mscoree,mshtml=" PREFIX=${PREFIXDIR} wineboot -u && \
+    # Create Prefix and delete base system linked directory links 
+    WINEDLLOVERRIDES="mscoree,mshtml=" \
+    WINEPREFIX=${PREFIXDIR} \
+    wineboot -u && \
+    
     rm -rf ${PREFIXDIR}/drive_c/users/$USER/Desktop
 	  rm -rf ${PREFIXDIR}/drive_c/users/$USER/Downloads
 	  rm -rf ${PREFIXDIR}/drive_c/users/$USER/'My Documents'
