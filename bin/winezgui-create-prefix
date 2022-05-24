@@ -30,7 +30,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_NAME=$(basename "$EXE_FILE")
     EXE_PATH=$(dirname  "$EXE_FILE")
 	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
- 	  EXE_DATE=$(echo $EXE_NOSP|sed "s/\.exe/$(date +%F)/g");
+ 	  EXE_DATE=$(echo $EXE_NOSP|sed "s/\.exe/-$(date +%F)/g");
     WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_DATE"    
 	      
 	# application shortcut folder
