@@ -102,7 +102,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
         export WINETRICKS_CMD="flatpak    run --command=winetricks org.winehq.Wine"
         export WINECFG_CMD="flatpak       run --command=wine org.winehq.Wine winecfg"
         export WINEEXPLORER_CMD="flatpak  run --command=wine org.winehq.Wine explorer"
-        export TERMINAL_CMD='gnome-terminal -- bash -c "flatpak run --command=bash org.winehq.Wine"'
+        export TERMINAL_CMD="gnome-terminal -- bash -c 'flatpak run --command=bash org.winehq.Wine'"
     else 
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
