@@ -96,14 +96,15 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
 
 
-    # if script is not run from sandbox, 
-    if [ \$(which flatpak 2>/dev/null) ]; then
+    # If io.github.WineZGUI is installed, then most probably we are using flatpak version
+    # and we need to assign flatpak wine commands to created wine shortcuts
+    if [ \$(flatpak --command=pwd run io.github.WineZGUI 1>/dev/null) ]; then
         export WINE_CMD="flatpak --filesystem=host run --command=wine io.github.WineZGUI"
         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
         export TERMINAL_CMD="gnome-terminal -- bash -c 'flatpak --filesystem=host --command=bash run io.github.WineZGUI'"
-    else 
+    else # We are using non flatpak install
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
         export WINECFG_CMD="\${WINE_CMD} winecfg"
