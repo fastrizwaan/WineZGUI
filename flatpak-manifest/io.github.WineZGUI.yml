@@ -67,4 +67,4 @@ modules:
     sources:
       - type: archive
         url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.51.tar.gz
-        sha256: c61fc768009b99c040862be464f7e00668d686e72786b6dd0bf77dc1dbb92c2e
+        sha256: ce3b1cf7ca767dfb51f34e1db427ce535ce792b76c7488d9c03ecab801cca4a5

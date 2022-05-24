@@ -118,12 +118,12 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
 ## Debug
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-  if [ ! -f \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.symlinks-removed  ]; then
+  if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
 
-       # Create Prefix and delete base system linked directory links       
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       wineboot -u && \ 
+#       # Create Prefix and delete base system linked directory links       
+#       WINEDLLOVERRIDES="mscoree,mshtml=" \
+#       WINEPREFIX=${WINEPREFIX_SUBDIR} \
+#       wineboot -u && \ 
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Downloads
@@ -143,7 +143,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
        mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Templates
 
        # Create file to check later
-     	 touch \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.symlinks-removed
+     	 touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
   fi
 
 
