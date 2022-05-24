@@ -72,8 +72,8 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_PREFIX="/app"
      UIC="flatpak-spawn --host gtk-update-icon-cache"
      UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
-     WINE_CMD="flatpak run --command=wine org.winehq.Wine"
-     WINETRICKS_CMD="flatpak run --command=winetricks org.winehq.Wine"
+     WINE_CMD='flatpak run --command=wine org.winehq.Wine'
+     WINETRICKS_CMD='flatpak run --command=winetricks org.winehq.Wine'
      TMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
 fi     
