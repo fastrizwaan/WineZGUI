@@ -17,6 +17,8 @@ finish-args:
   # Games need to write to their own directories
   - --filesystem=host
   # Launch Games from created desktop shorcuts
+  # Also need to call perl5 as runtime perl does not exist
+  # to get exe name from exe file using exiftool
   - --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
@@ -66,5 +68,15 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.51.tar.gz
-        sha256: ce3b1cf7ca767dfb51f34e1db427ce535ce792b76c7488d9c03ecab801cca4a5
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.52.tar.gz
+        sha256: 776296ea66734f268ae79fb9a604f037ada44ab5dc5bf8ae36e625ed1c90ef0a
+
+  - name: exiftool
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 exiftool /app/bin/
+      - sed 's:/usr/bin:/app/bin:g' -i /app/bin/exiftool
+    sources:
+      - type: archive
+        url: https://exiftool.org/Image-ExifTool-12.41.tar.gz
+        sha256: 654f401daab0045a8364fa59d3f69b6f9bf23bcef157a3c928e373884a6f9370
