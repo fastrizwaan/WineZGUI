@@ -96,7 +96,7 @@ export WINEPREFIX=${WINEPREFIX_SUBDIR}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
-export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
+export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
     # If io.github.WineZGUI is installed, then most probably we are using flatpak version
     # and we need to assign flatpak wine commands to created wine shortcuts

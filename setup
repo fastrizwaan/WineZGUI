@@ -108,7 +108,7 @@ if [ "${INSTALL}" = "true"  ]; then
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui
      sed "s|export TERMINAL_CMD=\"gnome-terminal -- bash\"|export TERMINAL_CMD=\"$TERMINAL_CMD\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"\\$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 
      # Create uninstall script for later removal
      echo "
