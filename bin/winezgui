@@ -252,30 +252,29 @@ else
             TRUE "Run ${EXE_NAME} using Default Prefix"                   \
                0 "Create Prefix for ${EXE_NAME}"                          \
           --text "Select Action for ${PREFIXDIR} " )
-    fi
+   fi
     
-    # Exit if Cancel is clicked
-    if [ -z "${SELECTION}" ]; then
-        exit 1
-    fi
+   # Exit if Cancel is clicked
+   if [ -z "${SELECTION}" ]; then
+       exit 1
+   fi
    
-    # If existing prefix does not exist for the exe supplied
-    if [ "${SELECTION}" = "Run ${EXE_NAME} using Default Prefix" ]; then  
-        cd "$dire" 2>/dev/null;#go to the exe directory then run
-        WINEPREFIX=${PREFIXDIR} ${WINEEXE} "$@"
-    # Create Prefix for the selected EXE
-    elif [ "${SELECTION}" = "Create Prefix for ${EXE_NAME}" ]; then
-    
-        echo "${EXE_FILE} ${EXE_FILE}"
-        sleep 10s
-         $BINDIR/winezgui-create-prefix "${EXE_FILE}"
-    elif [ "${SELECTION}" = "Run ${EXE_FILE} using existing ${EXE_NOEXE} prefix" ]; then
-      # We replace "name with space" to "name_with_space"
-      ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
+   # If existing prefix does not exist for the exe supplied
+   if [ "${SELECTION}" = "Run ${EXE_NAME} using Default Prefix" ]; then  
+       cd "$dire" 2>/dev/null;#go to the exe directory then run
+       WINEPREFIX=${PREFIXDIR} ${WINEEXE} "$@"
+   # Create Prefix for the selected EXE
+   elif [ "${SELECTION}" = "Create Prefix for ${EXE_NAME}" ]; then
+   
+       echo "${EXE_FILE} ${EXE_FILE}"
+        $BINDIR/winezgui-create-prefix "${EXE_FILE}"
+   elif [ "${SELECTION}" = "Run ${EXE_NAME} using existing ${EXE_NOEXE} Prefix" ]; then
+     # We replace "name with space" to "name_with_space"
+     ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
 
-    elif [ "${SELECTION}" =   "Run ${EXE_FILE} configuration" ]; then
-        ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
-    fi
+   elif [ "${SELECTION}" = "Run ${EXE_NAME} configuration" ]; then
+         ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
+   fi
   
 
 fi
