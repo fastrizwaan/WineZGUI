@@ -66,6 +66,9 @@ sudo ./setup --uninstall
 `sudo dnf install wine winetricks icoutils gnome-terminal`
 
 ### Debian / Ubuntu
-`sudo apt install wine winetricks icoutils gnome-terminal`
+```
+sudo dpkg --add-architecture i386
+sudo apt install wine winetricks icoutils gnome-terminal
+```
 
 
