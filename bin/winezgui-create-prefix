@@ -18,7 +18,7 @@ export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
-export TMPDIR="/tmp"
+export TMPDIR="${WINEZPREFIX}/tmp"
 
 
 
@@ -32,7 +32,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
  	  EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
     WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"    
-	      
+#	  export WINEPREFIX="${PREFIXDIR}/$EXE_NOEXE"    
 	# application shortcut folder
     mkdir -p  "${WINEPREFIX_SUBDIR}"
     mkdir -p  "${DESKTOPDIR}"
