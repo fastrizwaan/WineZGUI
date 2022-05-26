@@ -60,6 +60,7 @@ WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
+DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 # If prefix= nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
@@ -79,6 +80,7 @@ if [ "${FLATPAK}" = "true" ]; then
      # Environment variable is not set when winezgui calls game script from sandbox
      # so, ask them to run from host 
      TERMINAL_CMD="zenity --warning --text No-Terminal"
+     DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
 fi     
 ##
 
@@ -106,6 +108,7 @@ if [ "${INSTALL}" = "true"  ]; then
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui
      sed "s|export TERMINAL_CMD=\"gnome-terminal -- bash\"|export TERMINAL_CMD=\"$TERMINAL_CMD\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 
      # Create uninstall script for later removal
      echo "

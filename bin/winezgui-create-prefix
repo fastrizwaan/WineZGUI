@@ -96,7 +96,7 @@ export WINEPREFIX=${WINEPREFIX_SUBDIR}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
-
+export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
     # If io.github.WineZGUI is installed, then most probably we are using flatpak version
     # and we need to assign flatpak wine commands to created wine shortcuts
@@ -247,7 +247,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
          fi
          
          export WINEVER=\$(wine --version|cut -f1 -d ' ')
-         desktop-file-edit --set-name="\$PROGNAME ($WINEVER)" \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop
+         ${DESKTOP_FILE_EDIT} --set-name="\$PROGNAME ($WINEVER)" \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
          zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
@@ -258,7 +258,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
            exit;
         fi
         
-        desktop-file-edit --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/"$EXE_NOEXE".desktop 
+        ${DESKTOP_FILE_EDIT} --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/"$EXE_NOEXE".desktop 
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
         zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
