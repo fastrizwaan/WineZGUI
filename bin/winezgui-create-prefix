@@ -18,7 +18,7 @@ export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
-export TMPDIR="${WINEZPREFIX}/tmp"
+export TEMPDIR="${WINEZPREFIX}/tmp"
 
 
 
@@ -29,39 +29,42 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_FILE=$(realpath -m "$1")
     EXE_NAME=$(basename "$EXE_FILE")
     EXE_PATH=$(dirname  "$EXE_FILE")
-	  EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
- 	  EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
+    EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
+    EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
     WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"    
-#	  export WINEPREFIX="${PREFIXDIR}/$EXE_NOEXE"    
-	# application shortcut folder
+#    export WINEPREFIX="${PREFIXDIR}/$EXE_NOEXE"    
+  # application shortcut folder
     mkdir -p  "${WINEPREFIX_SUBDIR}"
     mkdir -p  "${DESKTOPDIR}"
     # Function to verify if required program is installed.
     VerInst () {
-	              if [ $? -eq 127 ]; then
-	                  echo "$1 package is not installed."
-	                  echo "Install it before running this script."
-	                  echo "Aborting."
-	                  exit 1
-	              fi
+                if [ $? -eq 127 ]; then
+                    echo "$1 package is not installed."
+                    echo "Install it before running this script."
+                    echo "Aborting."
+                    exit 1
+                fi
     }
     
     # Extract icon and convert it to several png files of diferent quality, 
-     mkdir -vp ${TMPDIR}
-     cd ${TMPDIR}
-     wrestool -x -t 14 "$EXE_FILE" > "${TMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
+     mkdir -vp ${TEMPDIR}
+     cd ${TEMPDIR}
+     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
      VerInst icoutils
 
     
-    icotool -x "${TMPDIR}/$EXE_NOEXE.ico" 2>/dev/null
+    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null
     echo icotool: extracting png from ico:$EXE_NOEXE.ico
-    ls -R "${TMPDIR}/" 
+    ls -R "${TEMPDIR}/" 
     
     # Select the best png image file.\
-    cp $(ls -S -1 ${TMPDIR}/${EXE_NOEXE}*.png  | head -n 1) \
+    cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) \
        ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.icon.png && \
-       
-    rm -rf $TMPDIR ; #remove tmp directory after copying icon png
+    
+
+    echo rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
+    sleep 5s;   
+
     
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
@@ -143,7 +146,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
        mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/\$USER/Templates
 
        # Create file to check later
-     	 touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
+        touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
   fi
 
 
@@ -186,10 +189,10 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
        \$WINETRICKS_CMD --gui
 
   # Install Custom dependencies for Wine
-	elif [ "\$choice" = "Install Custom DLLs..." ]; then
-	       DEPS=\$(zenity --title "Install custom dlls" \
-	                      --text  "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" \
-	                      --entry)
+  elif [ "\$choice" = "Install Custom DLLs..." ]; then
+         DEPS=\$(zenity --title "Install custom dlls" \
+                        --text  "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" \
+                        --entry)
          #If no DLLs are given, install default ones
          if [ -z "\$DEPS" ]; then         
               DEPS=(xact xact_x64 xinput xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2012 vcrun2015 vcrun2019 d3dx9 d9vk faudio quartz dotnet48)
@@ -204,16 +207,16 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
         step=\$(expr \$step + 1)
         prog=\$(echo \$step)
 
-	      ( for i in \${DEPS[*]};
-	        do
-          	echo \$prog
-	          echo "# Installing \$i..."
-	          \${WINETRICKS_CMD} --force --unattended \$i
+        ( for i in \${DEPS[*]};
+          do
+            echo \$prog
+            echo "# Installing \$i..."
+            \${WINETRICKS_CMD} --force --unattended \$i
               prog=\$(expr \$prog + \$step)
-	        done
-	        echo 100
-	        echo "# Done!"
-	      ) | zenity --width=340 --title "$EXE_NOSP: Installing Custom DLLs with Winetricks" --progress --auto-kill
+          done
+          echo 100
+          echo "# Done!"
+        ) | zenity --width=340 --title "$EXE_NOSP: Installing Custom DLLs with Winetricks" --progress --auto-kill
 
   # PSEUDO CODE WORK HERE
   # Download mf-install from github (create fastrizwan's mf-install)
@@ -257,18 +260,18 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
         
         desktop-file-edit --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/"$EXE_NOEXE".desktop 
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
-	      zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
+        zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
   # Ask user to where to save the backup
   elif [ "\$choice" = "Backup..." ]; then
 #         DATE=\$(date +'%Y%m%d')
 #         mkdir -p \$HOME/flatpak-wine70-backup;
-#	 tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz" \
-#			${PREFIXDIR}/"$EXE_NOSP"          \
-#			${PREFIXDIR}/"$EXE_NOSP.sh"       \
-#			${PREFIXDIR}/"$EXE_NOSP.desktop"  \
-#			${PREFIXDIR}/"$EXE_NOSP.icon.png" \
-#	     && zenity --info --title="Bottle backed up: $EXE_NOSP" --text="flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
+#   tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz" \
+#      ${PREFIXDIR}/"$EXE_NOSP"          \
+#      ${PREFIXDIR}/"$EXE_NOSP.sh"       \
+#      ${PREFIXDIR}/"$EXE_NOSP.desktop"  \
+#      ${PREFIXDIR}/"$EXE_NOSP.icon.png" \
+#       && zenity --info --title="Bottle backed up: $EXE_NOSP" --text="flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
       echo "fix me"
 
 
@@ -307,14 +310,14 @@ Keywords=wine; game; ${EXE_NOEXE};
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE}
         echo "Shortcut created sucessfuly on applications menu."
-    	zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NOEXE.desktop"
+      zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NOEXE.desktop"
     fi
 
 else 
 
 # If no application was submited, show this message.
-	echo Please, submit a windows application file. 
-	echo Usage: $0 path/to/app.exe 
-	zenity --info --title="Select an EXE to create shortcut" --text="in Filemanager, right-click on an exe and select this!"
+  echo Please, submit a windows application file. 
+  echo Usage: $0 path/to/app.exe 
+  zenity --info --title="Select an EXE to create shortcut" --text="in Filemanager, right-click on an exe and select this!"
 
 fi
