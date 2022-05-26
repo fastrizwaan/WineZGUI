@@ -40,7 +40,7 @@ export WINETRICKS="$(which winetricks)"
   
       # if arugment is not an exe file, then quit
       IS_EXE="$(echo $EXE_EXT|tr A-Z a-z)"
-      echo IS_EXE = IS_EXE
+
       if [ "$IS_EXE" != "exe" ]; then
           echo "Warn: \"${EXE_NAME}\" is not an EXE file"
           echo "info: Please provide EXE file as argument"

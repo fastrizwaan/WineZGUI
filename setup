@@ -76,7 +76,10 @@ if [ "${FLATPAK}" = "true" ]; then
 #     WINETRICKS_CMD='flatpak run --command=winetricks org.winehq.Wine'
      TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
-     TERMINAL_CMD="flatpak-spawn --host gnome-terminal --"
+     # Environment variable is not set when winezgui calls game script from sandbox
+     # so, ask them to run from host 
+     TERMINAL_CMD='zenity --info --title="Not supported" \
+           --text="Use Application from Desktop for this feature"'
 fi     
 ##
 
