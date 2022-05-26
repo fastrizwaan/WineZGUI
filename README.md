@@ -58,11 +58,11 @@ sudo ./setup uninstall
 `wine` - main program
 `winetricks` - must have wine addon script
 `icoutils` - to extract icon from exe file
-`ImageMagick` - to convert .ico to .png
+`gnome-terminal` - to access prefix directory in shell
 
 
 ## Install Requirement for your Linux OS
 ### Fedora 36
-`sudo dnf install wine winetricks icoutils ImageMagick`
+`sudo dnf install wine winetricks icoutils gnome-terminal`
 
 
