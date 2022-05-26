@@ -12,7 +12,7 @@ WineZGUI helps in:
 ## How it works
 When an exe is opened with WineZGUI, it asks whether to launch with default wine prefix (~/.local/share/winezgui/default) or create a new prefix with the EXE filename. Here the user can specify the Name, else Filename is used. Also WineZGUI uses icoutils to extract icon from exe file and uses that.
 
-### Naming used by me
+### Naming used
 `WineZGUI` - Application Name uses case sensitive "WineZGUI"
  `winezgui` - Rest all use "winezgui" for Directory name  Bash script (without .sh), Icon, Application shortcut (.desktop) file etc., for ease of typing 
 
