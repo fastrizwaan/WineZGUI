@@ -1,3 +1,8 @@
+#!/bin/bash
+
+FLATPAK_BUILD_DIR="~/.build/winezgui-flatpak"
+cd ${FLATPAK_BUILD_DIR}
+
 # find if sdk is not installed, else install it
 if [ ! -f ./sdk-installed.txt ]; then
     flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -9,4 +14,4 @@ if [ ! -f ./wine-installed.txt ]; then
     flatpak list|grep org.winehq.Wine/x86_64/stable-21.08 || flatpak --user -y install org.winehq.Wine/x86_64/stable-21.08 && touch ./wine-installed.txt
 fi
 
-flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml ||grep -i org.freedesktop.Sdk
+flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml 
