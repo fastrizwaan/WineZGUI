@@ -47,11 +47,11 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
-sudo ./setup install ; #systemwide
+sudo ./setup --install ; #systemwide
 ```
 ### Uninstall WineZGUI
 ```
-sudo ./setup uninstall
+sudo ./setup --uninstall
 ```
 
 ## Requirements
