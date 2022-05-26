@@ -68,8 +68,8 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.55.tar.gz
-        sha256: 9fa2cb32065d2e1943a86657dda984bc81539d8264f7bc9f0fc22521a20ac8d0
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.56.tar.gz
+        sha256: aefd643a6a8c92d8d39278a66f37deaba48003d6a78563c06cc94a79eca1c05a
 
   - name: exiftool
     buildsystem: simple
