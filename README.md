@@ -65,4 +65,7 @@ sudo ./setup uninstall
 ### Fedora 36
 `sudo dnf install wine winetricks icoutils gnome-terminal`
 
+### Debian / Ubuntu
+`sudo apt install wine winetricks icoutils gnome-terminal`
+
 
