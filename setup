@@ -58,8 +58,8 @@ UIC="gtk-update-icon-cache"
 UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
-TMPDIR="\$(realpath -m /tmp)"
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
+TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
 
 # If prefix= nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
@@ -74,8 +74,9 @@ if [ "${FLATPAK}" = "true" ]; then
      UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
 #     WINE_CMD='flatpak run --command=wine org.winehq.Wine'
 #     WINETRICKS_CMD='flatpak run --command=winetricks org.winehq.Wine'
-     TMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
+     TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
+     TERMINAL_CMD="flatpak-spawn --host gnome-terminal --"
 fi     
 ##
 
@@ -99,9 +100,10 @@ if [ "${INSTALL}" = "true"  ]; then
      sed "s|UPDATE_DESKTOP_DATABASE=.*|UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   #  sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|"        -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   #  sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|"                          -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|TMPDIR=.*|TMPDIR=\"$TMPDIR\"|"                                -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                                -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui
+     sed "s|export TERMINAL_CMD=\"gnome-terminal -- bash\"|export TERMINAL_CMD=\"$TERMINAL_CMD\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 
      # Create uninstall script for later removal
      echo "
