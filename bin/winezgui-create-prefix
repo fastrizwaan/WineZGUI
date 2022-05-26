@@ -105,7 +105,7 @@ export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib
         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
-        export TERMINAL_CMD="gnome-terminal -- bash -c 'flatpak --filesystem=host --command=bash run io.github.WineZGUI'"
+        export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
     else # We are using non flatpak install
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
