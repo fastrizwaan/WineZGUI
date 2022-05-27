@@ -274,7 +274,12 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
   #wine /app/explorer++/Explorer++.exe
          \${WINEEXPLORER_CMD}
   elif [ "\${SELECTION}" = "Open Shell..." ]; then   
-         \${TERMINAL_CMD}
+         if [ \$(flatpak-spawn echo 0) ]; then
+             flatpak-spawn --host gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
+         else 
+             gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
+         fi 
+    
  
   elif [ "\${SELECTION}" = "Rename..." ]; then
          PROGNAME=\$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
