@@ -192,35 +192,69 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
   if [ "\${SELECTION}" = "Winetricks GUI..." ]; then  
        \$WINETRICKS_CMD --gui
 
-  # Install Custom dependencies for Wine
-  elif [ "\${SELECTION}" = "Winetricks CLI..." ]; then
-         DEPS=\$(zenity --title "Install custom dlls" \
-                        --text  "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" \
-                        --entry)
-         #If no DLLs are given, install default ones
-         if [ -z "\$DEPS" ]; then         
-              DEPS=(xact xact_x64 xinput xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2012 vcrun2015 vcrun2019 d3dx9 d9vk faudio quartz dotnet48)
-         else
-              DEPS=( \$DEPS ) ; #convert string to array
-         fi
+    # Provide Command Line to enter multiple Dependencies
+    elif [ "\${SELECTION}" = "Winetricks CLI..." ]; then
+           VERB_LIST="xact xinput xna31 dotnet48 \
+                      vcrun2003 vcrun2005        \
+                      vcrun2008 vcrun2012        \
+                      vcrun2015 dxvk faudio      \
+                      quartz corefonts"
+           MESSAGE="Change and Press Enter to install these using Winetricks:"
+           TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
+           # Remove multiple spaces from variable           
+           VERB_LIST=\$(echo \${VERB_LIST}|sed 's/  / /g')
+           VERBS=\$(                     \
+           zenity                       \
+           --title "\${TITLE_TEXT}"      \
+           --width=800 --height=30      \
+           --text  "\${MESSAGE}"         \
+           --entry-text "\${VERB_LIST}"  \
+           --entry)
+ 
+          if [ -z "\${VERBS}" ]; then #if no dlls are given
+               #go back to Main function
+               MainFunction
+          else   
+               VERBS=(\${VERBS}) ; #convert string to array
+          fi
+          
+          # Show Progress Percentage by getting number of items
+          NO_OF_ITEMS=\${#VERBS[*]}
+          NO_OF_ITEMS=\$(expr \${NO_OF_ITEMS} + 1) ;# add +1 for PROGRESSress
 
-        # Show Progress
-        size=\${#DEPS[*]}
-        size=\$(expr \$size + 1) ;# add +1 for progress
-        step=\$(expr 100 / \$size)
-        step=\$(expr \$step + 1)
-        prog=\$(echo \$step)
+          PERCENTAGE=\$(expr 100 / \${NO_OF_ITEMS})
+          
+          # Convert number to string
+          PROGRESS=\$(echo \${PERCENTAGE})  
+          
+          echo "Info: Selected winetricks verbs: \${VERBS[*]}"
+          echo "Info: log location \${PREFIXDIR}"
+          echo "Info: Install log: winetricks.install.log"
+          echo "Info: Error   log: winetricks.error.log"
+          
+          # Show Progress using zenity
+          ( for i in \${VERBS[*]}; do
 
-        ( for i in \${DEPS[*]};
-          do
-            echo \$prog
-            echo "# Installing \$i..."
-            \${WINETRICKS_CMD} --force --unattended \$i
-              prog=\$(expr \$prog + \$step)
+          # Show Progress Percentage and Info
+          echo \${PROGRESS}
+          echo "# Installing \${i}..."
+          
+          # Install winetricks verbs and put output to logs
+          \${WINETRICKS} --force --unattended  \${i}     \
+          1>>\${PREFIXDIR}/winetricks.install.log       \
+          2>>\${PREFIXDIR}/winetricks.error.log 
+          
+          PROGRESS=\$(expr \${PROGRESS} + \${PERCENTAGE})
           done
           echo 100
           echo "# Done!"
-        ) | zenity --width=340 --title "$EXE_NOSP: Installing Custom DLLs with Winetricks" --progress --auto-kill
+          ) |zenity                                                     \
+            --width=440                                                 \
+            --title                                                     \
+            "Please Wait... Good things take time!"                     \
+            --progress                                                  \
+            --auto-kill
+  
 
   # PSEUDO CODE WORK HERE
   # Download mf-install from github (create fastrizwan's mf-install)
