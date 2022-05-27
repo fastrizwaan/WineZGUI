@@ -257,7 +257,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          else 
              export DESKTOP_FILE_EDIT="\$(which desktop-file-edit)"
          fi
-         \${DESKTOP_FILE_EDIT} --set-name="\$PROGNAME ($WINEVER)" \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop
+         \${DESKTOP_FILE_EDIT} --set-name="\$PROGNAME ($WINEVER)" \${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
          zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
@@ -272,7 +272,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          else 
              export DESKTOP_FILE_EDIT="\$(which desktop-file-edit)"
          fi
-        \${DESKTOP_FILE_EDIT} --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/"$EXE_NOEXE".desktop 
+        \${DESKTOP_FILE_EDIT} --set-icon="\$get_icon" \${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
         zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
