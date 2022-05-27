@@ -301,6 +301,9 @@ Type=Application
 Categories=$appCategory;
 Icon=${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.icon.png
 Keywords=wine; game; ${EXE_NOEXE};
+NoDisplay=false
+StartupNotify=true
+Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.

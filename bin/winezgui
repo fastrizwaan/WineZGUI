@@ -98,8 +98,8 @@ if [ $# -eq 0 ];  then
    
     SELECTION=$(                                             \
     zenity --title "${APPNAME} (${WINEVER})"                 \
-           --width=240 --height=300                          \
            --list                                            \
+           --width=240 --height=320                          \
            --radiolist --column " "                          \
            --column "Action"                                 \
                   0 "Winetricks GUI..."                      \
