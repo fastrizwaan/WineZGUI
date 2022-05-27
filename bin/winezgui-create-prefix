@@ -79,7 +79,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
     # Automatically set name, read from pe file, if not found use exe name
     
-    PROGNAME=$(${EXIFTOOL} ${EXE_FILE}|grep -i 'product name'|cut -f2 -d ':'||sed 's/^ //')
+    PROGNAME=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':'||sed 's/^ //')
     
     if [ ! "$PROGNAME" ]; #if no name is given, then use exe filename
        then         

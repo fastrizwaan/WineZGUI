@@ -48,9 +48,9 @@ export TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WIN
    
     # Winetricks is Selected
     if [ "${SELECTION}" = "Open EXE..." ]; then
-    	   EXE_FILE=$(zenity --file-filter=*.exe --file-selection --title="Select a File")
+    	   EXE_FILE="$(zenity --file-filter=*.exe --file-selection --title="Select a File")"
     	   
-    	   if [ -z ${EXE_FILE} ]; then
+    	   if [ -z "${EXE_FILE}" ]; then
     	      unset EXE_FILE
     	      unset SELECTION
   	          
@@ -198,7 +198,7 @@ export TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WIN
   
   else
       echo "EXE FILE IN ELSE IS $EXE_FILE AND $ 1 IS $1"
-      EXE_FILE=$(realpath -m "$1")
+      EXE_FILE="$(realpath -m "$1")"
       EXE_NAME=$(basename "${EXE_FILE}")
       EXE_PATH=$(dirname  "${EXE_FILE}")
       EXE_NOSP=$(echo ${EXE_NAME}|tr ' ' '_');
@@ -275,7 +275,7 @@ if [ $# -eq 0 ];  then
     # Handle User Selected Options for the above menu
 fi 
    
-if [ -f ${EXE_FILE}  ]; then
+if [ -f "${EXE_FILE}"  ]; then
     echo "Entered -f EXE_FILE"
     # Prompt to Launch exe with default or existing Prefix of that exe
     EXE_FILE=$(realpath -m "$EXE_FILE")
