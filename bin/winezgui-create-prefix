@@ -312,7 +312,7 @@ Terminal=false
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
-        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR
+        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
         echo "Shortcut created sucessfuly on applications menu."
       zenity --info --title="Shortcut created sucessfuly " --text="$EXE_NOEXE.desktop"
     fi
