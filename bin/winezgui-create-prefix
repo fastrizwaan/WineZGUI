@@ -15,7 +15,7 @@ export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export PREFIXDIR=${WINEZPREFIX}
 export UPDATE_ICON_CACHE="gtk-update-icon-cache"
-export UPDATE_DESKTOP_DATABASE="update-desktop-database ${APPLICATIONSDIR}/"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database}/"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZPREFIX}/tmp"
@@ -91,6 +91,7 @@ cat << EOF > ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
 #!/bin/bash
 export PREFIX=${WINEPREFIX_SUBDIR}
 export WINEPREFIX=${WINEPREFIX_SUBDIR}
+export WINEPREFIX_SUBDIR=${WINEPREFIX}
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/\$NAME:\$(pwd)
@@ -103,7 +104,9 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
-        export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
+        export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run
+         io.github.WineZGUI"
+        export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
     else # We are using non flatpak install
         export WINE_CMD="\$(which wine)"
         export WINETRICKS_CMD="\$(which winetricks)"
