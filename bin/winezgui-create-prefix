@@ -316,15 +316,18 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
   # Ask user to where to save the backup
   elif [ "\${SELECTION}" = "Backup..." ]; then
-#         DATE=\$(date +'%Y%m%d')
-#         mkdir -p \$HOME/flatpak-wine70-backup;
-#   tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz" \
-#      ${PREFIXDIR}/"$EXE_NOSP"          \
-#      ${PREFIXDIR}/"$EXE_NOSP.sh"       \
-#      ${PREFIXDIR}/"$EXE_NOSP.desktop"  \
-#      ${PREFIXDIR}/"$EXE_NOSP.icon.png" \
-#       && zenity --info --title="Bottle backed up: $EXE_NOSP" --text="flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz at \$HOME/flatpak-wine70-backup"
-      echo "fix me"
+         DATE=\$(date +%F_%T)
+         BACKUP_DIR=\$(zenity  --file-selection --title="Choose Backup directory"  --directory)
+         if [ -z "\$BACKUP_DIR" ]; then
+              exit 0;
+         fi
+         
+         # Backup
+         cd "\${PREFIXDIR}"
+         echo creating .winezgui (tar.gz) backup
+         tar -zcvf "\${EXE_NOSP}-\${DATE}.backup.winezgui" "./\${EXE_NOSP}" 
+         mv -v "\${EXE_NOSP}-\${DATE}.backup.winezgui" "\${BACKUP_DIR}"   && \
+         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${EXE_NOSP}-\${DATE}.backup.winezgui at \${BACKUP_DIR}"
 
 
   elif [ "\${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then

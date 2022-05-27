@@ -98,5 +98,5 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.75.tar.gz
-        sha256: e78bc4d497ec3f15c541c4a6f8c9aca040625dadc13ee4767d027c350e63b6af
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.76.tar.gz
+        sha256: 2071033dd9f6fd9e42330ef17b3b8f8975a5584f2ab78a2d4da729bf67afa98d
