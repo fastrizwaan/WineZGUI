@@ -229,7 +229,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
           PROGRESS=\$(echo \${PERCENTAGE})  
           
           echo "Info: Selected winetricks verbs: \${VERBS[*]}"
-          echo "Info: log location \${PREFIXDIR}"
+          echo "Info: log location \${PREFIX}"
           echo "Info: Install log: winetricks.install.log"
           echo "Info: Error   log: winetricks.error.log"
           
@@ -242,8 +242,8 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
           
           # Install winetricks verbs and put output to logs
           \${WINETRICKS} --force --unattended  \${i}     \
-          1>>\${PREFIXDIR}/winetricks.install.log       \
-          2>>\${PREFIXDIR}/winetricks.error.log 
+          1>>\${PREFIX}/winetricks.install.log       \
+          2>>\${PREFIX}/winetricks.error.log 
           
           PROGRESS=\$(expr \${PROGRESS} + \${PERCENTAGE})
           done
@@ -317,16 +317,19 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
   # Ask user to where to save the backup
   elif [ "\${SELECTION}" = "Backup..." ]; then
-         DATE=\$(date +%F_+H%M)
+         DATE=\$(date +%F_%H%M)
          TARGET_DIR=\$(zenity  --file-selection --title="Choose Backup directory"  --directory)
-         if [ -z "\$DIR_SELECT" ]; then
+         if [ -z "\$TARGET_DIR" ]; then
               exit 0;
          fi
          
          # Backup
-         cd "\${PREFIXDIR}"
-         echo creating .winezgui (tar.gz) backup
-         tar -zcvf "\${BACKUPNAME}-\${DATE}.backup.winezgui" "./\${BACKUPNAME}" 
+         cd "\${PREFIX}"
+         echo "creating .winezgui (tar.gz) backup"
+         (tar -zcvf "\${BACKUPNAME}-\${DATE}.backup.winezgui" "./\${BACKUPNAME}")| \
+		 zenity --progress   --title="Creating BACKUPNAME backup!" \
+		 --text="\${BACKUPNAME}-\${DATE}.backup.winezgui..."  --pulsate
+ 
          mv -v "\${BACKUPNAME}-\${DATE}.backup.winezgui" "\${TARGET_DIR}"   && \
          zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${EXE_NOSP}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
 
