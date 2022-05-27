@@ -54,13 +54,13 @@ done
 
 # Defaults for non flatpak install
 APPLICATIONSDIR=~/.local/share/applications
-UIC="gtk-update-icon-cache"
-UDD="update-desktop-database ${APPLICATIONSDIR}"
+#UIC="gtk-update-icon-cache"
+#UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
-DESKTOP_FILE_EDIT=$(which desktop-file-edit)
+#DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
 
 # If prefix= nothing then install to /usr
@@ -72,8 +72,8 @@ fi
 if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
-     UIC="flatpak-spawn --host gtk-update-icon-cache"
-     UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
+#     UIC="flatpak-spawn --host gtk-update-icon-cache"
+#     UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
 #     WINE_CMD='flatpak run --command=wine org.winehq.Wine'
 #     WINETRICKS_CMD='flatpak run --command=winetricks org.winehq.Wine'
      TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
@@ -100,15 +100,15 @@ if [ "${INSTALL}" = "true"  ]; then
 
      # Change Variables in winezgui and winezgui-create-prefix scripts for system or flatpak install
      sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"                          -i ${INSTALL_PREFIX}/bin/winezgui
-     sed "s|UPDATE_ICON_CACHE=.*|UPDATE_ICON_CACHE=\"$UIC\"|"             -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|UPDATE_DESKTOP_DATABASE=.*|UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+#     sed "s|UPDATE_ICON_CACHE=.*|UPDATE_ICON_CACHE=\"$UIC\"|"             -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+#     sed "s|UPDATE_DESKTOP_DATABASE=.*|UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   #  sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|"        -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
   #  sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|"                          -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                                -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui
      sed "s|export TERMINAL_CMD=\"gnome-terminal bash\"|export TERMINAL_CMD=\"$TERMINAL_CMD\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"\\$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+#     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"\\$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
 
      # Create uninstall script for later removal
      echo "
