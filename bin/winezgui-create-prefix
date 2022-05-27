@@ -252,7 +252,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          fi
          
          export WINEVER=\$(wine --version|cut -f1 -d ' ')
-         if [ $(flatpak-spawn echo 0) ]; then
+         if [ \$(flatpak-spawn echo 0) ]; then
              export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
          else 
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
@@ -267,7 +267,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
            zenity --info --title="Icon... " --text="no Change"        
            exit;
         fi
-        if [ $(flatpak-spawn echo 0) ]; then
+        if [ \$(flatpak-spawn echo 0) ]; then
              export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
          else 
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
