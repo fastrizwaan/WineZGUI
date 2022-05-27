@@ -168,17 +168,16 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
 
   # EXE handling by providing dialog
-  choice=\$(zenity --title "$EXE_NOSP: Choose!" \
+  SELECTION=\$(zenity --title "$EXE_NOSP: Choose!" \
                    --width=340 --height=500 \
                    --list \
                    --radiolist --column " " \
                    --column "Action" \
-                       0    "Install Custom DLLs..." \
-                       TRUE "Launch $PROGNAME" \
-                       0    "Run Winetricks..." \
-                       0    "Install Media Foundation Libraries" \
+                       TRUE "Open $PROGNAME" \
+                       0    "Winetricks GUI..." \
+                       0    "Winetricks CLI..." \
                        0    "Launch Winecfg..." \
-                       0    "Open Explorer++..." \
+                       0    "Open Explorer..." \
                        0    "Open Shell..." \
                        0    "Rename..." \
                        0    "Change Icon..." \
@@ -187,14 +186,14 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
-  [[ -z "\$choice" ]] && exit 1
+  [[ -z "\${SELECTION}" ]] && exit 1
 
   # If Winetricks is selected
-  if [ "\$choice" = "Run Winetricks..." ]; then  
+  if [ "\${SELECTION}" = "Winetricks GUI..." ]; then  
        \$WINETRICKS_CMD --gui
 
   # Install Custom dependencies for Wine
-  elif [ "\$choice" = "Install Custom DLLs..." ]; then
+  elif [ "\${SELECTION}" = "Winetricks CLI..." ]; then
          DEPS=\$(zenity --title "Install custom dlls" \
                         --text  "paste winetricks (e.g. dv9k dxvk xna31 d3dx9 xinput faudio)" \
                         --entry)
@@ -225,7 +224,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
   # PSEUDO CODE WORK HERE
   # Download mf-install from github (create fastrizwan's mf-install)
-  elif [ "\$choice" = "Install Media Foundation Libraries" ]; then
+  elif [ "\${SELECTION}" = "Install Media Foundation Libraries" ]; then
 #  wget github.com/fastrizwaan/mf-install/release/mf-install.tar.gz
 #  tar -hxvf mf-install.tar.gz
 #  cd mf-install
@@ -234,16 +233,16 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 #  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
    echo "fix me"
    
-  elif [ "\$choice" = "Launch Winecfg..." ]; then
+  elif [ "\${SELECTION}" = "Launch Winecfg..." ]; then
          \${WINECFG_CMD}
     
-  elif [ "\$choice" = "Open Explorer++..." ]; then
+  elif [ "\${SELECTION}" = "Open Explorer..." ]; then
   #wine /app/explorer++/Explorer++.exe
          \${WINEEXPLORER_CMD}
-  elif [ "\$choice" = "Open Shell..." ]; then   
+  elif [ "\${SELECTION}" = "Open Shell..." ]; then   
          \${TERMINAL_CMD}
  
-  elif [ "\$choice" = "Rename..." ]; then
+  elif [ "\${SELECTION}" = "Rename..." ]; then
          PROGNAME=\$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
        
          if [ ! \$PROGNAME ]; then #if no name is given use filename
@@ -261,7 +260,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          \${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
          zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: \$appname"
 
-  elif [ "\$choice" = "Change Icon..." ]; then
+  elif [ "\${SELECTION}" = "Change Icon..." ]; then
          get_icon=\$(zenity --file-selection --file-filter=""*.png" "*.jpg" "*.svg"")
         if [ ! \$get_icon ]; then #if no icon is choosen
            zenity --info --title="Icon... " --text="no Change"        
@@ -277,7 +276,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
         zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: \$get_icon"
 
   # Ask user to where to save the backup
-  elif [ "\$choice" = "Backup..." ]; then
+  elif [ "\${SELECTION}" = "Backup..." ]; then
 #         DATE=\$(date +'%Y%m%d')
 #         mkdir -p \$HOME/flatpak-wine70-backup;
 #   tar -zcvf "\$HOME/flatpak-wine70-backup/flatpak-wine70-bottle-$EXE_NOSP-\$DATE.tar.gz" \
@@ -289,11 +288,11 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
       echo "fix me"
 
 
-  elif [ "\$choice" = "Delete Prefix: $EXE_NOEXE" ]; then
+  elif [ "\${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
          rm -rfv ${WINEPREFIX_SUBDIR}; 
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
 
-  elif [ "\$choice" = "Launch $PROGNAME" ]; then
+  elif [ "\${SELECTION}" = "Open $PROGNAME" ]; then
          export base=\$(basename "$EXE_FILE")
          export dire=\$(dirname "$EXE_FILE")
          
