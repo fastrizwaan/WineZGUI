@@ -174,7 +174,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
                    --radiolist --column " " \
                    --column "Action" \
                        0    "Install Custom DLLs..." \
-                       TRUE "Launch $EXE_NOEXE" \
+                       TRUE "Launch $PROGNAME" \
                        0    "Run Winetricks..." \
                        0    "Install Media Foundation Libraries" \
                        0    "Launch Winecfg..." \
@@ -284,7 +284,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          rm -rfv ${WINEPREFIX_SUBDIR}; 
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
 
-  elif [ "\$choice" = "Launch $EXE_NOEXE" ]; then
+  elif [ "\$choice" = "Launch $PROGNAME" ]; then
          export base=\$(basename "$EXE_FILE")
          export dire=\$(dirname "$EXE_FILE")
          
