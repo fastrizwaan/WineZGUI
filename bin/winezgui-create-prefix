@@ -63,8 +63,6 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     
 
     echo rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
-    sleep 5s;   
-
     
     # Get the app category and shortcut name inputs from the user.
     appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
@@ -111,7 +109,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
         export WINETRICKS_CMD="\$(which winetricks)"
         export WINECFG_CMD="\${WINE_CMD} winecfg"
         export WINEEXPLORER_CMD="\${WINE_CMD} explorer"
-        export TERMINAL_CMD="gnome-terminal -- bash"
+        export TERMINAL_CMD="gnome-terminal bash"
     fi
 
 ## Debug
@@ -150,16 +148,16 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
   fi
 
 
-### / Do we need this?
-#  # If asked to run an exe by winezgui using launch option
-#  if [ "\$1" = "launch" ]; then
-#       export EXE_FILE_NAME=\$(basename "$EXE_FILE")
-#       export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
-#       cd "\$EXE_FILE_DIR"
-#       \${WINE_CMD}  "\$EXE_FILE_NAME"
-#       exit 0;
-#  fi
-### / Do we need this?
+
+# If asked to run an exe by winezgui using launch option
+  if [ "\$1" = "launch" ]; then
+       export EXE_FILE_NAME=\$(basename "$EXE_FILE")
+       export EXE_FILE_DIR=\$(dirname "$EXE_FILE")
+       cd "\$EXE_FILE_DIR"
+       \${WINE_CMD}  "\$EXE_FILE_NAME"
+       exit 0;
+  fi
+
 
 
   # EXE handling by providing dialog
