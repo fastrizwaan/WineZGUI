@@ -19,7 +19,7 @@ export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 export WINE_CMD=$(which wine)
 export WINETRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZPREFIX}/tmp"
-
+export EXIFTOOL=$(which exiftool)
 
 
 # Check if an application argument was submited.
@@ -65,19 +65,22 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     echo rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
     
     # Get the app category and shortcut name inputs from the user.
-    appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
+    #appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
  --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
  Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
  System 0 Utility  --text "Select a Category:" 2> /dev/null)
-
+    appCategory="Game"
 
     VerInst zenity
     
     # Create Desktop Shortcut
     # Ask for Name
-    PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
-
-    if [ ! "$PROGNAME" ]; #if no name is given use exe filename
+    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
+    # Automatically set name, read from pe file, if not found use exe name
+    
+    PROGNAME=$(${EXIFTOOL} ${EXE_FILE}|grep -i 'product name'|cut -f2 -d ':'||sed 's/^ //')
+    
+    if [ ! "$PROGNAME" ]; #if no name is given, then use exe filename
        then         
        PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
