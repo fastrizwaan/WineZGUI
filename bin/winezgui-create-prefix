@@ -318,8 +318,8 @@ Terminal=false
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
         echo "Shortcut created sucessfuly Name: ${PROGNAME}\nExe: ${EXE_NAME}"
-      zenity --info --title="Shortcut created sucessfuly "\
-             --text="Name: ${PROGNAME}\nExe: ${EXE_NAME}"
+      zenity --info      --title="Shortcut Created!"\
+             --width 300 --text="Name: ${PROGNAME}\nExe: ${EXE_NAME}"
     fi
 
 else 
