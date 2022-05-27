@@ -331,7 +331,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 		 --text="\${BACKUPNAME}-\${DATE}.backup.winezgui..."  --pulsate
  
          mv -v "\${BACKUPNAME}-\${DATE}.backup.winezgui" "\${TARGET_DIR}"   && \
-         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${EXE_NOSP}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
+         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${BACKUPNAME}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
 
 
   elif [ "\${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
