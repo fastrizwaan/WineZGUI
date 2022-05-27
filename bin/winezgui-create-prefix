@@ -93,7 +93,8 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 ###############################################
 cat << EOF > ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
 #!/bin/bash
-export PREFIX=${WINEPREFIX_SUBDIR}
+export PREFIX=${WINEZPREFIX}
+export BACKUPNAME=${EXE_NOEXE}
 export WINEPREFIX=${WINEPREFIX_SUBDIR}
 export WINEPREFIX_SUBDIR=\${WINEPREFIX}
 export WINEARCH=win64
@@ -316,18 +317,18 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
   # Ask user to where to save the backup
   elif [ "\${SELECTION}" = "Backup..." ]; then
-         DATE=\$(date +%F_%T)
-         BACKUP_DIR=\$(zenity  --file-selection --title="Choose Backup directory"  --directory)
-         if [ -z "\$BACKUP_DIR" ]; then
+         DATE=\$(date +%F_+H%M)
+         TARGET_DIR=\$(zenity  --file-selection --title="Choose Backup directory"  --directory)
+         if [ -z "\$DIR_SELECT" ]; then
               exit 0;
          fi
          
          # Backup
          cd "\${PREFIXDIR}"
          echo creating .winezgui (tar.gz) backup
-         tar -zcvf "\${EXE_NOSP}-\${DATE}.backup.winezgui" "./\${EXE_NOSP}" 
-         mv -v "\${EXE_NOSP}-\${DATE}.backup.winezgui" "\${BACKUP_DIR}"   && \
-         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${EXE_NOSP}-\${DATE}.backup.winezgui at \${BACKUP_DIR}"
+         tar -zcvf "\${BACKUPNAME}-\${DATE}.backup.winezgui" "./\${BACKUPNAME}" 
+         mv -v "\${BACKUPNAME}-\${DATE}.backup.winezgui" "\${TARGET_DIR}"   && \
+         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${EXE_NOSP}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
 
 
   elif [ "\${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
