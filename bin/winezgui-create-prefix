@@ -66,9 +66,10 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     
     # Get the app category and shortcut name inputs from the user.
     #appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
- --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
- Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
- System 0 Utility  --text "Select a Category:" 2> /dev/null)
+    # --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
+    # Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
+    # System 0 Utility  --text "Select a Category:" 2> /dev/null)
+    
     appCategory="Game"
 
     VerInst zenity
