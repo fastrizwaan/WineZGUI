@@ -328,7 +328,13 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          echo "creating .winezgui (tar.gz) backup"
          (tar -zcvf "\${BACKUPNAME}-\${DATE}.backup.winezgui" "./\${BACKUPNAME}")| \
 		 zenity --progress   --title="Creating BACKUPNAME backup!" \
-		 --text="\${BACKUPNAME}-\${DATE}.backup.winezgui..."  --pulsate
+		 --text="\${BACKUPNAME}-\${DATE}.backup.winezgui..."  --pulsate --auto-kill
+ 
+ 
+ 
+ 
+ 
+ 
  
          mv -v "\${BACKUPNAME}-\${DATE}.backup.winezgui" "\${TARGET_DIR}"   && \
          zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${BACKUPNAME}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
