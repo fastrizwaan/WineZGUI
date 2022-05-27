@@ -81,7 +81,6 @@ if [ "${FLATPAK}" = "true" ]; then
      # Environment variable is not set when winezgui calls game script from sandbox
      # so, ask them to run from host 
      TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
-     DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
 fi     
 ##
 
