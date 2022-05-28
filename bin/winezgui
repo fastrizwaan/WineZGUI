@@ -18,7 +18,7 @@ export WINEPREFIX=${PREFIXDIR}
 #export WINEEXE="flatpak run org.winehq.Wine"
 export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
-export TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
+
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
     MainFunction () {
@@ -176,8 +176,7 @@ export TERMINAL_CMD=gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WIN
           
     elif [ "${SELECTION}" = "Open Shell..." ]; then   
           echo TERMINAL_CMD $TERMINAL_CMD
-          ${TERMINAL_CMD}
-          #gnome-terminal -- bash -c "bash -c export WINEPREFIX=/OPT; echo $WINEPREFIX; exec bash -i"
+         gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
           MainFunction
          
     elif [ "${SELECTION}" = "Delete Prefix..." ]; then
