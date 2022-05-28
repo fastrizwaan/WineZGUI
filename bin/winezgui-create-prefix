@@ -170,7 +170,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
 
   # EXE handling by providing dialog
   SELECTION=\$(zenity --title "$EXE_NOSP: Choose!" \
-                   --width=340 --height=500 \
+                   --width=340 --height=380 \
                    --list \
                    --radiolist --column " " \
                    --column "Action" \
