@@ -286,12 +286,22 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
   elif [ "${SELECTION}" = "Open Shell..." ]; then   
   	 # Check if Open shell is called from sandboxed script?
          if [ $(flatpak-spawn echo 0) ]; then
+             echo "+===========+"
+             echo "wine is $(which wine)
+             echo +============+"
              flatpak-spawn --host gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=$WINEPREFIX; echo $WINE; exec bash -i\""
          fi #else ## if flatpak is used 
          
          if [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
+	     echo "=************="
+             echo "wine is $(which wine)
+	     echo "=************="
              gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI	
          else # if flatpak is not used
+	     echo "*xxxxxxxxxxxx*"
+             echo "wine is $(which wine)
+	     echo "*xxxxxxxxxxxx*"
+        
              gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=$WINEPREFIX; cd $WINEPREFIX; echo $WINE; exec bash -i\""
          fi 
     
