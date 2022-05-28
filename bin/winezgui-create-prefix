@@ -125,21 +125,12 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
         export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
         #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-        
-        # If flatpak is installed and running from inside sadbox use spawn
-        if [ $(flatpak-spawn --host echo 0) ]; then
-        export TERMINAL_CMD="flatpak-spawn --host gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
-        else # if flatpak install but shell to be opened from host
-        export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
-        
+
     else # We are using non flatpak install
         export WINE_CMD="$(which wine)"
         export WINETRICKS_CMD="$(which winetricks)"
         export WINECFG_CMD="${WINE_CMD} winecfg"
         export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-        # If Shell is called from within sandbox
-        export TERMINAL_CMD="gnome-terminal -- bash -c \"cd ${WINEPREFIX_SUBDIR}; export WINEPREFIX=${WINEPREFIX_SUBDIR}; bash -i\""
-       
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
