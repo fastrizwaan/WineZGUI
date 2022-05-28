@@ -289,18 +289,8 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
             [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
               gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
-	#debug
-             echo "+===========+"
-             echo "wine is $(which wine)"
-             echo "using flatpak install and running script from host"
-             echo +============+"
-        #/debug
-         else # using host install
-	     echo "*xxxxxxxxxxxx*"
-             echo "wine is $(which wine)"
-             echo "Not using flatpak running from host"
-	     echo "*xxxxxxxxxxxx*"
-             gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
+	 else 
+	     gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
          fi 
     
  
@@ -372,7 +362,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
 # Generate desktop entry specifications to be added to the application launcher.
---------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 echo "
 [Desktop Entry]
 Exec=bash -c ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
