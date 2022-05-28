@@ -284,10 +284,9 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
   #wine /app/explorer++/Explorer++.exe
          ${WINEEXPLORER_CMD}
   elif [ "${SELECTION}" = "Open Shell..." ]; then   
-  	 # Check if Open shell is called from sandboxed script?
 
-  	 # If using flatpak install and script is running from host
-         if [ "${WINE_CMD} = "/app/bin/wine" ] && \
+  	 #  using flatpak install and script is running from host
+         if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
               gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
@@ -297,22 +296,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
              echo "using flatpak install and running script from host"
              echo +============+"
         #/debug
-         fi
-         
-         # if using flatpak and running from inside sanbox shell         
-         if [ "${WINE_CMD} = "/app/bin/wine" ] && \
-            [ $(flatpak-spawn echo 0) ]; then
-              flatpak-spawn --host gnome-terminal --  bash -c "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
-        #debug              
-	     echo "=************="
-             echo "wine is $(which wine)
-             echo "using flatpak and running from inside sanbox shell"
-	     echo "=************="
-        #/debug	     
-         fi    	
-         
-         # if flatpak is not used
-         if [ "${WINE_CMD} != "/app/bin/wine" ]
+         else # using host install
 	     echo "*xxxxxxxxxxxx*"
              echo "wine is $(which wine)
              echo "Not using flatpak running from host"

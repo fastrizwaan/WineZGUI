@@ -344,10 +344,18 @@ echo EXE_PATH=$EXE_PATH
         $BINDIR/winezgui-create-prefix "${EXE_FILE}"
    elif [ "${SELECTION}" = "Run ${EXE_NAME} using existing ${EXE_NOEXE} Prefix" ]; then
      # We replace "name with space" to "name_with_space"
-     ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
-
+     	if [ $(flatpak-spawn echo 0) ]; then
+       	   flatpak-spawn --host  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
+     	else 
+		  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
+     	fi	  
    elif [ "${SELECTION}" = "Run ${EXE_NAME} configuration" ]; then
-         ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
+              if [ $(flatpak-spawn echo 0) ]; then
+          flatpak-spawn --host  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
+     else 
+	  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" 
+     fi	  
+
    fi
   
 
