@@ -81,6 +81,10 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     
     PROGNAME=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':'|sed 's/^ //')
     
+    # if language is not english set exe name
+    if [ $(echo $PROGNAME | grep -Ev [a-zA-Z] ) ]; then
+         unset PROGNAME
+    fi
     if [ ! "$PROGNAME" ]; #if no name is given, then use exe filename
        then         
        PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
