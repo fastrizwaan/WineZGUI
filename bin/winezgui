@@ -180,17 +180,7 @@ export WINE_CMD=${WINEEXE}
             [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
               gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
-	#debug
-             echo "+===========+"
-             echo "wine is $(which wine)
-             echo "using flatpak install and running script from host"
-             echo +============+"
-        #/debug
-         else # using host install
-	     echo "*xxxxxxxxxxxx*"
-             echo "wine is $(which wine)
-             echo "Not using flatpak running from host"
-	     echo "*xxxxxxxxxxxx*"
+         else 
              gnome-terminal -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
          fi 
           MainFunction
