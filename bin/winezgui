@@ -18,7 +18,7 @@ export WINEPREFIX=${PREFIXDIR}
 #export WINEEXE="flatpak run org.winehq.Wine"
 export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
-
+export WINE_CMD=${WINEEXE}
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
     MainFunction () {
@@ -175,8 +175,24 @@ export WINETRICKS="$(which winetricks)"
           MainFunction
           
     elif [ "${SELECTION}" = "Open Shell..." ]; then   
-          echo TERMINAL_CMD $TERMINAL_CMD
-         gnome-terminal -- bash -c "bash -c \"export WINEPREFIX=\$WINEPREFIX; echo $WINE; exec bash -i\""
+
+         if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+            [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
+              gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
+
+	#debug
+             echo "+===========+"
+             echo "wine is $(which wine)
+             echo "using flatpak install and running script from host"
+             echo +============+"
+        #/debug
+         else # using host install
+	     echo "*xxxxxxxxxxxx*"
+             echo "wine is $(which wine)
+             echo "Not using flatpak running from host"
+	     echo "*xxxxxxxxxxxx*"
+             gnome-terminal -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
+         fi 
           MainFunction
          
     elif [ "${SELECTION}" = "Delete Prefix..." ]; then
