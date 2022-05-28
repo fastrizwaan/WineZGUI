@@ -1,13 +1,22 @@
 #!/bin/bash
 
+# handle relative path
+
+SCRIPT_NAME="$(realpath -m $0)"
+SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
+
+echo SCRIPT_NAME="$(realpath -m $0)"
+echo SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
+
+
 export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 mkdir -p ${FLATPAK_BUILD_DIR}
 
 # Remove symoblic links if exist in build_dir
-find ~/.build/winezgui-flatpak/ -maxdepth 1 -type l -delete
+find ${FLATPAK_BUILD_DIR} -maxdepth 1 -type l -delete
 
 # Link files and build
-ln -sv ${PWD}/* ${FLATPAK_BUILD_DIR}
+ln -sv ${SCRIPT_DIR}/* ${FLATPAK_BUILD_DIR}
 cd       ${FLATPAK_BUILD_DIR}
 
 # find if sdk is not installed, else install it
