@@ -178,7 +178,7 @@ export WINE_CMD=${WINEEXE}
 
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
-              gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
+             flatpak-spawn --host gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${PREFIXDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
          else 
              gnome-terminal -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
