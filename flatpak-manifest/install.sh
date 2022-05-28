@@ -3,6 +3,10 @@
 export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 mkdir -p ${FLATPAK_BUILD_DIR}
 
+# Remove symoblic links if exist in build_dir
+find ~/.build/winezgui-flatpak/ -maxdepth 1 -type l -delete
+
+# Link files and build
 ln -sv ${PWD}/* ${FLATPAK_BUILD_DIR}
 cd       ${FLATPAK_BUILD_DIR}
 
