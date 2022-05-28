@@ -123,7 +123,6 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
-        export TERMINAL_CMD="gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI"
         #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
 
     else # We are using non flatpak install
@@ -288,7 +287,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
   	 #  using flatpak install and script is running from host
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
-              gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
+              gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
 	#debug
              echo "+===========+"
@@ -301,7 +300,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
              echo "wine is $(which wine)"
              echo "Not using flatpak running from host"
 	     echo "*xxxxxxxxxxxx*"
-             gnome-terminal -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
+             gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i\""
          fi 
     
  

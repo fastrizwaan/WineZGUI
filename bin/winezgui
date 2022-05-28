@@ -181,10 +181,10 @@ export WINE_CMD=${WINEEXE}
             
             export WINEPREFIX=${PREFIXDIR}
             
-             flatpak-spawn --host gnome-terminal -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; exec bash -i"
+             flatpak-spawn --host gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; exec bash -i"
 
          else 
-             gnome-terminal -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;  export WINEPREFIX=${PREFIXDIR}; exec bash -i\""
+             gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;  export WINEPREFIX=${PREFIXDIR}; exec bash -i\""
          fi 
           MainFunction
          
