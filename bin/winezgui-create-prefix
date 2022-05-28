@@ -215,8 +215,10 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
           if [ -z "\${VERBS}" ]; then #if no dlls are given
                #go back to Main function
                MainFunction
+			   echo "not given verbs=\$VERBS"
           else   
                VERBS=(\${VERBS}) ; #convert string to array
+			   echo "Given Verbs \$VERBS"
           fi
           
           # Show Progress Percentage by getting number of items
@@ -241,7 +243,7 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
           echo "# Installing \${i}..."
           
           # Install winetricks verbs and put output to logs
-          \${WINETRICKS} --force --unattended  \${i}     \
+          \${WINETRICKS_CMD} --force --unattended  \${i}     \
           1>>\${PREFIX}/winetricks.install.log       \
           2>>\${PREFIX}/winetricks.error.log 
           
@@ -325,19 +327,13 @@ export DESKTOP_FILE_EDIT=\$(which desktop-file-edit)
          
          # Backup
          cd "\${PREFIX}"
-         echo "creating .winezgui (tar.gz) backup"
-         (tar -zcvf "\${BACKUPNAME}-\${DATE}.backup.winezgui" "./\${BACKUPNAME}")| \
-		 zenity --progress   --title="Creating BACKUPNAME backup!" \
-		 --text="\${BACKUPNAME}-\${DATE}.backup.winezgui..."  --pulsate --auto-kill
- 
- 
- 
- 
- 
- 
- 
-         mv -v "\${BACKUPNAME}-\${DATE}.backup.winezgui" "\${TARGET_DIR}"   && \
-         zenity --info --title="Prefix backed up: \${EXE_NOSP}-\${DATE}.backup.winezgui" --text="Backup saved at \${BACKUPNAME}-\${DATE}.backup.winezgui at \${TARGET_DIR}"
+         echo "creating \${BACKUPNAME}-\${DATE}.winezgui (tar.gz) backup"
+         (tar -zcvf "\${BACKUPNAME}-\${DATE}.winezgui.tgz" "./\${BACKUPNAME}")| \
+		 zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+		 --text="\${BACKUPNAME}-\${DATE}.winezgui.tgz..." --pulsate --auto-kill
+			
+		 mv -v "\${BACKUPNAME}-\${DATE}.winezgui.tgz" "\${TARGET_DIR}"   && \
+         zenity --info --title="Prefix backed up: \${BACKUPNAME}-\${DATE}.winezgui.tgz" --text="Only Prefix is backupd up!\nBackup saved at \${BACKUPNAME}-\${DATE}.winezgui.tgz at \${TARGET_DIR}"
 
 
   elif [ "\${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
