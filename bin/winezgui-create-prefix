@@ -91,12 +91,22 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
 # Create Launch Script for the provided EXE file
 # ------------------------------------------------
-echo '
+# need variables from this script
+echo "
 #!/bin/bash
 export PREFIX=${WINEZPREFIX}
 export BACKUPNAME=${EXE_NOEXE}
 export WINEPREFIX=${WINEPREFIX_SUBDIR}
 export WINEPREFIX_SUBDIR=${WINEPREFIX}
+export EXE_FILE=${EXE_FILE}
+export EXE_NAME=${EXE_NAME}
+export EXE_PATH=${EXE_PATH}
+export EXE_NOSP=${EXE_NOSP}
+export EXE_NOEXE=${EXE_NOEXE}
+" > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+
+# Append rest 
+echo '
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
@@ -341,7 +351,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
          cd "$dire"
          ${WINE_CMD} "$base"
   fi
-' > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+' >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 ###############################################
 chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
