@@ -2,6 +2,8 @@
 
 export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 mkdir -p ${FLATPAK_BUILD_DIR}
+
+ln -sv ${PWD}/* ${FLATPAK_BUILD_DIR}
 cd       ${FLATPAK_BUILD_DIR}
 
 # find if sdk is not installed, else install it
