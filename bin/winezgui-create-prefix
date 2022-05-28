@@ -118,7 +118,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
     # If io.github.WineZGUI is installed, then most probably we are using flatpak version
     # and we need to assign flatpak wine commands to created wine shortcuts
-    if [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
+    if [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
         export WINE_CMD="flatpak --filesystem=host run --command=wine io.github.WineZGUI"
         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
@@ -280,13 +280,13 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
          ${WINECFG_CMD}
     
   elif [ "${SELECTION}" = "Open Explorer..." ]; then
-  #wine /app/explorer++/Explorer++.exe
          ${WINEEXPLORER_CMD}
+
   elif [ "${SELECTION}" = "Open Shell..." ]; then   
 
   	 #  using flatpak install and script is running from host
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-            [ $(flatpak --command=echo run io.github.WineZGUI 0) ]; then
+            [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
               gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; echo $WINE; exec bash -i"
 
 	 else 
@@ -303,7 +303,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
          fi
          
          export WINEVER=$(wine --version|cut -f1 -d " ")
-         if [ $(flatpak-spawn echo 0) ]; then
+         if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
              export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
          else 
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
@@ -318,7 +318,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
            zenity --info --title="Icon... " --text="no Change"        
            exit;
         fi
-        if [ $(flatpak-spawn echo 0) ]; then
+        if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
              export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
          else 
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"

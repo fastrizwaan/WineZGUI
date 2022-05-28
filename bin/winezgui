@@ -2,6 +2,7 @@
 
 # On 1st launch create default wine prefix
 export APPNAME=WineZGUI
+export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
 export PREFIXDIR="${WINEZPREFIX}/default"
@@ -155,7 +156,8 @@ export WINE_CMD=${WINEEXE}
     elif [ "${SELECTION}" = "Kill all Instances" ]; then
     
           # If run from flaptak sandbox
-          if [ $(flatpak-spawn echo 0) ]; then
+          if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
+               # flatpak launched wine and winezgui version will be killed
                flatpak-spawn --host flatpak kill io.github.WineZGUI
           else
               # Find all process which ends with .exe and kill them
@@ -170,8 +172,9 @@ export WINE_CMD=${WINEEXE}
               done
               # also kill wineserver to kill explorer, etc.
               wineserver -k
+              # kill winezgui also
           fi
-          # Open main window after closing all wine instances
+          # Go back to menu
           MainFunction
           
     elif [ "${SELECTION}" = "Open Shell..." ]; then   
@@ -352,13 +355,13 @@ echo EXE_PATH=$EXE_PATH
         $BINDIR/winezgui-create-prefix "${EXE_FILE}"
    elif [ "${SELECTION}" = "Run ${EXE_NAME} using existing ${EXE_NOEXE} Prefix" ]; then
      # We replace "name with space" to "name_with_space"
-     	if [ $(flatpak-spawn echo 0) ]; then
+     	if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
        	   flatpak-spawn --host  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
      	else 
 		  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
      	fi	  
    elif [ "${SELECTION}" = "Run ${EXE_NAME} configuration" ]; then
-              if [ $(flatpak-spawn echo 0) ]; then
+              if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
           flatpak-spawn --host  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
      else 
 	  ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" 
