@@ -8,6 +8,14 @@ SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 echo SCRIPT_NAME="$(realpath -m $0)"
 echo SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 
+# create a cleanup script
+echo'
+rm -rf ~/.local/share/applications/winezgui          \
+       ~/.local/share/winezgui/                      \
+       ~/.var/app/io.github.WineZGUI/data/prefixes
+' > ${FLATPAK_BUILD_DIR}/cleanup.sh
+
+chmod +rx ${FLATPAK_BUILD_DIR}/cleanup.sh
 
 export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 mkdir -p ${FLATPAK_BUILD_DIR}
