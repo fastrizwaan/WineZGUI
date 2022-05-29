@@ -13,10 +13,11 @@ finish-args:
   - --device=all
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
+    # Need to link .desktop files 
   - --filesystem=~/.local/share/applications
-  # Games need to write to their own directories
+    # Most Games write to their own directories
   - --filesystem=host
-  # need to run wine script from host
+    # Desktop shortcut runs wine script from host
   - --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
