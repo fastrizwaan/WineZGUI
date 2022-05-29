@@ -98,15 +98,15 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 # need variables from this script
 echo "
 #!/bin/bash
-export PREFIX=${WINEZPREFIX}
-export BACKUPNAME=${EXE_NOEXE}
-export WINEPREFIX=${WINEPREFIX_SUBDIR}
-export WINEPREFIX_SUBDIR=${WINEPREFIX}
-export EXE_FILE=${EXE_FILE}
-export EXE_NAME=${EXE_NAME}
-export EXE_PATH=${EXE_PATH}
-export EXE_NOSP=${EXE_NOSP}
-export EXE_NOEXE=${EXE_NOEXE}
+export PREFIX=\"${WINEZPREFIX}\"
+export BACKUPNAME=\"${EXE_NOEXE}\"
+export EXE_FILE=\"${EXE_FILE}\"
+export EXE_NAME=\"${EXE_NAME}\"
+export EXE_PATH=\"${EXE_PATH}\"
+export EXE_NOSP=\"${EXE_NOSP}\"
+export EXE_NOEXE=\"${EXE_NOEXE}\"
+export WINEPREFIX_SUBDIR=\"${WINEPREFIX}${NO_EXE}\"
+export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
 # Append rest 
