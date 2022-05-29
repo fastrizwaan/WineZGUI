@@ -90,6 +90,16 @@ modules:
       - type: archive
         url: https://exiftool.org/Image-ExifTool-12.41.tar.gz
         sha256: 654f401daab0045a8364fa59d3f69b6f9bf23bcef157a3c928e373884a6f9370
+        
+  - name: desktop-file-utils
+    build-options:
+      strip: true
+      no-debuginfo: true  
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.26.tar.xz
+        sha256: b26dbde79ea72c8c84fb7f9d870ffd857381d049a86d25e0038c4cef4c747309
 
   - name: WineZGUI
     buildsystem: simple
@@ -97,5 +107,5 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: archive
-        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.99.tar.gz
-        sha256: 8aa403aed94c268a1fcba57c241f006d563baa7bb5dc7875e897738507087d09
+        url: https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.100.tar.gz
+        sha256: 3ff01d264828f33af8d5b4461b042d86e767d5c0836fe4fafd8f351d2d560cc0
