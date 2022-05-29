@@ -126,12 +126,14 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
         #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
+		export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
 
     else # We are using non flatpak install
         export WINE_CMD="$(which wine)"
         export WINETRICKS_CMD="$(which winetricks)"
         export WINECFG_CMD="${WINE_CMD} winecfg"
         export WINEEXPLORER_CMD="${WINE_CMD} explorer"
+		export WINEBOOT_CMD="$(which wineboot) -u"
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
@@ -140,7 +142,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
        # Create Prefix and delete base system linked directory links       
         WINEDLLOVERRIDES="mscoree,mshtml=" \
         WINEPREFIX=${WINEPREFIX_SUBDIR} \
-        ${WINE_CMD} wineboot -u && \ 
+        ${WINEBOOT_CMD} && \ 
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
