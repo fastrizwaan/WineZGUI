@@ -16,9 +16,7 @@ finish-args:
   - --filesystem=~/.local/share/applications
   # Games need to write to their own directories
   - --filesystem=host
-  # Launch Games from created desktop shorcuts
-  # Also need to call perl5 as runtime perl does not exist
-  # to get exe name from exe file using exiftool
+  # need to run wine script from host
   - --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
