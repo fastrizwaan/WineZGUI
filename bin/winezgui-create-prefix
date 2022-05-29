@@ -141,7 +141,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
        # Create Prefix and delete base system linked directory links       
         WINEDLLOVERRIDES="mscoree,mshtml=" \
         WINEPREFIX=${WINEPREFIX_SUBDIR} \
-        ${WINEBOOT_CMD} && \ 
+        ${WINEBOOT_CMD} && \
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
@@ -178,20 +178,20 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
 
   # EXE handling by providing dialog
-  SELECTION=$(zenity --title "$EXE_NOSP: Choose!" \
-                   --width=340 --height=380 \
-                   --list \
-                   --radiolist --column " " \
-                   --column "Action" \
-                       TRUE "Open $PROGNAME" \
-                       0    "Winetricks GUI..." \
-                       0    "Winetricks CLI..." \
-                       0    "Launch Winecfg..." \
-                       0    "Open Explorer..." \
-                       0    "Open Shell..." \
-                       0    "Rename..." \
-                       0    "Change Icon..." \
-                       0    "Backup..." \
+  SELECTION=$(zenity --title "$EXE_NOSP: Choose!"       \
+                   --width=340 --height=380             \
+                   --list                               \
+                   --radiolist --column " "             \
+                   --column "Action"                    \
+                       TRUE "Open $PROGNAME"            \
+                       0    "Winetricks GUI..."         \
+                       0    "Winetricks CLI..."         \
+                       0    "Launch Winecfg..."         \
+                       0    "Open Explorer..."          \
+                       0    "Open Shell..."             \
+                       0    "Rename..."                 \
+                       0    "Change Icon..."            \
+                       0    "Backup..."                 \
                        0    "Delete Prefix: $EXE_NOEXE" \
                    --text "Select Action..." )
 
