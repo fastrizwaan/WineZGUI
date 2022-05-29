@@ -127,6 +127,8 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
         #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
 		export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
+		export UPDATE_DESKTOP_DATABASE="flatpak-spawn --host update-desktop-database"
+
 
     else # We are using non flatpak install
         export WINE_CMD="$(which wine)"
@@ -134,6 +136,8 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
         export WINECFG_CMD="${WINE_CMD} winecfg"
         export WINEEXPLORER_CMD="${WINE_CMD} explorer"
 		export WINEBOOT_CMD="$(which wineboot) -u"
+		export UPDATE_DESKTOP_DATABASE="$(which update-desktop-database)"
+
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
@@ -344,7 +348,7 @@ gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
          fi
         ${DESKTOP_FILE_EDIT} --set-icon="$get_icon" ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
-        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}/
+        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
         zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: $get_icon"
 
   # Ask user to where to save the backup
