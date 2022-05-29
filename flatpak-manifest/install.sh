@@ -10,8 +10,10 @@ echo SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 
 export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 # create a cleanup script
-echo'
-rm -rf ~/.local/share/applications/winezgui          \
+
+
+echo '
+rm -rvf ~/.local/share/applications/winezgui          \
        ~/.local/share/winezgui/                      \
        ~/.var/app/io.github.WineZGUI/data/prefixes
 ' > ${FLATPAK_BUILD_DIR}/cleanup.sh
