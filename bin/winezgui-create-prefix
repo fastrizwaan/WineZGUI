@@ -135,10 +135,10 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
   if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
 
-#       # Create Prefix and delete base system linked directory links       
-#       WINEDLLOVERRIDES="mscoree,mshtml=" \
-#       WINEPREFIX=${WINEPREFIX_SUBDIR} \
-#       wineboot -u && \ 
+       # Create Prefix and delete base system linked directory links       
+        WINEDLLOVERRIDES="mscoree,mshtml=" \
+        WINEPREFIX=${WINEPREFIX_SUBDIR} \
+        wineboot -u && \ 
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
