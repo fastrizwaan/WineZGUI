@@ -8,6 +8,7 @@ SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 echo SCRIPT_NAME="$(realpath -m $0)"
 echo SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 
+export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 # create a cleanup script
 echo'
 rm -rf ~/.local/share/applications/winezgui          \
@@ -17,7 +18,6 @@ rm -rf ~/.local/share/applications/winezgui          \
 
 chmod +rx ${FLATPAK_BUILD_DIR}/cleanup.sh
 
-export FLATPAK_BUILD_DIR=~/.build/winezgui-flatpak
 mkdir -p ${FLATPAK_BUILD_DIR}
 
 # Remove symoblic links if exist in build_dir
