@@ -289,7 +289,7 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
             [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
               export WINEPREFIX=${WINEPREFIX_SUBDIR};
               echo "I am in sandbox and I am confused ;-)"
-gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; export exec bash -i"
+gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i"
         elif [ "${WINE_CMD}" = "/app/bin/wine" ] && \
               [ $(flatpak-spawn --host echo 0 2>/dev/null) ]; then
          echo "I am in /app/bin/wine and flatpak-spawn command runs"
@@ -302,7 +302,7 @@ flatpak-spawn --host gnome-terminal --wait -- flatpak run --command=bash io.gith
          echo "I am in not app/bin/wine and flatpak command runs"
          echo "WINE_CMD = $WINE_CMD"
          echo "flatpak --command = $(flatpak --command=echo run io.github.WineZGUI 0)"
-gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; export exec bash -i"
+gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i"
         else
             echo "WINECMD $WINE_CMD"
             echo "I am in else"
