@@ -2,6 +2,17 @@
 
 # handle relative path
 
+if [ $# -eq 0 ];  then
+    echo "Building and installing winezgui flatpak!"
+    echo "Info: to build a flatpak bundle! run:"
+	echo "$0 bundle"
+	sleep 5s
+fi
+	
+	
+DATE=$(date +'%Y%m%d')
+WINE_VERSION="7.0"
+
 SCRIPT_NAME="$(realpath -m $0)"
 SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 
@@ -40,5 +51,15 @@ if [ ! -f ./wine-installed.txt ]; then
     flatpak list|grep org.winehq.Wine/x86_64/stable-21.08 || flatpak --user -y install org.winehq.Wine/x86_64/stable-21.08 && touch ./wine-installed.txt
 fi
 
-echo $PWD
+flatpak-builder --force-clean build-dir io.github.WineZGUI.yml 
+# Create flatpak bundle?
+if [ "$1" = "bundle" ]; then
+echo "Please wait building bundle... io.github.WineZGUI-$DATE.flatpak"
+flatpak build-bundle ~/.local/share/flatpak/repo io.github.WineZGUI-$DATE.flatpak io.github.WineZGUI  master
+echo "Installing the flatpak.."
+echo "flatpak install --user io.github.WineZGUI-$DATE.flatpak"
+flatpak install --user io.github.WineZGUI-$DATE.flatpak -y
+else 
 flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml 
+fi
+
