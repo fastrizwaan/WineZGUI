@@ -108,6 +108,7 @@ export EXE_NOEXE=\"${EXE_NOEXE}\"
 export WINEPREFIX_SUBDIR=\"${WINEPREFIX_SUBDIR}\"
 export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
 export APPLICATIONSDIR=\"$APPLICATIONSDIR\"
+export DESKTOPDIR=\"\${APPLICATIONSDIR}/winezgui\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
@@ -360,9 +361,10 @@ gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.
 
 
   elif [ "${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
-         rm -rfv ${WINEPREFIX_SUBDIR}; 
+         
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
-         rm ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop ; #delete shortcut link
+         rm -rf  ${WINEPREFIX_SUBDIR}; 
+         
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
   elif [ "${SELECTION}" = "Open $PROGNAME" ]; then
