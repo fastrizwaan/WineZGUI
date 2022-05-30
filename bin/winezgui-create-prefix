@@ -98,6 +98,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 # need variables from this script
 echo "
 #!/bin/bash
+export PROGNAME=\"${PROGNAME}\"
 export PREFIX=\"${WINEZPREFIX}\"
 export BACKUPNAME=\"${EXE_NOEXE}\"
 export EXE_FILE=\"${EXE_FILE}\"
@@ -184,7 +185,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Open $PROGNAME"            \
+                       TRUE "Launch ${PROGNAME}"            \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
                        0    "Launch Winecfg..."         \
@@ -367,7 +368,7 @@ gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
-  elif [ "${SELECTION}" = "Open $PROGNAME" ]; then
+  elif [ "${SELECTION}" = "Launch ${PROGNAME}" ]; then
          export base=$(basename "$EXE_FILE")
          export dire=$(dirname "$EXE_FILE")
          
