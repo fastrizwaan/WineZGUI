@@ -184,23 +184,25 @@ export WINE_CMD=${WINEEXE}
             
             export WINEPREFIX=${PREFIXDIR}
             
-             flatpak-spawn --host gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; exec bash -i"
+             flatpak-spawn --host gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
 
-         else 
+         else
+             export WINEPREFIX=${PREFIXDIR}
              gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;  export WINEPREFIX=${PREFIXDIR}; exec bash -i\""
          fi 
           MainFunction
          
     elif [ "${SELECTION}" = "Delete Prefix..." ]; then
           rm -rfv ${PREFIXDIR}; 
-          MainFunction
+          exit 0; # after deleting prefix
 
     elif [ "${SELECTION}" = "Open Explorer" ]; then
           ${WINEEXE} explorer; 
           MainFunction
        
     else
-          ${WINEEXE} explorer
+          echo "Unknown selection = ${SELECTION}"
+          exit 1
 
     fi
 # END of "Start WineZGUI when no argument is supplied" section
