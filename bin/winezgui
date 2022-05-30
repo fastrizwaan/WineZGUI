@@ -31,11 +31,11 @@ export WINE_CMD=${WINEEXE}
            --width=240 --height=400                          \
            --radiolist --column " "                          \
            --column "Action"                                 \
-                  0 "Open EXE..."                            \
+               TRUE "Open EXE..."                            \
                   0 "Winetricks GUI..."                      \
                   0 "Winetricks CLI..."                      \
                   0 "Launch Winecfg..."                      \
-               TRUE "Open Explorer"                          \
+                  0 "Open Explorer"                          \
                   0 "Open Shell..."                          \
                   0 "Kill all Instances"                     \
                   0 "Delete Prefix..."                       \
