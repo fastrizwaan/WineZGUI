@@ -362,6 +362,7 @@ gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.
   elif [ "${SELECTION}" = "Delete Prefix: $EXE_NOEXE" ]; then
          rm -rfv ${WINEPREFIX_SUBDIR}; 
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
   elif [ "${SELECTION}" = "Open $PROGNAME" ]; then
          export base=$(basename "$EXE_FILE")
