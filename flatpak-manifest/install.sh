@@ -5,7 +5,6 @@ if [ $# -eq 0 ];  then
     echo "Building and installing winezgui flatpak!"
     echo "Info: to build a flatpak bundle! run:"
 	echo "$0 bundle"
-	sleep 5s
 fi
 	
 	
@@ -61,5 +60,10 @@ flatpak remove --user io.github.WineZGUI -y 2>/dev/null
 flatpak install --user io.github.WineZGUI-$DATE.flatpak -y
 else 
 flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml 
+fi
+
+if [ $# -eq 0 ];  then
+    echo "To build a flatpak bundle! run:"
+        echo "$0 bundle"
 fi
 
