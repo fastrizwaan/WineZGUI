@@ -1,4 +1,4 @@
-# WineZGUI - Wine GUI using Zenity
+	# WineZGUI - Wine GUI using Zenity
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
 ## What is WineZGUI
@@ -44,15 +44,16 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
 ## Install WineZGUI
 
 ### Setup on Flatpak supported Distros (This is best)
-flatpak's optional requirement is `gnome-terminal` if we need to access prefix using shell
-
+Please install `flatpak-builder` in your system before running these commands
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI/flatpak-manifest
 install.sh
 ```
+flatpak's optional requirement is `gnome-terminal` if we need to access prefix using shell
 
 ### SETUP on normal linux system / non flatpak install
+
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
