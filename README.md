@@ -82,4 +82,8 @@ sudo dpkg --add-architecture i386
 sudo apt install wine winetricks icoutils gnome-terminal
 ```
 
+### Solus
+```
+sudo eopkg it icoutils wine winetricks gnome-terminal
+```
 
