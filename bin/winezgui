@@ -174,13 +174,7 @@ export WINE_CMD=${WINEEXE}
           
     elif [ "${SELECTION}" = "Open Shell..." ]; then   
           
-          # Prompt user to install gnome-terminal if not found
-           if ! command -v gnome-terminal &> /dev/null; then 
-               zenity --title "${SELECTION}" \
-                      --width=500 --height=30 --info \
-                      --text "This feature requires \"gnome-terminal\""
-               MainFunction
-          fi 
+
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak-spawn --host echo 0) ]; then
             

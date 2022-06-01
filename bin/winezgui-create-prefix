@@ -285,14 +285,6 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
-          # Prompt user to install gnome-terminal if not found
-          if ! command -v gnome-terminal &> /dev/null; then 
-               zenity --title "${SELECTION}" \
-                      --width=500 --height=30 --info \
-                      --text "This feature requires \"gnome-terminal\""
-               # MainFunction
-          fi 
-             
          #  using flatpak install and script is running from host
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
