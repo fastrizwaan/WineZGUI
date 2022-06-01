@@ -1,4 +1,5 @@
-	# WineZGUI - Wine GUI using Zenity
+# WineZGUI 
+## Wine GUI using Zenity
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
 ## What is WineZGUI
