@@ -350,6 +350,9 @@ echo EXE_PATH=$EXE_PATH
    
        echo "${EXE_FILE} ${EXE_FILE}"
         $BINDIR/winezgui-create-prefix "${EXE_FILE}"
+	# Launch after creating new prefix
+	${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
+	
    elif [ "${SELECTION}" = "Run ${EXE_NAME} using existing ${EXE_NOEXE} Prefix" ]; then
      # No need to use flatpak-spawn from main script
      	#if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
