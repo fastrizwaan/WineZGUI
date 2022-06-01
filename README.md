@@ -49,7 +49,7 @@ Please install `flatpak-builder` in your system before running these commands
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI/flatpak-manifest
-install.sh
+./install.sh
 ```
 flatpak's optional requirement is `gnome-terminal` if we need to access prefix using shell
 
