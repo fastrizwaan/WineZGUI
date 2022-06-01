@@ -178,11 +178,31 @@ export WINE_CMD=${WINEEXE}
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak-spawn --host echo 0) ]; then
             
+          # Prompt user to install gnome-terminal if not found
+           if [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+               then 
+               echo found 0
+           else
+                zenity --title "${SELECTION}" \
+                --width=500 --height=30 --info \
+                --text "This feature requires \"gnome-terminal\""
+                MainFunction
+           fi 
             export WINEPREFIX=${PREFIXDIR}
             
              flatpak-spawn --host gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
 
          else
+                  # Prompt user to install gnome-terminal if not found
+             if [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+                 then 
+                 echo found 0
+             else
+                  zenity --title "${SELECTION}" \
+                  --width=500 --height=30 --info \
+                  --text "This feature requires \"gnome-terminal\""
+                  MainFunction
+             fi 
              export WINEPREFIX=${PREFIXDIR}
              gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;  export WINEPREFIX=${PREFIXDIR}; exec bash -i\""
          fi 
