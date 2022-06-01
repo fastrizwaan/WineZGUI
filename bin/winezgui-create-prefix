@@ -241,9 +241,6 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
                PROGRESS=$(echo ${PERCENTAGE})  
                
                echo "Info: Selected winetricks verbs: ${VERBS[*]}"
-               echo "Info: log location ${PREFIX}"
-               echo "Info: Install log: winetricks.install.log"
-               echo "Info: Error   log: winetricks.error.log"
                
                # Show Progress using zenity
                ( for i in ${VERBS[*]}; do
@@ -267,7 +264,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
                  --auto-kill
           fi   
           # After winetricks cli, return to main menu
-          MainFunction
+          # MainFunction need to implement
           
   # PSEUDO CODE WORK HERE
   # Download mf-install from github (create fastrizwan mf-install)
