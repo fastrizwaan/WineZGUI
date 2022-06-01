@@ -53,7 +53,7 @@ add-extensions:
 modules:
   - name: icoutils
     build-options:
-      strip: true
+      #strip: true
       no-debuginfo: true  
     buildsystem: autotools
     sources:
@@ -93,7 +93,7 @@ modules:
         
   - name: desktop-file-utils
     build-options:
-      strip: true
+      #strip: true
       no-debuginfo: true  
     buildsystem: autotools
     sources:
