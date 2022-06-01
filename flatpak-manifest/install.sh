@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# flatpak-builder installed?
+if [ $(command -v fatpak-builder) ]; then 
+     echo "Please install 'flatpak-builder' using your distro's package manager"
+     echo ""
+     echo "Debian/Ubuntu: sudo apt install flatpak-builder"
+     echo "Fedora/Centos: sudo yum install flatpak-builder"
+     echo ""
+     echo "Fedora Silverblue: rpm-ostree install flatpak-builder" 
+     exit 1
+fi
+
 
 if [ $# -eq 0 ];  then
     echo "Building and installing winezgui flatpak!"
