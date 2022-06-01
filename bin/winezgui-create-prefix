@@ -253,9 +253,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
                echo "# Installing ${i}..."
                
                # Install winetricks verbs and put output to logs
-               ${WINETRICKS_CMD} --force --unattended  ${i}     \
-               1>>${PREFIX}/winetricks.install.log       \
-               2>>${PREFIX}/winetricks.error.log 
+               ${WINETRICKS_CMD} --force --unattended  ${i}
                
                PROGRESS=$(expr ${PROGRESS} + ${PERCENTAGE})
                done
