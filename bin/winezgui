@@ -22,6 +22,24 @@ export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
+# Check if "gnome-terminal" is installed on the Host system
+# Required for "Open Shell..." feature
+if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+   [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+    then 
+    echo "gnome-terminal found via flatpak-spawn"
+    export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
+elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
+     [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+     then
+     echo "gnome-terminal found"
+     export GNOME_TERMINAL=0 ; #Available on host install
+else
+     echo "gnome-terminal not found"
+     export GNOME_TERMINAL=1 ; #Unavailable on host
+fi
+
+    # Main WineZGUI application window
     MainFunction () {
     unset EXE_FILE
     unset SELECTION
@@ -129,11 +147,11 @@ export WINE_CMD=${WINEEXE}
           done
           echo 100
           echo "# Done!"
-          ) |zenity                                                     \
-            --width=440                                                 \
-            --title                                                     \
-            "Please Wait... Good things take time!"                     \
-            --progress                                                  \
+          ) |zenity                                 \
+            --width=440                             \
+            --title                                 \
+            "Please Wait... This will take time!"   \
+            --progress                              \
             --auto-kill
   
   
@@ -174,38 +192,29 @@ export WINE_CMD=${WINEEXE}
           
     elif [ "${SELECTION}" = "Open Shell..." ]; then   
           
-
+          # If gnome terminal is not found inform user
+            if [ ${GNOME_TERMINAL} -eq 1 ]; then
+            
+                zenity --title "${SELECTION}" \
+                    --width=500 --height=30 --info \
+                    --text "This feature requires \"gnome-terminal\""
+                    # and return to main application window
+                    MainFunction
+            fi
+         
+         # If flatpak, use flatpak-spawn
          if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
             [ $(flatpak-spawn --host echo 0) ]; then
             
-          # Prompt user to install gnome-terminal if not found
-           if [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-               then 
-               echo found 0
-           else
-                zenity --title "${SELECTION}" \
-                --width=500 --height=30 --info \
-                --text "This feature requires \"gnome-terminal\""
-                MainFunction
-           fi 
             export WINEPREFIX=${PREFIXDIR}
-            
              flatpak-spawn --host gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "cd $WINEPREFIX; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
 
-         else
-                  # Prompt user to install gnome-terminal if not found
-             if [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-                 then 
-                 echo found 0
-             else
-                  zenity --title "${SELECTION}" \
-                  --width=500 --height=30 --info \
-                  --text "This feature requires \"gnome-terminal\""
-                  MainFunction
-             fi 
+         else  
+             # If host, run gnome-terminal
              export WINEPREFIX=${PREFIXDIR}
              gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;  export WINEPREFIX=${PREFIXDIR}; exec bash -i\""
-         fi 
+         fi
+          # on closing shell, go back to main application window
           MainFunction
          
     elif [ "${SELECTION}" = "Delete Prefix..." ]; then
