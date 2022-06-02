@@ -85,22 +85,23 @@ sudo ./setup --uninstall
 ## Requirements
 `wine` - main program
 `winetricks` - must have wine addon script
+`perl‑image‑exiftool` - to extract icon name
 `icoutils` - to extract icon from exe file
 `gnome-terminal` - (optional) to access prefix directory in shell
 
 
 ## Install Requirement for your Linux OS
 ### Fedora 36
-`sudo dnf install wine winetricks icoutils gnome-terminal`
+`sudo dnf install wine winetricks perl-Image-ExifTool icoutils gnome-terminal`
 
 ### Debian / Ubuntu
 ```
 sudo dpkg --add-architecture i386
-sudo apt install wine winetricks icoutils gnome-terminal
+sudo apt install wine winetricks libimage-exiftool-perl icoutils gnome-terminal
 ```
 
 ### Solus
 ```
-sudo eopkg it icoutils wine winetricks gnome-terminal
+sudo eopkg it wine winetricks perl‑image‑exiftool icoutils gnome-terminal
 ```
 
