@@ -85,7 +85,7 @@ sudo ./setup --uninstall
 ## Requirements
 `wine` - main program
 `winetricks` - must have wine addon script
-`perl‑image‑exiftool` - to extract icon name
+`perl‑image‑exiftool` - to extract application/game name
 `icoutils` - to extract icon from exe file
 `gnome-terminal` - (optional) to access prefix directory in shell
 
