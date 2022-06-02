@@ -44,7 +44,7 @@ fi
     {
       unset EXE_FILE
       unset SELECTION
-      SELECTION=$(                                             \
+      SELECTION=$( \
       zenity --title "${APPNAME} (${WINEVER})"                 \
              --list                                            \
              --width=240 --height=400                          \
@@ -71,7 +71,7 @@ fi
       # Open EXE... Opens file dialog
       if [ "${SELECTION}" = "Open EXE..." ]
            then
-      	   EXE_FILE="$(                         \
+      	   EXE_FILE="$( \
       	                zenity                  \
       	                --file-filter=*.exe     \
       	                --file-selection        \
@@ -118,14 +118,14 @@ fi
                         vcrun2008 vcrun2012        \
                         vcrun2015 dxvk faudio      \
                         quartz corefonts"
-             MESSAGE="Change and Press Enter to install these using Winetricks:"
+             MESSAGE="Change & Press Enter to install these using Winetricks:"
              TITLE_TEXT="Winetricks CLI - Paste your verb list"
              # Remove multiple spaces from variable
              # from the above VERB_LIST
              VERB_LIST=$(echo ${VERB_LIST}|sed 's/  / /g')
              
              # Show the dialog
-             VERBS=$(                     \
+             VERBS=$( \
              zenity                       \
              --title "${TITLE_TEXT}"      \
              --width=800 --height=30      \
@@ -204,7 +204,7 @@ fi
                  flatpak-spawn --host flatpak kill io.github.WineZGUI
             else
                  # Find all process which ends with .exe and kill them
-                 WINE_PROCESSES=$(                       \
+                 WINE_PROCESSES=$( \
                                    ps -aux             | \
                                    grep -i '\.exe'     | \
                                    sed 's/\( \)*/\1/g' | \
@@ -237,7 +237,7 @@ fi
              fi
            
              # If flatpak, use flatpak-spawn
-             if [ "${WINE_CMD}" = "/app/bin/wine" ] &&                 \
+             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
                 [ $(flatpak-spawn --host echo 0) ]
                   then
                   echo "Opening gnome-terminal from flatpak sandbox"
@@ -363,9 +363,10 @@ fi
 ### End of Create a default wine prefix directory ###
 
 # Start WineZGUI when no argument is supplied
-if [ $# -eq 0 ];  then
-    echo "Info: Launching WineZGUI"
-    MainFunction 
+if [ $# -eq 0 ]
+     then
+     echo "Info: Launching WineZGUI"
+     MainFunction 
 fi 
 
 # If an exe file is provided as argument or selected by the Open EXE...   
@@ -386,15 +387,15 @@ if [ -f "${EXE_FILE}"  ]
      # If existing prefix exists for the exe
      if [ -f  ${WINEZPREFIX}/${EXE_NOEXE}/"${EXE_NOEXE}.sh" ]
           then
-          SELECTION=$(                                                  \
-          zenity                                                        \
-          --title "${APPNAME} (${WINEVER})"                             \
-          --width=500 --height=300                                      \
-          --list                                                        \
-          --radiolist --column " "                                      \
+          SELECTION=$( \
+          zenity \
+          --title "${APPNAME} (${WINEVER})" \
+          --width=500 --height=300 \
+          --list \
+          --radiolist --column " " \
           --column "Action"                                             \
                  0 "Run ${EXE_NAME} using Default Prefix"               \
-              TRUE "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix" \
+              TRUE "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix"  \
                  0 "Run ${EXE_NAME} configuration"                      \
             --text "Select Action for ${EXE_NAME} " )
      else
