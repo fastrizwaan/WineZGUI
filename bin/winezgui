@@ -434,7 +434,8 @@ if [ -f "${EXE_FILE}"  ]
           	${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
 	   
 	   # Run with existing exe prefix?
-     elif [ "${SELECTION}" = "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix" ]
+     elif [ "${SELECTION}" = \
+            "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix" ]
             then
             echo "Launching ${WINEPREFIX_SUBDIR}/\"${EXE_NOEXE}.sh\""
 	          ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
@@ -442,7 +443,7 @@ if [ -f "${EXE_FILE}"  ]
      # Show exe prefix configuration
      elif [ "${SELECTION}" = "Run ${EXE_NAME} configuration" ]
             then
-            echo "Launching ${WINEPREFIX_SUBDIR}/\"${EXE_NOEXE}.sh\" Configuration"
+            echo "Launching ${WINEPREFIX_SUBDIR}/\"${EXE_NOEXE}.sh\" Config..."
             ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" 
      fi
 fi
