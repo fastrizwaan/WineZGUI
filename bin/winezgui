@@ -358,6 +358,10 @@ fi
 
         # info
         echo "Info: Default Wine Prefix at ${PREFIXDIR}" Created
+        
+        # Create H: for HOME Directory for Wine Explorer
+        ln -sf $HOME "${PREFIXDIR}/dosdevices/h:"
+        
    fi
 
 ### End of Create a default wine prefix directory ###
