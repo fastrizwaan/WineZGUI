@@ -386,7 +386,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 		 --text="${BACKUPNAME}-${DATE}.winezgui.tgz..." --pulsate --auto-kill
 			
 		 mv -v "${BACKUPNAME}-${DATE}.winezgui.tgz" "${TARGET_DIR}"   && \
-         zenity --info --title="Prefix Backup!" --text="Prefix: ${BACKUPNAME}\nFilename: ${BACKUPNAME}-${DATE}.winezgui.tgz\nLocation:${TARGET_DIR}\n\n Info: Only wine prefix is backed up!"
+         zenity --info --title="Prefix Backup!" --text="<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n\n<b>Info:</b> Only wine prefix is backed up!"
 
 
   elif [ "${SELECTION}" = "Delete Prefix..." ]; then
