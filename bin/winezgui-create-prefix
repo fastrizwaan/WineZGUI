@@ -305,31 +305,41 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
-         #  using flatpak install and script is running from host
-         if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-            [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
+         #  using flatpak install and script is running from sandbox
+         # Check if it is a flatpak based script
+         # Check if it is running from inside sandbox
+         # and gnome terminal is found on host
+         if [ ${INSTALL_TYPE} = "flatpak" ] && \
+            [ $(flatpak-spawn --host which gnome-terminal) ]; then
+              echo "I am a flatpak script, running from sandbox"
               export WINEPREFIX=${WINEPREFIX_SUBDIR};
-              echo "I am in sandbox and I am confused ;-)"
-gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i"
-        elif [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-              [ $(flatpak-spawn --host echo 0 2>/dev/null) ]; then
-         echo "I am in /app/bin/wine and flatpak-spawn command runs"
-         echo "WINE_CMD = $WINE_CMD"
-         echo "flatpak-spawn --command = $(flatpak-spawn --host echo 0)"
-flatpak-spawn --host gnome-terminal --wait -- flatpak run --command=bash io.github.WineZGUI -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i\""
-
-         elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-              [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
-         echo "I am in not app/bin/wine and flatpak command runs"
-         echo "WINE_CMD = $WINE_CMD"
-         echo "flatpak --command = $(flatpak --command=echo run io.github.WineZGUI 0)"
-gnome-terminal --wait -- flatpak --filesystem=host --command=bash run io.github.WineZGUI -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i"
-        else
-            echo "WINECMD $WINE_CMD"
-            echo "I am in else"
-             gnome-terminal --wait -- bash -c  "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; exec bash -i\""
-         fi
-
+              flatpak-spawn --host gnome-terminal --wait -- flatpak run \
+              --command=bash io.github.WineZGUI -c  \
+             "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;\
+             exec bash -i\""
+         # If flatpak install and script running from host
+         # and gnome terminal is found
+         elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+              [ $(which gnome-terminal) ]; then
+              export WINEPREFIX=${WINEPREFIX_SUBDIR};
+              echo "I am a flatpak script, running from host"
+              gnome-terminal --wait -- flatpak --filesystem=host \
+              --command=bash run io.github.WineZGUI \
+              -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; \
+              exec bash -i"
+         # Else it is a host install and gnome-terminal is found
+         elif [ ${INSTALL_TYPE} = "system" ] && \
+              [ $(which gnome-terminal) ]; then
+              gnome-terminal --wait -- bash -c \
+              "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; \
+              cd $WINEPREFIX; exec bash -i\""
+         # gnome terminal is not found
+         else
+              zenity --title "${SELECTION}" \
+                     --width=500 --height=30 --info  \
+                     --text "This feature requires \"gnome-terminal\""
+                     
+                     
   elif [ "${SELECTION}" = "Rename..." ]; then
          PROGNAME=$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
        
