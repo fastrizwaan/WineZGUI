@@ -63,7 +63,7 @@ WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
-
+INSTALL_TYPE="system"
 
 # If prefix=nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
@@ -76,6 +76,7 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_PREFIX="/app"
      TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
+     INSTALL_TYPE="flatpak" 
 fi     
 
 
@@ -106,28 +107,19 @@ if [ "${INSTALL}" = "true"  ]
   
      # Install the files
      echo Installing...
-     install -Dm755 $APP1_SRC $APPS_DIR && \
-               echo "installed '$APPS_DIR/$APP1'" 
-     install -Dm755 $APP2_SRC $APPS_DIR && \
-        echo "installed '$APPS_DIR/$APP2'"
-     install -Dm644 $DESK_SRC $DESK_DIR && \
-        echo "installed '$DESK_DIR/$DESK'"
-     install -Dm644 $ICON_SRC $ICON_DIR && \
-        echo "installed '$ICON_DIR/$ICON'"
+     install -Dm755 $APP1_SRC $APPS_DIR && echo "installed '$APPS_DIR/$APP1'" 
+     install -Dm755 $APP2_SRC $APPS_DIR && echo "installed '$APPS_DIR/$APP2'"
+     install -Dm644 $DESK_SRC $DESK_DIR && echo "installed '$DESK_DIR/$DESK'"
+     install -Dm644 $ICON_SRC $ICON_DIR && echo "installed '$ICON_DIR/$ICON'"
 
      # Change Variables in winezgui and winezgui-create-prefix scripts 
      # for system or flatpak install
-     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|" \
-      -i ${INSTALL_PREFIX}/bin/winezgui
-
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|" \
-      -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" \
-      -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-      
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" \
-      -i ${INSTALL_PREFIX}/bin/winezgui
+     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $APPS_DIR/$APP1
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP1
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP1
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP2
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP2
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
       
      # Create uninstall script for later removal
      echo "
@@ -151,36 +143,26 @@ fi
 
 if [ "${DEPENDENCIES}" = "true" ]; then
 
-        # Function to verify if a required program is installed.
-        Verify () 
-        {
-          if ! [ -x "$(command -v $1)" ]
-                 then
-                 NOTFOUND+="$1"
-                 NOTFOUND+=" "
-                 
-          elif [ -x "$(command -v $1)" ]
-                 then
-                 FOUND+=$1
-                 FOUND+=" "
-                 
-          fi
-        }
+     # Function to print if dependencies are installed.
+     FOUND=()    # Array/list to hold all found commands
+     NOTFOUND=() # Array/list to hold all not found commands
 
-        FOUND=()    # Array to hold all found commands
-        NOTFOUND=() # all not found commands are added to this list
-
-        RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal" 
-
-        for i in $RUNTIME
-        do
-            Verify $i;
-        done
-        # Show found and not found dependencies for WineZGUI
-        echo "Dependencies..."
-        echo "Found    : $FOUND"
-        echo "Not Found: $NOTFOUND" 
-
+     RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal" 
+  
+     for i in $RUNTIME ; do
+         if ! [ -x "$(command -v $i)" ]; then
+                NOTFOUND+="$1"
+                NOTFOUND+=" "
+         elif [ -x "$(command -v $i)" ]; then
+                FOUND+=$1
+                FOUND+=" "
+         fi
+     done
+     
+     # Show found and not found dependencies for WineZGUI
+     echo "Dependencies..."
+     echo "Found    : $FOUND"
+     echo "Not Found: $NOTFOUND" 
 fi
 
 

@@ -8,7 +8,9 @@
 # Updated by Mohammed Asif Ali Rizvan for WineZGUI
 # URL: https://github.com/fastrizwaan/WineZGUI
 # ============================================================================ #
+
 export APPNAME=WineZGUI
+export INSTALL_TYPE="system"
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
@@ -99,6 +101,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 echo "
 #!/bin/bash
 export PROGNAME=\"${PROGNAME}\"
+export INSTALL_TYPE=\"$INSTALL_TYPE\"
 export PREFIX=\"${WINEZPREFIX}\"
 export BACKUPNAME=\"${EXE_NOEXE}\"
 export EXE_FILE=\"${EXE_FILE}\"
@@ -128,13 +131,23 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
         #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-		export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
-    else # We are using non flatpak install
-        export WINE_CMD="$(which wine)"
-        export WINETRICKS_CMD="$(which winetricks)"
-        export WINECFG_CMD="${WINE_CMD} winecfg"
-        export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-		export WINEBOOT_CMD="$(which wineboot) -u"
+		    export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
+    else 
+        # flatpak install and running from shell inside flatpak winezgui
+        if [ "\$INSTALL_TYPE" = "true" ]; then
+             export WINE_CMD="/app/bin/wine"
+             export WINETRICKS_CMD="/app/bin/winetricks"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WINEEXPLORER_CMD="${WINE_CMD} explorer"
+		         export WINEBOOT_CMD="${WINE_CMD} wineboot) -u" 
+        else
+             # We are using non flatpak install
+             export WINE_CMD="$(which wine)"
+             export WINETRICKS_CMD="$(which winetricks)"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WINEEXPLORER_CMD="${WINE_CMD} explorer"
+		         export WINEBOOT_CMD="$(which wineboot) -u"
+		    fi
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
@@ -164,6 +177,13 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
        # Create file to check later
         touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
+       
+       # Create G: for Game Directory for Wine Explorer
+       ln -sf "$EXE_PATH" "${PREFIXDIR}/dosdevices/g:"
+        
+       # Create H: for HOME Directory for Wine Explorer
+       ln -sf "$HOME" "${PREFIXDIR}/dosdevices/h:"
+        
   fi
 
 

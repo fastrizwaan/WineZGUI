@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # On 1st launch create default wine prefix
+
 export APPNAME=WineZGUI
+export INSTALL_TYPE="system"
 export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
@@ -22,23 +24,27 @@ export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
-# Check if "gnome-terminal" is installed on the Host system
-# Required for "Open Shell..." feature
-if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-   [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-     then 
-     echo "gnome-terminal found via flatpak-spawn"
-     export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-     [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-       then
-       echo "gnome-terminal found"
-       export GNOME_TERMINAL=0 ; #Available on host install
-else
-     echo "gnome-terminal not found"
-     export GNOME_TERMINAL=1 ; #Unavailable on host
-fi
+  # Check if "gnome-terminal" is installed on the Host system
+  # Required for "Open Shell..." feature
 
+  if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+     [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+       then 
+       echo "gnome-terminal found via flatpak-spawn"
+       export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
+  elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
+       [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
+         then
+         echo "gnome-terminal found"
+         export GNOME_TERMINAL=0 ; #Available on host install
+  else
+       echo "gnome-terminal not found"
+       export GNOME_TERMINAL=1 ; #Unavailable on host
+  fi
+
+  # Let other script read gnome-terminal-test to get gnome-terminal status
+  echo $GNOME_TERMINAL > ${WINEZPREFIX}/gnome-terminal-test
+     
     # Main WineZGUI application window function
     MainFunction () 
     {
