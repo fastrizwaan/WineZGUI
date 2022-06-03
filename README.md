@@ -3,7 +3,7 @@
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
 ## What is WineZGUI
-WineZGUI (pronounced Wine-Zee-Goo-Eee) are a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity. It allows quick launching of Direct play (not installed) EXE application from File Manager like Nautilus and allow creating separate wine prefix for each Windows' EXE binary.
+WineZGUI (pronounced Wine-Zee-Goo-Eee) is a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity. It allows quick launching of Direct play (not installed) EXE application from File Manager like Nautilus and allow creating separate wine prefix for each Windows' EXE binary.
 
 ## Quickly run WineZGUI 0.2 using flatpak
 Install dependencies
