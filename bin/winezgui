@@ -24,27 +24,6 @@ export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 #export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
 
-  # Check if "gnome-terminal" is installed on the Host system
-  # Required for "Open Shell..." feature
-
-  if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-     [ $(flatpak-spawn --host gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-       then 
-       echo "gnome-terminal found via flatpak-spawn"
-       export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-  elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-       [ $(gnome-terminal -q -- bash -c 'exit 0' && echo 0) ];
-         then
-         echo "gnome-terminal found"
-         export GNOME_TERMINAL=0 ; #Available on host install
-  else
-       echo "gnome-terminal not found"
-       export GNOME_TERMINAL=1 ; #Unavailable on host
-  fi
-
-  # Let other script read gnome-terminal-test to get gnome-terminal status
-  echo $GNOME_TERMINAL > ${WINEZPREFIX}/gnome-terminal-test
-     
     # Main WineZGUI application window function
     MainFunction () 
     {
@@ -232,17 +211,37 @@ export WINE_CMD=${WINEEXE}
       elif [ "${SELECTION}" = "Open Shell..." ]
              then
              
-             #If gnome terminal is not found inform user
-             if [ ${GNOME_TERMINAL} -eq 1 ]
-                  then
-                  zenity --title "${SELECTION}"       \
-                      --width=500 --height=30 --info  \
-                      --text "This feature requires \"gnome-terminal\""
-                      # and return to main application window
-                      MainFunction
-             fi
+                       
+             # Check if "gnome-terminal" is installed on the Host
+             # Required for "Open Shell..." feature
+               
+             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+                [ $(flatpak-spawn  --host which gnome-terminal) ]
+                 then 
+                 echo "gnome-terminal found via flatpak-spawn"
+                 export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
+            elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
+                 [ $(which gnome-terminal) ];
+                   then
+                   echo "gnome-terminal found on host system"
+                   export GNOME_TERMINAL=0 ; #Available on host install
+            else
+                 echo "gnome-terminal not found"
+                 export GNOME_TERMINAL=1 ; #Unavailable on host
+            fi
+
+                       
+            # Using Variable, If gnome terminal is not found inform user
+            if [ ${GNOME_TERMINAL} -eq 1 ]
+                 then
+                 zenity --title "${SELECTION}" \
+                        --width=500 --height=30 --info  \
+                        --text "This feature requires \"gnome-terminal\""
+                 # and return to main application window
+                 MainFunction
+            fi
            
-             # If flatpak, use flatpak-spawn
+             # If found in flatpak sandbox, use flatpak-spawn
              if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
                 [ $(flatpak-spawn --host echo 0) ]
                   then
@@ -254,7 +253,7 @@ export WINE_CMD=${WINEEXE}
                   -c "cd $WINEPREFIX; export WINEPREFIX=${WINEPREFIX}; \
                   exec bash -i"
 
-             # If host, run gnome-terminal
+             # If found on host, run gnome-terminal
              else
                  echo "Opening gnome-terminal from host"  
                  export WINEPREFIX=${PREFIXDIR}
