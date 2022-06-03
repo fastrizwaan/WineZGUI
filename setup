@@ -1,19 +1,21 @@
 #!/bin/bash
 
 # Function Show help
-ShowHelp()
+ShowHelp ()
 {
   echo "Setup file for WineZGUI scripts"
   echo "Usage:"
   echo "$0 --install | --uninstall"
   echo ""
   echo "Options:"
-  echo "-i, --install            Installs WineZGUI to default prefix /"
-  echo "-u, --uninstall          Removes previously installed WinzeGUI"
-  echo "-p, --prefix=            Installs to user specified prefix"  
+  echo "-i, --install            Install WineZGUI to default prefix"
+  echo "-u, --uninstall          Remove previously installed WinzeGUI"
+  echo "-p, --prefix=            Install to user specified prefix"  
   echo "-f, --flatpak            Install flatpak specific WineZGUI"
+  echo "-d, --deps               Show runtime dependencies"
   echo ""
   echo "Examples:"
+  echo "$0 --deps"
   echo "$0 --install --prefix=/usr/local"  
   echo "$0 --install --flatpak --prefix=/app"
   
@@ -41,6 +43,9 @@ case $i in
     -u|--uninstall)
     UNINSTALL="true"
     ;;
+    -d|--deps)
+    DEPENDENCIES="true"
+    ;;
     -h|--help)
     ShowHelp
     exit
@@ -54,15 +59,13 @@ done
 
 # Defaults for non flatpak install
 APPLICATIONSDIR=~/.local/share/applications
-#UIC="gtk-update-icon-cache"
-#UDD="update-desktop-database ${APPLICATIONSDIR}"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
-#DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-# If prefix= nothing then install to /usr
+
+# If prefix=nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
 fi
@@ -71,43 +74,61 @@ fi
 if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
-#     UIC="flatpak-spawn --host gtk-update-icon-cache"
-#     UDD="flatpak-spawn --host update-desktop-database ${APPLICATIONSDIR}"
-#     WINE_CMD='flatpak run --command=wine org.winehq.Wine'
-#     WINETRICKS_CMD='flatpak run --command=winetricks org.winehq.Wine'
      TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
-     # Environment variable is not set when winezgui calls game script from sandbox
-     # so, ask them to run from host 
 fi     
-##
+
+
+# Files to install
+APP1_SRC="./bin/winezgui"
+APP2_SRC="./bin/winezgui-create-prefix"
+DESK_SRC="./assets/winezgui.desktop"
+ICON_SRC="./assets/winezgui.svg"
+
+# Basename
+APP1=$(basename $APP1_SRC)
+APP2=$(basename $APP2_SRC)
+DESK=$(basename $DESK_SRC)
+ICON=$(basename $ICON_SRC)
+
+# Target Directory to install
+APPS_DIR="${INSTALL_PREFIX}/bin"
+DESK_DIR="${INSTALL_PREFIX}/share/applications/"
+ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
 
 # If Install is selected
-if [ "${INSTALL}" = "true"  ]; then
-
+if [ "${INSTALL}" = "true"  ]
+     then
      # Create required Directories
-     mkdir -p ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/
-     mkdir -p ${INSTALL_PREFIX}/share/applications/
-     mkdir -p ${INSTALL_PREFIX}/bin/
+     mkdir -p $ICON_DIR
+     mkdir -p $DESK_DIR
+     mkdir -p $APPS_DIR
   
      # Install the files
-     install -Dvm644 ./assets/winezgui.svg        ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/
-     install -Dvm644 ./assets/winezgui.desktop    ${INSTALL_PREFIX}/share/applications/
-     install -Dvm755 ./bin/winezgui               ${INSTALL_PREFIX}/bin/
-     install -Dvm755 ./bin/winezgui-create-prefix ${INSTALL_PREFIX}/bin/
+     echo Installing...
+     install -Dm755 $APP1_SRC $APPS_DIR && \
+               echo "installed '$APPS_DIR/$APP1'" 
+     install -Dm755 $APP2_SRC $APPS_DIR && \
+        echo "installed '$APPS_DIR/$APP2'"
+     install -Dm644 $DESK_SRC $DESK_DIR && \
+        echo "installed '$DESK_DIR/$DESK'"
+     install -Dm644 $ICON_SRC $ICON_DIR && \
+        echo "installed '$ICON_DIR/$ICON'"
 
-     # Change Variables in winezgui and winezgui-create-prefix scripts for system or flatpak install
-     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"                          -i ${INSTALL_PREFIX}/bin/winezgui
-#     sed "s|UPDATE_ICON_CACHE=.*|UPDATE_ICON_CACHE=\"$UIC\"|"             -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-#     sed "s|UPDATE_DESKTOP_DATABASE=.*|UPDATE_DESKTOP_DATABASE=\"$UDD\"|" -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  #  sed "s|WINETRICKS_CMD=.*|WINETRICKS_CMD=\"$WINETRICKS_CMD\"|"        -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-  #  sed "s|WINE_CMD=.*|WINE_CMD=\"$WINE_CMD\"|"                          -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                                -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui
-     sed "s|export TERMINAL_CMD=\"gnome-terminal bash\"|export TERMINAL_CMD=\"$TERMINAL_CMD\"|"                 -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
-#     sed "s|DESKTOP_FILE_EDIT=.*|DESKTOP_FILE_EDIT=\"\\$DESKTOP_FILE_EDIT\"|"    -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     # Change Variables in winezgui and winezgui-create-prefix scripts 
+     # for system or flatpak install
+     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|" \
+      -i ${INSTALL_PREFIX}/bin/winezgui
 
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|" \
+      -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" \
+      -i ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+      
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|" \
+      -i ${INSTALL_PREFIX}/bin/winezgui
+      
      # Create uninstall script for later removal
      echo "
      rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
@@ -115,7 +136,8 @@ if [ "${INSTALL}" = "true"  ]; then
      rm -vf ${INSTALL_PREFIX}/bin/winezgui
      rm -vf ${INSTALL_PREFIX}/bin/winezgui-create-prefix
      " > ./uninstall
-
+     
+     # 
 # For --uninstall, if already installed then uninstall else skip
 elif [ "${UNINSTALL}" = "true" ]; then
        if [ -f ./uninstall ]; then
@@ -126,3 +148,39 @@ elif [ "${UNINSTALL}" = "true" ]; then
             echo "Not installed. "
        fi
 fi
+
+if [ "${DEPENDENCIES}" = "true" ]; then
+
+        # Function to verify if a required program is installed.
+        Verify () 
+        {
+          if ! [ -x "$(command -v $1)" ]
+                 then
+                 NOTFOUND+="$1"
+                 NOTFOUND+=" "
+                 
+          elif [ -x "$(command -v $1)" ]
+                 then
+                 FOUND+=$1
+                 FOUND+=" "
+                 
+          fi
+        }
+
+        FOUND=()    # Array to hold all found commands
+        NOTFOUND=() # all not found commands are added to this list
+
+        RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal" 
+
+        for i in $RUNTIME
+        do
+            Verify $i;
+        done
+        # Show found and not found dependencies for WineZGUI
+        echo "Dependencies..."
+        echo "Found    : $FOUND"
+        echo "Not Found: $NOTFOUND" 
+
+fi
+
+
