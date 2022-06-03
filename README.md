@@ -99,9 +99,8 @@ sudo ./setup --uninstall
 sudo dpkg --add-architecture i386
 sudo apt install wine winetricks libimage-exiftool-perl icoutils gnome-terminal
 ```
-
 ### Solus
 ```
-sudo eopkg it wine winetricks perl‑image‑exiftool icoutils gnome-terminal
+sudo eopkg it wine winetricks perl-image-exiftool icoutils gnome-terminal
 ```
 
