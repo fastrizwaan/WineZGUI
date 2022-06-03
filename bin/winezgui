@@ -276,7 +276,7 @@ export WINE_CMD=${WINEEXE}
       elif [ "${SELECTION}" = "Open Explorer" ]
              then
              echo "Opening Explorer"
-             ${WINE_CMD} explorer; 
+             ${WINE_CMD} explorer $HOME; 
              MainFunction
          
       else

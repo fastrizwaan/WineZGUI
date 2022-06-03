@@ -301,7 +301,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
          ${WINECFG_CMD}
     
   elif [ "${SELECTION}" = "Open Explorer..." ]; then
-         ${WINEEXPLORER_CMD}
+         ${WINEEXPLORER_CMD} "$EXE_PATH"
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
