@@ -1,0 +1,6 @@
+
+     rm -vf /usr/share/icons/hicolor/scalable/apps/winezgui.svg
+     rm -vf /usr/share/applications/winezgui.desktop
+     rm -vf /usr/bin/winezgui
+     rm -vf /usr/bin/winezgui-create-prefix
+     

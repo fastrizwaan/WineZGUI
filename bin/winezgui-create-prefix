@@ -330,11 +330,13 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
          # Else it is a host install and gnome-terminal is found
          elif [ ${INSTALL_TYPE} = "system" ] && \
               [ $(which gnome-terminal) ]; then
+              echo "I am a host based script, running from host"
               gnome-terminal --wait -- bash -c \
               "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; \
               cd $WINEPREFIX; exec bash -i\""
          # gnome terminal is not found
          else
+              echo "gnome-terminal is not installed on the host"
               zenity --title "${SELECTION}" \
                      --width=500 --height=30 --info  \
                      --text "This feature requires \"gnome-terminal\""
@@ -384,7 +386,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 		 --text="${BACKUPNAME}-${DATE}.winezgui.tgz..." --pulsate --auto-kill
 			
 		 mv -v "${BACKUPNAME}-${DATE}.winezgui.tgz" "${TARGET_DIR}"   && \
-         zenity --info --title="Prefix Backup!" --text="Prefix: ${BACKUPNAME}\nFilename: ${BACKUPNAME}-${DATE}.winezgui.tgz\nLocation:$ {TARGET_DIR}\n\n Info: Only wine prefix is backed up!"
+         zenity --info --title="Prefix Backup!" --text="Prefix: ${BACKUPNAME}\nFilename: ${BACKUPNAME}-${DATE}.winezgui.tgz\nLocation:${TARGET_DIR}\n\n Info: Only wine prefix is backed up!"
 
 
   elif [ "${SELECTION}" = "Delete Prefix..." ]; then
