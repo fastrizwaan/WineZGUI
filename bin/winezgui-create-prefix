@@ -81,12 +81,14 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
     # Automatically set name, read from pe file, if not found use exe name
     
-    PROGNAME=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':'|sed 's/^ //')
+    PROGNAME=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
+                                                               |sed 's/^ //')
     
-    # if language is not english set exe name
+    # if language is not english inside exe name, use exe name
     if [ $(echo $PROGNAME | grep -Ev [a-zA-Z] ) ]; then
          unset PROGNAME
     fi
+    
     if [ ! "$PROGNAME" ]; #if no name is given, then use exe filename
        then         
        PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
@@ -125,29 +127,33 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
     # If io.github.WineZGUI is installed, then most probably we are using flatpak version
     # and we need to assign flatpak wine commands to created wine shortcuts
-    if [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
-        export WINE_CMD="flatpak --filesystem=host run --command=wine io.github.WineZGUI"
-        export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
-        export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
-        export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
-        #export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-		    export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
+    if [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
+         echo "We are using flatpak install type, but running from host"
+         export WINE_CMD="flatpak --filesystem=host run --command=wine io.github.WineZGUI"
+         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
+         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
+         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
+         export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
+         export WHICHWINE="$(flatpak --filesystem=host --command=which run io.github.WineZGUI wine)"
     else 
         # flatpak install and running from shell inside flatpak winezgui
-        if [ "\$INSTALL_TYPE" = "true" ]; then
+        if [ "\$INSTALL_TYPE" = "flatpak" ]; then
              export WINE_CMD="/app/bin/wine"
              export WINETRICKS_CMD="/app/bin/winetricks"
              export WINECFG_CMD="${WINE_CMD} winecfg"
              export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-		         export WINEBOOT_CMD="${WINE_CMD} wineboot) -u" 
+             export WINEBOOT_CMD="${WINE_CMD} wineboot) -u" 
+             export WHICHWINE="${WINE_CMD}"
         else
              # We are using non flatpak install
              export WINE_CMD="$(which wine)"
              export WINETRICKS_CMD="$(which winetricks)"
              export WINECFG_CMD="${WINE_CMD} winecfg"
              export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-		         export WINEBOOT_CMD="$(which wineboot) -u"
-		    fi
+             export WINEBOOT_CMD="$(which wineboot) -u"
+             export WHICHWINE="$(which wine)"             
+        fi
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
@@ -189,20 +195,20 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 # Create Metadata info.txt for the default wine prefix
 if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
 echo -e "
-Game Name       \t: ${PROGNAME}
+Game Name       \t: <b>${PROGNAME}</b>
 Game EXE        \t: ${EXE_FILE}
 Sha256sum       \t: $(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
 Game Directory  \t: ${EXE_PATH}
 Game Prefix     \t: ${WINEPREFIX_SUBDIR}
-Game Script     \t: Game Prefix/${NO_EXE}.sh
-Game Icon       \t: Game Prefix/${EXE_NOEXE}.png
-Game Shortcut   \t: Game Prefix/${EXE_NOEXE}.desktop 
+Game Script     \t: Game Prefix/<b>${EXE_NOEXE}.sh</b>
+Game Icon       \t: Game Prefix/<b>${EXE_NOEXE}.png</b>
+Game Shortcut   \t: Game Prefix/<b>${EXE_NOEXE}.desktop</b>
 System Shortcut \t: ${DESKTOPDIR}
 Creation Date   \t: $(date)
 ----------------------------------------------------
 Application Name\t: WineZGUI
 Version        \t\t\t: ${APPVERSION}
-Wine           \t\t\t: $(${WINE_CMD} --version)
+Wine           \t\t\t: ${WHICHWINE}
 Wine Version    \t\t: $(wine --version|cut -f1 -d " ")
 Wine Arch       \t\t: ${WINEARCH}
 WineZGUI Prefix \t\t: $(realpath -m ~/.local/share/winezgui)
