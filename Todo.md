@@ -8,13 +8,14 @@ Version 0.3
 
 - [x] Show WineZGUI version (use version variable)
 
-- [ ]  Fix wrong wine version when both host and flatpak exist
+- [x] Fix wrong wine version when both host and flatpak exist
 
 - [ ] Create shortcut should show --entry-text and ask to confirm to fix game name, on creation
 
 - [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
 
 - [ ] 
+
 - [ ] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
 - [x] Generate  metadata file inside prefix 
@@ -25,13 +26,13 @@ Version 0.3
   
   - [x] Game Name
   
-  - [x]  sha256sum, 
+  - [x] sha256sum, 
   
   - [x] filename,
   
-  - [x]  gamdir location (EXE_PATH) and
+  - [x] gamdir location (EXE_PATH) and
   
-  - [x]  prefix and 
+  - [x] prefix and 
   
   - [x] wine version 
   
@@ -39,7 +40,7 @@ Version 0.3
   
   - [x] icon
 
-- [ ]  Support Gamedir install (give option, gamedir preferred if writable)
+- [ ] Support Gamedir install (give option, gamedir preferred if writable)
   
   - [ ] Create wine prefix inside game directory, for backup up and sharing with friends
     
@@ -53,7 +54,7 @@ Version 0.3
       
       - [ ] game dir - for gamedir install if found launch
       
-      - [ ]  else WINEZPREFIX/NO_EXE dir
+      - [ ] else WINEZPREFIX/NO_EXE dir
 
 - [ ] Change prefix location support, from gamedir to somewhere else and vice versa
   
@@ -71,6 +72,6 @@ Version 0.3
   
   - [ ] if game dir, link shortcut from gamedir to applications
 
-- [ ]  if wine version changes (compared to metada) inform user 
+- [ ] if wine version changes (compared to metada) inform user 
 
 - [ ] 
