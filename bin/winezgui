@@ -389,8 +389,9 @@ export WINE_CMD=${WINEEXE}
 if [ ! -f ${PREFIXDIR}/info.txt ]; then
 echo -e "
 Application Name\t: WineZGUI
-Version        \t\t\t: ${APPVERSION}
-Wine           \t\t\t: ${WINE_CMD}
+Version       \t\t\t: ${APPVERSION}
+Copyright       \t\t: GNU General Public License (GPLv3)
+Wine          \t\t\t: ${WINE_CMD}
 Wine Version    \t\t: $(wine --version|cut -f1 -d ' ')
 Wine Arch       \t\t: ${WINEARCH}
 WineZGUI Prefix \t\t: $(realpath -m ~/.local/share/winezgui)
