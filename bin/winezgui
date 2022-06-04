@@ -3,6 +3,7 @@
 # On 1st launch create default wine prefix
 
 export APPNAME=WineZGUI
+export APPVERSION=0.3
 export INSTALL_TYPE="system"
 export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d ' ')
@@ -30,7 +31,7 @@ export WINE_CMD=${WINEEXE}
       unset EXE_FILE
       unset SELECTION
       SELECTION=$( \
-      zenity --title "${APPNAME} (${WINEVER})"                 \
+      zenity --title "${APPNAME} ${APPVERSION} - (${WINEVER})" \
              --list                                            \
              --width=240 --height=400                          \
              --radiolist --column " "                          \
@@ -43,6 +44,7 @@ export WINE_CMD=${WINEEXE}
                     0 "Open Shell..."                          \
                     0 "Kill all Instances"                     \
                     0 "Delete Prefix..."                       \
+                    0 "About..."                               \
              --text   "WineZGUI Default Prefix\n${PREFIXDIR} " \
               )
 
@@ -265,7 +267,13 @@ export WINE_CMD=${WINEEXE}
              fi
               # on closing shell, go back to main application window
               MainFunction
-           
+      
+      elif [ "${SELECTION}" = "About..." ]; then
+             zenity --info --text "$(cat ${PREFIXDIR}/info.txt \
+             |sed -E 's/^(.*:)/<b>\1<\/b>/')"
+             
+             MainFunction
+             
       elif [ "${SELECTION}" = "Delete Prefix..." ]
              then
              rm -rfv ${PREFIXDIR}; 
@@ -370,6 +378,22 @@ export WINE_CMD=${WINEEXE}
    fi
 
 ### End of Create a default wine prefix directory ###
+
+
+# Create Metadata info.txt for the default wine prefix
+if [ ! -f ${PREFIXDIR}/info.txt ]; then
+echo -e "
+Application Name\t: WineZGUI
+Version        \t\t\t: ${APPVERSION}
+Wine           \t\t\t: ${WINE_CMD}
+Wine Version    \t\t: $(wine --version|cut -f1 -d ' ')
+Wine Arch       \t\t: ${WINEARCH}
+WineZGUI Prefix \t\t: $(realpath -m ~/.local/share/winezgui)
+Wine Prefix     \t\t: ${PREFIXDIR}
+Creation Date   \t\t: $(date)
+" > ${PREFIXDIR}/info.txt
+echo "create ${PREFIXDIR}/info.txt"
+fi
 
 # Start WineZGUI when no argument is supplied
 if [ $# -eq 0 ]

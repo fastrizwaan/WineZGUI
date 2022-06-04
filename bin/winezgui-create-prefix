@@ -186,7 +186,28 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
         
   fi
 
-
+# Create Metadata info.txt for the default wine prefix
+if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
+echo -e "
+Game Name       \t: ${PROGNAME}
+Game EXE        \t: ${EXE_FILE}
+Game Directory  \t: ${EXE_PATH}
+Game Prefix     \t: ${WINEPREFIX_SUBDIR}
+Game Script     \t: Game Prefix/${NO_EXE}.sh
+Game Icon       \t: Game Prefix/${EXE_NOEXE}.png
+Game Shortcut   \t: Game Prefix/${EXE_NOEXE}.desktop 
+System Shortcut \t: ${DESKTOPDIR}
+Creation Date   \t: $(date)
+----------------------------------------------------
+Application Name\t: WineZGUI
+Version        \t\t\t: ${APPVERSION}
+Wine           \t\t\t: $(${WINE_CMD} --version)
+Wine Version    \t\t: $(wine --version|cut -f1 -d " ")
+Wine Arch       \t\t: ${WINEARCH}
+WineZGUI Prefix \t\t: $(realpath -m ~/.local/share/winezgui)
+" > ${WINEPREFIX_SUBDIR}/info.txt
+echo "created ${WINEPREFIX_SUBDIR}/info.txt"
+fi
 
 # If asked to run an exe by winezgui using launch option
   if [ "$1" = "launch" ]; then
@@ -200,12 +221,12 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
 
   # EXE handling by providing dialog
-  SELECTION=$(zenity --title "$EXE_NOSP"       \
-                   --width=340 --height=380             \
+  SELECTION=$(zenity --title "$EXE_NOSP ${APPNAME} (${WINEVER})"  \
+                   --width=340 --height=410             \
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Launch..."            \
+                       TRUE "Launch..."                 \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
                        0    "Launch Winecfg..."         \
@@ -214,7 +235,8 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
                        0    "Rename..."                 \
                        0    "Change Icon..."            \
                        0    "Backup..."                 \
-                       0    "Delete Prefix..." \
+                       0    "Delete Prefix..."          \
+                       0    "Show Prefix Info..."       \
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
@@ -395,6 +417,9 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
          rm -rf  ${WINEPREFIX_SUBDIR}; 
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+         
+  elif [ "${SELECTION}" = "Show Prefix Info..." ]; then
+          zenity --info --text "$(cat ${WINEPREFIX_SUBDIR}/info.txt|sed -E "s/^(.*:)/<b>\1<\/b>/g")"
 
   elif [ "${SELECTION}" = "Launch..." ]; then
          export base=$(basename "$EXE_FILE")
