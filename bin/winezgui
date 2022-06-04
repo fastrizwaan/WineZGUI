@@ -269,8 +269,13 @@ export WINE_CMD=${WINEEXE}
               MainFunction
       
       elif [ "${SELECTION}" = "About..." ]; then
-             zenity --info --width 400 --text "$(cat ${PREFIXDIR}/info.txt \
-             |sed -E 's/^(.*:)/<b>\1<\/b>/')"
+             # The about dialog size width should be wider
+             if [ ${INSTALL_TYPE} = "flatpak" ]; then
+                  ZCMD="zenity --info --width 620 --text"
+             else
+                  ZCMD="zenity --info --width 500 --text"
+             fi
+             $ZCMD "$(cat ${PREFIXDIR}/info.txt |sed -E 's/^(.*:)/<b>\1<\/b>/')"
              
              MainFunction
              
