@@ -42,8 +42,8 @@ export WINE_CMD=${WINEEXE}
                     0 "Launch Winecfg..."                      \
                     0 "Open Explorer"                          \
                     0 "Open Shell..."                          \
-                    0 "Kill all Instances"                     \
-                    0 "Delete Prefix..."                       \
+                    0 "Kill all..."                     \
+                    0 "Delete..."                              \
                     0 "About..."                               \
              --text   "WineZGUI Default Prefix\n${PREFIXDIR} " \
               )
@@ -181,7 +181,7 @@ export WINE_CMD=${WINEEXE}
       
       # It is a required feature, users will have trouble if
       # some wine application hang or stay resident
-      elif [ "${SELECTION}" = "Kill all Instances" ]
+      elif [ "${SELECTION}" = "Kill all..." ]
              then
       
             # for killing all wine instance from flaptak sandbox
@@ -279,7 +279,7 @@ export WINE_CMD=${WINEEXE}
              
              MainFunction
              
-      elif [ "${SELECTION}" = "Delete Prefix..." ]
+      elif [ "${SELECTION}" = "Delete..." ]
              then
              rm -rfv ${PREFIXDIR}; 
              echo "Deleted default prefix"

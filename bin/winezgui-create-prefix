@@ -19,7 +19,7 @@ export PREFIXDIR=${WINEZPREFIX}
 export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 export WINE_CMD=$(which wine)
-export WINETRICKS_CMD=$(which winetricks)
+export WTRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZPREFIX}/tmp"
 export EXIFTOOL=$(which exiftool)
 
@@ -122,36 +122,43 @@ export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 echo '
 export WINEARCH=win64
 export WINEDLLOVERRIDES="mscoree,mshtml="
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64:/app/lib/i386-linux-gnu:/app/lib/wine:/app/lib64/wine:/app/$NAME:$(pwd)
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/i386-linux-gnu:/app/lib/wine
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib64/wine:/app/$NAME:$(pwd)
 export DESKTOP_FILE_EDIT="desktop-file-edit"
 
-    # If io.github.WineZGUI is installed, then most probably we are using flatpak version
-    # and we need to assign flatpak wine commands to created wine shortcuts
+    # If io.github.WineZGUI is installed, and script created using flatpak 
     if [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak --command=echo run io.github.WineZGUI 0 2>/dev/null) ]; then
          echo "We are using flatpak install type, but running from host"
-         export WINE_CMD="flatpak --filesystem=host run --command=wine io.github.WineZGUI"
-         export WINETRICKS_CMD="flatpak --filesystem=host --command=winetricks run io.github.WineZGUI"
-         export WINECFG_CMD="flatpak --filesystem=host --command=wine run io.github.WineZGUI winecfg"
-         export WINEEXPLORER_CMD="flatpak --filesystem=host --command=wine  run io.github.WineZGUI explorer"
-         export WINEBOOT_CMD="flatpak --filesystem=host --command=wineboot run io.github.WineZGUI -u"
-         export WHICHWINE="$(flatpak --filesystem=host --command=which run io.github.WineZGUI wine)"
+         WINE_CMD="flatpak run --command=wine io.github.WineZGUI"
+         WTRICKS_CMD="flatpak run --command=winetricks io.github.WineZGUI"
+         WINECFG_CMD="flatpak run --command=wine io.github.WineZGUI winecfg"
+         WEXPLORER_CMD="flatpak run --command=wine io.github.WineZGUI explorer"
+         WBOOT_CMD="flatpak --command=wineboot run io.github.WineZGUI -u"
+         WHICHWINE="$(flatpak --command=which run io.github.WineZGUI wine)"
+         
+         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD 
+         export WHICHWINE
+         
     else 
         # flatpak install and running from shell inside flatpak winezgui
         if [ "\$INSTALL_TYPE" = "flatpak" ]; then
+             echo "We are running this from flatpak & installed via flatpak"
              export WINE_CMD="/app/bin/wine"
-             export WINETRICKS_CMD="/app/bin/winetricks"
+             export WTRICKS_CMD="/app/bin/winetricks"
              export WINECFG_CMD="${WINE_CMD} winecfg"
-             export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-             export WINEBOOT_CMD="${WINE_CMD} wineboot) -u" 
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="${WINE_CMD} wineboot) -u" 
              export WHICHWINE="${WINE_CMD}"
         else
              # We are using non flatpak install
+             echo "We are running this from host system."
              export WINE_CMD="$(which wine)"
-             export WINETRICKS_CMD="$(which winetricks)"
+             export WTRICKS_CMD="$(which winetricks)"
              export WINECFG_CMD="${WINE_CMD} winecfg"
-             export WINEEXPLORER_CMD="${WINE_CMD} explorer"
-             export WINEBOOT_CMD="$(which wineboot) -u"
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="$(which wineboot) -u"
              export WHICHWINE="$(which wine)"             
         fi
     fi
@@ -162,7 +169,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
        # Create Prefix and delete base system linked directory links       
        WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       ${WINEBOOT_CMD} && \
+       ${WBOOT_CMD} && \
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
@@ -242,8 +249,8 @@ fi
                        0    "Rename..."                 \
                        0    "Change Icon..."            \
                        0    "Backup..."                 \
-                       0    "Delete Prefix..."          \
-                       0    "About Prefix..."       \
+                       0    "Delete..."                 \
+                       0    "About..."       \
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
@@ -251,7 +258,7 @@ fi
 
   # If Winetricks is selected
   if [ "${SELECTION}" = "Winetricks GUI..." ]; then  
-       $WINETRICKS_CMD --gui
+       $WTRICKS_CMD --gui
 
     # Provide Command Line to enter multiple Dependencies
     elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
@@ -299,7 +306,7 @@ fi
                echo "# Installing ${i}..."
                
                # Install winetricks verbs and put output to logs
-               ${WINETRICKS_CMD} --force --unattended  ${i}
+               ${WTRICKS_CMD} --force --unattended  ${i}
                
                PROGRESS=$(expr ${PROGRESS} + ${PERCENTAGE})
                done
@@ -330,7 +337,7 @@ fi
          ${WINECFG_CMD}
     
   elif [ "${SELECTION}" = "Open Explorer..." ]; then
-         ${WINEEXPLORER_CMD} "$EXE_PATH"
+         ${WEXPLORER_CMD} "$EXE_PATH"
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
@@ -352,7 +359,7 @@ fi
               [ $(which gnome-terminal) ]; then
               export WINEPREFIX=${WINEPREFIX_SUBDIR};
               echo "I am a flatpak script, running from host"
-              gnome-terminal --wait -- flatpak --filesystem=host \
+              gnome-terminal --wait -- flatpak  \
               --command=bash run io.github.WineZGUI \
               -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; \
               exec bash -i"
@@ -385,19 +392,36 @@ fi
          zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: $appname"
 
   elif [ "${SELECTION}" = "Change Icon..." ]; then
-         get_icon=$(zenity --file-selection --file-filter=""*.png" "*.jpg" "*.svg"")
-        if [ ! $get_icon ]; then #if no icon is selected
-           zenity --info --title="Icon... " --text="no Change"        
-           exit;
-        fi
-        if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
+  
+         # Ask user to select an image icon
+         GET_ICON=$(zenity --file-selection \
+                           --file-filter=""*.png" "*.jpg" "*.svg"")
+         
+         # If he/she cancels, why prompt?
+         if [ ! ${GET_ICON} ]; then #if no icon is selected
+              #zenity --info --title="Icon... " --text="no Change"        
+              exit;
+              echo "No icon selected"
+              # GameWindow #return to game window 
+         fi
+         
+         # Now that we have included desktop-file-edit in flatpak, not needed
+         if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
              export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
          else 
              export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
          fi
-        ${DESKTOP_FILE_EDIT} --set-icon="$get_icon" ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
-        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-        zenity --info --title="$EXE_NOEXE.desktop" --text="Icon Changed sucessfuly: $get_icon"
+         
+         # set icon to the user selected one
+         ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" \
+                                         ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
+         
+         # Update .desktop database
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+         
+         # Inform user
+         zenity --info --title="$EXE_NOEXE.desktop" \
+               --text="Icon Changed sucessfuly: ${GET_ICON}"
 
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
@@ -429,14 +453,14 @@ fi
          
 
 
-  elif [ "${SELECTION}" = "Delete Prefix..." ]; then
+  elif [ "${SELECTION}" = "Delete..." ]; then
          
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
          rm -rf  ${WINEPREFIX_SUBDIR}; 
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
-  elif [ "${SELECTION}" = "About Prefix..." ]; then
+  elif [ "${SELECTION}" = "About..." ]; then
          if [ ${INSTALL_TYPE} = "flatpak" ]; then
                   ZCMD="zenity --info --width 650 --text"
              else
@@ -489,7 +513,7 @@ Terminal=false
         Z_TEXT+="<b><i>Use:</i></b>\n"        
         Z_TEXT+="<i><b>Rename... </b>\t\t"
         Z_TEXT+="To <b>change</b> the <b>application name</b></i>\n"
-        Z_TEXT+="<b>About Prefix...\t</b>"
+        Z_TEXT+="<b>About...\t</b>"
         Z_TEXT+="<i>To see location of shortcut, icon, etc.</i>"
         zenity --info \
                --timeout 5 \
