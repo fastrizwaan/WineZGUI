@@ -269,7 +269,7 @@ export WINE_CMD=${WINEEXE}
               MainFunction
       
       elif [ "${SELECTION}" = "About..." ]; then
-             zenity --info --text "$(cat ${PREFIXDIR}/info.txt \
+             zenity --info --width 400 --text "$(cat ${PREFIXDIR}/info.txt \
              |sed -E 's/^(.*:)/<b>\1<\/b>/')"
              
              MainFunction
