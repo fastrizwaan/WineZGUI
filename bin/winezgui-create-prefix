@@ -402,20 +402,31 @@ fi
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
          DATE=$(date +%F_%H%M)
-         TARGET_DIR=$(zenity  --file-selection --title="Choose Backup  Directory"  --directory)
+         Z_TITLE="Choose Backup Directory!"
+         TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
          if [ -z "$TARGET_DIR" ]; then
               exit 0;
          fi
          
          # Backup
+         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
          cd "${PREFIX}"
-         echo "creating ${BACKUPNAME}-${DATE}.winezgui (tar.gz) backup"
-         (tar -zcvf "${BACKUPNAME}-${DATE}.winezgui.tgz" "./${BACKUPNAME}")| \
-		 zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-		 --text="${BACKUPNAME}-${DATE}.winezgui.tgz..." --pulsate --auto-kill
+         echo "creating ${BACKUP_FILE} backup"
+         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+		      zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+		      --text="${BACKUP_FILE}..." --pulsate --auto-kill
 			
-		 mv -v "${BACKUPNAME}-${DATE}.winezgui.tgz" "${TARGET_DIR}"   && \
-         zenity --info --title="Prefix Backup!" --text="<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n\n<b>Info:</b> Only wine prefix is backed up!"
+			   # Report Size also
+			   BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+			   # Backup Sucess Message
+			   MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
+			   MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
+			   MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
+			   MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
+			   
+		     mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+         
 
 
   elif [ "${SELECTION}" = "Delete Prefix..." ]; then
@@ -431,7 +442,8 @@ fi
              else
                   ZCMD="zenity --info --width 500 --text"
              fi
-             $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt|sed -E "s/^(.*:)/<b>\1<\/b>/g")"
+             $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt| \
+                      sed -E "s/^(.*:)/<b>\1<\/b>/g")"
 
   elif [ "${SELECTION}" = "Launch..." ]; then
          export base=$(basename "$EXE_FILE")
@@ -445,7 +457,7 @@ fi
 chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
 # Generate desktop entry specifications to be added to the application launcher.
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 echo "
 [Desktop Entry]
 Exec=bash -c ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
@@ -461,14 +473,29 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
-    ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop ${DESKTOPDIR}/"$EXE_NOEXE".desktop
+    ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
+            ${DESKTOPDIR}/"$EXE_NOEXE".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
         echo "Shortcut created sucessfuly Name: ${PROGNAME}\nExe: ${EXE_NAME}"
-      zenity --info      --title="Shortcut Created!"\
-             --width 300 --text="Name: ${PROGNAME}\nExe: ${EXE_NAME}"
+        
+        #Create Variable for Zenity Strings for setting code at 80 column width
+        Z_TITLE='Desktop Shortcut Created'
+        Z_TEXT=() ; # Use array
+        Z_TEXT+="<b>Name</b> \t: <b>${PROGNAME}</b>\n"
+        Z_TEXT+="<b>EXE</b>  \t: <b>${EXE_NAME}</b>\n\n"
+        Z_TEXT+="<b><i>Use:</i></b>\n"        
+        Z_TEXT+="<i><b>Rename... </b>\t\t"
+        Z_TEXT+="To <b>change</b> the <b>application name</b></i>\n"
+        Z_TEXT+="<b>About Prefix...\t</b>"
+        Z_TEXT+="<i>To see location of shortcut, icon, etc.</i>"
+        zenity --info \
+               --timeout 5 \
+               --width 400 \
+               --title="${Z_TITLE}" \
+               --text="${Z_TEXT[@]}"
     fi
 
 else 
@@ -476,6 +503,7 @@ else
 # If no application was submited, show this message.
   echo Please, submit a windows application file. 
   echo Usage: $0 path/to/app.exe 
-  zenity --info --title="Select an EXE to create shortcut" --text="in Filemanager, right-click on an exe and select this!"
+  zenity --info --title="Select an EXE to create shortcut" \
+         --text="in Filemanager, right-click on an exe and select this!"
 
 fi
