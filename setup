@@ -94,7 +94,7 @@ ICON=$(basename $ICON_SRC)
 
 # Target Directory to install
 APPS_DIR="${INSTALL_PREFIX}/bin"
-DESK_DIR="${INSTALL_PREFIX}/share/applications/"
+DESK_DIR="${INSTALL_PREFIX}/share/applications"
 ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
 
 # If Install is selected

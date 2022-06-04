@@ -191,6 +191,7 @@ if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
 echo -e "
 Game Name       \t: ${PROGNAME}
 Game EXE        \t: ${EXE_FILE}
+Sha256sum       \t: $(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
 Game Directory  \t: ${EXE_PATH}
 Game Prefix     \t: ${WINEPREFIX_SUBDIR}
 Game Script     \t: Game Prefix/${NO_EXE}.sh
@@ -236,7 +237,7 @@ fi
                        0    "Change Icon..."            \
                        0    "Backup..."                 \
                        0    "Delete Prefix..."          \
-                       0    "Show Prefix Info..."       \
+                       0    "About Prefix......"       \
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
@@ -418,7 +419,7 @@ fi
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
-  elif [ "${SELECTION}" = "Show Prefix Info..." ]; then
+  elif [ "${SELECTION}" = "About Prefix......" ]; then
           zenity --info --text "$(cat ${WINEPREFIX_SUBDIR}/info.txt|sed -E "s/^(.*:)/<b>\1<\/b>/g")"
 
   elif [ "${SELECTION}" = "Launch..." ]; then

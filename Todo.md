@@ -2,11 +2,13 @@
 
 Version 0.3
 
-- [ ] gnome-terminal launch  (if fails)|| show need gnome terminal msg
+- [x] gnome-terminal launch  (if fails)|| show need gnome terminal msg
   
-  - [ ] winezgui flashing gnome-terminal window is annoying
+  - [x] winezgui flashing gnome-terminal window is annoying
 
-- [ ] Show WineZGUI version (use version variable)
+- [x] Show WineZGUI version (use version variable)
+
+- [ ]  Fix wrong wine version when both host and flatpak exist
 
 - [ ] Create shortcut should show --entry-text and ask to confirm to fix game name, on creation
 
@@ -15,27 +17,27 @@ Version 0.3
 - [ ] 
 - [ ] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
-- [ ] Generate  metadata file inside prefix 
+- [x] Generate  metadata file inside prefix 
 
-- [ ] Show prefix information, prefix, game directory, size (du), date of install, wine version used,  exe sha256sum etc.
+- [x] Show prefix information, prefix, game directory, size (du), date of install, wine version used,  exe sha256sum etc.
   
       Metadata:
   
-  - [ ] Game Name
+  - [x] Game Name
   
-  - [ ]  sha256sum, 
+  - [x]  sha256sum, 
   
-  - [ ] filename,
+  - [x] filename,
   
-  - [ ]  gamdir location (EXE_PATH) and
+  - [x]  gamdir location (EXE_PATH) and
   
-  - [ ]  prefix and 
+  - [x]  prefix and 
   
-  - [ ] wine version 
+  - [x] wine version 
   
-  - [ ] winezgui version, 
+  - [x] winezgui version, 
   
-  - [ ] icon
+  - [x] icon
 
 - [ ]  Support Gamedir install (give option, gamedir preferred if writable)
   
