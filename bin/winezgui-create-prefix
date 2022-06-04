@@ -427,7 +427,7 @@ fi
          
   elif [ "${SELECTION}" = "About Prefix......" ]; then
          if [ ${INSTALL_TYPE} = "flatpak" ]; then
-                  ZCMD="zenity --info --width 620 --text"
+                  ZCMD="zenity --info --width 650 --text"
              else
                   ZCMD="zenity --info --width 500 --text"
              fi
