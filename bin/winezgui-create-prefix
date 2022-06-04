@@ -426,7 +426,12 @@ fi
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
   elif [ "${SELECTION}" = "About Prefix......" ]; then
-          zenity --info --text "$(cat ${WINEPREFIX_SUBDIR}/info.txt|sed -E "s/^(.*:)/<b>\1<\/b>/g")"
+         if [ ${INSTALL_TYPE} = "flatpak" ]; then
+                  ZCMD="zenity --info --width 620 --text"
+             else
+                  ZCMD="zenity --info --width 500 --text"
+             fi
+             $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt|sed -E "s/^(.*:)/<b>\1<\/b>/g")"
 
   elif [ "${SELECTION}" = "Launch..." ]; then
          export base=$(basename "$EXE_FILE")
