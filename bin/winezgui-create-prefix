@@ -243,7 +243,7 @@ fi
                        0    "Change Icon..."            \
                        0    "Backup..."                 \
                        0    "Delete Prefix..."          \
-                       0    "About Prefix......"       \
+                       0    "About Prefix..."       \
                    --text "Select Action..." )
 
   # If Cancel button is pressed, exit
@@ -425,7 +425,7 @@ fi
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
-  elif [ "${SELECTION}" = "About Prefix......" ]; then
+  elif [ "${SELECTION}" = "About Prefix..." ]; then
          if [ ${INSTALL_TYPE} = "flatpak" ]; then
                   ZCMD="zenity --info --width 650 --text"
              else
