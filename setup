@@ -107,10 +107,10 @@ if [ "${INSTALL}" = "true"  ]
   
      # Install the files
      echo Installing...
-     install -Dm755 $APP1_SRC $APPS_DIR && echo "installed '$APPS_DIR/$APP1'" 
-     install -Dm755 $APP2_SRC $APPS_DIR && echo "installed '$APPS_DIR/$APP2'"
-     install -Dm644 $DESK_SRC $DESK_DIR && echo "installed '$DESK_DIR/$DESK'"
-     install -Dm644 $ICON_SRC $ICON_DIR && echo "installed '$ICON_DIR/$ICON'"
+     install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
+     install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
+     install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
+     install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
 
      # Change Variables in winezgui and winezgui-create-prefix scripts 
      # for system or flatpak install
