@@ -102,6 +102,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 echo "
 #!/bin/bash
 export APPNAME=\"$APPNAME\"
+export APPVERSION=\"$APPVERSION\"
 export WINEVER=\"$WINEVER\"
 export PROGNAME=\"${PROGNAME}\"
 export INSTALL_TYPE=\"$INSTALL_TYPE\"
@@ -241,12 +242,13 @@ fi
   echo "$ {EXE_FILE} ${EXE_FILE}"
   unset SELECTION
   # EXE handling by providing dialog
-  SELECTION=$(zenity --title "${EXE_NOEXE} (${WINEVER})" \
-                   --width=340 --height=410             \
+  SELECTION=$(zenity --title "${PROGNAME}"              \
+                   --width=360 --height=410             \
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Launch... $EXE_NOEXE"       \
+                       TRUE "Launch... $EXE_NAME"       \
+                       0    "Open Other EXE..."         \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
                        0    "Launch Winecfg..."         \
@@ -256,8 +258,8 @@ fi
                        0    "Change Icon..."            \
                        0    "Backup..."                 \
                        0    "Delete..."                 \
-                       0    "About..."       \
-                   --text "${PROGNAME}..." )
+                       0    "About..."                  \
+                   --text "Select action..." )
 
   # If Cancel button is pressed, exit
   [[ -z "${SELECTION}" ]] && exit 1
@@ -342,9 +344,9 @@ fi
 #  AND FOR FLATPAK?
 #  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
 #   echo "fix me"
-  elif [ "${SELECTION}" = "Open EXE..." ]
+  elif [ "${SELECTION}" = "Open Other EXE..." ]
            then
-      	   EXE_FILE="$( \
+      	   OTHER_EXE="$( \
       	                zenity                  \
       	                --file-filter=*.exe     \
       	                --file-selection        \
@@ -352,14 +354,14 @@ fi
       	              )"
       	   
       	   # If no exe is selected
-      	   if [ -z "${EXE_FILE}" ]
+      	   if [ -z "${OTHER_EXE}" ]
                 then
-      	        unset EXE_FILE  ; # Empty variable
       	        unset SELECTION ; # Empty variable
-                MainFunction    ; # Go back to Main Window
+                GameFunction    ; # Go back to Game Window
       	   fi
-      	   export base=$(basename "$EXE_FILE")
-           export dire=$(dirname "$EXE_FILE")
+
+      	   base=$(basename "$OTHER_EXE")
+           dire=$(dirname "$OTHER_EXE")
          
            cd "$dire"
            ${WINE_CMD} "$base"
@@ -525,7 +527,7 @@ fi
                       sed -E "s/^(.*: )/<b>\1<\/b>/g")"
          GameFunction
 
-  elif [ "${SELECTION}" = "Launch... $EXE_NOEXE" ]; then
+  elif [ "${SELECTION}" = "Launch... $EXE_NAME" ]; then
          export base=$(basename "$EXE_FILE")
          export dire=$(dirname "$EXE_FILE")
          
