@@ -233,7 +233,8 @@ fi
   fi
 
 
-
+  GameFunction () 
+  {
   # EXE handling by providing dialog
   SELECTION=$(zenity --title "$EXE_NOSP ${APPNAME} (${WINEVER})"  \
                    --width=340 --height=410             \
@@ -259,6 +260,8 @@ fi
   # If Winetricks is selected
   if [ "${SELECTION}" = "Winetricks GUI..." ]; then  
        $WTRICKS_CMD --gui
+       # Return to Game window
+       GameFunction
 
     # Provide Command Line to enter multiple Dependencies
     elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
@@ -321,23 +324,29 @@ fi
           fi   
           # After winetricks cli, return to main menu
           # MainFunction need to implement
-          
-  # PSEUDO CODE WORK HERE
-  # Download mf-install from github (create fastrizwan mf-install)
-  elif [ "${SELECTION}" = "Install Media Foundation Libraries" ]; then
+          # Return to Game window
+          GameFunction
+         
+# PSEUDO CODE WORK HERE
+# Download mf-install from github (create fastrizwan mf-install)
+#  elif [ "${SELECTION}" = "Install Media Foundation Libraries" ]; then
 #  wget github.com/fastrizwaan/mf-install/release/mf-install.tar.gz
 #  tar -hxvf mf-install.tar.gz
 #  cd mf-install
 #  WINEPREFIX=${WINEZPREFIX-WHATEVER} mf-install
 #  AND FOR FLATPAK?
 #  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
-   echo "fix me"
+#   echo "fix me"
    
   elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
          ${WINECFG_CMD}
+         # Return to Game window
+         GameFunction
     
   elif [ "${SELECTION}" = "Open Explorer..." ]; then
          ${WEXPLORER_CMD} "$EXE_PATH"
+         # Return to Game window
+         GameFunction
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
@@ -377,19 +386,30 @@ fi
                      --width=500 --height=30 --info  \
                      --text "This feature requires \"gnome-terminal\""
          fi            
+         # Return to Game window
+         GameFunction
                      
   elif [ "${SELECTION}" = "Rename..." ]; then
-         PROGNAME=$(zenity --title "Rename shortcut" --text "Enter a name for your shortcut" --entry)
+         PROGNAME=$(zenity --title "Rename shortcut" \
+                           --text "Enter a name for your shortcut" --entry)
        
-         if [ ! "${PROGNAME}" ]; then #if no name is given use filename
+         if [ -z "${PROGNAME}" ]; then #if no name is given use filename
               zenity --info --title="Shortcut... " --text="no Change"        
-              exit;
+              # Return to Game window
+              GameFunction
          fi
          
          export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
-	     ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
+	       ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
+	                            ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
+         
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-         zenity --info --title="$EXE_NOEXE.desktop" --text="Shortcut renamed sucessfuly: $appname"
+         
+         zenity --info --title="$EXE_NOEXE.desktop" \
+                --text="Shortcut renamed sucessfuly: $appname"
+         
+         # Return to Game window
+         GameFunction
 
   elif [ "${SELECTION}" = "Change Icon..." ]; then
   
@@ -398,11 +418,12 @@ fi
                            --file-filter=""*.png" "*.jpg" "*.svg"")
          
          # If he/she cancels, why prompt?
-         if [ ! ${GET_ICON} ]; then #if no icon is selected
+         if [ -z ${GET_ICON} ]; then #if no icon is selected
               #zenity --info --title="Icon... " --text="no Change"        
               exit;
               echo "No icon selected"
-              # GameWindow #return to game window 
+              # Return to Game window
+              GameFunction
          fi
          
          # Now that we have included desktop-file-edit in flatpak, not needed
@@ -422,6 +443,9 @@ fi
          # Inform user
          zenity --info --title="$EXE_NOEXE.desktop" \
                --text="Icon Changed sucessfuly: ${GET_ICON}"
+         
+         # Return to Game window
+         GameFunction
 
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
@@ -451,6 +475,8 @@ fi
 		     mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
          zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
          
+         # Return to Game window
+         GameFunction
 
 
   elif [ "${SELECTION}" = "Delete..." ]; then
@@ -465,9 +491,10 @@ fi
                   ZCMD="zenity --info --width 650 --text"
              else
                   ZCMD="zenity --info --width 500 --text"
-             fi
-             $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt| \
+         fi
+         $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt| \
                       sed -E "s/^(.*:)/<b>\1<\/b>/g")"
+         GameFunction
 
   elif [ "${SELECTION}" = "Launch..." ]; then
          export base=$(basename "$EXE_FILE")
@@ -476,6 +503,15 @@ fi
          cd "$dire"
          ${WINE_CMD} "$base"
   fi
+  }
+
+# Start WineZGUI when no argument is supplied
+if [ $# -eq 0 ]
+     then
+     echo "Info: Launching WineZGUI"
+     GameFunction 
+fi 
+
 ' >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 ###############################################
 chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"

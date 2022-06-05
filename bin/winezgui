@@ -4,13 +4,17 @@
 
 export APPNAME=WineZGUI
 export APPVERSION=0.3
+export AUTHOR="Mohammed Asif Ali Rizvan"
+export EMAIL="fast.rizwaan@gmail.com"
+export COPYRIGHT="GNU General Public License (GPLv3)"
+export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 export INSTALL_TYPE="system"
 export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d ' ')
 export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
 export PREFIXDIR="${WINEZPREFIX}/default"
 export WINEARCH=win64
-#export WINEDLLOVERRIDES="mscoree,mshtml="
+export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH="/app/lib:/app/lib32:/app/lib64:\
                         /app/lib/i386-linux-gnu:/app/lib/wine:\
                         /app/lib64/wine:/app/$NAME:$(pwd)"
@@ -19,11 +23,10 @@ export PATH=$PATH:$(pwd)
 export BINDIR=/usr/bin
 export ARGV="$@"
 export WINEPREFIX=${PREFIXDIR}
-#export WINEEXE="flatpak run org.winehq.Wine"
 export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
-#export WINETRICKS="PREFIX=${PREFIXDIR} flatpak run --command=winetricks org.winehq.Wine"
+
 
     # Main WineZGUI application window function
     MainFunction () 
@@ -40,9 +43,9 @@ export WINE_CMD=${WINEEXE}
                     0 "Winetricks GUI..."                      \
                     0 "Winetricks CLI..."                      \
                     0 "Launch Winecfg..."                      \
-                    0 "Open Explorer"                          \
+                    0 "Open Explorer..."                       \
                     0 "Open Shell..."                          \
-                    0 "Kill all..."                     \
+                    0 "Kill all..."                            \
                     0 "Delete..."                              \
                     0 "About..."                               \
              --text   "WineZGUI Default Prefix\n${PREFIXDIR} " \
@@ -285,7 +288,7 @@ export WINE_CMD=${WINEEXE}
              echo "Deleted default prefix"
              exit 0; # after deleting prefix
 
-      elif [ "${SELECTION}" = "Open Explorer" ]
+      elif [ "${SELECTION}" = "Open Explorer..." ]
              then
              echo "Opening Explorer"
              ${WINE_CMD} explorer $HOME; 
@@ -390,7 +393,10 @@ if [ ! -f ${PREFIXDIR}/info.txt ]; then
 echo -e "
 Application Name\t: WineZGUI
 Version       \t\t\t: ${APPVERSION}
-Copyright       \t\t: GNU General Public License (GPLv3)
+Copyright       \t\t: ${COPYRIGHT}
+Website       \t\t\t: ${WEBSITE}
+Author        \t\t\t: ${AUTHOR}
+E-mail        \t\t\t: ${EMAIL}
 Wine          \t\t\t: ${WINE_CMD}
 Wine Version    \t\t: $(wine --version|cut -f1 -d ' ')
 Wine Arch       \t\t: ${WINEARCH}
