@@ -34,7 +34,7 @@ export WINE_CMD=${WINEEXE}
       unset EXE_FILE
       unset SELECTION
       SELECTION=$( \
-      zenity --title "${APPNAME} ${APPVERSION} - (${WINEVER})" \
+      zenity --title "${APPNAME}-${APPVERSION}" \
              --list                                            \
              --width=360 --height=410                          \
              --radiolist --column " "                          \
@@ -48,7 +48,7 @@ export WINE_CMD=${WINEEXE}
                     0 "Kill all..."                            \
                     0 "Delete..."                              \
                     0 "About..."                               \
-             --text   "WineZGUI Default Prefix\n${PREFIXDIR} " \
+             --text   "Wine GUI using Zenity! Choose Action..." \
               )
 
       # Exit if Cancel is clicked

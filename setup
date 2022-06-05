@@ -64,7 +64,8 @@ WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
 TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
 INSTALL_TYPE="system"
-
+# Get version form VERSION.txt
+APPVERSION=$(cat ./VERSION.txt)
 # If prefix=nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
    INSTALL_PREFIX="/usr"
@@ -116,11 +117,14 @@ if [ "${INSTALL}" = "true"  ]
      # for system or flatpak install
      sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $APPS_DIR/$APP1
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP1
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP1
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP1
+     
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP2
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP2
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
-      
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
+     
      # Create uninstall script for later removal
      echo "
      rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
