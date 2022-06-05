@@ -58,7 +58,7 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
 
 #### Install WineZGUI flatpak
 
-Download [io.github.WineZGUI-0.3_20220606.flatpak](https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.3_20220606/io.github.WineZGUI-0.3_20220606.flatpak) and install with your software center or using command line:
+Download [io.github.WineZGUI-0.3_20220606.flatpak](https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.3_20220606/io.github.WineZGUI-0.3_20220606.flatpak) and install with the software center or using command line:
 
 ```
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -69,7 +69,7 @@ flatpak --user -y install io.github.WineZGUI-0.3_20220606.flatpak
 
 ### Setup on Flatpak supported Distros (This is latest)
 
-Please install `flatpak-builder` in your system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
+Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
 
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
@@ -101,7 +101,7 @@ sudo ./setup --uninstall
 `icoutils` - to extract icon from exe file
 `gnome-terminal` - (optional) to access prefix directory in shell
 
-## Install Requirements for your Linux OS
+## Install Requirements for Linux OS
 
 ### Fedora 36
 
