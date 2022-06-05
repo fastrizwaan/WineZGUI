@@ -571,22 +571,6 @@ Terminal=false
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
         echo "Shortcut created sucessfuly Name: ${PROGNAME}\nExe: ${EXE_NAME}"
-        
-        #Create Variable for Zenity Strings for setting code at 80 column width
-        Z_TITLE='Desktop Shortcut Created'
-        Z_TEXT=() ; # Use array
-        Z_TEXT+="<b>Name</b> \t: <b>${PROGNAME}</b>\n"
-        Z_TEXT+="<b>EXE</b>  \t: <b>${EXE_NAME}</b>\n\n"
-        Z_TEXT+="<b><i>Use:</i></b>\n"        
-        Z_TEXT+="<i><b>Rename... </b>\t\t"
-        Z_TEXT+="To <b>change</b> the <b>application name</b></i>\n"
-        Z_TEXT+="<b>About...\t</b>"
-        Z_TEXT+="<i>To see location of shortcut, icon, etc.</i>"
-        zenity --info \
-               --timeout 5 \
-               --width 400 \
-               --title="${Z_TITLE}" \
-               --text="${Z_TEXT[@]}"
     fi
 
 else 
