@@ -278,7 +278,7 @@ export WINE_CMD=${WINEEXE}
              else
                   ZCMD="zenity --info --width 500 --text"
              fi
-             $ZCMD "$(cat ${PREFIXDIR}/info.txt |sed -E 's/^(.*:)/<b>\1<\/b>/')"
+             $ZCMD "$(cat ${PREFIXDIR}/info.txt |sed -E 's/^(.*: )/<b>\1<\/b>/g')"
              
              MainFunction
              

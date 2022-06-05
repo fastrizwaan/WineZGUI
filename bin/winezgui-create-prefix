@@ -9,9 +9,9 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # ============================================================================ #
 
-export APPNAME=WineZGUI
+#export APPNAME=WineZGUI
 export INSTALL_TYPE="system"
-export WINEVER=$(wine --version|cut -f1 -d ' ')
+export WINEVER="$(wine --version|cut -f1 -d ' ')"
 export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export DESKTOPDIR=${APPLICATIONSDIR}/winezgui
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
@@ -81,27 +81,28 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
     # Automatically set name, read from pe file, if not found use exe name
     
-    PROGNAME=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
+    PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
                                                                |sed 's/^ //')
     
     # if language is not english inside exe name, use exe name
-    if [ $(echo $PROGNAME | grep -Ev [a-zA-Z] ) ]; then
+    if [ $(echo $PRODUCT | grep -Ev [a-zA-Z] ) ]; then
          unset PROGNAME
     fi
     
-    if [ ! "$PROGNAME" ]; #if no name is given, then use exe filename
+    if [ ! "$PRODUCT" ]; #if no name is given, then use exe filename
        then         
        PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
-       PROGNAME=$(echo "$PROGNAME (${WINEVER})");   
+       PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
     fi
-
 
 # Create Launch Script for the provided EXE file
 # ------------------------------------------------
 # need variables from this script
 echo "
 #!/bin/bash
+export APPNAME=\"$APPNAME\"
+export WINEVER=\"$WINEVER\"
 export PROGNAME=\"${PROGNAME}\"
 export INSTALL_TYPE=\"$INSTALL_TYPE\"
 export PREFIX=\"${WINEZPREFIX}\"
@@ -223,6 +224,7 @@ WineZGUI Prefix \t\t: $(realpath -m ~/.local/share/winezgui)
 echo "created ${WINEPREFIX_SUBDIR}/info.txt"
 fi
 
+
 # If asked to run an exe by winezgui using launch option
   if [ "$1" = "launch" ]; then
        export EXE_FILE_NAME=$(basename "$EXE_FILE")
@@ -235,13 +237,16 @@ fi
 
   GameFunction () 
   {
+  echo "$ {EXE_NAME} ${EXE_NAME}"
+  echo "$ {EXE_FILE} ${EXE_FILE}"
+  unset SELECTION
   # EXE handling by providing dialog
-  SELECTION=$(zenity --title "$EXE_NOSP ${APPNAME} (${WINEVER})"  \
+  SELECTION=$(zenity --title "${EXE_NOEXE} (${WINEVER})" \
                    --width=340 --height=410             \
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Launch..."                 \
+                       TRUE "Launch... $EXE_NOEXE"       \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
                        0    "Launch Winecfg..."         \
@@ -252,7 +257,7 @@ fi
                        0    "Backup..."                 \
                        0    "Delete..."                 \
                        0    "About..."       \
-                   --text "Select Action..." )
+                   --text "${PROGNAME}..." )
 
   # If Cancel button is pressed, exit
   [[ -z "${SELECTION}" ]] && exit 1
@@ -337,7 +342,31 @@ fi
 #  AND FOR FLATPAK?
 #  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
 #   echo "fix me"
-   
+  elif [ "${SELECTION}" = "Open EXE..." ]
+           then
+      	   EXE_FILE="$( \
+      	                zenity                  \
+      	                --file-filter=*.exe     \
+      	                --file-selection        \
+      	                --title="Select a File" \
+      	              )"
+      	   
+      	   # If no exe is selected
+      	   if [ -z "${EXE_FILE}" ]
+                then
+      	        unset EXE_FILE  ; # Empty variable
+      	        unset SELECTION ; # Empty variable
+                MainFunction    ; # Go back to Main Window
+      	   fi
+      	   export base=$(basename "$EXE_FILE")
+           export dire=$(dirname "$EXE_FILE")
+         
+           cd "$dire"
+           ${WINE_CMD} "$base"
+   	       # Return to Game window
+           GameFunction
+  
+      	   
   elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
          ${WINECFG_CMD}
          # Return to Game window
@@ -493,10 +522,10 @@ fi
                   ZCMD="zenity --info --width 500 --text"
          fi
          $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt| \
-                      sed -E "s/^(.*:)/<b>\1<\/b>/g")"
+                      sed -E "s/^(.*: )/<b>\1<\/b>/g")"
          GameFunction
 
-  elif [ "${SELECTION}" = "Launch..." ]; then
+  elif [ "${SELECTION}" = "Launch... $EXE_NOEXE" ]; then
          export base=$(basename "$EXE_FILE")
          export dire=$(dirname "$EXE_FILE")
          
