@@ -67,14 +67,15 @@ flatpak-builder --force-clean build-dir io.github.WineZGUI.yml
 # Create flatpak bundle?
 if [ "$1" = "bundle" ]; then
 echo "Please wait building bundle... io.github.WineZGUI-${APPVERSION}_${DATE}.flatpak"
-flatpak build-bundle ~/.local/share/flatpak/repo io.github.WineZGUI_${DATE}.flatpak io.github.WineZGUI  master
+flatpak build-bundle ~/.local/share/flatpak/repo io.github.WineZGUI-${APPVERSION}_${DATE}.flatpak io.github.WineZGUI  master
 echo "Installing the flatpak.."
-echo "flatpak install --user io.github.WineZGUI-${APPVERSION}_$DATE.flatpak"
+echo "flatpak install --user io.github.WineZGUI-${APPVERSION}_${DATE}.flatpak"
 flatpak remove --user io.github.WineZGUI -y 2>/dev/null
 sha256sum io.github.WineZGUI-${APPVERSION}_${DATE}.flatpak |tee SHA256SUM
-flatpak install --user io.github.WineZGUI-${APPVERSION}_$DATE.flatpak -y
+flatpak install --user io.github.WineZGUI-${APPVERSION}_${DATE}.flatpak -y && echo -e  "run:\nflatpak run io.github.WineZGUI"
+
 else 
-flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml && echo -e "\n\nSuccess: Installed WineZGUI flatpak!!!" && echo "run: 	flatpak run io.github.WineZGUI" 
+flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml && echo -e "\n\nSuccess: Installed WineZGUI flatpak!!!" && echo -e  "run:\nflatpak run io.github.WineZGUI" 
 fi
 
 

@@ -8,28 +8,7 @@
 
 WineZGUI (pronounced Wine-Zee-Goo-Eee) is a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity. It allows quick launching of Direct play (not installed) EXE application from File Manager like Nautilus and allow creating separate wine prefix for each Windows' EXE binary.
 
-## Quickly run WineZGUI 0.2 using flatpak
-
-Install dependencies
-
-```
-flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak --user -y install org.winehq.Wine/x86_64/stable-21.08 
-wget https://github.com/fastrizwaan/flatpak-wine-releases/releases/download/WineZGUI-0.2/io.github.WineZGUI-0.2_20220602.flatpak
-flatpak --user install io.github.WineZGUI-0.2_20220602.flatpak
-
-#run
-flatpak run io.github.WineZGUI
-```
-
-Sha256 sum of flatpak
-
-```
-sha256sum io.github.WineZGUI-0.2_20220602.flatpak
-d4a83cf895146c5e0fa28c76d34893c02db14b695c536ef87498b8503d4ee76c
-```
-
-## Why WineZGUI?
+## ## Why WineZGUI?
 
 WineZGUI helps in:
 
@@ -111,7 +90,7 @@ sudo ./setup --uninstall
 `icoutils` - to extract icon from exe file
 `gnome-terminal` - (optional) to access prefix directory in shell
 
-## Install Requirement for your Linux OS
+## Install Requirements for your Linux OS
 
 ### Fedora 36
 
