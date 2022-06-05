@@ -434,8 +434,8 @@ fi
          export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
 	       ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
 	                            ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
-         sed -E "0,/s/(^export PROGNAME=).*/\1$PROGNAME/" -i \
-                              ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
+        sed -E "s/^export PROGNAME=.*/export \$PROGNAME=$PROGNAME ($WINEVER)/" \
+            -i ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
