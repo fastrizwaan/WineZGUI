@@ -58,6 +58,8 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
 
 #### Install WineZGUI flatpak
 
+Download [io.github.WineZGUI-0.3_20220606.flatpak](https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.3_20220606/io.github.WineZGUI-0.3_20220606.flatpak) and install with your software center or using command line:
+
 ```
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak --user -y install org.winehq.Wine/x86_64/stable-21.08
