@@ -12,18 +12,11 @@ Version 0.3
 
 - [x] Just create shortcut and launch game window
 
-- [ ] GameWindow, check variables,  open other exe -> gamewindow ->launch fails
-
-- [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
-  
-  - [ ] Perhaps create and send a verb to winetricks instead with video proof
-
-- [ ] 
-
-- [ ] Runtime test of dependency by winezgui, create-prefix, and launch-script
+- [x] GameWindow, check variables,  open other exe -> gamewindow ->launch fails
 
 - [x] Generate  metadata file inside prefix 
 
+- [x] 
 - [x] Show prefix information, prefix, game directory, size (du), date of install, wine version used,  exe sha256sum etc.
   
       Metadata:
@@ -43,6 +36,16 @@ Version 0.3
   - [x] winezgui version, 
   
   - [x] icon
+
+0.4
+
+- [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
+  
+  - [ ] Perhaps create and send a verb to winetricks instead with video proof
+
+- [ ] 
+
+- [ ] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
 - [ ] Support Gamedir install (give option, gamedir preferred if writable)
   
