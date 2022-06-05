@@ -425,7 +425,7 @@ fi
                            --text "Enter a name for your shortcut" --entry)
        
          if [ -z "${PROGNAME}" ]; then #if no name is given use filename
-              zenity --info --title="Shortcut... " --text="no Change"        
+              #zenity --info --title="Shortcut... " --text="no Change"        
               # Return to Game window
               GameFunction
          fi
@@ -451,7 +451,6 @@ fi
          # If he/she cancels, why prompt?
          if [ -z ${GET_ICON} ]; then #if no icon is selected
               #zenity --info --title="Icon... " --text="no Change"        
-              exit;
               echo "No icon selected"
               # Return to Game window
               GameFunction
