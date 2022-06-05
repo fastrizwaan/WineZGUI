@@ -56,7 +56,7 @@ When an exe is opened with WineZGUI, it asks whether to launch with default wine
 
 ## Install WineZGUI
 
-#### Install WineZGUI flatpak
+#### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
 
 Download [io.github.WineZGUI-0.3_20220606.flatpak](https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.3_20220606/io.github.WineZGUI-0.3_20220606.flatpak) and install with the software center or using command line:
 
@@ -67,19 +67,40 @@ wget https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI
 flatpak --user -y install io.github.WineZGUI-0.3_20220606.flatpak
 ```
 
-### Setup on Flatpak supported Distros (This is latest)
+### Build and install flatpak from source
 
 Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
 
+##### Version 0.3
+
+```
+git clone --depth 1 --branch WineZGUI-0.3 https://github.com/fastrizwaan/WineZGUI.git
+./WineZGUI/flatpak-manifest/install.sh
+```
+
+#### Development version
+
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
-cd WineZGUI/flatpak-manifest
-./install.sh
+./WineZGUI/flatpak-manifest/install.sh
 ```
 
 flatpak's optional requirement is `gnome-terminal` if we need to access prefix using shell
 
-### SETUP on normal linux system / non flatpak install
+### SETUP on a Linux system, see [Requirements](https://github.com/fastrizwaan/WineZGUI#requirements)
+
+Setup is instant as it copies a few files to specific directories.
+
+##### Version 0.3
+
+Downoad source [WineZGUI-0.3.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/WineZGUI-0.3.tar.gz) or use `git tag 0.3`
+
+```
+git clone --depth 1 --branch WineZGUI-0.3 https://github.com/fastrizwaan/WineZGUI.gitcd WineZGUI
+sudo ./setup --install ; #systemwide
+```
+
+##### Development version
 
 ```
 git clone https://github.com/fastrizwaan/WineZGUI.git
@@ -88,6 +109,14 @@ sudo ./setup --install ; #systemwide
 ```
 
 ### Uninstall WineZGUI
+
+##### Flatpak uninstall
+
+```
+flatpak remove io.github.WineZGUI
+```
+
+##### System  uninstall
 
 ```
 sudo ./setup --uninstall
