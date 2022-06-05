@@ -1,5 +1,7 @@
 #!/bin/bash
 
+APPVERSION=$(cat ../VERSION.txt)
+
 # flatpak-builder installed?
 if ! command -v flatpak-builder &>/dev/null; then
      echo "Please install 'flatpak-builder' using your distro's package manager"
@@ -63,12 +65,12 @@ fi
 flatpak-builder --force-clean build-dir io.github.WineZGUI.yml 
 # Create flatpak bundle?
 if [ "$1" = "bundle" ]; then
-echo "Please wait building bundle... io.github.WineZGUI-$DATE.flatpak"
+echo "Please wait building bundle... io.github.WineZGUI-$APPVERSION-$DATE.flatpak"
 flatpak build-bundle ~/.local/share/flatpak/repo io.github.WineZGUI-$DATE.flatpak io.github.WineZGUI  master
 echo "Installing the flatpak.."
 echo "flatpak install --user io.github.WineZGUI-$DATE.flatpak"
 flatpak remove --user io.github.WineZGUI -y 2>/dev/null
-flatpak install --user io.github.WineZGUI-$DATE.flatpak -y
+flatpak install --user io.github.WineZGUI-$APPVERSION-$DATE.flatpak -y
 else 
 flatpak-builder --user --install  --force-clean build-dir io.github.WineZGUI.yml && echo -e "\n\nSuccess: Installed WineZGUI flatpak!!!" && echo "run: 	flatpak run io.github.WineZGUI" 
 fi
