@@ -441,7 +441,9 @@ fi
          
          #zenity --info --title="$EXE_NOEXE.desktop" \
          #       --text="Shortcut renamed sucessfuly: $appname"
-         export PROGNAME=="$PROGNAME ($WINEVER)"
+         
+         # Required for instant change in the GameWindow
+         export PROGNAME="$PROGNAME ($WINEVER)"
          # Return to Game window
          GameFunction
 
