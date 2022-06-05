@@ -244,11 +244,11 @@ fi
   unset SELECTION
   # EXE handling by providing dialog
   SELECTION=$(zenity --title "${PROGNAME}"              \
-                   --width=360 --height=410             \
+                   --width=360 --height=450             \
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Launch..."       \
+                       TRUE "Launch..."                 \
                        0    "Open Other EXE..."         \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
