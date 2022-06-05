@@ -248,7 +248,7 @@ fi
                    --list                               \
                    --radiolist --column " "             \
                    --column "Action"                    \
-                       TRUE "Launch... $EXE_NAME"       \
+                       TRUE "Launch..."       \
                        0    "Open Other EXE..."         \
                        0    "Winetricks GUI..."         \
                        0    "Winetricks CLI..."         \
@@ -260,7 +260,7 @@ fi
                        0    "Backup..."                 \
                        0    "Delete..."                 \
                        0    "About..."                  \
-                   --text "Select action..." )
+                   --text "Select action for $EXE_NAME..." )
 
   # If Cancel button is pressed, exit
   [[ -z "${SELECTION}" ]] && exit 1
@@ -357,7 +357,7 @@ fi
       	   # If no exe is selected
       	   if [ -z "${OTHER_EXE}" ]
                 then
-      	        unset SELECTION ; # Empty variable
+      	        #unset SELECTION ; # Empty variable
                 GameFunction    ; # Go back to Game Window
       	   fi
 

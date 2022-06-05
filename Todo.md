@@ -10,9 +10,13 @@ Version 0.3
 
 - [x] Fix wrong wine version when both host and flatpak exist
 
-- [ ] Create shortcut should show --entry-text and ask to confirm to fix game name, on creation
+- [x] Just create shortcut and launch game window
+
+- [ ] GameWindow, check variables,  open other exe -> gamewindow ->launch fails
 
 - [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
+  
+  - [ ] Perhaps create and send a verb to winetricks instead with video proof
 
 - [ ] 
 
