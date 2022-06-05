@@ -76,7 +76,7 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_PREFIX="/app"
      TEMPDIR="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/tmp)"
      WINEZPREFIX="\$(realpath -m ~/.var/app/io.github.WineZGUI/data/prefixes)"
-     INSTALL_TYPE="flatpak" 
+     INSTALL_TYPE=\"flatpak\" 
 fi     
 
 

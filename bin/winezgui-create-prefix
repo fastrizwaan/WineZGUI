@@ -145,7 +145,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
          
     else 
         # flatpak install and running from shell inside flatpak winezgui
-        if [ "\$INSTALL_TYPE" = "flatpak" ]; then
+        if [ "$INSTALL_TYPE" = "flatpak" ]; then
              echo "We are running this from flatpak & installed via flatpak"
              export WINE_CMD="/app/bin/wine"
              export WTRICKS_CMD="/app/bin/winetricks"
@@ -531,7 +531,7 @@ fi
                       sed -E "s/^(.*: )/<b>\1<\/b>/g")"
          GameFunction
 
-  elif [ "${SELECTION}" = "Launch... $EXE_NAME" ]; then
+  elif [ "${SELECTION}" = "Launch..." ]; then
          export base=$(basename "$EXE_FILE")
          export dire=$(dirname "$EXE_FILE")
          
