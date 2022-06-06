@@ -54,11 +54,7 @@ add-extensions:
 modules:
   - name: icoutils
     build-options:
-<<<<<<< HEAD
-      strip: true
-=======
       #strip: true
->>>>>>> 88ed380e72324037963ac9a52587fcf1e6aa85d2
       no-debuginfo: true  
     buildsystem: autotools
     sources:
@@ -74,10 +70,6 @@ modules:
     build-options:
       cflags: "-fPIC"
       ldflags: "-fpic"
-<<<<<<< HEAD
-      strip: true
-=======
->>>>>>> 88ed380e72324037963ac9a52587fcf1e6aa85d2
     sources:
     - type: archive
       url: https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
@@ -90,11 +82,6 @@ modules:
     - chmod -R u+w /app/lib/perl5
   
   - name: exiftool
-<<<<<<< HEAD
-    build-options:
-      strip: true
-=======
->>>>>>> 88ed380e72324037963ac9a52587fcf1e6aa85d2
     buildsystem: simple
     build-commands:
       - perl Makefile.PL
@@ -107,11 +94,7 @@ modules:
         
   - name: desktop-file-utils
     build-options:
-<<<<<<< HEAD
-      strip: true
-=======
       #strip: true
->>>>>>> 88ed380e72324037963ac9a52587fcf1e6aa85d2
       no-debuginfo: true  
     buildsystem: autotools
     sources:

@@ -9,19 +9,6 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # ============================================================================ #
 export APPNAME=WineZGUI
-<<<<<<< HEAD
-=======
-# These values will be assigned by Setup using sed command
-# Post install $PREFIX/bin/winezgui-create-prefix file will be different
-export APPVERSION="0.4"
-export INSTALL_TYPE="system"
-export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
-export FLATPAK_NAME="io.github.WineZGUI"
-export BINDIR="/usr/bin"
-#/These values will be changed  by Setup using sed command
-
-
->>>>>>> parent of 8ee65a9... variables fix
 export WINEVER="$(wine --version|cut -f1 -d ' ')"
 export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
 export PREFIXDIR=${WINEZPREFIX}
