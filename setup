@@ -1,0 +1,188 @@
+#!/bin/bash
+
+# Defaults for non flatpak install
+APPLICATIONSDIR=~/.local/share/applications
+WINE_CMD=$(which wine)
+WINETRICKS_CMD=$(which winetricks)
+WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
+DESKTOPDIR=\"${APPLICATIONSDIR}/winezgui\"
+TEMPDIR="\$(realpath -m ${WINEZPREFIX}/tmp)"
+INSTALL_TYPE="system"
+# Flatpak name should be used to kill, and run from launch script.
+FLATPAK_NAME="${FLATPAK_ID}" # set flatpak name
+# Get version form VERSION.txt
+APPVERSION=$(cat ./VERSION.txt)
+
+
+# Function Show help
+ShowHelp ()
+{
+  echo "Setup file for WineZGUI scripts"
+  echo "Usage:"
+  echo "$0 --install | --uninstall"
+  echo ""
+  echo "Options:"
+  echo "-i, --install            Install WineZGUI to default prefix"
+  echo "-u, --uninstall          Remove previously installed WinzeGUI"
+  echo "-p, --prefix=            Install to user specified prefix"  
+  echo "-f, --flatpak            Install flatpak specific WineZGUI"
+  echo "-d, --deps               Show runtime dependencies"
+  echo "-fid=, --flatpak-id=     Use $FLATPAK_ID inside flatpak-builder"
+  echo ""
+  echo "Examples:"
+  echo "$0 --deps"
+  echo "$0 --install --prefix=/usr/local"  
+  echo "$0 --install --flatpak --prefix=/app"
+  
+}
+
+# If no arguments are given show help
+if [ $# -eq 0 ];  then
+  ShowHelp
+  exit
+fi
+
+# parse command line arguments
+for i in "$@"
+do
+case $i in
+    -p=*|--prefix=*)
+    INSTALL_PREFIX="${i#*=}"
+    ;;
+    -f|--flatpak)
+    FLATPAK="true"
+    ;;
+    -fid=*|--flatpak-id=*)
+    FLATPAK_NAME="${i#*=}"
+    ;;
+    -i|--install)
+    INSTALL="true"
+    ;;    
+    -u|--uninstall)
+    UNINSTALL="true"
+    ;;
+    -d|--deps)
+    DEPENDENCIES="true"
+    ;;
+    -h|--help)
+    ShowHelp
+    exit
+    ;;    
+    *)
+    ShowHelp       # unknown option
+    exit
+    ;;
+esac
+done
+
+
+# If prefix=nothing then install to /usr
+if [ -z "${INSTALL_PREFIX}" ]; then
+   INSTALL_PREFIX="/usr"
+fi
+
+# Flatpak Specific Commands and Variables
+if [ "${FLATPAK}" = "true" ]; then
+     echo setting prefix and paths for flatpak
+     INSTALL_PREFIX="/app"
+     TEMPDIR="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
+     WINEZPREFIX="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/prefixes)"
+     INSTALL_TYPE=\"flatpak\"
+     # ~/.local/share/application/winezgui/$FLATPAK_ID
+     DESKTOPDIR=\"${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME}\"
+fi     
+
+
+# Files to install
+APP1_SRC="./bin/winezgui"
+APP2_SRC="./bin/winezgui-create-prefix"
+DESK_SRC="./assets/winezgui.desktop"
+ICON_SRC="./assets/winezgui.svg"
+
+# Basename
+APP1=$(basename $APP1_SRC)
+APP2=$(basename $APP2_SRC)
+DESK=$(basename $DESK_SRC)
+ICON=$(basename $ICON_SRC)
+
+# Target Directory to install
+APPS_DIR="${INSTALL_PREFIX}/bin"
+DESK_DIR="${INSTALL_PREFIX}/share/applications"
+ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
+
+# If Install is selected
+if [ "${INSTALL}" = "true"  ]
+     then
+     # Create required Directories
+     mkdir -p $ICON_DIR
+     mkdir -p $DESK_DIR
+     mkdir -p $APPS_DIR
+  
+     # Install the files
+     echo Installing...
+     install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
+     install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
+     install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
+     install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
+
+     # Change Variables in winezgui and winezgui-create-prefix scripts 
+     # for system or flatpak install
+     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $APPS_DIR/$APP1
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP1
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP1
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP1
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP1
+     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP1
+
+
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP2
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP2
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
+     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
+     # Create uninstall script for later removal
+     echo "
+     rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
+     rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop
+     rm -vf ${INSTALL_PREFIX}/bin/winezgui
+     rm -vf ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     " > ./uninstall
+     
+     # 
+# For --uninstall, if already installed then uninstall else skip
+elif [ "${UNINSTALL}" = "true" ]; then
+       if [ -f ./uninstall ]; then
+            echo "Uninstalling..."
+            sh ./uninstall
+            rm ./uninstall
+       else
+            echo "Not installed. "
+       fi
+fi
+
+if [ "${DEPENDENCIES}" = "true" ]; then
+
+     # Function to print if dependencies are installed.
+     FOUND=()    # Array/list to hold all found commands
+     NOTFOUND=() # Array/list to hold all not found commands
+
+     RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal" 
+  
+     for i in $RUNTIME ; do
+         if ! [ -x "$(command -v $i)" ]; then
+                NOTFOUND+="$1"
+                NOTFOUND+=" "
+         elif [ -x "$(command -v $i)" ]; then
+                FOUND+=$1
+                FOUND+=" "
+         fi
+     done
+     
+     # Show found and not found dependencies for WineZGUI
+     echo "Dependencies..."
+     echo "Found    : $FOUND"
+     echo "Not Found: $NOTFOUND" 
+fi
+
+

@@ -1,0 +1,617 @@
+#!/usr/bin/env bash
+# ============================================================================ #
+# This script will create a shortcut on applications menu for windows programs 
+# installed with wine.
+# Autor: Thiago silva
+# Contact: thiagos.dasilva@gmail.com
+# URL: https://github.com/thiggy01/wine-create-shortcut
+# Updated by Mohammed Asif Ali Rizvan for WineZGUI
+# URL: https://github.com/fastrizwaan/WineZGUI
+# ============================================================================ #
+export APPNAME=WineZGUI
+<<<<<<< HEAD
+=======
+# These values will be assigned by Setup using sed command
+# Post install $PREFIX/bin/winezgui-create-prefix file will be different
+export APPVERSION="0.4"
+export INSTALL_TYPE="system"
+export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
+export FLATPAK_NAME="io.github.WineZGUI"
+export BINDIR="/usr/bin"
+#/These values will be changed  by Setup using sed command
+
+
+>>>>>>> parent of 8ee65a9... variables fix
+export WINEVER="$(wine --version|cut -f1 -d ' ')"
+export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
+export PREFIXDIR=${WINEZPREFIX}
+export UPDATE_ICON_CACHE="gtk-update-icon-cache"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database"
+export WINE_CMD=$(which wine)
+export WTRICKS_CMD=$(which winetricks)
+export TEMPDIR="${WINEZPREFIX}/tmp"
+export EXIFTOOL=$(which exiftool)
+
+# These values will be assigned by Setup using sed command
+# Post install $PREFIX/bin/winezgui-create-prefix file will be different
+export APPVERSION="0.4"
+export INSTALL_TYPE="system"
+export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
+export FLATPAK_NAME="io.github.WineZGUI"
+export BINDIR=/usr/bin    # /usr will be replaced by prefix
+export DESKTOPDIR="${APPLICATIONSDIR}/winezgui"
+#/These values will be changed  by Setup using sed command
+
+
+# Check if an application argument was submited.
+if [[ $(file --mime-type -b "$1") = application/* ]]; then
+
+    # Get the full path, the name and directory name of submited application file.
+    EXE_FILE=$(realpath -m "$1")
+    EXE_NAME=$(basename "$EXE_FILE")
+    EXE_PATH=$(dirname  "$EXE_FILE")
+    EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
+    EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
+    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"
+    ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
+
+  # create required directories
+    mkdir -p  "${WINEPREFIX_SUBDIR}"
+    mkdir -p  "${DESKTOPDIR}"
+    # Function to verify if required program is installed.
+    VerInst () {
+                if [ $? -eq 127 ]; then
+                    echo "$1 package is not installed."
+                    echo "Install it before running this script."
+                    echo "Aborting."
+                    exit 1
+                fi
+    }
+    
+    # Extract icon and convert it to several png files of diferent quality, 
+     mkdir -vp ${TEMPDIR}
+     cd ${TEMPDIR}
+     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
+     VerInst icoutils
+
+    
+    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null
+    echo icotool: extracting png from ico:$EXE_NOEXE.ico
+
+    
+    # Select the best png image file by sorting.
+    cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
+    
+    rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
+    
+    # Get the app category and shortcut name inputs from the user.
+    #appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
+    # --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
+    # Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
+    # System 0 Utility  --text "Select a Category:" 2> /dev/null)
+    
+    appCategory="Game"
+
+    VerInst zenity
+    
+    # Create Desktop Shortcut
+    # Ask for Name
+    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
+    # Automatically set name, read from pe file, if not found use exe name
+    
+    PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
+                                                               |sed 's/^ //')
+    
+    # if language is not english inside exe name, use exe name
+    if [ $(echo $PRODUCT | grep -Ev [a-zA-Z] ) ]; then
+         unset PROGNAME
+    fi
+    
+    if [ ! "$PRODUCT" ]; #if no name is given, then use exe filename
+       then         
+       PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
+    else 
+       PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
+    fi
+
+# Create Launch Script for the provided EXE file
+# ------------------------------------------------
+# need variables from this script
+echo "
+#!/bin/bash
+export APPNAME=\"$APPNAME\"
+export FLATPAK_NAME=\"$FLATPAK_NAME\"
+export APPVERSION=\"$APPVERSION\"
+export WINEVER=\"$WINEVER\"
+export PROGNAME=\"${PROGNAME}\"
+export INSTALL_TYPE=\"$INSTALL_TYPE\"
+export PREFIX=\"${WINEZPREFIX}\"
+export BACKUPNAME=\"${EXE_NOEXE}\"
+export EXE_FILE=\"${EXE_FILE}\"
+export EXE_NAME=\"${EXE_NAME}\"
+export EXE_PATH=\"${EXE_PATH}\"
+export EXE_NOSP=\"${EXE_NOSP}\"
+export EXE_NOEXE=\"${EXE_NOEXE}\"
+export WINEPREFIX_SUBDIR=\"${WINEPREFIX_SUBDIR}\"
+export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
+export APPLICATIONSDIR=\"$APPLICATIONSDIR\"
+export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop|cut -f2 -d '=')\"
+export DESKTOPDIR=\"\${APPLICATIONSDIR}/winezgui\"
+export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
+" > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+
+# Append rest 
+echo '
+export WINEARCH=win64
+export WINEDLLOVERRIDES="mscoree,mshtml="
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/i386-linux-gnu:/app/lib/wine
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib64/wine:/app/$NAME:$(pwd)
+export DESKTOP_FILE_EDIT="desktop-file-edit"
+
+    # If ${FLATPAK_NAME} is installed, and script created using flatpak 
+    if [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+         echo "We are using flatpak install type, but running from host"
+         WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+         WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
+         WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
+         WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
+         WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -u"
+         WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
+         
+         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD 
+         export WHICHWINE
+         
+    else 
+        # flatpak install and running from shell inside flatpak winezgui
+        if [ "$INSTALL_TYPE" = "flatpak" ]; then
+             echo "We are running this from flatpak & installed via flatpak"
+             export WINE_CMD="/app/bin/wine"
+             export WTRICKS_CMD="/app/bin/winetricks"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="${WINE_CMD} wineboot) -u" 
+             export WHICHWINE="${WINE_CMD}"
+             export DESKTOPDIR="${DESKTOPDIR}/${FLATPAK_NAME}"
+        else
+             # We are using non flatpak install
+             echo "We are running this from host system."
+             export WINE_CMD="$(which wine)"
+             export WTRICKS_CMD="$(which winetricks)"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="$(which wineboot) -u"
+             export WHICHWINE="$(which wine)"             
+        fi
+    fi
+
+  # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
+  if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
+
+       # Create Prefix and delete base system linked directory links       
+       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       WINEPREFIX=${WINEPREFIX_SUBDIR} \
+       ${WBOOT_CMD} && \
+
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Documents"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Music"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Pictures"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Videos"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Templates
+
+       #Create normal folders for the deleted symlinks
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Documents"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Music"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Pictures"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Videos" 
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Templates
+
+       # Create file to check later
+        touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
+       
+       # Create G: for Game Directory for Wine Explorer
+       ln -sf "$EXE_PATH" "${WINEPREFIX_SUBDIR}/dosdevices/g:"
+        
+       # Create H: for HOME Directory for Wine Explorer
+       ln -sf "$HOME" "${WINEPREFIX_SUBDIR}/dosdevices/h:"
+        
+  fi
+
+# Create Metadata info.txt for the default wine prefix
+if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
+echo -e "
+Game Name       \t: <b>${PROGNAME}</b>
+Game EXE        \t: ${EXE_FILE}
+Sha256sum       \t: $(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+Game Directory  \t: ${EXE_PATH}
+Game Prefix     \t: ${WINEPREFIX_SUBDIR}
+Game Script     \t: Game Prefix/<b>${EXE_NOEXE}.sh</b>
+Game Icon       \t: Game Prefix/<b>${EXE_NOEXE}.png</b>
+Game Shortcut   \t: Game Prefix/<b>${EXE_NOEXE}.desktop</b>
+System Shortcut \t: ${DESKTOPDIR}
+Creation Date   \t: $(date)
+----------------------------------------------------
+Application Name\t\t: WineZGUI
+Version        \t\t\t: ${APPVERSION}
+Wine           \t\t\t: ${WHICHWINE}
+Wine Version    \t\t: $(wine --version|cut -f1 -d " ")
+Wine Arch       \t\t: ${WINEARCH}
+WineZGUI Prefix \t\t: ${WINEZPREFIX}
+" > ${WINEPREFIX_SUBDIR}/info.txt
+echo "created ${WINEPREFIX_SUBDIR}/info.txt"
+fi
+
+
+# If asked to run an exe by winezgui using launch option
+  if [ "$1" = "launch" ]; then
+       export EXE_FILE_NAME=$(basename "$EXE_FILE")
+       export EXE_FILE_DIR=$(dirname "$EXE_FILE")
+       cd "$EXE_FILE_DIR"
+       ${WINE_CMD}  "$EXE_FILE_NAME"
+       exit 0;
+  fi
+
+
+
+  GameFunction () 
+  {
+  echo "$ {EXE_NAME} ${EXE_NAME}"
+  echo "$ {EXE_FILE} ${EXE_FILE}"
+  unset SELECTION
+  # EXE handling by providing dialog
+  SELECTION=$(zenity --title "${PROGNAME}"              \
+                   --window-icon=${ICON}                \
+                   --width=360 --height=450             \
+                   --list                               \
+                   --radiolist --column " "             \
+                   --column "Action"                    \
+                       TRUE "Launch..."                 \
+                       0    "Open Other EXE..."         \
+                       0    "Winetricks GUI..."         \
+                       0    "Winetricks CLI..."         \
+                       0    "Launch Winecfg..."         \
+                       0    "Open Explorer..."          \
+                       0    "Open Shell..."             \
+                       0    "Rename..."                 \
+                       0    "Change Icon..."            \
+                       0    "Backup..."                 \
+                       0    "Delete..."                 \
+                       0    "About..."                  \
+                   --text "Select action for $EXE_NAME..." )
+
+  # If Cancel button is pressed, exit
+  [[ -z "${SELECTION}" ]] && exit 1
+
+  # If Winetricks is selected
+  if [ "${SELECTION}" = "Winetricks GUI..." ]; then  
+       $WTRICKS_CMD --gui
+       # Return to Game window
+       GameFunction
+
+    # Provide Command Line to enter multiple Dependencies
+    elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
+           VERB_LIST="xact xinput xna31 dotnet48 \
+                      vcrun2003 vcrun2005        \
+                      vcrun2008 vcrun2012        \
+                      vcrun2015 dxvk faudio      \
+                      quartz corefonts"
+           MESSAGE="Change and Press Enter to install these using Winetricks:"
+           TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
+           # Remove multiple spaces from variable           
+           VERB_LIST=$(echo ${VERB_LIST}|sed "s/  / /g")
+           VERBS=$(                     \
+           zenity                       \
+           --title "${TITLE_TEXT}"      \
+           --width=800 --height=30      \
+           --text  "${MESSAGE}"         \
+           --entry-text "${VERB_LIST}"  \
+           --entry)
+ 
+          if [ -z "${VERBS}" ]; then #if no dlls are given
+               #go back to Main function
+      			   echo "not given verbs=$VERBS"
+	         
+          else   
+               VERBS=(${VERBS}) ; #convert string to array
+			         echo "Given Verbs $VERBS"
+                    
+               # Show Progress Percentage by getting number of items
+               NO_OF_ITEMS=${#VERBS[*]}
+               NO_OF_ITEMS=$(expr ${NO_OF_ITEMS} + 1) ;# add +1 for for progress
+
+               PERCENTAGE=$(expr 100 / ${NO_OF_ITEMS})
+               
+               # Convert number to string
+               PROGRESS=$(echo ${PERCENTAGE})  
+               
+               echo "Info: Selected winetricks verbs: ${VERBS[*]}"
+               
+               # Show Progress using zenity
+               ( for i in ${VERBS[*]}; do
+
+               # Show Progress Percentage and Info
+               echo ${PROGRESS}
+               echo "# Installing ${i}..."
+               
+               # Install winetricks verbs and put output to logs
+               ${WTRICKS_CMD} --force --unattended  ${i}
+               
+               PROGRESS=$(expr ${PROGRESS} + ${PERCENTAGE})
+               done
+               echo 100
+               echo "# Done!"
+               ) |zenity                                                     \
+                 --width=440                                                 \
+                 --title                                                     \
+                 "Please Wait... Good things take time!"                     \
+                 --progress                                                  \
+                 --auto-kill
+          fi   
+          # After winetricks cli, return to main menu
+          # MainFunction need to implement
+          # Return to Game window
+          GameFunction
+         
+# PSEUDO CODE WORK HERE
+# Download mf-install from github (create fastrizwan mf-install)
+#  elif [ "${SELECTION}" = "Install Media Foundation Libraries" ]; then
+#  wget github.com/fastrizwaan/mf-install/release/mf-install.tar.gz
+#  tar -hxvf mf-install.tar.gz
+#  cd mf-install
+#  WINEPREFIX=${WINEZPREFIX-WHATEVER} mf-install
+#  AND FOR FLATPAK?
+#  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
+#   echo "fix me"
+  elif [ "${SELECTION}" = "Open Other EXE..." ]
+           then
+      	   OTHER_EXE="$( \
+      	                zenity                  \
+      	                --file-filter=*.exe     \
+      	                --file-selection        \
+      	                --title="Select a File" \
+      	              )"
+      	   
+      	   # If no exe is selected
+      	   if [ -z "${OTHER_EXE}" ]
+                then
+      	        #unset SELECTION ; # Empty variable
+                GameFunction    ; # Go back to Game Window
+      	   fi
+
+      	   base=$(basename "$OTHER_EXE")
+           dire=$(dirname "$OTHER_EXE")
+         
+           cd "$dire"
+           ${WINE_CMD} "$base"
+   	       # Return to Game window
+           GameFunction
+  
+      	   
+  elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
+         ${WINECFG_CMD}
+         # Return to Game window
+         GameFunction
+    
+  elif [ "${SELECTION}" = "Open Explorer..." ]; then
+         ${WEXPLORER_CMD} "$EXE_PATH"
+         # Return to Game window
+         GameFunction
+ 
+  elif [ "${SELECTION}" = "Open Shell..." ]; then
+          
+         #  using flatpak install and script is running from sandbox
+         # Check if it is a flatpak based script
+         # Check if it is running from inside sandbox
+         # and gnome terminal is found on host
+         if [ ${INSTALL_TYPE} = "flatpak" ] && \
+            [ $(flatpak-spawn --host which gnome-terminal) ]; then
+              echo "I am a flatpak script, running from sandbox"
+              export WINEPREFIX=${WINEPREFIX_SUBDIR};
+              flatpak-spawn --host gnome-terminal --wait -- flatpak run \
+              --command=bash ${FLATPAK_NAME} -c  \
+             "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;\
+             exec bash -i\""
+         # If flatpak install and script running from host
+         # and gnome terminal is found
+         elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+              [ $(which gnome-terminal) ]; then
+              export WINEPREFIX=${WINEPREFIX_SUBDIR};
+              echo "I am a flatpak script, running from host"
+              gnome-terminal --wait -- flatpak  \
+              --command=bash run ${FLATPAK_NAME} \
+              -c "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX; \
+              exec bash -i"
+         # Else it is a host install and gnome-terminal is found
+         elif [ ${INSTALL_TYPE} = "system" ] && \
+              [ $(which gnome-terminal) ]; then
+              echo "I am a host based script, running from host"
+              gnome-terminal --wait -- bash -c \
+              "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; \
+              cd $WINEPREFIX; exec bash -i\""
+         # gnome terminal is not found
+         else
+              echo "gnome-terminal is not installed on the host"
+              zenity --title "${SELECTION}" \
+                     --width=500 --height=30 --info  \
+                     --text "This feature requires \"gnome-terminal\""
+         fi            
+         # Return to Game window
+         GameFunction
+                     
+  elif [ "${SELECTION}" = "Rename..." ]; then
+         PROGNAME=$(zenity --title "Rename shortcut" \
+                           --text "Enter a name for your shortcut" --entry)
+       
+         if [ -z "${PROGNAME}" ]; then #if no name is given use filename
+              #zenity --info --title="Shortcut... " --text="no Change"        
+              # Return to Game window
+              GameFunction
+         fi
+         
+         export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
+	       ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
+	                            ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
+        sed -E "s/^export PROGNAME=.*/export PROGNAME=\"$PROGNAME ($WINEVER)\"/" \
+            -i ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
+         
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+         
+         #zenity --info --title="$EXE_NOEXE.desktop" \
+         #       --text="Shortcut renamed sucessfuly: $appname"
+         
+         # Required for instant change in the GameWindow
+         export PROGNAME="$PROGNAME ($WINEVER)"
+         # Return to Game window
+         GameFunction
+
+  elif [ "${SELECTION}" = "Change Icon..." ]; then
+  
+         # Ask user to select an image icon
+         GET_ICON=$(zenity --file-selection \
+                           --file-filter=""*.png" "*.jpg" "*.svg"")
+         
+         # If he/she cancels, why prompt?
+         if [ -z ${GET_ICON} ]; then #if no icon is selected
+              #zenity --info --title="Icon... " --text="no Change"        
+              echo "No icon selected"
+              # Return to Game window
+              GameFunction
+         fi
+         
+         # Now that we have included desktop-file-edit in flatpak, not needed
+         if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
+             export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
+         else 
+             export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
+         fi
+         
+         # set icon to the user selected one
+         ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" \
+                                         ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
+         
+         # Update .desktop database
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+         
+         # Inform user
+         zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
+               --text="Icon Changed sucessfuly: ${GET_ICON}"
+     
+	 # Change Runtime Icon as soon as it is changed
+         # Main Window is going to use ICON variable.
+         export ICON="${GET_ICON}"
+
+         # Return to Game window
+         GameFunction
+
+  # Ask user to where to save the backup
+  elif [ "${SELECTION}" = "Backup..." ]; then
+         DATE=$(date +%F_%H%M)
+         Z_TITLE="Choose Backup Directory!"
+         TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
+         if [ -z "$TARGET_DIR" ]; then
+              exit 0;
+         fi
+         
+         # Backup
+         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         cd "${PREFIX}"
+         echo "creating ${BACKUP_FILE} backup"
+         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+		      zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+		      --text="${BACKUP_FILE}..." --pulsate --auto-kill
+			
+			   # Report Size also
+			   BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+			   # Backup Sucess Message
+			   MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
+			   MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
+			   MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
+			   MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
+			   
+		     mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+         
+         # Return to Game window
+         GameFunction
+
+
+  elif [ "${SELECTION}" = "Delete..." ]; then
+         
+         rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
+         rm -rf  ${WINEPREFIX_SUBDIR}; 
+         
+         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+         
+  elif [ "${SELECTION}" = "About..." ]; then
+         if [ ${INSTALL_TYPE} = "flatpak" ]; then
+                  ZCMD="zenity --info --width 650 --text"
+             else
+                  ZCMD="zenity --info --width 500 --text"
+         fi
+         $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt| \
+                      sed -E "s/^(.*: )/<b>\1<\/b>/g")"
+         GameFunction
+
+  elif [ "${SELECTION}" = "Launch..." ]; then
+         export base=$(basename "$EXE_FILE")
+         export dire=$(dirname "$EXE_FILE")
+         
+         cd "$dire"
+         ${WINE_CMD} "$base"
+         exit 0; # Exit after execution of exe
+  fi
+  }
+
+# Start WineZGUI when no argument is supplied
+if [ $# -eq 0 ]
+     then
+     echo "Info: Launching WineZGUI"
+     GameFunction 
+fi 
+
+' >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+###############################################
+chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+
+# Generate desktop entry specifications to be added to the application launcher.
+#-------------------------------------------------------------------------------
+echo "
+[Desktop Entry]
+Exec=bash -c ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
+Name=$PROGNAME
+Path=$EXE_PATH
+Type=Application
+Categories=$appCategory;
+Icon=${ICON}
+Keywords=winezgui; game; ${EXE_NOEXE};
+NoDisplay=false
+StartupNotify=true
+Terminal=false
+" > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
+
+    # link the launcher  file to a shortcut on applications menu.
+    mkdir -p "${DESKTOPDIR}" 
+    
+    ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
+            ${DESKTOPDIR}/"$EXE_NOEXE".desktop
+    # Test if the app link was created sucessfully on applications menu 
+    if [ $? -eq 0 ]; then
+        ${UPDATE_ICON_CACHE}
+        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+        echo "Shortcut created sucessfuly Name: ${PROGNAME}\nExe: ${EXE_NAME}"
+    fi
+
+else 
+
+# If no application was submited, show this message.
+  echo Please, submit a windows application file. 
+  echo Usage: $0 path/to/app.exe 
+  zenity --info --title="Select an EXE to create shortcut" \
+         --text="in Filemanager, right-click on an exe and select this!"
+
+fi
