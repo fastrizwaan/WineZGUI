@@ -57,7 +57,7 @@ add-extensions:
 modules:
   - name: icoutils
     build-options:
-      strip: true
+      #strip: true
       no-debuginfo: true  
     buildsystem: autotools
     sources:
@@ -73,7 +73,7 @@ modules:
     build-options:
       cflags: "-fPIC"
       ldflags: "-fpic"
-      strip: true
+      #strip: true
     sources:
     - type: archive
       url: https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
@@ -87,7 +87,7 @@ modules:
   
   - name: exiftool
     build-options:
-      strip: true
+      #strip: true
     buildsystem: simple
     build-commands:
       - perl Makefile.PL
@@ -100,7 +100,7 @@ modules:
         
   - name: desktop-file-utils
     build-options:
-      strip: true
+      #strip: true
       no-debuginfo: true  
     buildsystem: autotools
     sources:
