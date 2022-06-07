@@ -17,6 +17,7 @@ Version 0.3
 - [x] Generate  metadata file inside prefix 
 
 - [x] 
+
 - [x] Show prefix information, prefix, game directory, size (du), date of install, wine version used,  exe sha256sum etc.
   
       Metadata:
@@ -37,7 +38,9 @@ Version 0.3
   
   - [x] icon
 
-0.4
+0.4 released
+
+0.5
 
 - [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
   
