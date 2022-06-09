@@ -278,15 +278,12 @@ export WINE_CMD=${WINEEXE}
               MainFunction
       
       elif [ "${SELECTION}" = "About..." ]; then
-             # The about dialog size width should be wider
-             if [ ${INSTALL_TYPE} = "flatpak" ]; then
-                  ZCMD="zenity --info --width 620 --text"
-             else
-                  ZCMD="zenity --info --width 500 --text"
-             fi
+             echo "Executing About..."
+             # Text is more, so we need to format it, with sed in pango markup
+             ZCMD="zenity --info --no-wrap --text"
              $ZCMD "$(cat ${PREFIXDIR}/info.txt | \
-                      sed -E 's/^(.*: )/<b>\1<\/b>/g')"
-             
+                      sed -E 's/^(.*: )/<tt><b>\1<\/b><\/tt>/g' | \
+                      sed -E 's/^(.*)$/<small>\1<\/small>/g')"
              MainFunction
              
       elif [ "${SELECTION}" = "Delete..." ]
@@ -397,19 +394,19 @@ export WINE_CMD=${WINEEXE}
 
 # Create Metadata info.txt for the default wine prefix
 if [ ! -f ${PREFIXDIR}/info.txt ]; then
-echo -e "
-Application Name\t\t: WineZGUI
-Version       \t\t\t: ${APPVERSION}
-Copyright       \t\t: ${COPYRIGHT}
-Website       \t\t\t: ${WEBSITE}
-Author        \t\t\t: ${AUTHOR}
-E-mail        \t\t\t: ${EMAIL}
-Wine          \t\t\t: ${WINE_CMD}
-Wine Version    \t\t: $(wine --version|cut -f1 -d ' ')
-Wine Arch       \t\t: ${WINEARCH}
-WineZGUI Prefix \t\t: ${WINEZPREFIX}
-Wine Prefix     \t\t: ${PREFIXDIR}
-Creation Date   \t\t: $(date)
+echo -e   "
+Application     : WineZGUI
+Version         : ${APPVERSION}
+Copyright       : ${COPYRIGHT}
+Website         : ${WEBSITE}
+Author          : ${AUTHOR}
+E-mail          : ${EMAIL}
+Wine            : ${WINE_CMD}
+Wine Version    : $(wine --version|cut -f1 -d ' ')
+Wine Arch       : ${WINEARCH}
+WineZGUI Prefix : ${WINEZPREFIX}
+Wine Prefix     : ${PREFIXDIR}
+Creation Date   : $(date)
 " > ${PREFIXDIR}/info.txt
 echo "create ${PREFIXDIR}/info.txt"
 fi
@@ -499,4 +496,3 @@ if [ -f "${EXE_FILE}"  ]
             ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" 
      fi
 fi
-
