@@ -21,7 +21,7 @@ export EXIFTOOL=$(which exiftool)
 
 # These values will be assigned by Setup using sed command
 # Post install $PREFIX/bin/winezgui-create-prefix file will be different
-export APPVERSION="0.4"
+export APPVERSION="git"
 export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"

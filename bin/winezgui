@@ -6,7 +6,7 @@ export APPNAME=WineZGUI
 # These values will be assigned by Setup using sed command
 # Post install $PREFIX/bin/winezgui file will be different
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
-export APPVERSION="0.4"
+export APPVERSION="git"
 export INSTALL_TYPE="system"
 export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
 export FLATPAK_NAME="io.github.WineZGUI"
