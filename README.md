@@ -37,7 +37,7 @@ Download [io.github.WineZGUI_0_4_20220608.flatpak](https://github.com/fastrizwaa
 ```
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
-wget https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.4_20220608/io.github.WineZGUI_0_4_20220608.flatpakhttps://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.4_20220608/io.github.WineZGUI_0_4_20220608.flatpak
+wget https://github.com/fastrizwaan/WineZGUI-Releases/releases/download/WineZGUI-0.4_20220608/io.github.WineZGUI_0_4_20220608.flatpak
 flatpak --user -y install io.github.WineZGUI_0_4_20220608.flatpak
 ```
 
