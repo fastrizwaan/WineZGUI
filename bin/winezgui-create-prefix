@@ -226,7 +226,7 @@ Creation Date  : $(date)
 Application    : ${APPNAME}
 Version        : ${APPVERSION}
 Wine           : ${WHICHWINE}
-Wine Version   : ${WINEVERSION}
+Wine Version   : ${WINEVER}
 Wine Arch      : ${WINEARCH}
 WineZGUI Prefix: ${WINEZPREFIX}
 " > ${WINEPREFIX_SUBDIR}/info.txt
