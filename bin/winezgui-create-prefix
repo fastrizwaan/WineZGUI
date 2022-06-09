@@ -214,7 +214,7 @@ if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
 echo -e "
 Game Name      : ${PROGNAME}
 Game EXE       : ${EXE_FILE}
-Sha256sum      : $(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+Sha256sum      : $(sha256sum ${EXE_FILE}|cut -f1 -d \" \")
 Game Directory : ${EXE_PATH}
 Game Prefix    : ${WINEPREFIX_SUBDIR}
 Game Script    : ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
@@ -226,7 +226,7 @@ Creation Date  : $(date)
 Application    : ${APPNAME}
 Version        : ${APPVERSION}
 Wine           : ${WHICHWINE}
-Wine Version   : $(wine --version|cut -f1 -d " ")
+Wine Version   : ${WINEVERSION}
 Wine Arch      : ${WINEARCH}
 WineZGUI Prefix: ${WINEZPREFIX}
 " > ${WINEPREFIX_SUBDIR}/info.txt
@@ -539,8 +539,8 @@ fi
          # Text is more, so we need to format it, with sed in pango markup
          ZCMD="zenity --info --no-wrap --text"
          $ZCMD "$(cat ${WINEPREFIX_SUBDIR}/info.txt | \
-                  sed -E 's/^(.*: )/<tt><b>\1<\/b><\/tt>/g' | \
-                  sed -E 's/^(.*)$/<small>\1<\/small>/g')"
+                  sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
+                  sed -E "s/^(.*)$/<small>\1<\/small>/g")"
          GameFunction
 
   elif [ "${SELECTION}" = "Launch..." ]; then

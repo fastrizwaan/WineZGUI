@@ -402,7 +402,7 @@ Website         : ${WEBSITE}
 Author          : ${AUTHOR}
 E-mail          : ${EMAIL}
 Wine            : ${WINE_CMD}
-Wine Version    : $(wine --version|cut -f1 -d ' ')
+Wine Version    : ${WINEVER}
 Wine Arch       : ${WINEARCH}
 WineZGUI Prefix : ${WINEZPREFIX}
 Wine Prefix     : ${PREFIXDIR}
