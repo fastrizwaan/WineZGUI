@@ -214,7 +214,7 @@ if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
 echo -e "
 Game Name      : ${PROGNAME}
 Game EXE       : ${EXE_FILE}
-Sha256sum      : $(sha256sum ${EXE_FILE}|cut -f1 -d \" \")
+Sha256sum      : $(sha256sum ${EXE_FILE}|cut -f1 -d " ")
 Game Directory : ${EXE_PATH}
 Game Prefix    : ${WINEPREFIX_SUBDIR}
 Game Script    : ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
