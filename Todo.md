@@ -2,7 +2,7 @@
 
 0.5
 
-- [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
+- [x] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7, included as mf-install script
   
 - [x] Perhaps create and send a verb to winetricks instead with video proof
 

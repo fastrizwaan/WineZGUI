@@ -421,8 +421,6 @@ fi
         # Create H: for HOME Directory for Wine Explorer
         ln -sf $HOME "${PREFIXDIR}/dosdevices/h:"
         
-        # Install mf
-        mf-installer
    fi
 
 ### End of Create a default wine prefix directory ###
@@ -431,7 +429,7 @@ fi
 # Create Metadata info.txt for the default wine prefix
 if [ ! -f ${PREFIXDIR}/info.txt ]; then
 echo -e   "
-Application     : WineZGUI
+Application     : ${APPNAME}
 Version         : ${APPVERSION}
 Copyright       : ${COPYRIGHT}
 Website         : ${WEBSITE}

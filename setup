@@ -96,12 +96,14 @@ fi
 # Files to install
 APP1_SRC="./bin/winezgui"
 APP2_SRC="./bin/winezgui-create-prefix"
+APP3_SRC="./bin/mf-install"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
 
 # Basename
 APP1=$(basename $APP1_SRC)
 APP2=$(basename $APP2_SRC)
+APP3=$(basename $APP3_SRC)
 DESK=$(basename $DESK_SRC)
 ICON=$(basename $ICON_SRC)
 
@@ -122,6 +124,7 @@ if [ "${INSTALL}" = "true"  ]
      echo Installing...
      install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
      install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
+     install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
 
@@ -141,12 +144,14 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
      sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
+
      # Create uninstall script for later removal
      echo "
-     rm -vf ${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/winezgui.svg
-     rm -vf ${INSTALL_PREFIX}/share/applications/winezgui.desktop
-     rm -vf ${INSTALL_PREFIX}/bin/winezgui
-     rm -vf ${INSTALL_PREFIX}/bin/winezgui-create-prefix
+     rm -vf $APPS_DIR/$APP1 
+     rm -vf $APPS_DIR/$APP2
+     rm -vf $APPS_DIR/$APP3
+     rm -vf $DESK_DIR/$DESK
+     rm -vf $ICON_DIR/$ICON
      " > ./uninstall
      
      # 
