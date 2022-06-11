@@ -1,55 +1,14 @@
 ###### Todo
 
-Version 0.3
-
-- [x] gnome-terminal launch  (if fails)|| show need gnome terminal msg
-  
-  - [x] winezgui flashing gnome-terminal window is annoying
-
-- [x] Show WineZGUI version (use version variable)
-
-- [x] Fix wrong wine version when both host and flatpak exist
-
-- [x] Just create shortcut and launch game window
-
-- [x] GameWindow, check variables,  open other exe -> gamewindow ->launch fails
-
-- [x] Generate  metadata file inside prefix 
-
-- [x] 
-
-- [x] Show prefix information, prefix, game directory, size (du), date of install, wine version used,  exe sha256sum etc.
-  
-      Metadata:
-  
-  - [x] Game Name
-  
-  - [x] sha256sum, 
-  
-  - [x] filename,
-  
-  - [x] gamdir location (EXE_PATH) and
-  
-  - [x] prefix and 
-  
-  - [x] wine version 
-  
-  - [x] winezgui version, 
-  
-  - [x] icon
-
-0.4 released
-
 0.5
 
 - [ ] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7
   
-  - [ ] Perhaps create and send a verb to winetricks instead with video proof
+- [x] Perhaps create and send a verb to winetricks instead with video proof
 
-- [ ] 
+- [x] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
-- [ ] Runtime test of dependency by winezgui, create-prefix, and launch-script
-
+0.6
 - [ ] Support Gamedir install (give option, gamedir preferred if writable)
   
   - [ ] Create wine prefix inside game directory, for backup up and sharing with friends
