@@ -33,6 +33,37 @@ export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 
+# On launch check required runtime dependencies
+if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
+     # Function to print if dependencies are installed.
+     FOUND=()    # Array/list to hold all found commands
+     NOTFOUND=() # Array/list to hold all not found commands
+
+     RUNTIME="wine winetricks icotool exiftool zenity" 
+     echo $RUNTIME
+     for i in $RUNTIME ; do
+         if [ $(which $i) ]; then
+                FOUND+="$i"
+                FOUND+=" "
+                echo "FOUND = $i"
+         else 
+                NOTFOUND+="$i"
+                NOTFOUND+=" "
+         fi
+     done
+     
+     # Show found and not found dependencies for WineZGUI
+     echo "Dependencies..."
+     echo "Found    : $FOUND"
+     echo "Not Found: $NOTFOUND"
+     if [ ! -z "${NOTFOUND}" ]; then
+          zenity --info --no-wrap --title="Missing Dependencies" \
+                 --text="Please install these in your system:\n${NOTFOUND}"
+     else
+          touch "${WINEZPREFIX}/deps_check_ok.txt"
+     fi
+fi
+
 
     # Main WineZGUI application window function
     MainFunction () 
@@ -290,7 +321,6 @@ export WINE_CMD=${WINEEXE}
              then
              rm -rfv ${PREFIXDIR}; 
              echo "Deleted default prefix"
-             
              #Present main window after deleting default prefix
              MainFunction
 
