@@ -50,7 +50,7 @@ if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
      FOUND=()    # Array/list to hold all found commands
      NOTFOUND=() # Array/list to hold all not found commands
 
-     RUNTIME="wine winetricks icotool exiftool zenity" 
+     RUNTIME="wine winetricks icotool exiftool zenity wget" 
      echo $RUNTIME
      for i in $RUNTIME ; do
          if [ $(which $i) ]; then
