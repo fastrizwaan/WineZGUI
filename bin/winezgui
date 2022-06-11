@@ -290,6 +290,7 @@ export WINE_CMD=${WINEEXE}
              then
              rm -rfv ${PREFIXDIR}; 
              echo "Deleted default prefix"
+             
              #Present main window after deleting default prefix
              MainFunction
 

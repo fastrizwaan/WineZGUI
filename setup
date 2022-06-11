@@ -171,10 +171,10 @@ if [ "${DEPENDENCIES}" = "true" ]; then
   
      for i in $RUNTIME ; do
          if ! [ -x "$(command -v $i)" ]; then
-                NOTFOUND+="$1"
+                NOTFOUND+="$i"
                 NOTFOUND+=" "
          elif [ -x "$(command -v $i)" ]; then
-                FOUND+=$1
+                FOUND+=$i
                 FOUND+=" "
          fi
      done
