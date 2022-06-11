@@ -1,7 +1,7 @@
 # Install Media Foundation Libraries, required for UE4 games
 # https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4
-TEMPDIR="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
-WINEZPREFIX="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/prefixes)"
+TEMPDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
+WINEZPREFIX="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/prefixes)"
 
 mkdir -p "${WINEZPREFIX}" 
 cd "${WINEZPREFIX}"

@@ -145,6 +145,9 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
      sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
 
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3
+     
      # Create uninstall script for later removal
      echo "
      rm -vf $APPS_DIR/$APP1 
