@@ -137,7 +137,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib64/wine:/app/$NAME:$(pwd)
 export DESKTOP_FILE_EDIT="desktop-file-edit"
 
 
-# Test if Game exe is reachable or not
+# Test if exe exists?
 if [ ! -f "${EXE_FILE}" ] ; then
     zenity --error --title "File not found!" --text "${EXE_FILE}"
 fi
@@ -242,6 +242,11 @@ fi
 
 # If asked to run an exe by winezgui using launch option
   if [ "$1" = "launch" ]; then
+       # Test if exe exists?
+       if [ ! -f "${EXE_FILE}" ] ; then
+            zenity --error --title "File not found!" --text "${EXE_FILE}"
+            GameFunction
+       fi
        export EXE_FILE_NAME=$(basename "$EXE_FILE")
        export EXE_FILE_DIR=$(dirname "$EXE_FILE")
        cd "$EXE_FILE_DIR"
