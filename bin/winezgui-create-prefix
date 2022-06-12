@@ -419,11 +419,11 @@ fi
          elif [ ${INSTALL_TYPE} = "flatpak" ] && \
               [ $(which gnome-terminal) ]; then
               export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";
+              echo "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";"
               echo "I am a flatpak script, running from host"
               gnome-terminal --wait -- flatpak  \
               --command=bash run ${FLATPAK_NAME} \
-              -c "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"; \
-              cd \"$WINEPREFIX\"; exec bash -i"
+              -c "exec bash -i"
          # Else it is a host install and gnome-terminal is found
          elif [ ${INSTALL_TYPE} = "system" ] && \
               [ $(which gnome-terminal) ]; then
