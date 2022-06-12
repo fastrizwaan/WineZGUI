@@ -412,8 +412,8 @@ fi
               export WINEPREFIX=${WINEPREFIX_SUBDIR};
               flatpak-spawn --host gnome-terminal --wait -- flatpak run \
               --command=bash ${FLATPAK_NAME} -c  \
-             "bash -c \"export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;\
-             exec bash -i\""
+             "bash -c \"\'export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd $WINEPREFIX;\
+             exec bash -i\"\'"
          # If flatpak install and script running from host
          # and gnome terminal is found
          elif [ ${INSTALL_TYPE} = "flatpak" ] && \
