@@ -13,6 +13,7 @@ FLATPAK_NAME="${FLATPAK_ID}" # set flatpak name
 # Get version form VERSION.txt
 APPVERSION=$(cat ./VERSION.txt)
 
+echo "$APPVERSION"
 
 # Function Show help
 ShowHelp ()
