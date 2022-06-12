@@ -581,7 +581,7 @@ echo "
 [Desktop Entry]
 Exec=bash -c \"${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh\"
 Name=$PROGNAME
-Path=$EXE_PATH
+#Path=$EXE_PATH
 Type=Application
 Categories=$appCategory;
 Icon=${ICON}
