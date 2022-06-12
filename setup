@@ -5,7 +5,7 @@ APPLICATIONSDIR=~/.local/share/applications
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
-DESKTOPDIR=\"${APPLICATIONSDIR}/winezgui\"
+DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
 TEMPDIR="\$(realpath -m  ~/.local/share/winezgui/tmp)"
 INSTALL_TYPE="system"
 # Flatpak name should be used to kill, and run from launch script.
