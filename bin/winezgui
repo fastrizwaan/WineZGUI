@@ -455,7 +455,7 @@ fi
 # If an exe file is provided as argument or selected by the Open EXE...   
 # TODO: list all available prefixes to install Redist softwares
 
-if [ -f "${EXE_FILE}"  ]
+if [ -f "'${EXE_FILE}'"  ]
      then
      echo "Entered -f EXE_FILE"
      # Prompt to Launch exe with default or existing Prefix of that exe
