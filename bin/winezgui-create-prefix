@@ -136,6 +136,12 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/i386-linux-gnu:/app/lib/wine
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib64/wine:/app/$NAME:$(pwd)
 export DESKTOP_FILE_EDIT="desktop-file-edit"
 
+
+# Test if Game exe is reachable or not
+if [ ! -f "${EXE_FILE}" ] ; then
+    zenity --error --title "File not found!" --text "${EXE_FILE}"
+fi
+
     # If ${FLATPAK_NAME} is installed, and script created using flatpak 
     if [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
