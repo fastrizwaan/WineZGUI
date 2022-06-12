@@ -120,17 +120,17 @@ sudo ./setup --uninstall
 
 ### Fedora 36
 
-`sudo dnf install zenity wine winetricks perl-Image-ExifTool icoutils gnome-terminal`
+`sudo dnf install zenity wine winetricks perl-Image-ExifTool icoutils gnome-terminal wget`
 
 ### Debian / Ubuntu
 
 ```
 sudo dpkg --add-architecture i386
-sudo apt install zenity wine winetricks libimage-exiftool-perl icoutils gnome-terminal
+sudo apt install zenity wine winetricks libimage-exiftool-perl icoutils gnome-terminal wget
 ```
 
 ### Solus
 
 ```
-sudo eopkg it zenity wine winetricks perl-image-exiftool icoutils gnome-terminal
+sudo eopkg it zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget
 ```
