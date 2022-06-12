@@ -584,7 +584,7 @@ chmod +x "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 #-------------------------------------------------------------------------------
 echo "
 [Desktop Entry]
-Exec=bash -c \"${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh\"
+Exec=bash -c \'${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh\'
 Name=$PROGNAME
 #Path=$EXE_PATH
 Type=Application
