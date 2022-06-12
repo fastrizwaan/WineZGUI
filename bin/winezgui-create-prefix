@@ -555,6 +555,11 @@ fi
          GameFunction
 
   elif [ "${SELECTION}" = "Launch..." ]; then
+         # Test if exe exists?
+         if [ ! -f "${EXE_FILE}" ] ; then
+              zenity --error --title "File not found!" --text "${EXE_FILE}"
+              GameFunction
+         fi
          export base=$(basename "$EXE_FILE")
          export dire=$(dirname "$EXE_FILE")
          
