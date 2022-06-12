@@ -265,7 +265,7 @@ fi
   unset SELECTION
   # EXE handling by providing dialog
   SELECTION=$(zenity --title "${PROGNAME}"              \
-                   --window-icon=${ICON}                \
+                   --window-icon="${ICON}"              \
                    --width=360 --height=450             \
                    --list                               \
                    --radiolist --column " "             \
