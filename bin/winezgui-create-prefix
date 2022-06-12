@@ -428,9 +428,10 @@ fi
          elif [ ${INSTALL_TYPE} = "system" ] && \
               [ $(which gnome-terminal) ]; then
               echo "I am a host based script, running from host"
+              export WINEPREFIX="${WINEPREFIX_SUBDIR}";
+              echo "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";"
               gnome-terminal --wait -- bash -c \
-              "bash -c \"export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"; \
-              cd \"$WINEPREFIX\"; exec bash -i\""
+              "cd \"${WINEPREFIX}\"; exec bash -i"
          # gnome terminal is not found
          else
               echo "gnome-terminal is not installed on the host"
