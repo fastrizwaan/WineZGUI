@@ -1,0 +1,10 @@
+wine start /unix 
+"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Angel Writer\\Angel Writer.lnk"
+"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Angel Writer\\Angel Writer.lnk"
+
+
+# Works
+OUT=$(grep lnk user.reg |head -n1|sed 's/.*=//g'|sed 's/\\\\/\\/g')
+echo $OUT|xargs winepath
+wine start /unix "$(echo $OUT|xargs winepath)"
+
