@@ -119,7 +119,8 @@ fi
           case $? in
            0)
               echo "\"$EXE_FILE\" selected.";
-              EXE_FILE=$(echo $EXE_FILE|sed "s/(/\(/g")
+              # Handle file name with ( and ) like abc (copy).exe
+              EXE_FILE=$(echo $EXE_FILE|sed "s/(/\\\(/g"|sed "s/)/\\\)/g")
               export EXE_FILE;;
               echo "\"$EXE_FILE\" selected.";
                   
