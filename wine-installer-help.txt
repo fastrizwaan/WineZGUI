@@ -8,6 +8,12 @@ OUT=$(grep lnk user.reg |head -n1|sed 's/.*=//g'|sed 's/\\\\/\\/g')
 echo $OUT|xargs winepath
 wine start /unix "$(echo $OUT|xargs winepath)"
 
+#########
+# Flatpak data/application -> ~/.local/share/applications
+env WINEPREFIX="/home/rizvan/.var/app/io.github.WineZGUI/data/prefixes/AngelWriterSetup/dosdevices/h:/.var/app/io.github.WineZGUI/data/prefixes/AngelWriterSetup" flatpak run --command=wine io.github.WineZGUI start /unix  "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Angel Writer\\Angel Writer.lnk"
+
+#############
+
 
 Alternatively using EXE file
 1. Open EXE
