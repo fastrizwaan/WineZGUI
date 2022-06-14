@@ -184,9 +184,9 @@ fi
   if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
 
        # Create Prefix and delete base system linked directory links       
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       ${WBOOT_CMD} && \
+       #WINEDLLOVERRIDES="mscoree,mshtml=" \
+       #WINEPREFIX=${WINEPREFIX_SUBDIR} \
+       #${WBOOT_CMD} && \
 
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
