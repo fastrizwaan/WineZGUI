@@ -189,7 +189,7 @@ fi
        echo "Wineboot command = ${WBOOT_CMD}"
        WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       ${WBOOT_CMD} && \
+       wineboot -u 2>/dev/null && \
        
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
