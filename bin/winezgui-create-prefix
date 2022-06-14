@@ -414,14 +414,14 @@ fi
               export WINEPREFIX=${WINEPREFIX_SUBDIR};
               flatpak-spawn --host gnome-terminal --wait -- flatpak run \
               --command=bash ${FLATPAK_NAME} -c  \
-             "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"; cd \"$WINEPREFIX\";\
+             "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd \"$WINEPREFIX\";\
              exec bash -i;"
          # If flatpak install and script running from host
          # and gnome terminal is found
          elif [ ${INSTALL_TYPE} = "flatpak" ] && \
               [ $(which gnome-terminal) ]; then
-              export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";
-              echo "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";"
+              export WINEPREFIX=${WINEPREFIX_SUBDIR};
+              echo "export WINEPREFIX=${WINEPREFIX_SUBDIR};"
               echo "I am a flatpak script, running from host"
               gnome-terminal --wait -- flatpak  \
               --command=bash run ${FLATPAK_NAME} \
@@ -431,7 +431,7 @@ fi
               [ $(which gnome-terminal) ]; then
               echo "I am a host based script, running from host"
               export WINEPREFIX="${WINEPREFIX_SUBDIR}";
-              echo "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";"
+              echo "export WINEPREFIX=${WINEPREFIX_SUBDIR};"
               gnome-terminal --wait -- bash -c \
               "cd \"${WINEPREFIX}\"; exec bash -i"
          # gnome terminal is not found
