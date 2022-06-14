@@ -72,9 +72,9 @@ Downoad source [WineZGUI-0.51.tar.gz](https://github.com/fastrizwaan/WineZGUI/ar
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.5.tar.gz
-tar -zxvf 0.5.tar.gz
-cd WineZGUI-0.5
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.51.tar.gz
+tar -zxvf 0.51.tar.gz
+cd WineZGUI-0.51
 sudo ./setup --install ; #systemwide
 ```
 
