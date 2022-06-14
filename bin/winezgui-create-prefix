@@ -184,13 +184,13 @@ fi
   if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
 
        # Create Prefix and delete base system linked directory links  
-       echo "wine=$(which wine)"
-       echo "WINEPREFIX=$WINEPREFIX"
-       echo "Wineboot command = ${WBOOT_CMD}"
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       WINEDEBUG=-all \
-       ${WBOOT_CMD} 2>/dev/null && \
+       #echo "wine=$(which wine)"
+       #echo "WINEPREFIX=$WINEPREFIX"
+       #echo "Wineboot command = ${WBOOT_CMD}"
+       #WINEDLLOVERRIDES="mscoree,mshtml=" \
+       #WINEPREFIX=${WINEPREFIX_SUBDIR} \
+       #WINEDEBUG=-all \
+       #${WBOOT_CMD} 2>/dev/null && \
        
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
