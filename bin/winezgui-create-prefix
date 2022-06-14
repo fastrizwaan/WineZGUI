@@ -188,7 +188,7 @@ fi
        echo "WINEPREFIX=$WINEPREFIX"
        echo "Wineboot command = ${WBOOT_CMD}"
        echo "WINEARCH $WINEARCH"
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       #WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
        ${WBOOT_CMD} 2>/dev/null && \
        
