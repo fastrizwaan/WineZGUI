@@ -165,7 +165,7 @@ fi
              export WTRICKS_CMD="/app/bin/winetricks"
              export WINECFG_CMD="${WINE_CMD} winecfg"
              export WEXPLORER_CMD="${WINE_CMD} explorer"
-             export WBOOT_CMD="${WINE_CMD} wineboot) -u" 
+             export WBOOT_CMD="${WINE_CMD} wineboot -u" 
              export WHICHWINE="${WINE_CMD}"
              export DESKTOPDIR="${DESKTOPDIR}/${FLATPAK_NAME}"
         else
