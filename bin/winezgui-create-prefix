@@ -187,9 +187,10 @@ fi
        echo "wine=$(which wine)"
        echo "WINEPREFIX=$WINEPREFIX"
        echo "Wineboot command = ${WBOOT_CMD}"
+       echo "winearch = $WINEARCH"
        WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       wineboot -u 2>/dev/null && \
+       winecfg && \
        
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
        rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
