@@ -48,7 +48,7 @@ Please install `flatpak-builder` in the Linux system before running these comman
 ##### Version 0.51 (copy paste this on a terminal)
 
 ```
-git clone --depth 1 --branch 0.5 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.51 https://github.com/fastrizwaan/WineZGUI.git
 ./WineZGUI/flatpak-manifest/install.sh
 ```
 
