@@ -393,7 +393,7 @@ fi
         WINEDLLOVERRIDES="mscoree,mshtml=" \
         WINEPREFIX=${PREFIXDIR} \
         WINEDEBUG=-all \
-        wineboot -u 2>/dev/null && \
+        wineboot -i 2>/dev/null && \
         
         rm -rf ${PREFIXDIR}/drive_c/users/${USER}/Desktop
         rm -rf ${PREFIXDIR}/drive_c/users/${USER}/Downloads
