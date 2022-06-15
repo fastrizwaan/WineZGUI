@@ -88,10 +88,10 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # Automatically set name, read from pe file, if not found use exe name
     
     PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
-                                                               |sed 's/^ //')
+                                                              |sed 's/^ //')
     
     # if language is not english inside exe name, use exe name
-    if [ $(echo $PRODUCT | grep -Ev [a-zA-Z] ) ]; then
+    if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ]; then
          unset PROGNAME
     fi
     
