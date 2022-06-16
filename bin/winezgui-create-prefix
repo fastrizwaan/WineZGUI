@@ -603,6 +603,7 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
+    echo "*****************************************"
     echo "mkdir -p ${DESKTOPDIR}" 
     mkdir -p "${DESKTOPDIR}" 
     
