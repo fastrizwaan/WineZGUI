@@ -44,6 +44,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
 
   # create required directories
+    echo "mkdir 1 desktopdir"
     mkdir -pv  "${WINEPREFIX_SUBDIR}"
     mkdir -pv  "${DESKTOPDIR}"
     echo "mkdir -p  ${WINEPREFIX_SUBDIR}"
@@ -59,7 +60,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     }
     
     # Extract icon and convert it to several png files of diferent quality, 
-    
+     echo "mkdir 2 tmpdir"
      mkdir -vp ${TEMPDIR}
      cd ${TEMPDIR}
      wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
@@ -603,7 +604,8 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
-    echo "*****************************************"
+    echo "--------------"
+    echo "mkdir 3 desktopdir"
     echo "mkdir -p ${DESKTOPDIR}" 
     mkdir -p "${DESKTOPDIR}" 
     
