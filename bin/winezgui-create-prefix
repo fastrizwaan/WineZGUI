@@ -102,8 +102,9 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
                                                               |sed 's/^ //')
     
     # if language is not english inside exe name, use exe name
-    if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ]; then
-         unset PROGNAME
+    if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ] || [ -z "$PRODUCT" ]; then
+         unset PRODUCT
+	 unset PROGNAME
          PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
          PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
