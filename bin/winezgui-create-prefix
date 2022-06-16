@@ -46,6 +46,8 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
   # create required directories
     mkdir -p  "${WINEPREFIX_SUBDIR}"
     mkdir -p  "${DESKTOPDIR}"
+    echo "mkdir -p  ${WINEPREFIX_SUBDIR}"
+    echo "mkdir -p  ${DESKTOPDIR}"
     # Function to verify if required program is installed.
     VerInst () {
                 if [ $? -eq 127 ]; then
