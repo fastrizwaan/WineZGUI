@@ -90,7 +90,7 @@ if [ "${FLATPAK}" = "true" ]; then
      WINEZPREFIX="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/prefixes)"
      INSTALL_TYPE=\"flatpak\"
      # ~/.local/share/application/winezgui/$FLATPAK_ID
-     DESKTOPDIR="\${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME}"
+     DESKTOPDIR="\$(realpath -m \${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
      echo "DESKTOPDIR in SETUP $DESKTOPDIR"
 fi     
 
