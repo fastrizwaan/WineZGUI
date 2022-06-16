@@ -91,6 +91,7 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_TYPE=\"flatpak\"
      # ~/.local/share/application/winezgui/$FLATPAK_ID
      DESKTOPDIR="\${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME}"
+     echo "DESKTOPDIR in SETUP $DESKTOPDIR"
 fi     
 
 
@@ -144,7 +145,7 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
-     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
+#     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
 
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3
