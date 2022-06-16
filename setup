@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Defaults for non flatpak install
-APPLICATIONSDIR='~/.local/share/applications'
+APPLICATIONSDIR=\"$(realpath -m ~/.local/share/applications)\"
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
-WINEZPREFIX="\$(realpath -m ~/.local/share/winezgui)"
+WINEZPREFIX=\"$(realpath -m ~/.local/share/winezgui)\"
 DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
 TEMPDIR="\$(realpath -m  ~/.local/share/winezgui/tmp)"
 INSTALL_TYPE="system"

@@ -10,7 +10,7 @@
 # ============================================================================ #
 export APPNAME=WineZGUI
 export WINEVER="$(wine --version|cut -f1 -d ' ')"
-export APPLICATIONSDIR=$(realpath -m ~/.local/share/applications)
+export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export PREFIXDIR=${WINEZPREFIX}
 export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
