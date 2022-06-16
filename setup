@@ -5,7 +5,7 @@ APPLICATIONSDIR='\$(realpath -m \~/.local/share/applications)\'
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
 WINEZPREFIX='\$(realpath -m \~/.local/share/winezgui)'
-DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
+DESKTOPDIR='\${APPLICATIONSDIR}/winezgui'
 TEMPDIR="\$(realpath -m  \~/.local/share/winezgui/tmp)"
 INSTALL_TYPE="system"
 # Flatpak name should be used to kill, and run from launch script.
@@ -145,7 +145,7 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
-#     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
+     sed "s|DESKTOPDIR=.*|DESKTOPDIR=\"$DESKTOPDIR\"|"       -i $APPS_DIR/$APP2     
 
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3

@@ -27,6 +27,7 @@ export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
 export DESKTOPDIR="${APPLICATIONSDIR}/winezgui"
+echo "winez-create-prefix DESKTOPDIR = $DESKTOPDIR"
 #/These values will be changed  by Setup using sed command
 
 
@@ -600,6 +601,7 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
+    echo "mkdir -p ${DESKTOPDIR}" 
     mkdir -p "${DESKTOPDIR}" 
     
     ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
