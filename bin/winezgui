@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# winez-create-prefix (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
+# URL: https://github.com/fastrizwaan/WineZGUI
+# winezgui main program to create run or create wine prefix for a selected exe
+# ============================================================================ #
 
-# On 1st launch create default wine prefix
-
+# Variables
 export APPNAME=WineZGUI
 # These values will be assigned by Setup using sed command
 # Post install $PREFIX/bin/winezgui file will be different
@@ -375,6 +378,7 @@ fi
        fi
   fi      
 
+## On 1st launch create default wine prefix
 ### Create a default wine prefix directory ###
     
    mkdir -p "${PREFIXDIR}"

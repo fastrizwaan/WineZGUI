@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
-# ============================================================================ #
-# This script will create a shortcut on applications menu for windows programs 
-# installed with wine.
-# Autor: Thiago silva
-# Contact: thiagos.dasilva@gmail.com
-# URL: https://github.com/thiggy01/wine-create-shortcut
-# Updated by Mohammed Asif Ali Rizvan for WineZGUI
+# winez-create-prefix (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
 # URL: https://github.com/fastrizwaan/WineZGUI
+# Creates Application shortcut when called from winezgui.
 # ============================================================================ #
 export APPNAME=WineZGUI
 export WINEVER="$(wine --version|cut -f1 -d ' ')"
@@ -27,10 +22,12 @@ export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
 
-# shortcut dir
+# Where to install .desktop shortcuts?
+# for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "$INSTALL_TYPE" = "system" ]; then
     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 else 
+    # for flatpak create subdirectory with flatpakname 
     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/$FLATPAK_NAME)"
 fi
 
@@ -50,39 +47,25 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"
     ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
 
-  # create required directories
-    echo "mkdir 1 desktopdir"
+    # Create required directories
     mkdir -pv  "${WINEPREFIX_SUBDIR}"
     mkdir -pv  "${DESKTOPDIR}"
-    echo "mkdir -p  ${WINEPREFIX_SUBDIR}"
-    echo "mkdir -p  ${DESKTOPDIR}"
-    # Function to verify if required program is installed.
-    VerInst () {
-                if [ $? -eq 127 ]; then
-                    echo "$1 package is not installed."
-                    echo "Install it before running this script."
-                    echo "Aborting."
-                    exit 1
-                fi
-    }
     
     # Extract icon and convert it to several png files of diferent quality, 
-     echo "mkdir 2 tmpdir"
-     mkdir -vp ${TEMPDIR}
-     cd ${TEMPDIR}
-     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
-     VerInst icoutils
-
-    
-    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null
-    echo icotool: extracting png from ico:$EXE_NOEXE.ico
-
-    
-    # Select the best png image file by sorting.
+    ## Create a temporary Directory to extract icon from the exe file
+    mkdir -vp ${TEMPDIR} && cd ${TEMPDIR}
+    # wrestool extracts ico file from EXE
+    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null &&\
+    echo "wrestool: Extracting ico file from $EXE_NOEXE"
+    # icotool extracts all png files from ico files
+    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null && \
+    echo "icotool: Extracting png files from ico:$EXE_NOEXE.ico"
+    # Select and copy the best png image file by sorting using ls -S1.
     cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-    
+    echo "Icon copied successfully..." && \
     rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
-    
+
+    # Create Desktop Shortcut file for the exe
     # Get the app category and shortcut name inputs from the user.
     #appCategory=$(zenity --title "wine-create-shortcut" --height=450 --list \
     # --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
@@ -91,20 +74,17 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     
     appCategory="Game"
 
-    VerInst zenity
-    
     # Create Desktop Shortcut
     # Ask for Name
     #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
-    # Automatically set name, read from pe file, if not found use exe name
     
+    # Automatically set name, read from pe file, if not found use exe name
     PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
                                                               |sed 's/^ //')
-    
-    # if language is not english inside exe name, use exe name
+    # if language is not english inside exe name, or product is '', use exe name
     if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ] || [ -z "$PRODUCT" ]; then
          unset PRODUCT
-	 unset PROGNAME
+	       unset PROGNAME
          PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
          PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
@@ -131,7 +111,8 @@ export EXE_NOEXE=\"${EXE_NOEXE}\"
 export WINEPREFIX_SUBDIR=\"${WINEPREFIX_SUBDIR}\"
 export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
 export APPLICATIONSDIR=\"$APPLICATIONSDIR\"
-export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop|cut -f2 -d '=')\"
+export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop\
+                |cut -f2 -d '=')\"
 export DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
@@ -368,17 +349,6 @@ fi
           # MainFunction need to implement
           # Return to Game window
           GameFunction
-         
-# PSEUDO CODE WORK HERE
-# Download mf-install from github (create fastrizwan mf-install)
-#  elif [ "${SELECTION}" = "Install Media Foundation Libraries" ]; then
-#  wget github.com/fastrizwaan/mf-install/release/mf-install.tar.gz
-#  tar -hxvf mf-install.tar.gz
-#  cd mf-install
-#  WINEPREFIX=${WINEZPREFIX-WHATEVER} mf-install
-#  AND FOR FLATPAK?
-#  flatpak run --command=/app/mf-install/mf-install.sh org.winehq.flatpak-wine70 
-#   echo "fix me"
   elif [ "${SELECTION}" = "Open Other EXE..." ]
            then
       	   OTHER_EXE="$( \
@@ -395,15 +365,17 @@ fi
                 GameFunction    ; # Go back to Game Window
       	   fi
 
+           # If another exe is selected
       	   base=$(basename "$OTHER_EXE")
            dire=$(dirname "$OTHER_EXE")
-         
+           
+           # Launch other EXE
            cd "$dire"
            ${WINE_CMD} "$base"
+           
    	       # Return to Game window
            GameFunction
   
-      	   
   elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
          ${WINECFG_CMD}
          # Return to Game window
