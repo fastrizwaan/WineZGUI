@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Defaults for non flatpak install
-APPLICATIONSDIR=\"$(realpath -m ~/.local/share/applications)\"
+APPLICATIONSDIR='\$(realpath -m \~/.local/share/applications)\'
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
-WINEZPREFIX=\"$(realpath -m ~/.local/share/winezgui)\"
+WINEZPREFIX='\$(realpath -m \~/.local/share/winezgui)'
 DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
-TEMPDIR="\$(realpath -m  ~/.local/share/winezgui/tmp)"
+TEMPDIR="\$(realpath -m  \~/.local/share/winezgui/tmp)"
 INSTALL_TYPE="system"
 # Flatpak name should be used to kill, and run from launch script.
 FLATPAK_NAME="${FLATPAK_ID}" # set flatpak name
@@ -86,8 +86,8 @@ fi
 if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
-     TEMPDIR="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
-     WINEZPREFIX="\$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/prefixes)"
+     TEMPDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/tmp)"
+     WINEZPREFIX="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/prefixes)"
      INSTALL_TYPE=\"flatpak\"
      # ~/.local/share/application/winezgui/$FLATPAK_ID
      DESKTOPDIR=\"${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME}\"
