@@ -44,8 +44,8 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
 
   # create required directories
-    mkdir -p  "${WINEPREFIX_SUBDIR}"
-    mkdir -p  "${DESKTOPDIR}"
+    mkdir -pv  "${WINEPREFIX_SUBDIR}"
+    mkdir -pv  "${DESKTOPDIR}"
     echo "mkdir -p  ${WINEPREFIX_SUBDIR}"
     echo "mkdir -p  ${DESKTOPDIR}"
     # Function to verify if required program is installed.
