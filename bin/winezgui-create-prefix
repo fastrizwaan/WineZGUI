@@ -26,7 +26,14 @@ export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
-export DESKTOPDIR="${APPLICATIONSDIR}/winezgui"
+
+# shortcut dir
+if [ "$INSTALL_TYPE" = "system" ]; then
+    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else 
+    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/$FLATPAK_NAME)"
+fi
+
 echo "winez-create-prefix DESKTOPDIR = $DESKTOPDIR"
 #/These values will be changed  by Setup using sed command
 
