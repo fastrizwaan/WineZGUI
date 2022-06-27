@@ -1,4 +1,4 @@
-+++++++++++++++++++++# WineZGUI
+# WineZGUI
 
 #### Wine GUI using Zenity
 
