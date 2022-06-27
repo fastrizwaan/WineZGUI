@@ -139,5 +139,6 @@ sudo eopkg it zenity wine winetricks perl-image-exiftool icoutils gnome-terminal
 
 ### Arch Linux / EndeavourOS
 ```
-sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget lib32-alsa-plugins lib32-libpulse lib32-openal
+sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget \
+                lib32-alsa-plugins lib32-libpulse lib32-openal
 ```
