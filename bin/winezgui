@@ -389,7 +389,9 @@ fi
    # and create real directories inside wine prefix
    
    # Check if default prefix was created and symlinks removed
-   if [ ! -f ${PREFIXDIR}/default.symlinks-removed ]
+   # and create prefix only when wine is found
+   if [ ! -f ${PREFIXDIR}/default.symlinks-removed ] && \
+      [ $(which wine) ]
         then
         
         # Create Prefix then delete host linked directories
@@ -415,7 +417,8 @@ fi
         mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/'My Videos' 
         mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/Templates
 
-        # Create an empty file to test whether prefix is created 
+        # Create an empty file to test whether prefix is created
+
         touch ${PREFIXDIR}/default.symlinks-removed
 
         # info
@@ -430,7 +433,8 @@ fi
 
 
 # Create Metadata info.txt for the default wine prefix
-if [ ! -f ${PREFIXDIR}/info.txt ]; then
+# Update info only when wine is found
+if [ ! -f ${PREFIXDIR}/info.txt ] && [ $(which wine) ]; then
 echo -e   "
 Application     : ${APPNAME}
 Version         : ${APPVERSION}
