@@ -1,4 +1,4 @@
-# WineZGUI
++++++++++++++++++++++# WineZGUI
 
 #### Wine GUI using Zenity
 
@@ -135,4 +135,9 @@ sudo apt install zenity wine winetricks libimage-exiftool-perl icoutils gnome-te
 
 ```
 sudo eopkg it zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget
+```
+
+### Arch Linux / EndeavourOS
+```
+sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget
 ```
