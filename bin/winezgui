@@ -95,8 +95,7 @@ Check_Flatpak_Deps()
       if zenity --question --title "Install Missing Flatpak Runtimes?" \
                 --text="$MISSING"
          then
-         for i in $MISSING; 
-         do 
+          echo "Installing flatpak runtime dependencies..."
           ( for i in ${MISSING[*]}; do
             # Show Progress Percentage and Info
             echo "# Installing ${i}..."
@@ -106,9 +105,9 @@ Check_Flatpak_Deps()
           ) |zenity                                         \
              --width=440                                    \
              --title                                        \
-             "Please Wait... Installing Flatpak Runtime!"   \
+             "Please Wait... Installing Flatpak Runtimes!"   \
              --auto-kill --pulsate --progress
-           done
+
            # After successful installation, create the file
            touch ${WINEZPREFIX}/runtime-checked.txt
        else
