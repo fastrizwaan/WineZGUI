@@ -89,37 +89,39 @@ Check_Flatpak_Deps()
        then 
        echo "Found missing dependencies for flatpak"; 
        echo "$MISSING"
+
+
+      # Install the missing flatpak runtime by taking user's permission
+      if zenity --question --title "Install Missing Flatpak Runtimes?" \
+                --text="$MISSING"
+         then
+         for i in $MISSING; 
+         do 
+          ( for i in ${MISSING[*]}; do
+            # Show Progress Percentage and Info
+            echo ${PROGRESS}
+            echo "# Installing ${i}..."
+            flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
+                  
+            done
+            echo "# Done!"
+          ) |zenity                                  \
+             --width=440                             \
+             --title                                 \
+             "Please Wait... This will take time!"   \
+             --progress                              \
+             --auto-kill --pulsate
+           done
+           # After successful installation, create the file
+           touch ${WINEZPREFIX}/runtime-checked.txt
+       else
+           echo "Flatpak dependencies are not Installed..."
+       fi
   else 
        echo "All flatpak dependecies found"
        echo "$AVAILABLE"
-  fi
-
-  # Install the missing flatpak runtime by taking user's permission
-  if zenity --question --title "Install Missing Flatpak Runtimes?" \
-            --text="$MISSING"
-       then
-       for i in $MISSING; 
-       do 
-         ( for i in ${MISSING[*]}; do
-           # Show Progress Percentage and Info
-           echo ${PROGRESS}
-           echo "# Installing ${i}..."
-           flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
-              
-           done
-           echo "# Done!"
-          )    |zenity                                  \
-                --width=440                             \
-                --title                                 \
-                "Please Wait... This will take time!"   \
-                --progress                              \
-                --auto-kill --pulsate
-       done
-       # After successful installation, create the file
-       touch ${WINEZPREFIX}/runtime-checked.txt
-  else
-       echo "Flatpak dependencies are not Installed..."
-  fi
+       
+  fi      
 }
 
 # If flatpak runtimes were not checked before, then check for them
