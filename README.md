@@ -2,7 +2,9 @@
 
 #### Wine GUI using Zenity
 
-<img src="https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg" title="" alt="" data-align="left"> ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/winezgui-main-window.png)
+![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
+
+![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/winezgui-main-window.png)
 
 ## What is WineZGUI
 
