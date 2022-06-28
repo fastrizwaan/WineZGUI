@@ -37,6 +37,98 @@ export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 
 
+Check_Flatpak_Deps()
+{
+  # Find missing flatpak dependency and install
+  BRANCH='21.08'
+
+  RUNTIME="org.freedesktop.Platform                  \
+           org.freedesktop.Platform.Compat.i386      \
+           org.freedesktop.Platform.GL32.default     \
+           org.freedesktop.Platform.GL.default       \
+           org.freedesktop.Platform.VAAPI.Intel.i386 \
+           org.freedesktop.Platform.VAAPI.Intel      \
+           org.freedesktop.Platform.ffmpeg_full.i386 \
+           org.freedesktop.Platform.ffmpeg-full"
+
+  AVAILABLE=()    # Array/list to hold all found flatpak runtimes
+  MISSING=()      # Array/list to hold all not found flatpak runtimes
+
+  # Find which are installed and not installed
+  for i in $(echo $RUNTIME)
+  do
+       TEST="$(flatpak-spawn --host flatpak list | grep  "$i" | grep $BRANCH)"
+
+       if   [ "$TEST" ]; then
+              AVAILABLE+=$i
+              AVAILABLE+=" "
+       elif [ ! "$TEST" ]; then
+              MISSING+="$i"
+              MISSING+=" "
+       fi
+  done
+  echo "AVAILABLE Flatpak Runtimes = $AVAILABLE"
+  echo "Unavailable Runtimes = $MISSING"
+
+  # flatpak system install may have some runtimes already installed, so
+  # install the remaining missing runtimes for user
+
+  if [ "$(flatpak-spawn --host flatpak remotes|grep -i user|grep -i flathub)" ]
+       then 
+       echo "flatpak remote is configured for user install..."
+  else 
+       echo "flathub not found for user... installing flathub remote for user"
+       flatpak-spawn --host "flatpak --user remote-add --if-not-exists \
+                      flathub https://flathub.org/repo/flathub.flatpakrepo"
+  fi
+
+  # Check if missing variable has anything before prompting
+  # Runtimes will have alphabets (org.freedesktop.Platform) etc.
+  # if no alphabets are there in MISSING variable, then it is empty
+  if echo $MISSING| grep -Ei [a-z]; 
+       then 
+       echo "Found missing dependencies for flatpak"; 
+       echo "$MISSING"
+  else 
+       echo "All flatpak dependecies found"
+       echo "$AVAILABLE"
+  fi
+
+  # Install the missing flatpak runtime by taking user's permission
+  if zenity --question --title "Install Missing Flatpak Runtimes?" \
+            --text="$MISSING"
+       then
+       for i in $MISSING; 
+       do 
+         ( for i in ${MISSING[*]}; do
+           # Show Progress Percentage and Info
+           echo ${PROGRESS}
+           echo "# Installing ${i}..."
+           flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
+              
+           done
+           echo "# Done!"
+          )    |zenity                                  \
+                --width=440                             \
+                --title                                 \
+                "Please Wait... This will take time!"   \
+                --progress                              \
+                --auto-kill --pulsate
+       done
+       # After successful installation, create the file
+       touch ${WINEZPREFIX}/runtime-checked.txt
+  else
+       echo "Flatpak dependencies are not Installed..."
+  fi
+}
+
+# If flatpak runtimes were not checked before, then check for them
+
+if [ "${INSTALL_TYPE}" = "flatpak" ] && \
+   [ ! -f ${WINEZPREFIX}/runtime-checked.txt ]
+     then 
+     Check_Flatpak_Deps ; # run the function
+fi
 
 # On launch check required runtime dependencies
 if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
