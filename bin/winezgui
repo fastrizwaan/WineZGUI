@@ -68,7 +68,7 @@ Check_Flatpak_Deps()
        fi
   done
   echo "AVAILABLE Flatpak Runtimes = $AVAILABLE"
-  echo "Unavailable Runtimes = $MISSING"
+  echo "REQUIRED Runtimes = $MISSING"
 
   # flatpak system install may have some runtimes already installed, so
   # install the remaining missing runtimes for user
@@ -105,11 +105,12 @@ Check_Flatpak_Deps()
           ) |zenity                                         \
              --width=440                                    \
              --title                                        \
-             "Please Wait... Installing Flatpak Runtimes!"   \
+             "Please Wait... Installing Flatpak Runtimes!"  \
              --auto-kill --pulsate --progress
 
            # After successful installation, create the file
            touch ${WINEZPREFIX}/runtime-checked.txt
+           echo "Flatpak dependencies have been installed!"
        else
            echo "Flatpak dependencies are not Installed..."
        fi
