@@ -101,8 +101,7 @@ Check_Flatpak_Deps()
             echo "# Installing ${i}..."
             flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
             done
-            echo "# Updating Flatpak..."
-            flatpak-spawn --host flatpak --user -y update
+
             echo "# Complete!"
             
           ) |zenity                                         \
@@ -110,7 +109,17 @@ Check_Flatpak_Deps()
              --title                                        \
              "Please Wait... Installing Flatpak Runtimes!"  \
              --auto-kill --pulsate --progress
-
+           if zenity --question --title "Update Flatpak Runtimes?" \
+                --text="If you have Nvidia GPU, update will install 32 bit \
+                drivers!"
+                then
+                     echo "Updating Flatpak..."
+                     flatpak-spawn --host flatpak --user -y update
+                else
+                     echo "Not updating flatpak, and perhaps missing out on 32 \
+                     bit nvidia drivers..."
+            fi
+           then
            # After successful installation, create the file
            touch ${WINEZPREFIX}/runtime-checked.txt
            echo "Flatpak dependencies have been installed!"
