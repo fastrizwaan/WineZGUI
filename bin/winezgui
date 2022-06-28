@@ -99,17 +99,14 @@ Check_Flatpak_Deps()
          do 
           ( for i in ${MISSING[*]}; do
             # Show Progress Percentage and Info
-            echo ${PROGRESS}
             echo "# Installing ${i}..."
             flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
-                  
             done
-            echo "# Done!"
-          ) |zenity                                  \
-             --width=440                             \
-             --title                                 \
-             "Please Wait... This will take time!"   \
-             --progress                              \
+            echo "Complete!"
+          ) |zenity                                         \
+             --width=440                                    \
+             --title                                        \
+             "Please Wait... Installing Flatpak Runtime!"   \
              --auto-kill --pulsate
            done
            # After successful installation, create the file
