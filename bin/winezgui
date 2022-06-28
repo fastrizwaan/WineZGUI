@@ -92,26 +92,26 @@ Check_Flatpak_Deps()
 
 
       # Install the missing flatpak runtime by taking user's permission
-      if zenity --question --title "Install Missing Flatpak Runtimes?" \
+      if zenity --question \
+                --title "Install Missing Runtimes? This will take time" \
                 --text="$MISSING"
          then
-          echo "Installing flatpak runtime dependencies..."
+            echo "Installing flatpak runtime dependencies..."
           ( for i in ${MISSING[*]}; do
             # Show Progress Percentage and Info
             echo "# Installing ${i}..."
             flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
             done
-
+            echo "Updating flatpak... also detects and installs nvidia drivers!"
+            flatpak-spawn --host flatpak --user -y update
             echo "# Complete!"
-            
           ) |zenity                                         \
              --width=440                                    \
              --title                                        \
              "Please Wait... Installing Flatpak Runtimes!"  \
              --auto-kill --pulsate --progress
-           if zenity --question --title "Update Flatpak Runtimes?" \
-                --text="If you have Nvidia GPU, update will install 32 bit \
-                drivers!"
+           if zenity --question --no-wrap --title "Update Flatpak Runtimes?" \
+           --text="If you have Nvidia GPU, update will install 32 bit drivers!"
                 then
                      echo "Updating Flatpak..."
                      flatpak-spawn --host flatpak --user -y update
