@@ -102,7 +102,7 @@ Check_Flatpak_Deps()
             flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
             done
             echo "# Updating Flatpak..."
-            flatpak-spawn --host flatpak -y update
+            flatpak-spawn --host flatpak --user -y update
             echo "# Complete!"
             
           ) |zenity                                         \
