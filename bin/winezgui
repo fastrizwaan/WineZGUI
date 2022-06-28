@@ -120,7 +120,7 @@ Check_Flatpak_Deps()
   else 
        echo "All flatpak dependecies found"
        echo "$AVAILABLE"
-       
+       touch ${WINEZPREFIX}/runtime-checked.txt
   fi      
 }
 
