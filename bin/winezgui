@@ -118,8 +118,8 @@ Check_Flatpak_Deps()
                 else
                      echo "Not updating flatpak, and perhaps missing out on 32 \
                      bit nvidia drivers..."
-            fi
-           then
+           fi
+           
            # After successful installation, create the file
            touch ${WINEZPREFIX}/runtime-checked.txt
            echo "Flatpak dependencies have been installed!"
