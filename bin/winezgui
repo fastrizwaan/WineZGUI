@@ -107,7 +107,7 @@ Check_Flatpak_Deps()
              --width=440                                    \
              --title                                        \
              "Please Wait... Installing Flatpak Runtime!"   \
-             --auto-kill --pulsate
+             --auto-kill --pulsate --progress
            done
            # After successful installation, create the file
            touch ${WINEZPREFIX}/runtime-checked.txt
