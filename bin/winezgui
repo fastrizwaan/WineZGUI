@@ -101,7 +101,7 @@ Check_Flatpak_Deps()
             echo "# Installing ${i}..."
             flatpak-spawn --host flatpak --user -y install flathub "$i//$BRANCH"
             done
-            echo "Complete!"
+            echo "# Complete!"
           ) |zenity                                         \
              --width=440                                    \
              --title                                        \
