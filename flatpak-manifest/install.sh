@@ -18,7 +18,7 @@ fi
 #    echo "$0 bundle"
 #fi
 	
-APP_ID="io.github.WineZGUI"
+APP_ID="io.github.fastrizwaan.WineZGUI"
 DATE=$(date +'%Y%m%d')
 
 # handle relative path for building
