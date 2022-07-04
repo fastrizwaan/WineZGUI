@@ -24,7 +24,7 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 
 2. It asks whether to launch with default wine prefix (~/.local/share/winezgui/default) or create a new prefix associated with the EXE filename. 
 
-3. If the user selects `create prefix`, then WineZGUI tries to extract Product Name and icon from the exe file, if name is found, it uses that else, uses name of the exe file. Both name and icon can be changed later from the gui.
+3. If the user selects `create prefix`, then WineZGUI creates a desktop shortcut in applications directory. It also tries to extract Product Name and icon from the exe file, if name is found, it uses that else, uses name of the exe file. Both name and icon can be changed later from the gui.
 
 4. Later if the user again opens the previously opened exe which as associated with a prefix, it will recommend to run using that associated prefix, so that game saves, and other settings, etc. can be used.
 
