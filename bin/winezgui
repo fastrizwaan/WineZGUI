@@ -16,6 +16,8 @@ export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export FLATPAK_NAME="io.github.fastrizwaan.WineZGUI"
 export PROGRAMSDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/applications/wine/Programs/)"
 export WINE_APPS_SHORTCUT_DIR="$(realpath -m ${APPLICATIONSDIR}/${FLATPAK_NAME}/default)"
+export ICONSDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/icons/hicolor)"
+export LOCALICONSDIR="$(realpath -m ~/.local/share/icons/hicolor)"
 export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 #/These values will be changed  by Setup using sed command
@@ -89,7 +91,27 @@ for i in $(find ${PROGRAMSDIR} -iname "*.desktop"); do
  sed 's/\\\\\\\\/\\/g' -i "$i"
  sed "s/wine \"C/flatpak run --command=wine ${FLATPAK_NAME} start \/unix \"C/g"\
     -i "$i"
-done
+    
+ # Also link Icon, find the highest resolution and link it
+ ICON=$(grep -i Icon "$i"|sed 's/Icon=//g'|sed 's/$/\.png/g')
+ echo "ICON is $ICON"
+ 
+ for i in 256 128 64 48 32; do
+     #echo "inside for loop"
+     #echo ${ICONSDIR}/$ix$i/apps/$ICON
+     ICON_WITH_PATH="$(echo ${ICONSDIR}/${i}x${i}/apps/${ICON})"
+     echo $ICON_WITH_PATH
+
+     if [ -f ${ICON_WITH_PATH} ]; then
+          mkdir -p "${LOCALICONSDIR}/${i}x${i}/apps"
+          ln -s "${ICONSDIR}/${i}x${i}/apps/$ICON" \
+                "${LOCALICONSDIR}/${i}x${i}/apps/"
+
+          break
+     fi
+  done # Icon for loop
+  
+done # .desktop file for loop
        
 IFS=$SAVEIFS
 ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
@@ -545,7 +567,7 @@ if [ -f "${EXE_FILE}"  ]
           
           ### Handle Wine created shortcuts inside Flatpak ###
           if [ ${INSTALL_TYPE} = "flatpak" ]; then
-               echo "Making sandboxed wine shortcuts..."
+               echo "Making sandboxed wine shortcuts available..."
                MAKE_SANBOXED_WINE_SHORTCUTS
           fi
           
