@@ -78,7 +78,8 @@ fi
 MAKE_SANBOXED_WINE_SHORTCUTS()
 {
 mkdir -p ${WINE_APPS_SHORTCUT_DIR}
-ln -sf ${PROGRAMSDIR} ${WINE_APPS_SHORTCUT_DIR}
+mkdir -p ${LOCALICONSDIR}
+ln -s ${PROGRAMSDIR} ${WINE_APPS_SHORTCUT_DIR}
  
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
@@ -91,7 +92,7 @@ for i in $(find ${PROGRAMSDIR} -iname "*.desktop"); do
  sed 's/\\\\\\\\/\\/g' -i "$i"
  sed "s/wine \"C/flatpak run --command=wine ${FLATPAK_NAME} start \/unix \"C/g"\
     -i "$i"
-    
+ 
  # Also link Icon, find the highest resolution and link it
  ICON=$(grep -i Icon "$i"|sed 's/Icon=//g'|sed 's/$/\.png/g')
  echo "ICON is $ICON"
@@ -109,12 +110,13 @@ for i in $(find ${PROGRAMSDIR} -iname "*.desktop"); do
 
           break
      fi
-  done # Icon for loop
-  
-done # .desktop file for loop
+  done   
+   
+
+done
        
 IFS=$SAVEIFS
-${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+
 
 }
 
@@ -509,11 +511,6 @@ if [ $# -eq 0 ]
      MainFunction 
 fi 
 
-### Update desktop files and icons on every launch ###
-if [ ${INSTALL_TYPE} = "flatpak" ]; then
-     echo "1st launch making sandboxed wine shortcuts available..."
-     MAKE_SANBOXED_WINE_SHORTCUTS
-fi
 
 # If an exe file is provided as argument or selected by the Open EXE...   
 # TODO: list all available prefixes to install Redist softwares
@@ -565,13 +562,23 @@ if [ -f "${EXE_FILE}"  ]
    
      # If exe prefix (already created prefix for the exe) does not exist 
      if [ "${SELECTION}" = "Run ${EXE_NAME} using Default Prefix" ]
-          then  
+          then
+          
+          # Before launching EXE
+          # Update .desktop files i.e., Wine created shortcuts inside Flatpak
+          if [ ${INSTALL_TYPE} = "flatpak" ]; then
+               echo "Making sandboxed wine shortcuts available..."
+               MAKE_SANBOXED_WINE_SHORTCUTS
+          fi
+          
+          # Now run EXE
           cd "$EXE_PATH" 2>/dev/null; # Go to the exe directory then run
           echo "Inside Run EXE with default prefix"
           echo "WINEPREFIX=${PREFIXDIR} ${WINE_CMD} \"${EXE_NAME}\" # $@"
           WINEPREFIX=${PREFIXDIR} ${WINE_CMD} "${EXE_NAME}" # "$@"
           
-          ### Handle Wine created shortcuts inside Flatpak ###
+          # and After launching EXE
+          # Update .desktop files i.e., Wine created shortcuts inside Flatpak
           if [ ${INSTALL_TYPE} = "flatpak" ]; then
                echo "Making sandboxed wine shortcuts available..."
                MAKE_SANBOXED_WINE_SHORTCUTS
