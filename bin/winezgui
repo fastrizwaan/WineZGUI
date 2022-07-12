@@ -509,6 +509,12 @@ if [ $# -eq 0 ]
      MainFunction 
 fi 
 
+### Update desktop files and icons on every launch ###
+if [ ${INSTALL_TYPE} = "flatpak" ]; then
+     echo "1st launch making sandboxed wine shortcuts available..."
+     MAKE_SANBOXED_WINE_SHORTCUTS
+fi
+
 # If an exe file is provided as argument or selected by the Open EXE...   
 # TODO: list all available prefixes to install Redist softwares
 
