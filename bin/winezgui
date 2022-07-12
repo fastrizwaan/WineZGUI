@@ -75,7 +75,7 @@ if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
 fi
 
 ### links and make accessible wine created shortcuts after installer exits ###
-MAKE_SANBOXED_WINE_SHORTCUTS()
+GIVE_ACCESS_TO_WINE_SANDBOX_SHORTCUTS()
 {
 mkdir -p ${WINE_APPS_SHORTCUT_DIR}
 mkdir -p ${LOCALICONSDIR}
@@ -89,6 +89,8 @@ for i in $(find ${PROGRAMSDIR} -iname "*.desktop"); do
  echo \"$i\"; 
  sed -E 's/ wine C(.*$)/ wine "C\1"/g' -i "$i"
  sed 's/\\\\ / /g' -i "$i"
+ sed 's/\\\\(/\(/g' -i "$i"
+ sed 's/\\\\)/\)/g' -i "$i"
  sed 's/\\\\\\\\/\\/g' -i "$i"
  sed "s/wine \"C/flatpak run --command=wine ${FLATPAK_NAME} start \/unix \"C/g"\
     -i "$i"
@@ -568,7 +570,7 @@ if [ -f "${EXE_FILE}"  ]
           # Update .desktop files i.e., Wine created shortcuts inside Flatpak
           if [ ${INSTALL_TYPE} = "flatpak" ]; then
                echo "Making sandboxed wine shortcuts available..."
-               MAKE_SANBOXED_WINE_SHORTCUTS
+               GIVE_ACCESS_TO_WINE_SANDBOX_SHORTCUTS
           fi
           
           # Now run EXE
@@ -581,7 +583,7 @@ if [ -f "${EXE_FILE}"  ]
           # Update .desktop files i.e., Wine created shortcuts inside Flatpak
           if [ ${INSTALL_TYPE} = "flatpak" ]; then
                echo "Making sandboxed wine shortcuts available..."
-               MAKE_SANBOXED_WINE_SHORTCUTS
+               GIVE_ACCESS_TO_WINE_SANDBOX_SHORTCUTS
           fi
           
      # Create Prefix for the selected EXE
