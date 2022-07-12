@@ -101,12 +101,12 @@ sudo ./setup --install ; #systemwide
 ##### Flatpak uninstall
 
 ```
-flatpak remove io.github.WineZGUI
+flatpak remove io.github.fastrizwaan.WineZGUI
 ```
 
 ##### System  uninstall
 
-Run `uninstall` from the same installation directory 
+Run `uninstall` from the same installation source directory
 
 ```
 sudo ./setup --uninstall
