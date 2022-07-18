@@ -333,8 +333,7 @@ fi
       
       elif [ "${SELECTION}" = "Restore Backup..." ]
              then
-             WINEZGUI_BACKUP_FILE="                              \
-                        $( zenity                                \
+             WINEZGUI_BACKUP_FILE="$(zenity                      \
                            --file-filter=*.winezgui.tgz          \
                            --file-selection                      \
                            --title="Select WineZGUI Backup File" \
