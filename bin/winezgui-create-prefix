@@ -186,7 +186,7 @@ fi
        SAVEIFS=$IFS
        IFS=$(echo -en "\n\b")
        echo "Starting for loop"
-       for i in $(find ${WINEPREFIX}/drive_c/users/ -type l); do
+       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
          rm -v $i
          mkdir -vp $i
        done
