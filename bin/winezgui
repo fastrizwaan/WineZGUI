@@ -348,7 +348,7 @@ fi
              else
                   echo "Inside elif -r"
         	  # 1. Extract to WineZGUI Prefix 
-        	  tar -zcvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
+        	  tar -zxvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
         	  # 2. Link shortcut from
         	  FILENAME="$(basename \"${WINEZGUI_BACKUP_FILE}\")" 
         	  ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
