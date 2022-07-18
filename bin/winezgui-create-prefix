@@ -189,7 +189,7 @@ fi
 #       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
 #         rm -v $i
 #         mkdir -vp $i
-       done
+#       done
        IFS=$SAVEIFS
 
        # Create file to check later
