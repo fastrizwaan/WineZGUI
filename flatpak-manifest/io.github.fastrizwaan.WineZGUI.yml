@@ -17,7 +17,7 @@ finish-args:
     # Need to link .desktop files 
   - --filesystem=~/.local/share/applications
     # Most Games write to their own directories
-  - --filesystem=host
+  - --filesystem=host:ro
     # Desktop shortcut runs wine script from host
   - --talk-name=org.freedesktop.Flatpak
   - --share=ipc
