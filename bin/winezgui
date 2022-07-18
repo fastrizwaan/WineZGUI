@@ -339,20 +339,20 @@ fi
                            --file-selection                      \
                            --title="Select WineZGUI Backup File" \
                          )"       
-            
+             echo "selected ${WINEZGUI_BACKUP_FILE}"
              # If no Backup file is selected, or cancel is clicked
-        	   if [ -z "${WINEZGUI_BACKUP_FILE}" ]
+             if [ -z "${WINEZGUI_BACKUP_FILE}" ]
                   then
         	        unset WINEZGUI_BACKUP_FILE  ; # Empty variable
         	   # Check if file is readable then extract in prefixes
-        	   elif [ -r "${WINEZGUI_BACKUP_FILE}" ]
-        	        then
-        	        # 1. Extract to WineZGUI Prefix 
-        	        tar -zcvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
-        	        # 2. Link shortcut from
-        	        FILENAME="$(basename \"${WINEZGUI_BACKUP_FILE}\")" 
-        	        ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
-        	                ${DESKTOPDIR}
+             else
+                  echo "Inside elif -r"
+        	  # 1. Extract to WineZGUI Prefix 
+        	  tar -zcvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
+        	  # 2. Link shortcut from
+        	  FILENAME="$(basename \"${WINEZGUI_BACKUP_FILE}\")" 
+        	  ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
+        	  ${DESKTOPDIR}
         	        
         	        # Inform user
                         zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
