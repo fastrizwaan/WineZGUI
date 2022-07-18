@@ -181,22 +181,22 @@ fi
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
        ${WBOOT_CMD} 2>/dev/null && \
        
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop   
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Documents"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Music"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Pictures"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Videos"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Templates
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Desktop   
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Downloads
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Documents"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Music"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Pictures"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Videos"
+       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Templates
 
        #Create normal folders for the deleted symlinks
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Desktop
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Downloads
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Documents"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Music"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Pictures"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/"My Videos" 
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/$USER/Templates
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Desktop
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Downloads
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Documents"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Music"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Pictures"
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Videos" 
+       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Templates
 
        # Create file to check later
         touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
