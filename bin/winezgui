@@ -349,7 +349,7 @@ fi
         	  # 1. Extract to WineZGUI Prefix 
         	  tar -zxvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
         	  # 2. Link shortcut from
-        	  FILENAME="$(basename \"${WINEZGUI_BACKUP_FILE}\")" 
+        	  FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}"|cut -f1 -d '-') 
         	  ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
         	  ${DESKTOPDIR}
         	        
