@@ -36,6 +36,17 @@ export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 
+export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+# Where to install .desktop shortcuts?
+# for system install (./setup -i) use ~/.local/share/applications/winezgui
+if [ "$INSTALL_TYPE" = "system" ]; then
+    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else 
+    # for flatpak create subdirectory with flatpakname 
+    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/$FLATPAK_NAME)"
+fi
+
+
 # On launch check required runtime dependencies
 if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
      # Function to print if dependencies are installed.
@@ -86,6 +97,7 @@ fi
                     0 "Open Explorer..."                        \
                     0 "Open Shell..."                           \
                     0 "Kill all..."                             \
+                    0 "Restore Backup..."                       \
                     0 "Delete..."                               \
                     0 "About..."                                \
              --text   "Wine GUI using Zenity! Choose Action..." \
@@ -318,6 +330,39 @@ fi
                       sed -E 's/^(.*: )/<tt><b>\1<\/b><\/tt>/g' | \
                       sed -E 's/^(.*)$/<small>\1<\/small>/g')"
              MainFunction
+      
+      elif [ "${SELECTION}" = "Restore Backup..." ]
+             then
+             WINEZGUI_BACKUP_FILE="                              \
+                        $( zenity                                \
+                           --file-filter=*.winezgui.tgz          \
+                           --file-selection                      \
+                           --title="Select WineZGUI Backup File" \
+                         )"       
+            
+             # If no Backup file is selected, or cancel is clicked
+        	   if [ -z "${WINEZGUI_BACKUP_FILE}" ]
+                  then
+        	        unset WINEZGUI_BACKUP_FILE  ; # Empty variable
+        	   # Check if file is readable then extract in prefixes
+        	   elif [ -r "${WINEZGUI_BACKUP_FILE}" ]
+        	        then
+        	        # 1. Extract to WineZGUI Prefix 
+        	        tar -zcvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
+        	        # 2. Link shortcut from
+        	        FILENAME="$(basename \"${WINEZGUI_BACKUP_FILE}\")" 
+        	        ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
+        	                ${DESKTOPDIR}
+        	        
+        	        # Inform user
+                        zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
+                               --text="Backup Restored: $BACK"
+        	   fi
+        	   MainFunction    ; # Go back to Main Window
+        	   
+         if [ -z "$TARGET_DIR" ]; then
+              exit 0;
+         fi
              
       elif [ "${SELECTION}" = "Delete..." ]
              then
