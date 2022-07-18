@@ -115,6 +115,6 @@ modules:
     sources:
       - type: git
         #branch: Gamedir
-        branch: main #for devel version
+        branch: restore #for devel version
         url: https://github.com/fastrizwaan/WineZGUI.git
 
