@@ -177,18 +177,16 @@ fi
        echo "WINEPREFIX=$WINEPREFIX"
        echo "Wineboot command = ${WBOOT_CMD}"
        echo "WINEARCH $WINEARCH"
+       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       WINEPREFIX=${WINEPREFIX_SUBDIR} \
+       ${WBOOT_CMD} 2>/dev/null 
        
        # Remove links to actual host directories for backup
        # and create normal subdirectories in their place
        SAVEIFS=$IFS
        IFS=$(echo -en "\n\b")
-
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       ${WBOOT_CMD} 2>/dev/null && \
-       
+       echo "Starting for loop"
        for i in $(find ${WINEPREFIX}/drive_c/users/ -type l); do
-         echo $i
          rm -v $i
          mkdir -vp $i
        done
