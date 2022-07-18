@@ -187,8 +187,8 @@ fi
        IFS=$(echo -en "\n\b")
        echo "Starting for loop"
        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-         echo $i
-#         mkdir -vp $i
+         rm -v $i
+         mkdir -vp $i
        done
        IFS=$SAVEIFS
 
