@@ -186,10 +186,10 @@ fi
        SAVEIFS=$IFS
        IFS=$(echo -en "\n\b")
        echo "Starting for loop"
-#       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-#         rm -v $i
+       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+         echo $i
 #         mkdir -vp $i
-#       done
+       done
        IFS=$SAVEIFS
 
        # Create file to check later
