@@ -411,8 +411,15 @@ fi
              
       elif [ "${SELECTION}" = "Delete..." ]
              then
+
+             # Delete Shortcuts and Prefix Directory
              rm -rfv ${PREFIXDIR}; 
              echo "Deleted default prefix"
+             # Delete all broken links which points to winezgui
+             find ${DESKTOPDIR} -xtype l -delete
+             ${UPDATE_ICON_CACHE}
+             ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+             
              #Present main window after deleting default prefix
              MainFunction
 
