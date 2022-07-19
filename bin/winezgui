@@ -398,7 +398,16 @@ fi
         	   FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}"|cut -f1 -d '-')
         	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
         	   ${DESKTOPDIR}
-        	
+        	   
+        	   # If restoring from flatpak, change flatpak name to current flatpak
+        	   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        	       sed 's/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g' -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	       sed 's/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g' -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	       sed "s/^\(export FLATPAK_NAME=\).*/\1${FLATPAK_ID}/g" -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	   fi
         	   # if .desktop file is found
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
         	          echo "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
