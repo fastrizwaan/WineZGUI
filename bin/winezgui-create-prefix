@@ -496,6 +496,7 @@ fi
          # Ask Before Backing up Game prefix
          if zenity --question \
                    --no-wrap \
+                   --width=200 \
                    --title="${APPNAME}-${APPVERSION} ${BACKUPNAME} Prefix!" \
                    --text="Backup ${BACKUPNAME} prefix?\nSize: ${PREFIX_SIZE}?"
          then
