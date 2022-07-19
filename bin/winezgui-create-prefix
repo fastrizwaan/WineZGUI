@@ -490,6 +490,15 @@ fi
 
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
+         cd "${PREFIX}"
+         PREFIX_SIZE=$(du -sh ${BACKUPNAME}|cut -f1)
+         echo "${PREFIX_SIZE}"
+         # Ask Before Backing up Game prefix
+         if zenity --question \
+                   --no-wrap \
+                   --title="${APPNAME}-${APPVERSION} ${BACKUPNAME} Prefix!" \
+                   --text="Backup ${BACKUPNAME} prefix?\nSize: ${PREFIX_SIZE}?"
+         then
          DATE=$(date +%F_%H%M)
          Z_TITLE="Choose Backup Directory!"
          TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
@@ -515,7 +524,9 @@ fi
          
          mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
          zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
-         
+         else
+             unset PREFIX_SIZE
+         fi
          # Return to Game window
          GameFunction
 
