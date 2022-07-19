@@ -395,11 +395,26 @@ fi
              # 1. Extract to WineZGUI Prefix
          	   tar -zxvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
         	   # 2. Link shortcut from
-        	   FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}"|cut -f1 -d '-')
+        	   FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}" | \
+        	              sed -E 's/-[0-9][0-9][0-9][0-9].*//g')
         	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
         	   ${DESKTOPDIR}
-        	
-        	   # if .desktop file is found
+        	   
+        	   # 3. If backup created using a flatpak based winezgui
+        	   #    change old flatpak name to current flatpak name 
+        	   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	       
+        	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	       
+        	       sed -E "s/FLATPAK=.*/FLATPAK=${FLATPAK_ID}/g" -i \
+        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+
+        	   fi
+        	   # 4. if non-default backup is restored, then a .desktop file 
+        	   # will be available inside prefixdir, ask whether to launch it
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
         	          echo "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
         	          GAME_NAME="$(grep -i Name \
