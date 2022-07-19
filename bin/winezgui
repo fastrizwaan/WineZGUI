@@ -403,10 +403,13 @@ fi
         	   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
         	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	       
         	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
         	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
-        	       sed "s/^\(export FLATPAK_NAME=\).*/\1${FLATPAK_ID}/g" -i \
+        	       
+        	       sed -E "s/FLATPAK=.*/FLATPAK=${FLATPAK_ID}/g" -i \
         	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+
         	   fi
         	   # if .desktop file is found
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
