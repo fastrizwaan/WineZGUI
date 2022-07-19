@@ -114,7 +114,6 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        #branch: Gamedir
-        branch: 0.80
+        branch: main
         url: https://github.com/fastrizwaan/WineZGUI.git
 
