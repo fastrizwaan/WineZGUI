@@ -1,4 +1,13 @@
 ###### Todo
+0.81
+
+- [ ] Include Appstream Metadata
+
+0.80
+
+- [x] Backup Restore Support
+
+- [x] Launch Game after Restoring Backup
 
 0.5
 
