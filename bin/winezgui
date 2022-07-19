@@ -341,7 +341,7 @@ fi
          fi
          
          # Backup
-         BACKUPNAME="Default"
+         BACKUPNAME="default"
          BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
          cd "${PREFIX}"
          echo "creating ${BACKUP_FILE} backup"
