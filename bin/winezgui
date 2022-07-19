@@ -333,8 +333,8 @@ fi
              MainFunction
       
       elif [ "${SELECTION}" = "Backup..." ]; then
-         echo "${PREFIX}"
-         PREFIX_SIZE=$(du -sh ${PREFIX}|cut -f1)
+         echo "${PREFIXDIR}"
+         PREFIX_SIZE=$(du -sh ${PREFIXDIR}|cut -f1)
          echo "${PREFIX_SIZE}"
          # Ask Before Backing up Default prefix
          if zenity --question \
@@ -351,7 +351,7 @@ fi
          # Backup
          BACKUPNAME="default"
          BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
-         cd "${PREFIX}"
+         cd "${PREFIXDIR}"
          
          
          echo "creating ${BACKUP_FILE} backup"
