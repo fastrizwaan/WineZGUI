@@ -409,8 +409,8 @@ fi
         	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
         	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
         	       
-        	       sed -E "s/FLATPAK_NAME=.*/FLATPAK_NAME=${FLATPAK_ID}/g" -i \
-        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	      sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
+        	      "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
 
         	   fi
         	   # 4. if non-default backup is restored, then a .desktop file 
