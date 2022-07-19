@@ -344,11 +344,17 @@ fi
          BACKUPNAME="default"
          BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
          cd "${PREFIX}"
-         echo "creating ${BACKUP_FILE} backup"
-         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
-          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-          --text="${BACKUP_FILE}..." --pulsate --auto-kill
-      
+         PREFIX_SIZE=$(du -sh ${PREFIX}|cut -f1)
+         
+         # Ask Before Backing up Default prefix
+         if zenity --question \
+                   --title="${APPNAME}-${APPVERSION} Default Prefix!" \
+                   --text="Backup default prefix?\nSize: ${PREFIX_SIZE}?"
+         then
+              echo "creating ${BACKUP_FILE} backup"
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+               zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+                      --text="${BACKUP_FILE}..." --pulsate --auto-kill
          # Report Size also
          BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
          # Backup Sucess Message
@@ -359,7 +365,7 @@ fi
          
          mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
          zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
-         
+         fi
          # Return to Game window
          MainFunction
          
