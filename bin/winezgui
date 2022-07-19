@@ -338,6 +338,7 @@ fi
          echo "${PREFIX_SIZE}"
          # Ask Before Backing up Default prefix
          if zenity --question \
+                   --no-wrap \
                    --title="${APPNAME}-${APPVERSION} Default Prefix!" \
                    --text="Backup default prefix?\nSize: ${PREFIX_SIZE}?"
          then
