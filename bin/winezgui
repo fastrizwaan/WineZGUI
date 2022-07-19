@@ -367,6 +367,8 @@ fi
          
          mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
          zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+         else
+             unset PREFIX_SIZE
          fi
          # Return to Game window
          MainFunction
