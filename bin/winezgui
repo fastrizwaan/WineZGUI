@@ -333,7 +333,9 @@ fi
              MainFunction
       
       elif [ "${SELECTION}" = "Backup..." ]; then
+         echo "${PREFIX}"
          PREFIX_SIZE=$(du -sh ${PREFIX}|cut -f1)
+         echo "${PREFIX_SIZE}"
          # Ask Before Backing up Default prefix
          if zenity --question \
                    --title="${APPNAME}-${APPVERSION} Default Prefix!" \
