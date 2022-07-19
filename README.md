@@ -34,7 +34,7 @@ I highly recommend using flatpak version, because, distro based wine (wine-stagi
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
 
-Download and Install  [WineZGUI flatpak binary](https://github.com/fastrizwaan/WineZGUI-Releases/releases) 
+[Download and Install WineZGUI flatpak binary](https://github.com/fastrizwaan/WineZGUI-Releases/releases)  (Recommended)
 
 ### 
 
