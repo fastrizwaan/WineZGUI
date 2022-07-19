@@ -397,7 +397,7 @@ fi
         	   # 2. Link shortcut from
         	   #FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}"|cut -f1 -d '-')
         	   FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}" | \
-        	              grep -oE ".*-[0-9]"|sed 's/-[0-9]//g')
+        	              grep -oE ".*-[0-9]"|sed 's/-[0-9].*//g')
         	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
         	   ${DESKTOPDIR}
         	   
