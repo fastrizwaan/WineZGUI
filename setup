@@ -98,6 +98,7 @@ APP2_SRC="./bin/winezgui-create-prefix"
 APP3_SRC="./bin/mf-install"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
+META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
 
 # Basename
 APP1=$(basename $APP1_SRC)
@@ -105,11 +106,13 @@ APP2=$(basename $APP2_SRC)
 APP3=$(basename $APP3_SRC)
 DESK=$(basename $DESK_SRC)
 ICON=$(basename $ICON_SRC)
+META=$(basename $META_SRC)
 
 # Target Directory to install
 APPS_DIR="${INSTALL_PREFIX}/bin"
 DESK_DIR="${INSTALL_PREFIX}/share/applications"
 ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
+META_DIR="${INSTALL_PREFIX}/share/metainfo"
 
 # If Install is selected
 if [ "${INSTALL}" = "true"  ]
@@ -118,6 +121,7 @@ if [ "${INSTALL}" = "true"  ]
      mkdir -p $ICON_DIR
      mkdir -p $DESK_DIR
      mkdir -p $APPS_DIR
+     mkdir -p $META_DIR
   
      # Install the files
      echo Installing...
@@ -126,6 +130,7 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
+     install -Dm644 $META_SRC $META_DIR && echo "Installed '$META_DIR/$META'"
 
      # Change Variables in winezgui and winezgui-create-prefix scripts 
      # for system or flatpak install
@@ -151,6 +156,7 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $APPS_DIR/$APP3
      rm -vf $DESK_DIR/$DESK
      rm -vf $ICON_DIR/$ICON
+     rm -vf $META_DIR/$META
      " > ./uninstall
      
 # For --uninstall, if already installed then uninstall else skip

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.fastrizwaan.WineZGUI</id>
+  
+  <name>WineZGUI</name>
+  <summary>Wine GUI using Zenity</summary>
+  
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <description>
+    <p>
+      WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows games with wine easily. It is a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity. It allows quick launching of Direct play (not installed) EXE application or game from File Manager like Nautilus and allow creating separate wine prefix for each Windows&apos; EXE binary.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">winezgui.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/main-window.png</image>
+    </screenshot>
+  </screenshots>
+</component>
