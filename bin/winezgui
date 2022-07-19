@@ -97,7 +97,8 @@ fi
                     0 "Open Explorer..."                        \
                     0 "Open Shell..."                           \
                     0 "Kill all..."                             \
-                    0 "Restore Backup..."                       \
+                    0 "Backup..."                               \
+                    0 "Restore..."                       \
                     0 "Delete..."                               \
                     0 "About..."                                \
              --text   "Wine GUI using Zenity! Choose Action..." \
@@ -331,7 +332,37 @@ fi
                       sed -E 's/^(.*)$/<small>\1<\/small>/g')"
              MainFunction
       
-      elif [ "${SELECTION}" = "Restore Backup..." ]
+      elif [ "${SELECTION}" = "Backup..." ]; then
+         DATE=$(date +%F_%H%M)
+         Z_TITLE="Choose Backup Directory!"
+         TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
+         if [ -z "$TARGET_DIR" ]; then
+              exit 0;
+         fi
+         
+         # Backup
+         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         cd "${PREFIX}"
+         echo "creating ${BACKUP_FILE} backup"
+         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+          --text="${BACKUP_FILE}..." --pulsate --auto-kill
+      
+         # Report Size also
+         BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+         # Backup Sucess Message
+         MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
+         MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
+         MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
+         MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
+         
+         mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+         
+         # Return to Game window
+         MainFunction
+         
+      elif [ "${SELECTION}" = "Restore..." ]
              then
              WINEZGUI_BACKUP_FILE="$(zenity                      \
                            --file-filter=*.winezgui.tgz          \
