@@ -401,8 +401,9 @@ fi
         	
         	   # if .desktop file is found
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
+        	          echo "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
         	          GAME_NAME="$(grep -i Name \
-        	                     ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
+        	                     ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop |\
         	                     cut -f2 -d '=')"
         	          echo "Game Name: $GAME_NAME"
         	     	   # Inform and ask if the user wants to start the restored game
@@ -410,8 +411,9 @@ fi
                              --title="WineZGUI Backup Restored!" \
                              --text="Launch: ${GAME_NAME}?"
                    then
-                        # Start the Game script
+                        # Start the Game script and exit main app
                         bash ${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh
+                        exit
                    fi # zenity
                fi # .desktop
         	   fi # -z
