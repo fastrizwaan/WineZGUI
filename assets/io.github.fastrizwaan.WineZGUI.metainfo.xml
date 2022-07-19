@@ -4,7 +4,7 @@
   
   <name>WineZGUI</name>
   <summary>Wine GUI using Zenity</summary>
-  
+  <url type="homepage">https://github.com/fastrizwaan/WineZGUI</url>
   <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   
