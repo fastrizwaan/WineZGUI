@@ -432,7 +432,7 @@ fi
    
    # Check if default prefix was created and symlinks removed
    # and create prefix only when wine is found
-   if [ ! -f ${PREFIXDIR}/default.symlinks-removed ] && \
+   if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt ] && \
       [ $(which wine) ]
         then
         
@@ -440,28 +440,21 @@ fi
         WINEDLLOVERRIDES="mscoree,mshtml=" \
         WINEPREFIX=${PREFIXDIR} \
         WINEDEBUG=-all \
-        wineboot -i 2>/dev/null && \
+        wineboot -i 2>/dev/null
         
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/Desktop
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/Downloads
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/'My Documents'
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/'My Music'
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/'My Pictures'
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/'My Videos' 
-        rm -rf ${PREFIXDIR}/drive_c/users/${USER}/Templates
-
-        # Create normal directories for the deleted symlinks
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/Desktop
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/Downloads
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/'My Documents'
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/'My Music'
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/'My Pictures'
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/'My Videos' 
-        mkdir -p ${PREFIXDIR}/drive_c/users/${USER}/Templates
+       # Replace home liked directory links with normal directories
+       # For Games which saves in ~/Documents now will save in
+       # Prefix-dir/drive_c/users/${USER}/Documents
+       SAVEIFS=$IFS
+       IFS=$(echo -en "\n\b")
+       echo "Starting for loop"
+       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+         rm $i && mkdir -p $i && echo $i >> ${PREFIXDIR}/replaced_symlinks.txt
+       done
+       IFS=$SAVEIFS
 
         # Create an empty file to test whether prefix is created
-
-        touch ${PREFIXDIR}/default.symlinks-removed
+        touch ${PREFIXDIR}/replaced_symlinks.txt
 
         # info
         echo "Info: Default Wine Prefix at ${PREFIXDIR}" Created

@@ -38,7 +38,7 @@ echo "winez-create-prefix DESKTOPDIR = $DESKTOPDIR"
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
-    # Get the full path, the name and directory name of submited application file.
+    # Get the full path, the name & directory name of submited application file.
     EXE_FILE=$(realpath -m "$1")
     EXE_NAME=$(basename "$EXE_FILE")
     EXE_PATH=$(dirname  "$EXE_FILE")
@@ -170,7 +170,7 @@ fi
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-  if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
+  if [ ! -f ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt  ]; then
 
        # Create Prefix and delete base system linked directory links  
        echo "wine=$(which wine)"
@@ -181,19 +181,20 @@ fi
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
        ${WBOOT_CMD} 2>/dev/null 
        
-       # Remove links to actual host directories for backup
-       # and create normal subdirectories in their place
+       # Replace home liked directory links with normal directories
+       # For Games which saves in ~/Documents now will save in
+       # Prefix-dir/drive_c/users/${USER}/Documents
        SAVEIFS=$IFS
        IFS=$(echo -en "\n\b")
        echo "Starting for loop"
        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-         rm -v $i
-         mkdir -vp $i
+         rm $i && mkdir -p $i && \
+         echo $i >> ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt
        done
        IFS=$SAVEIFS
 
        # Create file to check later
-       touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
+       touch ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt
        
        # Create G: for Game Directory for Wine Explorer
        ln -sf $EXE_PATH "${WINEPREFIX_SUBDIR}/dosdevices/g:"
