@@ -38,7 +38,7 @@ echo "winez-create-prefix DESKTOPDIR = $DESKTOPDIR"
 # Check if an application argument was submited.
 if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
-    # Get the full path, the name and directory name of submited application file.
+    # Get the full path, the name & directory name of submited application file.
     EXE_FILE=$(realpath -m "$1")
     EXE_NAME=$(basename "$EXE_FILE")
     EXE_PATH=$(dirname  "$EXE_FILE")
@@ -84,7 +84,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # if language is not english inside exe name, or product is '', use exe name
     if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ] || [ -z "$PRODUCT" ]; then
          unset PRODUCT
-	       unset PROGNAME
+         unset PROGNAME
          PROGNAME=$(echo "$EXE_NOEXE (${WINEVER})"|sed 's/\.exe//g');     
     else 
          PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
@@ -170,7 +170,7 @@ fi
     fi
 
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-  if [ ! -f ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed  ]; then
+  if [ ! -f ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt  ]; then
 
        # Create Prefix and delete base system linked directory links  
        echo "wine=$(which wine)"
@@ -179,27 +179,22 @@ fi
        echo "WINEARCH $WINEARCH"
        WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${WINEPREFIX_SUBDIR} \
-       ${WBOOT_CMD} 2>/dev/null && \
+       ${WBOOT_CMD} 2>/dev/null 
        
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Desktop   
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Downloads
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Documents"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Music"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Pictures"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Videos"
-       rm ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Templates
-
-       #Create normal folders for the deleted symlinks
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Desktop
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Downloads
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Documents"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Music"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Pictures"
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/"My Videos" 
-       mkdir -p ${WINEPREFIX_SUBDIR}/drive_c/users/${USER}/Templates
+       # Replace home liked directory links with normal directories
+       # For Games which saves in ~/Documents now will save in
+       # Prefix-dir/drive_c/users/${USER}/Documents
+       SAVEIFS=$IFS
+       IFS=$(echo -en "\n\b")
+       echo "Starting for loop"
+       for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+         rm $i && mkdir -p $i && \
+         echo $i >> ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt
+       done
+       IFS=$SAVEIFS
 
        # Create file to check later
-        touch ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.symlinks-removed
+       touch ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt
        
        # Create G: for Game Directory for Wine Explorer
        ln -sf $EXE_PATH "${WINEPREFIX_SUBDIR}/dosdevices/g:"
@@ -307,11 +302,11 @@ fi
  
           if [ -z "${VERBS}" ]; then #if no dlls are given
                #go back to Main function
-      			   echo "not given verbs=$VERBS"
-	         
+               echo "not given verbs=$VERBS"
+           
           else   
                VERBS=(${VERBS}) ; #convert string to array
-			         echo "Given Verbs $VERBS"
+               echo "Given Verbs $VERBS"
                     
                # Show Progress Percentage by getting number of items
                NO_OF_ITEMS=${#VERBS[*]}
@@ -351,29 +346,29 @@ fi
           GameFunction
   elif [ "${SELECTION}" = "Open Other EXE..." ]
            then
-      	   OTHER_EXE="$( \
-      	                zenity                  \
-      	                --file-filter=*.exe     \
-      	                --file-selection        \
-      	                --title="Select a File" \
-      	              )"
-      	   
-      	   # If no exe is selected
-      	   if [ -z "${OTHER_EXE}" ]
+           OTHER_EXE="$( \
+                        zenity                  \
+                        --file-filter=*.exe     \
+                        --file-selection        \
+                        --title="Select a File" \
+                      )"
+           
+           # If no exe is selected
+           if [ -z "${OTHER_EXE}" ]
                 then
-      	        #unset SELECTION ; # Empty variable
+                #unset SELECTION ; # Empty variable
                 GameFunction    ; # Go back to Game Window
-      	   fi
+           fi
 
            # If another exe is selected
-      	   base=$(basename "$OTHER_EXE")
+           base=$(basename "$OTHER_EXE")
            dire=$(dirname "$OTHER_EXE")
            
            # Launch other EXE
            cd "$dire"
            ${WINE_CMD} "$base"
            
-   	       # Return to Game window
+            # Return to Game window
            GameFunction
   
   elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
@@ -439,8 +434,8 @@ fi
          fi
          
          export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
-	       ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
-	                            ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
+         ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
+                              ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
         sed -E "s/^export PROGNAME=.*/export PROGNAME=\"$PROGNAME ($WINEVER)\"/" \
             -i ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
          
@@ -486,7 +481,7 @@ fi
          zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
                --text="Icon Changed sucessfuly: ${GET_ICON}"
      
-	 # Change Runtime Icon as soon as it is changed
+   # Change Runtime Icon as soon as it is changed
          # Main Window is going to use ICON variable.
          export ICON="${GET_ICON}"
 
@@ -495,6 +490,16 @@ fi
 
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
+         cd "${PREFIX}"
+         PREFIX_SIZE=$(du -sh ${BACKUPNAME}|cut -f1)
+         echo "${PREFIX_SIZE}"
+         # Ask Before Backing up Game prefix
+         if zenity --question \
+                   --no-wrap \
+                   --width=200 \
+                   --title="${APPNAME}-${APPVERSION} ${BACKUPNAME} Prefix!" \
+                   --text="Backup ${BACKUPNAME} prefix?\nSize: ${PREFIX_SIZE}?"
+         then
          DATE=$(date +%F_%H%M)
          Z_TITLE="Choose Backup Directory!"
          TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
@@ -507,29 +512,34 @@ fi
          cd "${PREFIX}"
          echo "creating ${BACKUP_FILE} backup"
          (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
-		      zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-		      --text="${BACKUP_FILE}..." --pulsate --auto-kill
-			
-			   # Report Size also
-			   BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
-			   # Backup Sucess Message
-			   MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
-			   MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
-			   MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
-			   MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
-			   
-		     mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
-         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+          --text="${BACKUP_FILE}..." --pulsate --auto-kill
+      
+         # Report Size also
+         BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+         # Backup Sucess Message
+         MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
+         MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
+         MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
+         MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
          
+         mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+         else
+             unset PREFIX_SIZE
+         fi
          # Return to Game window
          GameFunction
 
 
   elif [ "${SELECTION}" = "Delete..." ]; then
          
+         # Delete Shortcuts and Prefix Directory
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
          rm -rf  ${WINEPREFIX_SUBDIR}; 
-         
+         # Delete all broken links which points to winezgui game prefix
+         find ${DESKTOPDIR} -xtype l -delete
+         ${UPDATE_ICON_CACHE}
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
   elif [ "${SELECTION}" = "About..." ]; then
