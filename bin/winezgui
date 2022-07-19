@@ -334,7 +334,7 @@ fi
       
       elif [ "${SELECTION}" = "Backup..." ]; then
          echo "${PREFIXDIR}"
-         PREFIX_SIZE=$(du -h ${PREFIXDIR}|cut -f1)
+         PREFIX_SIZE=$(du -sh ${PREFIXDIR}|cut -f1)
          echo "${PREFIX_SIZE}"
          # Ask Before Backing up Default prefix
          if zenity --question \
