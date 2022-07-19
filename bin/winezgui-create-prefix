@@ -284,10 +284,10 @@ fi
     # Provide Command Line to enter multiple Dependencies
     elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
            VERB_LIST="xact xinput xna31 dotnet48 \
-                      vcrun2003 vcrun2005        \
-                      vcrun2008 vcrun2012        \
-                      vcrun2015 dxvk faudio      \
-                      quartz corefonts"
+                        vcrun2003 vcrun2005      \
+                        vcrun2008 vcrun2019      \
+                        vcrun2010 dxvk faudio    \
+                        quartz corefonts"
            MESSAGE="Change and Press Enter to install these using Winetricks:"
            TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
            # Remove multiple spaces from variable           

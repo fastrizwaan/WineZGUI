@@ -158,8 +158,8 @@ fi
              # Present some preselected winetricks verbs
              VERB_LIST="xact xinput xna31 dotnet48 \
                         vcrun2003 vcrun2005        \
-                        vcrun2008 vcrun2012        \
-                        vcrun2015 dxvk faudio      \
+                        vcrun2008 vcrun2019        \
+                        vcrun2010 dxvk faudio      \
                         quartz corefonts"
              MESSAGE="Change & Press Enter to install these using Winetricks:"
              TITLE_TEXT="Winetricks CLI - Paste your verb list"
