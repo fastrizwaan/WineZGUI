@@ -409,10 +409,15 @@ fi
         	       sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
         	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
         	       
-        	       sed -E "s/FLATPAK=.*/FLATPAK=${FLATPAK_ID}/g" -i \
-        	       "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	      sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
+        	      "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	      
+        	      # Let WineZGUI create New info.txt file, so back it up
+        	      mv "${WINEZPREFIX}/${FILENAME}/info.txt" \
+        	         "${WINEZPREFIX}/${FILENAME}/old_info.txt"
 
         	   fi
+        	   
         	   # 4. if non-default backup is restored, then a .desktop file 
         	   # will be available inside prefixdir, ask whether to launch it
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
