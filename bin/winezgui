@@ -352,7 +352,7 @@ fi
 
          # Backup
          BACKUPNAME="default"
-         BACKUP_FILE="${BACKUPNAME}~${DATE}.winezgui.tgz"
+         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
 
          cd "${WINEZPREFIX}"
          cd "${WINEZPREFIX}"
