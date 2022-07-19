@@ -334,7 +334,7 @@ fi
       
       elif [ "${SELECTION}" = "Backup..." ]; then
          echo "${PREFIXDIR}"
-         PREFIX_SIZE=$(du -sh ${PREFIXDIR}|cut -f1)
+         PREFIX_SIZE=$(du -h ${PREFIXDIR}|cut -f1)
          echo "${PREFIX_SIZE}"
          # Ask Before Backing up Default prefix
          if zenity --question \
@@ -351,9 +351,9 @@ fi
          # Backup
          BACKUPNAME="default"
          BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
-         cd "${PREFIXDIR}"
          
-         
+         cd "${WINEZPREFIX}"
+         cd "${WINEZPREFIX}"
          echo "creating ${BACKUP_FILE} backup"
          (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
