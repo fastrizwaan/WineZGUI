@@ -352,7 +352,7 @@ fi
 
          # Backup
          BACKUPNAME="default"
-         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         BACKUP_FILE="${BACKUPNAME}~${DATE}.winezgui.tgz"
 
          cd "${WINEZPREFIX}"
          cd "${WINEZPREFIX}"
@@ -397,7 +397,7 @@ fi
         	   # 2. Link shortcut from
         	   #FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}"|cut -f1 -d '-')
         	   FILENAME=$(basename "${WINEZGUI_BACKUP_FILE}" | \
-        	              grep -oE ".*-[0-9]"|sed 's/-[0-9].*//g')
+        	              sed -E 's/-[0-9][0-9][0-9][0-9].*//g')
         	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
         	   ${DESKTOPDIR}
         	   
