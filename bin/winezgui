@@ -368,7 +368,7 @@ fi
          
          # required extension is .winezgui.tgz, if not found add it
          if ! [[ "${BACKUP_FILE}" == *".winezgui.tgz" ]]; then
-               BACKUP_FILE="$(echo \"${BACKUP_FILE}.winezgui.tgz\")"
+               BACKUP_FILE="$(echo ${BACKUP_FILE}.winezgui.tgz)"
          fi
         
          cd "${WINEZPREFIX}"
