@@ -354,7 +354,7 @@ fi
              MainFunction
          fi
          
-         
+         # Select Backup Target Directory
          Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
          TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
          if [ -z "$TARGET_DIR" ]; then
@@ -366,28 +366,34 @@ fi
                BACKUP_FILE="$(echo ${BACKUP_FILE}.winezgui.tgz)"
          fi
         
-         cd "${WINEZPREFIX}"
+         if [ ! -w "${TARGET_DIR}" ]; then 
+              echo "${TARGET_DIR} not writable"
+              zenity --error --no-wrap --title="Backup Error!" \
+                     --text "${TARGET_DIR} not writable\nAborting Backup!"
+         else
+              cd "${WINEZPREFIX}"
+              echo "creating ${BACKUP_FILE} backup..."
          
-         
-         echo "creating ${BACKUP_FILE} backup"
-         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
-         zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+              zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
                 --text="${BACKUP_FILE}..." --pulsate --auto-kill
 
-         # Report Size also
-         BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
-         # Backup Sucess Message
-         MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUP_FILE}")
-         MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-         MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
-         MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!"
+              # Report Size also
+              BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+              # Backup Sucess Message
+              MSG=("<b>Prefix: </b> ${BACKUPNAME}\n")
+              MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+              MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+              MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+              MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!"
 
-         mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
-         zenity --no-wrap \
-                --info     \
-                --title="${BACKUP_FILE} Prefix Backup!" --text="${MSG[@]}"
+              mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+              zenity --no-wrap \
+                     --info     \
+                     --title="${BACKUP_FILE} Prefix Backup!" --text="${MSG[@]}"
 
-         # Return to Game window
+         fi # ! -w 
+         # Return to Game window after backup or target directory write error
          MainFunction
 
       elif [ "${SELECTION}" = "Restore..." ]
