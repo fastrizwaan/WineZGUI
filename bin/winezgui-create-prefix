@@ -492,45 +492,65 @@ fi
 
   # Ask user to where to save the backup
   elif [ "${SELECTION}" = "Backup..." ]; then
-         cd "${PREFIX}"
-         PREFIX_SIZE=$(du -sh ${BACKUPNAME}|cut -f1)
+         echo "${PREFIX}"
+         PREFIX_SIZE=$(du -sh ${PREFIX}|cut -f1)
          echo "${PREFIX_SIZE}"
-         # Ask Before Backing up Game prefix
-         if zenity --question \
-                   --no-wrap \
-                   --width=200 \
-                   --title="${APPNAME}-${APPVERSION} ${BACKUPNAME} Prefix!" \
-                   --text="Backup ${BACKUPNAME} prefix?\nSize: ${PREFIX_SIZE}?"
-         then
+         # Ask Before Backing up Default prefix
+         # Ask Backup filename
          DATE=$(date +%F_%H%M)
-         Z_TITLE="Choose Backup Directory!"
+         BKPFNAME="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         
+         BACKUP_FILE=$( zenity                    \
+           --title="Backup ${BACKUPNAME} Prefix!" \
+           --width=400 --height=30                \
+           --text="Size: ${PREFIX_SIZE}\nName:"   \
+           --entry-text="${BKPFNAME}"             \
+           --entry)
+         
+         # if backup file is empty / cancel clicked
+         if [ -z "${BACKUP_FILE}" ]; then
+             MainFunction
+         fi
+         
+         # Select Backup Target Directory
+         Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
          TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
          if [ -z "$TARGET_DIR" ]; then
-              exit 0;
+             MainFunction
          fi
-         
-         # Backup
-         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
-         cd "${PREFIX}"
-         echo "creating ${BACKUP_FILE} backup"
-         (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
-          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-          --text="${BACKUP_FILE}..." --pulsate --auto-kill
-      
-         # Report Size also
-         BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
-         # Backup Sucess Message
-         MSG=("<b>Prefix: </b> ${BACKUPNAME}\n<b>Filename:</b> ${BACKUPNAME}-")
-         MSG+="${DATE}.winezgui.tgz\n<b>Location:</b> ${TARGET_DIR}\n"
-         MSG+="<b>Backup Size :</b> ${BACKUP_SIZE}"
-         MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!" 
-         
-         mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
-         zenity --info --title="Prefix Backup!" --text="${MSG[@]}"
+
+         # required extension is .winezgui.tgz, if not found add it
+         if ! [[ "${BACKUP_FILE}" == *".winezgui.tgz" ]]; then
+               BACKUP_FILE="$(echo ${BACKUP_FILE}.winezgui.tgz)"
+         fi
+        
+         if [ ! -w "${TARGET_DIR}" ]; then 
+              echo "${TARGET_DIR} not writable"
+              zenity --error --no-wrap --title="Backup Error!" \
+                     --text "${TARGET_DIR} not writable\nAborting Backup!"
          else
-             unset PREFIX_SIZE
-         fi
-         # Return to Game window
+              cd "${PREFIX}"
+              echo "creating ${BACKUP_FILE} backup..."
+         
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
+              zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
+                    --width=240 --text="${BACKUP_FILE}..." --pulsate --auto-kill
+
+              # Report Size also
+              BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
+              # Backup Sucess Message
+              MSG=("<b>Prefix: </b> ${BACKUPNAME}\n")
+              MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+              MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+              MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+              MSG+="\n\n<b>Info: </b>Only wine prefix is backed up!"
+
+              mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
+              zenity --no-wrap \
+                     --info     \
+                     --title="${BACKUP_FILE} Prefix Backup!" --text="${MSG[@]}"
+
+         fi # ! -w
          GameFunction
 
 
