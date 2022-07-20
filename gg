@@ -1,0 +1,6 @@
+git add .
+git commit -m  "$@"
+git push && \
+./flatpak-manifest/install.sh
+flatpak run io.github.fastrizwaan.WineZGUI
+
