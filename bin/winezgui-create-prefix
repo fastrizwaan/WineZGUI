@@ -424,19 +424,21 @@ fi
          GameFunction
                      
   elif [ "${SELECTION}" = "Rename..." ]; then
-         PROGNAME=$(zenity --title "Rename shortcut" \
-                           --text "Enter a name for your shortcut" --entry)
+         NEWPROGNAME=$(zenity --title "Rename shortcut" \
+                           --text "Enter a name for your shortcut" \
+                           --entry-text "${PROGNAME}"  \
+                           --entry)
        
-         if [ -z "${PROGNAME}" ]; then #if no name is given use filename
+         if [ -z "${NEWPROGNAME}" ]; then #if no name is given use filename
               #zenity --info --title="Shortcut... " --text="no Change"        
               # Return to Game window
               GameFunction
          fi
          
          export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
-         ${DESKTOP_FILE_EDIT} --set-name="$PROGNAME ($WINEVER)" \
+         ${DESKTOP_FILE_EDIT} --set-name="$NEWPROGNAME ($WINEVER)" \
                               ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
-        sed -E "s/^export PROGNAME=.*/export PROGNAME=\"$PROGNAME ($WINEVER)\"/" \
+        sed -E "s/^export PROGNAME=.*/export PROGNAME=\"$NEWPROGNAME ($WINEVER)\"/" \
             -i ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
@@ -445,7 +447,7 @@ fi
          #       --text="Shortcut renamed sucessfuly: $appname"
          
          # Required for instant change in the GameWindow
-         export PROGNAME="$PROGNAME ($WINEVER)"
+         export PROGNAME="$NEWPROGNAME ($WINEVER)"
          # Return to Game window
          GameFunction
 
