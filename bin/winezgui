@@ -376,7 +376,7 @@ fi
          
               (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
               zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-                --text="${BACKUP_FILE}..." --pulsate --auto-kill
+                     --no-wrap --text="${BACKUP_FILE}..." --pulsate --auto-kill
 
               # Report Size also
               BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
