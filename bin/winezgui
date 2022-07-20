@@ -367,7 +367,8 @@ fi
          fi
         
          cd "${WINEZPREFIX}"
-         cd "${WINEZPREFIX}"
+         
+         
          echo "creating ${BACKUP_FILE} backup"
          (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
          zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
