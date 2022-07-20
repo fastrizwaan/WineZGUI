@@ -413,7 +413,7 @@ fi
              
              echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              # 1. Extract to WineZGUI Prefix
-         	   tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" 
+         	   tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" 2>/dev/null
         	   
         	   # Get Directory Name which is the Prefix name 
         	   FILENAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" 2>/dev/null \
