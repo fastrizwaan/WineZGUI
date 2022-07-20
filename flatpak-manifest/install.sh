@@ -8,6 +8,7 @@ if ! command -v flatpak-builder &>/dev/null; then
      echo "Fedora/Centos: sudo yum install flatpak-builder"
      echo "Fedora Silverblue: rpm-ostree install flatpak-builder" 
      echo "Solus: sudo eopkg it flatpak-builder"
+     echo "Arch/EndeavourOS: sudo pacman -Sy flatpak-builder"
      exit 1
 fi
 
