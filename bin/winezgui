@@ -374,7 +374,7 @@ fi
               cd "${WINEZPREFIX}"
               echo "creating ${BACKUP_FILE} backup..."
          
-              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}")| \
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
               zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
                      --no-wrap --text="${BACKUP_FILE}..." --pulsate --auto-kill
 
