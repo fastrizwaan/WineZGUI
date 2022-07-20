@@ -340,8 +340,7 @@ fi
                  --progress                                                  \
                  --auto-kill
           fi   
-          # After winetricks cli, return to main menu
-          # MainFunction need to implement
+          # After winetricks cli,
           # Return to Game window
           GameFunction
   elif [ "${SELECTION}" = "Open Other EXE..." ]
@@ -509,14 +508,14 @@ fi
          
          # if backup file is empty / cancel clicked
          if [ -z "${BACKUP_FILE}" ]; then
-             MainFunction
+             GameFunction
          fi
          
          # Select Backup Target Directory
          Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
          TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
          if [ -z "$TARGET_DIR" ]; then
-             MainFunction
+             GameFunction
          fi
 
          # required extension is .winezgui.tgz, if not found add it
