@@ -350,10 +350,22 @@ fi
               exit 0;
          fi
 
-         # Backup
+         # Ask Backup filename
          BACKUPNAME="default"
-         BACKUP_FILE="${BACKUPNAME}-${DATE}.winezgui.tgz"
-
+         BKPFNAME="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         BACKUP_FILE=$(                 \
+           zenity                       \
+           --title "Backup prefix!"     \
+           --width=800 --height=30      \
+           --text  "Backup file name:"  \
+           --entry-text "${BKPFNAME}"   \
+           --entry)
+        
+         # required extension is .winezgui.tgz, if not found add it
+         if ! [[ "${BACKUP_FILE}" == *".winezgui.tgz" ]]; then
+               BACKUP_FILE="$(echo \"${BACKUP_FILE}.winezgui.tgz\")"
+         fi
+        
          cd "${WINEZPREFIX}"
          cd "${WINEZPREFIX}"
          echo "creating ${BACKUP_FILE} backup"
