@@ -1,7 +1,20 @@
 ###### Todo
+
+0.90
+
+- [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
+
+
+
 0.81
 
-- [ ] Include Appstream Metadata
+- [x] Include Appstream Metadata
+
+- [x] Retore work with filename containing numbers
+
+- [x] backup / restore work with different flatpak versions (flatpak-wine5, flatpak-wine7, flatpak-WineZGUI)
+  
+  
 
 0.80
 
@@ -12,12 +25,13 @@
 0.5
 
 - [x] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7, included as mf-install script
-  
+
 - [x] Perhaps create and send a verb to winetricks instead with video proof
 
 - [x] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
 0.6
+
 - [ ] Support Gamedir install (give option, gamedir preferred if writable)
   
   - [ ] Create wine prefix inside game directory, for backup up and sharing with friends
