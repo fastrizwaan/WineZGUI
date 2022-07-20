@@ -405,11 +405,13 @@ fi
              else
                   echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              # 1. Extract to WineZGUI Prefix
-         	   tar -zxvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
+         	   tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}"
         	   
         	   # Get Directory Name which is the Prefix name 
-        	   FILENAME=$(tar -tf "${WINEZGUI_BACKUP_FILE}" \
+        	   FILENAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" \
         	             |head -n1|cut -f2 -d '/')
+             echo "$FILENAME"
+             sleep 5s;
              
              # 2. Link shortcut from
         	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
