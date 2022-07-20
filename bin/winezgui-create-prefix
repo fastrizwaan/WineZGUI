@@ -113,7 +113,7 @@ export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
 export APPLICATIONSDIR=\"$APPLICATIONSDIR\"
 export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop\
                 |cut -f2 -d '=')\"
-export DESKTOPDIR="\${APPLICATIONSDIR}/winezgui"
+export DESKTOPDIR=\"${DESKTOPDIR}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
