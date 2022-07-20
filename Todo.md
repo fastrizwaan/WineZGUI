@@ -10,7 +10,7 @@
 
 - [x] Include Appstream Metadata
 
-- [x] Retore work with filename containing numbers
+- [x] Restore work with filename containing numbers
 
 - [x] backup / restore work with different flatpak versions (flatpak-wine5, flatpak-wine7, flatpak-WineZGUI)
   
