@@ -411,12 +411,8 @@ fi
         	   FILENAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" \
         	             |head -n1|cut -f2 -d '/')
              echo "$FILENAME"
-             sleep 5s;
              
-             # 2. Link shortcut from
-        	   ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
-        	   ${DESKTOPDIR}
-        	   
+                    	           	   
         	   # 3. If backup created using a flatpak based winezgui
         	   #    change old flatpak name to current flatpak name
         	   #    also default prefix does not have script or desktop files
@@ -440,9 +436,15 @@ fi
         	   fi
         	   
         	   # 4. if non-default backup is restored, then a .desktop file 
-        	   # will be available inside prefixdir, ask whether to launch it
+        	   # will be available inside prefixdir, get the app/game name from it
+        	   # and ask whether the user wants to launch it
         	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
         	          echo "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	          
+        	          # link desktop file only if found
+        	          ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
+        	                  ${DESKTOPDIR}
+        	                  
         	          GAME_NAME="$(grep -i Name \
         	                     ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop |\
         	                     cut -f2 -d '=')"
