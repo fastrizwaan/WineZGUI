@@ -375,45 +375,67 @@ fi
               echo "creating ${BACKUP_FILE} backup..."
               
               
+              #Preprocess
               
-              # Pre-process desktop and game.sh script for restoration later by
-              # flatpak and system winezgui
-              echo "Making backup ready"
+              # info.txt and script.sh
+              SEARCH=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
+              REPLACE=("XOPREFIXXO")
               
-              # 1. Change User
-              SEARCH="${USER}"
-              REPLACE="XOUSERXO"
-              sed "s/${SEARCH}/${REPLACE}/g" -i ${BACKUPNAME}/*.reg && \
-              echo "Registry files: user"
+              SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
+              REPLACE+=("XOAPPLICATIONSXO")
               
-              # 2. Applicatoins shorcut dir name system install
-              SEARCH="\.local\\\\\\\\share\\\\\\\\applications"
-              REPLACE="XOAPPLICATIONSXO"
-              sed "s/${SEARCH}/${REPLACE}/g" -i ${BACKUPNAME}/*.reg && \
-              echo "Registry files: Application Shortcut Dir System"
+              SEARCH+=("${WINE}")
+              REPLACE+=("XOWINEXO")
+
+              SEARCH+=("${WINEVER}")
+              REPLACE+=("XOWINEVERXO")
               
-              # 3. Applicatoins shorcut dir name FLATPAK install
-              SEARCH="\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications"
-              REPLACE="XOAPPLICATIONSXO"
-              sed "s/${SEARCH}/${REPLACE}/g" -i ${BACKUPNAME}/*.reg && \
-              echo "Registry files: Application Shortcut Dir flatpak"
+              # Registry files: system.reg, user.reg, userdef.reg
               
-                            
-              # 4. Change flatpak id for flatpak installs
-              SEARCH="${FLATPAK_ID}"
-              REPLACE="XOFLATPAKIDXO"
-              sed "s/${SEARCH}/${REPLACE}/g" -i ${BACKUPNAME}/*.reg && \
-              echo "Registry files: flatpak_id"
+              SEARCH+=("${USER}")
+              REPLACE+=("XOUSERXO")
+
+              SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications")
+              REPLACE+=("XOAPPLICATIONSXO")
+
+              SEARCH+=("${FLATPAK_ID}")
+              REPLACE+=("XOFLATPAKIDXO")
+              
+              len=${#SEARCH[@]}
+              
+              echo "Preprocessing Registry and Info files"
+              for (( i=0; i <$len; i++ ))
+              do
+                 echo 
+                 sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
+                 sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
+              done
+              
+              #/Preprocess
               
               
-              
-              
+              # Create Backup archive
               (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
               zenity --progress \
                      --title="Creating ${BACKUPNAME} backup!" \
                      --width=240 --text="${BACKUP_FILE}..." \
                      --pulsate --auto-kill
 
+              # After compression, undo preprocess, this will be used by
+              # Restore... option to restore a backup
+              
+              #Testing Purpose
+              sleep 1m;
+              #/Testing Purpose
+              
+              echo "Reprocessing Registry and Info files"
+              for (( i=0; i <$len; i++ ))
+              do
+                 echo "i = $i"
+                 sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
+                 sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
+              done
+              
               # Report Size also
               BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
               # Backup Sucess Message
