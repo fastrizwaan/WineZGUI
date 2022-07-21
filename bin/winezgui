@@ -435,12 +435,7 @@ PROCESS_FILES_FOR_BACKUP()
               # After compression, undo preprocess, this will be used by
               # Restore... option to restore a backup
               
-              #Testing Purpose
-              sleep 15s;
-              #/Testing Purpose
-              # Notes to Self: use a function to do Processing and Reprocessing
-              # for Backup and Restore Options
-              
+
               echo "Restoring Registry and Info files"
               PROCESS_FILES_FOR_BACKUP "restore"
               
