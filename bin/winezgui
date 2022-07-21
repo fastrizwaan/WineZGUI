@@ -83,7 +83,7 @@ PROCESS_FILES_FOR_BACKUP()
 {
   #  Paths needs flatpak/host specific replacement
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\config")
+      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\config")
   else
       SEARCH+=("\\\\\\\\?\\\\\\H:\\\\\\\\.config")
   fi
