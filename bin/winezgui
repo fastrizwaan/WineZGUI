@@ -112,16 +112,16 @@ PROCESS_FILES_FOR_BACKUP()
         echo "Restoring preprocessed variables"
         for (( i=0; i <$len; i++ ))
             do
-            sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
-            sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.reg
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.txt
         done
   else
         echo "Processing Registry and Info files"
         for (( i=0; i <$len; i++ ))
         do
            echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
-           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
+           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.reg
+           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.txt
         done
   fi
 }
