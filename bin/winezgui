@@ -81,6 +81,8 @@ fi
 # Preprocessing files for Backup and Restore Function
 PROCESS_FILES_FOR_BACKUP()
 {
+  unset SEARCH
+  unset REPLACE
   #  Paths needs flatpak/host specific replacement
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
       SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\config")
@@ -88,6 +90,7 @@ PROCESS_FILES_FOR_BACKUP()
       SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\.config")
   fi
   REPLACE+=("XOCONFIGXO")
+  
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
      SEARCH+=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
   else
