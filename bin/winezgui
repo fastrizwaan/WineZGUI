@@ -78,6 +78,53 @@ if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
      fi
 fi
 
+# Preprocessing files for Backup and Restore Function
+PROCESS_FILES_FOR_BACKUP()
+{
+  # 0. Prefix: for info.txt and scripts
+  SEARCH=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
+  REPLACE=("XOPREFIXXO")
+
+  SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
+  REPLACE+=("XOAPPLICATIONSXO")
+
+  SEARCH+=("${WINEEXE}")
+  REPLACE+=("XOWINEEXEXO")
+
+  SEARCH+=("${WINEVER}")
+  REPLACE+=("XOWINEVERXO")
+
+  # Registry files: system.reg, user.reg, userdef.reg
+
+  SEARCH+=("${USER}")
+  REPLACE+=("XOUSERXO")
+
+  SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications")
+  REPLACE+=("XOAPPLICATIONSXO")
+
+  SEARCH+=("${FLATPAK_ID}")
+  REPLACE+=("XOFLATPAKIDXO")
+
+  len=${#SEARCH[@]}
+
+  # By default restore
+  if [ "$1" = "restore" ]; then
+        echo "Restoring preprocessed variables"
+        for (( i=0; i <$len; i++ ))
+            do
+            sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
+            sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
+        done
+  else
+        echo "Processing Registry and Info files"
+        for (( i=0; i <$len; i++ ))
+        do
+           echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
+           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
+           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
+        done
+  fi
+}
 
     # Main WineZGUI application window function
     MainFunction ()
@@ -376,43 +423,7 @@ fi
               
               
               #Preprocess
-              
-              # info.txt and script.sh
-              SEARCH=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
-              REPLACE=("XOPREFIXXO")
-              
-              SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
-              REPLACE+=("XOAPPLICATIONSXO")
-              
-              SEARCH+=("${WINEVER}")
-              REPLACE+=("XOWINEVERXO")
-
-              SEARCH+=("${WINEVER}")
-              REPLACE+=("XOWINEVERXO")
-              
-              # Registry files: system.reg, user.reg, userdef.reg
-              
-              SEARCH+=("${USER}")
-              REPLACE+=("XOUSERXO")
-
-              SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications")
-              REPLACE+=("XOAPPLICATIONSXO")
-
-              SEARCH+=("${FLATPAK_ID}")
-              REPLACE+=("XOFLATPAKIDXO")
-              
-              len=${#SEARCH[@]}
-              
-              echo "Preprocessing Registry and Info files"
-              for (( i=0; i <$len; i++ ))
-              do
-                 echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
-                 sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
-                 sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
-              done
-              
-              #/Preprocess
-              
+              PROCESS_FILES_FOR_BACKUP
               
               # Create Backup archive
               (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
@@ -427,14 +438,11 @@ fi
               #Testing Purpose
               sleep 15s;
               #/Testing Purpose
+              # Notes to Self: use a function to do Processing and Reprocessing
+              # for Backup and Restore Options
               
-              echo "Reprocessing Registry and Info files"
-              for (( i=0; i <$len; i++ ))
-              do
-                 echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-                 sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
-                 sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
-              done
+              echo "Restoring Registry and Info files"
+              PROCESS_FILES_FOR_BACKUP "restore"
               
               # Report Size also
               BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
