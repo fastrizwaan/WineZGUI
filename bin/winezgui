@@ -384,8 +384,8 @@ fi
               SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
               REPLACE+=("XOAPPLICATIONSXO")
               
-              SEARCH+=("${WINE}")
-              REPLACE+=("XOWINEXO")
+              SEARCH+=("${WINEVER}")
+              REPLACE+=("XOWINEVERXO")
 
               SEARCH+=("${WINEVER}")
               REPLACE+=("XOWINEVERXO")
@@ -406,7 +406,7 @@ fi
               echo "Preprocessing Registry and Info files"
               for (( i=0; i <$len; i++ ))
               do
-                 echo 
+                 echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
                  sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
                  sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
               done
@@ -425,13 +425,13 @@ fi
               # Restore... option to restore a backup
               
               #Testing Purpose
-              sleep 1m;
+              sleep 15s;
               #/Testing Purpose
               
               echo "Reprocessing Registry and Info files"
               for (( i=0; i <$len; i++ ))
               do
-                 echo "i = $i"
+                 echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
                  sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
                  sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
               done
