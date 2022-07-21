@@ -489,54 +489,57 @@ PROCESS_FILES_FOR_BACKUP()
         	   
         	   # If user selects a .winezgui.tgz file
         	   # Get Directory Name which is the Prefix name from the winezgui.tgz 
-        	   FILENAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" 2>/dev/null \
+        	   BACKUPNAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" 2>/dev/null \
         	             |head -n1|cut -f2 -d '/')
-             echo "Prefix is $FILENAME"
+             echo "Prefix is $BACKUPNAME"
              
              # 1. Extract to WineZGUI Prefix and show progress dialog
              echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              
              (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
                    2>/dev/null)| \
-              zenity --progress --title="Restoring ${FILENAME}!" --width=240  \
+              zenity --progress --title="Restoring ${BACKUPNAME}!" --width=240  \
                      --text="Extracting ${WINEZGUI_BACKUP_FILE}..." --pulsate \
                      --auto-kill
 
              # Now do Preprocessing for host and flatpak installs
+             cd "${WINEZPREFIX}"
+             
+             PROCESS_FILES_FOR_BACKUP "restore"
              
         	   # 3. If backup created using a flatpak based winezgui
         	   #    change old flatpak name to current flatpak name
         	   #    also default prefix does not have script or desktop files
         	   #    so make sure it is not default prefix which is restored
         	   if [ "${INSTALL_TYPE}" = "flatpak" ] && \
-        	      [ "${FILENAME}" != "default" ] ; then
+        	      [ "${BACKUPNAME}" != "default" ] ; then
         	        
         	        echo "We are restoring in flatpak and non default prefix"
         	        
         	        sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	            "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
         	        sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	            "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
         	        sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
-        	               "${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh"
+        	               "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
         	      
         	        # Let WineZGUI create New info.txt file, so back it up
-        	        mv "${WINEZPREFIX}/${FILENAME}/info.txt" \
-        	           "${WINEZPREFIX}/${FILENAME}/old_info.txt"
+        	        #mv "${WINEZPREFIX}/${BACKUPNAME}/info.txt" \
+        	         #  "${WINEZPREFIX}/${BACKUPNAME}/old_info.txt"
 
         	   fi
         	   
         	   # 4. if non-default backup is restored, then a .desktop file 
         	   # will be available inside prefixdir, get the app/game name from it
         	   # and ask whether the user wants to launch it
-        	     if [ -f "${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop" ]; then
-        	          echo "found ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop"
+        	     if [ -f "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop" ]; then
+        	          echo "found ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
         	          # link desktop file only if found
-        	          ln -svf ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop \
+        	          ln -svf ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop \
         	                  ${DESKTOPDIR}
                     # Get Game name from desktop file
         	          GAME_NAME="$(grep -i Name \
-        	                     ${WINEZPREFIX}/${FILENAME}/${FILENAME}.desktop |\
+        	                     ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop |\
         	                     cut -f2 -d '=')"
         	          echo "Game Name: $GAME_NAME"
         	          
@@ -546,7 +549,7 @@ PROCESS_FILES_FOR_BACKUP()
                              --text="Launch: ${GAME_NAME}?"
                    then
                         # Start the Game script and exit main app
-                        bash ${WINEZPREFIX}/${FILENAME}/${FILENAME}.sh
+                        bash ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh
                         exit
                    fi # zenity
                fi # .desktop
