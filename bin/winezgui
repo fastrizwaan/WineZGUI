@@ -83,20 +83,26 @@ PROCESS_FILES_FOR_BACKUP()
 {
   #  Paths needs flatpak/host specific replacement
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\config")
+  else
+      SEARCH+=("\\\\\\\\?\\\\\\H:\\\\\\\\.config")
+  fi
+  REPLACE+=("XOCONFIGXO")
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
      SEARCH=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
   else
      SEARCH=("\/home\/${USER}\/\.local\/share\/winezgui")
   fi
   REPLACE=("XOPREFIXXO")
-
+  
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
       SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications")
   else
       SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
   fi
   REPLACE+=("XOAPPLICATIONSXO")
-
-  # Variables 
+  
+# Variables 
   SEARCH+=("${WINEEXE}")
   REPLACE+=("XOWINEEXEXO")
 
