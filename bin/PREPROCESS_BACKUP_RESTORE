@@ -1,7 +1,11 @@
 echo "x=x=x=x=x=x=x=x=x=x=x=x=x=x=x=x"
 echo "Install Type = ${INSTALL_TYPE}"
 echo "x=x=x=x=x=x=x=x=x=x=x=x=x=x=x=x"
-sleep 3s; 
+echo "PWD is $PWD"
+echo "BACKUPNAME $BACKUPNAME"
+echo "BACKUPNAME/*"
+ls ${BACKUPNAME}/
+sleep 3s;
 
 PROCESS_FILES_FOR_BACKUP()
 {
@@ -50,9 +54,9 @@ PROCESS_FILES_FOR_BACKUP()
         for (( i=0; i <$len; i++ ))
             do
             echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "${BACKUPNAME}/*.reg"
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "${BACKUPNAME}/*.txt"
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "${BACKUPNAME}/*.desktop"
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "./${BACKUPNAME}/*.reg"
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "./${BACKUPNAME}/*.txt"
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i "./${BACKUPNAME}/*.desktop"
             
             ls "${BACKUPNAME}/*.txt"
             ls "${BACKUPNAME}/*.reg"
