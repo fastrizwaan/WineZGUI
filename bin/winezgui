@@ -82,7 +82,7 @@ fi
 # include backup and restore preprocess function
 # which can be used both by default prefix and game prefix script
 # PROCESS_FILES_FOR_BACKUP()
-source ${BINDIR}/backup_restore_preprocess.sh
+source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
 
     # Main WineZGUI application window function
     MainFunction ()

@@ -22,10 +22,6 @@ export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
 
-
-# PROCESS_FILES_FOR_BACKUP() include function for backup
-source ${BINDIR}/backup_restore_preprocess.sh
-
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "$INSTALL_TYPE" = "system" ]; then
@@ -96,6 +92,12 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
 # Create Launch Script for the provided EXE file
 # ------------------------------------------------
+# Launch script needs 
+
+echo  "Copying PREPROCESS_BACKUP_RESTORE to ${WINEPREFIX_SUBDIR}"
+cp -v "${BINDIR}/PREPROCESS_BACKUP_RESTORE" "${WINEPREFIX_SUBDIR}/"
+
+sleep 5s;
 # need variables from this script
 echo "
 #!/bin/bash
@@ -120,12 +122,6 @@ export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop\
 export DESKTOPDIR=\"${DESKTOPDIR}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
-
-# Append Required Function to Game script
-echo "${BINDIR}/backup_restore_preprocess.sh"
-cat "${BINDIR}/backup_restore_preprocess.sh" >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
-
-sleep 5s;
 
 # Append rest 
 echo '
@@ -254,7 +250,8 @@ fi
        exit 0;
   fi
 
-
+# PROCESS_FILES_FOR_BACKUP()
+source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
 
   GameFunction () 
   {
