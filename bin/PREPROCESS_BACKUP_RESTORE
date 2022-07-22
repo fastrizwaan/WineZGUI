@@ -48,6 +48,7 @@ PROCESS_FILES_FOR_BACKUP()
             sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.reg
             sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.txt
             sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.desktop
+            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.sh
 
         done
   else
@@ -58,7 +59,7 @@ PROCESS_FILES_FOR_BACKUP()
            sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.reg
            sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.txt
            sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.desktop
-
+           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.sh
         done
   fi
 }
