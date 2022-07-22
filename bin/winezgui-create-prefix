@@ -22,6 +22,10 @@ export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
 
+
+# PROCESS_FILES_FOR_BACKUP() include function for backup
+source ${BINDIR}/backup_restore_preprocess.sh
+
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "$INSTALL_TYPE" = "system" ]; then
@@ -490,7 +494,7 @@ fi
          GameFunction
 
   # Ask user to where to save the backup
-  elif [ "${SELECTION}" = "Backup..." ]; then
+      elif [ "${SELECTION}" = "Backup..." ]; then
          echo "${PREFIX}"
          PREFIX_SIZE=$(du -sh ${PREFIX}|cut -f1)
          echo "${PREFIX_SIZE}"
@@ -530,11 +534,25 @@ fi
          else
               cd "${PREFIX}"
               echo "creating ${BACKUP_FILE} backup..."
-         
+              
+              
+              #Preprocess
+              PROCESS_FILES_FOR_BACKUP
+              
+              # Create Backup archive
               (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
-              zenity --progress   --title="Creating ${BACKUPNAME} backup!" \
-                    --width=240 --text="${BACKUP_FILE}..." --pulsate --auto-kill
+              zenity --progress \
+                     --title="Creating ${BACKUPNAME} backup!" \
+                     --width=240 --text="${BACKUP_FILE}..." \
+                     --pulsate --auto-kill
 
+              # After compression, undo preprocess, this will be used by
+              # Restore... option to restore a backup
+              
+
+              echo "Restoring Registry and Info files"
+              PROCESS_FILES_FOR_BACKUP "restore"
+              
               # Report Size also
               BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
               # Backup Sucess Message
@@ -547,11 +565,12 @@ fi
               mv -v "${BACKUP_FILE}" "${TARGET_DIR}"   && \
               zenity --no-wrap \
                      --info     \
-                     --title="${BACKUP_FILE} Prefix Backup!" --text="${MSG[@]}"
+                     --title="${BACKUP_FILE} Prefix Backup!" \
+                     --text="${MSG[@]}"
 
-         fi # ! -w
-         GameFunction
-
+         fi # ! -w 
+         # Return to Game window after backup or target directory write error
+         GameFunctionbackup
 
   elif [ "${SELECTION}" = "Delete..." ]; then
          

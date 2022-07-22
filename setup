@@ -96,6 +96,7 @@ fi
 APP1_SRC="./bin/winezgui"
 APP2_SRC="./bin/winezgui-create-prefix"
 APP3_SRC="./bin/mf-install"
+APP4_SRC="./bin/backup_restore_preprocess.sh"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
 META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
@@ -104,6 +105,7 @@ META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
 APP1=$(basename $APP1_SRC)
 APP2=$(basename $APP2_SRC)
 APP3=$(basename $APP3_SRC)
+APP4=$(basename $APP4_SRC)
 DESK=$(basename $DESK_SRC)
 ICON=$(basename $ICON_SRC)
 META=$(basename $META_SRC)
@@ -128,6 +130,7 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
      install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
      install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
+     install -Dm755 $APP4_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP4'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
      install -Dm644 $META_SRC $META_DIR && echo "Installed '$META_DIR/$META'"
@@ -154,6 +157,7 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $APPS_DIR/$APP1 
      rm -vf $APPS_DIR/$APP2
      rm -vf $APPS_DIR/$APP3
+     rm -vf $APPS_DIR/$APP4
      rm -vf $DESK_DIR/$DESK
      rm -vf $ICON_DIR/$ICON
      rm -vf $META_DIR/$META
