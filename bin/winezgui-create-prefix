@@ -97,16 +97,15 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 echo  "Copying PREPROCESS_BACKUP_RESTORE to ${WINEPREFIX_SUBDIR}"
 cp -v "${BINDIR}/PREPROCESS_BACKUP_RESTORE" "${WINEPREFIX_SUBDIR}/"
 
-sleep 5s;
 # need variables from this script
 echo "
 #!/bin/bash
-export APPNAME=\"$APPNAME\"
-export FLATPAK_NAME=\"$FLATPAK_NAME\"
-export APPVERSION=\"$APPVERSION\"
-export WINEVER=\"$WINEVER\"
+export APPNAME=\"${APPNAME}\"
+export FLATPAK_NAME=\"${FLATPAK_NAME}\"
+export APPVERSION=\"${APPVERSION}\"
+export WINEVER=\"${WINEVER}\"
 export PROGNAME=\"${PROGNAME}\"
-export INSTALL_TYPE=\"$INSTALL_TYPE\"
+export INSTALL_TYPE=\"${INSTALL_TYPE}\"
 export PREFIX=\"${WINEZPREFIX}\"
 export BACKUPNAME=\"${EXE_NOEXE}\"
 export EXE_FILE=\"${EXE_FILE}\"
@@ -116,7 +115,7 @@ export EXE_NOSP=\"${EXE_NOSP}\"
 export EXE_NOEXE=\"${EXE_NOEXE}\"
 export WINEPREFIX_SUBDIR=\"${WINEPREFIX_SUBDIR}\"
 export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\"
-export APPLICATIONSDIR=\"$APPLICATIONSDIR\"
+export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
 export ICON=\"\$(grep Icon \${WINEPREFIX_SUBDIR}/\${EXE_NOEXE}.desktop\
                 |cut -f2 -d '=')\"
 export DESKTOPDIR=\"${DESKTOPDIR}\"

@@ -1,3 +1,8 @@
+echo "x=x=x=x=x=x=x=x=x=x=x=x=x=x=x=x"
+echo "Install Type = ${INSTALL_TYPE}"
+echo "x=x=x=x=x=x=x=x=x=x=x=x=x=x=x=x"
+sleep 10s; 
+
 PROCESS_FILES_FOR_BACKUP()
 {
   unset SEARCH
