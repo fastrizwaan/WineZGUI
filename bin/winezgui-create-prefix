@@ -121,6 +121,9 @@ export DESKTOPDIR=\"${DESKTOPDIR}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
+# Append Required Function to Game script
+cat "${BINDIR}/backup_restore_preprocess.sh" >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+
 # Append rest 
 echo '
 export WINEARCH=win64
