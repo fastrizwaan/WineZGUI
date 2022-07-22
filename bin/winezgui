@@ -456,23 +456,23 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
         	   #    change old flatpak name to current flatpak name
         	   #    also default prefix does not have script or desktop files
         	   #    so make sure it is not default prefix which is restored
-        	   if [ "${INSTALL_TYPE}" = "flatpak" ] && \
-        	      [ "${BACKUPNAME}" != "default" ] ; then
+        	   #if [ "${INSTALL_TYPE}" = "flatpak" ] && \
+        	   #   [ "${BACKUPNAME}" != "default" ] ; then
         	        
-        	        echo "We are restoring in flatpak and non default prefix"
+        	   #     echo "We are restoring in flatpak and non default prefix"
         	        
-        	        sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
-        	        sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
-        	        sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
-        	               "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
+        	   #     sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
+        	   #         "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
+        	   #     sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
+        	   #         "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
+        	   #     sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
+        	   #            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
         	      
         	        # Let WineZGUI create New info.txt file, so back it up
         	        #mv "${WINEZPREFIX}/${BACKUPNAME}/info.txt" \
         	         #  "${WINEZPREFIX}/${BACKUPNAME}/old_info.txt"
 
-        	   fi
+        	   #fi
         	   
         	   # 4. if non-default backup is restored, then a .desktop file 
         	   # will be available inside prefixdir, get the app/game name from it
