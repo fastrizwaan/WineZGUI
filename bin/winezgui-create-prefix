@@ -572,7 +572,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
 
          fi # ! -w 
          # Return to Game window after backup or target directory write error
-         GameFunctionbackup
+         GameFunction
 
   elif [ "${SELECTION}" = "Delete..." ]; then
          
