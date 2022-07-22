@@ -96,7 +96,7 @@ fi
 APP1_SRC="./bin/winezgui"
 APP2_SRC="./bin/winezgui-create-prefix"
 APP3_SRC="./bin/mf-install"
-APP4_SRC="./bin/backup_restore_preprocess.sh"
+APP4_SRC="./bin/PREPROCESS_BACKUP_RESTORE"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
 META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
