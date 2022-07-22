@@ -122,7 +122,10 @@ export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
 
 # Append Required Function to Game script
+echo "${BINDIR}/backup_restore_preprocess.sh"
 cat "${BINDIR}/backup_restore_preprocess.sh" >> "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
+
+sleep 5s;
 
 # Append rest 
 echo '
