@@ -67,7 +67,9 @@ PROCESS_FILES_FOR_BACKUP()
         # Set install type
         sed -E "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
                ${BACKUPNAME}/*.sh
-  else
+        # Create Applications Directory on Restore if not found
+     
+   else
         echo "Processing Registry and Info files"
         for (( i=0; i <$len; i++ ))
         do

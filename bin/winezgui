@@ -477,26 +477,34 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
         	   # 4. if non-default backup is restored, then a .desktop file 
         	   # will be available inside prefixdir, get the app/game name from it
         	   # and ask whether the user wants to launch it
-        	     if [ -f "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop" ]; then
-        	          echo "found ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
-        	          # link desktop file only if found
-        	          ln -svf ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop \
-        	                  ${DESKTOPDIR}
-                    # Get Game name from desktop file
-        	          GAME_NAME="$(grep -i Name \
-        	                     ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop |\
-        	                     cut -f2 -d '=')"
-        	          echo "Game Name: $GAME_NAME"
+        	   # Desktop file needs applications directory.
+        	     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+               mkdir -p \
+               "/home/${USER}/.local/share/applications/winezgui/${FLATPAK_ID}")
+               else
+               mkdir -p "/home/${USER}/.local/share/applications/winezgui")
+               fi
+        	     if [ -f "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop" ]; 
+        	       then
+        	       echo "found ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
+        	       # link desktop file only if found
+        	       ln -svf ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop \
+        	               ${DESKTOPDIR}
+                 # Get Game name from desktop file
+        	       GAME_NAME="$(grep -i Name \
+        	                 ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop |\
+        	                   cut -f2 -d '=')"
+        	       echo "Game Name: $GAME_NAME"
         	          
         	     	   # Inform and ask if the user wants to start the restored game
-                   if zenity --question --no-wrap --width=200 \
-                             --title="WineZGUI Backup Restored!" \
-                             --text="Launch: ${GAME_NAME}?"
-                   then
-                        # Start the Game script and exit main app
-                        bash ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh
-                        exit
-                   fi # zenity
+                 if zenity --question --no-wrap --width=200 \
+                           --title="WineZGUI Backup Restored!" \
+                           --text="Launch: ${GAME_NAME}?"
+                 then
+                      # Start the Game script and exit main app
+                      bash ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh
+                      exit
+                 fi # zenity
                fi # .desktop
         	   fi # -z
         	   MainFunction    ; # Go back to Main Window
