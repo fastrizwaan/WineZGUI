@@ -75,8 +75,15 @@ echo "Building ${APP_ID}..."
 flatpak-builder --force-clean build-dir ${APP_ID}.yml && \
 echo "Built ${APP_ID}..."
 
+if [ "$1" = "system" ]; then
+     INSTALL="--system"
+     SUDO="sudo"
+else
+     INSTALL="--user"
+     unset SUDO
+fi
 echo "Installing ${APP_ID}..."
-flatpak-builder --user --install --force-clean build-dir ${APP_ID}.yml && \
+${SUDO} flatpak-builder ${INSTALL}  --install --force-clean build-dir ${APP_ID}.yml && \
 echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
 echo -e "run:\nflatpak run ${APP_ID}" 
 
