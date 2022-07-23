@@ -63,6 +63,9 @@ PROCESS_FILES_FOR_BACKUP()
         # Rename Directory on Restore
         mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
               "${BACKUPNAME}/drive_c/users/${USER}"
+        # Set install type
+        sed -E "s|XOINSTALLTYPEXO|export INSTALL_TYPE=${INSTALL_TYPE}|g" -i \
+               ${BACKUPNAME}/*.sh
   else
         echo "Processing Registry and Info files"
         for (( i=0; i <$len; i++ ))
@@ -76,6 +79,8 @@ PROCESS_FILES_FOR_BACKUP()
         # Rename Directory for Backup
         mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
               "${BACKUPNAME}/drive_c/users/XOUSERXO"
+        # Set install type
+        sed -E "s|export INSTALL_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
   fi
 
 }
