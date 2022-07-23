@@ -52,38 +52,39 @@ PROCESS_FILES_FOR_BACKUP()
 
   # By default process
   if [ "$1" = "restore" ]; then
-        echo "Restoring preprocessed variables"
-        for (( i=0; i <$len; i++ ))
-            do
-            echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.reg
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.txt
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.desktop
-            sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.sh
-        done
-        # Rename Directory on Restore
-        mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
-              "${BACKUPNAME}/drive_c/users/${USER}"
-        # Set install type
-        sed -E "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
-               ${BACKUPNAME}/*.sh
-        # Create Applications Directory on Restore if not found
-     
-   else
-        echo "Processing Registry and Info files"
-        for (( i=0; i <$len; i++ ))
-        do
-           echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
-           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.reg
-           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.txt
-           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.desktop
-           sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.sh
-        done
-        # Rename Directory for Backup
-        mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
-              "${BACKUPNAME}/drive_c/users/XOUSERXO"
-        # Set install type
-        sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
+      echo "Restoring preprocessed variables"
+      for (( i=0; i <$len; i++ ))
+          do
+          echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
+          sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.reg
+          sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.txt
+          sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.desktop
+          sed "s|${REPLACE[$i]}|${SEARCH[$i]}|g" -i ${BACKUPNAME}/*.sh
+      done
+      # Rename Directory on Restore
+      mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
+            "${BACKUPNAME}/drive_c/users/${USER}"
+      # Set install type
+      sed -E "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
+             ${BACKUPNAME}/*.sh
+      # set flatpak name on restoring using flatpak
+      sed -E  "s|\(export FLATPAK\_NAME=\).*|\1\"${FLATPAK_ID}\"|g" -i \
+             ${BACKUPNAME}/*.sh
+  else
+      echo "Processing Registry and Info files"
+      for (( i=0; i <$len; i++ ))
+      do
+         echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
+         sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.reg
+         sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.txt
+         sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.desktop
+         sed "s|${SEARCH[$i]}|${REPLACE[$i]}|g" -i ${BACKUPNAME}/*.sh
+      done
+      # Rename Directory for Backup
+      mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
+            "${BACKUPNAME}/drive_c/users/XOUSERXO"
+      # Set install type
+      sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
   fi
 
 }
