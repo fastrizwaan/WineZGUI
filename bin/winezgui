@@ -480,9 +480,9 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
         	   # Desktop file needs applications directory.
         	     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
                mkdir -p \
-               "/home/${USER}/.local/share/applications/winezgui/${FLATPAK_ID}")
+               "/home/${USER}/.local/share/applications/winezgui/${FLATPAK_ID}"
                else
-               mkdir -p "/home/${USER}/.local/share/applications/winezgui")
+               mkdir -p "/home/${USER}/.local/share/applications/winezgui"
                fi
         	     if [ -f "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop" ]; 
         	       then
