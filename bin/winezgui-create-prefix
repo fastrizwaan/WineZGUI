@@ -90,6 +90,11 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
          PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
     fi
 
+
+# Generate Sha256sum for the exefile
+SHA256SUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+
+
 # Create Launch Script for the provided EXE file
 # ------------------------------------------------
 # Launch script needs 
@@ -110,6 +115,7 @@ export PREFIX=\"${WINEZPREFIX}\"
 export BACKUPNAME=\"${EXE_NOEXE}\"
 export EXE_FILE=\"${EXE_FILE}\"
 export EXE_NAME=\"${EXE_NAME}\"
+export SHA256SUM=\"${SHA256SUM}\"
 export EXE_PATH=\"${EXE_PATH}\"
 export EXE_NOSP=\"${EXE_NOSP}\"
 export EXE_NOEXE=\"${EXE_NOEXE}\"
@@ -211,7 +217,6 @@ fi
 
 # Create Metadata info.txt for the default wine prefix
 if [ ! -f ${WINEPREFIX_SUBDIR}/info.txt ]; then
-SHA256SUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
 echo -e "
 Game Name      : ${PROGNAME}
 Game EXE       : ${EXE_FILE}
