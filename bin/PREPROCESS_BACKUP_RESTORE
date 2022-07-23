@@ -65,10 +65,10 @@ PROCESS_FILES_FOR_BACKUP()
       mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
             "${BACKUPNAME}/drive_c/users/${USER}"
       # Set install type
-      sed -E "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
+      sed   "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
              ${BACKUPNAME}/*.sh
       # set flatpak name on restoring using flatpak
-      sed -E  "s|\(export FLATPAK\_NAME=\).*|\1\"${FLATPAK_ID}\"|g" -i \
+      sed   "s|\(export FLATPAK\_NAME=\).*|\1\"${FLATPAK_ID}\"|g" -i \
              ${BACKUPNAME}/*.sh
   else
       echo "Processing Registry and Info files"
