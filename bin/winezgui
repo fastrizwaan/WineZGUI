@@ -384,7 +384,8 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
               PROCESS_FILES_FOR_BACKUP
               
               # Create Backup archive
-              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null)| \
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null; \
+                   PROCESS_FILES_FOR_BACKUP "restore") | \
               zenity --progress \
                      --title="Creating ${BACKUPNAME} backup!" \
                      --width=240 --text="${BACKUP_FILE}..." \
