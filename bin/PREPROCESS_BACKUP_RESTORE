@@ -87,6 +87,9 @@ PROCESS_FILES_FOR_BACKUP()
             "${BACKUPNAME}/drive_c/users/XOUSERXO"
       # Set install type
       sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
+      # remove flatpak name on backup (flatpak)
+      sed   "s|\(export FLATPAK\_NAME=\).*|\1|g" -i \
+             ${BACKUPNAME}/*.sh
   fi
 
 }
