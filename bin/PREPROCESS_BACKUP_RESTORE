@@ -19,7 +19,7 @@ PROCESS_FILES_FOR_BACKUP()
   REPLACE+=("XOPREFIXXO")
   
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui\/${FLATPAK_ID}")
+     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
   else
      SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui")
   fi
