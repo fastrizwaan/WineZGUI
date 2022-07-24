@@ -69,9 +69,9 @@ PROCESS_FILES_FOR_BACKUP()
       # Set install type
       sed   "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
              ${BACKUPNAME}/*.sh
-      # set flatpak name on restoring using flatpak
-#      sed   "s|\(export FLATPAK\_NAME=\).*|\1\"${FLATPAK_ID}\"|g" -i \
-#             ${BACKUPNAME}/*.sh
+      # set flatpak name on restoring (flatpak)
+      sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_ID}|g" -i \
+             ${BACKUPNAME}/*.sh
   else
       echo "Processing Registry and Info files"
       for (( i=0; i <$len; i++ ))
