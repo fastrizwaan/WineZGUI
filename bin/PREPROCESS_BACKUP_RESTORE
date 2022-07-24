@@ -35,7 +35,7 @@ PROCESS_FILES_FOR_BACKUP()
   SEARCH+=("\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
   
-  SEARCH+=("\/home\/${USER}")
+  SEARCH+=("home\/${USER}")
   REPLACE+=("XOUSERHOMEXO")
   
 # Variables
