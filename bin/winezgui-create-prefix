@@ -9,7 +9,8 @@ export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export PREFIXDIR=${WINEZPREFIX}
 export UPDATE_ICON_CACHE="gtk-update-icon-cache"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
-export WINE_CMD=$(which wine)
+export WINE_CMD="$(which wine)"
+export WINEEXE=${WINE_CMD}
 export WTRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZPREFIX}/tmp"
 export EXIFTOOL=$(which exiftool)
@@ -288,7 +289,7 @@ Creation Date  : $(date)
 ----------------------------------------------------
 Application    : ${APPNAME}
 Version        : ${APPVERSION}
-Wine           : ${WHICHWINE}
+Wine           : ${WINEEXE}
 Wine Version   : ${WINEVER}
 Wine Arch      : ${WINEARCH}
 WineZGUI Prefix: ${WINEZPREFIX}

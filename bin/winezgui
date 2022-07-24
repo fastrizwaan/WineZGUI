@@ -635,7 +635,7 @@ Copyright       : ${COPYRIGHT}
 Website         : ${WEBSITE}
 Author          : ${AUTHOR}
 E-mail          : ${EMAIL}
-Wine            : ${WINE_CMD}
+Wine            : ${WINEEXE}
 Wine Version    : ${WINEVER}
 Wine Arch       : ${WINEARCH}
 WineZGUI Prefix : ${WINEZPREFIX}
