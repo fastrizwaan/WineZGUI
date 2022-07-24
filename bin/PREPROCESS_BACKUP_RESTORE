@@ -67,7 +67,7 @@ PROCESS_FILES_FOR_BACKUP()
       mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
             "${BACKUPNAME}/drive_c/users/${USER}"
       # Set install type
-      sed   "s|XOINSTALLTYPEXO|export INSTALL\_TYPE=${INSTALL_TYPE}|g" -i \
+      sed   "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
              ${BACKUPNAME}/*.sh
       # set flatpak name on restoring (flatpak)
       sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_ID}|g" -i \
@@ -86,7 +86,7 @@ PROCESS_FILES_FOR_BACKUP()
       mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
             "${BACKUPNAME}/drive_c/users/XOUSERXO"
       # Set install type
-      sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
+      #sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
       # remove flatpak name on backuping (flatpak)
       #sed   "s|\(export FLATPAK\_NAME=\).*|\1XOFLATPAKIDXO|g" -i \
       #       ${BACKUPNAME}/*.sh
