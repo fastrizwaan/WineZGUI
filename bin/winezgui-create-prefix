@@ -338,7 +338,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
                        0    "Backup..."                 \
                        0    "Delete..."                 \
                        0    "About..."                  \
-                   --text "Select action for $EXE_NAME..." )
+                   --text "Select action for <b>${EXE_NAME}</b>..." )
 
   # If Cancel button is pressed, exit
   [[ -z "${SELECTION}" ]] && exit 1
