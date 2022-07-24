@@ -88,8 +88,8 @@ PROCESS_FILES_FOR_BACKUP()
       # Set install type
       sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
       # remove flatpak name on backuping (flatpak)
-      sed   "s|\(export FLATPAK\_NAME=\).*|\1XOFLATPAKIDXO|g" -i \
-             ${BACKUPNAME}/*.sh
+      #sed   "s|\(export FLATPAK\_NAME=\).*|\1XOFLATPAKIDXO|g" -i \
+      #       ${BACKUPNAME}/*.sh
   fi
 
 }
