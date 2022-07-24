@@ -12,16 +12,16 @@ PROCESS_FILES_FOR_BACKUP()
   REPLACE=("XOCONFIGXO")
   
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("/home/${USER}/\.var/app/${FLATPAK_ID}/data/prefixes")
+     SEARCH+=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
   else
-     SEARCH+=("/home/${USER}/\.local/share/winezgui")
+     SEARCH+=("\/home\/${USER}\/\.local\/share\/winezgui")
   fi
   REPLACE+=("XOPREFIXXO")
   
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("/home/${USER}/\.local/share/applications/winezgui/${FLATPAK_ID}")
+     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui\/${FLATPAK_ID}")
   else
-     SEARCH+=("/home/${USER}/\.local/share/applications/winezgui")
+     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui")
   fi
   REPLACE+=("XODESKTOPDIRXO")
 
@@ -32,10 +32,13 @@ PROCESS_FILES_FOR_BACKUP()
   fi
   REPLACE+=("XOAPPLICATIONSXO")
 
-  SEARCH+=("/home/${USER}/.local/share/applications")
+  SEARCH+=("\/home\/${USER}\/\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
 
-# Variables 
+# Variables
+  SEARCH+=("${FLATPAK_ID}")
+  REPLACE+=("XOFLATPAKIDXO")
+  
   SEARCH+=("${WINEEXE}")
   REPLACE+=("XOWINEEXEXO")
 
@@ -45,8 +48,7 @@ PROCESS_FILES_FOR_BACKUP()
   SEARCH+=("${USER}")
   REPLACE+=("XOUSERXO")
 
-  SEARCH+=("${FLATPAK_ID}")
-  REPLACE+=("XOFLATPAKIDXO")
+
 
   len=${#SEARCH[@]}
 
