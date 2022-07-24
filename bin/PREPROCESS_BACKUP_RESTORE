@@ -5,38 +5,41 @@ PROCESS_FILES_FOR_BACKUP()
   unset REPLACE
   #  Paths needs flatpak/host specific replacement
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-      SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\config")
+      SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\config")
   else
       SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config")
   fi
   REPLACE=("XOCONFIGXO")
   
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("\/home\/${USER}\/\.var\/app\/${FLATPAK_ID}\/data\/prefixes")
+     SEARCH+=("\.var\/app\/${FLATPAK_NAME}\/data\/prefixes")
   else
-     SEARCH+=("\/home\/${USER}\/\.local\/share\/winezgui")
+     SEARCH+=("\.local\/share\/winezgui")
   fi
   REPLACE+=("XOPREFIXXO")
   
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
+     SEARCH+=("\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
   else
-     SEARCH+=("\/home\/${USER}\/\.local\/share\/applications\/winezgui")
+     SEARCH+=("\.local\/share\/applications\/winezgui")
   fi
   REPLACE+=("XODESKTOPDIRXO")
 
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_ID}\\\\\\\\data\\\\\\\\applications")
+      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\data\\\\\\\\applications")
   else
       SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
   fi
   REPLACE+=("XOAPPLICATIONSXO")
 
-  SEARCH+=("\/home\/${USER}\/\.local\/share\/applications")
+  SEARCH+=("\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
-
+  
+  SEARCH+=("\/home\/${USER}")
+  REPLACE+=("XOUSERHOMEXO")
+  
 # Variables
-  SEARCH+=("${FLATPAK_ID}")
+  SEARCH+=("${FLATPAK_NAME}")
   REPLACE+=("XOFLATPAKIDXO")
   
   SEARCH+=("${WINEEXE}")
@@ -70,7 +73,7 @@ PROCESS_FILES_FOR_BACKUP()
       sed   "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
              ${BACKUPNAME}/*.sh
       # set flatpak name on restoring (flatpak)
-      sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_ID}|g" -i \
+      sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g" -i \
              ${BACKUPNAME}/*.sh
   else
       echo "Processing Registry and Info files"
