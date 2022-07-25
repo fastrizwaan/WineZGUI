@@ -576,7 +576,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          BACKUP_FILE=$( zenity                    \
            --title="Backup ${BACKUPNAME} Prefix!" \
-           --width=400 --height=30                \
+           --width=500 --height=30                \
            --text="Size: ${PREFIX_SIZE}\nName:"   \
            --entry-text="${BKPFNAME}"             \
            --entry)
