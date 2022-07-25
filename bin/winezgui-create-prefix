@@ -566,7 +566,12 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          # Ask Before Backing up Default prefix
          # Ask Backup filename
          DATE=$(date +%F_%H%M)
-         BKPFNAME="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         # Set name based on flatpak or system
+         if [ ${INSTALL_TYPE} = "flatpak" ]; then
+              BKPFNAME="${BACKUPNAME}-${FLATPAK_NAME}-${DATE}.winezgui.tgz"
+         else
+              BKPFNAME="${BACKUPNAME}-system-${DATE}.winezgui.tgz"
+         fi
          
          BACKUP_FILE=$( zenity                    \
            --title="Backup ${BACKUPNAME} Prefix!" \

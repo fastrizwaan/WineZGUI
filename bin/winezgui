@@ -345,7 +345,13 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
          # Ask Backup filename
          DATE=$(date +%F_%H%M)
          BACKUPNAME="default"
-         BKPFNAME="${BACKUPNAME}-${DATE}.winezgui.tgz"
+         # Set name based on flatpak or system
+         if [ ${INSTALL_TYPE} = "flatpak" ]; then
+              BKPFNAME="${BACKUPNAME}-${FLATPAK_NAME}-${DATE}.winezgui.tgz"
+         else
+              BKPFNAME="${BACKUPNAME}-system-${DATE}.winezgui.tgz"
+         fi
+         
          
          BACKUP_FILE=$( zenity                    \
            --title="Backup ${BACKUPNAME} Prefix!" \
