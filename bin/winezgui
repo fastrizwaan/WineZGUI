@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# winez-create-prefix (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
+# ============================================================================ #
+# WineZGUI (winezgui) (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
 # URL: https://github.com/fastrizwaan/WineZGUI
-# winezgui main program to create run or create wine prefix for a selected exe
+# winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
 
 # Variables
@@ -48,7 +49,7 @@ fi
 
 
 # On launch check required runtime dependencies
-if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
+if [ ! -f "${WINEZPREFIX}/DepsCheckOK.txt" ]; then
      # Function to print if dependencies are installed.
      FOUND=()    # Array/list to hold all found commands
      NOTFOUND=() # Array/list to hold all not found commands
@@ -74,7 +75,7 @@ if [ ! -f "${WINEZPREFIX}/deps_check_ok.txt" ]; then
           zenity --info --no-wrap --title="Missing Dependencies" \
                  --text="Please install these in your system:\n${NOTFOUND}"
      else
-          touch "${WINEZPREFIX}/deps_check_ok.txt"
+          touch "${WINEZPREFIX}/DepsCheckOK.txt"
      fi
 fi
 
@@ -113,7 +114,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
       if [ -z "${SELECTION}" ]
            then
            echo "Bye!"
-           exit 1
+           exit 0
       fi
 
       # Open EXE... Opens file dialog
@@ -149,14 +150,14 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
               echo "An unexpected error has occurred.";;
           esac
 
-      # Winetricks GUI
+      # ====================== Winetricks GUI ========================= #
       elif [ "${SELECTION}" = "Winetricks GUI..." ]
              then
              WINEPREFIX=${PREFIXDIR} ${WINETRICKS} --gui
              MainFunction
 
-      # Winetricks CLI
-      # Provide Command Line to enter multiple Dependencies
+      # ====================== Winetricks CLI ========================= #
+      # Provide text entry command Line to enter multiple Dependencies
       elif [ "${SELECTION}" = "Winetricks CLI..." ]
              then
 
@@ -167,7 +168,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                         vcrun2010 dxvk faudio      \
                         quartz corefonts"
              MESSAGE="Change & Press Enter to install these using Winetricks:"
-             TITLE_TEXT="Winetricks CLI - Paste your verb list"
+             TITLE_TEXT="Winetricks CLI - Paste winetricks verb list"
              # Remove multiple spaces from variable
              # from the above VERB_LIST
              VERB_LIST=$(echo ${VERB_LIST}|sed 's/  / /g')
@@ -229,17 +230,13 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
 
             MainFunction ; # Return to Main Application Window
 
-    #  # Install Media Foundation Libraries
-    #  elif [ "${SELECTION}" = "Install Media Foundation Libraries" ]
-    #     then
-    #     cd /app/mf-install && PREFIX=${PREFIXDIR} sh mf-install.sh
-
-      # Winecfg
+      # ====================== Launch Winecfg ========================= #
       elif [ "${SELECTION}" = "Launch Winecfg..." ]
              then
              ${WINE_CMD} winecfg
              MainFunction
 
+      # ========================= Kill all ============================ #
       # It is a required feature, users will have trouble if
       # some wine application hang or stay resident
       elif [ "${SELECTION}" = "Kill all..." ]
@@ -270,7 +267,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
             fi
             # Go back to menu
             MainFunction
-
+      # ====================== Open Shell ========================= #
       elif [ "${SELECTION}" = "Open Shell..." ]
              then
 
@@ -327,7 +324,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
              fi
               # on closing shell, go back to main application window
               MainFunction
-
+      # ====================== About ================================== #
       elif [ "${SELECTION}" = "About..." ]; then
              echo "Executing About..."
              # Text is more, so we need to format it, with sed in pango markup
@@ -336,7 +333,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                       sed -E 's/^(.*: )/<tt><b>\1<\/b><\/tt>/g' | \
                       sed -E 's/^(.*)$/<small>\1<\/small>/g')"
              MainFunction
-
+      # ====================== Backup ================================= #
       elif [ "${SELECTION}" = "Backup..." ]; then
          echo "${PREFIXDIR}"
          PREFIX_SIZE=$(du -sh ${PREFIXDIR}|cut -f1)
@@ -367,16 +364,25 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
          
          # Select Backup Target Directory
          Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-         TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
+         TARGET_DIR=$(zenity --file-selection     \
+                             --title="${Z_TITLE}" \
+                             --directory)
+         # Cleanup variable after use
+         unset Z_TITLE
+
+         # If no directory is selected or cancel is clicked by the user
          if [ -z "$TARGET_DIR" ]; then
+             # Retun to Main window
              MainFunction
          fi
 
-         # required extension is .winezgui.tgz, if not found add it
+         # Required extension is .winezgui.tgz,
+         # If substring (suffix *.winezgui.tgz") is NOT found add it
          if ! [[ "${BACKUP_FILE}" == *".winezgui.tgz" ]]; then
-               BACKUP_FILE="$(echo ${BACKUP_FILE}.winezgui.tgz)"
+               BACKUP_FILE="${BACKUP_FILE}.winezgui.tgz"
          fi
-        
+
+         # Check if the user can write to the selected Backup Directory 
          if [ ! -w "${TARGET_DIR}" ]; then 
               echo "${TARGET_DIR} not writable"
               zenity --error --no-wrap --title="Backup Error!" \
@@ -386,17 +392,17 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
               echo "creating ${BACKUP_FILE} backup..."
               
               
-              #Preprocess
+              # Preprocess: Prepare *.reg *.sh and *.txt for Backup 
               PROCESS_FILES_FOR_BACKUP
               
               # Create Backup archive and restore changes as soon as tar is done
-              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null && \
-                   echo "${BACKUP_FILE} created successfully"; \
-                   echo "Restoring Registry and Info files"; \
-                   PROCESS_FILES_FOR_BACKUP "restore") | \
-              zenity --progress \
+              (tar  -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null && \
+                     echo "${BACKUP_FILE} created successfully";            \
+                     echo "Restoring Registry and Info files";              \
+                     PROCESS_FILES_FOR_BACKUP "restore") |                  \
+              zenity --progress                               \
                      --title="Creating ${BACKUPNAME} backup!" \
-                     --width=240 --text="${BACKUP_FILE}..." \
+                     --width=240 --text="${BACKUP_FILE}..."   \
                      --pulsate --auto-kill
 
               # Report Size also
@@ -415,9 +421,16 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                      --text="${MSG[@]}"
 
          fi # ! -w 
+         # Cleanup variables after use
+         unset MSG
+         unset BACKUP_SIZE
+         unset TARGET_DIR
+         unset BACKUP_SIZE
+         unset BACKUP_FILE
+         
          # Return to Game window after backup or target directory write error
          MainFunction
-
+      # ====================== Restore ================================= #
       elif [ "${SELECTION}" = "Restore..." ]
              then
              # Ask user to select the .winezgui.tgz backup file to restore
@@ -426,113 +439,109 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                            --file-selection                      \
                            --title="Select WineZGUI Backup File" \
                          )"
-             echo "selected ${WINEZGUI_BACKUP_FILE}"
+             
              # If no Backup file is selected, or cancel is clicked
-             if [ -z "${WINEZGUI_BACKUP_FILE}" ]
-                  then
+             if [ -z "${WINEZGUI_BACKUP_FILE}" ]; then
         	        unset WINEZGUI_BACKUP_FILE  ; # Empty variable
-        	   # Check if file is readable then extract in prefixes
+
              else
-        	   
-        	   # If user selects a .winezgui.tgz file
-        	   # Get Directory Name which is the Prefix name from the winezgui.tgz 
-        	   BACKUPNAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" 2>/dev/null \
+                  echo "selected ${WINEZGUI_BACKUP_FILE}"
+        	        # If user selects a .winezgui.tgz file
+        	        # extract Prefix name from the winezgui.tgz 
+        	        BACKUPNAME=$(tar -tzf "${WINEZGUI_BACKUP_FILE}" 2>/dev/null \
         	             |head -n1|cut -f2 -d '/')
-             echo "Prefix is $BACKUPNAME"
+                  echo "Prefix from ${WINEZGUI_BACKUP_FILE} is ${BACKUPNAME}"
              
-             # 1. Extract to WineZGUI Prefix and show progress dialog
-             echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
+                  # Extract file to WineZGUI Prefix and show gui progress dialog
+                  echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              
-             (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
-                   2>/dev/null)| \
-              zenity --progress --title="Restoring ${BACKUPNAME}!" --width=240  \
-                     --text="Extracting ${WINEZGUI_BACKUP_FILE}..." --pulsate \
-                     --auto-kill
+                 (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
+                       2>/dev/null)|                                     \
+                  zenity --progress --width=240                          \ 
+                         --title="Restoring ${BACKUPNAME}!"              \
+                         --text="Extracting ${WINEZGUI_BACKUP_FILE}..."  \
+                         --pulsate --auto-kill
 
-             # Now do Preprocessing for host and flatpak installs
-             cd "${WINEZPREFIX}"
-             
-             PROCESS_FILES_FOR_BACKUP "restore"
-             
-        	   # 3. If backup created using a flatpak based winezgui
-        	   #    change old flatpak name to current flatpak name
-        	   #    also default prefix does not have script or desktop files
-        	   #    so make sure it is not default prefix which is restored
-        	   #if [ "${INSTALL_TYPE}" = "flatpak" ] && \
-        	   #   [ "${BACKUPNAME}" != "default" ] ; then
-        	        
-        	   #     echo "We are restoring in flatpak and non default prefix"
-        	        
-        	   #     sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	   #         "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
-        	   #     sed "s/\(\.var\/app\/\).*\/data/\1${FLATPAK_ID}\/data/g" -i \
-        	   #         "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
-        	   #     sed -E "s|FLATPAK\_NAME=.*|FLATPAK\_NAME=${FLATPAK_ID}|g" -i \
-        	   #            "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh"
-        	      
-        	        # Let WineZGUI create New info.txt file, so back it up
-        	        #mv "${WINEZPREFIX}/${BACKUPNAME}/info.txt" \
-        	         #  "${WINEZPREFIX}/${BACKUPNAME}/old_info.txt"
-
-        	   #fi
+                 # Now do Preprocessing for host and flatpak installs
+                 cd "${WINEZPREFIX}"
+                 PROCESS_FILES_FOR_BACKUP "restore"
+                 
+                 # Create required applications directory for .desktop files
+            	   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            	        MAKEDIR=("/home/${USER}/.local/share/applications/")
+            	        MAKEDIR+="winezgui/${FLATPAK_ID}"
+                      mkdir -p "${MAKEDIR}"
+                      unset MAKEDIR
+                 else
+                      MAKEDIR=("/home/${USER}/.local/share/applications/")
+            	        MAKEDIR+="winezgui"
+                      mkdir -p "${MAKEDIR}"
+                 fi
         	   
-        	   # 4. if non-default backup is restored, then a .desktop file 
-        	   # will be available inside prefixdir, get the app/game name from it
-        	   # and ask whether the user wants to launch it
-        	   # Desktop file needs applications directory.
-        	     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-               mkdir -p \
-               "/home/${USER}/.local/share/applications/winezgui/${FLATPAK_ID}"
-               else
-               mkdir -p "/home/${USER}/.local/share/applications/winezgui"
-               fi
-        	     if [ -f "${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop" ]; 
-        	       then
-        	       echo "found ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop"
-        	       # link desktop file only if found
-        	       ln -svf ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop \
-        	               ${DESKTOPDIR}
-                 # Get Game name from desktop file
-        	       GAME_NAME="$(grep -i Name \
-        	                 ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.desktop |\
-        	                   cut -f2 -d '=')"
-        	       echo "Game Name: $GAME_NAME"
-        	          
-        	     	   # Inform and ask if the user wants to start the restored game
-                 if zenity --question --no-wrap --width=200 \
-                           --title="WineZGUI Backup Restored!" \
-                           --text="Launch: ${GAME_NAME}?"
-                 then
-                      # Start the Game script and exit main app
-                      bash ${WINEZPREFIX}/${BACKUPNAME}/${BACKUPNAME}.sh
-                      exit
-                 fi # zenity
-               fi # .desktop
-        	   fi # -z
-        	   MainFunction    ; # Go back to Main Window
-        	
-         if [ -z "$TARGET_DIR" ]; then
-              exit 0;
-         fi
+            	   # If .desktop file is found, means, it is a non default backup
+            	   
+            	   FOUND_PREFIX_DIR=("${WINEZPREFIX}/${BACKUPNAME}/")
+            	   FOUND_DESKTOP_FILE+="${FOUND_PREFIX_DIR}/${BACKUPNAME}.desktop"
+            	   FOUND_SCRIPT_FILE+="${FOUND_PREFIX_DIR}/${BACKUPNAME}.sh"
+            	   if [ -f "${FOUND_DESKTOP_FILE}" ]
+            	        then
+            	        echo "found ${FOUND_DESKTOP_FILE}, creating shortcut"
+            	       
+            	        # link the application shortcut .desktop file
+            	        ln -svf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
+                     
+                      # Get Game name from desktop file
+            	        GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d '=')"
+            	        echo "Game Name: $GN"
+            	          
+            	     	 # Inform & ask if the user wants to start the restored game
+                     if zenity --question --no-wrap --width=200    \
+                               --title="WineZGUI Backup Restored!" \
+                               --text="Launch: ${GN}?"
+                     then
+                          # Start the Game script and exit main app
+                          echo "Launching Script for the restored game..."
+                          bash ${FOUND_SCRIPT_FILE}
+                          exit 0
+                     fi # zenity --question
+                 fi # -f "${FOUND_DESKTOP_FILE}"
+        	   fi # -z "${WINEZGUI_BACKUP_FILE}"
+        	   
+        	   # Clear temporary used variables
+        	   unset WINEZGUI_BACKUP_FILE
+        	   unset FOUND_PREFIX_DIR
+        	   unset FOUND_DESKTOP_FILE
+        	   unset FOUND_SCRIPT_FILE
+        	   unset BACKUPNAME
+        	   unset GN
+        	   
+        	   # Go back to Main Window
+        	   MainFunction
 
+      # ====================== Delete ================================= #
       elif [ "${SELECTION}" = "Delete..." ]
              then
 
              # Delete Shortcuts and Prefix Directory
-             rm -rfv ${PREFIXDIR};
+             rm -rf ${PREFIXDIR};
              echo "Deleted default prefix"
+             
              # Delete all broken links which points to winezgui
              find ${DESKTOPDIR} -xtype l -delete
              ${UPDATE_ICON_CACHE}
              ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
-             #Present main window after deleting default prefix
+             # Return to Main window after deleting default prefix
              MainFunction
-
+      # ====================== Open Explorer ========================== #
       elif [ "${SELECTION}" = "Open Explorer..." ]
              then
+             
+             # Open home directory using windows explorer
              echo "Opening Explorer"
-             ${WINE_CMD} explorer $HOME;
+             ${WINE_CMD} explorer $HOME
+             
+             # Return to Main window, when explorer exits
              MainFunction
 
       else
@@ -583,7 +592,6 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
 
    mkdir -p "${PREFIXDIR}"
 
-
    # Wine creates some directories which are linked to user's home
    # To prevent games/programs from writing to host ~/Documents
    # and to allow sandbox backup we need to remove the links \
@@ -591,7 +599,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
 
    # Check if default prefix was created and symlinks removed
    # and create prefix only when wine is found
-   if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt ] && \
+   if [ ! -f ${PREFIXDIR}/ReplacedSymLinks.txt ] && \
       [ $(which wine) ]
         then
 
@@ -608,18 +616,18 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
        IFS=$(echo -en "\n\b")
        echo "Starting for loop"
        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-         rm $i && mkdir -p $i && echo $i >> ${PREFIXDIR}/replaced_symlinks.txt
+         rm $i && mkdir -p $i && echo $i >> ${PREFIXDIR}/ReplacedSymLinks.txt
        done
        IFS=$SAVEIFS
 
-        # Create an empty file to test whether prefix is created
-        touch ${PREFIXDIR}/replaced_symlinks.txt
+       # Create an empty file to test whether prefix is created
+       touch ${PREFIXDIR}/ReplacedSymLinks.txt
 
-        # info
-        echo "Info: Default Wine Prefix at ${PREFIXDIR}" Created
+       # info
+       echo "Info: Default Wine Prefix at ${PREFIXDIR}" Created
 
-        # Create H: for HOME Directory for Wine Explorer
-        ln -sf $HOME "${PREFIXDIR}/dosdevices/h:"
+       # Create H: for HOME Directory for Wine Explorer
+       ln -sf $HOME "${PREFIXDIR}/dosdevices/h:"
 
    fi
 
@@ -643,7 +651,7 @@ WineZGUI Prefix : ${WINEZPREFIX}
 Wine Prefix     : ${PREFIXDIR}
 Creation Date   : $(date)
 " > ${PREFIXDIR}/info.txt
-echo "create ${PREFIXDIR}/info.txt"
+echo "Created ${PREFIXDIR}/info.txt"
 fi
 
 # Start WineZGUI when no argument is supplied
@@ -655,7 +663,7 @@ fi
 
 # If an exe file is provided as argument or selected by the Open EXE...
 # TODO: list all available prefixes to install Redist softwares
-
+# ====================== Open EXE ================================= #
 if [ -f "${EXE_FILE}"  ]
      then
      echo "Entered -f EXE_FILE"

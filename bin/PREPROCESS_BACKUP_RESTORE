@@ -1,44 +1,43 @@
 PROCESS_FILES_FOR_BACKUP()
 {
-  
+  # Unset any previously initialized variables
   unset SEARCH
   unset REPLACE
+
   #  Paths needs flatpak/host specific replacement
+  # *.reg files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-      SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\config")
-  else
-      SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config")
-  fi
-  REPLACE=("XOCONFIGXO")
+       SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\config")
+  else SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
+       REPLACE=("XOCONFIGXO")
   
+  # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("\.var\/app\/${FLATPAK_NAME}\/data\/prefixes")
-  else
-     SEARCH+=("\.local\/share\/winezgui")
-  fi
-  REPLACE+=("XOPREFIXXO")
+       SEARCH+=("\.var\/app\/${FLATPAK_NAME}\/data\/prefixes")
+  else SEARCH+=("\.local\/share\/winezgui"); fi
+       REPLACE+=("XOPREFIXXO")
   
+  # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     SEARCH+=("\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
-  else
-     SEARCH+=("\.local\/share\/applications\/winezgui")
-  fi
-  REPLACE+=("XODESKTOPDIRXO")
+       SEARCH+=("\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
+  else SEARCH+=("\.local\/share\/applications\/winezgui"); fi
+       REPLACE+=("XODESKTOPDIRXO")
 
+  # *.reg files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-      SEARCH+=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\data\\\\\\\\applications")
-  else
-      SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications")
-  fi
-  REPLACE+=("XOAPPLICATIONSXO")
+       SSSSSSS=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}")
+       SEARCH+=("${SSSSSSS}\\\\\\\\data\\\\\\\\applications")
+  else SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications");  fi
+       REPLACE+=("XOAPPLICATIONSXO")
 
+  # Paths
   SEARCH+=("\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
   
   SEARCH+=("home\/${USER}")
   REPLACE+=("XOUSERHOMEXO")
   
-# Variables
+  # Variables
   SEARCH+=("${FLATPAK_NAME}")
   REPLACE+=("XOFLATPAKIDXO")
   
@@ -53,12 +52,12 @@ PROCESS_FILES_FOR_BACKUP()
 
 
 
-  len=${#SEARCH[@]}
+  LEN=${#SEARCH[@]}
 
-  # By default process
+  # By default process (SEARCH->REPLACE)
   if [ "$1" = "restore" ]; then
       echo "Restoring preprocessed variables"
-      for (( i=0; i <$len; i++ ))
+      for (( i=0; i <${LEN}; i++ ))
           do
           echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
@@ -77,7 +76,7 @@ PROCESS_FILES_FOR_BACKUP()
              ${BACKUPNAME}/*.sh
   else
       echo "Processing Registry and Info files"
-      for (( i=0; i <$len; i++ ))
+      for (( i=0; i <${LEN}; i++ ))
       do
          echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
@@ -85,14 +84,17 @@ PROCESS_FILES_FOR_BACKUP()
          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.desktop
          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.sh
       done
+
       # Rename Directory for Backup
       mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
             "${BACKUPNAME}/drive_c/users/XOUSERXO"
-      # Set install type
-      #sed -E "s|export INSTALL\_TYPE=.*|XOINSTALLTYPEXO|g" -i ${BACKUPNAME}/*.sh
-      # remove flatpak name on backuping (flatpak)
-      #sed   "s|\(export FLATPAK\_NAME=\).*|\1XOFLATPAKIDXO|g" -i \
-      #       ${BACKUPNAME}/*.sh
+
   fi
+
+  # Cleanup variables
+  unset LEN
+  unset SSSSSSS
+  unset SEARCH
+  unset REPLACE
 
 }
