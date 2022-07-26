@@ -82,6 +82,7 @@ PROCESS_FILES_FOR_BACKUP()
             "${BACKUPNAME}/drive_c/users/${USER}"
 
       # Recreate Links to H: and G: links on Restore
+      echo "Recreating Links to H: and G: links in wine prefix"
       ln -sf "${EXE_PATH}" "${BACKUPNAME}/dosdevices/g:"
       ln -sf "${HOME}"     "${BACKUPNAME}/dosdevices/h:"
 
@@ -108,8 +109,9 @@ PROCESS_FILES_FOR_BACKUP()
             "${BACKUPNAME}/drive_c/users/XOUSERXO"
 
       # Remove H: and G: links on Backup
-      rm "${BACKUPNAME}/dosdevices/g:"
-      rm "${BACKUPNAME}/dosdevices/h:"
+      echo "Removing G: and H: links from wine prefix"
+      rm -v "${BACKUPNAME}/dosdevices/g:"
+      rm -v "${BACKUPNAME}/dosdevices/h:"
   fi
 
   # Cleanup variables
