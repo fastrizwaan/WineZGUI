@@ -460,9 +460,9 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                   # Extract file to WineZGUI Prefix and show gui progress dialog
                   echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              
-                  (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
+                  (tar -zxvf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
                        2>/dev/null)|                                     \
-                  zenity --progress --width=240                          \ 
+                       zenity --progress --width=240                     \
                          --title="Restoring ${BACKUPNAME}!"              \
                          --text="Extracting ${WINEZGUI_BACKUP_FILE}..."  \
                          --pulsate --auto-close
