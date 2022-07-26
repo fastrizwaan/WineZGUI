@@ -186,10 +186,12 @@ if [ ! -f "${EXE_FILE}" ] ; then
                              "${WINEPREFIX_SUBDIR}/dosdevices/g:"
  
                      # Change info.txt
-                     sed "s/\(Game EXE.*: \)/\1${FIND_EXE_FILE}/g" -i \
+                     REPLACE_EXE_FILE=$(echo $FIND_EXE_FILE |sed 's/\//\\\//g')
+                     sed "s/\(Game EXE.*: \)/\1${REPLACE_EXE_FILE}/g" -i \
                           ${WINEPREFIX_SUBDIR}/info.txt
                      
-                     sed "s/\(Game Directory.*: \)/\1${FIND_EXE_PATH}/g" -i \
+                     REPLACE_EXE_PATH=$(echo $FIND_EXE_PATH |sed 's/\//\\\//g')
+                     sed "s/\(Game Directory.*: \)/\1${REPLACE_EXE_PATH}/g" -i \
                           ${WINEPREFIX_SUBDIR}/info.txt
                      
                      # Allow launching exe by setting temporarily variables
