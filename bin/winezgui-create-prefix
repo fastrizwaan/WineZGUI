@@ -188,12 +188,12 @@ if [ ! -f "${EXE_FILE}" ] ; then
                      # Change info.txt
                      REPL_EXE_FILE=$(echo $FIND_EXE_FILE|\
                                      sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-                     sed "s/\(Game EXE.*: \)/\1${REPL_EXE_FILE}/g" -i \
+                     sed "s/\(Game EXE.*: \).*/\1${REPL_EXE_FILE}/g" -i \
                           ${WINEPREFIX_SUBDIR}/info.txt
                      
                      REPL_EXE_PATH=$(echo $FIND_EXE_PATH|\
                                      sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-                     sed "s/\(Game Directory.*: \)/\1${REPL_EXE_PATH}/g" -i \
+                     sed "s/\(Game Directory.*: \).*/\1${REPL_EXE_PATH}/g" -i \
                           ${WINEPREFIX_SUBDIR}/info.txt
                      
                      # Allow launching exe by setting temporarily variables
