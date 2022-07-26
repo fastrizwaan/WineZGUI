@@ -181,7 +181,7 @@ if [ ! -f "${EXE_FILE}" ] ; then
                           -i $0
                      
                      # set g: to new exe path
-                     rm  -v  "WINEPREFIX_SUBDIR/dosdevices/g:"
+                     rm  -v  "${WINEPREFIX_SUBDIR}/dosdevices/g:"
                      ln -svf "${FIND_EXE_PATH}" \
                              "${WINEPREFIX_SUBDIR}/dosdevices/g:"
  
