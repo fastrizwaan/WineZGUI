@@ -142,7 +142,7 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT()
 {
 if [ ! -f "${EXE_FILE}" ] ; then
-    zenity --question --title "${EXE_NAME} not found!" \
+    zenity --question --no-wrap --title "${EXE_NAME} not found!" \
            --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
     ANSWER=$?
     echo ${ANSWER}
@@ -165,34 +165,51 @@ if [ ! -f "${EXE_FILE}" ] ; then
         	       echo "old256sum ${SHA256SUM}"
         	       echo "newSha256 ${FIND_EXE_FILE_SHA256SUM}"
         	      if [ "${SHA256SUM}" = "${FIND_EXE_FILE_SHA256SUM}" ]; then
-        	            echo "Found same sha256sum file"
-        	            zenity --question \
-        	                   --title "${EXE_NAME} found!" \
-                             --text  "set ${FIND_EXE_FILE}?"
-                      ANSWER=$?
-                      if [ ${ANSWER} -eq 0 ]; then
-                      sed "s|\(export EXE\_FILE=\).*|\1\"${FIND_EXE_FILE}\"|g" \
-                           -i $0
-                      FIND_EXE_PATH=$(dirname "$FIND_EXE_FILE")
-                      sed "s|\(export EXE\_PATH=\).*|\1\"${FIND_EXE_PATH}\"|g" \
-                           -i $0
-                      EXE_FILE="${FIND_EXE_FILE}"
-                      EXE_PATH="${FIND_EXE_PATH}"
-                      
-                      fi
+        	           echo "Found same sha256sum file"
+        	           zenity --question --no-wrap \
+        	                  --title "${EXE_NAME} found!" \
+                            --text  "set ${FIND_EXE_FILE}?"
+                     ANSWER=$?
+                     # Set EXE and EXE path in script file and info.txt and g:
+                     if [ ${ANSWER} -eq 0 ]; then
+                     
+                     # Script ($0) file update
+                     sed "s|\(export EXE\_FILE=\).*|\1\"${FIND_EXE_FILE}\"|g" \
+                          -i $0
+                     FIND_EXE_PATH=$(dirname "$FIND_EXE_FILE")
+                     sed "s|\(export EXE\_PATH=\).*|\1\"${FIND_EXE_PATH}\"|g" \
+                          -i $0
+                     
+                     # set g: to new exe path
+                     rm  -v  "WINEPREFIX_SUBDIR/dosdevices/g:"
+                     ln -svf "${FIND_EXE_PATH}" \
+                             "${WINEPREFIX_SUBDIR}/dosdevices/g:"
+ 
+                     # Change info.txt
+                     sed "s/\(Game EXE.*: \)/\1${FIND_EXE_FILE}/g" -i \
+                          ${WINEPREFIX_SUBDIR}/info.txt
+                     
+                     sed "s/\(Game Directory.*: \)/\1${FIND_EXE_PATH}/g" -i \
+                          ${WINEPREFIX_SUBDIR}/info.txt
+                     
+                     # Allow launching exe by setting temporarily variables
+                     EXE_FILE="${FIND_EXE_FILE}"
+                     EXE_PATH="${FIND_EXE_PATH}"
+
+                     fi
                 else
-                      echo "Warning: Different Sha256sum"
-        	            zenity --question \
-        	                   --title "${EXE_NAME} Checksum Fail!" \
-                             --text  "Just run ${FIND_EXE_FILE} once?"
-                      ANSWER=$?
-                      # If the user still want to run the mismatched exe
-                      # Let the user run it once
-                      if [ ${ANSWER} -eq 0 ]; then
-                      FIND_EXE_PATH=$(dirname "$FIND_EXE_FILE")
-                      EXE_FILE="${FIND_EXE_FILE}"
-                      EXE_PATH="${FIND_EXE_PATH}"
-                      fi
+                     echo "Warning: Different Sha256sum"
+        	           zenity --question --no-wrap \
+        	                  --title "${EXE_NAME} Checksum Fail!" \
+                            --text  "Just run ${FIND_EXE_FILE} once?"
+                     ANSWER=$?
+                     # If the user still want to run the mismatched exe
+                     # Let the user run it once
+                     if [ ${ANSWER} -eq 0 ]; then
+                          FIND_EXE_PATH=$(dirname "$FIND_EXE_FILE")
+                          EXE_FILE="${FIND_EXE_FILE}"
+                          EXE_PATH="${FIND_EXE_PATH}"
+                     fi
                 fi
         	       
         	  fi
