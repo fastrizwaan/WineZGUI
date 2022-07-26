@@ -16,6 +16,9 @@ export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
 export FLATPAK_NAME="io.github.WineZGUI"
 #/These values will be changed  by Setup using sed command
 
+export UPDATE_ICON_CACHE="gtk-update-icon-cache"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database"
+
 export AUTHOR="Mohammed Asif Ali Rizvan"
 export EMAIL="fast.rizwaan@gmail.com"
 export COPYRIGHT="GNU General Public License (GPLv3)"
@@ -36,6 +39,7 @@ export WINEPREFIX=${PREFIXDIR}
 export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
+
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Where to install .desktop shortcuts?
@@ -461,7 +465,7 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                   zenity --progress --width=240                          \ 
                          --title="Restoring ${BACKUPNAME}!"              \
                          --text="Extracting ${WINEZGUI_BACKUP_FILE}..."  \
-                         --pulsate --auto-kill
+                         --pulsate --auto-close
 
                  # Now do Preprocessing for host and flatpak installs
                  cd "${WINEZPREFIX}"
@@ -490,7 +494,12 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
             	       
             	        # link the application shortcut .desktop file
             	        ln -svf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
-                     
+
+                      # Update menus
+                      ${UPDATE_ICON_CACHE}
+                      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+                      ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+
                       # Get Game name from desktop file
             	        GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d '=')"
             	        echo "Game Name: $GN"
@@ -529,9 +538,11 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
              
              # Delete all broken links which points to winezgui
              find ${DESKTOPDIR} -xtype l -delete
+
+             # Update menus
              ${UPDATE_ICON_CACHE}
              ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-
+             ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
              # Return to Main window after deleting default prefix
              MainFunction
       # ====================== Open Explorer ========================== #
