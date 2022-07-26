@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ============================================================================ #
 # winez-create-prefix (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
 # URL: https://github.com/fastrizwaan/WineZGUI
 # Creates Application shortcut when called from winezgui.
@@ -507,7 +508,10 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          export WINEVER=$(${WINE_CMD} --version|cut -f1 -d " ")
          ${DESKTOP_FILE_EDIT} --set-name="$NEWPROGNAME ($WINEVER)" \
                               ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop
-        sed -E "s/^export PROGNAME=.*/export PROGNAME=\"$NEWPROGNAME ($WINEVER)\"/" \
+         
+         SED_SEARCH="^export PROGNAME=.*"
+         SED_REPLACE="export PROGNAME=\"${NEWPROGNAME} (${WINEVER})\""
+         sed -E "s/${SED_SEARCH}/${SED_REPLACE}/" \
             -i ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
