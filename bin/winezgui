@@ -460,61 +460,61 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
                   # Extract file to WineZGUI Prefix and show gui progress dialog
                   echo "Extracting ${WINEZGUI_BACKUP_FILE} at ${WINEZPREFIX}"
              
-                 (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
+                  (tar -zxf "${WINEZGUI_BACKUP_FILE}" -C "${WINEZPREFIX}" \
                        2>/dev/null)|                                     \
                   zenity --progress --width=240                          \ 
                          --title="Restoring ${BACKUPNAME}!"              \
                          --text="Extracting ${WINEZGUI_BACKUP_FILE}..."  \
                          --pulsate --auto-close
 
-                 # Now do Preprocessing for host and flatpak installs
-                 cd "${WINEZPREFIX}"
-                 PROCESS_FILES_FOR_BACKUP "restore"
+                  # Now do Preprocessing for host and flatpak installs
+                  cd "${WINEZPREFIX}"
+                  PROCESS_FILES_FOR_BACKUP "restore"
                  
-                 # Create required applications directory for .desktop files
-            	   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-            	        MAKEDIR=("/home/${USER}/.local/share/applications/")
-            	        MAKEDIR+="winezgui/${FLATPAK_ID}"
-                      mkdir -p "${MAKEDIR}"
-                      unset MAKEDIR
-                 else
-                      MAKEDIR=("/home/${USER}/.local/share/applications/")
-            	        MAKEDIR+="winezgui"
-                      mkdir -p "${MAKEDIR}"
-                 fi
+                  # Create required applications directory for .desktop files
+            	    if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            	         MAKEDIR=("/home/${USER}/.local/share/applications/")
+            	         MAKEDIR+="winezgui/${FLATPAK_ID}"
+                       mkdir -p "${MAKEDIR}"
+                       unset MAKEDIR
+                  else
+                       MAKEDIR=("/home/${USER}/.local/share/applications/")
+            	         MAKEDIR+="winezgui"
+                       mkdir -p "${MAKEDIR}"
+                  fi
         	   
-            	   # If .desktop file is found, means, it is a non default backup
-            	   
-            	   FOUND_PREFIX_DIR=("${WINEZPREFIX}/${BACKUPNAME}/")
-            	   FOUND_DESKTOP_FILE+="${FOUND_PREFIX_DIR}/${BACKUPNAME}.desktop"
-            	   FOUND_SCRIPT_FILE+="${FOUND_PREFIX_DIR}/${BACKUPNAME}.sh"
-            	   if [ -f "${FOUND_DESKTOP_FILE}" ]
-            	        then
-            	        echo "found ${FOUND_DESKTOP_FILE}, creating shortcut"
-            	       
-            	        # link the application shortcut .desktop file
-            	        ln -svf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
+            	    # If .desktop file is found, means, it is a non default backup
+            	    FOUND_PREFIX_DIR="${WINEZPREFIX}/${BACKUPNAME}"
+            	    FOUND_DESKTOP_FILE="${FOUND_PREFIX_DIR}/${BACKUPNAME}.desktop"
+            	    FOUND_SCRIPT_FILE="${FOUND_PREFIX_DIR}/${BACKUPNAME}.sh"
+            	    
+            	    if [ -f "${FOUND_DESKTOP_FILE}" ]
+            	         then
+            	         echo "found ${FOUND_DESKTOP_FILE}, creating shortcut"
+            	     
+            	         # link the application shortcut .desktop file
+            	         ln -svf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
 
-                      # Update menus
-                      ${UPDATE_ICON_CACHE}
-                      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-                      ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+                       # Update menus
+                       ${UPDATE_ICON_CACHE}
+                       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+                       ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
-                      # Get Game name from desktop file
-            	        GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d '=')"
-            	        echo "Game Name: $GN"
+                       # Get Game name from desktop file
+            	         GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d '=')"
+            	         echo "Game Name: $GN"
             	          
-            	     	 # Inform & ask if the user wants to start the restored game
-                     if zenity --question --no-wrap --width=200    \
-                               --title="WineZGUI Backup Restored!" \
-                               --text="Launch: ${GN}?"
-                     then
-                          # Start the Game script and exit main app
-                          echo "Launching Script for the restored game..."
-                          bash ${FOUND_SCRIPT_FILE}
-                          exit 0
-                     fi # zenity --question
-                 fi # -f "${FOUND_DESKTOP_FILE}"
+            	     	   # Ask if the user wants to start the restored game
+                       if zenity --question --no-wrap --width=200    \
+                                 --title="WineZGUI Backup Restored!" \
+                                 --text="Launch: ${GN}?"
+                       then
+                            # Start the Game script and exit main app
+                            echo "Launching Script for the restored game..."
+                            bash ${FOUND_SCRIPT_FILE}
+                            exit 0
+                       fi # zenity --question
+                  fi # -f "${FOUND_DESKTOP_FILE}"
         	   fi # -z "${WINEZGUI_BACKUP_FILE}"
         	   
         	   # Clear temporary used variables
