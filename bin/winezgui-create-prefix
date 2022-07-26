@@ -268,10 +268,10 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
        touch ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt
        
        # Create G: for Game Directory for Wine Explorer
-       ln -sf $EXE_PATH "${WINEPREFIX_SUBDIR}/dosdevices/g:"
+       ln -sf "${EXE_PATH}" "${WINEPREFIX_SUBDIR}/dosdevices/g:"
         
        # Create H: for HOME Directory for Wine Explorer
-       ln -sf $HOME "${WINEPREFIX_SUBDIR}/dosdevices/h:"
+       ln -sf "${HOME}" "${WINEPREFIX_SUBDIR}/dosdevices/h:"
         
   fi
 

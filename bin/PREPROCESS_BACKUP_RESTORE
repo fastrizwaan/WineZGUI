@@ -34,7 +34,19 @@ PROCESS_FILES_FOR_BACKUP()
   SEARCH+=("\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
   
-  SEARCH+=("home\/${USER}")
+  # \\user\\user *.reg
+  SEARCH+=("\\\\\\\\users\\\\\\\\${USER}")
+  REPLACE+=("XOREGUSERSUSERXO")
+
+  # \\home\\user\\ *.reg
+  SEARCH+=("\\\\\\\\home\\\\\\\\${USER}")
+  REPLACE+=("XOREGHOMEUSERXO")
+
+  # "USERNAME"="user" user.reg
+  SEARCH+=(\"USERNAME\"=\"${USER}\")
+  REPLACE+=("XOREGUSERNAMEUSERXO")
+
+  SEARCH+=("\/home\/${USER}")
   REPLACE+=("XOUSERHOMEXO")
   
   # Variables
@@ -47,10 +59,10 @@ PROCESS_FILES_FOR_BACKUP()
   SEARCH+=("${WINEVER}")
   REPLACE+=("XOWINEVERXO")
 
-  SEARCH+=("${USER}")
-  REPLACE+=("XOUSERXO")
+#  SEARCH+=("${USER}")
+#  REPLACE+=("XOUSERXO")
 
-
+# Now do the processing with the above search and replace values
 
   LEN=${#SEARCH[@]}
 
@@ -68,6 +80,12 @@ PROCESS_FILES_FOR_BACKUP()
       # Rename Directory on Restore
       mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
             "${BACKUPNAME}/drive_c/users/${USER}"
+
+      # Recreate Links to H: and G: links on Restore
+      ln -sf "${EXE_PATH}" "${BACKUPNAME}/dosdevices/g:"
+      ln -sf "${HOME}"     "${BACKUPNAME}/dosdevices/h:"
+
+
       # Set install type
       sed   "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
              ${BACKUPNAME}/*.sh
@@ -89,6 +107,9 @@ PROCESS_FILES_FOR_BACKUP()
       mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
             "${BACKUPNAME}/drive_c/users/XOUSERXO"
 
+      # Remove H: and G: links on Backup
+      rm "${BACKUPNAME}/dosdevices/g:"
+      rm "${BACKUPNAME}/dosdevices/h:"
   fi
 
   # Cleanup variables
