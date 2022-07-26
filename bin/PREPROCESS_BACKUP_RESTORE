@@ -3,29 +3,31 @@ PROCESS_FILES_FOR_BACKUP()
   # Unset any previously initialized variables
   unset SEARCH
   unset REPLACE
-
+  unset FPNAME
   #  Paths needs flatpak/host specific replacement
   # *.reg files
+  # flatpak name has .(period) which confuses sed
+  FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-       SEARCH=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}\\\\\\\\config")
+       SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
   else SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
        REPLACE=("XOCONFIGXO")
   
   # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-       SEARCH+=("\.var\/app\/${FLATPAK_NAME}\/data\/prefixes")
+       SEARCH+=("\.var\/app\/${FPNAME}\/data\/prefixes")
   else SEARCH+=("\.local\/share\/winezgui"); fi
        REPLACE+=("XOPREFIXXO")
   
   # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-       SEARCH+=("\.local\/share\/applications\/winezgui\/${FLATPAK_NAME}")
+       SEARCH+=("\.local\/share\/applications\/winezgui\/${FPNAME}")
   else SEARCH+=("\.local\/share\/applications\/winezgui"); fi
        REPLACE+=("XODESKTOPDIRXO")
 
   # *.reg files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-       SSSSSSS=("\.var\\\\\\\\app\\\\\\\\${FLATPAK_NAME}")
+       SSSSSSS=("\.var\\\\\\\\app\\\\\\\\${FPNAME}")
        SEARCH+=("${SSSSSSS}\\\\\\\\data\\\\\\\\applications")
   else SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications");  fi
        REPLACE+=("XOAPPLICATIONSXO")
@@ -50,13 +52,16 @@ PROCESS_FILES_FOR_BACKUP()
   REPLACE+=("XOUSERHOMEXO")
   
   # Variables
-  SEARCH+=("${FLATPAK_NAME}")
+  FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  SEARCH+=("${FPNAME}")
   REPLACE+=("XOFLATPAKIDXO")
   
-  SEARCH+=("${WINEEXE}")
+  WEXE=$(echo ${WINEEXE}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
-
-  SEARCH+=("${WINEVER}")
+  
+  WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  SEARCH+=("${WVER}")
   REPLACE+=("XOWINEVERXO")
 
 #  SEARCH+=("${USER}")
@@ -132,5 +137,8 @@ PROCESS_FILES_FOR_BACKUP()
   unset SEARCH
   unset REPLACE
   unset FIND_EXE_PATH
+  unset FPNAME
+  unset WEXE
+  unset WVER
 
 }
