@@ -87,8 +87,8 @@ PROCESS_FILES_FOR_BACKUP()
        if ! [ "${BACKUPNAME}" = "default" ]; then
               
               # Get EXE_PATH (where Game.exe is located)
-              FIND_EXE_PATH=$(grep "export EXE_PATH=\(.*\) \
-                              ${BACKUPNAME}/${BACKUPNAME}.sh" )
+              FIND_EXE_PATH=$(grep "export EXE_PATH=\(.*\)" \
+                              "${BACKUPNAME}/${BACKUPNAME}.sh" )
               echo "EXE_PATH found ${FIND_EXE_PATH}"
               ln -svf "${FIND_EXE_PATH}" \
                       "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/g:"
