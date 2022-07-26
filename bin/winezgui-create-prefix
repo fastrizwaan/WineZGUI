@@ -610,19 +610,20 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
               cd "${PREFIX}"
               echo "creating ${BACKUP_FILE} backup..."
               
-              
               #Preprocess
               PROCESS_FILES_FOR_BACKUP
               
               # Create Backup archive and restore changes as soon as tar is done
-              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null && \
-                   echo "${BACKUP_FILE} created successfully"; \
-                   echo "Restoring Registry and Info files"; \
-                   PROCESS_FILES_FOR_BACKUP "restore") | \
-                  zenity --progress \
-                         --title="Creating ${BACKUPNAME} backup!" \
-                         --width=240 --text="${BACKUP_FILE}..." \
-                         --pulsate --auto-kill
+              (tar -zcvf "${BACKUP_FILE}" "./${BACKUPNAME}" 2>/dev/null) | \
+                   zenity --progress --pulsate --auto-close        \
+                          --title="Creating ${BACKUPNAME} backup!" \
+                          --width=240 --text="${BACKUP_FILE}..."
+                   echo "${BACKUP_FILE} created successfully"
+
+              # Restore changed values after backup
+              echo "Restoring Registry and Info files"
+              PROCESS_FILES_FOR_BACKUP "restore"
+
 
               # Report Size also
               BACKUP_SIZE=$(du -sh "${BACKUP_FILE}"|cut -f1)
