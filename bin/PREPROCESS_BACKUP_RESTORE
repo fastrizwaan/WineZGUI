@@ -68,50 +68,56 @@ PROCESS_FILES_FOR_BACKUP()
 
   # By default process (SEARCH->REPLACE)
   if [ "$1" = "restore" ]; then
-      echo "Restoring preprocessed variables"
-      for (( i=0; i <${LEN}; i++ ))
-          do
-          echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-          sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
-          sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
-          sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.desktop
-          sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.sh
-      done
-      # Rename Directory on Restore
-      mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
-            "${BACKUPNAME}/drive_c/users/${USER}"
+       echo "Restoring preprocessed variables"
+       for (( i=0; i <${LEN}; i++ ))
+           do
+           echo "Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
+           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.reg
+           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.txt
+           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.desktop
+           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${BACKUPNAME}/*.sh
+       done
+       # Rename Directory on Restore
+       mv -v "${BACKUPNAME}/drive_c/users/XOUSERXO" \
+             "${BACKUPNAME}/drive_c/users/${USER}"
 
-      # Recreate Links to H: and G: links on Restore
-      echo "Recreating Links to H: and G: links in wine prefix"
-      ln -svf "${EXE_PATH}" "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/g:"
-      ln -svf "${HOME}"     "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/h:"
+       # Recreate Links to H: and G: links on Restore
+       echo "Recreating Links to H: and G: links in wine prefix"
+       # Skip Default prefix, as there's no game exe associated with it.
+       if ! [ "${BACKUPNAME}" = "default" ]; then
+              ln -svf "${EXE_PATH}" "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/g:"
+       fi
+              ln -svf "${HOME}"     "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/h:"
 
 
-      # Set install type
-      sed   "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
-             ${BACKUPNAME}/*.sh
-      # set flatpak name on restoring (flatpak)
-      sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g" -i \
-             ${BACKUPNAME}/*.sh
+       # Set install type
+       sed   "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
+              ${BACKUPNAME}/*.sh
+       # set flatpak name on restoring (flatpak)
+       sed   "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g" -i \
+              ${BACKUPNAME}/*.sh
   else
-      echo "Processing Registry and Info files"
-      for (( i=0; i <${LEN}; i++ ))
-      do
-         echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
-         sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
-         sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
-         sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.desktop
-         sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.sh
-      done
+       echo "Processing Registry and Info files"
+       for (( i=0; i <${LEN}; i++ ))
+       do
+          echo "Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
+          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.reg
+          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.txt
+          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.desktop
+          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${BACKUPNAME}/*.sh
+       done
 
-      # Rename Directory for Backup
-      mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
-            "${BACKUPNAME}/drive_c/users/XOUSERXO"
+       # Rename Directory for Backup
+       mv -v "${BACKUPNAME}/drive_c/users/${USER}" \
+             "${BACKUPNAME}/drive_c/users/XOUSERXO"
 
-      # Remove H: and G: links on Backup
-      echo "Removing G: and H: links from wine prefix"
-      rm -v "${BACKUPNAME}/dosdevices/g:"
-      rm -v "${BACKUPNAME}/dosdevices/h:"
+       # Remove H: and G: links on Backup
+       echo "Removing G: and H: links from wine prefix"
+       # Do not remove g: as default prefix does not have g:
+       if ! [ "${BACKUPNAME}" = "default" ]; then
+              rm -v "${BACKUPNAME}/dosdevices/g:"
+       fi
+              rm -v "${BACKUPNAME}/dosdevices/h:"
   fi
 
   # Cleanup variables
