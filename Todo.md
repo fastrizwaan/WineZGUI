@@ -4,6 +4,13 @@
 
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
+0.82
+Backup and Restore with Multi user
+- [ ] flatpak -> system
+- [x] flatpak -> flatpak
+- [ ] system -> system
+- [ ] system -> flatpak
+- [x] backup from user A / restores with user B and vice versa
 
 
 0.81
