@@ -83,8 +83,8 @@ PROCESS_FILES_FOR_BACKUP()
 
       # Recreate Links to H: and G: links on Restore
       echo "Recreating Links to H: and G: links in wine prefix"
-      ln -sf "${EXE_PATH}" "${BACKUPNAME}/dosdevices/g:"
-      ln -sf "${HOME}"     "${BACKUPNAME}/dosdevices/h:"
+      ln -svf "${EXE_PATH}" "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/g:"
+      ln -svf "${HOME}"     "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/h:"
 
 
       # Set install type
