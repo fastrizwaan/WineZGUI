@@ -1,0 +1,33 @@
+# Detect EXE from registry files
+system.reg:"exe"="C:\\GOG Games\\Cuphead\\Cuphead.exe"
+system.reg:"launchCommand"="C:\\GOG Games\\Cuphead\\Cuphead.exe "
+
+system.reg:@="C:\\Program Files\\Notepad++\\notepad++.exe"
+system.reg:"DisplayIcon"="C:\\Program Files\\Notepad++\\notepad++.exe"
+
+dospath=`echo $unixpath | sed 's/\//\\\\/g'`
+
+
+exiftool lnk file
+Target File DOS Name            : notepad++.exe
+Local Base Path                 : C:\Program Files\Notepad++\notepad++.exe
+Working Directory               : C:\Program Files\Notepad++
+
+How to find exe path?
+
+1. Using find command
+2. using exiftool lnk file
+3. using registry entry
+
+
+
+wine start /unix  "$(winepath -u "C:\Program Files\Notepad++\notepad++.exe")"
+
+PlayonLinux uses winepath
+
+0. find drive_c -iname "*.lnk"
+1. EXIFTOOL_FILE_NAME=exiftool lnk|grep Local Base Path |winepath -u
+2. EXIFTOOL_FILE_PATH=$(dirname $EXIFTOOL_FILE_NAME)
+3. 
+
+FOUND_EXE=$(find . -name windows -prune -o -name iexplore.exe -o -name wordpad.exe -o -name wmplayer.exe -prune -o -iname '*.exe' -a -type f -print)
