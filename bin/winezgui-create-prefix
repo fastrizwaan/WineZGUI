@@ -133,7 +133,6 @@ export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 # Append rest 
 echo '
 export WINEARCH=win64
-export WINEDLLOVERRIDES="mscoree,mshtml="
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib:/app/lib32:/app/lib64
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib/i386-linux-gnu:/app/lib/wine
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/lib64/wine:/app/$NAME:$(pwd)
