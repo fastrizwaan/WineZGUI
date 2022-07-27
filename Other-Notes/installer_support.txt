@@ -31,3 +31,29 @@ PlayonLinux uses winepath
 3. 
 
 FOUND_EXE=$(find . -name windows -prune -o -name iexplore.exe -o -name wordpad.exe -o -name wmplayer.exe -prune -o -iname '*.exe' -a -type f -print)
+
+
+#Merge Gamedir with Prefix
+1. if Gamedir is not inside prefix, ask user if he/she wants to move the game dir
+   inside game prefix or ask user to give write permission to gamedir
+
+# Create Backup with Gamedir
+1. On backup ask, if user wants to backup the Game dir too? if yes
+2. Copy the Gamedir to PREFIX/Gamedir
+3. set exe and path and to PREFIX/Gamedir
+
+
+# How to Replace an installer prefix to game/app prefix?
+
+1. if exe name contains *setup* or *install*, suggest installer prefix mode
+2. let the setup complete, then find exe using above FOUND_EXE and 
+3. present EXE names list to set as prefix and game name.
+4. avoid uninstaller exe (
+system.reg:"UninstallString"="\"C:\\Program Files (x86)\\Subatomic Studios LLC\\Fieldrunners 2\\unins000.exe\""
+
+# Use Sed with -e to reduce variable size
+echo $HOME|sed -e "s|/|X|g"
+ 
+VARIABLE=$(echo "\"C:\\Program Files (x86)\\Subatomic Studios LLC\\Fieldrunners 2\\unins000.exe\"")
+UNINSTALLER=\"$(winepath -u "C:\\Program Files (x86)\\Subatomic Studios LLC\\Fieldrunners 2\\unins000.exe\")\"
+basename of
