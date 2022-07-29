@@ -260,6 +260,15 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
         fi
     fi
 
+  # If restored from Backup, update the wineprefix on different wine version
+  # without install mono and install html dialog
+  if [ -f ${WINEPREFIX_SUBDIR}/restored.txt ]; then
+       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       WINEPREFIX=${WINEPREFIX_SUBDIR} \
+       ${WBOOT_CMD} 2>/dev/null
+       rm ${WINEPREFIX_SUBDIR}/restored.txt
+  fi
+
   # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
   if [ ! -f ${WINEPREFIX_SUBDIR}/replaced_symlinks.txt  ]; then
 

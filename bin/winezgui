@@ -490,7 +490,14 @@ source ${BINDIR}/PREPROCESS_BACKUP_RESTORE
             	    if [ -f "${FOUND_DESKTOP_FILE}" ]
             	         then
             	         echo "found ${FOUND_DESKTOP_FILE}, creating shortcut"
-            	     
+            	         
+            	         
+            	         # Create a restored.text to update wineprefix
+            	         # without mono and html install dialog which
+            	         # winezgui-create-prefix checks
+            	         # on 1st lauch on restoring
+            	         touch ${FOUND_PREFIX_DIR}/restored.txt
+            	         
             	         # link the application shortcut .desktop file
             	         ln -svf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
 

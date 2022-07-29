@@ -78,22 +78,28 @@ echo "Built ${APP_ID}..."
 if [ "$1" = "system" ]; then
      INSTALL="--system"
      SUDO="sudo"
-     FUNCTION_INSTALL_DEPS
-     echo "Installing ${APP_ID}...${INSTALL}"
-     ${SUDO} flatpak-builder ${INSTALL}  \
-             --install --force-clean build-dir ${APP_ID}.yml && \
-     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
 else
      INSTALL="--user"
      unset SUDO
+fi
+
      FUNCTION_INSTALL_DEPS
+     echo "Installing ${APP_ID}...${INSTALL}"
+     
+# Install System or User?
+if [ "$1" = "system" ]; then
      echo "Installing ${APP_ID}...${INSTALL}"
      ${SUDO} flatpak-builder ${INSTALL}  \
              --install --force-clean build-dir ${APP_ID}.yml && \
-     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
-     echo -e "run:\nflatpak run ${APP_ID}" 
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak as ${INSTALL}!"
+else
+     echo "Installing ${APP_ID}...${INSTALL}"
+     ${SUDO} flatpak-builder ${INSTALL}  \
+             --install --force-clean build-dir ${APP_ID}.yml && \
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak as ${INSTALL}!"
+     
 fi
-
+echo -e "run:\nflatpak run ${APP_ID}" 
 # Create flatpak bundle?
 if [ "$1" = "bundle" ]; then
      MSG=("Please wait building bundle...")
