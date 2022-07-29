@@ -111,9 +111,9 @@ PROCESS_FILES_FOR_BACKUP()
                               "${BACKUPNAME}/${BACKUPNAME}.sh" )
               echo "EXE_PATH found ${FIND_EXE_PATH}"
               ln -svf "${FIND_EXE_PATH}" \
-                      "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/g:"
+                      "${PWD}/${BACKUPNAME}/dosdevices/g:"
        fi
-              ln -svf "${HOME}" "${WINEZPREFIX}/${BACKUPNAME}/dosdevices/h:"
+              ln -svf "${HOME}" "${PWD}/${BACKUPNAME}/dosdevices/h:"
 
 
        # Set install type
