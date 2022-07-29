@@ -58,18 +58,18 @@ cd ${FLATPAK_BUILD_DIR}
 # org.freedesktop.Sdk/x86_64/21.08
 # org.freedesktop.Platform/x86_64/21.08
 # org.winehq.Wine/x86_64/stable-21.08
-
-(flatpak --user remote-add --if-not-exists \
- flathub https://flathub.org/repo/flathub.flatpakrepo 
- flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
- flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
- flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
- flatpak --user -y install flathub org.freedesktop.Platform/x86_64/21.08; 
- flatpak list |grep org.winehq.Wine/x86_64/stable-21.08   || \
- flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
-) && \
- echo "Installed dependencies for ${APP_ID}"
-
+FUNCTION_INSTALL_DEPS(){
+  (${SUDO} flatpak ${INSTALL} remote-add --if-not-exists \
+   flathub https://flathub.org/repo/flathub.flatpakrepo 
+   flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
+   ${SUDO} flatpak ${INSTALL} -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
+   flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
+   ${SUDO} flatpak ${INSTALL} -y install flathub org.freedesktop.Platform/x86_64/21.08; 
+   flatpak list |grep org.winehq.Wine/x86_64/stable-21.08   || \
+   ${SUDO} flatpak ${INSTALL} -y install flathub org.winehq.Wine/x86_64/stable-21.08
+  ) && \
+   echo "Installed dependencies for ${APP_ID}"
+}
 
 echo "Building ${APP_ID}..."
 flatpak-builder --force-clean build-dir ${APP_ID}.yml && \
@@ -78,14 +78,21 @@ echo "Built ${APP_ID}..."
 if [ "$1" = "system" ]; then
      INSTALL="--system"
      SUDO="sudo"
+     FUNCTION_INSTALL_DEPS
+     echo "Installing ${APP_ID}...${INSTALL}"
+     ${SUDO} flatpak-builder ${INSTALL}  \
+             --install --force-clean build-dir ${APP_ID}.yml && \
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
 else
      INSTALL="--user"
      unset SUDO
+     FUNCTION_INSTALL_DEPS
+     echo "Installing ${APP_ID}...${INSTALL}"
+     ${SUDO} flatpak-builder ${INSTALL}  \
+             --install --force-clean build-dir ${APP_ID}.yml && \
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
+     echo -e "run:\nflatpak run ${APP_ID}" 
 fi
-echo "Installing ${APP_ID}..."
-${SUDO} flatpak-builder ${INSTALL}  --install --force-clean build-dir ${APP_ID}.yml && \
-echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
-echo -e "run:\nflatpak run ${APP_ID}" 
 
 # Create flatpak bundle?
 if [ "$1" = "bundle" ]; then
