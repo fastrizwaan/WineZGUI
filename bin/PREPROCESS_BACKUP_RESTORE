@@ -48,9 +48,15 @@ PROCESS_FILES_FOR_BACKUP()
   SEARCH+=(\"USERNAME\"=\"${USER}\")
   REPLACE+=("XOREGUSERNAMEUSERXO")
 
+  SEARCH+=(\"InstalledBy\"=\"${USER}\")
+  REPLACE+=("XOREGINSTALLEDBYUSERXO")
+
   SEARCH+=("\/home\/${USER}")
   REPLACE+=("XOUSERHOMEXO")
   
+  SEARCH+=("\/users\/${USER}")
+  REPLACE+=("XOUSERSUSERXO")
+
   # Variables
   FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${FPNAME}")
