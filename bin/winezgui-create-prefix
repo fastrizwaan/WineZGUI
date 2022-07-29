@@ -146,7 +146,7 @@ if [ ! -f "${EXE_FILE}" ] ; then
     ANSWER=$?
     echo ${ANSWER}
     if [ ${ANSWER} -eq 0 ]; then
-        FILTER=$(echo $EXE_NOEXE|cut -f1 -d " ")
+        FILTER=$(echo ${EXE_NAME}|cut -f1 -d " ")
         FIND_EXE_FILE="$(zenity                      \
                            --file-filter="${FILTER}*.exe"          \
                            --file-selection                      \
