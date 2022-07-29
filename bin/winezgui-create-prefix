@@ -260,7 +260,7 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
     fi
 
 # Needed for info.txt and backup and restore function
-WINEEXE=${WINE_CMD}
+export WINEEXE=${WINE_CMD}
 
   # If restored from Backup, update the wineprefix on different wine version
   # without install mono and install html dialog
