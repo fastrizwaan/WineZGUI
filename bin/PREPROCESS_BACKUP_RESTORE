@@ -7,7 +7,11 @@ PROCESS_FILES_FOR_BACKUP()
   #  Paths needs flatpak/host specific replacement
   # *.reg files
   # flatpak name has .(period) which confuses sed
+  # Only sed if FLATPAK_NAME has value
+  if ! [ -z "$FLATPAK_NAME" ]; then
   FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  fi
+
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
        SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
   else SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
@@ -58,10 +62,15 @@ PROCESS_FILES_FOR_BACKUP()
   REPLACE+=("XOUSERSUSERXO")
 
   # Variables
+  # Sed can't change empty string/variables,
+  # e.g., flatpakid in system install is empty
+  # Only change FLATPAK_NAME if found
+  if ! [ -z "$FLATPAK_NAME" ]; then
   FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${FPNAME}")
   REPLACE+=("XOFLATPAKIDXO")
-  
+  fi
+
   WEXE=$(echo ${WINEEXE}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
