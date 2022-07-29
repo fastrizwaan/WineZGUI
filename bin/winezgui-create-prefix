@@ -484,6 +484,9 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
  
   elif [ "${SELECTION}" = "Open Shell..." ]; then
           
+        elif [ "${SELECTION}" = "Open Shell..." ]; then
+         export TERMINAL_PREFIX=$(echo ${WINEPREFIX_SUBDIR} \
+                                |sed -e "s|(|\\\(|g"|sed -e "s|)|\\\)|g") 
          #  using flatpak install and script is running from sandbox
          # Check if it is a flatpak based script
          # Check if it is running from inside sandbox
@@ -491,27 +494,29 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          if [ ${INSTALL_TYPE} = "flatpak" ] && \
             [ $(flatpak-spawn --host which gnome-terminal) ]; then
               echo "I am a flatpak script, running from sandbox"
-              export WINEPREFIX=${WINEPREFIX_SUBDIR};
+             
+              
+              echo "export WINEPREFIX=${WINEPREFIX};"
               flatpak-spawn --host gnome-terminal --wait -- flatpak run \
               --command=bash ${FLATPAK_NAME} -c  \
-             "export WINEPREFIX=${WINEPREFIX_SUBDIR}; cd \"$WINEPREFIX\";\
+             "export WINEPREFIX=${TERMINAL_PREFIX}; cd \"$WINEPREFIX\";\
              exec bash -i;"
          # If flatpak install and script running from host
          # and gnome terminal is found
          elif [ ${INSTALL_TYPE} = "flatpak" ] && \
               [ $(which gnome-terminal) ]; then
-              export WINEPREFIX=${WINEPREFIX_SUBDIR};
-              echo "export WINEPREFIX=\"${WINEPREFIX_SUBDIR}\";"
+              export WINEPREFIX=${TERMINAL_PREFIX};
+              echo "export WINEPREFIX=\"${TERMINAL_PREFIX}\";"
               echo "I am a flatpak script, running from host"
               gnome-terminal --wait -- flatpak  \
               --command=bash run ${FLATPAK_NAME} \
-              -c "cd \"${WINEPREFIX_SUBDIR}\"; exec bash -i"
+              -c "cd \"${TERMINAL_PREFIX}\"; exec bash -i"
          # Else it is a host install and gnome-terminal is found
          elif [ ${INSTALL_TYPE} = "system" ] && \
               [ $(which gnome-terminal) ]; then
               echo "I am a host based script, running from host"
-              export WINEPREFIX="${WINEPREFIX_SUBDIR}";
-              echo "export WINEPREFIX=${WINEPREFIX_SUBDIR};"
+              export WINEPREFIX="${TERMINAL_PREFIX}";
+              echo "export WINEPREFIX=${TERMINAL_PREFIX};"
               gnome-terminal --wait -- bash -c \
               "cd \"${WINEPREFIX}\"; exec bash -i"
          # gnome terminal is not found
