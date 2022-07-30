@@ -152,8 +152,8 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP2
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP2
 
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP3
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP3
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3
      
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP4
      # Create uninstall script for later removal
