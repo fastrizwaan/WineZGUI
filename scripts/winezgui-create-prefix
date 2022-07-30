@@ -58,14 +58,24 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ## Create a temporary Directory to extract icon from the exe file
     mkdir -vp ${TEMPDIR} && cd ${TEMPDIR}
     # wrestool extracts ico file from EXE
-    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null &&\
     echo "wrestool: Extracting ico file from $EXE_NOEXE"
-    # icotool extracts all png files from ico files
-    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null && \
-    echo "icotool: Extracting png files from ico:$EXE_NOEXE.ico"
-    # Select and copy the best png image file by sorting using ls -S1.
-    cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-    echo "Icon copied successfully..." && \
+    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null \
+              && echo "Found Icon" && FOUND_ICON="true"
+
+    # Only try to extract Icon when Icon is Found in the EXE
+    if [ "${FOUND_ICON}" = "true" ]; then
+          # icotool extracts all png files from ico files
+          icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null && \
+          echo "icotool: Extracting png files from ico:$EXE_NOEXE.ico"
+
+          # Select and copy the best png image file by sorting using ls -S1.
+          cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
+          echo "Icon copied successfully..." && \
+    else
+         echo "Echo Icon not found, please use \"Change Icon feature...\""
+    fi
+    # Cleanup tempdir and clear variable
+    unset FOUND_ICON
     rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
 
     # Create Desktop Shortcut file for the exe
@@ -74,7 +84,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
     # Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
     # System 0 Utility  --text "Select a Category:" 2> /dev/null)
-    
+    echo "Setting Category Game..."
     appCategory="Game"
 
     # Create Desktop Shortcut
