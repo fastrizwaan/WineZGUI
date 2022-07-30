@@ -22,7 +22,7 @@ export APPVERSION="git"
 export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
-export BINDIR=/usr/bin    # /usr will be replaced by prefix
+export BINDIR=/usr/share/winezgui    # /usr will be replaced by prefix
 export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 
 # Where to install .desktop shortcuts?
@@ -47,7 +47,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_PATH=$(dirname  "$EXE_FILE")
     EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
     EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
-    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"
+    WINEPREFIX_SUBDIR="${PREFIXDIR}/${EXE_NOEXE}"
     ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
 
     # Create required directories
@@ -58,14 +58,22 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ## Create a temporary Directory to extract icon from the exe file
     mkdir -vp ${TEMPDIR} && cd ${TEMPDIR}
     # wrestool extracts ico file from EXE
-    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null &&\
-    echo "wrestool: Extracting ico file from $EXE_NOEXE"
+    echo "wrestool: Extracting ico file from ${EXE_NOEXE}"
+    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null
+
+    # Only try to extract Icon when Icon is Found in the EXE
     # icotool extracts all png files from ico files
-    icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null && \
-    echo "icotool: Extracting png files from ico:$EXE_NOEXE.ico"
     # Select and copy the best png image file by sorting using ls -S1.
+    icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
+    echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
     cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-    echo "Icon copied successfully..." && \
+    echo "Icon copied successfully..." && WARN="false"
+    if [ "$WARN" != "false" ]; then
+         echo "Icon could not be copied... use \"Change Icon...\""
+    fi
+
+    # Cleanup tempdir and clear variable
+    unset WARN
     rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
 
     # Create Desktop Shortcut file for the exe
@@ -74,12 +82,12 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # --radiolist --column " " --column "Categories" 0 AudioVideo 0 Audio 0 Video 0 \
     # Development 0 Education TRUE Game 0 Graphics 0 Network 0 Office 0 Settings 0 \
     # System 0 Utility  --text "Select a Category:" 2> /dev/null)
-    
+    echo "Setting Category Game..."
     appCategory="Game"
 
     # Create Desktop Shortcut
     # Ask for Name
-    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
+    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use ${EXE_NOEXE} name" --entry)
     
     # Automatically set name, read from pe file, if not found use exe name
     PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
@@ -141,13 +149,17 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
 TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT()
 {
+# If exe file not found, ask user to locate it
 if [ ! -f "${EXE_FILE}" ] ; then
     zenity --question --no-wrap --title "${EXE_NAME} not found!" \
            --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
     ANSWER=$?
     echo ${ANSWER}
     if [ ${ANSWER} -eq 0 ]; then
-        FILTER=$(echo ${EXE_NAME}|cut -f1 -d " ")
+        # Take exe name before " " or "(" or ".exe"
+        FILTER=$(echo ${EXE_NAME}|cut -f1 -d " " \
+                                 |cut -f1 -d "(" \
+                                 |sed "s/\.[Ee][Xx][Ee]//g")
         FIND_EXE_FILE="$(zenity                      \
                            --file-filter="${FILTER}*.exe"          \
                            --file-selection                      \
@@ -545,7 +557,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
-         #zenity --info --title="$EXE_NOEXE.desktop" \
+         #zenity --info --title="${EXE_NOEXE}.desktop" \
          #       --text="Shortcut renamed sucessfuly: $appname"
          
          # Required for instant change in the GameWindow
@@ -576,13 +588,13 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          # set icon to the user selected one
          ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" \
-                                         ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
+                                         ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop 
          
          # Update .desktop database
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
          # Inform user
-         zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
+         zenity --info --no-wrap --title="${EXE_NOEXE}.desktop" \
                --text="Icon Changed sucessfuly: ${GET_ICON}"
      
    # Change Runtime Icon as soon as it is changed
@@ -676,7 +688,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
   elif [ "${SELECTION}" = "Delete..." ]; then
          
          # Delete Shortcuts and Prefix Directory
-         rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
+         rm -rfv ${DESKTOPDIR}/${EXE_NOEXE}.desktop
          rm -rf  ${WINEPREFIX_SUBDIR}; 
          # Delete all broken links which points to winezgui game prefix
          find ${WINEZSHORTCUTS} -xtype l -delete
@@ -733,13 +745,11 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
-    echo "--------------"
-    echo "mkdir 3 desktopdir"
-    echo "mkdir -p ${DESKTOPDIR}" 
+    echo "Info: Creating ${DESKTOPDIR}" 
     mkdir -p "${DESKTOPDIR}" 
     
     ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
-            ${DESKTOPDIR}/"$EXE_NOEXE".desktop
+            ${DESKTOPDIR}/"${EXE_NOEXE}".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
