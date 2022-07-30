@@ -155,13 +155,17 @@ export DESKTOP_FILE_EDIT="desktop-file-edit"
 
 TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT()
 {
+# If exe file not found, ask user to locate it
 if [ ! -f "${EXE_FILE}" ] ; then
     zenity --question --no-wrap --title "${EXE_NAME} not found!" \
            --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
     ANSWER=$?
     echo ${ANSWER}
     if [ ${ANSWER} -eq 0 ]; then
-        FILTER=$(echo ${EXE_NAME}|cut -f1 -d " ")
+        # Take exe name before " " or "(" or ".exe"
+        FILTER=$(echo ${EXE_NAME}|cut -f1 -d " " \
+                                 |cut -f1 -d "(" \
+                                 |sed "s/\.[Ee][Xx][Ee]//g")
         FIND_EXE_FILE="$(zenity                      \
                            --file-filter="${FILTER}*.exe"          \
                            --file-selection                      \
