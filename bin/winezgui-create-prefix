@@ -87,7 +87,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     if [ $(echo $PRODUCT | grep -aEv [a-zA-Z] ) ] || [ -z "$PRODUCT" ]; then
          unset PRODUCT
          unset PROGNAME
-         PROGNAME=$(echo "$EXE_NAME (${WINEVER})"|sed 's/\.exe//g');
+         PROGNAME=$(echo "$EXE_NAME (${WINEVER})"|sed "s/\.[eE][Xx][Ee]//g");
     else
          PROGNAME=$(echo "$PRODUCT (${WINEVER})");   
     fi
