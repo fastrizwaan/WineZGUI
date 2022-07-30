@@ -33,15 +33,6 @@ APPVERSION=$(cat ${SCRIPT_DIR}/../VERSION.txt|sed 's/\./_/g')
 # Where to build the flatpak?
 export FLATPAK_BUILD_DIR=~/.build/flatpak-builds/flatpak-winezgui
 
-# create a cleanup script
-echo '
-rm -rvf ~/.local/share/applications/winezgui          \
-        ~/.local/share/winezgui/                      \
-        ~/.var/app/${APP_ID}/data/prefixes
-' > ${FLATPAK_BUILD_DIR}/cleanup.sh
-
-chmod +rx ${FLATPAK_BUILD_DIR}/cleanup.sh
-
 mkdir -p ${FLATPAK_BUILD_DIR}
 
 # Remove symoblic links if exist in build_dir
