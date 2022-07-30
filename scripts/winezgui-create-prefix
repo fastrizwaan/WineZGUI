@@ -70,7 +70,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
           # Select and copy the best png image file by sorting using ls -S1.
           cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-          echo "Icon copied successfully..." && \
+          echo "Icon copied successfully..."
     else
          echo "Echo Icon not found, please use \"Change Icon feature...\""
     fi
