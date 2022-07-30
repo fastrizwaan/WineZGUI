@@ -67,7 +67,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
     echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
     cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-    echo "Icon copied successfully..." && WARN='false'
+    echo "Icon copied successfully..." && WARN="false"
     if [ "$WARN" != "false" ]; then
          echo "Icon could not be copied... use \"Change Icon...\""
     fi
