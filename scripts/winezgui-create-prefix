@@ -62,19 +62,19 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null
 
     # Only try to extract Icon when Icon is Found in the EXE
-    if [ "${FOUND_ICON}" = "true" ]; then
-          # icotool extracts all png files from ico files
-          # Select and copy the best png image file by sorting using ls -S1.
-          icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
-          echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
-
-          cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
-          echo "Icon copied successfully..."
-    else
-         echo "Warn: Icon not found! please use \"Change Icon feature...\""
+    # icotool extracts all png files from ico files
+    # Select and copy the best png image file by sorting using ls -S1.
+    icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
+    echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
+    "${FOUND_ICON}" = "true" && \
+    cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
+    echo "Icon copied successfully..." && WARN='false'
+    if [ "$WARN" != "false" ]; then
+         echo "Icon could not be copied... use \"Change Icon...\""
     fi
+
     # Cleanup tempdir and clear variable
-    unset FOUND_ICON
+    unset WARN
     rm -rf $TEMPDIR ; #remove tmp directory after copying icon png    
 
     # Create Desktop Shortcut file for the exe
