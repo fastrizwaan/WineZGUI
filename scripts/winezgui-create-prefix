@@ -61,21 +61,13 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     echo "wrestool: Extracting ico file from ${EXE_NOEXE}"
     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null
 
-    # if extracted icon file is not empty    
-    ICON_SIZE=$(du -s "${TEMPDIR}/${EXE_NOEXE}.ico"|cut -f1)
-
-    if [ ${ICON_SIZE} -gt 0 ]; then
-         echo "Found Icon"
-         FOUND_ICON="true"
-    fi
-
     # Only try to extract Icon when Icon is Found in the EXE
     if [ "${FOUND_ICON}" = "true" ]; then
           # icotool extracts all png files from ico files
-          icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
-          echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico"
-
           # Select and copy the best png image file by sorting using ls -S1.
+          icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
+          echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
+
           cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
           echo "Icon copied successfully..."
     else
