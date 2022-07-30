@@ -95,7 +95,7 @@ fi
 # Files to install
 APP1_SRC="./bin/winezgui"
 APP2_SRC="./scripts/winezgui-create-prefix"
-APP3_SRC="./scripts/mf-install"
+APP3_SRC="./bin/mf-install"
 APP4_SRC="./scripts/PREPROCESS_BACKUP_RESTORE"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
