@@ -59,8 +59,12 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     mkdir -vp ${TEMPDIR} && cd ${TEMPDIR}
     # wrestool extracts ico file from EXE
     echo "wrestool: Extracting ico file from $EXE_NOEXE"
-    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null \
-              && echo "Found Icon" && FOUND_ICON="true"
+    wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/$EXE_NOEXE.ico" 2> /dev/null
+    # if extracted icon file is not empty
+    if ! [ -s "${TEMPDIR}/$EXE_NOEXE.ico" ]; then
+           echo "Found Icon"
+           FOUND_ICON="true"
+    fi
 
     # Only try to extract Icon when Icon is Found in the EXE
     if [ "${FOUND_ICON}" = "true" ]; then
