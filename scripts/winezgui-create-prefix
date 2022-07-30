@@ -66,7 +66,6 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     # Select and copy the best png image file by sorting using ls -S1.
     icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
     echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico" && \
-    "${FOUND_ICON}" = "true" && \
     cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
     echo "Icon copied successfully..." && WARN='false'
     if [ "$WARN" != "false" ]; then
