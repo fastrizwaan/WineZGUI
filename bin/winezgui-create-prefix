@@ -701,7 +701,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          cd "$dire"
          ${WINE_CMD} "$base"
-         exit 0; # Exit after execution of exe
+         #exit 0; # Do not Exit after execution of exe
   fi
   }
 
