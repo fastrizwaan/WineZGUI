@@ -94,9 +94,9 @@ fi
 
 # Files to install
 APP1_SRC="./bin/winezgui"
-APP2_SRC="./bin/winezgui-create-prefix"
-APP3_SRC="./bin/mf-install"
-APP4_SRC="./bin/PREPROCESS_BACKUP_RESTORE"
+APP2_SRC="./scripts/winezgui-create-prefix"
+APP3_SRC="./scripts/mf-install"
+APP4_SRC="./scripts/PREPROCESS_BACKUP_RESTORE"
 DESK_SRC="./assets/winezgui.desktop"
 ICON_SRC="./assets/winezgui.svg"
 META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
@@ -112,6 +112,7 @@ META=$(basename $META_SRC)
 
 # Target Directory to install
 APPS_DIR="${INSTALL_PREFIX}/bin"
+DATA_DIR="${INSTALL_PREFIX}/share/winezgui"
 DESK_DIR="${INSTALL_PREFIX}/share/applications"
 ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
 META_DIR="${INSTALL_PREFIX}/share/metainfo"
@@ -120,17 +121,18 @@ META_DIR="${INSTALL_PREFIX}/share/metainfo"
 if [ "${INSTALL}" = "true"  ]
      then
      # Create required Directories
-     mkdir -p $ICON_DIR
-     mkdir -p $DESK_DIR
      mkdir -p $APPS_DIR
+     mkdir -p $DATA_DIR
+     mkdir -p $DESK_DIR
+     mkdir -p $ICON_DIR
      mkdir -p $META_DIR
   
      # Install the files
      echo Installing...
      install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
-     install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
-     install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
-     install -Dm755 $APP4_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP4'"
+     install -Dm755 $APP2_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP2'"
+     install -Dm755 $APP3_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP3'"
+     install -Dm755 $APP4_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP4'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
      install -Dm644 $META_SRC $META_DIR && echo "Installed '$META_DIR/$META'"
@@ -143,23 +145,23 @@ if [ "${INSTALL}" = "true"  ]
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP1
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP1
 
-     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $APPS_DIR/$APP2
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP2
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP2
-     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP2
-     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP2
-     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP2
+     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $DATA_DIR/$APP2
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP2
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP2
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP2
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP2
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP2
 
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP3
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP3
      
-     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP4
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP4
      # Create uninstall script for later removal
      echo "
      rm -vf $APPS_DIR/$APP1 
-     rm -vf $APPS_DIR/$APP2
-     rm -vf $APPS_DIR/$APP3
-     rm -vf $APPS_DIR/$APP4
+     rm -vf $DATA_DIR/$APP2
+     rm -vf $DATA_DIR/$APP3
+     rm -vf $DATA_DIR/$APP4
      rm -vf $DESK_DIR/$DESK
      rm -vf $ICON_DIR/$ICON
      rm -vf $META_DIR/$META

@@ -22,7 +22,7 @@ export APPVERSION="git"
 export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
-export BINDIR=/usr/bin    # /usr will be replaced by prefix
+export BINDIR=/usr/share/winezgui    # /usr will be replaced by prefix
 export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 
 # Where to install .desktop shortcuts?
