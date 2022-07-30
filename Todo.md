@@ -6,10 +6,10 @@
 
 0.82
 Backup and Restore with Multi user
-- [ ] flatpak -> system
+- [x] flatpak -> system
 - [x] flatpak -> flatpak
-- [ ] system -> system
-- [ ] system -> flatpak
+- [x] system -> system
+- [x] system -> flatpak
 - [x] backup from user A / restores with user B and vice versa
 
 
