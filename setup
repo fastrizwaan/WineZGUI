@@ -131,7 +131,7 @@ if [ "${INSTALL}" = "true"  ]
      echo Installing...
      install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
      install -Dm755 $APP2_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP2'"
-     install -Dm755 $APP3_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP3'"
+     install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
      install -Dm755 $APP4_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP4'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
@@ -160,7 +160,7 @@ if [ "${INSTALL}" = "true"  ]
      echo "
      rm -vf $APPS_DIR/$APP1 
      rm -vf $DATA_DIR/$APP2
-     rm -vf $DATA_DIR/$APP3
+     rm -vf $APPS_DIR/$APP3
      rm -vf $DATA_DIR/$APP4
      rm -vf $DESK_DIR/$DESK
      rm -vf $ICON_DIR/$ICON
