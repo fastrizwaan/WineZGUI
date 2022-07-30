@@ -198,8 +198,16 @@ if [ "${DEPENDENCIES}" = "true" ]; then
      
      # Show found and not found dependencies for WineZGUI
      echo "Dependencies..."
-     echo "Found    : $FOUND"
-     echo "Not Found: $NOTFOUND" 
+
+     # If NOTFOUND variable has a value
+     if ! [ -z "$NOTFOUND" ]; then
+          echo "Found    : $FOUND"
+          echo "Not Found: $NOTFOUND"
+     else
+          echo "$RUNTIME"
+          echo "Found all dependencies"
+
+     fi
 fi
 
 
