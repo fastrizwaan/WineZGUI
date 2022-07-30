@@ -47,7 +47,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     EXE_PATH=$(dirname  "$EXE_FILE")
     EXE_NOSP=$(echo $EXE_NAME|tr ' ' '_');
     EXE_NOEXE=$(echo $EXE_NOSP|sed "s/\.exe//g");
-    WINEPREFIX_SUBDIR="${PREFIXDIR}/$EXE_NOEXE"
+    WINEPREFIX_SUBDIR="${PREFIXDIR}/${EXE_NOEXE}"
     ICON="${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.png"    
 
     # Create required directories
@@ -58,18 +58,21 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
     ## Create a temporary Directory to extract icon from the exe file
     mkdir -vp ${TEMPDIR} && cd ${TEMPDIR}
     # wrestool extracts ico file from EXE
-    echo "wrestool: Extracting ico file from $EXE_NOEXE"
+    echo "wrestool: Extracting ico file from ${EXE_NOEXE}"
     wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null
-    # if extracted icon file is not empty
-    if ! [ -s "${TEMPDIR}/${EXE_NOEXE}.ico" ]; then
-           echo "Found Icon"
-           FOUND_ICON="true"
+
+    # if extracted icon file is not empty    
+    ICON_SIZE=$(du -s "${TEMPDIR}/${EXE_NOEXE}.ico"|cut -f1)
+
+    if [ ${ICON_SIZE} -gt 0 ]; then
+         echo "Found Icon"
+         FOUND_ICON="true"
     fi
 
     # Only try to extract Icon when Icon is Found in the EXE
     if [ "${FOUND_ICON}" = "true" ]; then
           # icotool extracts all png files from ico files
-          icotool -x "${TEMPDIR}/$EXE_NOEXE.ico" 2>/dev/null && \
+          icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" 2>/dev/null && \
           echo "icotool: Extracting png files from ico:${EXE_NOEXE}.ico"
 
           # Select and copy the best png image file by sorting using ls -S1.
@@ -93,7 +96,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
 
     # Create Desktop Shortcut
     # Ask for Name
-    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use $EXE_NOEXE name" --entry)
+    #PROGNAME=$(zenity --title "Create-Desktop-Shortcut" --text "Enter a name or Click OK to use ${EXE_NOEXE} name" --entry)
     
     # Automatically set name, read from pe file, if not found use exe name
     PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i 'product name'|cut -f2 -d ':' \
@@ -563,7 +566,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
-         #zenity --info --title="$EXE_NOEXE.desktop" \
+         #zenity --info --title="${EXE_NOEXE}.desktop" \
          #       --text="Shortcut renamed sucessfuly: $appname"
          
          # Required for instant change in the GameWindow
@@ -594,13 +597,13 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          
          # set icon to the user selected one
          ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" \
-                                         ${WINEPREFIX_SUBDIR}/$EXE_NOEXE.desktop 
+                                         ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop 
          
          # Update .desktop database
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
          # Inform user
-         zenity --info --no-wrap --title="$EXE_NOEXE.desktop" \
+         zenity --info --no-wrap --title="${EXE_NOEXE}.desktop" \
                --text="Icon Changed sucessfuly: ${GET_ICON}"
      
    # Change Runtime Icon as soon as it is changed
@@ -694,7 +697,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
   elif [ "${SELECTION}" = "Delete..." ]; then
          
          # Delete Shortcuts and Prefix Directory
-         rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
+         rm -rfv ${DESKTOPDIR}/${EXE_NOEXE}.desktop
          rm -rf  ${WINEPREFIX_SUBDIR}; 
          # Delete all broken links which points to winezgui game prefix
          find ${WINEZSHORTCUTS} -xtype l -delete
@@ -755,7 +758,7 @@ Terminal=false
     mkdir -p "${DESKTOPDIR}" 
     
     ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
-            ${DESKTOPDIR}/"$EXE_NOEXE".desktop
+            ${DESKTOPDIR}/"${EXE_NOEXE}".desktop
     # Test if the app link was created sucessfully on applications menu 
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
