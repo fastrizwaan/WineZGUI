@@ -23,6 +23,7 @@ export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 export BINDIR=/usr/bin    # /usr will be replaced by prefix
+export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
@@ -678,7 +679,7 @@ source ${WINEPREFIX_SUBDIR}/PREPROCESS_BACKUP_RESTORE
          rm -rfv ${DESKTOPDIR}/$EXE_NOEXE.desktop
          rm -rf  ${WINEPREFIX_SUBDIR}; 
          # Delete all broken links which points to winezgui game prefix
-         find ${DESKTOPDIR} -xtype l -delete
+         find ${WINEZSHORTCUTS} -xtype l -delete
          ${UPDATE_ICON_CACHE}
          ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          
