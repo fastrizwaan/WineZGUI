@@ -76,7 +76,7 @@ if [[ $(file --mime-type -b "$1") = application/* ]]; then
           cp $(ls -S -1 ${TEMPDIR}/${EXE_NOEXE}*.png  | head -n 1) ${ICON} && \
           echo "Icon copied successfully..."
     else
-         echo "Echo Icon not found, please use \"Change Icon feature...\""
+         echo "Warn: Icon not found! please use \"Change Icon feature...\""
     fi
     # Cleanup tempdir and clear variable
     unset FOUND_ICON
@@ -747,9 +747,7 @@ Terminal=false
 " > "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop"
 
     # link the launcher  file to a shortcut on applications menu.
-    echo "--------------"
-    echo "mkdir 3 desktopdir"
-    echo "mkdir -p ${DESKTOPDIR}" 
+    echo "Info: Creating ${DESKTOPDIR}" 
     mkdir -p "${DESKTOPDIR}" 
     
     ln -sfv ${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.desktop \
