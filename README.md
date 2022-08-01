@@ -125,7 +125,7 @@ sudo ./setup --uninstall
 
 ```
 sudo dpkg --add-architecture i386 && sudo apt update
-sudo apt install zenity wine wine32 winetricks libimage-exiftool-perl icoutils gnome-terminal wget
+sudo apt install zenity wine wine32 wine64 winetricks libimage-exiftool-perl icoutils gnome-terminal wget
 ```
 
 ### Solus
