@@ -124,8 +124,8 @@ sudo ./setup --uninstall
 ### Debian / Ubuntu
 
 ```
-sudo dpkg --add-architecture i386
-sudo apt install zenity wine winetricks libimage-exiftool-perl icoutils gnome-terminal wget
+sudo dpkg --add-architecture i386 && sudo apt update
+sudo apt install zenity wine wine32 winetricks libimage-exiftool-perl icoutils gnome-terminal wget
 ```
 
 ### Solus
