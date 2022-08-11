@@ -79,7 +79,7 @@ done
 
 # If prefix=nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
-   INSTALL_PREFIX="/usr"
+     INSTALL_PREFIX="/usr"
 fi
 
 # Flatpak Specific Commands and Variables
@@ -94,28 +94,38 @@ fi
 
 # Files to install
 APP1_SRC="./bin/winezgui"
-APP2_SRC="./scripts/winezgui-create-prefix"
-APP3_SRC="./bin/mf-install"
-APP4_SRC="./scripts/PREPROCESS_BACKUP_RESTORE"
-DESK_SRC="./assets/winezgui.desktop"
-ICON_SRC="./assets/winezgui.svg"
-META_SRC="./assets/io.github.fastrizwaan.WineZGUI.metainfo.xml"
+APP2_SRC="./bin/mf-install"
+APP3_SRC="./resources/winezgui-create-prefix"
+APP4_SRC="./resources/winezgui-backup-restore"
+APP5_SRC="./resources/winezgui-rename-prefix"
+DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
+MIME_SRC="./resources/winezgui-wzt.xml"
+ICON_SRC="./assets/io.github.fastrizwaan.WineZGUI.svg"
+META_SRC="./resources/io.github.fastrizwaan.WineZGUI.metainfo.xml"
+
+MIME_ICO1="application-x-wzt.svg"
+MIME_ICO2="gnome-mime-application-x-wzt.svg"
 
 # Basename
 APP1=$(basename $APP1_SRC)
 APP2=$(basename $APP2_SRC)
 APP3=$(basename $APP3_SRC)
 APP4=$(basename $APP4_SRC)
+APP5=$(basename $APP5_SRC)
 DESK=$(basename $DESK_SRC)
+MIME=$(basename $MIME_SRC)
 ICON=$(basename $ICON_SRC)
 META=$(basename $META_SRC)
+
 
 # Target Directory to install
 APPS_DIR="${INSTALL_PREFIX}/bin"
 DATA_DIR="${INSTALL_PREFIX}/share/winezgui"
 DESK_DIR="${INSTALL_PREFIX}/share/applications"
+MIME_DIR="${INSTALL_PREFIX}/share/mime/packages"
 ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
 META_DIR="${INSTALL_PREFIX}/share/metainfo"
+MIME_ICO="${INSTALL_PREFIX}/share/icons/hicolor/32x32/mimetypes"
 
 # If Install is selected
 if [ "${INSTALL}" = "true"  ]
@@ -124,49 +134,73 @@ if [ "${INSTALL}" = "true"  ]
      mkdir -p $APPS_DIR
      mkdir -p $DATA_DIR
      mkdir -p $DESK_DIR
+     mkdir -p $MIME_DIR
      mkdir -p $ICON_DIR
      mkdir -p $META_DIR
+     mkdir -p $MIME_ICO
   
      # Install the files
      echo Installing...
      install -Dm755 $APP1_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP1'" 
-     install -Dm755 $APP2_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP2'"
-     install -Dm755 $APP3_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP3'"
+     install -Dm755 $APP2_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP2'"
+     install -Dm755 $APP3_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP3'"
      install -Dm755 $APP4_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP4'"
+     install -Dm755 $APP5_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP5'"
      install -Dm644 $DESK_SRC $DESK_DIR && echo "Installed '$DESK_DIR/$DESK'"
+     install -Dm644 $MIME_SRC $MIME_DIR && echo "Installed '$MIME_DIR/$MIME'"
      install -Dm644 $ICON_SRC $ICON_DIR && echo "Installed '$ICON_DIR/$ICON'"
      install -Dm644 $META_SRC $META_DIR && echo "Installed '$META_DIR/$META'"
 
+     # mimetype icon same as application icon
+     install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO1 && \
+                    echo "Installed '$MIME_ICO/$MIME_ICO1'"
+                    
+     install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO2 && \
+                    echo "Installed '$MIME_ICO/$MIME_ICO2'"
+
+
+
+
+     # Update mime and desktop paths
+     update-mime-database ${INSTALL_PREFIX}/share/mime &
+     update-desktop-database ${DESK_DIR} &
+     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons &
+     
      # Change Variables in winezgui and winezgui-create-prefix scripts 
      # for system or flatpak install
-     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $APPS_DIR/$APP1
+     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $APPS_DIR/$APP1
      sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP1
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP1
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP1
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP1
 
-     sed "s|BINDIR=/usr|BINDIR=$INSTALL_PREFIX|"             -i $DATA_DIR/$APP2
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP2
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP2
-     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP2
-     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP2
-     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP2
-
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP3
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP3
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP2
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP2
      
+     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $DATA_DIR/$APP3
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP3
+     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP3
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP3
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP3
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP3
+
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP4
      # Create uninstall script for later removal
      echo "
      rm -vf $APPS_DIR/$APP1 
-     rm -vf $DATA_DIR/$APP2
-     rm -vf $APPS_DIR/$APP3
+     rm -vf $APPS_DIR/$APP2
+     rm -vf $DATA_DIR/$APP3
      rm -vf $DATA_DIR/$APP4
+     rm -vf $DATA_DIR/$APP5
      rm -vf $DESK_DIR/$DESK
+     rm -vf $MIME_DIR/$MIME
      rm -vf $ICON_DIR/$ICON
      rm -vf $META_DIR/$META
+     rm -vf $MIME_ICO/$MIME_ICO1
+     rm -vf $MIME_ICO/$MIME_ICO2
+     rmdir  $DATA_DIR && echo "removed \\\'${DATA_DIR}\\\'"
      " > ./uninstall
-     
+   
 # For --uninstall, if already installed then uninstall else skip
 elif [ "${UNINSTALL}" = "true" ]; then
        if [ -f ./uninstall ]; then

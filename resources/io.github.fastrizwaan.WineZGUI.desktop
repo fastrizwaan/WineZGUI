@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=WineZGUI
+Type=Application
+Comment=Wine GUI using Zenity
+Exec=winezgui %F
+MimeType=application/x-ms-dos-executable;application/x-winezgui-backup-file;
+Icon=io.github.fastrizwaan.WineZGUI
+StartupNotify=true
+Categories=Game;Emulator
+Keywords=exe;wine;windows

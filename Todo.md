@@ -2,26 +2,16 @@
 
 0.90
 
-
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
-      remove wine created.desktop files
-      by searching.desktop in startup menu
--     find all newly installed exe using find
-      present exe and set exe for the current prefix
-      Rename prefix for the current exe
-0.84
-- [ ] template prefix, 
-      downloadable prefixes like ue4,
-      create template from winezgui
-      (*) use Templates...
-      show using default template
-      launch using selected Templates
- 
+
 0.83
-- [x] Rename Prefix support
-- [x] Change category 
-- [ ] set backup file name to .wzt (winezgui tar)
-- [ ] register .wzt mimetype
+- [x] Rename Prefix
+- [x] Associate wzt mimetype with WineZGUI backup filename
+- [x] Mimetype support
+- [x] Open WineZGUI backup .wzt from argument and from Restore... option
+- [x] Change icon name to io.github.fast.rizwaan.WineZGUI.svg
+- [x] Change .desktop file name to io.github.fastrizwaan.WineZGUI.desktop
+
 0.82
 Backup and Restore with Multi user
 - [x] flatpak -> system

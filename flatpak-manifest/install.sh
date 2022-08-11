@@ -10,13 +10,6 @@ if ! command -v flatpak-builder &>/dev/null; then
      echo "Solus: sudo eopkg it flatpak-builder"
      exit 1
 fi
-
-
-#if [ $# -eq 0 ];  then
-#    echo "Building and installing winezgui flatpak!"
-#    echo "Info: to build a flatpak bundle! run:"
-#    echo "$0 bundle"
-#fi
 	
 APP_ID="io.github.fastrizwaan.WineZGUI"
 DATE=$(date +'%Y%m%d')
@@ -31,7 +24,7 @@ echo SCRIPT_DIR=$(dirname ${SCRIPT_NAME})
 APPVERSION=$(cat ${SCRIPT_DIR}/../VERSION.txt|sed 's/\./_/g')
 
 # Where to build the flatpak?
-export FLATPAK_BUILD_DIR=~/.build/flatpak-builds/flatpak-winezgui
+export FLATPAK_BUILD_DIR=~/.build/FLATPAK_BUILD_DIR/flatpak-winezgui
 
 mkdir -p ${FLATPAK_BUILD_DIR}
 
@@ -43,43 +36,63 @@ echo "Building flatpak inside ${FLATPAK_BUILD_DIR}..."
 ln -s ${SCRIPT_DIR}/* ${FLATPAK_BUILD_DIR}
 cd ${FLATPAK_BUILD_DIR}
 
+echo "Install these Dependencies in the system or as user"
+echo \
+'#-----------------------system---------------------------------------
+flatpak remove --user --all ; # Run as user
+sudo flatpak --system remote-add --if-not-exists \
+flathub https://flathub.org/repo/flathub.flatpakrepo 
+sudo flatpak --system -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
+sudo flatpak --system -y install flathub org.freedesktop.Platform/x86_64/21.08; 
+sudo flatpak --system -y install flathub org.winehq.Wine/x86_64/stable-21.08
+#------------------------user----------------------------------------------
+flatpak --user remote-add --if-not-exists \
+flathub https://flathub.org/repo/flathub.flatpakrepo 
+flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
+flatpak --user -y install flathub org.freedesktop.Platform/x86_64/21.08; 
+flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
+#------------------------user----------------------------------------------'
 
-# flatpak build requires these:
-# org.freedesktop.Sdk/x86_64/21.08
-# org.freedesktop.Platform/x86_64/21.08
-# org.winehq.Wine/x86_64/stable-21.08
-
-(flatpak --user remote-add --if-not-exists \
- flathub https://flathub.org/repo/flathub.flatpakrepo 
- flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
- flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
- flatpak list |grep org.freedesktop.Platform/x86_64/21.08 || \
- flatpak --user -y install flathub org.freedesktop.Platform/x86_64/21.08; 
- flatpak list |grep org.winehq.Wine/x86_64/stable-21.08   || \
- flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
-) && \
- echo "Installed dependencies for ${APP_ID}"
-
-
+# Building flatpak
 echo "Building ${APP_ID}..."
 flatpak-builder --force-clean build-dir ${APP_ID}.yml && \
-echo "Built ${APP_ID}..."
+echo "Built ${APP_ID}..." || \
+exit 1
 
-echo "Installing ${APP_ID}..."
-flatpak-builder --user --install --force-clean build-dir ${APP_ID}.yml && \
-echo -e "\n\nSuccessfully installed ${APP_ID} flatpak!"
-echo -e "run:\nflatpak run ${APP_ID}" 
+# Prefer system install
+if [ "$1" = "user" ]; then
+
+     echo "Building ${APP_ID}..."
+     flatpak-builder --force-clean build-dir ${APP_ID}.yml && \     
+     echo "Built ${APP_ID}..." || exit 1
+
+     echo "Installing ${APP_ID}..."
+     flatpak-builder --user --install --force-clean build-dir ${APP_ID}.yml && \
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak as user ${USER}!" || \
+     exit 1
+     echo -e "run:\nflatpak run ${APP_ID}" 
+else
+     echo "Building ${APP_ID}..."
+     flatpak-builder --force-clean build-dir-root ${APP_ID}.yml && \     
+     echo "Built ${APP_ID}..." || exit 1
+     
+     echo "Installing ${APP_ID}... systemwide"
+     sudo flatpak-builder --system --install --force-clean build-dir-root ${APP_ID}.yml && \
+     echo -e "\n\nSuccessfully installed ${APP_ID} flatpak in the system!" || \
+     exit 1
+     echo -e "run:\nflatpak run ${APP_ID}" 
+fi
 
 # Create flatpak bundle?
 if [ "$1" = "bundle" ]; then
      MSG=("Please wait building bundle...")
      BUNDLE="${APP_ID}_${APPVERSION}_${DATE}.flatpak"
-     REPO=~/.local/share/flatpak/repo
+     #REPO=~/.local/share/flatpak/repo
+     REPO=/var/lib/flatpak/repo
    
      echo "$MSG $BUNDLE"    
 
      # Create flatpak bundle
-
      flatpak build-bundle ${REPO} ${BUNDLE} ${APP_ID} main && \
      echo "Sucessfully built ${BUNDLE}!"
 

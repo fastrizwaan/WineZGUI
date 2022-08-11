@@ -6,8 +6,8 @@ sdk: org.freedesktop.Sdk
 base: org.winehq.Wine
 base-version: stable-21.08
 command: winezgui
-rename-icon: winezgui
-rename-desktop-file: winezgui.desktop
+#rename-icon: winezgui
+#rename-desktop-file: winezgui.desktop
 finish-args:
   - --allow=devel # For Wine crash handling
   - --allow=multiarch
@@ -114,6 +114,6 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        branch: 0.82
+        branch: 0.83
         url: https://github.com/fastrizwaan/WineZGUI.git
 
