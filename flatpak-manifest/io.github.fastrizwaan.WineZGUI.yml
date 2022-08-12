@@ -114,6 +114,7 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        branch: 0.83
+        # Version 0.83
+        commit: 4b8e76579588d547a0fd1736f297c71297f28d65
         url: https://github.com/fastrizwaan/WineZGUI.git
 
