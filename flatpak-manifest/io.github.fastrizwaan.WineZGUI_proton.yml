@@ -1,6 +1,5 @@
 id: io.github.fastrizwaan.WineZGUI
 branch: main
-version: '0.83'
 runtime: org.freedesktop.Platform
 runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
@@ -15,7 +14,7 @@ finish-args:
   - --device=all
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
-    # Need to link .desktop files
+    # Need to link .desktop files 
   - --filesystem=~/.local/share/applications
     # Most Games write to their own directories
   - --filesystem=host
@@ -59,7 +58,7 @@ modules:
   - name: icoutils
     build-options:
       #strip: true
-      no-debuginfo: true
+      no-debuginfo: true  
     buildsystem: autotools
     sources:
       - type: archive
@@ -85,7 +84,7 @@ modules:
       - exec ./configure.gnu $@
     post-install:
     - chmod -R u+w /app/lib/perl5
-
+  
   - name: exiftool
     build-options:
       #strip: true
@@ -93,16 +92,16 @@ modules:
     build-commands:
       - perl Makefile.PL
       - make
-      - make install
+      - make install 
     sources:
       - type: archive
         url: https://exiftool.org/Image-ExifTool-12.41.tar.gz
         sha256: 654f401daab0045a8364fa59d3f69b6f9bf23bcef157a3c928e373884a6f9370
-
+        
   - name: desktop-file-utils
     build-options:
       #strip: true
-      no-debuginfo: true
+      no-debuginfo: true  
     buildsystem: autotools
     sources:
       - type: archive
@@ -118,3 +117,4 @@ modules:
         # Version 0.83
         commit: 4b8e76579588d547a0fd1736f297c71297f28d65
         url: https://github.com/fastrizwaan/WineZGUI.git
+
