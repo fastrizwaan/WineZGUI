@@ -1,6 +1,6 @@
 id: io.github.fastrizwaan.WineZGUI
 branch: main
-version: '0.83'
+version: '0.83.1'
 runtime: org.freedesktop.Platform
 runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
@@ -115,6 +115,6 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        # Version 0.83
-        commit: 4b8e76579588d547a0fd1736f297c71297f28d65
+        #tag: 0.83.1
+        commit: 16521f2a7c822cf2a3930785df7a01b2cb4b861a
         url: https://github.com/fastrizwaan/WineZGUI.git
