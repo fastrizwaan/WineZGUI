@@ -31,7 +31,6 @@ export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
-export SHORT_FLATPAK_NAME="flatpak-${FLATPAK_NAME##*.}"
 
 export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
 export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
@@ -199,7 +198,6 @@ echo "
 #!/bin/bash
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
-export SHORT_FLATPAK_NAME=\"${SHORT_FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"
 export APP_WITH_VER=\"${APPNAME}-${APPVERSION}\"
 export WINEVER=\"${WINEVER}\"

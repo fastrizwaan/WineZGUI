@@ -1,6 +1,6 @@
 # winezgui-backup-function
 # This function can create a prefix backup or a game bundle by including gamedir
-
+export SHORT_FLATPAK_NAME="flatpak-${FLATPAK_NAME##*.}"
 # Step 1: Ask Backup, prefix or create game bundle?
 # Ask whether to backup only prefix or bundle the game directory too
 echo "I: Script: Backup... Selected!"
