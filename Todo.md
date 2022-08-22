@@ -4,11 +4,18 @@
 
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
-0.85
-- [ ] Code cleanup
-- [ ] Improve debug output
-- [ ] use non confusing filenames
+0.86
+- [ ] Game dir/Lava/Binaries/Win64/exe -> Bundle Directory (for UE4 games)
+- [ ] Ask for Game Directory before creating bundle
+- [ ] Restore question dialog should present wzt-info on loading .wzt file
 
+
+0.85
+- [x] Game Bundle, Ask compression Level, defaults to "zstd -10"
+- [x] use "zstd -T0" to detect no. of cpu cores
+- [x] Remove --gui and --force in winetricks-cli script
+- [x] Change Game-Bundle and Prefix-Backup naming (do not use date)
+- [x] Include flatpak name in wzt-info.txt on backup/bundle creation
 
 0.84
 - [x] Launch script instead of launching game
