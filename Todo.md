@@ -4,12 +4,18 @@
 
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
+0.85
+- [ ] Code cleanup
+- [ ] Improve debug output
+- [ ] use non confusing filenames
+
+
 0.84
-- [ ] Launch script instead of launching game
-- [ ] Offer to Merge Gamedir to create bundle on Backup
-- [ ] Code: 80 column rule
-- [ ] Code: Clean up spaces/tabs etc.
-- [ ] Code: Use better Variables
+- [x] Launch script instead of launching game
+- [x] Create Bundle (include gamedir along with prefix) using Backup
+- [x] Create and add wzt-info.txt to get info on restoring .wzt file
+- [x] Use faster zstd instead of gzip
+- [x] use APPNAME-VERSION in Title
 
 0.83
 - [x] Rename Prefix
@@ -80,7 +86,7 @@ Backup and Restore with Multi user
 
 - [ ] Backup  Restore: Backup should support (for system install, for flatpak, and prefix in ~/.var or ~/.local or game dir).
 
-- [ ] a wizard to restore is better?  
+- [ ] a wizard to restore is better?
 
   - [ ] on restore, check metadata and inform user, if exe not found, ask user to select or search for the exe, use md5sum to verify same exe.
 

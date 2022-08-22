@@ -1,0 +1,216 @@
+################ Restore/Extract .wzt backup/bundle ################
+# .wzt file is a tar.zst (created using tar --zstd -cvf wztfile.wzt directory)
+# see winezgui-script-backup
+RESTORE_WZT_FILE()
+{
+  cd "${WINEZPREFIX}"
+  # 0. Check whether WINEZPREFIX is writable or not before starting restore 
+  #    Process
+  if ! [ -w "${WINEZPREFIX}" ]; then
+      echo "I: Restore: ${WINEZPREFIX} is not writable. Aborting!" 
+      Main_Function
+  fi
+  
+  # wzt-info.txt has the needed info about uncompressed size and game name
+  # see winezgui-create-wzt-info to see the content
+  WZT_INFO_FILE="wzt-info.txt"
+  echo "I: Restore: Selected ${WZT_FILE}"
+  
+  # Get name from the file_with_path
+  WZT_NAME="$(basename ${WZT_FILE})"
+  
+  # 1. Extract prefix name from the given .wzt file
+  #    the directory name is the prefix name
+  WZT_PREFIX=$(tar -tf ${WZT_FILE}|head -n1|cut -f1 -d "/")
+  echo "I: Restore: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
+  
+  # 2. Ask whether the user want to extract wzt file at ${PREFIXDIR}
+  if ! zenity --question --title "${APP_WITH_VER}"  --width=300 \
+       --text "<b>Restore ${WZT_NAME}?</b>"
+  then
+       # Start the Game script and exit main app
+       echo "I: Restore: Restoring WineZGUI file. Cancelled!"
+       Main_Function
+  fi   # zenity --question
+  
+  # 3. Get needed uncompressed space for the wzt file from the wzt-info.txt
+  #    file inside the given wzt file
+  
+  # 3.1 Create a temporary directory to extract wzt-info.txt file
+  export TEMPDIR="${WINEZPREFIX}/tmp"
+  mkdir -p  ${TEMPDIR}
+  
+  # 3.2 Extract wzt-info.txt file to TEMPDIR, And show a progress bar using 
+  # zenity as takes a while to read from big file
+  (tar xfO ${WZT_FILE} ${WZT_PREFIX}/${WZT_INFO_FILE} \
+                              | tee ${TEMPDIR}/${WZT_INFO_FILE}) | \
+     zenity --progress --pulsate --auto-close \
+            --title="${WZT_NAME}" \
+            --width=500 --text="Reading ${WZT_NAME} info..."
+
+  # 3.3 Read the file contents into a variable 
+  WZT_VAR=$(cat "${TEMPDIR}/${WZT_INFO_FILE}"|tr "\n" "|")
+
+  # 3.3 Remove ${TEMPDIR} after getting data into WZT_VAR variable
+  rm -rf ${TEMPDIR}
+  
+  # 3.4 If the WZT_VAR is empty, then WZT_VAR could not read from wzt-info.txt
+  if [ -z "${WZT_VAR}" ]; then
+       echo "I: Restore: ${WZT_INFO_FILE} not found in tar archive"
+       zenity --info    --title "${WZT_NAME}" \
+              --no-wrap --text "${WZT_INFO_FILE} not found"
+       Main_Function
+  fi
+
+  # 3.5 Get Game/App name from the wzt-info.txt file
+  GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Name *:"|cut -f2 -d ":")
+  echo "I: Restore: Name: ${GAME_NAME}"
+
+  echo "I: Restore: Determining available space for extraction"
+  # determine df -h of ~ directory / winezgui prefix
+  WINEZPREFIX_DF=$(df -h ${WINEZPREFIX}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
+
+  echo "I: Restore: Available space is: ${WINEZPREFIX_DF}"
+
+  # 3.6 Convert the above $WINEZPREFIX_DF into bytes
+  # for comparison
+  WINEZPREFIX_DF_IN_BYTES=$(echo ${WINEZPREFIX_DF}|numfmt --from iec)
+
+  # 3.7 Fetch required size from space from
+  echo "I: Restore: Fetching required disk space from ${WZT_INFO_FILE}"
+  WZT_F_UNCOMPRESSED_SIZE=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep "Size" \
+                           |cut -f2 -d ":"|numfmt --from iec)
+  echo "I: Restore: Required space: ${WZT_F_UNCOMPRESSED_SIZE}"
+  
+  # 3.8 If Target directory does not have sufficient space, abort backup
+  echo "I: Restore: Checking Available size is more than Required space"
+  if [ ${WINEZPREFIX_DF_IN_BYTES} -gt ${WZT_F_UNCOMPRESSED_SIZE} ];then
+       echo "I: Restore: ${WINEZPREFIX} has enough available disk space!"
+  else
+       echo "W: Restore: ${WINEZPREFIX} does not have free disk space!!!"
+       unset MSG
+       MSG+="${WINEZPREFIX} has only ${WINEZPREFIX_DF}"
+       MSG+=" "
+       MSG+="free disk space left!\n"0
+       MSG+="Prefix backup requires ${WZT_F_UNCOMPRESSED_SIZE} free disk space."
+
+       # 3.9 Inform user
+       zenity --warning --no-wrap --title "Insufficient Disk Space!" \
+              --text "${MSG}"
+       echo "E: Restore: Insufficient Disk Space, Cancelled!"
+       Main_Function
+
+  fi
+
+  # 4. Start restoring wzt file
+  echo "I: Restore: Restoring ${WZT_NAME}"
+  
+  # 5. Check if already a prefix with the same name exists,
+  #    if so, ask whether to overwrite already existing prefix
+  if [ -d "${WINEZPREFIX}/${WZT_PREFIX}" ]; then
+       zenity --question --title "Restore ${GAME_NAME}" \
+              --text "${WZT_PREFIX} already exists, overwrite?"
+       ANSWER=$?       
+       if [ "${ANSWER}" = "1" ]; then
+            echo "I: Restore: User Cancelled! Aborting!"
+            Main_Function
+       else
+            echo "I: Restore: Overwriting existing ${WZT_NAME}"
+       fi
+  fi
+
+  # Extract file to WineZGUI Prefix and show gui progress dialog
+  # Change XOUSERXO to username on restore
+  echo "I: Restore: Extracting ${WZT_NAME} at ${WINEZPREFIX}"
+  (tar --zstd -xvf "${WZT_FILE}" -C "${WINEZPREFIX}" --transform \
+           "s|XOUSERXO|${USER}|g"   2>/dev/null)| \
+              zenity --progress --width=500                    \
+              --title="Restoring ${GAME_NAME}!"               \
+              --text="Extracting ${WZT_FILE}..."   \
+              --pulsate --auto-close
+
+  # 5.0 If the user cancels extraction of wzt game bundle during extraction
+  # kill the running tar command which has wzt in it
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt |sed 's/  */ /g'|cut -f2 -d " ")
+  if ! [ -z "$PID_OF_TAR" ]; then
+       kill -9 ${PID_OF_TAR} \
+       && echo "I: Restore: Cancelled! Stopped extraction!" 
+       # Ask the user whether to delete partially extracted or let it be
+       zenity --question --title "Extraction Cancelled!" \
+              --title "Delete ${WZT_PREFIX} prefix?"
+       ANSWER=$?
+       if [ "${ANSWER}" = "0" ]; then
+            rm -f "${WINEZPREFIX}/${WZT_PREFIX}" && \
+            echo "I: Restore: Removed ${WINEZPREFIX}/${WZT_PREFIX}"
+       else
+            echo "I: Restore: Keeping extracted ${WINEZPREFIX}/${WZT_PREFIX}"
+            # Restore Sucess Message
+       fi
+       MSG=("${WZT_PREFIX} Restore Cancelled!")
+       Main_Function
+
+  else
+       echo "I: Restore: Restored ${WZT_FILE} Successfully!"
+  fi
+########################################## kill tar and delete partial prefix
+
+  # Now do Preprocessing for host and flatpak installs
+  cd "${WINEZPREFIX}"
+  PREFIXNAME="${WZT_PREFIX}"
+  Backup_Restore_Function "restore"
+
+  # Create required applications directory for .desktop files
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR+="winezgui/${FLATPAK_ID}"
+       mkdir -p "${MAKEDIR}"
+       unset MAKEDIR
+  else
+       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR+="winezgui"
+       mkdir -p "${MAKEDIR}"
+  fi
+
+  # If .desktop file is found, means, it is a non default backup
+  FOUND_PREFIX_DIR="${WINEZPREFIX}/${WZT_PREFIX}"
+  FOUND_DESKTOP_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.desktop"
+  FOUND_SCRIPT_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.sh"
+
+  if [ -f "${FOUND_DESKTOP_FILE}" ]; then
+       echo "I: Restore: Found ${FOUND_DESKTOP_FILE}," \
+            "creating shortcut!"
+       # Create a restored.text to update wineprefix
+       # without mono and html install dialog which
+       # winezgui-create-prefix checks
+       # on 1st lauch on restoring
+       echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
+
+       # link the application shortcut .desktop file
+       ln -sf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
+
+       # Cleanup broken links in winezgui shortcuts directory
+       find ${WINEZSHORTCUTS} -xtype l -delete && \
+       echo "I: Restore: Removed broken WineZGUI .desktop links"
+
+       # Update menus
+       ${UPDATE_ICON_CACHE}
+       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+       ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+
+       # Get Game name from desktop file
+       GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d "=")"
+       echo "I: Restore: Game Name: $GN"
+
+       # Ask if the user wants to start the restored game
+       if zenity --question --no-wrap --width=200    \
+                 --title="WineZGUI Backup Restored!" \
+                 --text="Launch: ${GN}?"
+       then
+            # Start the Game script and exit main app
+            echo "I: Restore: Launching Script for" \
+                 "the restored game..."
+            bash ${FOUND_SCRIPT_FILE}
+            exit 0
+       fi # zenity --question
+  fi # -f "${FOUND_DESKTOP_FILE}"
+}

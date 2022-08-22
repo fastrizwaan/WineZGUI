@@ -1,6 +1,6 @@
 id: io.github.fastrizwaan.WineZGUI
-branch: main
-version: '0.83.1'
+branch: '21.08'
+version: '0.83'
 runtime: org.freedesktop.Platform
 runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
@@ -56,14 +56,19 @@ add-extensions:
     autodelete: false
 
 modules:
+ 
   - name: icoutils
     build-options:
+      make-args: -j $FLATPAK_BUILDER_N_JOBS
       #strip: true
-      no-debuginfo: true
+      no-debuginfo: true  
     buildsystem: autotools
     sources:
       - type: archive
         url: http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
+        mirror-urls: 
+          - https://download-mirror.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
+          - https://ftp.up.pt/pub/nongnu/icoutils/icoutils-0.32.3.tar.bz2
         sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 
   - name: perl
@@ -72,9 +77,9 @@ modules:
     - "-des"
     - "-Duseshrplib"
     build-options:
+      make-args: -j $FLATPAK_BUILDER_N_JOBS
       cflags: "-fPIC"
       ldflags: "-fpic"
-      #strip: true
     sources:
     - type: archive
       url: https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
@@ -85,24 +90,26 @@ modules:
       - exec ./configure.gnu $@
     post-install:
     - chmod -R u+w /app/lib/perl5
-
+  
   - name: exiftool
-    build-options:
-      #strip: true
     buildsystem: simple
+    build-options:
+      make-args: -j $FLATPAK_BUILDER_N_JOBS
+
     build-commands:
       - perl Makefile.PL
       - make
-      - make install
+      - make install 
     sources:
       - type: archive
         url: https://exiftool.org/Image-ExifTool-12.41.tar.gz
         sha256: 654f401daab0045a8364fa59d3f69b6f9bf23bcef157a3c928e373884a6f9370
-
+        
   - name: desktop-file-utils
     build-options:
+      make-args: -j $FLATPAK_BUILDER_N_JOBS
       #strip: true
-      no-debuginfo: true
+      no-debuginfo: true  
     buildsystem: autotools
     sources:
       - type: archive
@@ -115,6 +122,5 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        #tag: 0.83.1
-        commit: 16521f2a7c822cf2a3930785df7a01b2cb4b861a
+        branch: 0.84
         url: https://github.com/fastrizwaan/WineZGUI.git

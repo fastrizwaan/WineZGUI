@@ -1,0 +1,21 @@
+       OTHER_EXE="$(zenity --file-filter="*.exe *.msi"  \
+                           --file-selection        \
+                           --title="Select a File")"
+
+       # If no exe is selected
+       if [ -z "${OTHER_EXE}" ]; then
+            echo "I: Script: Open Other EXE: Cancelled!"
+            #unset SELECTION ; # Empty variable
+            Game_Function    ; # Go back to Game Window
+       fi
+
+       # If another exe is selected
+       echo "I: Script: Open Other EXE: ${OTHER_EXE} selected"
+       base=$(basename "${OTHER_EXE}")
+       dire=$(dirname "${OTHER_EXE}")
+
+       # Launch other EXE
+       cd "$dire"
+       echo "I: Script: Open Other EXE: Launching \"${base}\""
+       ${WINE_CMD} "$base"
+       echo "I: Script: Open Other EXE... Finished!"

@@ -1,0 +1,37 @@
+       #  using flatpak install and script is running from flatpak container
+       # Check if it is a flatpak based script
+       # Check if it is running from inside flatpak container
+       # and gnome terminal is found on host
+       if [ ${INSTALL_TYPE} = "flatpak" ] && \
+          [ $(flatpak-spawn --host which gnome-terminal) ]; then
+            echo "I: Script: Open Shell: Flatpak script, running from sandbox"
+            flatpak-spawn --host gnome-terminal --wait -- \
+            flatpak run --command=bash ${FLATPAK_NAME} -c \
+            "export WINEPREFIX=\"${PREFIXDIR}\";  \
+            cd \"${WINEPREFIX}\"; exec bash -i;"
+
+       # If flatpak install and script running from host
+       # and gnome terminal is found
+       elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+            [ $(which gnome-terminal) ]; then
+              export WINEPREFIX="${PREFIXDIR}";
+              echo "I: Script: Open Shell: Flatpak script, running from host"
+              gnome-terminal --wait -- flatpak  \
+              --command=bash run ${FLATPAK_NAME} -c \
+              "cd \"${PREFIXDIR}\"; exec bash -i"
+
+       # Else it is a host install and gnome-terminal is found
+       elif [ ${INSTALL_TYPE} = "system" ] && \
+            [ $(which gnome-terminal) ]; then
+              echo "I: Script: Open Shell: System script, running from host"
+              export WINEPREFIX="${PREFIXDIR}";
+              gnome-terminal --wait -- bash -c \
+              "cd \"${WINEPREFIX}\"; exec bash -i"
+       # gnome terminal is not found
+       else
+              echo "I: Script: Open Shell: Gnome-terminal not found"
+
+              zenity --title "${SELECTION}" \
+                     --width=500 --height=30 --info  \
+                     --text "This feature requires \"gnome-terminal\""
+       fi

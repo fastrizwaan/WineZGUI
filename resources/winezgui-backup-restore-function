@@ -1,4 +1,4 @@
-PROCESS_FILES_FOR_BACKUP()
+Backup_Restore_Function()
 {
   # Unset any previously initialized variables
   unset SEARCH
@@ -16,13 +16,13 @@ PROCESS_FILES_FOR_BACKUP()
         SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
   else  SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
         REPLACE=("XOCONFIGXO")
-  
+
   # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         SEARCH+=("\.var\/app\/${FPNAME}\/data\/prefixes")
   else  SEARCH+=("\.local\/share\/winezgui"); fi
         REPLACE+=("XOPREFIXXO")
-  
+
   # *.desktop and *.sh files
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         SEARCH+=("\.local\/share\/applications\/winezgui\/${FPNAME}")
@@ -39,7 +39,7 @@ PROCESS_FILES_FOR_BACKUP()
   # Paths
   SEARCH+=("\.local\/share\/applications")
   REPLACE+=("XOAPPLICATIONSDIRXO")
-  
+
   # \\user\\user *.reg
   SEARCH+=("\\\\\\\\users\\\\\\\\${USER}")
   REPLACE+=("XOREGUSERSUSERXO")
@@ -57,7 +57,7 @@ PROCESS_FILES_FOR_BACKUP()
 
   SEARCH+=("\/home\/${USER}")
   REPLACE+=("XOUSERHOMEXO")
-  
+
   SEARCH+=("\/users\/${USER}")
   REPLACE+=("XOUSERSUSERXO")
 
@@ -74,7 +74,7 @@ PROCESS_FILES_FOR_BACKUP()
   WEXE=$(echo ${WINEEXE}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
-  
+
   WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${WVER}")
   REPLACE+=("XOWINEVERXO")
@@ -85,7 +85,7 @@ PROCESS_FILES_FOR_BACKUP()
 # Now do the processing with the above search and replace values
 
   LEN=${#SEARCH[@]}
-  
+
 # Find files to change in the Prefix
   unset SED_THESE
   SED_THESE+=$(find ${PREFIXNAME} -maxdepth 1 -iname "*.txt" 2>/dev/null)
@@ -97,25 +97,48 @@ PROCESS_FILES_FOR_BACKUP()
   SED_THESE+=$(find ${PREFIXNAME} -maxdepth 1 -iname "*.desktop" 2>/dev/null)
   SED_THESE+=" "
 
-       
+
   # By default backup runs process (SEARCH->REPLACE)
   if [ "$1" = "restore" ]; then
        echo "I: Restore: Processing files inside ${PREFIXNAME}"
        for (( i=0; i <${LEN}; i++ )); do
-           echo "I: Restore: Replacing: ${REPLACE[$i]} with ${SEARCH[$i]}"
-           sed "s/${REPLACE[$i]}/${SEARCH[$i]}/g" -i ${SED_THESE}
-       done
+           sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${SED_THESE} 
+           #&& \
+           # echo "I: Restore: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
 
+       done
        # Rename Directory on Restore
        DSOURCE="${PREFIXNAME}/drive_c/users/${USER}"
-       DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO" 
-       mv "${DTARGET}" "${DSOURCE}" && \
-       echo "I: Restore: Renamed ${DTARGET} to ${DSOURCE}" || \
+       DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO"
        
+       # Hopefully not needed
+#       DBACKUP="${PREFIXNAME}/drive_c/users/user_backup"
+#       
+#       # Even though extracted dir will change XOUSERXO to $USER 
+#       # And XOUSERXO dir should not exist 
+#       # Still if XOUSERXO and $USER directory is found together, 
+#       # rename it to user_backup when user select overwrite 
+#      
+#       # If XOUSERXO is found rename it to $USER
+#       # Should not be there, but as a redundancy check
+#       # If XOUSERXO is found and it needs to be renamed to $USER, then
+#       # Rename $USER directory 1st to $USER.backup and rename XOUSERXO to $USER
+#       if [ -d "${DTARGET}" ] ; then 
+#            if [ -d "${DSOURCE}" ] ; then # check if directory exist
+#                  echo "I: Restore: Found existing ${DSOURCE}"
+#                  # if XOUSERXO directory exists copy content
+#                  mv "${DSOURCE}" "${DBACKUP}" && \
+#                  echo "W: Restore: Moved ${DSOURCE} to ${DBACKUP}" 
+#            fi
+#            mv "${DTARGET}" "${DSOURCE}" && \
+#            echo "I: Restore: Renamed ${DTARGET} to ${DSOURCE}" 
+#       fi
+#       
        
+
        # Recreate Links to H: link to $HOME on Restore
        echo "I: Restore: Recreating Links to H: in ${PREFIXNAME} prefix"
-  
+
        ln -sf "${HOME}" "${PWD}/${PREFIXNAME}/dosdevices/h:" && \
        echo "I: Restore: Created H: symlink ${HOME}" \
             "to ${PREFIXNAME}/dosdevices/h:"
@@ -123,31 +146,33 @@ PROCESS_FILES_FOR_BACKUP()
        # Process desktop and script files if the prefix is not default
        # For Install Type and Flatpak Name
        if ! [ "${PREFIXNAME}" = "default" ]; then
-            # Set install type 
-            sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g" -i \
-                 ${PREFIXNAME}/*.sh
+            # Set install type
+            sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
+                 ${PREFIXNAME}/*.sh && \
+                 echo "I: Restore: Updated ${INSTALL_TYPE} in script file"
             # set flatpak name on restoring (flatpak)
-            sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g" -i \
-                   ${PREFIXNAME}/*.sh
+            sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
+                   ${PREFIXNAME}/*.sh && \
+                   echo "I: Restore: Updated ${FLATPAK_NAME} in script file"
        fi
   else
        echo "I: Backup: Processing files inside ${PREFIXNAME}"
        for (( i=0; i <${LEN}; i++ ))
            do
-           echo "I: Backup: Replacing: ${SEARCH[$i]} with ${REPLACE[$i]}"
-           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${SED_THESE}
+           sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${SED_THESE} 
+           #&& \
+           #echo "I: Backup: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
        done
 
        # Rename Directory for Backup
        DSOURCE="${PREFIXNAME}/drive_c/users/${USER}"
-       DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO" 
+       DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO"
        mv ${DSOURCE} ${DTARGET} && \
-       echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}" 
+       echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
 
        # Remove H: links on Backup
-       echo "I: Backup: Removing H: links from ${PREFIXNAME} prefix"
        rm  "${PREFIXNAME}/dosdevices/h:" && \
-       echo "I: Backup: Removed symlink ${PREFIXNAME}/dosdevices/h:"
+       echo "I: Backup: Removed H: symlink ${PREFIXNAME}/dosdevices/h:"
   fi
 
   # Cleanup variables

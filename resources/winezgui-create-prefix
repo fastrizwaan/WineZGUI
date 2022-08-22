@@ -27,6 +27,7 @@ export EXIFTOOL=$(which exiftool)
 # These values will be assigned by Setup using sed command
 # Post install $PREFIX/bin/winezgui-create-prefix file will be different
 export APPVERSION="git"
+export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
 export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
@@ -38,8 +39,8 @@ export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "$INSTALL_TYPE" = "system" ]; then
     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-else 
-    # for flatpak create subdirectory with flatpakname 
+else
+    # for flatpak create subdirectory with flatpakname
     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/$FLATPAK_NAME)"
 fi
 
@@ -55,7 +56,7 @@ EXE_NOEXE=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 EXE_EXT="${EXE_FILE##*.}"
 export PREFIXDIR="${WINEZPREFIX}/${EXE_NOEXE}"
 export PREFIXNAME="${EXE_NOEXE}"
-
+export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
 export INFOFILE="${PREFIXDIR}/info.txt"
 export ICONFILE="${PREFIXDIR}/${EXE_NOEXE}.png"
@@ -83,7 +84,7 @@ echo "I: Create Prefix: Created directory ${PREFIXDIR}"
 mkdir -p  "${DESKTOPDIR}" && \
 echo "I: Create Prefix: Created directory ${DESKTOPDIR}"
 
-# Extract icon and convert it to several png files of diferent quality, 
+# Extract icon and convert it to several png files of diferent quality,
 # Create a temporary Directory to extract icon from the exe file
 echo "I: Create Prefix: Icon: Extraction from ${EXE_NAME}"
 mkdir -p ${TEMPDIR} && \
@@ -120,7 +121,7 @@ echo "I: Create Prefix: Icon: Cleanup ${TEMPDIR}"
 
 # Prepare Desktop file
 appCategory="Game"
-echo "I: Create Prefix: Setting Category - ${appCategory}"    
+echo "I: Create Prefix: Setting Category - ${appCategory}"
 
 # Create Desktop Shortcut
 # Ask for Name
@@ -134,10 +135,10 @@ PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i "product name"|cut -f2 -d ":" \
 if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z] ) ] || [ -z "${PRODUCT}" ]; then
      unset PRODUCT
      unset PROGNAME
-     PROGNAME=$(echo "${EXE_NAME} (${WINEVER})"|sed "s/\.[eE][Xx][Ee]//g");
+     PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
      echo "I: Create Prefix: Name: Product Name not found, using exe name"
 else
-     PROGNAME=$(echo "${PRODUCT} (${WINEVER})");
+     PROGNAME=$(echo "${PRODUCT} (${APP_WITH_VER})");
      echo "I: Create Prefix: Name: Product Name found: \"${PRODUCT}\""
 fi
 
@@ -148,18 +149,48 @@ echo "I: Create Prefix: Sha256sum: ${SHA256SUM}"
 
 # Create Launch Script for the provided EXE file
 # ------------------------------------------------
-# Launch script needs 
+# Launch script needs
 echo "I: Create Prefix: Script: Launch Script Creation..."
+echo "I: Create Prefix: Script: Copying required script modules"
+unset SCRIPT_MODULES
+SCRIPT_MODULES+="winezgui-script-launch "
+SCRIPT_MODULES+="winezgui-script-open-other-exe "
+SCRIPT_MODULES+="winezgui-script-winetricks-gui "
+SCRIPT_MODULES+="winezgui-script-winetricks-cli "
+SCRIPT_MODULES+="winezgui-script-launch-winecfg "
+SCRIPT_MODULES+="winezgui-script-open-explorer "
+SCRIPT_MODULES+="winezgui-script-open-shell "
+SCRIPT_MODULES+="winezgui-script-rename "
+SCRIPT_MODULES+="winezgui-script-change-icon "
+SCRIPT_MODULES+="winezgui-script-change-category "
+SCRIPT_MODULES+="winezgui-script-backup "
+SCRIPT_MODULES+="winezgui-script-delete "
+SCRIPT_MODULES+="winezgui-script-about "
+SCRIPT_MODULES+="winezgui-backup-restore-function "
+SCRIPT_MODULES+="winezgui-script-locate-exe-function "
+SCRIPT_MODULES+="winezgui-create-wzt-info "
 
-cp "${DATADIR}/winezgui-backup-restore" "${PREFIXDIR}/" && \
-echo  "I: Create Prefix: Script: Copied Backup & Restore script" \
-      "to ${PREFIXDIR}"
+# Check PREFIXDIR is writable or not
+if ! [ -w "${PREFIXDIR}" ] ; then
+       echo "E: Create Prefix: Script: Cannot write to ${PREFIXDIR}"
+       echo "W: Create Prefix: Script: Aborting!"
+       exit 1
+fi
 
-cp "${DATADIR}/winezgui-rename-prefix" "${PREFIXDIR}/" && \
-echo  "I: Create Prefix: Script: Copied rename script" \
-      "to ${PREFIXDIR}"
-#echo "RIZVAN: Continue from here"
-#exit 0
+#Create scripts directory inside prefixdir
+mkdir -p "${WINEZGUI_SCRIPTS}"
+
+# copy the scripts from datadir to winezgui-scripts directory inside prefixdir
+for SCRIPT in ${SCRIPT_MODULES}; do
+
+    cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" && \
+    echo  "I: Create Prefix: Script: Copied ${SCRIPT} to ${PREFIXDIR}"
+
+done
+
+# Clean up variables
+unset SCRIPT_MODULES
+unset SCRIPT
 
 # need variables from this script
 echo "
@@ -178,9 +209,11 @@ export SHA256SUM=\"${SHA256SUM}\"
 export EXE_PATH=\"${EXE_PATH}\"
 export EXE_NOSP=\"${EXE_NOSP}\"
 export EXE_NOEXE=\"${EXE_NOEXE}\"
+export EXE_EXT=\"${EXE_FILE##*.}\"
 export PREFIXDIR=\"${PREFIXDIR}\"
 export WINEPREFIX=\"${PREFIXDIR}\"
 export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
+export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 
 export DESKTOPDIR=\"${DESKTOPDIR}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
@@ -202,7 +235,7 @@ else
 fi
 " > "${SCRIPTFILE}"
 
-# Append rest 
+# Append rest
 echo '
 export WINEARCH=win64
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64
@@ -210,117 +243,11 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/lib/i386-linux-gnu:/app/lib/wine
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/lib64/wine:/app/${NAME}:$(pwd)
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT()
-{
-# If exe file not found, ask user to locate it
-if [ ! -f "${EXE_FILE}" ]; then
-     echo "E: Script: Locate: ${EXE_FILE} not found at ${EXE_PATH}"
-       
-     zenity --question --no-wrap --title="${EXE_NAME} not found!" \
-            --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
-     ANSWER=$?
-     # If user selects yes to locate exe file
-     if [ ${ANSWER} -eq 0 ]; then
-          # Take exe name before " " or "(" or ".exe"
-          FILTER=$(echo ${EXE_NAME}|cut -f1 -d " " \
-                                   |cut -f1 -d "(" \
-                                   |cut -f1 -d "." \
-                                   |sed "s/\.[Ee][Xx][Ee]//g" \
-                                   |sed "s/\.[Ms][Ss][Ii]//g")
-                                     
-          FIND_EXE_FILE="$(zenity --file-filter="${FILTER}*.exe ${FILTER}*.msi"\
-                        --file-selection --title="Locate ${EXE_NAME} File")"
-          echo "I: Script: Locate: Selected ${FIND_EXE_FILE}"
-          # If no Backup file is selected, or cancel is clicked
-          if [ -z "${FIND_EXE_FILE}" ]; then
-               echo "I: Script: Locate: User cancelled locating file"
-               unset FIND_EXE_FILE; # Empty variable
-          else
-               FIND_EXE_NAME=$(basename "${FIND_EXE_FILE}")
-               FIND_EXE_PATH=$(dirname  "${FIND_EXE_FILE}")
-               FIND_EXE_NOSP=$(echo      ${FIND_EXE_NAME}|tr " " "_");
-               FIND_EXE_NOEXE=$(echo     ${FIND_EXE_NOSP}|sed "s/\.exe//g");
-               #check shasum and verify
-               echo "I: Script: Locate: Matching checksum of ${FIND_EXE_FILE}"
-               FIND_EXE_FILE_SHA256SUM=$(sha256sum "${FIND_EXE_FILE}" \
-                                           |cut -f1 -d " ")
-                 echo "I: Script: Locate: ${EXE_FILE} Shasum: ${SHA256SUM}"
-                 echo "I: Script: Locate: ${FIND_EXE_FILE} Shasum:" \
-                                         "${FIND_EXE_FILE_SHA256SUM}"
-                if [ "${SHA256SUM}" = "${FIND_EXE_FILE_SHA256SUM}" ]; then
-                     echo "I: Script: Locate: Checksum matches!"
-                       
-                     zenity --question --no-wrap \
-                            --title "${EXE_NAME} found!" \
-                            --text "Use ${FIND_EXE_NAME} from now onwards?"
-                     ANSWER=$?
-                     # Set EXE and EXE path in script file and info.txt
-                     if [ ${ANSWER} -eq 0 ]; then
-                     echo "I: Script: Locate: Using ${FIND_EXE_FILE} as default"
-                     # Script ($0) file update
-                     # Update EXE_FILE variable
-                     FINDME="\(export EXE\_FILE=\).*"
-                     CHANGE="\1\"${FIND_EXE_FILE}\""
-                     sed "s|${FINDME}|${CHANGE}|g" -i ${0}
-                     echo "I: Script: Locate: Update EXE_FILE in ${0}"
-                     
-                     # Update EXE_PATH variable
-                     FINDME="\(export EXE\_PATH=\).*"
-                     CHANGE="\1\"${FIND_EXE_PATH}\""
-                     sed    "s|${FINDME}|${CHANGE}|g" -i ${0}
-                     echo   "I: Script: Locate: Update EXE_PATH in ${0}"
-                     
-                     # Change info.txt
-                     echo   "I: Script: Locate: Updating prefix info.txt" 
-                     # Update EXE_FILE in info.txt
-                     REPL_EXE_FILE=$(echo ${FIND_EXE_FILE}|\
-                                     sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-                     FINDME="\(Game EXE.*: \).*"
-                     CHANGE="\1${REPL_EXE_FILE}"                
-                     sed    "s/${FINDME}/${CHANGE}/g" -i \
-                               ${INFOFILE}
-                     echo   "I: Script: Locate: Updated EXE_FILE in info.txt" 
-                     
-                     # Update EXE_PATH in info.txt
-                     REPL_EXE_PATH=$(echo ${FIND_EXE_PATH}|\
-                                     sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
+# Launch the function: Locate_Exe_Function from the above file
+Locate_Exe_Function
 
-                     FINDME="\(Game Directory.*: \).*"
-                     CHANGE="\1${REPL_EXE_PATH}"                
-
-                     sed    "s/${FINDME}/${CHANGE}/g" -i \
-                               ${INFOFILE}
-                     
-                     # Allow launching exe by setting temporarily variables
-                     EXE_FILE="${FIND_EXE_FILE}"
-                     EXE_PATH="${FIND_EXE_PATH}"
-                     echo "I: Script: Locate: Updated EXE_FILE and EXE_PATH"
-                     fi # if [ ${ANSWER} -eq 0 ]
-                else
-                     echo "W: Script: Locate: Warning files are different"
-                       
-                     zenity --question --no-wrap \
-                            --title "${EXE_NAME} Checksum Fail!" \
-                            --text  "Just run ${FIND_EXE_NAME} once?"
-                     ANSWER=$?
-                     # If the user still want to run the mismatched exe
-                     # Let the user run it once
-                     if [ ${ANSWER} -eq 0 ]; then
-                          echo "W: Script: Locate: Allowing running once."
-                          FIND_EXE_PATH=$(dirname "${FIND_EXE_FILE}")
-                          EXE_FILE="${FIND_EXE_FILE}"
-                          EXE_PATH="${FIND_EXE_PATH}"
-                     fi
-                fi #if [ "${SHA256SUM}" =
-          fi #if [ -z "${FIND_EXE_FILE}" ];
-     fi #if [ ${ANSWER} -eq 0 ]
-fi #if [ ! -f "${EXE_FILE}" ]
-}
-
-# Launch the function: test if exe exists?
-TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
-
-    # If ${FLATPAK_NAME} is installed, and script created using flatpak 
+    # If ${FLATPAK_NAME} is installed, and script created using flatpak
     if [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
          echo "I: Script: Install type: Flatpak, Running from host!"
@@ -330,10 +257,10 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
          WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
          WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
          WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
-         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD 
+         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
          export WHICHWINE
-         
-    else 
+
+    else
         # flatpak install and running from shell inside flatpak winezgui
         if [ "${INSTALL_TYPE}" = "flatpak" ]; then
              echo "I: Script: Install type: Flatpak, Running from flatpak!"
@@ -341,7 +268,7 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
              export WTRICKS_CMD="/app/bin/winetricks"
              export WINECFG_CMD="${WINE_CMD} winecfg"
              export WEXPLORER_CMD="${WINE_CMD} explorer"
-             export WBOOT_CMD="$(which wineboot) -i" 
+             export WBOOT_CMD="$(which wineboot) -i"
              export WHICHWINE="${WINE_CMD}"
         else
              # We are using non flatpak install
@@ -351,7 +278,7 @@ TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
              export WINECFG_CMD="${WINE_CMD} winecfg"
              export WEXPLORER_CMD="${WINE_CMD} explorer"
              export WBOOT_CMD="$(which wineboot) -i"
-             export WHICHWINE="$(which wine)"             
+             export WHICHWINE="$(which wine)"
         fi
     fi
 
@@ -372,17 +299,17 @@ fi
 
 # Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
 if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
-     
+
      echo "I: Script: Prefix: Creating Prefix..."
-     # Create Prefix and delete base system linked directory links  
+     # Create Prefix and delete base system linked directory links
      echo "I: Script: Prefix: wine=$(which wine)"
      echo "I: Script: Prefix: WINEPREFIX=${WINEPREFIX}"
      echo "I: Script: Prefix: Wineboot command = ${WBOOT_CMD}"
      echo "I: Script: Prefix: WINEARCH ${WINEARCH}"
      WINEDLLOVERRIDES="mscoree,mshtml=" \
      WINEPREFIX=${PREFIXDIR} \
-     ${WBOOT_CMD} 2>/dev/null 
-       
+     ${WBOOT_CMD} 2>/dev/null
+
      # Replace home liked directory links with normal directories
      # For Games which saves in ~/Documents now will save in
      # Prefix-dir/drive_c/users/${USER}/Documents
@@ -397,15 +324,15 @@ if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
 
      # Create file to check later
      touch ${PREFIXDIR}/replaced_symlinks.txt
-       
+
      # Create H: for HOME Directory for Wine Explorer
      ln -sf "${HOME}" "${PREFIXDIR}/dosdevices/h:"
      echo "I: Script: Prefix: Creating H: symlink to ${HOME}"
      echo "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
 fi
 
-# Create Metadata info.txt for the default wine prefix
-if [ ! -f ${INFOFILE} ]; then
+# Create Metadata info.txt for the prefix
+if [ ! -f "${INFOFILE}" ]; then
 echo -e "
 Game Name      : ${PROGNAME}
 Game EXE       : ${EXE_FILE}
@@ -435,9 +362,9 @@ fi
        # Test if exe exists?
        if [ ! -f "${EXE_FILE}" ] ; then
             echo "E: Script: Launch: ${EXE_NAME} not found!"
-              
+
             zenity --error --title "File not found!" --text "${EXE_FILE}"
-            GameFunction
+            Game_Function
        fi
        export EXE_FILE_NAME=$(basename "${EXE_FILE}")
        export EXE_FILE_DIR=$(dirname "${EXE_FILE}")
@@ -447,10 +374,10 @@ fi
        exit 0;
   fi
 
-# PROCESS_FILES_FOR_BACKUP()
-source ${PREFIXDIR}/winezgui-backup-restore
+# Backup_Restore_Function()
+source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
 
-GameFunction () 
+Game_Function ()
 {
 unset SELECTION
 # EXE handling by providing dialog
@@ -482,411 +409,88 @@ if [ -z "${SELECTION}" ]; then
      exit 0
 fi
 
-# If Winetricks is selected
-if [ "${SELECTION}" = "Winetricks GUI..." ]; then  
-     echo "I: Script: Winetricks GUI... Selected!"
-     ${WTRICKS_CMD} --gui
-     # Return to Game window
-     echo "I: Script: Winetricks GUI ended..."
-     GameFunction
-
-# Provide Command Line to enter multiple Dependencies
-elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
-       echo "I: Script: Winetricks CLI... Selected!"
-       VERB_LIST="xact xinput xna31 dotnet48 \
-                  vcrun2003 vcrun2005        \
-                  vcrun2008 vcrun2010        \
-                  vcrun2019 dxvk faudio      \
-                  quartz corefonts"
-       MESSAGE="Change & Press Enter to install these using Winetricks:"
-       TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
-       # Remove multiple spaces from variable           
-       VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
-         
-       VERBS=$( zenity --title "${TITLE_TEXT}"      \
-                       --width=800 --height=30      \
-                       --text  "${MESSAGE}"         \
-                       --entry-text "${VERB_LIST}"  \
-                       --entry)
- 
-       if [ -z "${VERBS}" ]; then #if no dlls are given
-            #go back to Main function
-            echo "I: Script: Winetricks CLI: no verbs are given!"
-           
-       else   
-            VERBS=(${VERBS}) ; #convert string to array
-            echo "I: Script: Winetricks CLI: Selected verbs:"
-            echo "I: Script: ${VERBS[*]}"
-                    
-            # Report user the time it took to install winetricks
-            TIMER_START=${SECONDS}
-
-            # Start of Show Progress using zenity dialog
-            ( for i in ${VERBS[*]}; do
-
-            # Show Progress Percentage and Info
-            echo "# Installing ${i}..." 
-
-            # Install winetricks verbs and put output to logs
-            ${WTRICKS_CMD} --force --unattended  ${i}
-               
-            done
-            TOOK=$(( SECONDS - ${TIMER_START} )) 
-            echo "# Time Taken: ${TOOK} seconds!"
-            ) | zenity --width=440 \
-                       --title="Please Wait... This will take time!" \
-                       --progress --pulsate --auto-kill
-            # Inform about time taken
-                  
-            echo "I: Script: Winetricks CLI: Exited!"
-       fi   
-       # After winetricks cli,
+if   [ "${SELECTION}" = "Launch..." ]; then
+       echo "I: Script: Launch... Selected"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-launch
        # Return to Game window
-       GameFunction
+       Game_Function
+
 elif [ "${SELECTION}" = "Open Other EXE..." ]; then
        echo "I: Script: Open Other EXE... Selected!"
-         
-       OTHER_EXE="$(zenity --file-filter="*.exe *.msi"  \
-                           --file-selection        \
-                           --title="Select a File")"
-           
-       # If no exe is selected
-       if [ -z "${OTHER_EXE}" ]; then
-            echo "I: Script: Open Other EXE: Cancelled!"
-            #unset SELECTION ; # Empty variable
-            GameFunction    ; # Go back to Game Window
-       fi
-
-       # If another exe is selected
-       echo "I: Script: Open Other EXE: ${OTHER_EXE} selected"
-       base=$(basename "${OTHER_EXE}")
-       dire=$(dirname "${OTHER_EXE}")
-           
-       # Launch other EXE
-       cd "$dire"
-       echo "I: Script: Open Other EXE: Launching \"${base}\""
-       ${WINE_CMD} "$base"
-       echo "I: Script: Open Other EXE... Finished!"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-open-other-exe
        # Return to Game window
-       GameFunction
-  
+       Game_Function
+
+
+       # If Winetricks GUI is selected
+elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
+       echo "I: Script: Winetricks GUI... Selected!"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-winetricks-gui
+       # Return to Game window
+       Game_Function
+
+     # Provide Command Line to enter multiple Dependencies
+elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
+       echo "I: Script: Winetricks CLI... Selected!"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-winetricks-cli
+       # Return to Game window
+       Game_Function
+
 elif [ "${SELECTION}" = "Launch Winecfg..." ]; then
        echo "I: Script: Launch Winecfg... Selected!"
-       ${WINECFG_CMD}
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-launch-winecfg
        # Return to Game window
-       GameFunction
-    
+       Game_Function
+
 elif [ "${SELECTION}" = "Open Explorer..." ]; then
        echo "I: Script: Open Explorer... Selected!"
-       ${WEXPLORER_CMD} "${EXE_PATH}"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-open-explorer
+
        # Return to Game window
-       GameFunction
- 
+       Game_Function
+
 elif [ "${SELECTION}" = "Open Shell..." ]; then
        echo "I: Script: Open Shell... Selected!"
-       #  using flatpak install and script is running from flatpak container
-       # Check if it is a flatpak based script
-       # Check if it is running from inside flatpak container
-       # and gnome terminal is found on host
-       if [ ${INSTALL_TYPE} = "flatpak" ] && \
-          [ $(flatpak-spawn --host which gnome-terminal) ]; then
-            echo "I: Script: Open Shell: Flatpak script, running from sandbox"
-            flatpak-spawn --host gnome-terminal --wait -- \
-            flatpak run --command=bash ${FLATPAK_NAME} -c \
-            "export WINEPREFIX=\"${PREFIXDIR}\";  \
-            cd \"${WINEPREFIX}\"; exec bash -i;"
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-open-shell
+       # Return to Game window
+       Game_Function
 
-       # If flatpak install and script running from host
-       # and gnome terminal is found
-       elif [ ${INSTALL_TYPE} = "flatpak" ] && \
-            [ $(which gnome-terminal) ]; then
-              export WINEPREFIX="${PREFIXDIR}";
-              echo "I: Script: Open Shell: Flatpak script, running from host"
-              gnome-terminal --wait -- flatpak  \
-              --command=bash run ${FLATPAK_NAME} -c \
-              "cd \"${PREFIXDIR}\"; exec bash -i"
-              
-       # Else it is a host install and gnome-terminal is found
-       elif [ ${INSTALL_TYPE} = "system" ] && \
-            [ $(which gnome-terminal) ]; then
-              echo "I: Script: Open Shell: System script, running from host"
-              export WINEPREFIX="${PREFIXDIR}";
-              gnome-terminal --wait -- bash -c \
-              "cd \"${WINEPREFIX}\"; exec bash -i"
-       # gnome terminal is not found
-       else
-              echo "I: Script: Open Shell: Gnome-terminal not found"
-                
-              zenity --title "${SELECTION}" \
-                     --width=500 --height=30 --info  \
-                     --text "This feature requires \"gnome-terminal\""
-       fi            
-       # Return to Game window
-       GameFunction
-                     
 elif [ "${SELECTION}" = "Rename..." ]; then
-       source ${PREFIXDIR}/winezgui-rename-prefix
-       # Call function in the above file
+
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-rename
        RENAME_PREFIX
-       # Return to Game window
-       GameFunction
+
+       Game_Function
 
 elif [ "${SELECTION}" = "Change Icon..." ]; then
        echo "I: Script: Change Icon... Selected!"
-       # Ask user to select an image icon
-       GET_ICON=$(zenity --file-selection \
-                         --file-filter=""*.png" "*.jpg" "*.svg"")
-
-       # If he/she cancels, why prompt?
-       if [ -z "${GET_ICON}" ]; then #if no icon is selected
-            echo "I: Script: Change Icon: Cancelled!"
-            # Return to Game window
-            GameFunction
-       fi
-       echo "I: Script: Change Icon: ${GET_ICON} selected"
-
-       # Now that we have included desktop-file-edit in flatpak, not needed
-       if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
-            export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-       else
-            export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
-       fi
-
-       # set icon to the user selected one
-       ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" \
-       ${PREFIXDIR}/${EXE_NOEXE}.desktop && \
-       echo "I: Script: Change Icon: Icon Changed Successfully!"
-
-       # Update .desktop database
-       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-
-       # Inform user
-       zenity --info --no-wrap --title="${EXE_NOEXE}.desktop" \
-              --text="Icon Changed sucessfuly: ${GET_ICON}"
-
- # Change Runtime Icon as soon as it is changed
-       # Main Window is going to use ICON variable.
-       export ICON="${GET_ICON}"
-
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-change-icon
        # Return to Game window
-       GameFunction
+       Game_Function
 
 elif [ "${SELECTION}" = "Change Category..." ]; then
        echo "I: Script: Change Category... Selected!"
-       GET_CATEGORY=$(zenity \
-                   --title  "${PROGNAME}"     \
-                   --height=450 --list        \
-                   --radiolist --column " "   \
-                   --column "Categories"      \
-                   0        "AudioVideo"      \
-                   0        "Audio"           \
-                   0        "Video"           \
-                   0        "Development"     \
-                   0        "Education"       \
-                   TRUE     "Game"            \
-                   0        "Graphics"        \
-                   0        "Network"         \
-                   0        "Office"          \
-                   0        "Science"         \
-                   0        "Settings"        \
-                   0        "System"          \
-                   0        "Utility"         \
-                   --text "<b>Select a Category...</b>" 2> /dev/null)
-       if [ -z "${GET_CATEGORY}" ]; then
-            echo "I: Script: Change Category: Cancelled!"
-            GameFunction
-       fi
-       
-       # Now that we have included desktop-file-edit in flatpak, not needed
-       if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
-            export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-       else 
-            export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
-       fi
-         
-       # Set category with selected one
-       ${DESKTOP_FILE_EDIT} --set-key="Categories"  \
-                            --set-value="${GET_CATEGORY}" \
-                            ${DESKTOPFILE}
-
-       # Update .desktop database
-       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
- 
-       # Inform user
-       echo "I: Script: Change Category: Changed to ${GET_CATEGORY}"           
-       zenity --info --no-wrap --title="${PROGNAME}" \
-              --text="Category Changed sucessfuly: ${GET_CATEGORY}"
-       
-       GameFunction
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-change-category
+       Game_Function
 
   # Ask user to where to save the backup
 elif [ "${SELECTION}" = "Backup..." ]; then
        echo "I: Script: Backup... Selected!"
-       PREFIX_SIZE=$(du -sh ${WINEZPREFIX}/${PREFIXNAME}|cut -f1)
-
-       echo "I: Script: Backup: Prefix = ${WINEZPREFIX}/${PREFIXNAME}"
-       echo "I: Script: Backup: Prefix size = ${PREFIX_SIZE}"
-       # Ask Before Backing up Default prefix
-       # Ask Backup filename
-       DATE=$(date +%F_%H%M)
-#       # Set name based on flatpak or system
-#       if [ ${INSTALL_TYPE} = "flatpak" ]; then
-#            echo "I: Script: Backup: Backing up from flatpak!"
-#            BKPFNAME="${PREFIXNAME}-${FLATPAK_NAME}-${DATE}.${BKP_EXT}"
-#       else
-#            echo "I: Script: Backup: Backing up from system!"
-#            BKPFNAME="${PREFIXNAME}-system-${DATE}.${BKP_EXT}"
-#       fi
-       # Not setting flatpak or system name
-       # Just prompt prefix-date-time.wzt
-       BKPFNAME="${PREFIXNAME}-${DATE}.${BKP_EXT}"
-       BACKUP_FILE=$( zenity                    \
-         --title="Backup ${PREFIXNAME} Prefix!" \
-         --width=500 --height=30                \
-         --text="Size: ${PREFIX_SIZE}\nName:"   \
-         --entry-text="${BKPFNAME}"             \
-         --entry)
-         
-       # if backup file is empty / cancel clicked
-       if [ -z "${BACKUP_FILE}" ]; then
-            echo "I: Script: Backup: Cancelled!"
-            GameFunction
-       fi
-         
-       # Select Backup Target Directory
-       Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-           
-       TARGET_DIR=$(zenity  --file-selection --title="${Z_TITLE}" --directory)
-       if [ -z "${TARGET_DIR}" ]; then
-            GameFunction
-       fi
-
-       # required extension is .${BKP_EXT}, if not found add it
-       if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
-                BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
-       fi
-       
-       # Check for available disk space in target directory before backing up
-       # Get available target dir partition size in kilobytes (df)
-       # and du -s prefix to get usage of the prefix to be
-       TGTDISKFREE=$(df ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-       PREFIXKSIZE=$(du -s ${WINEZPREFIX}/${PREFIXNAME}|cut -f1)
-       TGTSIZEH=$(df -h ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-       echo "I: Backup: Target size: ${TGTSIZEH}"
-       echo "I: Backup: Prefix size: ${PREFIX_SIZE}"
-         
-       if [ $TGTDISKFREE -gt $PREFIXKSIZE ];then
-            echo "I: Backup: ${TARGET_DIR} has enough available disk space"
-       else
-            echo "W: Backup: ${TARGET_DIR} does not have free disk space!!!"
-            unset MSG
-            MSG+="${TARGET_DIR} has only ${TGTSIZEH} free disk space left!\n"
-            MSG+="Prefix backup requires ${PREFIX_SIZE} free disk space."
-            RESPONSE=$(zenity --warning --title "Not Enough Disk Space!" \
-            --text "${MSG}")
-              
-            echo "W: Backup: Backup Cancelled!"
-            GameFunction
-              
-       fi
-          
-       if [ ! -w "${TARGET_DIR}" ]; then 
-            echo "I: Script: Backup: ${TARGET_DIR} not writable"
-            zenity --error --no-wrap --title="Backup Error!" \
-                   --text "${TARGET_DIR} not writable\nAborting Backup!"
-       else
-            cd "${WINEZPREFIX}"
-            echo "I: Script: Backup: Creating ${BACKUP_FILE} backup..."
-              
-            #Preprocess
-            PROCESS_FILES_FOR_BACKUP
-              
-            # Create Backup archive and restore changes as soon as tar is done
-              (tar -zcvf "${TARGET_DIR}/${BACKUP_FILE}" "./${PREFIXNAME}" \
-               2>/dev/null) | \
-                   zenity --progress --pulsate --auto-close --no-cancel    \
-                          --title="Creating ${PREFIXNAME} backup!"         \
-                          --width=500 --text="${BACKUP_FILE}..."
-                   echo "I: Backup: ${BACKUP_FILE} created successfully"
-
-            # Restore changed values after backup
-            echo "I: Script: Backup: Restoring Registry and Info files"
-            PROCESS_FILES_FOR_BACKUP "restore"
-
-
-            # Report Size also
-            BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-            # Backup Sucess Message
-            MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
-            MSG+="<b>Filename:</b> ${BACKUP_FILE}"
-            MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-            MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
-            MSG+="\n\n<b>Warn: </b>Only wine prefix is backed up!"
-               
-                
-            echo "I: Script: Backup: Created ${BACKUP_FILE} to ${TARGET_DIR}" && \
-            zenity --no-wrap \
-                   --info     \
-                   --title="${BACKUP_FILE} Prefix Backup!" \
-                   --text="${MSG[@]}"
-
-       fi # ! -w 
+       # source ~/.build/WineZGUI-0.84/script-backup-function
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-backup
        # Return to Game window after backup or target directory write error
-       GameFunction
-
+       Game_Function
 
 elif [ "${SELECTION}" = "Delete..." ]; then
        echo "I: Script: Delete... Selected!"
-       RESPONSE=$( zenity \
-             --title "${PROGNAME}"                  \
-             --list   --hide-header                 \
-             --width=360 --height=30                \
-             --radiolist --column " "               \
-             --column "Action"                      \
-                 TRUE "Delete and Quit..."          \
-             --text   "<b>${EXE_NAME} Prefix...</b>"    \
-             )
-       # If Cancel is clicked
-       if [ -z "${RESPONSE}" ]; then
-            echo "I: Script: Delete: Cancelled!"
-            GameFunction
-       fi
-       
-       # Delete Shortcuts and Prefix Directory
-       echo "I: Script: Delete: Removed ${DESKTOPDIR}/${EXE_NOEXE}.desktop"
-       rm -rf ${DESKTOPDIR}/${EXE_NOEXE}.desktop
-       rm -rf ${PREFIXDIR}; 
-       echo "I: Script: Delete: Removed ${PREFIXDIR}"
-       
-       # Delete all broken links which points to winezgui game prefix
-       find ${WINEZSHORTCUTS} -xtype l -delete && \
-       echo "I: Script: Delete: Removed broken WineZGUI .desktop links"
-       ${UPDATE_ICON_CACHE}
-       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-       echo "I: Script: Delete: Exiting!"
-       
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-delete
+
 elif [ "${SELECTION}" = "About..." ]; then
        echo "I: Script: Executing About... Selected!"
-       # Text is more, so we need to format it, with sed in pango markup
-           
-       ZCMD="zenity --info --no-wrap --text"
-       ${ZCMD} "$(cat ${INFOFILE} | \
-                sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
-                sed -E "s/^(.*)$/<small>\1<\/small>/g")"
-       GameFunction
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-about
+       Game_Function
 
-elif [ "${SELECTION}" = "Launch..." ]; then
-       echo "I: Script: Launch... Selected"
-       # Test if exe exists?
-       TEST_FILE_EXIST_IF_NOT_ASK_TO_SELECT
 
-       export base=$(basename "${EXE_FILE}")
-       export dire=$(dirname "${EXE_FILE}")
-         
-       cd "$dire"
-       echo "I: Script: Launching ${base}"
-       ${WINE_CMD} "${base}"
-       exit 0; # Do Exit after execution of exe
 fi
 }
 
@@ -894,8 +498,8 @@ fi
 if [ $# -eq 0 ]
      then
      echo "I: Script: Launching ${EXE_NAME} script"
-     GameFunction 
-fi 
+     Game_Function
+fi
 
 ' >> "${SCRIPTFILE}"
 ###############################################
@@ -918,13 +522,13 @@ Categories=$appCategory;
 
     # link the launcher  file to a shortcut on applications menu.
     mkdir -p "${DESKTOPDIR}" && \
-    echo "I: Create Prefix: Created ${DESKTOPDIR}" 
-    
+    echo "I: Create Prefix: Created ${DESKTOPDIR}"
+
     ln -sf "${DESKTOPFILE}" \
            "${DESKTOPDIR}/${EXE_NOEXE}.desktop" && \
     echo "I: Create Prefix: Symlinked ${EXE_NOEXE}.desktop" \
          "at ${DESKTOPDIR}/${EXE_NOEXE}"
-    # Test if the app link was created sucessfully on applications menu 
+    # Test if the app link was created sucessfully on applications menu
     if [ $? -eq 0 ]; then
         ${UPDATE_ICON_CACHE}
         ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
@@ -933,5 +537,3 @@ Categories=$appCategory;
          echo "I: Create Prefix: Can use \"Rename...\" to change name"
          echo "I: Create Prefix: Shortcut: Exe: ${EXE_NAME}"
     fi
-
-

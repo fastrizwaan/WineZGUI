@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
-![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/winezgui-0.83.png)
+![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/winezgui-0.84.png)
 
 ## What is WineZGUI
 
@@ -13,10 +13,10 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 ## Why WineZGUI?
 
 1. Runs windows games or exe files from file manager
-
 2. Creates application shortcut for easier access.
-
 3. Focus on running games and not setting up prefixes.
+4. Backup and Restore prefixes for later use.
+5. Create Game Bundles for sharing (prefix+game)
 
 ## How it works
 
@@ -33,8 +33,12 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 I highly recommend using flatpak version, because, distro based wine (wine-staging) keeps on updating and games may break every few days. Using wine stable from flathub is better or use wine stable 5.0 or 7.0 from the distro packages.
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
+WineZGUI is packaged in flatpak-wine. Visit:
+[WineZGUI flatpak from flatpak-wine](hhttps://github.com/fastrizwaan/flatpak-wine)
 
-[Download and Install WineZGUI flatpak binary](https://github.com/fastrizwaan/WineZGUI-Releases/releases)  (Recommended)
+[WineZGUI with Proton-GE-7.29](https://github.com/fastrizwaan/flatpak-wine#-now-using-winezgui-with-flatpak-wine-505-fltpak-wine-70-and-flatpak-proton-ge-729-)
+
+
 
 ### 
 
@@ -42,10 +46,10 @@ I highly recommend using flatpak version, because, distro based wine (wine-stagi
 
 Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
 
-##### Version 0.83.1 (copy paste this on a terminal)
+##### Version 0.84 (copy paste this on a terminal)
 
 ```
-git clone --depth 1 --branch 0.83.1 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.84 https://github.com/fastrizwaan/WineZGUI.git
 ./WineZGUI/flatpak-manifest/install.sh
 ```
 
@@ -62,23 +66,23 @@ flatpak's optional requirement is `gnome-terminal` if we need to access prefix u
 
 Setup is instant as it copies a few files to specific directories.
 
-##### Version 0.83.1
+##### Version 0.84
 
-Downoad source [WineZGUI-0.83.1.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.83.1.tar.gz) or use `git tag 0.83.1`
+Downoad source [WineZGUI-0.84.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.84.tar.gz) or use `git tag 0.84`
 
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.83.1.tar.gz
-tar -zxvf 0.83.1.tar.gz
-cd WineZGUI-0.83.1
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.84.tar.gz
+tar -zxvf 0.84.tar.gz
+cd WineZGUI-0.84
 sudo ./setup --install ; #systemwide
 ```
 
-##### git tag 0.83.1
+##### git tag 0.84
 
 ```
-git clone --depth 1 --branch 0.83.1 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.84 https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```

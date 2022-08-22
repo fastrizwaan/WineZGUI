@@ -1,0 +1,7 @@
+Gtk-Message: 19:21:16.596: Failed to load module "canberra-gtk-module"
+Gtk-Message: 19:21:16.596: Failed to load module "canberra-gtk-module"
+[GFX1-]: glxtest: VA-API test failed: failed to initialise VAAPI connection.
+[2022-08-20T13:57:22Z ERROR mp4parse] Found 2 nul bytes in "\0\0"
+[2022-08-20T13:57:22Z ERROR mp4parse] Found 2 nul bytes in "\0\0"
+[2022-08-20T13:57:22Z ERROR mp4parse] Found 2 nul bytes in "\0\0"
+[2022-08-20T13:57:24Z ERROR mp4parse] Found 2 nul bytes in "\0\0"

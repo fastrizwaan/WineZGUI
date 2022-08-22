@@ -1,0 +1,34 @@
+       # Ask user to select an image icon
+       GET_ICON=$(zenity --file-selection \
+                         --file-filter=""*.png" "*.jpg" "*.svg"")
+
+       # If he/she cancels, why prompt?
+       if [ -z "${GET_ICON}" ]; then #if no icon is selected
+            echo "I: Script: Change Icon: Cancelled!"
+            # Return to Game window
+            Game_Function
+       fi
+       echo "I: Script: Change Icon: ${GET_ICON} selected"
+
+       # Now that we have included desktop-file-edit in flatpak, not needed
+       if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
+            export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
+       else
+            export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
+       fi
+
+       # set icon to the user selected one
+       ${DESKTOP_FILE_EDIT} --set-icon="${GET_ICON}" ${DESKTOPFILE} && \
+       echo "I: Script: Change Icon: Icon Changed Successfully!"
+
+       # Update .desktop database
+       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+
+       # Inform user
+       zenity --info --no-wrap --title="${DESKTOPFILE}" \
+              --text="Icon Changed sucessfuly: ${GET_ICON}"
+
+       # Change Runtime Icon as soon as it is changed
+       # Main Window is going to use ICON variable.
+       export ICON="${GET_ICON}"
+

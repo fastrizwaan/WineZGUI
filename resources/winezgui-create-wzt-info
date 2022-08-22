@@ -1,0 +1,52 @@
+# Create wzt-info.txt for WineZGUI Backup file
+
+if [ "${PREFIXNAME}" = "default" ]; then
+     PROMPT="Backup"
+     FUNCTION_TO_RETURN="Main_Function"
+     
+     WZT_INFO_PROGNAME="Default Prefix"
+     WZT_INFO_EXE_NAME="No-EXE"
+     WZT_INFO_PREFIXNAME="${PREFIXNAME}"
+
+     PREFIX_DIR="${WINEZPREFIX}/${PREFIXNAME}"
+else
+     PROMPT="Script: Backup"
+     FUNCTION_TO_RETURN="Game_Function"
+     
+     WZT_INFO_PROGNAME="${PROGNAME}"
+     WZT_INFO_EXE_NAME="${EXE_NAME}"
+     WZT_INFO_PREFIXNAME="${PREFIXNAME}"
+     PREFIX_DIR="${PREFIXDIR}"
+fi
+
+
+echo "I: ${PROMPT}: Creating wzt-info.txt at ${PREFIXNAME}"
+echo "I: ${PROMPT}: is prefix ${PREFIXNAME} writable?"     
+if [ -w "${PREFIX_DIR}" ]; then
+     echo "I: ${PROMPT}: Yes!"
+else
+     echo "I: ${PROMPT}: No!"
+     echo "I: ${PROMPT}: Aborting!"
+     ${FUNCTION_TO_RETURN}
+fi
+
+DATE=$(date +%F_%H%M)
+echo "-=-=-==-=-=-=-=-=-==-"
+echo "PREFIX_DIR = ${PREFIX_DIR}"
+echo "PREFIXNAME = ${PREFIXNAME}"
+echo "----------------------------------------------------------"
+echo "
+Name    :${WZT_INFO_PROGNAME}
+Exe     :${WZT_INFO_EXE_NAME}
+PREFIX  :${WZT_INFO_PREFIXNAME}
+Created :${DATE}
+Install :${INSTALL_TYPE}
+WineZGUI:${APPVERSION}
+Wine    :${WINEVER}
+Size    :${TOTAL_BACKUP_SIZE_IN_HF}
+" |tee "${PREFIX_DIR}/wzt-info.txt"
+echo "----------------------------------------------------------"
+
+if [ -f "${PREFIX_DIR}/wzt-info.txt" ]; then
+     echo "I: ${PROMPT}: Created ${PREFIX_DIR}/wzt-info.txt"
+fi

@@ -1,0 +1,35 @@
+       unset DEL_RESPONSE
+       DEL_RESPONSE=$( zenity \
+             --title "${PROGNAME}"                  \
+             --list   --hide-header                 \
+             --width=360 --height=30                \
+             --radiolist --column " "               \
+             --column "Action"                      \
+                 TRUE "Delete and Quit..."          \
+             --text   "<b>${EXE_NAME} Prefix...</b>"    \
+             )
+       # If Cancel is clicked
+       if [ -z "${DEL_RESPONSE}" ]; then
+            echo "I: Script: Delete: Cancelled!"
+            unset DEL_RESPONSE
+            Game_Function
+       fi
+
+       SHORTCUT="${DESKTOPDIR}/${EXE_NOEXE}.desktop"
+       # Delete Shortcuts and Prefix Directory
+       rm -rf ${SHORTCUT} && \
+       echo "I: Script: Delete: Removed ${SHORTCUT}" \ ||
+       echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
+
+       rm -rf ${PREFIXDIR} && \
+       echo "I: Script: Delete: Removed ${PREFIXDIR}"
+
+       # Delete all broken links which points to winezgui game prefix
+       find ${WINEZSHORTCUTS} -xtype l -delete && \
+       echo "I: Script: Delete: Removed broken WineZGUI .desktop links"
+       ${UPDATE_ICON_CACHE}
+       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+       echo "I: Script: Delete: Exiting!"
+       # Exit after deleting prefix
+       exit 0
+
