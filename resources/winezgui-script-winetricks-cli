@@ -2,7 +2,7 @@
                   vcrun2003 vcrun2005        \
                   vcrun2008 vcrun2010        \
                   vcrun2019 dxvk faudio      \
-                  quartz directmusic avifil32 dsound corefonts"
+                  quartz avifil32 d3dx9_43 corefonts"
                   
 # Old Games with MIDI support
 # d3dx9 xact quartz gmdls avifil32 faudio d3dx9_43 dmusic32 vcrun2008 dirac \
@@ -39,7 +39,7 @@
             echo "# Installing ${i}..."
 
             # Install winetricks verbs and put output to logs
-            ${WTRICKS_CMD} --unattended --force ${i}
+            ${WTRICKS_CMD} --unattended ${i}
             done
             TOOK=$(( SECONDS - ${TIMER_START} ))
             echo "# Time Taken: ${TOOK} seconds!"
