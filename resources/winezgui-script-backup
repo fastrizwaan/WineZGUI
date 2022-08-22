@@ -110,7 +110,19 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
 
 
      # Step 3.3: Set Backup file name, add .bundle suffix
-     BKPFNAME="${PREFIXNAME}-${DATE}.bundle.${BKP_EXT}"
+     # Game-WineZGUI-0.84-Game-Bundle-flatpak-wine7.wzt
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          unset BKPFNAME
+          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
+          BKPFNAME+="-Game-Bundle-"
+          BKPFNAME+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+     else
+      # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
+          unset BKPFNAME
+          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
+          BKPFNAME+="-Game-Bundle-"
+          BKPFNAME+="${WINEVER}.${BKP_EXT}"
+     fi
      echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${BKPFNAME}"
      BKPTITLE="Creating bundle for ${PREFIXNAME}"
      unset BKPTEXTS
@@ -127,8 +139,20 @@ elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
      TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
      echo "I: Script: Backup: Prefix Backup: Size: ${TOTAL_BACKUP_SIZE_IN_HF}"
 
-     # Suggest Prefix Backup file name
-     BKPFNAME="${PREFIXNAME}-${DATE}.${BKP_EXT}"
+     # Suggest name for prefix
+     # Game-WineZGUI-0.84-Prefix-Backup-flatpak-wine7.wzt
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          unset BKPFNAME
+          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
+          BKPFNAME+="-Prefix-Backup-"
+          BKPFNAME+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+     else
+      # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
+          unset BKPFNAME
+          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
+          BKPFNAME+="-Prefix-Backup-"
+          BKPFNAME+="${WINEVER}.${BKP_EXT}"
+     fi
      echo "I: Script: Backup: Prefix Backup: Filename Suggestion: ${BKPFNAME}"
      BKPTITLE="Backup ${PREFIXNAME} Prefix!"
      unset BKPTEXTS
@@ -224,15 +248,19 @@ else
 
 fi
 
-# Detect Number of CPU Cores for faster compression
-CPU_CORES=$(grep "cores" /proc/cpuinfo|sed 's/ //g'|cut -f2 -d ":"|head -n1)
-# if a non number is not found in the variable CPU_CORES (i.e., only digits)
-if ! [[ ${CPU_CORES} == *[!0-9]* ]]; then
-      echo "I: Script: Backup: Found ${CPU_CORES} CPU Cores!"
-else
-      echo "I: Script: Backup: Unknown ${CPU_CORES} Cores, using 2 cores!"
-      CPU_CORES=2
+# Ask for Compression Levels
+unset LEVEL
+# EXE handling by providing dialog
+
+LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+               --text "Select Compression Level" --title "${BKPFNAME}")
+# Exit if Cancel is clicked
+if [ -z "${LEVEL}" ]; then
+     echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancel Selected!"
+     Game_Function
 fi
+echo "I: Script Backup: ${BKP_RESP_TXT}: Compression Level ${LEVEL} Selected!"
+
 
 # Change directory to WINEZPREFIX
 cd "${WINEZPREFIX}"
@@ -282,7 +310,7 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
 
-     (tar -I "zstd -T${CPU_CORES}" -cf \
+     (tar -I "zstd -${LEVEL} -T0" -cf \
       "${TARGET_DIR}/${BACKUP_FILE}" \
       -C "${WINEZPREFIX}" "${PREFIXNAME}" \
       -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}" \
@@ -310,7 +338,7 @@ else  # Create Prefix
      # tar -cvf test.tar -C ~/Downloads/ ./PUTTY
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
      # Create Backup archive and restore changes as soon as tar is done
-     (tar -I "zstd -T${CPU_CORES}" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
+     (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
              -C "${WINEZPREFIX}" "${PREFIXNAME}" &) | \
      zenity --progress --pulsate --auto-close \
             --title="Creating ${PREFIXNAME} backup!" \
