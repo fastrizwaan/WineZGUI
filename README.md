@@ -33,14 +33,10 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 I highly recommend using flatpak version, because, distro based wine (wine-staging) keeps on updating and games may break every few days. Using wine stable from flathub is better or use wine stable 5.0 or 7.0 from the distro packages.
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
-WineZGUI is packaged in flatpak-wine. Visit:
-[WineZGUI flatpak from flatpak-wine](hhttps://github.com/fastrizwaan/flatpak-wine)
+WineZGUI is packaged in flatpak-wine. Please visit [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine)
 
 [WineZGUI with Proton-GE-7.29](https://github.com/fastrizwaan/flatpak-wine#-now-using-winezgui-with-flatpak-wine-505-fltpak-wine-70-and-flatpak-proton-ge-729-)
 
-
-
-### 
 
 ### Build and install flatpak from source
 
