@@ -1,6 +1,6 @@
 # winezgui-backup-function
 # This function can create a prefix backup or a game bundle by including gamedir
-
+export SHORT_FLATPAK_NAME="flatpak-${FLATPAK_NAME##*.}"
 # Step 1: Ask Backup, prefix or create game bundle?
 # Ask whether to backup only prefix or bundle the game directory too
 echo "I: Script: Backup... Selected!"
@@ -85,11 +85,14 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
 
      # Step 3.1.1: if gamedir is already inside prefixdir
      if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-           echo "================================="
-           echo "GAMEDIR INSIDE PREFIXDIR"
+           echo "I: Script: Backup: Game Bundle: Game Directory inside Prefix!"
            # do not include GAMEDIR separately when it is already inside prefix
            TOTAL_BACKUP_SIZE=${PREFIX_SIZE_IN_BYTES}
            TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
+
+     # Show only Prefix size
+     unset MSG_TEXT
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
      else
      GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
      GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF}|cut -f1 -d " " \
@@ -97,7 +100,11 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      # Step 3.3: Calculate total backup size prefix+gamedir
      TOTAL_BACKUP_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES} + $GAMEDIR_DU_IN_BYTES)
      TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
-
+     
+     # Show Prefix + Gamedir size
+     unset MSG_TEXT
+     MSG_TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
      fi
      # Step 3.2: Now get disk usage and of gamedir
 
@@ -110,13 +117,21 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
 
 
      # Step 3.3: Set Backup file name, add .bundle suffix
-     BKPFNAME="${PREFIXNAME}-${DATE}.bundle.${BKP_EXT}"
-     echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${BKPFNAME}"
+     # Game-WineZGUI-0.84-Game-Bundle-flatpak-wine7.wzt
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Game-Bundle-"
+          WZT_FILE+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+     else
+      # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Game-Bundle-"
+          WZT_FILE+="${WINEVER}.${BKP_EXT}"
+     fi
+     echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${WZT_FILE}"
      BKPTITLE="Creating bundle for ${PREFIXNAME}"
-     unset BKPTEXTS
-     BKPTEXTS+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
-     BKPTEXTS+="${PREFIX_SIZE_IN_HF}"
-     #BKPTEXTS+="Name:"
 
 # Step 3: If only Prefix is being backed up
 elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
@@ -127,13 +142,25 @@ elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
      TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
      echo "I: Script: Backup: Prefix Backup: Size: ${TOTAL_BACKUP_SIZE_IN_HF}"
 
-     # Suggest Prefix Backup file name
-     BKPFNAME="${PREFIXNAME}-${DATE}.${BKP_EXT}"
-     echo "I: Script: Backup: Prefix Backup: Filename Suggestion: ${BKPFNAME}"
+     # Suggest name for prefix
+     # Game-WineZGUI-0.84-Prefix-Backup-flatpak-wine7.wzt
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Prefix-Backup-"
+          WZT_FILE+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+     else
+      # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Prefix-Backup-"
+          WZT_FILE+="${WINEVER}.${BKP_EXT}"
+     fi
+     echo "I: Script: Backup: Prefix Backup: Filename Suggestion: ${WZT_FILE}"
      BKPTITLE="Backup ${PREFIXNAME} Prefix!"
-     unset BKPTEXTS
-     BKPTEXTS+="${PREFIX_SIZE_IN_HF}"
-     #BKPTEXTS+="Name:"
+     unset MSG_TEXT
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
+     #MSG_TEXT+="Name:"
 else
      echo "E: Script: Backup: Unknown Selection!"
      echo "E: Script: =========================="
@@ -145,15 +172,15 @@ echo "I: Script: Backup: ${BKP_RESP_TXT}: Asking filename"
 BACKUP_FILE=$( zenity                 \
               --title="${BKPTITLE}"   \
               --width=500 --height=30                \
-              --text="${BKPTEXTS}"   \
-              --entry-text="${BKPFNAME}"             \
+              --text="${MSG_TEXT}"   \
+              --entry-text="${WZT_FILE}"             \
               --entry)
 
 # Step 4.1: if backup file is empty / cancel clicked
 if [ -z "${BACKUP_FILE}" ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancelled!"
      unset BACKUP_FILE
-     unset BKPFNAME
+     unset WZT_FILE
      Game_Function
 fi
 
@@ -224,15 +251,19 @@ else
 
 fi
 
-# Detect Number of CPU Cores for faster compression
-CPU_CORES=$(grep "cores" /proc/cpuinfo|sed 's/ //g'|cut -f2 -d ":"|head -n1)
-# if a non number is not found in the variable CPU_CORES (i.e., only digits)
-if ! [[ ${CPU_CORES} == *[!0-9]* ]]; then
-      echo "I: Script: Backup: Found ${CPU_CORES} CPU Cores!"
-else
-      echo "I: Script: Backup: Unknown ${CPU_CORES} Cores, using 2 cores!"
-      CPU_CORES=2
+# Ask for Compression Levels
+unset LEVEL
+# EXE handling by providing dialog
+
+LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+               --text "Select Compression Level" --title "${WZT_FILE}")
+# Exit if Cancel is clicked
+if [ -z "${LEVEL}" ]; then
+     echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancel Selected!"
+     Game_Function
 fi
+echo "I: Script Backup: ${BKP_RESP_TXT}: Compression Level ${LEVEL} Selected!"
+
 
 # Change directory to WINEZPREFIX
 cd "${WINEZPREFIX}"
@@ -282,7 +313,7 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
 
-     (tar -I "zstd -T${CPU_CORES}" -cf \
+     (tar -I "zstd -${LEVEL} -T0" -cf \
       "${TARGET_DIR}/${BACKUP_FILE}" \
       -C "${WINEZPREFIX}" "${PREFIXNAME}" \
       -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}" \
@@ -310,7 +341,7 @@ else  # Create Prefix
      # tar -cvf test.tar -C ~/Downloads/ ./PUTTY
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
      # Create Backup archive and restore changes as soon as tar is done
-     (tar -I "zstd -T${CPU_CORES}" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
+     (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
              -C "${WINEZPREFIX}" "${PREFIXNAME}" &) | \
      zenity --progress --pulsate --auto-close \
             --title="Creating ${PREFIXNAME} backup!" \

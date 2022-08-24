@@ -31,21 +31,22 @@ else
 fi
 
 DATE=$(date +%F_%H%M)
-echo "-=-=-==-=-=-=-=-=-==-"
-echo "PREFIX_DIR = ${PREFIX_DIR}"
-echo "PREFIXNAME = ${PREFIXNAME}"
-echo "----------------------------------------------------------"
-echo "
+
+echo "# ${APP_WITH_VER} created wzt file
 Name    :${WZT_INFO_PROGNAME}
 Exe     :${WZT_INFO_EXE_NAME}
 PREFIX  :${WZT_INFO_PREFIXNAME}
 Created :${DATE}
-Install :${INSTALL_TYPE}
-WineZGUI:${APPVERSION}
+Install :${INSTALL_TYPE}" |tee "${PREFIX_DIR}/wzt-info.txt"
+
+# Include flatpak id in wzt-info.txt
+if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+     echo "Flatpak :${FLATPAK_NAME}" |tee -a "${PREFIX_DIR}/wzt-info.txt"
+fi
+
+echo "WineZGUI:${APPVERSION}
 Wine    :${WINEVER}
-Size    :${TOTAL_BACKUP_SIZE_IN_HF}
-" |tee "${PREFIX_DIR}/wzt-info.txt"
-echo "----------------------------------------------------------"
+Size    :${TOTAL_BACKUP_SIZE_IN_HF}" |tee -a "${PREFIX_DIR}/wzt-info.txt"
 
 if [ -f "${PREFIX_DIR}/wzt-info.txt" ]; then
      echo "I: ${PROMPT}: Created ${PREFIX_DIR}/wzt-info.txt"
