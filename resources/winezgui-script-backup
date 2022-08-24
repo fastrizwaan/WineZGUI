@@ -112,23 +112,23 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      # Step 3.3: Set Backup file name, add .bundle suffix
      # Game-WineZGUI-0.84-Game-Bundle-flatpak-wine7.wzt
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-          unset BKPFNAME
-          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          BKPFNAME+="-Game-Bundle-"
-          BKPFNAME+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Game-Bundle-"
+          WZT_FILE+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
      else
       # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
-          unset BKPFNAME
-          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          BKPFNAME+="-Game-Bundle-"
-          BKPFNAME+="${WINEVER}.${BKP_EXT}"
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Game-Bundle-"
+          WZT_FILE+="${WINEVER}.${BKP_EXT}"
      fi
-     echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${BKPFNAME}"
+     echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${WZT_FILE}"
      BKPTITLE="Creating bundle for ${PREFIXNAME}"
-     unset BKPTEXTS
-     BKPTEXTS+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
-     BKPTEXTS+="${PREFIX_SIZE_IN_HF}"
-     #BKPTEXTS+="Name:"
+     unset MSG_TEXT
+     MSG_TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
+     #MSG_TEXT+="Name:"
 
 # Step 3: If only Prefix is being backed up
 elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
@@ -142,22 +142,22 @@ elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
      # Suggest name for prefix
      # Game-WineZGUI-0.84-Prefix-Backup-flatpak-wine7.wzt
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-          unset BKPFNAME
-          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          BKPFNAME+="-Prefix-Backup-"
-          BKPFNAME+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Prefix-Backup-"
+          WZT_FILE+="${SHORT_FLATPAK_NAME}.${BKP_EXT}"
      else
       # Game-WineZGUI-0.84-Game-Bundle-wine-7.0.wzt
-          unset BKPFNAME
-          BKPFNAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          BKPFNAME+="-Prefix-Backup-"
-          BKPFNAME+="${WINEVER}.${BKP_EXT}"
+          unset WZT_FILE
+          WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
+          WZT_FILE+="-Prefix-Backup-"
+          WZT_FILE+="${WINEVER}.${BKP_EXT}"
      fi
-     echo "I: Script: Backup: Prefix Backup: Filename Suggestion: ${BKPFNAME}"
+     echo "I: Script: Backup: Prefix Backup: Filename Suggestion: ${WZT_FILE}"
      BKPTITLE="Backup ${PREFIXNAME} Prefix!"
-     unset BKPTEXTS
-     BKPTEXTS+="${PREFIX_SIZE_IN_HF}"
-     #BKPTEXTS+="Name:"
+     unset MSG_TEXT
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
+     #MSG_TEXT+="Name:"
 else
      echo "E: Script: Backup: Unknown Selection!"
      echo "E: Script: =========================="
@@ -169,15 +169,15 @@ echo "I: Script: Backup: ${BKP_RESP_TXT}: Asking filename"
 BACKUP_FILE=$( zenity                 \
               --title="${BKPTITLE}"   \
               --width=500 --height=30                \
-              --text="${BKPTEXTS}"   \
-              --entry-text="${BKPFNAME}"             \
+              --text="${MSG_TEXT}"   \
+              --entry-text="${WZT_FILE}"             \
               --entry)
 
 # Step 4.1: if backup file is empty / cancel clicked
 if [ -z "${BACKUP_FILE}" ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancelled!"
      unset BACKUP_FILE
-     unset BKPFNAME
+     unset WZT_FILE
      Game_Function
 fi
 
@@ -253,7 +253,7 @@ unset LEVEL
 # EXE handling by providing dialog
 
 LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
-               --text "Select Compression Level" --title "${BKPFNAME}")
+               --text "Select Compression Level" --title "${WZT_FILE}")
 # Exit if Cancel is clicked
 if [ -z "${LEVEL}" ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancel Selected!"
