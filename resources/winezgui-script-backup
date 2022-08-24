@@ -85,11 +85,14 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
 
      # Step 3.1.1: if gamedir is already inside prefixdir
      if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-           echo "================================="
-           echo "GAMEDIR INSIDE PREFIXDIR"
+           echo "I: Script: Backup: Game Bundle: Game Directory inside Prefix!"
            # do not include GAMEDIR separately when it is already inside prefix
            TOTAL_BACKUP_SIZE=${PREFIX_SIZE_IN_BYTES}
            TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
+
+     # Show only Prefix size
+     unset MSG_TEXT
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
      else
      GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
      GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF}|cut -f1 -d " " \
@@ -97,7 +100,11 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      # Step 3.3: Calculate total backup size prefix+gamedir
      TOTAL_BACKUP_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES} + $GAMEDIR_DU_IN_BYTES)
      TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --to iec)
-
+     
+     # Show Prefix + Gamedir size
+     unset MSG_TEXT
+     MSG_TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
+     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
      fi
      # Step 3.2: Now get disk usage and of gamedir
 
@@ -125,10 +132,6 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      fi
      echo "I: Script: Backup: Game Bundle: Filename Suggestion: ${WZT_FILE}"
      BKPTITLE="Creating bundle for ${PREFIXNAME}"
-     unset MSG_TEXT
-     MSG_TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
-     MSG_TEXT+="${PREFIX_SIZE_IN_HF}"
-     #MSG_TEXT+="Name:"
 
 # Step 3: If only Prefix is being backed up
 elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
