@@ -280,7 +280,9 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Name : ${TAR_GAME_DIR_NAME}"
 
      # Change EXE_FILE and EXE_PATH before bundling
-     GAME_EXE_PATH="${PREFIXDIR}/${TAR_GAME_DIR_NAME}"
+     # Putting Game directory inside drive_c/bundled_game
+     GAME_BUNDLED_DIR="drive_c/bundled_game/${TAR_GAME_DIR_NAME}"
+     GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
      GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
 
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Exe Path: ${GAME_EXE_PATH}"
@@ -318,7 +320,7 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
       -C "${WINEZPREFIX}" "${PREFIXNAME}" \
       -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}" \
       --transform \
-           "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${TAR_GAME_DIR_NAME}|g" &)| \
+      "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
      zenity  --progress --pulsate --auto-close \
              --title="Creating ${PREFIXNAME} Game Bundle...!" \
              --width=500 --text="${BACKUP_FILE}..."
