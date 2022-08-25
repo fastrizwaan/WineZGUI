@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
-![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/screenshots/winezgui-0.85.png)
+![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.85.1/winezgui-0.85.1.png)
 
 ## What is WineZGUI
 
