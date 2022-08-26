@@ -263,9 +263,7 @@ fi
 
 # Ask for Compression Levels
 unset LEVEL
-# EXE handling by providing dialog
-
-LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 --width=500 \
                --text "Select Compression Level" --title "${WZT_FILE}")
 # Exit if Cancel is clicked
 if [ -z "${LEVEL}" ]; then
