@@ -1,6 +1,8 @@
 # winezgui-backup-function
 # This function can create a prefix backup or a game bundle by including gamedir
-export SHORT_FLATPAK_NAME="flatpak-${FLATPAK_NAME##*.}"
+export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"
+
+
 # Step 1: Ask Backup, prefix or create game bundle?
 # Ask whether to backup only prefix or bundle the game directory too
 echo "I: Script: Backup... Selected!"
@@ -119,6 +121,10 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      # Step 3.3: Set Backup file name, add .bundle suffix
      # Game-WineZGUI-0.84-Game-Bundle-flatpak-wine7.wzt
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          # If "flatpak-" is not part of flatpak name, like WineZGUI, add it
+          if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+                  SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+          fi
           unset WZT_FILE
           WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
           WZT_FILE+="-Game-Bundle-"
@@ -145,6 +151,10 @@ elif [ "$BKP_RESPONSE" = "Prefix Backup..." ]; then
      # Suggest name for prefix
      # Game-WineZGUI-0.84-Prefix-Backup-flatpak-wine7.wzt
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          # If "flatpak-" is not part of flatpak name, like WineZGUI, add it
+          if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+                  SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+          fi
           unset WZT_FILE
           WZT_FILE+="${PREFIXNAME}-${APP_WITH_VER}"
           WZT_FILE+="-Prefix-Backup-"
