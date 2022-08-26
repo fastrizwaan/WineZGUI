@@ -263,8 +263,8 @@ fi
 
 # Ask for Compression Levels
 unset LEVEL
-LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 --width=500 \
-               --text "Select Compression Level" --title "${WZT_FILE}")
+LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+               --text "${WZT_FILE}" --title "Select Compression Level...")
 # Exit if Cancel is clicked
 if [ -z "${LEVEL}" ]; then
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Cancel Selected!"
