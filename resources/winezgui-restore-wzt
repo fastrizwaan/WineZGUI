@@ -17,11 +17,11 @@ RESTORE_WZT_FILE()
   echo "I: Restore: Selected ${WZT_FILE}"
   
   # Get name from the file_with_path
-  WZT_NAME="$(basename ${WZT_FILE})"
+  WZT_NAME=$(basename "${WZT_FILE}")
   
   # 1. Extract prefix name from the given .wzt file
   #    the directory name is the prefix name
-  WZT_PREFIX=$(tar -tf ${WZT_FILE}|head -n1|cut -f1 -d "/")
+  WZT_PREFIX=$(tar -tf "${WZT_FILE}"|head -n1|cut -f1 -d "/")
   echo "I: Restore: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
   
   # 2. Ask whether the user want to extract wzt file at ${PREFIXDIR}
@@ -42,7 +42,7 @@ RESTORE_WZT_FILE()
   
   # 3.2 Extract wzt-info.txt file to TEMPDIR, And show a progress bar using 
   # zenity as takes a while to read from big file
-  (tar xfO ${WZT_FILE} ${WZT_PREFIX}/${WZT_INFO_FILE} \
+  (tar xfO "${WZT_FILE}" ${WZT_PREFIX}/${WZT_INFO_FILE} \
                               | tee ${TEMPDIR}/${WZT_INFO_FILE}) | \
      zenity --progress --pulsate --auto-close \
             --title="${WZT_NAME}" \
