@@ -33,8 +33,6 @@ export WINEZPREFIX="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 
 export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
-export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-
 
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui

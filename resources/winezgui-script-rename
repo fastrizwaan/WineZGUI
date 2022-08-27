@@ -66,7 +66,7 @@ if [ "${RESPONSE}" = "Name..." ]; then
        -i ${PREFIXDIR}/${PREFIXNAME}.sh
 
      # Remove broken .desktop links
-     find ${WINEZSHORTCUTS} -xtype l -delete && \
+     find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
      echo "I: Script: Rename: Removed broken WineZGUI .desktop links"
      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
      echo "I: Script: Rename: Change ${PROGNAME} to ${GET_PROGNAME}"
@@ -245,7 +245,7 @@ else
      echo "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
 
      # Delete all broken links which points to winezgui game prefix
-     find ${WINEZSHORTCUTS} -xtype l -delete && \
+     find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
      echo "I: Script: Rename: Prefix: Removed broken WineZGUI .desktop links"
      ${UPDATE_ICON_CACHE}
      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}

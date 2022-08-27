@@ -189,7 +189,7 @@ RESTORE_WZT_FILE()
        ln -sf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
 
        # Cleanup broken links in winezgui shortcuts directory
-       find ${WINEZSHORTCUTS} -xtype l -delete && \
+       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
        echo "I: Restore: Removed broken WineZGUI .desktop links"
 
        # Update menus

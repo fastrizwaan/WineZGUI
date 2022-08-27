@@ -42,7 +42,6 @@ export WINE_CMD=${WINEEXE}
 
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-export WINEZSHORTCUTS="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "$INSTALL_TYPE" = "system" ]; then
@@ -541,7 +540,8 @@ source ${DATADIR}/winezgui-restore-wzt
 
              if [ -d "${DESKTOPDIR}" ]; then
                   # Delete all broken links which points to winezgui
-                  find ${DESKTOPDIR} -xtype l -delete && \
+                  # only from desktop dir
+                  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
                   echo "I: Delete: Removed broken WineZGUI .desktop links"
                   # Update menus
                   ${UPDATE_ICON_CACHE}

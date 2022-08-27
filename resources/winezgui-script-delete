@@ -25,7 +25,7 @@
        echo "I: Script: Delete: Removed ${PREFIXDIR}"
 
        # Delete all broken links which points to winezgui game prefix
-       find ${WINEZSHORTCUTS} -xtype l -delete && \
+       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
        echo "I: Script: Delete: Removed broken WineZGUI .desktop links"
        ${UPDATE_ICON_CACHE}
        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
