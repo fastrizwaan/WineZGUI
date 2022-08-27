@@ -17,7 +17,7 @@ RESTORE_WZT_FILE()
   echo "I: Restore: Selected ${WZT_FILE}"
   
   # Get name from the file_with_path
-  WZT_NAME="$(basename ${WZT_FILE})"
+  WZT_NAME=$(basename "${WZT_FILE}")
   
   # 1. Extract prefix name from the given .wzt file
   #    the directory name is the prefix name
