@@ -128,26 +128,31 @@ else
      # Change Script, Text files, and .desktop shortcut file
      # Process files 1st
      # exe file must not be changed for prefix to working
-     sed "s|${EXE_FILE}|XOEXE_FILEXO|g"  \
-         -i ${PREFIXDIR}/*.txt   \
-         -i ${PREFIXDIR}/*.sh    \
-         -i ${PREFIXDIR}/*.desktop
+          
+     # If gamedir is outside prefix, do not change EXE path on renaming prefix
+     # Keep EXE: FILE, PATH, NAME, NOSP when they are outside prefix
+     if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+             echo "I: Script: Rename: Prefix: GAME dir is outside prefix!"
+             sed "s|${EXE_FILE}|XOEXE_FILEXO|g"  \
+                 -i ${PREFIXDIR}/*.txt   \
+                 -i ${PREFIXDIR}/*.sh    \
+                 -i ${PREFIXDIR}/*.desktop
 
-     sed "s|${EXE_PATH}|XOEXE_PATHXO|g"  \
-          -i ${PREFIXDIR}/*.txt   \
-          -i ${PREFIXDIR}/*.sh    \
-          -i ${PREFIXDIR}/*.desktop
+             sed "s|${EXE_PATH}|XOEXE_PATHXO|g"  \
+                  -i ${PREFIXDIR}/*.txt   \
+                  -i ${PREFIXDIR}/*.sh    \
+                  -i ${PREFIXDIR}/*.desktop
 
-     sed "s|${EXE_NAME}|XOEXE_NAMEXO|g"  \
-         -i ${PREFIXDIR}/*.txt   \
-         -i ${PREFIXDIR}/*.sh    \
-         -i ${PREFIXDIR}/*.desktop
+             sed "s|${EXE_NAME}|XOEXE_NAMEXO|g"  \
+                 -i ${PREFIXDIR}/*.txt   \
+                 -i ${PREFIXDIR}/*.sh    \
+                 -i ${PREFIXDIR}/*.desktop
 
-     sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g"  \
-         -i ${PREFIXDIR}/*.txt   \
-         -i ${PREFIXDIR}/*.sh    \
-         -i ${PREFIXDIR}/*.desktop
-
+             sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g"  \
+                 -i ${PREFIXDIR}/*.txt   \
+                 -i ${PREFIXDIR}/*.sh    \
+                 -i ${PREFIXDIR}/*.desktop
+     fi
      # Main Replacement
      # Change values with path
      # Change all instances of old prefix name with the new name
@@ -179,27 +184,32 @@ else
 
 
      # re Process files
-     # exe file must not be changed for prefix to working
-     sed "s|XOEXE_FILEXO|${EXE_FILE}|g"  \
-          -i ${PREFIXDIR}/*.txt   \
-          -i ${PREFIXDIR}/*.sh    \
-          -i ${PREFIXDIR}/*.desktop
+     # exe file must not be changed for prefix to launch the exe from script
 
-     sed "s|XOEXE_PATHXO|${EXE_PATH}|g"  \
-          -i ${PREFIXDIR}/*.txt   \
-          -i ${PREFIXDIR}/*.sh    \
-          -i ${PREFIXDIR}/*.desktop
+     # If gamedir is outside prefix, do not change EXE path on renaming prefix
+     # Keep EXE: FILE, PATH, NAME, NOSP when they are outside prefix
+     if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+             sed "s|XOEXE_FILEXO|${EXE_FILE}|g"  \
+                  -i ${PREFIXDIR}/*.txt   \
+                  -i ${PREFIXDIR}/*.sh    \
+                  -i ${PREFIXDIR}/*.desktop
 
-     sed "s|XOEXE_NAMEXO|${EXE_NAME}|g"  \
-          -i ${PREFIXDIR}/*.txt   \
-          -i ${PREFIXDIR}/*.sh    \
-          -i ${PREFIXDIR}/*.desktop
+             sed "s|XOEXE_PATHXO|${EXE_PATH}|g"  \
+                  -i ${PREFIXDIR}/*.txt   \
+                  -i ${PREFIXDIR}/*.sh    \
+                  -i ${PREFIXDIR}/*.desktop
 
-     sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g"  \
-          -i ${PREFIXDIR}/*.txt   \
-          -i ${PREFIXDIR}/*.sh    \
-          -i ${PREFIXDIR}/*.desktop
+             sed "s|XOEXE_NAMEXO|${EXE_NAME}|g"  \
+                  -i ${PREFIXDIR}/*.txt   \
+                  -i ${PREFIXDIR}/*.sh    \
+                  -i ${PREFIXDIR}/*.desktop
 
+             sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g"  \
+                  -i ${PREFIXDIR}/*.txt   \
+                  -i ${PREFIXDIR}/*.sh    \
+                  -i ${PREFIXDIR}/*.desktop
+
+     fi
      # Rename .png file
      # check if the file exists before renaming
      if [ -f "${ICONFILE}" ]; then
