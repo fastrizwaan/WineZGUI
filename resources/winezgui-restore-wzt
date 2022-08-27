@@ -21,7 +21,7 @@ RESTORE_WZT_FILE()
   
   # 1. Extract prefix name from the given .wzt file
   #    the directory name is the prefix name
-  WZT_PREFIX=$(tar -tf "${WZT_FILE}""|head -n1|cut -f1 -d "/")
+  WZT_PREFIX=$(tar -tf "${WZT_FILE}"|head -n1|cut -f1 -d "/")
   echo "I: Restore: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
   
   # 2. Ask whether the user want to extract wzt file at ${PREFIXDIR}
