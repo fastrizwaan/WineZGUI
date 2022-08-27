@@ -5,8 +5,6 @@
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
 0.86
-- [ ] Game dir/Lava/Binaries/Win64/exe -> Bundle Directory (for UE4 games)
-- [ ] Ask for Game Directory before creating bundle
 - [ ] Restore question dialog should present wzt-info on loading .wzt file
 
 
