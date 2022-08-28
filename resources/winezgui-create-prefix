@@ -16,7 +16,8 @@ fi
 export APPNAME=WineZGUI
 export WINEVER="$(wine --version|cut -f1 -d " ")"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-export UPDATE_ICON_CACHE="gtk-update-icon-cache"
+export UPDATE_ICON_CACHE="gtk-update-icon-cache -f --ignore-theme-index \
+                          ~/.local/share/icons"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 export WINE_CMD="$(which wine)"
 export WINEEXE=${WINE_CMD}

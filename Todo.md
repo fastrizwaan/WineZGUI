@@ -5,7 +5,8 @@
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
 0.86
-- [ ] Restore question dialog should present wzt-info on loading .wzt file
+- [x] Restore question dialog should present wzt-info on loading .wzt file
+- [x] Handle user cancel of prefix name, extraction of wzt file
 
 
 0.85
