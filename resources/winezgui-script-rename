@@ -1,4 +1,5 @@
 RENAME_PREFIX(){
+unset RESPONSE
 echo "I: Script: Rename... Selected!"
 RESPONSE=$( zenity --title "${APP_WITH_VER}" \
                  --list   --hide-header               \
@@ -73,7 +74,19 @@ if [ "${RESPONSE}" = "Name..." ]; then
 
      # Required for instant change in the GameWindow
      export PROGNAME="${GET_PROGNAME}"
+     unset GET_PROGNAME
+     unset SED_SEARCH
+     unset SED_REPLACE
 else
+     unset PROGNAME_WITH_SUFFIX
+     unset GET_PROGNAME
+     unset NEWPREFIX
+     unset NEWPREFIXDIR
+     unset NEW_EXE_FILE
+     unset NEW_EXE_PATH
+     unset NEWSCRIPTFILE
+     unset NEWICONFILE
+     unset NEWDESKTOPFILE
      # Rename: Prefix Directory
      PROGNAME_WITH_SUFFIX="${PREFIXNAME}"
      # Ask for Name
@@ -163,24 +176,24 @@ else
      NEWICONFILE="${NEWPREFIXDIR}/${NEWPREFIX}.png"
      NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIX}.desktop"
 
-     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i ${DESKTOPFILE}
-     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i ${DESKTOPFILE}
+     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${DESKTOPFILE}"
+     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${DESKTOPFILE}"
 
      # Info.txt filename
-     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i ${INFOFILE}
-     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i ${INFOFILE}
-     sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i ${INFOFILE}
-     sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i ${INFOFILE}
+     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
+     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
+     sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"
+     sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${INFOFILE}"
 
      # Script FIle
-     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i ${SCRIPTFILE}
-     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i ${SCRIPTFILE}
-     sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i ${SCRIPTFILE}
-     sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i ${SCRIPTFILE}
+     sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${SCRIPTFILE}"
+     sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${SCRIPTFILE}"
+     sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${SCRIPTFILE}"
+     sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${SCRIPTFILE}"
 
      # Variables
      sed "s|^export PREFIXNAME=.*|export PREFIXNAME=\"${NEWPREFIX}\"|g" \
-           -i ${SCRIPTFILE}
+           -i "${SCRIPTFILE}"
 
 
      # re Process files
@@ -213,22 +226,22 @@ else
      # Rename .png file
      # check if the file exists before renaming
      if [ -f "${ICONFILE}" ]; then
-          mv    ${ICONFILE} \
-                ${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.png && \
+          mv    "${ICONFILE}" \
+                "${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.png" && \
           echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.png ->" \
                 "${NEWPREFIX}.png"
      fi
      # Rename .sh file
      if [ -f "${SCRIPTFILE}" ]; then
-          mv    ${SCRIPTFILE} \
-                ${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.sh && \
+          mv    "${SCRIPTFILE}" \
+                "${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.sh" && \
           echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.sh ->" \
                 "${NEWPREFIX}.sh"
      fi
      # Rename .desktop and .sh file
      if [ -f "${DESKTOPFILE}" ]; then
-          mv    ${DESKTOPFILE} \
-                ${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.desktop && \
+          mv    "${DESKTOPFILE}" \
+                "${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.desktop" && \
           echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.desktop" \
                 "-> ${NEWPREFIX}.sh"
      fi
@@ -257,7 +270,7 @@ else
      export ICONFILE="${NEWICONFILE}"
      export DESKTOPFILE="${NEWDESKTOPFILE}"
      echo "I: Script: Rename: Prefix: starting script from renamed dir"
-     ${WINEZPREFIX}/${NEWPREFIX}/${NEWPREFIX}.sh
+     ${WINEZPREFIX}/${NEWPREFIX}/${NEWPREFIX}.sh &
 
      exit 0
 fi
