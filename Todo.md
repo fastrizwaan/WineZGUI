@@ -4,6 +4,13 @@
 
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
+0.86.1
+- [ ] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
+      Name->Name-anything will repeat -anything...
+      Name->NEWNAME->Name-anything might fix
+      Rather, directly change EXE_FILE=.* and EXE_PATH= in script
+      Game Name: and Game Directory: in info.txt and .desktop file
+
 0.86
 - [x] Restore question dialog should present wzt-info on loading .wzt file
 - [x] Handle user cancel of prefix name, extraction of wzt file
