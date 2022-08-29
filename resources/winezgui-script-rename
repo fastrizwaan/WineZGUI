@@ -77,7 +77,7 @@ if [ "${RESPONSE}" = "Name..." ]; then
      unset GET_PROGNAME
      unset SED_SEARCH
      unset SED_REPLACE
-else
+else # Change Prefix Directory Name (mv oldprefx newprefix)
      unset PROGNAME_WITH_SUFFIX
      unset GET_PROGNAME
      unset NEWPREFIX
@@ -128,12 +128,28 @@ else
      if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]]; then
          echo "I: Script: Rename: Prefix: Gamedir is found inside Prefix"
          echo "I: Script: Rename: Prefix: Changing EXE_PATH also"
-         sed "s|${EXE_PATH}|${NEW_EXE_PATH}|g"  \
-              -i ${PREFIXDIR}/*.txt   \
-              -i ${PREFIXDIR}/*.sh
-         sed "s|${EXE_FILE}|${NEW_EXE_FILE}|g"  \
-              -i ${PREFIXDIR}/*.txt   \
-              -i ${PREFIXDIR}/*.sh
+
+         # Changes inside .sh file
+         # Change EXE_PATH AND EXE_FILE
+         SEARCHPATH="export EXE_PATH=.*"
+         SEARCHFILE="export EXE_FILE=.*"
+         REPLACEPATH"export EXE_PATH=${NEW_EXE_PATH}"
+         REPLACEFILE="export EXE_FILE=${NEW_EXE_FILE}"
+         sed "s|${SEARCHPATH}|${REPLACEPATH}|g" -i ${PREFIXDIR}/*.sh
+         sed "s|${SEARCHFILE}|${REPLACEFILE}|g" -i ${PREFIXDIR}/*.sh
+
+         # Changes inside info.txt file
+         SEARCHPATH="Game Directory : .*"
+         SEARCHFILE="Game EXE       : .*"
+         REPLACEPATH"Game Directory : ${NEW_EXE_PATH}"
+         REPLACEFILE="Game EXE       : ${NEW_EXE_FILE}"
+         sed "s|${SEARCHPATH}|${REPLACEPATH}|g" -i ${PREFIXDIR}/*.txt
+         sed "s|${SEARCHFILE}|${REPLACEFILE}|g" -i ${PREFIXDIR}/*.txt
+
+         unset SEARCHFILE
+         unset SEARCHPATH
+         unset REPLACEFILE
+         unset REPLACEPATH
      else
           echo "I: Script: Rename: Prefix: Gamedir is outside Prefix"
           echo "I: Script: Rename: Prefix: Not changing EXE_PATH"
