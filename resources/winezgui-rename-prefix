@@ -23,28 +23,25 @@ RENAME_PREFIX()
   fi
   
   # 2. replace " " with "_" (underscore)
-  NEWPREFIX=$(echo ${GET_PREFIX_NAME}|tr " " "_")
+  NEWPREFIXNAME=$(echo ${GET_PREFIX_NAME}|tr " " "_")
   
   
   # 3. If a prefix with given name already exist, inform
-  if [ -d "${WINEZPREFIX}/${NEWPREFIX}" ]; then
+  if [ -d "${WINEZPREFIX}/${NEWPREFIXNAME}" ]; then
        zenity --error --title="Directory Already Exists!" \
-              --text="Cannot change ${PREFIXNAME} to ${NEWPREFIX}"
+              --text="Cannot change ${PREFIXNAME} to ${NEWPREFIXNAME}"
               
-       echo "I: Script: Rename: Prefix: Cannot change to ${NEWPREFIX}"
+       echo "I: Script: Rename: Prefix: Cannot change to ${NEWPREFIXNAME}"
        echo "I: Script: Rename: Prefix: Directory ${PREFIXNAME} Already Exists!"
        Game_Function
   fi
 
   # 4. Create Variables for replacement
-  NEWPREFIXDIR="${WINEZPREFIX}/${NEWPREFIX}"
+  NEWPREFIXDIR="${WINEZPREFIX}/${NEWPREFIXNAME}"
   NEW_EXE_FILE="$(echo ${EXE_FILE}|sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g")"
+  NEW_EXE_FILE="${NEW_EXE_FILE}"
   NEW_EXE_PATH="$(dirname ${NEW_EXE_FILE})"
 
-  NEWSCRIPTFILE="${NEWPREFIXDIR}/${NEWPREFIX}.sh"
-  NEWICONFILE="${NEWPREFIXDIR}/${NEWPREFIX}.png"
-  NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIX}.desktop"
-  
   # 5.  Replace PREFIX values inside files
   # 5.1 If gamedir is outside prefix, do not change EXE path on renaming prefix
   # Keep EXE: FILE, PATH, NAME, NOSP when they are outside prefix
@@ -74,31 +71,63 @@ RENAME_PREFIX()
 
   # 5.2 Replace PREFIX values inside .desktop, .txt and .sh files
   # Main Replacement
+  NEWSCRIPTFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh"
+  NEWICONFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.png"
+  NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop"
+  NEWINFOFILE="${NEWPREFIXDIR}/info.txt"
  
   # 5.2.1 Replace in .desktop file
+  
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${DESKTOPFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${DESKTOPFILE}"
-
+  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${DESKTOPFILE}"
+  
   # 5.3 Replace in Info.txt
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"
   sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${INFOFILE}"
+  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${INFOFILE}"
 
   # 5.3 Change in Script FIle
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${SCRIPTFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${SCRIPTFILE}"
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${SCRIPTFILE}"
-
+  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${SCRIPTFILE}"
+  
 ########################### FIX ME SECTION #############################
+  # Change Variables inside Script file which has PREFIXNAME
+  # 5.4 Change export PREFIXNAME= Variable to new prefix name value
+  
+  S_PREFIXDIR="^export PREFIXDIR=.*"
+  R_PREFIXDIR="export PREFIXDIR=\"${NEWPREFIXDIR}\""
+  sed "s|${S_PREFIXDIR}|${R_PREFIXDIR}|g"  -i "${SCRIPTFILE}"
+  
+  S_PREFIXNAME="^export PREFIXNAME=.*"
+  R_PREFIXNAME="export PREFIXNAME=\"${NEWPREFIXNAME}\""
+  sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"  -i "${SCRIPTFILE}"
+
+  S_WINEZGUI_SCRIPTS="^export WINEZGUI_SCRIPTS=.*"
+  R_WINEZGUI_SCRIPTS="export WINEZGUI_SCRIPTS=\"${NEWPREFIXDIR}/winezgui-scripts\""
+  sed "s|${S_WINEZGUI_SCRIPTS}|${R_WINEZGUI_SCRIPTS}|g"  -i "${SCRIPTFILE}"
+
+  S_WINEPREFIX="^export WINEPREFIX=.*"
+  R_WINEPREFIX="export WINEPREFIX=\"${NEWPREFIXDIR}\""
+  sed "s|${S_WINEPREFIX}|${R_WINEPREFIX}|g"  -i "${SCRIPTFILE}"
+  
+  S_EXE_FILE="^export EXE_FILE=.*"
+  R_EXE_FILE="export EXE_FILE=\"${NEW_EXE_FILE}\""
+  sed "s|${S_EXE_FILE}|${R_EXE_FILE}|g"  -i "${SCRIPTFILE}"
+
+  S_EXE_PATH="^export EXE_PATH=.*"
+  R_EXE_PATH="export EXE_PATH=\"${NEW_EXE_PATH}\""
+  sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"  -i "${SCRIPTFILE}"
+  
   # 5.4 Change all instances of old prefix name with the new prefix name
   # FIXME, only change prefix direcotry like above files
-  sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${SCRIPTFILE}"
+  #sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${SCRIPTFILE}"
   
-  # 5.5 Change export PREFIXNAME= Variable to new prefix name value
-  SEARCHPREFIX="^export PREFIXNAME=.*"
-  REPLACEPREFIX="export PREFIXNAME=\"${NEWPREFIX}\""
-  sed "s|${SEARCHPREFIX}|${REPLACEPREFIX}|g"  -i "${SCRIPTFILE}"
+  
 ########################### FIX ME SECTION #############################
 
   # 5.6 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
@@ -126,39 +155,39 @@ RENAME_PREFIX()
   
   # 6. Rename files as per new prefix name 
   # check if the file exists before renaming
-  RENAMED_ICON_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.png"
-  RENAMED_SCRIPT_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.sh"
-  RENAMED_DESKTOP_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIX}.desktop"
+  RENAMED_ICON_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.png"
+  RENAMED_SCRIPT_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.sh"
+  RENAMED_DESKTOP_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.desktop"
   
   # 6.1 Rename .png file
   if [ -f "${ICONFILE}" ]; then
        mv "${ICONFILE}" "${RENAMED_ICON_FILE}" && \
        echo "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.png ->" \
-            "${NEWPREFIX}.png"
+            "${NEWPREFIXNAME}.png"
   fi
   
   # 6.2 Rename .sh file
   if [ -f "${SCRIPTFILE}" ]; then
        mv "${SCRIPTFILE}" "${RENAMED_SCRIPT_FILE}" && \
       echo "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.sh ->" \
-           "${NEWPREFIX}.sh"
+           "${NEWPREFIXNAME}.sh"
   fi
   
   # 6.3 Rename .desktop and .sh file
   if [ -f "${DESKTOPFILE}" ]; then
        mv "${DESKTOPFILE}" "${RENAMED_DESKTOP_FILE}" && \
        echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.desktop" \
-             "-> ${NEWPREFIX}.sh"
+             "-> ${NEWPREFIXNAME}.sh"
   fi
   
   # 6.4 Rename: Prefix Directory
-  mv ${PREFIXDIR} ${WINEZPREFIX}/${NEWPREFIX} && \
+  mv ${PREFIXDIR} ${WINEZPREFIX}/${NEWPREFIXNAME} && \
   echo  "I: Script: Rename: Prefix: Renamed directory ${PREFIXNAME}" \
-        "-> ${NEWPREFIX}"
+        "-> ${NEWPREFIXNAME}"
 
   # 7. Create new shortcut and delete old one
   # 7.1 link new .desktop file to desktopdir
-  ln -sf "${NEWDESKTOPFILE}" "${DESKTOPDIR}/${NEWPREFIX}.desktop" && \
+  ln -sf "${NEWDESKTOPFILE}" "${DESKTOPDIR}/${NEWPREFIXNAME}.desktop" && \
   echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
          "at ${DESKTOPDIR}" || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
@@ -172,7 +201,7 @@ RENAME_PREFIX()
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
   # Required for instant change in the GameWindow
-  export PREFIXNAME="${NEWPREFIX}"
+  export PREFIXNAME="${NEWPREFIXNAME}"
   export PREFIXDIR="${NEWPREFIXDIR}"
   export SCRIPTFILE="${NEWSCRIPTFILE}"
   export ICONFILE="${NEWICONFILE}"
@@ -180,10 +209,10 @@ RENAME_PREFIX()
   echo "I: Script: Rename: Prefix: starting script from renamed dir"
   
   # 8. Launch Script from Renamed Directory
-  ${WINEZPREFIX}/${NEWPREFIX}/${NEWPREFIX}.sh &
+  ${WINEZPREFIX}/${NEWPREFIXNAME}/${NEWPREFIXNAME}.sh &
   
   unset GET_PREFIX_NAME
-  unset NEWPREFIX
+  unset NEWPREFIXNAME
   unset NEWPREFIXDIR
   unset NEW_EXE_FILE
   unset NEW_EXE_PATH
