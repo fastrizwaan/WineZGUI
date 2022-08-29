@@ -1,14 +1,14 @@
 RENAME_PREFIX(){
 unset RESPONSE
 echo "I: Script: Rename... Selected!"
-RESPONSE=$( zenity --title "${APP_WITH_VER}" \
-                 --list   --hide-header               \
-                 --width=360 --height=30              \
-                 --radiolist --column " "             \
-                 --column "Change"                    \
-                     TRUE "Name..."                   \
-                     0    "Prefix..."                 \
-                 --text   "<b>Rename...</b>" )
+RESPONSE=$( zenity --title "${APP_WITH_VER}"            \
+                   --list   --hide-header               \
+                   --width=360 --height=30              \
+                   --radiolist --column " "             \
+                   --column "Change"                    \
+                       TRUE "Name..."                   \
+                       0    "Prefix..."                 \
+                   --text   "<b>Rename...</b>" )
 # If Cancel is clicked
 if [ -z "${RESPONSE}" ]; then
      echo "I: Rename: Cancelled!"
