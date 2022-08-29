@@ -169,6 +169,8 @@ SCRIPT_MODULES+="winezgui-script-about "
 SCRIPT_MODULES+="winezgui-backup-restore-function "
 SCRIPT_MODULES+="winezgui-script-locate-exe-function "
 SCRIPT_MODULES+="winezgui-create-wzt-info "
+SCRIPT_MODULES+="winezgui-rename-name "
+SCRIPT_MODULES+="winezgui-rename-prefix "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -458,8 +460,11 @@ elif [ "${SELECTION}" = "Open Shell..." ]; then
 
 elif [ "${SELECTION}" = "Rename..." ]; then
 
+       source ${WINEZGUI_SCRIPTS}/winezgui-rename-name
+       source ${WINEZGUI_SCRIPTS}/winezgui-rename-prefix
        source ${WINEZGUI_SCRIPTS}/winezgui-script-rename
-       RENAME_PREFIX
+       
+       RENAME_FUNCTION # Call the function in the above file
 
        Game_Function
 

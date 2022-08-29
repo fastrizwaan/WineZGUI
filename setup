@@ -113,6 +113,8 @@ APP17_SRC="./resources/winezgui-script-locate-exe-function"
 APP18_SRC="./resources/winezgui-backup-restore-function"
 APP19_SRC="./resources/winezgui-restore-wzt"
 APP20_SRC="./resources/winezgui-create-wzt-info"
+APP21_SRC="./resources/winezgui-rename-name"
+APP22_SRC="./resources/winezgui-rename-prefix"
 
 DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
 MIME_SRC="./resources/winezgui-wzt.xml"
@@ -143,6 +145,8 @@ APP17=$(basename $APP17_SRC)
 APP18=$(basename $APP18_SRC)
 APP19=$(basename $APP19_SRC)
 APP20=$(basename $APP20_SRC)
+APP21=$(basename $APP21_SRC)
+APP22=$(basename $APP22_SRC)
 
 DESK=$(basename $DESK_SRC)
 MIME=$(basename $MIME_SRC)
@@ -194,7 +198,9 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP18_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP18'"
      install -Dm755 $APP19_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP19'"
      install -Dm755 $APP20_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP20'"
-
+     install -Dm755 $APP21_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP21'"
+     install -Dm755 $APP22_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP22'"
+     
      install -Dm644 $DESK_SRC $DESK_DIR  && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $MIME_SRC $MIME_DIR  && echo "Installed '$MIME_DIR/$MIME'"
      install -Dm644 $ICON_SRC $ICON_DIR  && echo "Installed '$ICON_DIR/$ICON'"
@@ -257,7 +263,9 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $DATA_DIR/$APP18
      rm -vf $DATA_DIR/$APP19
      rm -vf $DATA_DIR/$APP20
-
+     rm -vf $DATA_DIR/$APP21
+     rm -vf $DATA_DIR/$APP22
+     
      rm -vf $DESK_DIR/$DESK
      rm -vf $MIME_DIR/$MIME
      rm -vf $ICON_DIR/$ICON
@@ -284,7 +292,7 @@ if [ "${DEPENDENCIES}" = "true" ]; then
      FOUND=()    # Array/list to hold all found commands
      NOTFOUND=() # Array/list to hold all not found commands
 
-     RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal"
+     RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal zstd"
 
      for i in $RUNTIME ; do
          if ! [ -x "$(command -v $i)" ]; then
