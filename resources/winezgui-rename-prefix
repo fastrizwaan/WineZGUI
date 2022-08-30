@@ -95,17 +95,17 @@ RENAME_PREFIX()
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${SCRIPTFILE}"
   sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${SCRIPTFILE}"
   
-########################### FIX ME SECTION #############################
+  ########################### FIX ME SECTION #############################
   # Change Variables inside Script file which has PREFIXNAME
   # 5.4 Change export PREFIXNAME= Variable to new prefix name value
-  
+  # 5.4.1 Change Values inside Script file
   S_PREFIXDIR="^export PREFIXDIR=.*"
   R_PREFIXDIR="export PREFIXDIR=\"${NEWPREFIXDIR}\""
-  sed "s|${S_PREFIXDIR}|${R_PREFIXDIR}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_PREFIXDIR}|${R_PREFIXDIR}|g"     -i "${SCRIPTFILE}"
   
   S_PREFIXNAME="^export PREFIXNAME=.*"
   R_PREFIXNAME="export PREFIXNAME=\"${NEWPREFIXNAME}\""
-  sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"   -i "${SCRIPTFILE}"
 
   S_WINEZGUI_SCRIPTS="^export WINEZGUI_SCRIPTS=.*"
   R_WINEZGUI_SCRIPTS="export WINEZGUI_SCRIPTS=\"${NEWPREFIXDIR}/winezgui-scripts\""
@@ -113,24 +113,33 @@ RENAME_PREFIX()
 
   S_WINEPREFIX="^export WINEPREFIX=.*"
   R_WINEPREFIX="export WINEPREFIX=\"${NEWPREFIXDIR}\""
-  sed "s|${S_WINEPREFIX}|${R_WINEPREFIX}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_WINEPREFIX}|${R_WINEPREFIX}|g"   -i "${SCRIPTFILE}"
   
   S_EXE_FILE="^export EXE_FILE=.*"
   R_EXE_FILE="export EXE_FILE=\"${NEW_EXE_FILE}\""
-  sed "s|${S_EXE_FILE}|${R_EXE_FILE}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_EXE_FILE}|${R_EXE_FILE}|g"       -i "${SCRIPTFILE}"
 
   S_EXE_PATH="^export EXE_PATH=.*"
   R_EXE_PATH="export EXE_PATH=\"${NEW_EXE_PATH}\""
-  sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"       -i "${SCRIPTFILE}"
   
-  # 5.4 Change all instances of old prefix name with the new prefix name
-  # FIXME, only change prefix direcotry like above files
-  #sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${SCRIPTFILE}"
+  # 5.4.2 Change values inside info.txt
+  # 5.4.2.1 Change Script file value in info.txt
+  S_SCRIPT_FILE="^Game Script    : .*"
+  R_SCRIPT_FILE="Game Script    : ${SCRIPTFILE}"
+  sed "s|${S_SCRIPT_FILE}|${R_SCRIPT_FILE}|g"  -i "${INFOFILE}"
   
+  # 5.4.2.2 Change Icon file value in info.txt
+  S_ICON_FILE="^Game Icon      : .*"
+  R_ICON_FILE="Game Icon      : ${ICONFILE}"
+  sed "s|${S_ICON_FILE}|${R_ICON_FILE}|g"      -i "${INFOFILE}"
   
-########################### FIX ME SECTION #############################
+  # 5.4.2.3 Change desktop file value in info.txt
+  S_DESK_FILE="^Game Shortcut  : .*"
+  R_DESK_FILE="Game Shortcut  : ${DESKTOPFILE}"
+  sed "s|${S_DESK_FILE}|${R_DESK_FILE}|g" -i "${INFOFILE}"
 
-  # 5.6 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
+  # 5.5 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           sed "s|XOEXE_FILEXO|${EXE_FILE}|g"  \
               -i ${PREFIXDIR}/*.txt           \
@@ -153,11 +162,11 @@ RENAME_PREFIX()
               -i ${PREFIXDIR}/*.desktop
   fi
   
-  # 6. Rename files as per new prefix name 
+  # 6. Rename files having prefix as part of file name, with new prefix name 
   # check if the file exists before renaming
   RENAMED_ICON_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.png"
   RENAMED_SCRIPT_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.sh"
-  RENAMED_DESKTOP_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.desktop"
+  RENAMED_DESK_FILE="${WINEZPREFIX}/${PREFIXNAME}/${NEWPREFIXNAME}.desktop"
   
   # 6.1 Rename .png file
   if [ -f "${ICONFILE}" ]; then
@@ -175,7 +184,7 @@ RENAME_PREFIX()
   
   # 6.3 Rename .desktop and .sh file
   if [ -f "${DESKTOPFILE}" ]; then
-       mv "${DESKTOPFILE}" "${RENAMED_DESKTOP_FILE}" && \
+       mv "${DESKTOPFILE}" "${RENAMED_DESK_FILE}" && \
        echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.desktop" \
              "-> ${NEWPREFIXNAME}.sh"
   fi
