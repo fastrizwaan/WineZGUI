@@ -86,7 +86,7 @@ RENAME_PREFIX()
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"
-  sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g"      -i "${INFOFILE}"
+  sed "s|${EXE_FILE}|${NEW_EXE_FILE}|g"       -i "${INFOFILE}"
   sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${INFOFILE}"
 
   # 5.3 Change in Script FIle
@@ -125,19 +125,18 @@ RENAME_PREFIX()
   
   # 5.4.2 Change values inside info.txt
   # 5.4.2.1 Change Script file value in info.txt
-  S_SCRIPT_FILE="^Game Script    : .*"
-  R_SCRIPT_FILE="Game Script    : ${SCRIPTFILE}"
-  sed "s|${S_SCRIPT_FILE}|${R_SCRIPT_FILE}|g"  -i "${INFOFILE}"
-  
-  # 5.4.2.2 Change Icon file value in info.txt
-  S_ICON_FILE="^Game Icon      : .*"
-  R_ICON_FILE="Game Icon      : ${ICONFILE}"
-  sed "s|${S_ICON_FILE}|${R_ICON_FILE}|g"      -i "${INFOFILE}"
-  
-  # 5.4.2.3 Change desktop file value in info.txt
-  S_DESK_FILE="^Game Shortcut  : .*"
-  R_DESK_FILE="Game Shortcut  : ${DESKTOPFILE}"
-  sed "s|${S_DESK_FILE}|${R_DESK_FILE}|g" -i "${INFOFILE}"
+  #Game Prefix    : /home/rizvan/.local/share/winezgui/PREFIXNAME
+  S_INFO_PREFIXDIR="Game Prefix    : .*"
+  R_INFO_PREFIXDIR="Game Prefix    : ${NEWPREFIXDIR}"
+  sed "s|${S_INFO_PREFIXDIR}|${R_INFO_PREFIXDIR}|g"  -i "${INFOFILE}"
+
+  #Game Directory : /home/rizvan/GAMEDIR  
+  S_GAME_DIRECTORY="Game Directory : .*"
+  R_GAME_DIRECTORY="Game Directory : ${NEW_EXE_PATH}"
+  sed "s|${S_GAME_DIRECTORY}|${R_GAME_DIRECTORY}|g"  -i "${INFOFILE}"
+
+
+
 
   # 5.5 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
