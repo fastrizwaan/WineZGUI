@@ -2,14 +2,7 @@
 CHANGE_ANY_OTHER_EXE()
 {
 
- # Take exe name before " " or "(" or ".exe"
- FILTER=$(echo ${EXE_NAME}|cut -f1 -d " " \
-      |cut -f1 -d "(" \
-      |cut -f1 -d "." \
-      |sed "s/\.[Ee][Xx][Ee]//g" \
-      |sed "s/\.[Ms][Ss][Ii]//g")
-
- SELECT_EXE_FILE="$(zenity --file-filter="${FILTER}*.${EXE_EXT}" \
+ SELECT_EXE_FILE="$(zenity --file-filter="*.${EXE_EXT}" \
                            --file-selection \
                            --title="Change EXE for ${PREFIXNAME}")"
  echo "I: Script: Change Exe: Any Other Exe: ${SELECT_EXE_FILE}"
