@@ -26,7 +26,7 @@ export TEMPDIR="${WINEZPREFIX}/tmp"
 export EXIFTOOL=$(which exiftool)
 
 # These values will be assigned by Setup using sed command
-# Post install $PREFIX/bin/winezgui-create-prefix file will be different
+# Post install ${PREFIX}/bin/winezgui-create-prefix file will be different
 export APPVERSION="git"
 export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
@@ -37,11 +37,11 @@ export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
 
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
-if [ "$INSTALL_TYPE" = "system" ]; then
+if [ "${INSTALL_TYPE}" = "system" ]; then
     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
 else
     # for flatpak create subdirectory with flatpakname
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/$FLATPAK_NAME)"
+    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
 fi
 
 # winezgui backup file extension
@@ -92,7 +92,7 @@ echo "I: Create Prefix: Icon: Created directory ${TEMPDIR}"
 cd ${TEMPDIR}
 
 # wrestool extracts ico file from EXE
-wrestool -x -t 14 "$EXE_FILE" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null && \
+wrestool -x -t 14 "${EXE_FILE}" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null && \
 echo "I: Create Prefix: Icon: Wrestool executed"
 
 # Only try to extract Icon when Icon is Found in the EXE

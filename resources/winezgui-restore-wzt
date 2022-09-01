@@ -84,11 +84,12 @@ RESTORE_WZT_FILE()
 
   # 2. Show Content of extracted wzt-info.txt file before restoring
   # 2.1 Get Game/App name from the wzt-info.txt file
-  GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Name *:"|cut -f2 -d ":")
+  GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Name*:"|cut -f2 -d ":")
   echo "I: Restore: Name: ${GAME_NAME}"
 
   # 2.1 format the wzt-info.txt content for display using zenity
   TEXT_MSG="$(cat ${TEMPDIR}/${WZT_INFO_FILE} | \
+           sed "s/:/ ,:, /g"|column -t -s "," | \
            sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/g" | \
            sed -E "s/^(.*)$/ \1/g")"
   # 2.2 Show message
@@ -250,7 +251,7 @@ RESTORE_WZT_FILE()
        echo "I: Restore: Removed broken WineZGUI .desktop links"
 
        # 8. Update desktop menus and Icon cache
-       ${UPDATE_ICON_CACHE}
+       ${UPDATE_ICON_CACHE} 2>/dev/null
        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
        ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
