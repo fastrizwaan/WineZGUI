@@ -171,6 +171,9 @@ SCRIPT_MODULES+="winezgui-script-locate-exe-function "
 SCRIPT_MODULES+="winezgui-create-wzt-info "
 SCRIPT_MODULES+="winezgui-rename-name "
 SCRIPT_MODULES+="winezgui-rename-prefix "
+SCRIPT_MODULES+="winezgui-script-change-exe "
+SCRIPT_MODULES+="winezgui-change-installed-exe "
+SCRIPT_MODULES+="winezgui-change-any-other-exe "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -387,7 +390,7 @@ unset SELECTION
 
 SELECTION=$(zenity --title       "${PROGNAME}"        \
                    --window-icon="${ICON}"            \
-                   --width=360 --height=440           \
+                   --width=360 --height=450           \
                    --list      --hide-header          \
                    --radiolist --column " "           \
                    --column "Action"                  \
@@ -399,6 +402,7 @@ SELECTION=$(zenity --title       "${PROGNAME}"        \
                      0      "Open Explorer..."        \
                      0      "Open Shell..."           \
                      0      "Rename..."               \
+                     0      "Change Exe..."           \
                      0      "Change Icon..."          \
                      0      "Change Category..."      \
                      0      "Backup..."               \
@@ -465,6 +469,16 @@ elif [ "${SELECTION}" = "Rename..." ]; then
        source ${WINEZGUI_SCRIPTS}/winezgui-script-rename
        
        RENAME_FUNCTION # Call the function in the above file
+
+       Game_Function
+
+elif [ "${SELECTION}" = "Change Exe..." ]; then
+
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-change-exe
+       source ${WINEZGUI_SCRIPTS}/winezgui-change-installed-exe
+       source ${WINEZGUI_SCRIPTS}/winezgui-change-any-other-exe
+       
+       CHANGE_EXE_FUNCTION # Call the function in the above file
 
        Game_Function
 

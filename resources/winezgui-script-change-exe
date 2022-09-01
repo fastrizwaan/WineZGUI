@@ -1,0 +1,47 @@
+# winezgui-script-change-exe
+# Change EXE for the prefix, required for installers
+# Change EXE can be from inside prefix or outside prefix
+# Steps:
+# 1. Ask whether to Find Exe inside prefix (for installers)
+# 2. 
+CHANGE_EXE_FUNCTION()
+{
+  unset RESPONSE
+  echo "I: Script: Change Exe... Selected!"
+  RESPONSE=$(zenity --title "Change EXE for ${PREFIXNAME}"       \
+                    --list --hide-header --width=360 --height=30 \
+                    --radiolist --column " "                     \
+                    --column "Change"                            \
+                        TRUE "Installed Exe (after Setup)"       \
+                        0    "Any other Exe"           \
+                    --text   "<b>Set default exe...</b>" )
+  # If Cancel is clicked
+  if [ -z "${RESPONSE}" ]; then
+       echo "I: Change Exe: Cancelled!"
+       Game_Function
+  fi
+  
+  
+  # Print response
+  echo "I: Script: Change Exe: ${RESPONSE} Selected!"
+
+  # If only name, append (wine-xx)
+  if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
+         # Call CHANGE_INSTALLED_EXE
+         CHANGE_INSTALLED_EXE
+         echo "I: Script: Change Exe: ${SELECTED_EXE} Selected!"
+  elif [ "$RESPONSE" = "Any other Exe" ]; then
+         # CHANGE_ANY_OTHER_EXE
+         CHANGE_ANY_OTHER_EXE
+         # use locate exe
+  fi
+  echo "--------------------------------"
+  echo "SELECTED_EXE = ${SELECTED_EXE}"
+  echo "--------------------------------"
+  # Change EXE_NAME and EXE_PATH in all the required files
+  # Change Sha256sum
+  # Change Icon
+  # Change Prefix
+  # etc.
+}
+
