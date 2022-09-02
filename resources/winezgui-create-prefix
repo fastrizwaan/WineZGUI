@@ -174,6 +174,7 @@ SCRIPT_MODULES+="winezgui-rename-prefix "
 SCRIPT_MODULES+="winezgui-script-change-exe "
 SCRIPT_MODULES+="winezgui-change-installed-exe "
 SCRIPT_MODULES+="winezgui-change-any-other-exe "
+SCRIPT_MODULES+="winezgui-change-exe-variables-in-files "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -477,7 +478,7 @@ elif [ "${SELECTION}" = "Change Exe..." ]; then
        source ${WINEZGUI_SCRIPTS}/winezgui-script-change-exe
        source ${WINEZGUI_SCRIPTS}/winezgui-change-installed-exe
        source ${WINEZGUI_SCRIPTS}/winezgui-change-any-other-exe
-       
+       source ${WINEZGUI_SCRIPTS}/winezgui-change-exe-variables-in-files
        CHANGE_EXE_FUNCTION # Call the function in the above file
 
        Game_Function

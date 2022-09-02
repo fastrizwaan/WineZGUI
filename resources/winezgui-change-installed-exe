@@ -1,4 +1,6 @@
 # Change_Installed_exe function
+# Finds exe installed in drive_c by an installer
+# and set the variable SELECTED_EXE 
 CHANGE_INSTALLED_EXE()
 {
  IFS=$(echo -en "\n\b")

@@ -118,6 +118,7 @@ APP22_SRC="./resources/winezgui-rename-prefix"
 APP23_SRC="./resources/winezgui-script-change-exe"
 APP24_SRC="./resources/winezgui-change-installed-exe"
 APP25_SRC="./resources/winezgui-change-any-other-exe"
+APP26_SRC="./resources/winezgui-change-exe-variables-in-files"
 
 DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
 MIME_SRC="./resources/winezgui-wzt.xml"
@@ -153,6 +154,7 @@ APP22=$(basename $APP22_SRC)
 APP23=$(basename $APP23_SRC)
 APP24=$(basename $APP24_SRC)
 APP25=$(basename $APP25_SRC)
+APP26=$(basename $APP26_SRC)
 
 DESK=$(basename $DESK_SRC)
 MIME=$(basename $MIME_SRC)
@@ -209,6 +211,7 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP23_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP23'"
      install -Dm755 $APP24_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP24'"
      install -Dm755 $APP25_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP25'"
+     install -Dm755 $APP26_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP26'"
 
      install -Dm644 $DESK_SRC $DESK_DIR  && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $MIME_SRC $MIME_DIR  && echo "Installed '$MIME_DIR/$MIME'"
@@ -277,7 +280,8 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $DATA_DIR/$APP23
      rm -vf $DATA_DIR/$APP24
      rm -vf $DATA_DIR/$APP25
-     
+     rm -vf $DATA_DIR/$APP26
+
      rm -vf $DESK_DIR/$DESK
      rm -vf $MIME_DIR/$MIME
      rm -vf $ICON_DIR/$ICON
