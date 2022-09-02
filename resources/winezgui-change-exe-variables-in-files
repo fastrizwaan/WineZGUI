@@ -9,23 +9,7 @@
 
 CHANGE_EXE_VARIABLES_IN_FILES()
 {
-  # 1. PROGNAME (Get NEW_PROGNAME)
-  # Automatically set name, read from pe file, if not found use exe name
-  NEW_PRODUCT=$(${EXIFTOOL} "${SELECTED_EXE}"| \
-                grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")
-                
-  # if language is not english inside exe name, or product is "", use exe name
-  if [ $(echo ${NEW_PRODUCT}|grep -aEv [a-zA-Z]) ] || [ -z "${NEW_PRODUCT}" ] \
-       then
-       unset NEW_PRODUCT
-       unset NEW_PROGNAME
-       NEW_PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
-       echo "I: Script: Change Exe: Product Name not found, using exe name"
-  else
-       NEW_PROGNAME=$(echo "${NEW_PRODUCT} (${APP_WITH_VER})");
-       echo "I: Script: Change Exe: Product Name found: \"${NEW_PRODUCT}\""
-  fi
-
+ 
   # 2. EXE_FILE (SELECTED_EXE is the NEW_EXE_FILE)
   NEW_EXE_FILE="${SELECTED_EXE}"
   
@@ -45,15 +29,31 @@ CHANGE_EXE_VARIABLES_IN_FILES()
   # 7. EXE_NOEXE (SELECTED_EXE without .exe or .msi is the NEW_EXE_NOEXE) 
   NEW_EXE_NOEXE=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 
+ # 1. PROGNAME (Get NEW_PROGNAME)
+  # Automatically set name, read from pe file, if not found use exe name
+  NEW_PRODUCT=$(${EXIFTOOL} "${SELECTED_EXE}"| \
+                grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")
+                
+  # if language is not english inside exe name, or product is "", use exe name
+  if [ $(echo ${NEW_PRODUCT}|grep -aEv [a-zA-Z]) ] || [ -z "${NEW_PRODUCT}" ] ;
+       then
+       unset NEW_PRODUCT
+       unset NEW_PROGNAME
+       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
+       echo "I: Script: Change Exe: Product Name not found, using exe name"
+  else
+       NEW_PROGNAME=$(echo "${NEW_PRODUCT} (${APP_WITH_VER})");
+       echo "I: Script: Change Exe: Product Name found: \"${NEW_PRODUCT}\""
+  fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
   
-  sed "s|${PROGNAME}|${NEW_PROGNAME}|g"     -i ${SCRIPTFILE}
-  sed "s|${EXE_FILE}|${NEW_EXE_FILE}|g"     -i ${SCRIPTFILE}
-  sed "s|${EXE_NAME}|${NEW_EXE_NAME}|g"     -i ${SCRIPTFILE}
-  sed "s|${EXE_PATH}|${NEW_EXE_PATH}|g"     -i ${SCRIPTFILE}
-  sed "s|${EXE_NOSP}|${NEW_EXE_NOSP}|g"     -i ${SCRIPTFILE}
-  sed "s|${SHA256SUM}|${NEW_SHA256SUM}|g"   -i ${SCRIPTFILE}
-  sed "s|${EXE_NOEXE}|${NEW_EXE_NOEXE}|g"   -i ${SCRIPTFILE}
+  sed "s|export PROGNAME=.*|export PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|export EXE_FILE=.*|export EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
+  sed "s|export EXE_NAME=.*|export EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|export EXE_PATH=.*|export EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
+  sed "s|export EXE_NOSP=.*|export EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
+  sed "s|export SHA256SUM=.*|export SHA256SUM=\"${NEW_SHA256SUM}\"|g" -i ${SCRIPTFILE}
+  sed "s|export EXE_NOEXE=.*|export EXE_NOEXE=\"${NEW_EXE_NOEXE}\"|g" -i ${SCRIPTFILE}
   
   # Launch Script after modification
   "${SCRIPTFILE}" &
