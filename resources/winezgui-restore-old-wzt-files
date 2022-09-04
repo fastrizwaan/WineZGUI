@@ -1,0 +1,129 @@
+RESTORE_OLD_WZT_FILES()
+{
+  # 4.1 Check: Existing prefix with the same name!?
+  if [ -d "${WINEZPREFIX}/${WZT_PREFIX}" ]; then
+       # If yes, ask whether to overwrite existing prefix
+       zenity --question --title "Restore ${GAME_NAME}" \
+              --text "${WZT_PREFIX} already exists, overwrite?"
+       ANSWER=$?       
+       if [ "${ANSWER}" = "1" ]; then
+            echo "I: Restore: User Cancelled Overwriting! Aborting!"
+            Main_Function
+       else
+            echo "I: Restore: Overwriting existing ${WZT_NAME}"
+       fi
+  fi
+
+  # 4.2 Extract file to WineZGUI Prefix and show gui progress dialog
+  # Change directory name XOUSERXO to username on restore
+  echo "I: Restore: Extracting ${WZT_NAME} at ${WINEZPREFIX}"
+  (tar --zstd -xvf "${WZT_FILE}" -C "${WINEZPREFIX}" --transform \
+           "s|XOUSERXO|${USER}|g" &)| \
+  (zenity --progress --width=500                    \
+          --title="Restoring ${GAME_NAME}!"         \
+          --text="Extracting ${WZT_FILE}..."        \
+          --pulsate --auto-close)
+  
+
+  ZENITY_STATUS=$?
+
+  # 4.2.1 If user cancels extraction,  zenity will return 1
+  if [ "${ZENITY_STATUS}" = "1" ]; then
+       # If the user cancels extraction of wzt game bundle during extraction
+       # kill the running tar command which has wzt in it
+       unset PID_OF_TAR 
+       PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt|sed 's/  */ /g'|cut -f2 -d " ")
+       if ! [ -z "$PID_OF_TAR" ]; then
+            kill -9 ${PID_OF_TAR} \
+            && echo "I: Restore: Cancelled! Stopped extraction!" 
+            # Ask the user whether to delete partially extracted or let it be
+            zenity --question --title "Extraction Cancelled!" \
+                   --text "Delete ${WZT_PREFIX} prefix?"
+            ANSWER=$?
+            if [ "${ANSWER}" = "0" ]; then
+                 # User selected Delete
+                 rm -rf "${WINEZPREFIX}/${WZT_PREFIX}" && \
+                 echo "I: Restore: Removed ${WINEZPREFIX}/${WZT_PREFIX}"
+                 # Cleanup broken links in winezgui shortcuts directory
+                 find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+                 echo "I: Restore: Removed broken WineZGUI .desktop links"
+            else
+                 # user wants to keep prefix 
+                 echo "I: Restore: Keeping extracted ${WINEZPREFIX}/${WZT_PREFIX}"
+                 # Restore Sucess Message
+            fi
+            MSG=("${WZT_PREFIX} Restore Cancelled!")
+            Main_Function
+
+       else
+            # If no pid of tar is found means extraction already completed
+            echo "I: Restore: Restored ${WZT_FILE} Successfully!"
+       fi # if ! [ -z "$PID_OF_TAR" ]; then
+  fi # [ "${ZENITY_STATUS}" = "1" ]; then
+
+
+  # 5. Preprocess backup values and variables in the extracted prefix
+  cd "${WINEZPREFIX}"
+  PREFIXNAME="${WZT_PREFIX}"
+  Backup_Restore_Function "restore"
+
+  # 6. Create Shortcut in applications directory
+  # 6.1 Create required applications directory for .desktop files
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR+="winezgui/${FLATPAK_ID}"
+       mkdir -p "${MAKEDIR}"
+       unset MAKEDIR
+  else
+       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR+="winezgui"
+       mkdir -p "${MAKEDIR}"
+  fi
+
+  # Since we are using a default prefix without shortcut and script file
+  # Game prefixes will have game.desktop game.sh and game.png files in it.
+  # If .desktop file is found, means, it is a non default backup
+  FOUND_PREFIX_DIR="${WINEZPREFIX}/${WZT_PREFIX}"
+  FOUND_DESKTOP_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.desktop"
+  FOUND_SCRIPT_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.sh"
+  
+  # 6.2 If .desktop file is found inside extracted prefix, then create shortcut
+  if [ -f "${FOUND_DESKTOP_FILE}" ]; then
+       echo "I: Restore: Found ${FOUND_DESKTOP_FILE}," \
+            "creating shortcut!"
+       # Create a restored.text to update wineprefix
+       # without mono and gecko install dialog which
+       # winezgui-create-prefix checks on different versions of wine
+       # on 1st lauch on restoring
+       # we'll use restored.txt to launch wineboot with DLLoverrides 
+       echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
+
+       # link the application shortcut .desktop file
+       ln -sf "${FOUND_DESKTOP_FILE}" "${DESKTOPDIR}"
+
+       # 7. Cleanup broken links in winezgui shortcuts directory
+       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+       echo "I: Restore: Removed broken WineZGUI .desktop links"
+
+       # 8. Update desktop menus and Icon cache
+       ${UPDATE_ICON_CACHE} 2>/dev/null
+       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+       ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+
+       # 9. Get Game name from desktop file
+       GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d "=")"
+       echo "I: Restore: Game Name: $GN"
+
+       # 10. Ask if the user wants to start the restored game
+       if zenity --question --no-wrap --width=200    \
+                 --title="WineZGUI Backup Restored!" \
+                 --text="Launch: ${GN}?"
+       then
+            # Start the Game script and exit main app
+            echo "I: Restore: Launching Script for" \
+                 "the restored game..."
+            bash ${FOUND_SCRIPT_FILE}
+            exit 0
+       fi # zenity --question
+  fi # -f "${FOUND_DESKTOP_FILE}"
+}
