@@ -22,7 +22,7 @@ RENAME_FUNCTION ()
   if   [ "${RESPONSE}" = "Name..." ]; then
          # Call RENAME_NAME
          RENAME_NAME
-  elif [ "$RESPONSE" = "Prefix..." ]; then
+  elif [ "${RESPONSE}" = "Prefix..." ]; then
          # Call RENAME_NAME
          RENAME_PREFIX
   fi

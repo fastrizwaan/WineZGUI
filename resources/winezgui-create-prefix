@@ -175,6 +175,8 @@ SCRIPT_MODULES+="winezgui-script-change-exe "
 SCRIPT_MODULES+="winezgui-change-installed-exe "
 SCRIPT_MODULES+="winezgui-change-any-other-exe "
 SCRIPT_MODULES+="winezgui-change-exe-variables-in-files "
+SCRIPT_MODULES+="winezgui-script-backup-prefix "
+SCRIPT_MODULES+="winezgui-script-backup-bundle "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -498,7 +500,12 @@ elif [ "${SELECTION}" = "Change Category..." ]; then
 elif [ "${SELECTION}" = "Backup..." ]; then
        echo "I: Script: Backup... Selected!"
        # source ~/.build/WineZGUI-0.84/script-backup-function
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-backup-bundle
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-backup-prefix
        source ${WINEZGUI_SCRIPTS}/winezgui-script-backup
+       WINEZGUI-SCRIPT-BACKUP-FUNCTION
+
+       
        # Return to Game window after backup or target directory write error
        Game_Function
 
