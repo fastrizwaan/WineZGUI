@@ -1,15 +1,15 @@
-# Create wzt (tar) with wzt-info.txt and tar.zst file
+# Create wzt (tar) with wzt-info.yml and tar.zst file
 =====================================================
 1. Create zst file using tar --zst .. as in winezgui-script-backup, change name to .tar.zst
-2. Create another tar file as .wzt, which includes wzt-info.txt and .tar.zst file
-3. While creating wzt file set compressed size into wzt-info.txt file
+2. Create another tar file as .wzt, which includes wzt-info.yml and .tar.zst file
+3. While creating wzt file set compressed size into wzt-info.yml file
 
-Command: to add wzt-info.txt file to a wzt tar file
+Command: to add wzt-info.yml file to a wzt tar file
 ----------------------------------------------------
-time tar -cvf ~/test.wzt -C . wzt-info.txt -C ~/Documents vcredist_x86_2010-WineZGUI-0.87-Game-Bundle-wine-7.0.tar.zst
+time tar -cvf ~/test.wzt -C . wzt-info.yml -C ~/Documents vcredist_x86_2010-WineZGUI-0.87-Game-Bundle-wine-7.0.tar.zst
 ----------------------------------------------------
 
-# Read wzt-info.txt from wzt tar file
+# Read wzt-info.yml from wzt tar file
 ===============================
   tar xfO ~/test.tar wzt-info.yml ; # show this info
  
@@ -20,4 +20,14 @@ time tar -cvf ~/test.wzt -C . wzt-info.txt -C ~/Documents vcredist_x86_2010-Wine
 # Extract tar.zst from tar file
 ===============================
   tar xfO ~/test.tar vcredist_x86_2010-WineZGUI-0.87-Game-Bundle-wine-7.0.wzt|tar --zstd -xvf -
+
+#### Update ###
+add wzt-info.yml as top, then prefix as subdir
+time tar --zstd -cvf /home/rizvan/Downloads/oddworld.tar.zst -C ./Oddworld-Soulstorm wzt-info.yml -C $PWD Oddworld-Soulstorm
+
+# Get Prefix Name
+tar tf ~/Downloads/oddworld.tar.zst |head -n2|grep "/"
+
+# Get wzt-info.yml content
+tar --occurrence=1 --extract -O -f ~/Downloads/oddworld.tar.zst wzt-info.yml
 

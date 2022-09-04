@@ -4,8 +4,8 @@
 # For restoring we need "Prefix" name and Resore "Size" from wzt file
 # Steps:
 # 0.  Check if winezprefix is writable before restoring
-# 1.  Extract prefix name and wzt-info.txt to tmp dir and put that in wzt_var
-# 2.  Show Content of extracted wzt-info.txt file before restoring 
+# 1.  Extract prefix name and wzt-info.yml to tmp dir and put that in wzt_var
+# 2.  Show Content of extracted wzt-info.yml file before restoring 
 # 3.  Determine required disk space to extract the wzt file
 # 4.  Restoring wzt file
 # 5.  Preprocess backup values and variables in the extracted prefix
@@ -27,66 +27,54 @@ RESTORE_WZT_FILE()
        Main_Function
   fi
   
-  # wzt-info.txt has info about uncompressed size and game name
-  WZT_INFO_FILE="wzt-info.txt"
+  # wzt-info.yml has info about uncompressed size and game name
+  WZT_INFO_FILE="wzt-info.yml"
   
   # Get basename of wztfile without path
   WZT_NAME=$(basename "${WZT_FILE}")
   
-  # 1. Extract prefixname and wzt-info.txt file to tmp dir from wzt file
+  # 1. Extract prefixname and wzt-info.yml file to tmp dir from wzt file
 
   # 1.1  Extract Prefix Name: Get the directory name from wzt file
-  WZT_DIRECTORY=$(tar -tf "${WZT_FILE}"|head -n1|cut -f1 -d "/")
-  echo "------------------------------------------------------"
-  echo "WZT_DIRECTORY = $WZT_DIRECTORY"
-  echo "------------------------------------------------------"
-  WZT_PREFIX=$(echo "${WZT_DIRECTORY}"|cut -f1 -d ",")
-  WZT_SIZE=$(echo "${WZT_DIRECTORY}"  |cut -f2 -d ",")
-  WZT_APP=$(echo "${WZT_DIRECTORY}"   |cut -f3 -d ",")
-  WZT_DATE=$(echo "${WZT_DIRECTORY}"  |cut -f4 -d ",")
+  WZT_PREFIX=$(tar -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
   echo "I: Restore: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
   
-  # 1.2 Create a temporary directory to extract wzt-info.txt file
+  # 1.2 Create a temporary directory to extract wzt-info.yml file
   export TEMPDIR="${WINEZPREFIX}/tmp"
   mkdir -p  ${TEMPDIR}
   
-#  # 1.3 Extract wzt-info.txt file to TEMPDIR; Show a progress bar using zenity 
-#  # Big szied (3GB+) wzt files takes long time to extract wzt-info.txt from them
-#  (tar xfO "${WZT_FILE}" ${WZT_PREFIX}/${WZT_INFO_FILE} \
-#  | tee ${TEMPDIR}/${WZT_INFO_FILE} &) | \
-#  (zenity --progress --pulsate --auto-close  \
-#         --title="${APP_WITH_VER} - Restore... Please wait." \
-#         --width=500 --text="Getting info from\n${WZT_NAME}")
+  # 1.3 Extract wzt-info.yml file to TEMPDIR; Show a progress bar using zenity 
+  # Big szied (3GB+) wzt files takes long time to extract wzt-info.yml from them
+  (tar --occurrence=1 --extract -O -f "${WZT_FILE}" ${WZT_INFO_FILE} \
+  | tee ${TEMPDIR}/${WZT_INFO_FILE} &) | \
+  (zenity --progress --pulsate --auto-close  \
+         --title="${APP_WITH_VER} - Restore... Please wait." \
+         --width=500 --text="Getting info from\n${WZT_NAME}")
 
-#  # Zenity on Cancel sends 1 and 0 on OK
-#  ZENITY_STATUS=$?
-#  
-#  # 1.4 If the user cancels extracting wzt-info.txt using tar xfO 
-#  # kill tar running in background
-#  # If zenity returns 1 (means either cancel or other error with tar xfO)
-#  if [ "${ZENITY_STATUS}" = "1" ]; then
-#       # Find the PID and kill the running tar command which has wzt in it
-#       unset PID_OF_TAR 
-#       PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt|sed 's/  */ /g'|cut -f2 -d " ")
-#       if ! [ -z "$PID_OF_TAR" ]; then # if pid is found kill it
-#            kill -9 ${PID_OF_TAR} \
-#            && echo "I: Restore: Getting Info Cancelled!" 
-#            Main_Function
-#       fi
-#  else
-#       echo "I: Restore: Read ${WZT_NAME} Successfully!"
-#  fi
-#  
-
-echo "Prefix:${WZT_PREFIX}"  |tee    "${TEMPDIR}/${WZT_INFO_FILE}"
-echo "Size:${WZT_SIZE}"      |tee -a "${TEMPDIR}/${WZT_INFO_FILE}"
-echo "WineZGUI:${WZT_APP}"   |tee -a "${TEMPDIR}/${WZT_INFO_FILE}"
-echo "Created:${WZT_DATE}"   |tee -a "${TEMPDIR}/${WZT_INFO_FILE}"
+  # Zenity on Cancel sends 1 and 0 on OK
+  ZENITY_STATUS=$?
+  
+  # 1.4 If the user cancels extracting wzt-info.yml using tar xfO 
+  # kill tar running in background
+  # If zenity returns 1 (means either cancel or other error with tar xfO)
+  if [ "${ZENITY_STATUS}" = "1" ]; then
+       # Find the PID and kill the running tar command which has wzt in it
+       unset PID_OF_TAR 
+       PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt|sed 's/  */ /g'|cut -f2 -d " ")
+       if ! [ -z "$PID_OF_TAR" ]; then # if pid is found kill it
+            kill -9 ${PID_OF_TAR} \
+            && echo "I: Restore: Getting Info Cancelled!" 
+            Main_Function
+       fi
+  else
+       echo "I: Restore: Read ${WZT_NAME} Successfully!"
+  fi
+  
 
   # 1.5 Read the wztfile contents into a variable 
   WZT_VAR=$(cat "${TEMPDIR}/${WZT_INFO_FILE}"|tr "\n" "|")
   
-  # 1.6 If the WZT_VAR is empty, then WZT_VAR could not read from wzt-info.txt
+  # 1.6 If the WZT_VAR is empty, then WZT_VAR could not read from wzt-info.yml
   if [ -z "${WZT_VAR}" ]; then
        echo "I: Restore: ${WZT_INFO_FILE} not found in tar archive"
        zenity --info    --title "${WZT_NAME}" \
@@ -94,12 +82,12 @@ echo "Created:${WZT_DATE}"   |tee -a "${TEMPDIR}/${WZT_INFO_FILE}"
        Main_Function
   fi
 
-  # 2. Show Content of extracted wzt-info.txt file before restoring
-  # 2.1 Get Game/App name from the wzt-info.txt file
-  GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Prefix*:"|cut -f2 -d ":")
+  # 2. Show Content of extracted wzt-info.yml file before restoring
+  # 2.1 Get Game/App name from the wzt-info.yml file
+  GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Name*:"|cut -f2 -d ":")
   echo "I: Restore: Name: ${GAME_NAME}"
 
-  # 2.1 format the wzt-info.txt content for display using zenity
+  # 2.1 format the wzt-info.yml content for display using zenity
   TEXT_MSG="$(cat ${TEMPDIR}/${WZT_INFO_FILE} | \
            sed "s/:/ ,:, /g"|column -t -s "," | \
            sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/g" | \
@@ -173,19 +161,15 @@ echo "Created:${WZT_DATE}"   |tee -a "${TEMPDIR}/${WZT_INFO_FILE}"
 
   # 4.2 Extract file to WineZGUI Prefix and show gui progress dialog
   # Change directory name XOUSERXO to username on restore
-  # To save time, the dir name is renamed to wzt_directory like below,
-  # So, on extraction, we need to replace (WZT_DIRECTORY) => (WZT_PREFIX)
-  # PREFIX,SIZE,WINEZGUI-VERSION,DATE => PREFIX
   echo "I: Restore: Extracting ${WZT_NAME} at ${WINEZPREFIX}"
-  (tar --zstd -xvf "${WZT_FILE}" -C "${WINEZPREFIX}" \
-       --transform "s|XOUSERXO|${USER}|g" \
-       --transform "s|^${WZT_DIRECTORY}|${WZT_PREFIX}|g" &)| \
+  (tar --zstd -xvf "${WZT_FILE}" -C "${WINEZPREFIX}" --transform \
+           "s|XOUSERXO|${USER}|g" &)| \
   (zenity --progress --width=500                    \
           --title="Restoring ${GAME_NAME}!"         \
           --text="Extracting ${WZT_FILE}..."        \
           --pulsate --auto-close)
   
-  # extraction status
+
   ZENITY_STATUS=$?
 
   # 4.2.1 If user cancels extraction,  zenity will return 1
