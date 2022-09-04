@@ -322,13 +322,31 @@ if [ "${BKP_RESPONSE}" = "Create Game Bundle..." ]; then
      # Create Bundle
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
-
+     
+     # Using ${PREFIX_WITH_INFO} to save time on getting wzt-info.txt 
+     unset PREFIX_WITH_INFO
+     PREFIX_WITH_INFO+="${PREFIXNAME},"
+     PREFIX_WITH_INFO+="${TOTAL_BACKUP_SIZE_IN_HF},"
+     PREFIX_WITH_INFO+="${APP_WITH_VER},"
+     PREFIX_WITH_INFO+="${DATE}"
+     
+     
+     ## --transform uses sed to change directory names while creating and 
+     ## extracting tar archives
+     # --transform "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}
+     # replaces ./PREFIX with PREFIX/GAMEDIR/ when -C prefix and -C tar_game_dir
+     # used below
+     # --transform "s|^${PREFIXNAME}|${PREFIX_WITH_INFO}|g" &)| \
+     # replaces ^PREFIX -> PREFIX,SIZE,WINZGUI-VERSION,DATE
+     
      (tar -I "zstd -${LEVEL} -T0" -cf \
       "${TARGET_DIR}/${BACKUP_FILE}" \
       -C "${WINEZPREFIX}" "${PREFIXNAME}" \
       -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}" \
       --transform \
-      "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
+      "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" \
+      --transform \
+      "s|^${PREFIXNAME}|${PREFIX_WITH_INFO}|g" &)| \
      zenity  --progress --pulsate --auto-close \
              --title="Creating ${PREFIXNAME} Game Bundle...!" \
              --width=500 --text="${BACKUP_FILE}..."
@@ -350,9 +368,19 @@ else  # Create Prefix
      #-C $(dirname $EXE_PATH) ./$(basename EXE_PATH)
      # tar -cvf test.tar -C ~/Downloads/ ./PUTTY
      echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
+
+     # Using ${PREFIX_WITH_INFO} to save time on getting wzt-info.txt 
+     unset PREFIX_WITH_INFO
+     PREFIX_WITH_INFO+="${PREFIXNAME},"
+     PREFIX_WITH_INFO+="${TOTAL_BACKUP_SIZE_IN_HF},"
+     PREFIX_WITH_INFO+="${APP_WITH_VER},"
+     PREFIX_WITH_INFO+="${DATE}"
      # Create Backup archive and restore changes as soon as tar is done
      (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-             -C "${WINEZPREFIX}" "${PREFIXNAME}" &) | \
+             -C "${WINEZPREFIX}" "${PREFIXNAME}" \
+      --transform \
+      "s|^${PREFIXNAME}|${PREFIX_WITH_INFO}|g" &)| \
+             
      zenity --progress --pulsate --auto-close \
             --title="Creating ${PREFIXNAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
