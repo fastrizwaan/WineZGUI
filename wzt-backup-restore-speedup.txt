@@ -1,0 +1,23 @@
+# Create wzt (tar) with wzt-info.txt and tar.zst file
+=====================================================
+1. Create zst file using tar --zst .. as in winezgui-script-backup, change name to .tar.zst
+2. Create another tar file as .wzt, which includes wzt-info.txt and .tar.zst file
+3. While creating wzt file set compressed size into wzt-info.txt file
+
+Command: to add wzt-info.txt file to a wzt tar file
+----------------------------------------------------
+time tar -cvf ~/test.wzt -C . wzt-info.txt -C ~/Documents vcredist_x86_2010-WineZGUI-0.87-Game-Bundle-wine-7.0.tar.zst
+----------------------------------------------------
+
+# Read wzt-info.txt from wzt tar file
+===============================
+  tar xfO ~/test.tar wzt-info.yml ; # show this info
+ 
+# Get tar.zst name from wzt file
+===============================
+  tar -tf ~/test.tar |grep tar.zst 
+
+# Extract tar.zst from tar file
+===============================
+  tar xfO ~/test.tar vcredist_x86_2010-WineZGUI-0.87-Game-Bundle-wine-7.0.wzt|tar --zstd -xvf -
+
