@@ -56,7 +56,7 @@ WINEZGUI-SCRIPT-BACKUP-PREFIX()
   echo "I: Script: Backup: Prefix: Asking filename"
   BACKUP_FILE=$( zenity          \
       --title="${TITLE}"         \
-      --width=500 --height=30    \
+      --width=700 --height=30    \
       --text="${TEXT}"           \
       --entry-text="${FILENAME}" \
       --entry)

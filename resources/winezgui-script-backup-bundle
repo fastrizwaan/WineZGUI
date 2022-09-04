@@ -125,7 +125,7 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
   echo "I: Script: Backup: Bundle: Asking filename"
   BACKUP_FILE=$( zenity        \
           --title="${TITLE}"      \
-          --width=500 --height=30    \
+          --width=700 --height=30    \
           --text="${TEXT}"     \
           --entry-text="${FILENAME}" \
           --entry)
