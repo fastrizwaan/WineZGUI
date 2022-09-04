@@ -221,55 +221,83 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
   # 7.1 Change directory to WINEZPREFIX
   cd "${WINEZPREFIX}"
   echo "I: Script: Backup: Bundle: Processing ${EXE_NAME}"
+  
+  # 7.0 
+  # If gamedir is outside prefixdir, bundle the gamedir
+  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+        # Do not include GAMEDIR separately when it is already inside prefix
+        # tar would need these 2 variables to bundle gamedir into tar archive
+        
+        TAR_GAME_DIR_NAME=$(basename "${EXE_PATH}")
+        TAR_GAME_DIR_PATH=$(dirname "${EXE_PATH}")
+        echo "I: Script: Backup: Bundle: Gamedir at: ${TAR_GAME_DIR_PATH}"
+        echo "I: Script: Backup: Bundle: Game Name : ${TAR_GAME_DIR_NAME}"
 
-  # tar would need these 2 variables to bundle gamedir into tar archive
-  TAR_GAME_DIR_NAME=$(basename "${EXE_PATH}")
-  TAR_GAME_DIR_PATH=$(dirname "${EXE_PATH}")
-  echo "I: Script: Backup: Bundle: Gamedir at: ${TAR_GAME_DIR_PATH}"
-  echo "I: Script: Backup: Bundle: Game Name : ${TAR_GAME_DIR_NAME}"
+        # 7.2 Change EXE_FILE and EXE_PATH before bundling
+        # Putting Game directory inside drive_c/bundled_game
+        GAME_BUNDLED_DIR="drive_c/bundled_game/${TAR_GAME_DIR_NAME}"
+        GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
+        GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
 
-  # 7.2 Change EXE_FILE and EXE_PATH before bundling
-  # Putting Game directory inside drive_c/bundled_game
-  GAME_BUNDLED_DIR="drive_c/bundled_game/${TAR_GAME_DIR_NAME}"
-  GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
-  GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
+        echo "I: Script: Backup: Bundle: Game Exe Path: ${GAME_EXE_PATH}"
+        echo "I: Script: Backup: Bundle: Game Exe File: ${GAME_EXE_FILE}"
 
-  echo "I: Script: Backup: Bundle: Game Exe Path: ${GAME_EXE_PATH}"
-  echo "I: Script: Backup: Bundle: Game Exe File: ${GAME_EXE_FILE}"
+        # 7.3 Change EXE path and name in the script and txt file
+        sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" \
+            -i ${PREFIXDIR}/*.txt   \
+            -i ${PREFIXDIR}/*.sh && \
+        echo "I: Script: Backup: Bundle: Game Exe Path Changed To: ${GAME_EXE_PATH}"
 
-  # 7.3 Change EXE path and name in the script and txt file
-  sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" \
-      -i ${PREFIXDIR}/*.txt   \
-      -i ${PREFIXDIR}/*.sh && \
-  echo "I: Script: Backup: Bundle: Game Exe Path Changed To: ${GAME_EXE_PATH}"
+        sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;"  \
+            -i ${PREFIXDIR}/*.txt   \
+            -i ${PREFIXDIR}/*.sh && \
+        echo "I: Script: Backup: Bundle: Game Exe File Changed To: ${GAME_EXE_FILE}"
+        
+          # 7.4 Preprocess
+        echo "I: Script: Backup: Bundle: Preparing files"
+        Backup_Restore_Function
 
-  sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;"  \
-      -i ${PREFIXDIR}/*.txt   \
-      -i ${PREFIXDIR}/*.sh && \
-  echo "I: Script: Backup: Bundle: Game Exe File Changed To: ${GAME_EXE_FILE}"
+        # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
+        source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
 
-  # 7.4 Preprocess
-  echo "I: Script: Backup: Bundle: Preparing files"
-  Backup_Restore_Function
-
-
-  # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-  source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
-
-  # 7.6 Create Bundle
-  echo "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
-  echo "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
-     
-  # add wzt-info.yml 1st then the prefix directory to the wzt file
-  (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
-       -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"                      \
-       -C "${WINEZPREFIX}" "${PREFIXNAME}"                         \
-       -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"          \
-  --transform \
+        # 7.6 Create Bundle
+        echo "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
+        echo "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
+           
+        # add wzt-info.yml 1st then the prefix directory to the wzt file
+        (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
+             -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"                      \
+             -C "${WINEZPREFIX}" "${PREFIXNAME}"                         \
+             -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"          \
+        --transform \
           "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
-  zenity  --progress --pulsate --auto-close \
-          --title="Creating ${PREFIXNAME} Game Bundle...!" \
-          --width=500 --text="${BACKUP_FILE}..."
+        zenity  --progress --pulsate --auto-close \
+                --title="Creating ${PREFIXNAME} Game Bundle...!" \
+                --width=500 --text="${BACKUP_FILE}..."
+
+   
+  else
+       # If gamedir is inside prefixdir, do not bundle gamedir
+       # 7.4 Preprocess
+        echo "I: Script: Backup: Bundle: Preparing files"
+        Backup_Restore_Function
+
+        # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
+        source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
+
+        # 7.6 Create Bundle
+        echo "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
+        echo "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
+           
+        # add wzt-info.yml 1st then the prefix directory to the wzt file
+        # just like prefix 
+        (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
+             -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"      \
+             -C "${WINEZPREFIX}" "${PREFIXNAME}" &) |    \
+        zenity  --progress --pulsate --auto-close \
+                --title="Creating ${PREFIXNAME} Game Bundle...!" \
+                --width=500 --text="${BACKUP_FILE}..."
+  fi
 
   # 7.7 If user clicks cancel, kill tar commands
   # Handle Backup interruption
@@ -309,15 +337,18 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change
-  sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
-      -i ${PREFIXDIR}/*.txt   \
-      -i ${PREFIXDIR}/*.sh && \
-  echo "I: Script: Backup: Bundle: Reverted Game Exe Path to: ${EXE_PATH}"
+  # revert EXE_FILE and EXE_PATH for the gamedir which is outside prefixdir
+  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+        sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
+            -i ${PREFIXDIR}/*.txt   \
+            -i ${PREFIXDIR}/*.sh && \
+        echo "I: Script: Backup: Bundle: Reverted Game Exe Path to: ${EXE_PATH}"
 
-  sed "s|${GAME_EXE_FILE}|${EXE_FILE}|g; t;"  \
-      -i ${PREFIXDIR}/*.txt   \
-      -i ${PREFIXDIR}/*.sh && \
-  echo "I: Script: Backup: Bundle: Reverted Game Exe File to: ${EXE_FILE}"
+        sed "s|${GAME_EXE_FILE}|${EXE_FILE}|g; t;"  \
+            -i ${PREFIXDIR}/*.txt   \
+            -i ${PREFIXDIR}/*.sh && \
+        echo "I: Script: Backup: Bundle: Reverted Game Exe File to: ${EXE_FILE}"
+  fi
 
   echo "I: Script: Backup: Bundle: Created ${BACKUP_FILE} at ${TARGET_DIR}" && \
   zenity --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
