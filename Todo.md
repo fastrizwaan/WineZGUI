@@ -13,10 +13,10 @@
 - [x] Use wzt-info.yml
 - [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
       archive. Breaks backward compatibility.
-- [ ] Use info.yml for info file instead of info.txt
-- [ ] About use info.yml
-- [ ] Use column to format info.yml like restore-wzt does
-- [ ] Change Exe update info.yml
+- [x] Use info.yml for info file instead of info.txt
+- [x] About use info.yml
+- [x] Use column to format info.yml like restore-wzt does
+- [x] Change Exe update info.yml
 - [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
 - [ ] After Installer, if new exe's are found
       - [ ] Show Change EXE

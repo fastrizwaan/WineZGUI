@@ -8,6 +8,7 @@
 # 4. Check if the file exists after it is created
 ################################################################################
 WZT_INFO_FILE="wzt-info.yml"
+WZT_INFO_FILE_IN_PREFIX="${PREFIXDIR}/${WZT_INFO_FILE}"
 # 1. Set Debug Prompt, If prefix is default it is "I: Backup: ..."
 if [ "${PREFIXNAME}" = "default" ]; then
      PROMPT="Backup"
@@ -42,20 +43,20 @@ fi
 # 3. Insert Data into wzt-info.yml
 DATE=$(date +%F_%H%M)
 
-echo "Name:${WZT_INFO_PROGNAME}"       |tee    "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Exe:${WZT_INFO_EXE_NAME}"        |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Prefix:${WZT_INFO_PREFIXNAME}"   |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Created:${DATE}"                 |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Install:${INSTALL_TYPE}"         |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Wine:${WINEVER}"                 |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "Size:${TOTAL_BACKUP_SIZE_IN_HF}" |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
-echo "WineZGUI:${APPVERSION}"          |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
+echo "Name:${WZT_INFO_PROGNAME}"       |tee    "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Exe:${WZT_INFO_EXE_NAME}"        |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Prefix:${WZT_INFO_PREFIXNAME}"   |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Created:${DATE}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Wine:${WINEVER}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Size:${TOTAL_BACKUP_SIZE_IN_HF}" |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 # 3.1 Include flatpak id in wzt-info.yml
 if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-     echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${PREFIX_DIR}/${WZT_INFO_FILE}"
+     echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 fi
 
 # 4. Check if the file exists after it is created
-if [ -f "${PREFIX_DIR}/${WZT_INFO_FILE}" ]; then
-     echo "I: ${PROMPT}: Created ${PREFIX_DIR}/${WZT_INFO_FILE}"
+if [ -f "${WZT_INFO_FILE_IN_PREFIX}" ]; then
+     echo "I: ${PROMPT}: Created ${WZT_INFO_FILE_IN_PREFIX}"
 fi

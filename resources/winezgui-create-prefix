@@ -58,7 +58,7 @@ export PREFIXDIR="${WINEZPREFIX}/${EXE_NOEXE}"
 export PREFIXNAME="${EXE_NOEXE}"
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
-export INFOFILE="${PREFIXDIR}/info.txt"
+export INFOFILE="${PREFIXDIR}/Info.yml"
 export ICONFILE="${PREFIXDIR}/${EXE_NOEXE}.png"
 export SCRIPTFILE="${PREFIXDIR}/${EXE_NOEXE}.sh"
 export DESKTOPFILE="${PREFIXDIR}/${EXE_NOEXE}.desktop"
@@ -135,7 +135,8 @@ PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i "product name"|cut -f2 -d ":" \
 if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z] ) ] || [ -z "${PRODUCT}" ]; then
      unset PRODUCT
      unset PROGNAME
-     PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
+     PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[mM][Ss][Ii]//g"\
+                                                    |sed "s/\.[eE][Xx][Ee]//g");
      echo "I: Create Prefix: Name: Product Name not found, using exe name"
 else
      PROGNAME=$(echo "${PRODUCT} (${APP_WITH_VER})");
@@ -231,7 +232,7 @@ export EXIFTOOL=\"\$(which exiftool)\"
 export BKP_EXT=\"${BKP_EXT}\"
 
 # Files
-export INFOFILE=\"${PREFIXDIR}/info.txt\"
+export INFOFILE=\"${PREFIXDIR}/Info.yml\"
 export ICONFILE=\"${PREFIXDIR}/${EXE_NOEXE}.png\"
 export SCRIPTFILE=\"${PREFIXDIR}/${EXE_NOEXE}.sh\"
 export DESKTOPFILE=\"${PREFIXDIR}/${EXE_NOEXE}.desktop\"
@@ -291,7 +292,7 @@ source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
         fi
     fi
 
-# Needed for info.txt and backup and restore function
+# Needed for Info.yml and backup and restore function
 export WINEEXE=${WINE_CMD}
 
 # If restored from Backup, update the wineprefix on different wine version
@@ -340,28 +341,29 @@ if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
      echo "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
 fi
 
-# Create Metadata info.txt for the prefix
+# Create Metadata Info.yml for the prefix
 if [ ! -f "${INFOFILE}" ]; then
-echo -e "
-Game Name      : ${PROGNAME}
-Game EXE       : ${EXE_FILE}
-Sha256sum      : ${SHA256SUM}
-Game Directory : ${EXE_PATH}
-Game Prefix    : ${PREFIXDIR}
-Game Script    : ${SCRIPTFILE}
-Game Icon      : ${ICONFILE}
-Game Shortcut  : ${DESKTOPFILE}
-System Shortcut: ${DESKTOPDIR}
-Creation Date  : $(date)
-----------------------------------------------------
-Application    : ${APPNAME}
-Version        : ${APPVERSION}
-Wine           : ${WINEEXE}
-Wine Version   : ${WINEVER}
-Wine Arch      : ${WINEARCH}
-WineZGUI Prefix: ${WINEZPREFIX}
-" > ${INFOFILE}
-echo "I: Script: Prefix: Created ${INFOFILE}"
+     #  Insert Data into Info.yml
+     DATE=$(date +%F_%H%M)
+
+     echo "Name:${PROGNAME}"                |tee    "${INFOFILE}"
+     echo "Exe:${EXE_FILE}"                 |tee -a "${INFOFILE}"
+     echo "Sha256sum:${SHA256SUM}"          |tee -a "${INFOFILE}" 
+     echo "Exe Path:${EXE_PATH}"            |tee -a "${INFOFILE}"
+     echo "Prefix:${PREFIXNAME}"            |tee -a "${INFOFILE}"
+     echo "Script:${SCRIPTFILE}"            |tee -a "${INFOFILE}"
+     echo "Icon:${ICONFILE}"                |tee -a "${INFOFILE}"
+     echo "Shortcut:${DESKTOPFILE}"         |tee -a "${INFOFILE}"
+     echo "Created:${DATE}"                 |tee -a "${INFOFILE}"
+     echo "Install:${INSTALL_TYPE}"         |tee -a "${INFOFILE}"
+     echo "Wine:${WINEVER}"                 |tee -a "${INFOFILE}"
+     echo "WineZGUI:${APPVERSION}"          |tee -a "${INFOFILE}"
+     # Include flatpak id in Info.yml
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${INFOFILE}"
+     fi
+     echo "WineZGUI Prefix:${WINEZPREFIX}"  |tee -a "${INFOFILE}"
+     echo "I: Script: Prefix: Created ${INFOFILE}"
 fi
 
 

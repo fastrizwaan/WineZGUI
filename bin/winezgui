@@ -745,8 +745,8 @@ if [ -f "${EXE_FILE}"  ] ; then
                               --list  --hide-header                 \
                               --radiolist --column " "              \
                               --column "Action"                     \
-                                  TRUE "Run with Default Prefix..." \
-                                     0 "Create Prefix..."           \
+                                  TRUE "Create Prefix..."           \
+                                  0    "Run with Default Prefix..." \
                                 --text "<b>${EXE_NAME}...</b>" )
      fi
 

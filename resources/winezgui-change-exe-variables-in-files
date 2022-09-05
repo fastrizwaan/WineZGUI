@@ -27,7 +27,8 @@ CHANGE_EXE_VARIABLES_IN_FILES()
   NEW_EXE_NOSP=$(echo ${NEW_EXE_NAME}|tr " " "_");
   
   # 7. EXE_NOEXE (SELECTED_EXE without .exe or .msi is the NEW_EXE_NOEXE) 
-  NEW_EXE_NOEXE=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+  NEW_EXE_NOEXE=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
+                                      |sed "s/\.[Mm][Ss][Ii]//")
 
  # 1. PROGNAME (Get NEW_PROGNAME)
   # Automatically set name, read from pe file, if not found use exe name
@@ -38,21 +39,28 @@ CHANGE_EXE_VARIABLES_IN_FILES()
        then
        unset NEW_PRODUCT
        unset NEW_PROGNAME
-       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
+       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})" \
+                     |sed "s/\.[eE][Xx][Ee]//g");
        echo "I: Script: Change Exe: Product Name not found, using exe name"
   else
        NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
        echo "I: Script: Change Exe: Product Name found: \"${NEW_PRODUCT}\""
   fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
+  E="export " # for 80 column rule
+  sed "s|${E}PROGNAME=.*|${E}PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_FILE=.*|${E}EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_NAME=.*|${E}EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_PATH=.*|${E}EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_NOSP=.*|${E}EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}SHA256SUM=.*|${E}SHA256SUM=\"${NEW_SHA256SUM}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_NOEXE=.*|${E}EXE_NOEXE=\"${NEW_EXE_NOEXE}\"|g" -i ${SCRIPTFILE}
   
-  sed "s|export PROGNAME=.*|export PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
-  sed "s|export EXE_FILE=.*|export EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
-  sed "s|export EXE_NAME=.*|export EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
-  sed "s|export EXE_PATH=.*|export EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
-  sed "s|export EXE_NOSP=.*|export EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
-  sed "s|export SHA256SUM=.*|export SHA256SUM=\"${NEW_SHA256SUM}\"|g" -i ${SCRIPTFILE}
-  sed "s|export EXE_NOEXE=.*|export EXE_NOEXE=\"${NEW_EXE_NOEXE}\"|g" -i ${SCRIPTFILE}
+  ####### Change Info.yml
+  sed "s|Name:.*|Name:${NEW_PROGNAME}|g"            -i "${INFOFILE}"
+  sed "s|Exe:.*|Exe:${NEW_EXE_FILE}|g"              -i "${INFOFILE}"
+  sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"    -i "${INFOFILE}"
+  sed "s|Sha256sum:.*|Sha256sum:${NEW_SHA256SUM}|g" -i "${INFOFILE}"
   
   # Launch Script after modification
   "${SCRIPTFILE}" &

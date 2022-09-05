@@ -48,25 +48,25 @@ RENAME_PREFIX()
   # if not exe_path inside exe_file = if exe_file not inside prefixdir
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           echo "I: Script: Rename: Prefix: Game directory is outside prefix!"
-          sed "s|${EXE_FILE}|XOEXE_FILEXO|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|${EXE_FILE}|XOEXE_FILEXO|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|${EXE_PATH}|XOEXE_PATHXO|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|${EXE_PATH}|XOEXE_PATHXO|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
   fi
 
   # 5.2 Replace PREFIX values inside .desktop, .txt and .sh files
@@ -74,7 +74,7 @@ RENAME_PREFIX()
   NEWSCRIPTFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh"
   NEWICONFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.png"
   NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop"
-  NEWINFOFILE="${NEWPREFIXDIR}/info.txt"
+  NEWINFOFILE="${NEWPREFIXDIR}/Info.yml"
  
   # 5.2.1 Replace in .desktop file
   
@@ -107,9 +107,9 @@ RENAME_PREFIX()
   R_PREFIXNAME="export PREFIXNAME=\"${NEWPREFIXNAME}\""
   sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"   -i "${SCRIPTFILE}"
 
-  S_WINEZGUI_SCRIPTS="^export WINEZGUI_SCRIPTS=.*"
-  R_WINEZGUI_SCRIPTS="export WINEZGUI_SCRIPTS=\"${NEWPREFIXDIR}/winezgui-scripts\""
-  sed "s|${S_WINEZGUI_SCRIPTS}|${R_WINEZGUI_SCRIPTS}|g"  -i "${SCRIPTFILE}"
+  S_SCRIPTS_DIR="^export WINEZGUI_SCRIPTS=.*"
+  R_SCRIPTS_DIR="export WINEZGUI_SCRIPTS=\"${NEWPREFIXDIR}/winezgui-scripts\""
+  sed "s|${S_SCRIPTS_DIR}|${R_SCRIPTS_DIR}|g"  -i "${SCRIPTFILE}"
 
   S_WINEPREFIX="^export WINEPREFIX=.*"
   R_WINEPREFIX="export WINEPREFIX=\"${NEWPREFIXDIR}\""
@@ -123,42 +123,35 @@ RENAME_PREFIX()
   R_EXE_PATH="export EXE_PATH=\"${NEW_EXE_PATH}\""
   sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"       -i "${SCRIPTFILE}"
   
-  # 5.4.2 Change values inside info.txt
-  # 5.4.2.1 Change Script file value in info.txt
-  #Game Prefix    : /home/rizvan/.local/share/winezgui/PREFIXNAME
-  S_INFO_PREFIXDIR="Game Prefix    : .*"
-  R_INFO_PREFIXDIR="Game Prefix    : ${NEWPREFIXDIR}"
-  sed "s|${S_INFO_PREFIXDIR}|${R_INFO_PREFIXDIR}|g"  -i "${INFOFILE}"
-
-  #Game Directory : /home/rizvan/GAMEDIR  
-  S_GAME_DIRECTORY="Game Directory : .*"
-  R_GAME_DIRECTORY="Game Directory : ${NEW_EXE_PATH}"
-  sed "s|${S_GAME_DIRECTORY}|${R_GAME_DIRECTORY}|g"  -i "${INFOFILE}"
-
+  # 5.4.2 Change values inside Info.yml
+  # 5.4.2.1 Change Script file value in Info.yml
+  sed "s|^Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"     -i "${INFOFILE}"
+  sed "s|^Exe:.*|Exe:${NEW_EXE_FILE}|g"               -i "${INFOFILE}"
+  sed "s|^Prefix:.*|Prefix:${NEWPREFIXNAME}|g"        -i "${INFOFILE}"
 
 
 
   # 5.5 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-          sed "s|XOEXE_FILEXO|${EXE_FILE}|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|XOEXE_FILEXO|${EXE_FILE}|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|XOEXE_PATHXO|${EXE_PATH}|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|XOEXE_PATHXO|${EXE_PATH}|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
 
-          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g"  \
-              -i ${PREFIXDIR}/*.txt           \
-              -i ${PREFIXDIR}/*.sh            \
-              -i ${PREFIXDIR}/*.desktop
+          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g" \
+              -i ${INFOFILE}                 \
+              -i ${SCRIPTFILE}               \
+              -i ${DESKTOPFILE}
   fi
   
   # 6. Rename files having prefix as part of file name, with new prefix name 
