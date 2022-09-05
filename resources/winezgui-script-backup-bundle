@@ -234,8 +234,8 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
         echo "I: Script: Backup: Bundle: Game Name : ${TAR_GAME_DIR_NAME}"
 
         # 7.2 Change EXE_FILE and EXE_PATH before bundling
-        # Putting Game directory inside drive_c/bundled_game
-        GAME_BUNDLED_DIR="drive_c/bundled_game/${TAR_GAME_DIR_NAME}"
+        # Putting Game directory inside drive_c/GAMEDIR
+        GAME_BUNDLED_DIR="drive_c/GAMEDIR/${TAR_GAME_DIR_NAME}"
         GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
         GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
 
