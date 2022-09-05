@@ -41,6 +41,7 @@ export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
 export WINE_CMD=${WINEEXE}
 
+export INFOFILE="${PREFIXDIR}/Info.yml"
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Where to install .desktop shortcuts?
@@ -324,7 +325,7 @@ source ${DATADIR}/winezgui-restore-wzt
              echo "I: About... Selected!"
              # Text is more, so we need to format it, with sed in pango markup
              ZCMD="zenity --info --no-wrap --text"
-             ${ZCMD} "$(cat ${DEFAULT}/info.txt | \
+             ${ZCMD} "$(cat ${DEFAULT}/${INFOFILE} | \
                       sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
                       sed -E "s/^(.*)$/<small>\1<\/small>/g")"
              Main_Function
@@ -675,9 +676,9 @@ INITIALIZE_WINEPREFIX(){
     ### End of Create a default wine prefix directory ###
 
 
-# Create Metadata info.txt for the default wine prefix
+# Create Metadata Info.yml for the default wine prefix
 # Update info only when wine is found
-if [ ! -f ${DEFAULT}/info.txt ] && [ $(which wine) ]; then
+if [ ! -f ${DEFAULT}/${INFOFILE} ] && [ $(which wine) ]; then
 echo -e   "
 Application     : ${APPNAME}
 Version         : ${APPVERSION}
@@ -691,8 +692,8 @@ Wine Arch       : ${WINEARCH}
 WineZGUI Prefix : ${WINEZPREFIX}
 Wine Prefix     : ${DEFAULT}
 Creation Date   : $(date)
-" > ${DEFAULT}/info.txt
-echo "I: Startup: Created ${DEFAULT}/info.txt"
+" > ${DEFAULT}/${INFOFILE}
+echo "I: Startup: Created ${DEFAULT}/${INFOFILE}"
 fi
 }
 

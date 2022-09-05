@@ -253,8 +253,8 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/lib64/wine:/app/${NAME}:$(pwd)
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
-# Launch the function: Locate_Exe_Function from the above file
-Locate_Exe_Function
+# LOCATE_EXE_FUNCTION need on Launch
+
 
     # If ${FLATPAK_NAME} is installed, and script created using flatpak
     if [ ${INSTALL_TYPE} = "flatpak" ] && \

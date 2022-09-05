@@ -7,7 +7,7 @@
 
 
 # 1. Test if the given exe exists (if not found ask user to locate it)
-Locate_Exe_Function
+LOCATE_EXE_FUNCTION
 
 export exe_name=$(basename "${EXE_FILE}")
 export exe_path=$(dirname  "${EXE_FILE}")
@@ -20,5 +20,5 @@ echo "I: Script: Launching ${exe_name}"
 ${WINE_CMD} "${exe_name}"
 
 # 4. After the Launch if lnk and .desktop files are found inside wine prefix
-echo "Hello ${PREFIXDIR}"
+echo "Launched ${PREFIXDIR}"
 
