@@ -4,6 +4,27 @@
 
 - [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
 
+0.87
+- [x] Installer Support
+- [x] Change Exe
+- [x] Change Icon from exe too
+- [x] Backup do not double include gamedir when it is inside prefixdir
+- [x] Use GAMEDIR instead of bundled_game directory for Game Bundle.
+- [x] Use wzt-info.yml
+- [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
+      archive. Breaks backward compatibility.
+- [ ] Use info.yml for info file instead of info.txt
+- [ ] About use info.yml
+- [ ] Use column to format info.yml like restore-wzt does
+- [ ] Change Exe update info.yml
+- [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
+- [ ] After Installer, if new exe's are found
+      - [ ] Show Change EXE
+      - [ ] Change Icon from exe when changing exe
+      - [ ] Change Prefix Directory on changing exe
+- [ ] If name contains Setup or Install, create Installer prefix
+- [ ] Find and remove Installer Created desktop shortcuts from wine directory
+
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
       Name->Name-anything will repeat -anything...

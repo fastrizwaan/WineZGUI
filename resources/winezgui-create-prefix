@@ -226,7 +226,7 @@ export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 
 export DESKTOPDIR=\"${DESKTOPDIR}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
-
+export EXIFTOOL=\"\$(which exiftool)\"
 # winezgui backup file extension
 export BKP_EXT=\"${BKP_EXT}\"
 

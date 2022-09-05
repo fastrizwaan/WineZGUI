@@ -24,16 +24,15 @@ CHANGE_EXE_VARIABLES_IN_FILES()
   NEW_EXE_PATH=$(dirname  "${SELECTED_EXE}")
   
   # 6. EXE_NOSP (replace space with underscore of SELECTED_EXE is NEW_EXE_NOSP)
-  NEW_EXE_NOSP=$(echo ${SELECTED_EXE}|tr " " "_");
+  NEW_EXE_NOSP=$(echo ${NEW_EXE_NAME}|tr " " "_");
   
   # 7. EXE_NOEXE (SELECTED_EXE without .exe or .msi is the NEW_EXE_NOEXE) 
   NEW_EXE_NOEXE=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 
  # 1. PROGNAME (Get NEW_PROGNAME)
   # Automatically set name, read from pe file, if not found use exe name
-  NEW_PRODUCT=$(${EXIFTOOL} "${SELECTED_EXE}"| \
-                grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")
-                
+  NEW_PRODUCT="$(${EXIFTOOL} "${SELECTED_EXE}"| \
+                grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")"
   # if language is not english inside exe name, or product is "", use exe name
   if [ $(echo ${NEW_PRODUCT}|grep -aEv [a-zA-Z]) ] || [ -z "${NEW_PRODUCT}" ] ;
        then
@@ -42,7 +41,7 @@ CHANGE_EXE_VARIABLES_IN_FILES()
        NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[eE][Xx][Ee]//g");
        echo "I: Script: Change Exe: Product Name not found, using exe name"
   else
-       NEW_PROGNAME=$(echo "${NEW_PRODUCT} (${APP_WITH_VER})");
+       NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
        echo "I: Script: Change Exe: Product Name found: \"${NEW_PRODUCT}\""
   fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
