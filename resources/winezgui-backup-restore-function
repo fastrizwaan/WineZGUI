@@ -4,14 +4,15 @@ Backup_Restore_Function()
   unset SEARCH
   unset REPLACE
   unset FPNAME
-  #  Paths needs flatpak/host specific replacement
+  
   # *.reg files
   # flatpak name has .(period) which confuses sed
   # Only sed if FLATPAK_NAME has value
   if ! [ -z "$FLATPAK_NAME" ]; then
   FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   fi
-
+  
+  #  Paths needs flatpak/system specific replacement
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
   else  SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
@@ -88,7 +89,7 @@ Backup_Restore_Function()
 
 # Find files to change in the Prefix
   unset SED_THESE
-  SED_THESE+=$(find ${PREFIXNAME} -maxdepth 1 -iname "*.txt" 2>/dev/null)
+  SED_THESE+=$(find ${PREFIXNAME} -maxdepth 1 -iname "Info.yml" 2>/dev/null)
   SED_THESE+=" "
   SED_THESE+=$(find ${PREFIXNAME} -maxdepth 1 -iname "*.reg" 2>/dev/null)
   SED_THESE+=" "
@@ -110,7 +111,12 @@ Backup_Restore_Function()
        # Rename Directory on Restore
        DSOURCE="${PREFIXNAME}/drive_c/users/${USER}"
        DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO"
-       
+       # If not restored from a backup file, revert xouserxo->user
+       # Make sure that directory for the user exists, before moving
+       if [ -d "${PREFIXNAME}/drive_c/users/XOUSERXO" ]; then
+            mv "${DTARGET}" "${DSOURCE}" && \
+            echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+       fi
        # Recreate Links to H: link to $HOME on Restore
        echo "I: Restore: Recreating Links to H: in ${PREFIXNAME} prefix"
 
@@ -142,8 +148,12 @@ Backup_Restore_Function()
        # Rename Directory for Backup
        DSOURCE="${PREFIXNAME}/drive_c/users/${USER}"
        DTARGET="${PREFIXNAME}/drive_c/users/XOUSERXO"
-       mv ${DSOURCE} ${DTARGET} && \
-       echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+       # Make sure that directory for the user exists, before moving
+       if [ -d "${PREFIXNAME}/drive_c/users/${USER}" ]; then
+            mv "${DSOURCE}" "${DTARGET}" && \
+            echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+       fi
+
 
        # Remove H: links on Backup
        rm  "${PREFIXNAME}/dosdevices/h:" && \

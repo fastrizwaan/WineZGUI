@@ -263,7 +263,9 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
         # 7.6 Create Bundle
         echo "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
         echo "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
-           
+        
+        # Report user the time it took to bundle
+        TIMER_START=${SECONDS}   
         # add wzt-info.yml 1st then the prefix directory to the wzt file
         (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
              -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"                      \
@@ -274,7 +276,8 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
         zenity  --progress --pulsate --auto-close \
                 --title="Creating ${PREFIXNAME} Game Bundle...!" \
                 --width=500 --text="${BACKUP_FILE}..."
-
+        TOOK=$(( SECONDS - ${TIMER_START} ))
+        echo "I: Script: Backup: Bundle: Time Taken: ${TOOK} seconds!!!"
    
   else
        # If gamedir is inside prefixdir, do not bundle gamedir
@@ -291,12 +294,16 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
            
         # add wzt-info.yml 1st then the prefix directory to the wzt file
         # just like prefix 
+        # Report user the time it took to bundle
+        TIMER_START=${SECONDS}  
         (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
              -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"      \
              -C "${WINEZPREFIX}" "${PREFIXNAME}" &) |    \
         zenity  --progress --pulsate --auto-close \
                 --title="Creating ${PREFIXNAME} Game Bundle...!" \
                 --width=500 --text="${BACKUP_FILE}..."
+        TOOK=$(( SECONDS - ${TIMER_START} ))
+        echo "I: Script: Backup: Bundle: Time Taken: ${TOOK} seconds!!!"
   fi
 
   # 7.7 If user clicks cancel, kill tar commands
@@ -333,7 +340,7 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
 
   # 7.7 Restore changed values after backup
   echo "I: Script: Backup: Bundle: Restoring Registry and Info files"
-  Backup_Restore_Function "restore"
+  Backup_Restore_Function restore
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change

@@ -200,7 +200,7 @@ WINEZGUI-SCRIPT-BACKUP-PREFIX()
 
   # 7.7 Restore changed values after backup
   echo "I: Script: Backup: Prefix: Restoring Registry and Info files"
-  Backup_Restore_Function "restore"
+  Backup_Restore_Function restore
 
   echo "I: Script: Backup: Prefix: Created ${BACKUP_FILE} at ${TARGET_DIR}"
   
