@@ -18,10 +18,13 @@
 - [x] Use column to format info.yml like restore-wzt does
 - [x] Change Exe update info.yml
 - [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
-- [ ] After Installer, if new exe's are found
-      - [ ] Show Change EXE
-      - [ ] Change Icon from exe when changing exe
+- [x] After Installer, if new exe's are found
+      - [x] Show Change EXE
+      - [x] update name in desktop file
+      - [x] Change Icon from exe when changing exe
+      - [ ] do no prompt change icon when run from changing exe
       - [ ] Change Prefix Directory on changing exe
+      - [ ] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
 - [ ] If name contains Setup or Install, create Installer prefix
 - [ ] Find and remove Installer Created desktop shortcuts from wine directory
 

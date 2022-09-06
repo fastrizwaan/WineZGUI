@@ -1,7 +1,14 @@
        # Ask user to select an image icon or exe file to extract icon from
-       GET_ICON=$(zenity --file-selection \
+       # If No argument is given ask
+       CHANGE_ICON()
+{
+        if [ -z "${1}" ]; then
+            GET_ICON=$(zenity --file-selection \
                          --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
-
+       else
+            GET_ICON="${1}"  
+       fi
+       
        # If he/she cancels, why prompt?
        if [ -z "${GET_ICON}" ]; then #if no icon is selected
             echo "I: Script: Change Icon: Cancelled!"
@@ -82,3 +89,4 @@
        
        # Update icon cache for gtk based desktops
        gtk-update-icon-cache -f --ignore-theme-index ~/.local/share/icons
+}

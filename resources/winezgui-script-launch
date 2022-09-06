@@ -19,6 +19,5 @@ echo "I: Script: Launching ${exe_name}"
 # 3. Launch The EXE file
 ${WINE_CMD} "${exe_name}"
 
-# 4. After the Launch if lnk and .desktop files are found inside wine prefix
-echo "Launched ${PREFIXDIR}"
-
+source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
+FIND_INSTALLED_EXE

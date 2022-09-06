@@ -159,6 +159,8 @@ WINEZGUI-SCRIPT-BACKUP-PREFIX()
   source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
 
   echo "I: Script: Backup: Prefix: Creating ${BACKUP_FILE} file..."
+  # Report user the time it took to bundle
+  TIMER_START=${SECONDS}  
   # 7.4 Create Backup archive and restore changes as soon as tar is done
   # add wzt-info.yml 1st then the prefix directory to the wzt file
   (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
@@ -167,7 +169,8 @@ WINEZGUI-SCRIPT-BACKUP-PREFIX()
    zenity --progress --pulsate --auto-close        \
           --title="Creating ${PREFIXNAME} backup!" \
           --width=500 --text="${BACKUP_FILE}..."
-
+  TOOK=$(( SECONDS - ${TIMER_START} ))
+  echo "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
 
   # 7.5 If user clicks cancel, kill tar commands
   # zenity progress won't kill the process, so we do it

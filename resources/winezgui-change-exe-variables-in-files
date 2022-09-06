@@ -62,6 +62,9 @@ CHANGE_EXE_VARIABLES_IN_FILES()
   sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"    -i "${INFOFILE}"
   sed "s|Sha256sum:.*|Sha256sum:${NEW_SHA256SUM}|g" -i "${INFOFILE}"
   
+  ####### Change Desktop file
+  sed "s|Name=.*|Name=${NEW_PROGNAME}|g"            -i "${DESKTOPFILE}"
+  sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}" -i "${DESKTOPFILE}"
   # Launch Script after modification
   "${SCRIPTFILE}" &
   exit 0

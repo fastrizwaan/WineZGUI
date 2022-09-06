@@ -178,6 +178,8 @@ SCRIPT_MODULES+="winezgui-change-any-other-exe "
 SCRIPT_MODULES+="winezgui-change-exe-variables-in-files "
 SCRIPT_MODULES+="winezgui-script-backup-prefix "
 SCRIPT_MODULES+="winezgui-script-backup-bundle "
+SCRIPT_MODULES+="winezgui-script-find-installed-exe "
+
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -490,6 +492,7 @@ elif [ "${SELECTION}" = "Change Exe..." ]; then
 elif [ "${SELECTION}" = "Change Icon..." ]; then
        echo "I: Script: Change Icon... Selected!"
        source ${WINEZGUI_SCRIPTS}/winezgui-script-change-icon
+       CHANGE_ICON
        # Return to Game window
        Game_Function
 

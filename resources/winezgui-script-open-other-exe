@@ -19,3 +19,6 @@
        echo "I: Script: Open Other EXE: Launching \"${base}\""
        ${WINE_CMD} "$base"
        echo "I: Script: Open Other EXE... Finished!"
+       
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
+       FIND_INSTALLED_EXE

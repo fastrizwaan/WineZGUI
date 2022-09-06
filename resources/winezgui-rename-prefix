@@ -10,11 +10,16 @@
 # 8. Launch Script from Renamed Directory
 RENAME_PREFIX()
 {
-  # 1. Ask for New Prefix Name
-  GET_PREFIX_NAME=$(zenity --title "Rename Prefix..." \
-                           --width=500 --entry \
-                           --text "Enter a name for the prefix" \
-                           --entry-text "${PREFIXNAME}")
+  # If No argument is given ask
+  if [ -z "${1}" ]; then
+       # 1. Ask for New Prefix Name if not provided by argument
+       GET_PREFIX_NAME=$(zenity --title "Rename Prefix..." \
+                                --width=500 --entry \
+                                --text "Enter a name for the prefix" \
+                                --entry-text "${PREFIXNAME}")
+  else
+       GET_PREFIX_NAME="${1}"  
+  fi
   
   # 1.1 If User clicks cancel, go back 
   if [ -z "${GET_PREFIX_NAME}" ]; then

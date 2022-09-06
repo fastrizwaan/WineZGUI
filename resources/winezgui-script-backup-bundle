@@ -277,7 +277,7 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
                 --title="Creating ${PREFIXNAME} Game Bundle...!" \
                 --width=500 --text="${BACKUP_FILE}..."
         TOOK=$(( SECONDS - ${TIMER_START} ))
-        echo "I: Script: Backup: Bundle: Time Taken: ${TOOK} seconds!!!"
+        echo "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
    
   else
        # If gamedir is inside prefixdir, do not bundle gamedir
@@ -303,7 +303,7 @@ WINEZGUI-SCRIPT-BACKUP-BUNDLE()
                 --title="Creating ${PREFIXNAME} Game Bundle...!" \
                 --width=500 --text="${BACKUP_FILE}..."
         TOOK=$(( SECONDS - ${TIMER_START} ))
-        echo "I: Script: Backup: Bundle: Time Taken: ${TOOK} seconds!!!"
+        echo "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
   fi
 
   # 7.7 If user clicks cancel, kill tar commands
