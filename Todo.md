@@ -22,12 +22,17 @@
       - [x] Show Change EXE
       - [x] update name in desktop file
       - [x] Change Icon from exe when changing exe
-      - [ ] do no prompt change icon when run from changing exe
+      - [x] do no prompt change icon when run from changing exe
+      - [x] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
+      - [x] If prefix do not have any installed exe, show error message
       - [ ] Change Prefix Directory on changing exe
-      - [ ] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
 - [ ] If name contains Setup or Install, create Installer prefix
+- [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
 - [ ] Find and remove Installer Created desktop shortcuts from wine directory
-
+- [x] Sort found exe list before presenting 
+- [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
+- [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
+- [ ] winezgui-script-locate-exe-function: use | instead of / sed FIXME
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
       Name->Name-anything will repeat -anything...

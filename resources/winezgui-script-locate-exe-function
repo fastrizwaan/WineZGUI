@@ -75,18 +75,15 @@ LOCATE_EXE_FUNCTION()
                  # 4.1.1 sed / with \/ for sed 
                  REPL_EXE_FILE=$(echo ${NEW_EXE}| \
                               sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-                 FINDME="\(Game EXE.*: \).*"
-                 CHANGE="\1${REPL_EXE_FILE}"
-                 sed    "s/${FINDME}/${CHANGE}/g" -i ${INFOFILE}
-                 echo  "I: Script: Locate: Updated EXE_FILE in Info.yml"
+
+                 sed  "s/EXE:.*/EXE:${REPL_EXE_FILE}/g" -i ${INFOFILE}
+                 echo "I: Script: Locate: Updated EXE_FILE in Info.yml"
 
                  # 4.2 Update EXE_PATH in Info.yml
                  # 4.2.1 sed / with \/ for sed 
                  REPL_EXE_PATH=$(echo ${NEW_EXE_PATH}|\
                               sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-                 FINDME="\(Game Directory.*: \).*"
-                 CHANGE="\1${REPL_EXE_PATH}"
-                 sed    "s/${FINDME}/${CHANGE}/g" -i ${INFOFILE}
+                 sed  "s/Exe Path:.*/Exe Path:${REPL_EXE_PATH}/g" -i ${INFOFILE}
 
                  # 5. Allow immediate exe launch by updating
                  # runtime variable for current running script

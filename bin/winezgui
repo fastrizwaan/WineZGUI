@@ -129,7 +129,8 @@ source ${DATADIR}/winezgui-restore-wzt
       if [ "${SELECTION}" = "Open EXE..." ]
            then
            echo "I: Open EXE... Selected!"
-      	   EXE_FILE="$( zenity                  \
+           unset EXE_FILE
+      	    EXE_FILE="$( zenity                  \
       	                --file-filter="*.exe *.msi" \
       	                --file-selection        \
       	                --title="Select a File" \
@@ -754,9 +755,11 @@ if [ -f "${EXE_FILE}"  ] ; then
      if [ -z "${SELECTION}" ]
           then
           echo "I: Open EXE: Cancelled!"
+          unset SELECTION
           Main_Function
-     fi
 
+     fi
+############ FIXME: Opening, exe, cancelling, reopening quits winezgui ####
      # If exe prefix (already created prefix for the exe) does not exist
      if [ "${SELECTION}" = "Run with Default Prefix..." ]
           then
@@ -790,7 +793,9 @@ if [ -f "${EXE_FILE}"  ] ; then
 #            echo "I: Open EXE: Launching Config Script \"${EXE_NOEXE}.sh\""
 #            ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
      else
+     ############ FIXME: Opening, exe, cancelling, reopening other exe quits winezgui ####
           echo "I: Open EXE: Bye!"
+          echo "I am in the else of Open EXE function"
           exit 0
      fi
 fi
