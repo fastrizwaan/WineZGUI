@@ -43,6 +43,8 @@ else # EXE_LIST has value
                CHANGE_INSTALLED_EXE
                echo "5. Creating ${FOUND_EXE_FILES}"
                source ${WINEZGUI_SCRIPTS}/winezgui-script-change-icon
+               # We do not want to see zenity dialog of icon change success
+               export CHANGE_ICON_DO_NOT_PROMPT="true"
                CHANGE_ICON "${SELECTED_EXE}"
                CHANGE_EXE_VARIABLES_IN_FILES
           else
@@ -79,6 +81,8 @@ else # EXE_LIST has value
                   # Remove the new-found-exe-files.yml file
                   rm "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}"
                   source ${WINEZGUI_SCRIPTS}/winezgui-script-change-icon
+                  # We do not want to see zenity dialog of icon change success
+                  export CHANGE_ICON_DO_NOT_PROMPT="true"
                   CHANGE_ICON "${SELECTED_EXE}"
                   CHANGE_EXE_VARIABLES_IN_FILES
              else

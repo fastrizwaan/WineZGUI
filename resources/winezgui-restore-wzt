@@ -251,7 +251,7 @@ RESTORE_WZT_FILE()
        echo "I: Restore: Removed broken WineZGUI .desktop links"
 
        # 8. Update desktop menus and Icon cache
-       ${UPDATE_ICON_CACHE} 2>/dev/null
+       ${UPDATE_ICON_CACHE}
        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
        ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
