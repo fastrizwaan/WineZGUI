@@ -240,7 +240,8 @@ if [ "${INSTALL}" = "true"  ]
      # Update mime and desktop paths
      update-mime-database ${INSTALL_PREFIX}/share/mime &
      update-desktop-database ${DESK_DIR} &
-     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons &
+     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons \
+                           2>/dev/null &
 
      # Change Variables in winezgui and winezgui-create-prefix scripts
      # for system or flatpak install

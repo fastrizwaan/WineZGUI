@@ -94,5 +94,5 @@
        export ICON="${ICONFILE}"
        
        # Update icon cache for gtk based desktops
-       gtk-update-icon-cache -f --ignore-theme-index ~/.local/share/icons
+       ${UPDATE_ICON_CACHE}
 }
