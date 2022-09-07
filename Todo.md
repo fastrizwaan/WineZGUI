@@ -2,8 +2,32 @@
 
 0.90
 
-- [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
+- [ ] WineZGUI recipe support
+    - [ ] URL
+    - [ ] Image
+    - [ ] EXE
+    - [ ] wine version
+    - [ ] winetricks
+    - [ ] Arch
+    - [ ] Playonlinux -> wzt-install?
+    - [ ] Create wzt-install script from existing install.
+         POL_Shortcut "7zFM.exe" "$TITLE" "" "" "Archiving;"
+         https://www.playonlinux.com/en/app-373-7Zip.html 
 
+0.89
+- [ ] Prefix Management (prefixes with winetricks and registry customizations)
+  - Default Prefix 
+  - WineZGUI default (mf-install)
+  - Unreal Engine 4 Prefix
+  - Old Games Midi Supported
+
+0.88
+- [ ] wzt management
+    - [ ] Split
+    - [ ] Join
+    - [ ] Extract wzt (unplayable)
+    - [ ] Extract and restore wzt (playable)
+    - [ ] Change Compression Level
 0.87
 - [x] Installer Support
 - [x] Change Exe
