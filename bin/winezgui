@@ -6,7 +6,8 @@
 # ============================================================================ #
 #set -x
 # Variables
-export APPNAME=WineZGUI
+export APPNAME=WineZGUI 
+
 # These values will be assigned by Setup using sed command
 # Post install ${PREFIX}/bin/winezgui file will be different
 export DATADIR=/usr/share/winezgui # /usr will be replaced by prefix
@@ -47,11 +48,12 @@ export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "${INSTALL_TYPE}" = "system" ]; then
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-else
-    # for flatpak create subdirectory with flatpakname
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else # for flatpak create subdirectory with flatpakname
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR
 fi
+
 
 # winezgui backup file extension
 export BKP_EXT="wzt"
@@ -658,7 +660,7 @@ INITIALIZE_WINEPREFIX(){
 
         echo "I: Startup: Removing symlinks from wineprefix"
 
-        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+        for i in $(find "${WINEPREFIX}/drive_c/users/${USER}" -type l); do
                    rm $i && mkdir -p $i && \
                    echo $i >> ${DEFAULT}/ReplacedSymLinks.txt
         done
