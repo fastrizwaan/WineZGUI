@@ -1,4 +1,5 @@
 ##### Rename Prefix Directory ####
+# winezgui-rename-prefix
 # Steps:
 # 1. Ask for New Prefix Name
 # 2. replace " " with "_" (underscore)

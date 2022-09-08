@@ -1,7 +1,7 @@
 ###### Todo
+0.92 
 
-0.90
-
+0.91
 - [ ] WineZGUI recipe support
     - [ ] URL
     - [ ] Image
@@ -14,17 +14,16 @@
          POL_Shortcut "7zFM.exe" "$TITLE" "" "" "Archiving;"
          https://www.playonlinux.com/en/app-373-7Zip.html 
 
-0.89
+0.90
 - [ ] Prefix Management (prefixes with winetricks and registry customizations)
   - Default Prefix 
   - WineZGUI default (mf-install)
   - Unreal Engine 4 Prefix
   - Old Games Midi Supported
 
-0.88
+0.89
 - [ ] if wine version changes (compared to metada) inform user esp. for system install
 - [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
-- [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
 - [ ] If name contains Setup or Install, create Installer prefix
 - [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
 - [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
@@ -38,6 +37,14 @@
     - [ ] Extract wzt (unplayable)
     - [ ] Extract and restore wzt (playable)
     - [ ] Change Compression Level
+
+0.88
+- [ ] Rewrite winezgui to fix
+  - [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
+- [ ] Modularize even more, every script file be used as function
+- [ ] 80 column rules
+- [ ] Comment every script, what it does
+  
 0.87
 - [x] Installer Support
 - [x] Change Exe

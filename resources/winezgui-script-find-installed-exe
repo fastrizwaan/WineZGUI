@@ -43,6 +43,10 @@ else # EXE_LIST has value
                # We do not want to see zenity dialog of icon change success
                export CHANGE_ICON_DO_NOT_PROMPT="true"
                CHANGE_ICON "${SELECTED_EXE}"
+               # Create a file to change prefix name immediately on next launch
+               # On next launch, it will change prefixdir name
+               source ${WINEZGUI_SCRIPTS}/winezgui-create-change-prefix-file
+               CREATE_CHANGE_PREFIX_FILE
                CHANGE_EXE_VARIABLES_IN_FILES
           else
                echo "I: Script: Find Exe: Not changing exe!"
@@ -87,6 +91,10 @@ else # EXE_LIST has value
                   # We do not want to see zenity dialog of icon change success
                   export CHANGE_ICON_DO_NOT_PROMPT="true"
                   CHANGE_ICON "${SELECTED_EXE}"
+                  # Create a file to change prefix name immediately on next launch
+                  # On next launch, it will change prefixdir name
+                  source ${WINEZGUI_SCRIPTS}/winezgui-create-change-prefix-file
+                  CREATE_CHANGE_PREFIX_FILE
                   CHANGE_EXE_VARIABLES_IN_FILES
              else
                   echo "I: Script: Find Exe: Not changing exe!"

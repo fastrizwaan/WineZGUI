@@ -64,15 +64,26 @@ export SCRIPTFILE="${PREFIXDIR}/${EXE_NOEXE}.sh"
 export DESKTOPFILE="${PREFIXDIR}/${EXE_NOEXE}.desktop"
 
 ICON="${ICONFILE}"
-# if argument is not an exe file, then quit
-IS_EXE="$(echo ${EXE_EXT}|tr A-Z a-z)"
 
-if [ "${IS_EXE}" != "exe" ] && [ "${IS_EXE}" != "msi" ]; then
-     echo "W: Create Prefix: \"${EXE_NAME}\" is not an EXE file"
-     echo "I: Create Prefix: Please, submit an exe file as argument"
+# If argument is not an exe file, then quit
+# Make it small case to compare
+EXTENSION="$(echo ${EXE_EXT}|tr A-Z a-z)"
+EXE="exe"
+MSI="msi"
+
+
+# If exe or msi file is not given, we can't create script for other files
+if [ "${EXTENSION}" != "${EXE}" ] && [ "${EXTENSION}" != "${MSI}" ]; then
+     echo "E: Create Prefix: \"${EXE_NAME}\" is not an ${EXE} or ${MSI} file"
+     echo "I: Create Prefix: Please, give an ${EXE} or ${MSI} file as argument"
      echo "I: Usage: ${0} path/to/app.exe "
      exit 1
 fi
+
+# Clear variables
+unset EXTENSION
+unset EXE
+unset MSI
 
 # Start processing submitted exe file
 echo "I: Create Prefix: Preparing prefix for exe file"
@@ -180,6 +191,7 @@ SCRIPT_MODULES+="winezgui-script-backup-prefix "
 SCRIPT_MODULES+="winezgui-script-backup-bundle "
 SCRIPT_MODULES+="winezgui-script-find-installed-exe "
 SCRIPT_MODULES+="winezgui-script-remove-wine-created-shortcuts "
+SCRIPT_MODULES+="winezgui-create-change-prefix-file "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then
@@ -296,6 +308,17 @@ source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
 
 # Needed for Info.yml and backup and restore function
 export WINEEXE=${WINE_CMD}
+
+# Change Prefix on changing EXE
+if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
+     echo "I: Script: Change Prefix Requested..."
+     PREFIX_NAME_TO_CHANGE="$(grep Prefix|cut -f2 -d ":")"
+     echo "I: Script: Launching winezgui-rename-prefix function (RENAME_PREFIX)"
+     source ${WINEZGUI_SCRIPTS}/winezgui-rename-prefix
+     rm "${PREFIXDIR}/Change-Prefix-Name"
+     RENAME_PREFIX "${PREFIX_NAME_TO_CHANGE}"
+     
+fi
 
 # If restored from Backup, update the wineprefix on different wine version
 # without install mono and install html dialog
