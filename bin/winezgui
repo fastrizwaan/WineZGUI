@@ -102,7 +102,7 @@ source ${DATADIR}/winezgui-restore-wzt
       SELECTION=$( \
       zenity --title "${APP_WITH_VER}" \
              --list   --hide-header                             \
-             --width=360 --height=400                           \
+             --width=360 --height=450                           \
              --radiolist --column " "                           \
              --column "Action"                                  \
                  TRUE "Open EXE..."                             \

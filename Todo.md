@@ -60,7 +60,7 @@
 - [x] Sort found exe list before presenting 
 - [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
 - [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
-- [ ] winezgui-script-locate-exe-function: use | instead of / sed FIXME
+- [x] winezgui-script-locate-exe-function: use | instead of / sed FIXME
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
       Name->Name-anything will repeat -anything...

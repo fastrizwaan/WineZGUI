@@ -69,20 +69,20 @@ LOCATE_EXE_FUNCTION()
                  echo   "I: Script: Locate: Update EXE_PATH in ${0}"
                  # 4. Set EXE and EXE path in Info.yml
                  echo   "I: Script: Locate: Updating prefix Info.yml"
-######################## FIXME: INFO FILE  ###############################
-# FIXME: use sed with | instead of /
+
                  # 4.1 Update EXE_FILE in Info.yml
                  # 4.1.1 sed / with \/ for sed 
-                 REPL_EXE_FILE=$(echo ${NEW_EXE}| \
-                              sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+                 REPL_EXE_FILE=$(echo ${NEW_EXE}|sed "s|\/|\\\/|g" | \
+                                                |sed "s|\\.|\\\.|g")
 
                  sed  "s/EXE:.*/EXE:${REPL_EXE_FILE}/g" -i ${INFOFILE}
                  echo "I: Script: Locate: Updated EXE_FILE in Info.yml"
 
                  # 4.2 Update EXE_PATH in Info.yml
                  # 4.2.1 sed / with \/ for sed 
-                 REPL_EXE_PATH=$(echo ${NEW_EXE_PATH}|\
-                              sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+                 REPL_EXE_PATH=$(echo ${NEW_EXE_PATH}|sed "s|\/|\\\/|g" | \
+                                                     |sed "s|\\.|\\\.|g")
+
                  sed  "s/Exe Path:.*/Exe Path:${REPL_EXE_PATH}/g" -i ${INFOFILE}
 
                  # 5. Allow immediate exe launch by updating
