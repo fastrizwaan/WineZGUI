@@ -268,7 +268,7 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/lib64/wine:/app/${NAME}:$(pwd)
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
-# LOCATE_EXE_FUNCTION need on Launch
+# LOCATE_EXE_FUNCTION required on Launch
 
 
     # If ${FLATPAK_NAME} is installed, and script created using flatpak
@@ -309,109 +309,6 @@ source ${WINEZGUI_SCRIPTS}/winezgui-script-locate-exe-function
 # Needed for Info.yml and backup and restore function
 export WINEEXE=${WINE_CMD}
 
-# Change Prefix on changing EXE
-if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
-     echo "I: Script: Change Prefix Requested..."
-     PREFIX_NAME_TO_CHANGE="$(grep Prefix|cut -f2 -d ":")"
-     echo "I: Script: Launching winezgui-rename-prefix function (RENAME_PREFIX)"
-     source ${WINEZGUI_SCRIPTS}/winezgui-rename-prefix
-     rm "${PREFIXDIR}/Change-Prefix-Name"
-     RENAME_PREFIX "${PREFIX_NAME_TO_CHANGE}"
-     
-fi
-
-# If restored from Backup, update the wineprefix on different wine version
-# without install mono and install html dialog
-if [ -f ${PREFIXDIR}/restored.txt ]; then
-     echo "I: Script: Updating wine prefix on 1st run after restoring backup"
-     WINEDLLOVERRIDES="mscoree,mshtml=" \
-     WINEPREFIX=${PREFIXDIR} \
-     ${WBOOT_CMD} 2>/dev/null
-     rm ${PREFIXDIR}/restored.txt
-fi
-
-# Creating/Updating Prefix for the EXE prefix
-
-# Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
-if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
-
-     echo "I: Script: Prefix: Creating Prefix..."
-     # Create Prefix and delete base system linked directory links
-     echo "I: Script: Prefix: wine=$(which wine)"
-     echo "I: Script: Prefix: WINEPREFIX=${WINEPREFIX}"
-     echo "I: Script: Prefix: Wineboot command = ${WBOOT_CMD}"
-     echo "I: Script: Prefix: WINEARCH ${WINEARCH}"
-     WINEDLLOVERRIDES="mscoree,mshtml=" \
-     WINEPREFIX=${PREFIXDIR} \
-     ${WBOOT_CMD} 2>/dev/null
-
-     # Replace home liked directory links with normal directories
-     # For Games which saves in ~/Documents now will save in
-     # Prefix-dir/drive_c/users/${USER}/Documents
-     echo "I: Script: Prefix: Replacing symlinks with directories inside prefix"
-     SAVEIFS=${IFS}
-     IFS=$(echo -en "\n\b")
-     for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-           rm $i && mkdir -p $i && \
-           echo $i >> ${PREFIXDIR}/replaced_symlinks.txt
-     done
-     IFS=${SAVEIFS}
-
-     # Create file to check later
-     touch ${PREFIXDIR}/replaced_symlinks.txt
-
-     # Create H: for HOME Directory for Wine Explorer
-     ln -sf "${HOME}" "${PREFIXDIR}/dosdevices/h:"
-     echo "I: Script: Prefix: Creating H: symlink to ${HOME}"
-     echo "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
-fi
-
-# Create Metadata Info.yml for the prefix
-if [ ! -f "${INFOFILE}" ]; then
-     #  Insert Data into Info.yml
-     DATE=$(date +%F_%H%M)
-
-     echo "Name:${PROGNAME}"                |tee    "${INFOFILE}"
-     echo "Exe:${EXE_FILE}"                 |tee -a "${INFOFILE}"
-     echo "Sha256sum:${SHA256SUM}"          |tee -a "${INFOFILE}" 
-     echo "Exe Path:${EXE_PATH}"            |tee -a "${INFOFILE}"
-     echo "Prefix:${PREFIXNAME}"            |tee -a "${INFOFILE}"
-     echo "Script:${SCRIPTFILE}"            |tee -a "${INFOFILE}"
-     echo "Icon:${ICONFILE}"                |tee -a "${INFOFILE}"
-     echo "Shortcut:${DESKTOPFILE}"         |tee -a "${INFOFILE}"
-     echo "Created:${DATE}"                 |tee -a "${INFOFILE}"
-     echo "Install:${INSTALL_TYPE}"         |tee -a "${INFOFILE}"
-     echo "Wine:${WINEVER}"                 |tee -a "${INFOFILE}"
-     echo "WineZGUI:${APPVERSION}"          |tee -a "${INFOFILE}"
-     # Include flatpak id in Info.yml
-     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-          echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${INFOFILE}"
-     fi
-     echo "WineZGUI Prefix:${WINEZPREFIX}"  |tee -a "${INFOFILE}"
-     echo "I: Script: Prefix: Created ${INFOFILE}"
-fi
-
-
-# If asked to run an exe by winezgui using launch option
-  if [ "$1" = "launch" ]; then
-       echo "I: Script: Launch: ${EXE_FILE}"
-       # Test if exe exists?
-       if [ ! -f "${EXE_FILE}" ] ; then
-            echo "E: Script: Launch: ${EXE_NAME} not found!"
-
-            zenity --error --title "File not found!" --text "${EXE_FILE}"
-            Game_Function
-       fi
-       export EXE_FILE_NAME=\"$(basename "${EXE_FILE}")\"
-       export EXE_FILE_DIR=\"$(dirname "${EXE_FILE}")\"
-       cd "${EXE_FILE_DIR}"
-       echo "I: Script: Launch: Starting ${EXE_FILE_NAME}"
-       ${WINE_CMD}  "${EXE_FILE_NAME}"
-       exit 0;
-  fi
-
-# Backup_Restore_Function()
-source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
 
 Game_Function ()
 {
@@ -549,6 +446,116 @@ elif [ "${SELECTION}" = "About..." ]; then
 
 fi
 }
+
+# Change Prefix on changing EXE
+if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
+     echo "=========================================="  
+     echo "I: Script: Change Prefix Requested..."
+     PREFIX_NAME_TO_CHANGE="$(grep Prefix "${PREFIXDIR}/Change-Prefix-Name" \
+                             |cut -f2 -d ":")"
+     echo "=========================================="  
+     echo "I: Script: Launching winezgui-rename-prefix function (RENAME_PREFIX)"
+     source ${WINEZGUI_SCRIPTS}/winezgui-rename-prefix
+     rm "${PREFIXDIR}/Change-Prefix-Name"
+     echo "------------------------------"  
+     echo "RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}"
+     echo "------------------------------"  
+     RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}
+     
+fi
+
+# If restored from Backup, update the wineprefix on different wine version
+# without install mono and install html dialog
+if [ -f ${PREFIXDIR}/restored.txt ]; then
+     echo "I: Script: Updating wine prefix on 1st run after restoring backup"
+     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     WINEPREFIX=${PREFIXDIR} \
+     ${WBOOT_CMD} 2>/dev/null
+     rm ${PREFIXDIR}/restored.txt
+fi
+
+# Creating/Updating Prefix for the EXE prefix
+
+# Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
+if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
+
+     echo "I: Script: Prefix: Creating Prefix..."
+     # Create Prefix and delete base system linked directory links
+     echo "I: Script: Prefix: wine=$(which wine)"
+     echo "I: Script: Prefix: WINEPREFIX=${WINEPREFIX}"
+     echo "I: Script: Prefix: Wineboot command = ${WBOOT_CMD}"
+     echo "I: Script: Prefix: WINEARCH ${WINEARCH}"
+     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     WINEPREFIX=${PREFIXDIR} \
+     ${WBOOT_CMD} 2>/dev/null
+
+     # Replace home liked directory links with normal directories
+     # For Games which saves in ~/Documents now will save in
+     # Prefix-dir/drive_c/users/${USER}/Documents
+     echo "I: Script: Prefix: Replacing symlinks with directories inside prefix"
+     SAVEIFS=${IFS}
+     IFS=$(echo -en "\n\b")
+     for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+           rm $i && mkdir -p $i && \
+           echo $i >> ${PREFIXDIR}/replaced_symlinks.txt
+     done
+     IFS=${SAVEIFS}
+
+     # Create file to check later
+     touch ${PREFIXDIR}/replaced_symlinks.txt
+
+     # Create H: for HOME Directory for Wine Explorer
+     ln -sf "${HOME}" "${PREFIXDIR}/dosdevices/h:"
+     echo "I: Script: Prefix: Creating H: symlink to ${HOME}"
+     echo "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
+fi
+
+# Create Metadata Info.yml for the prefix
+if [ ! -f "${INFOFILE}" ]; then
+     #  Insert Data into Info.yml
+     DATE=$(date +%F_%H%M)
+
+     echo "Name:${PROGNAME}"                |tee    "${INFOFILE}"
+     echo "Exe:${EXE_FILE}"                 |tee -a "${INFOFILE}"
+     echo "Sha256sum:${SHA256SUM}"          |tee -a "${INFOFILE}" 
+     echo "Exe Path:${EXE_PATH}"            |tee -a "${INFOFILE}"
+     echo "Prefix:${PREFIXNAME}"            |tee -a "${INFOFILE}"
+     echo "Script:${SCRIPTFILE}"            |tee -a "${INFOFILE}"
+     echo "Icon:${ICONFILE}"                |tee -a "${INFOFILE}"
+     echo "Shortcut:${DESKTOPFILE}"         |tee -a "${INFOFILE}"
+     echo "Created:${DATE}"                 |tee -a "${INFOFILE}"
+     echo "Install:${INSTALL_TYPE}"         |tee -a "${INFOFILE}"
+     echo "Wine:${WINEVER}"                 |tee -a "${INFOFILE}"
+     echo "WineZGUI:${APPVERSION}"          |tee -a "${INFOFILE}"
+     # Include flatpak id in Info.yml
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${INFOFILE}"
+     fi
+     echo "WineZGUI Prefix:${WINEZPREFIX}"  |tee -a "${INFOFILE}"
+     echo "I: Script: Prefix: Created ${INFOFILE}"
+fi
+
+
+# If asked to run an exe by winezgui using launch option
+  if [ "$1" = "launch" ]; then
+       echo "I: Script: Launch: ${EXE_FILE}"
+       # Test if exe exists?
+       if [ ! -f "${EXE_FILE}" ] ; then
+            echo "E: Script: Launch: ${EXE_NAME} not found!"
+
+            zenity --error --title "File not found!" --text "${EXE_FILE}"
+            Game_Function
+       fi
+       export EXE_FILE_NAME=\"$(basename "${EXE_FILE}")\"
+       export EXE_FILE_DIR=\"$(dirname "${EXE_FILE}")\"
+       cd "${EXE_FILE_DIR}"
+       echo "I: Script: Launch: Starting ${EXE_FILE_NAME}"
+       ${WINE_CMD}  "${EXE_FILE_NAME}"
+       exit 0;
+  fi
+
+# Backup_Restore_Function()
+source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
 
 # Start WineZGUI when no argument is supplied
 if [ $# -eq 0 ]

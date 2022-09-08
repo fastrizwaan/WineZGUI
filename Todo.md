@@ -65,7 +65,9 @@
       - [x] do no prompt change icon when run from changing exe
       - [x] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
       - [x] If prefix do not have any installed exe, show error message
-      - [ ] Rename/Change Prefix Directory on changing exe
+      - [x] Rename/Change Prefix Directory on changing exe
+      - [x] Change EXE path in Info.yml
+      - [x] Script name and Function Name must be same. Script smallcase, Function CAPITALCASE
 - [x] Find and remove Installer Created desktop shortcuts from wine directory
       grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
 - [x] Sort found exe list before presenting 

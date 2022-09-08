@@ -11,6 +11,9 @@
 # 8. Launch Script from Renamed Directory
 RENAME_PREFIX()
 {
+  echo "------------------------------"
+  echo "RENAME_PREFIX \${1} = ${1}"
+  echo "------------------------------"  
   # If No argument is given ask
   if [ -z "${1}" ]; then
        # 1. Ask for New Prefix Name if not provided by argument
@@ -18,14 +21,22 @@ RENAME_PREFIX()
                                 --width=500 --entry \
                                 --text "Enter a name for the prefix" \
                                 --entry-text "${PREFIXNAME}")
+       echo "------------------------------"
+       echo " 1. GET_PREFIX_NAME = $GET_PREFIX_NAME"
+       echo "------------------------------"  
+
   else
-       GET_PREFIX_NAME="${1}"  
+       GET_PREFIX_NAME="${1}"
+       echo "------------------------------"
+       echo " 2. GET_PREFIX_NAME = $GET_PREFIX_NAME"
+       echo "------------------------------"  
+      
   fi
   
   # 1.1 If User clicks cancel, go back 
   if [ -z "${GET_PREFIX_NAME}" ]; then
      echo "I: Script: Rename: Prefix: Cancelled"
-     Game_Function
+     Game_Function || (echo "-=-=-=-=-=- Returning =-=-=-=-=-=-"; return)
   fi
   
   # 2. replace " " with "_" (underscore)
@@ -39,7 +50,9 @@ RENAME_PREFIX()
               
        echo "I: Script: Rename: Prefix: Cannot change to ${NEWPREFIXNAME}"
        echo "I: Script: Rename: Prefix: Directory ${PREFIXNAME} Already Exists!"
-       Game_Function
+       Game_Function || (echo "-=-=-=-=-=- Returning =-=-=-=-=-=-"; return)
+       # FIXME Game_Function needs to be on top of script!
+       # FIXME TODO Game_Function: command not found
   fi
 
   # 4. Create Variables for replacement
@@ -47,6 +60,8 @@ RENAME_PREFIX()
   NEW_EXE_FILE="$(echo ${EXE_FILE}|sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g")"
   NEW_EXE_FILE="${NEW_EXE_FILE}"
   NEW_EXE_PATH="$(dirname ${NEW_EXE_FILE})"
+  NEW_EXE_PATH="$(echo ${EXE_PATH}|sed "s|${PREFIXDIR}|${NEWPREFIXDIR}|g")"
+  
 
   # 5.  Replace PREFIX values inside files
   # 5.1 If gamedir is outside prefix, do not change EXE path on renaming prefix
