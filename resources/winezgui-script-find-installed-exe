@@ -7,35 +7,33 @@ NEW_FOUND_EXE_FILES="new-found-exe-files.yml"
 ##############################################################################
 # 4. Find if there are exe created after installer, ask user to change prefix
 # After 1st run, try to search exe files in prefixdir and add them to EXE_LIST
-echo "I: Script: Launch: Searching prefix for newly installed exe files!"
+echo "I: Script: Find Exe: Searching prefix for newly installed exe files!"
 echo "======================================================================"
 EXE_LIST=$(find "${PREFIXDIR}/drive_c" -name windows -prune -o \
                                        -name iexplore.exe   -o \
                                        -name wordpad.exe    -o \
                                        -name wmplayer.exe   -o \
                                        -iname '*.exe' -a -type f -print) 
-echo "-----------------------------------"
-echo "1. EXE_LIST="
-echo "$EXE_LIST"
-echo "-----------------------------------"
+
 # If EXE_LIST contains files, prompt user to change exe
 if [ -z "${EXE_LIST}" ]; then
-     echo "======================================================================"
-     echo "2. EXE_LIST is empty!"
+     echo "I: Script: Find Exe: EXE_LIST is empty!"
 
 else # EXE_LIST has value
-     echo "======================================================================"
-     echo "3. !! EXE_LIST is NOT EMPTY!!"
+     echo "I: Script: Find Exe: Found exe files inside prefix"
+     echo "${EXE_LIST}"
      # if found-exe-files.yml file do no exist, create and prompt for change exe
      if [ ! -f "${PREFIXDIR}/${FOUND_EXE_FILES}" ]; then
-          echo "4. Can't find \"${PREFIXDIR}/${FOUND_EXE_FILES}\""
+          echo "I: Script: Find Exe: Cannot find ${FOUND_EXE_FILES}, 1st run?"
           echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                   > "${PREFIXDIR}/${FOUND_EXE_FILES}" && \
-               echo "${EXE_LIST} > ${PREFIXDIR}/${FOUND_EXE_FILES}"
+               echo "I: Script: Find Exe: created ${FOUND_EXE_FILES}"
                
           # Ask use to Change the EXE for Installer
-          zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" \
-                 --text "New exe files installed in the prefix, would you like to change?"
+          unset TEXT
+          TEXT+="New exe files found inside prefix...\\nChange exe\?"
+          zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" --text "$TEXT"
+                 
           ANSWER=$?
           if [ ${ANSWER} -eq 0 ] ; then
                source ${WINEZGUI_SCRIPTS}/winezgui-change-installed-exe
@@ -48,26 +46,30 @@ else # EXE_LIST has value
                CHANGE_ICON "${SELECTED_EXE}"
                CHANGE_EXE_VARIABLES_IN_FILES
           else
-               echo "Not changing exe; use Change EXE... function to change"
+               echo "I: Script: Find Exe: Not changing exe!"
+               echo "I: Script: Find Exe: use Change EXE... to set default exe"
           fi
-          echo "======================================================================"
+
      else # If already existing EXE_LIST file 
-          echo "======================================================================"
-          echo "6. found found-exe-files.yml"
+          echo "I: Script: Find Exe: found found-exe-files.yml"
           # Create a new file with the list to compare
           # Remove Prefix name 
+
           echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
              > "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}"
-          echo "${EXE_LIST} > ${PREFIXDIR}/${NEW_FOUND_EXE_FILES}"
+          echo "I: Script: Find Exe: Checking for more recent exe files"
           
-          echo "7. checking difference"
+          echo "I: Script: Find Exe: Checking for any difference"
           # Check if new files are created, and are different in the list
           if ! (diff "${PREFIXDIR}/${FOUND_EXE_FILES}" \
                      "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}") ; then
-             echo "8. -----------------New Files found----------------------"
+             echo "I: Script: Find Exe: New exe files found!"
              # Ask use to Change the EXE for Installer
+             unset TEXT
+             TEXT+="New exe files <b>found again</b> in the prefix\!"
+             TEXT+="\\nChange exe\?"
              zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" \
-                    --text "New exe files <b>again installed</b> in the prefix, would you like to change?"
+                    --text "${TEXT}"
              ANSWER=$?
              if [ ${ANSWER} -eq 0 ] ; then
                   # Prompt user to change exe 
@@ -77,24 +79,27 @@ else # EXE_LIST has value
                   # And replace new list with old list
                   echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                      > "${PREFIXDIR}/${FOUND_EXE_FILES}"
-                  echo "${EXE_LIST} > ${PREFIXDIR}/${FOUND_EXE_FILES}"
+                  echo "I: Script: Find Exe: Updated ${FOUND_EXE_FILES}!"
                   # Remove the new-found-exe-files.yml file
-                  rm "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}"
+                  rm "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}" && \
+                  echo "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
+                  echo "I: Script: Find Exe: Changing icon..."
                   source ${WINEZGUI_SCRIPTS}/winezgui-script-change-icon
                   # We do not want to see zenity dialog of icon change success
                   export CHANGE_ICON_DO_NOT_PROMPT="true"
                   CHANGE_ICON "${SELECTED_EXE}"
                   CHANGE_EXE_VARIABLES_IN_FILES
              else
-                  echo "Not changing exe; use Change EXE... function to change"
+                  echo "I: Script: Find Exe: Not changing exe!"
+                  echo "I: Script: Find Exe: use Change EXE... to set default"
                   echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                      > "${PREFIXDIR}/${FOUND_EXE_FILES}" && \
-                  echo "${EXE_LIST} > ${PREFIXDIR}/${FOUND_EXE_FILES}"
+                  echo "I: Script: Find Exe: Updaing ${FOUND_EXE_FILES}"
              fi
           fi
-          echo "======================================================================"
+
      fi
     
 fi
-################################################################################
+
 }
