@@ -44,6 +44,7 @@
 - [ ] Modularize even more, every script file be used as function
 - [ ] 80 column rules
 - [ ] Comment every script, what it does
+- [ ] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
   
 0.87
 - [x] Installer Support
