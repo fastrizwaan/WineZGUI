@@ -1,3 +1,33 @@
+  unset RESPONSE
+  echo "I: Script: Open Other EXE:... Selected!"
+  RESPONSE=$(zenity --title "Open Other EXE for ${PREFIXNAME}"       \
+                    --list --hide-header --width=360 --height=30 \
+                    --radiolist --column " "                     \
+                    --column "Change"                            \
+                        TRUE "Installed Exe (after Setup)"       \
+                        0    "Any other Exe"           \
+                    --text   "<b>Other exe from...</b>" )
+  # If Cancel is clicked
+  if [ -z "${RESPONSE}" ]; then
+       echo "I: Change Exe: Cancelled!"
+       Game_Function
+  fi
+  
+  
+  # Print response
+  echo "I: Script: Open Other EXE:  ${RESPONSE} Selected!"
+
+  # If only name, append (wine-xx)
+  if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
+         # Call CHANGE_INSTALLED_EXE
+         source ${WINEZGUI_SCRIPTS}/winezgui-change-installed-exe
+         CHANGE_INSTALLED_EXE
+         OTHER_EXE="${SELECTED_EXE}"
+         echo "I: Script: Open Other EXE:  ${SELECTED_EXE} Selected!"
+  elif [ "$RESPONSE" = "Any other Exe" ]; then
+         # Open Any Other Exe
+
+
        OTHER_EXE="$(zenity --file-filter="*.exe *.msi"  \
                            --file-selection        \
                            --title="Select a File")"
@@ -8,7 +38,7 @@
             #unset SELECTION ; # Empty variable
             Game_Function    ; # Go back to Game Window
        fi
-
+ fi
        # If another exe is selected
        echo "I: Script: Open Other EXE: ${OTHER_EXE} selected"
        base=$(basename "${OTHER_EXE}")
@@ -22,3 +52,4 @@
        
        source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
        FIND_INSTALLED_EXE
+

@@ -88,6 +88,16 @@ unset MSI
 # Start processing submitted exe file
 echo "I: Create Prefix: Preparing prefix for exe file"
 
+# We are switching to Template based system, where user can install all 
+# winetricks verbs and save as a template. default will be the link to using
+# Template.
+
+# Copy Default Prefix to avoid showing dialog
+if [ ! -d "${PREFIXDIR}" ]; then
+   echo "${PREFIXDIR} not found, copying..."
+   cp -rvf "${WINEZPREFIX}/default/" "${PREFIXDIR}"
+fi
+
 # Create required directories
 mkdir -p  "${PREFIXDIR}" && \
 echo "I: Create Prefix: Created directory ${PREFIXDIR}"

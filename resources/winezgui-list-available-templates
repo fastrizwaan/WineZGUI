@@ -1,8 +1,7 @@
-# Change_Installed_exe function
+# winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
-# and set the variable SELECTED_EXE 
-# FIXME change this to list installed exe function to be used by Open Other EXE and Change EXE
-CHANGE_INSTALLED_EXE()
+# and set the variable SELECTED_TEMPLATE 
+LIST_AVAILABLE_TEMPLATES()
 {
  unset COMMAND
  unset count
@@ -20,20 +19,15 @@ CHANGE_INSTALLED_EXE()
  # Find all exe files in drive_c Exclude windows directory, 
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
- echo "-----------------------------------------------"
- GET_LIST_OF_EXE_FILES_INSTALLED
- EXE_LIST="${EXE_FILES_FOUND}"
- echo "EXE_LIST = $EXE_LIST"
- search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
- echo "search_list = $search_list"
- echo "-----------------------------------------------"
+
+ search_list=$(find ${TEMPLATES_DIR}/* -maxdepth 0 -type d -print| tr '\n' '|')
  
- exe_found=$(echo ${search_list}|grep -i "exe")
+ exe_found=$(echo ${search_list})
  
  if [ -z "${exe_found}" ] ; then
-      zenity --error --title "${PROGNAME} - no exe installed!" \
-             --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
-      Game_Function
+      zenity --error --title "${PROGNAME} - no templates found!" \
+             --text "Sorry, no templates found in Templates directory"
+      Main_Function
  fi
  # if exe_found has value, then only change exe
  for i in $(echo ${search_list}|tr '|' '\n'|sort)
@@ -59,7 +53,7 @@ CHANGE_INSTALLED_EXE()
 
 # 3. Show the found exe files using zenity
  unset COMMAND
- COMMAND+="zenity --title=\"Exe inside ${PREFIXNAME}\" --radiolist --list "
+ COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Templates\" --radiolist --list "
  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
  RESULT=$(eval ${COMMAND})
  
@@ -74,7 +68,7 @@ CHANGE_INSTALLED_EXE()
      if [ "$i" = "$RESULT" ]; then
           echo "Selected $i"
           echo "File is ${FILES[${count}]}"
-          export SELECTED_EXE="${FILES[${count}]}"
+          export SELECTED_TEMPLATE="${FILES[${count}]}"
           break
      fi
      count=$(expr ${count} + 1)

@@ -1,6 +1,24 @@
 # FIND_INSTALLED_EXE
 # Find Installed EXE inside prefixdir
 # winezgui-script-find-installed-exe
+# winezgui-script-find-installed-exe
+GET_LIST_OF_EXE_FILES_INSTALLED()
+{
+unset EXE_FILES_FOUND
+EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c" \
+           -iname "windows" -prune     \
+           -o -iname "dw20.exe"        \
+           -o -iname "wmplayer.exe"    \
+           -o -iname "iexplore.exe"    \
+           -o -iname "wordpad.exe"     \
+           -o -iname "dwtrig20.exe"    \
+           -o -iname "dxsetup.exe"     \
+           -o -iname "*.exe"           \
+           -a -type f -print)
+           
+export EXE_FILES_FOUND
+}
+
 FIND_INSTALLED_EXE(){
 FOUND_EXE_FILES="found-exe-files.yml"
 NEW_FOUND_EXE_FILES="new-found-exe-files.yml"
@@ -8,11 +26,10 @@ NEW_FOUND_EXE_FILES="new-found-exe-files.yml"
 # 4. Find if there are exe created after installer, ask user to change prefix
 # After 1st run, try to search exe files in prefixdir and add them to EXE_LIST
 echo "I: Script: Find Exe: Searching prefix for newly installed exe files!"
-EXE_LIST=$(find "${PREFIXDIR}/drive_c" -name windows -prune -o \
-                                       -name iexplore.exe   -o \
-                                       -name wordpad.exe    -o \
-                                       -name wmplayer.exe   -o \
-                                       -iname '*.exe' -a -type f -print) 
+
+GET_LIST_OF_EXE_FILES_INSTALLED
+EXE_LIST="${EXE_FILES_FOUND}"
+
 
 # If EXE_LIST contains files, prompt user to change exe
 if [ -z "${EXE_LIST}" ]; then

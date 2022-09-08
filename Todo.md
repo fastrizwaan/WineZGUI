@@ -47,6 +47,7 @@
   
 0.87
 - [x] Installer Support
+- [x] Template Support (basic)
 - [x] Change Exe
 - [x] Change Icon from exe too
 - [x] Backup do not double include gamedir when it is inside prefixdir
@@ -67,11 +68,15 @@
       - [x] If prefix do not have any installed exe, show error message
       - [x] Rename/Change Prefix Directory on changing exe
       - [x] Change EXE path in Info.yml
+      - [x] Existing directory, add name duplicate/prefixdir to desktop file
+      - [x] Open Other EXE, allow Installed and non installed exe to run
+      - [x] winezgui-change-installed-exe and winezgui-script-find-installed-exe
       - [x] Script name and Function Name must be same. Script smallcase, Function CAPITALCASE
 - [x] Find and remove Installer Created desktop shortcuts from wine directory
       grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
 - [x] Sort found exe list before presenting 
 - [x] winezgui-script-locate-exe-function: use | instead of / sed FIXME
+- [x] copy default to create-prefixdir then run winezgui-create-prefix
 
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating

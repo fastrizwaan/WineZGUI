@@ -36,7 +36,7 @@ RENAME_PREFIX()
   # 1.1 If User clicks cancel, go back 
   if [ -z "${GET_PREFIX_NAME}" ]; then
      echo "I: Script: Rename: Prefix: Cancelled"
-     Game_Function || (echo "-=-=-=-=-=- Returning =-=-=-=-=-=-"; return)
+     Game_Function
   fi
   
   # 2. replace " " with "_" (underscore)
@@ -50,9 +50,10 @@ RENAME_PREFIX()
               
        echo "I: Script: Rename: Prefix: Cannot change to ${NEWPREFIXNAME}"
        echo "I: Script: Rename: Prefix: Directory ${PREFIXNAME} Already Exists!"
-       Game_Function || (echo "-=-=-=-=-=- Returning =-=-=-=-=-=-"; return)
-       # FIXME Game_Function needs to be on top of script!
-       # FIXME TODO Game_Function: command not found
+       echo "W: -----------------------------"
+       echo "W: setting prefixname in desktop file"
+       sed "s|${APP_WITH_VER}|${PREFIXNAME}|g" -i "${DESKTOPFILE}"
+       Game_Function 
   fi
 
   # 4. Create Variables for replacement
