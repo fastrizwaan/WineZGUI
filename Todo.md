@@ -56,7 +56,8 @@
       - [ ] Change Prefix Directory on changing exe
 - [ ] If name contains Setup or Install, create Installer prefix
 - [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-- [ ] Find and remove Installer Created desktop shortcuts from wine directory
+- [ - ] Find and remove Installer Created desktop shortcuts from wine directory
+        grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
 - [x] Sort found exe list before presenting 
 - [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
 - [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui

@@ -19,5 +19,10 @@ echo "I: Script: Launching ${exe_name}"
 # 3. Launch The EXE file
 ${WINE_CMD} "${exe_name}"
 
+# 4. Remove wine installed shortcuts, unclutters menu
+source ${WINEZGUI_SCRIPTS}/winezgui-script-remove-wine-created-shortcuts
+REMOVE_WINE_CREATED_SHORTCUTS
+
+# 5. Find any exe files installed by setup or installer
 source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
 FIND_INSTALLED_EXE

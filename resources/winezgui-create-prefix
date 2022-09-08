@@ -179,7 +179,7 @@ SCRIPT_MODULES+="winezgui-change-exe-variables-in-files "
 SCRIPT_MODULES+="winezgui-script-backup-prefix "
 SCRIPT_MODULES+="winezgui-script-backup-bundle "
 SCRIPT_MODULES+="winezgui-script-find-installed-exe "
-
+SCRIPT_MODULES+="winezgui-script-remove-wine-created-shortcuts "
 
 # Check PREFIXDIR is writable or not
 if ! [ -w "${PREFIXDIR}" ] ; then

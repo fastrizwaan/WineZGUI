@@ -122,6 +122,7 @@ APP26_SRC="./resources/winezgui-change-exe-variables-in-files"
 APP27_SRC="./resources/winezgui-script-backup-bundle"
 APP28_SRC="./resources/winezgui-script-backup-prefix"
 APP29_SRC="./resources/winezgui-script-find-installed-exe"
+APP30_SRC="winezgui-script-remove-wine-created-shortcuts"
 
 DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
 MIME_SRC="./resources/winezgui-wzt.xml"
@@ -161,6 +162,7 @@ APP26=$(basename $APP26_SRC)
 APP27=$(basename $APP27_SRC)
 APP28=$(basename $APP28_SRC)
 APP29=$(basename $APP29_SRC)
+APP30=$(basename $APP30_SRC)
 
 DESK=$(basename $DESK_SRC)
 MIME=$(basename $MIME_SRC)
@@ -221,7 +223,8 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP27_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP27'"
      install -Dm755 $APP28_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP28'"
      install -Dm755 $APP29_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP29'"
-
+     install -Dm755 $APP30_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP30'"
+     
      install -Dm644 $DESK_SRC $DESK_DIR  && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $MIME_SRC $MIME_DIR  && echo "Installed '$MIME_DIR/$MIME'"
      install -Dm644 $ICON_SRC $ICON_DIR  && echo "Installed '$ICON_DIR/$ICON'"
@@ -294,6 +297,7 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $DATA_DIR/$APP27
      rm -vf $DATA_DIR/$APP28
      rm -vf $DATA_DIR/$APP29
+     rm -vf $DATA_DIR/$APP30
      
      rm -vf $DESK_DIR/$DESK
      rm -vf $MIME_DIR/$MIME

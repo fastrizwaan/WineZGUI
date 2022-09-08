@@ -8,7 +8,6 @@ NEW_FOUND_EXE_FILES="new-found-exe-files.yml"
 # 4. Find if there are exe created after installer, ask user to change prefix
 # After 1st run, try to search exe files in prefixdir and add them to EXE_LIST
 echo "I: Script: Find Exe: Searching prefix for newly installed exe files!"
-echo "======================================================================"
 EXE_LIST=$(find "${PREFIXDIR}/drive_c" -name windows -prune -o \
                                        -name iexplore.exe   -o \
                                        -name wordpad.exe    -o \
