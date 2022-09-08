@@ -22,6 +22,12 @@
   - Old Games Midi Supported
 
 0.88
+- [ ] if wine version changes (compared to metada) inform user esp. for system install
+- [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
+- [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
+- [ ] If name contains Setup or Install, create Installer prefix
+- [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
+- [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
 - [ ] clone prefix from script itself
   - [ ] Basically Copy prefix, i.e., Change EXE (with cp without mv) 
 - [ ] wzt management
@@ -45,7 +51,6 @@
 - [x] About use info.yml
 - [x] Use column to format info.yml like restore-wzt does
 - [x] Change Exe update info.yml
-- [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
 - [x] After Installer, if new exe's are found
       - [x] Show Change EXE
       - [x] update name in desktop file
@@ -53,15 +58,12 @@
       - [x] do no prompt change icon when run from changing exe
       - [x] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
       - [x] If prefix do not have any installed exe, show error message
-      - [ ] Change Prefix Directory on changing exe
-- [ ] If name contains Setup or Install, create Installer prefix
-- [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-- [ - ] Find and remove Installer Created desktop shortcuts from wine directory
-        grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
+      - [ ] Rename/Change Prefix Directory on changing exe
+- [x] Find and remove Installer Created desktop shortcuts from wine directory
+      grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
 - [x] Sort found exe list before presenting 
-- [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
-- [ ] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
 - [x] winezgui-script-locate-exe-function: use | instead of / sed FIXME
+
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
       Name->Name-anything will repeat -anything...
@@ -124,24 +126,6 @@ Backup and Restore with Multi user
 - [x] Perhaps create and send a verb to winetricks instead with video proof
 - [x] Runtime test of dependency by winezgui, create-prefix, and launch-script
 
-0.6
 
-- [ ] Support Gamedir install (give option, gamedir preferred if writable)
-  - [ ] Create wine prefix inside game directory, for backup up and sharing with friends
-    - [ ] if it is on read only block device, use ~/.var or ~/.local to create prefix
-    - [ ] give option to choose install location, either same directory or ~/.var / ~/.local
-    - [ ] Handling exe launch with different prefix dirs
-      - [ ] on launch, check subdir in
-      - [ ] game dir - for gamedir install if found launch
-      - [ ] else WINEZPREFIX/NO_EXE dir
-- [ ] Change prefix location support, from gamedir to somewhere else and vice versa
-  - [ ] give 2 option, to gamedir or custom location
-  - [ ] if from gamedir only show other location
-- [ ] Backup should store metadata like, wine version and prefix and gamedir, and exe md5sum (to find later on the filesystem)
-- [ ] Backup  Restore: Backup should support (for system install, for flatpak, and prefix in ~/.var or ~/.local or game dir).
-- [ ] a wizard to restore is better?
-  - [ ] on restore, check metadata and inform user, if exe not found, ask user to select or search for the exe, use md5sum to verify same exe.
-  - [ ] if game dir, link shortcut from gamedir to applications
-- [ ] if wine version changes (compared to metada) inform user
 
 

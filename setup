@@ -122,7 +122,7 @@ APP26_SRC="./resources/winezgui-change-exe-variables-in-files"
 APP27_SRC="./resources/winezgui-script-backup-bundle"
 APP28_SRC="./resources/winezgui-script-backup-prefix"
 APP29_SRC="./resources/winezgui-script-find-installed-exe"
-APP30_SRC="winezgui-script-remove-wine-created-shortcuts"
+APP30_SRC="./resources/winezgui-script-remove-wine-created-shortcuts"
 
 DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
 MIME_SRC="./resources/winezgui-wzt.xml"
