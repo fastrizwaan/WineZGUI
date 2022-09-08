@@ -1,12 +1,28 @@
-       # Test if exe exists?
-       Locate_Exe_Function
+# Launch the Script file
+# 
+# 1. Test if the given exe exists (if not found ask user to locate it)
+# 2. Goto Game Directory
+# 3. Launch The EXE file
+# 4. After the Launch if lnk and .desktop files are found inside wine prefix
 
-       export base=$(basename "${EXE_FILE}")
-       export dire=$(dirname  "${EXE_FILE}")
 
-       cd "$dire"
-       echo "I: Script: Launching ${base}"
-       ${WINE_CMD} "${base}"
+# 1. Test if the given exe exists (if not found ask user to locate it)
+LOCATE_EXE_FUNCTION
 
-       # Not exiting for test purpose
-       # exit 0; # Do Exit after execution of exe
+export exe_name=$(basename "${EXE_FILE}")
+export exe_path=$(dirname  "${EXE_FILE}")
+
+# 2. Goto Game Directory
+cd "${exe_path}"
+echo "I: Script: Launching ${exe_name}"
+
+# 3. Launch The EXE file
+${WINE_CMD} "${exe_name}"
+
+# 4. Remove wine installed shortcuts, unclutters menu
+source ${WINEZGUI_SCRIPTS}/winezgui-script-remove-wine-created-shortcuts
+REMOVE_WINE_CREATED_SHORTCUTS
+
+# 5. Find any exe files installed by setup or installer
+source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
+FIND_INSTALLED_EXE

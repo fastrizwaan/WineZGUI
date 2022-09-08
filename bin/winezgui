@@ -6,7 +6,8 @@
 # ============================================================================ #
 #set -x
 # Variables
-export APPNAME=WineZGUI
+export APPNAME=WineZGUI 
+
 # These values will be assigned by Setup using sed command
 # Post install ${PREFIX}/bin/winezgui file will be different
 export DATADIR=/usr/share/winezgui # /usr will be replaced by prefix
@@ -14,11 +15,11 @@ export APPVERSION="git"
 export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
 export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
-export FLATPAK_NAME="io.github.WineZGUI"
+export FLATPAK_NAME="io.github.fastrizwaan.WineZGUI"
 #/These values will be changed  by Setup using sed command
 
 export UPDATE_ICON_CACHE="gtk-update-icon-cache -f --ignore-theme-index \
-                          ~/.local/share/icons"
+                          ~/.local/share/icons 2>/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 
 export AUTHOR="Mohammed Asif Ali Rizvan"
@@ -28,7 +29,10 @@ export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d " ")
 
-export DEFAULT="${WINEZPREFIX}/default"
+export TEMPLATES_DIR="${WINEZPREFIX}/Templates"
+export DEFAULT_TEMPLATE="${WINEZPREFIX}/default" # This is going to be a shortcut
+export WINE_TEMPLATE="${TEMPLATES_DIR}/wine" # This will be used 
+export DEFAULT="${DEFAULT_TEMPLATE}"
 export WINEARCH=win64
 export LD_LIBRARY_PATH="/app/lib:/app/lib32:/app/lib64:\
                         /app/lib/i386-linux-gnu:/app/lib/wine:\
@@ -36,21 +40,24 @@ export LD_LIBRARY_PATH="/app/lib:/app/lib32:/app/lib64:\
 
 export PATH=${PATH}:$(pwd)
 export ARGV="$@"
-export WINEPREFIX=${DEFAULT}
+export WINEPREFIX="${DEFAULT}"
 export WINEEXE="$(which wine)"
 export WINETRICKS="$(which winetricks)"
-export WINE_CMD=${WINEEXE}
+export WINE_CMD="${WINEEXE}"
 
+export INFOFILE="${PREFIXDIR}/Info.yml"
+export ABOUTFILE="${PREFIXDIR}/About.yml"
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "${INSTALL_TYPE}" = "system" ]; then
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-else
-    # for flatpak create subdirectory with flatpakname
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else # for flatpak create subdirectory with flatpakname
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR
 fi
+
 
 # winezgui backup file extension
 export BKP_EXT="wzt"
@@ -85,6 +92,21 @@ if [ ! -f "${WINEZPREFIX}/DepsCheckOK.txt" ]; then
      fi
 fi
 
+
+
+# Create wine template and link it to defaults
+if [ ! -d "${WINE_TEMPLATE}" ]; then
+      INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
+fi
+
+# if default link is broken then create link do wine_template
+find ${TEMPLATES_DIR} -maxdepth 1 -xtype l -delete
+
+if [ ! -L "${DEFAULT_TEMPLATE}" ]; then
+     echo "Could not find default template, using wine_template"
+     ln -sf "${WINE_TEMPLATE}" "${DEFAULT_TEMPLATE}"
+fi
+
 # Preprocessing files for Backup and Restore Function
 # include backup and restore preprocess function
 # which can be used both by default prefix and game prefix script
@@ -99,7 +121,7 @@ source ${DATADIR}/winezgui-restore-wzt
       SELECTION=$( \
       zenity --title "${APP_WITH_VER}" \
              --list   --hide-header                             \
-             --width=360 --height=400                           \
+             --width=360 --height=480                           \
              --radiolist --column " "                           \
              --column "Action"                                  \
                  TRUE "Open EXE..."                             \
@@ -112,6 +134,7 @@ source ${DATADIR}/winezgui-restore-wzt
                     0 "Backup..."                               \
                     0 "Restore..."                              \
                     0 "Delete..."                               \
+                    0 "Templates..."                            \
                     0 "About..."                                \
                     0 "Quit..."                                 \
              --text   "<b>Wine GUI using Zenity...</b>" \
@@ -124,11 +147,20 @@ source ${DATADIR}/winezgui-restore-wzt
            exit 0
       fi
 
+      # Create, Modify, Delete Templates
+      if [ "${SELECTION}" = "Templates..." ]; then
+           source ${DATADIR}/winezgui-templates
+           source ${DATADIR}/winezgui-list-available-templates
+           TEMPLATES
+           Main_Function
+      fi
+      
       # Open EXE... Opens file dialog
       if [ "${SELECTION}" = "Open EXE..." ]
            then
            echo "I: Open EXE... Selected!"
-      	   EXE_FILE="$( zenity                  \
+           unset EXE_FILE
+      	    EXE_FILE="$( zenity                  \
       	                --file-filter="*.exe *.msi" \
       	                --file-selection        \
       	                --title="Select a File" \
@@ -324,7 +356,7 @@ source ${DATADIR}/winezgui-restore-wzt
              echo "I: About... Selected!"
              # Text is more, so we need to format it, with sed in pango markup
              ZCMD="zenity --info --no-wrap --text"
-             ${ZCMD} "$(cat ${DEFAULT}/info.txt | \
+             ${ZCMD} "$(cat ${DEFAULT}/${ABOUTFILE} | \
                       sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
                       sed -E "s/^(.*)$/<small>\1<\/small>/g")"
              Main_Function
@@ -555,7 +587,7 @@ source ${DATADIR}/winezgui-restore-wzt
                   exit 0
              else
                   echo "W: Delete: Re-initializing default prefix"
-                  INITIALIZE_WINEPREFIX
+                  INITIALIZE_WINEPREFIX "${DEFAULT_TEMPLATE}"
              fi
                   Main_Function
       # ====================== Open Explorer ========================== #
@@ -637,14 +669,15 @@ source ${DATADIR}/winezgui-restore-wzt
    # Check if default prefix was created and symlinks removed
    # and create prefix only when wine is found
 
-INITIALIZE_WINEPREFIX(){
-   if [ ! -f ${DEFAULT}/ReplacedSymLinks.txt ] && \
+INITIALIZE_WINEPREFIX()
+{
+   if [ ! -f ${1}/ReplacedSymLinks.txt ] && \
       [ $(which wine) ]
         then
         echo "I: Startup: Initializing wine Prefix... PREFIX arch is ${WINEARCH}"
         # Create Prefix then delete host linked directories
         WINEDLLOVERRIDES="mscoree,mshtml=" \
-        WINEPREFIX=${DEFAULT} \
+        WINEPREFIX=${1} \
         WINEDEBUG=-all \
         wineboot -i 2>/dev/null
 
@@ -656,18 +689,18 @@ INITIALIZE_WINEPREFIX(){
 
         echo "I: Startup: Removing symlinks from wineprefix"
 
-        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+        for i in $(find "${1}/drive_c/users/${USER}" -type l); do
                    rm $i && mkdir -p $i && \
-                   echo $i >> ${DEFAULT}/ReplacedSymLinks.txt
+                   echo $i >> ${1}/ReplacedSymLinks.txt
         done
         IFS=${SAVEIFS}
 
         # Create an empty file to test whether prefix is created
-        touch ${DEFAULT}/ReplacedSymLinks.txt
-        echo "I: Startup: Default Wine Prefix at ${DEFAULT} Created"
+        touch ${1}/ReplacedSymLinks.txt
+        echo "I: Startup: Default Wine Prefix at ${1} Created"
 
         # Create H: for HOME Directory for Wine Explorer
-        ln -sf ${HOME} "${DEFAULT}/dosdevices/h:"
+        ln -sf ${HOME} "${1}/dosdevices/h:"
         echo "I: Startup: Created H: symlink to ${HOME}"
    fi
 
@@ -675,9 +708,9 @@ INITIALIZE_WINEPREFIX(){
     ### End of Create a default wine prefix directory ###
 
 
-# Create Metadata info.txt for the default wine prefix
+# Create Metadata Info.yml for the default wine prefix
 # Update info only when wine is found
-if [ ! -f ${DEFAULT}/info.txt ] && [ $(which wine) ]; then
+if [ ! -f ${1}/${ABOUTFILE} ] && [ $(which wine) ]; then
 echo -e   "
 Application     : ${APPNAME}
 Version         : ${APPVERSION}
@@ -691,8 +724,8 @@ Wine Arch       : ${WINEARCH}
 WineZGUI Prefix : ${WINEZPREFIX}
 Wine Prefix     : ${DEFAULT}
 Creation Date   : $(date)
-" > ${DEFAULT}/info.txt
-echo "I: Startup: Created ${DEFAULT}/info.txt"
+" > ${1}/${ABOUTFILE}
+echo "I: Startup: Created ${1}/${ABOUTFILE}"
 fi
 }
 
@@ -744,8 +777,8 @@ if [ -f "${EXE_FILE}"  ] ; then
                               --list  --hide-header                 \
                               --radiolist --column " "              \
                               --column "Action"                     \
-                                  TRUE "Run with Default Prefix..." \
-                                     0 "Create Prefix..."           \
+                                  TRUE "Create Prefix..."           \
+                                  0    "Run with Default Prefix..." \
                                 --text "<b>${EXE_NAME}...</b>" )
      fi
 
@@ -753,9 +786,11 @@ if [ -f "${EXE_FILE}"  ] ; then
      if [ -z "${SELECTION}" ]
           then
           echo "I: Open EXE: Cancelled!"
+          unset SELECTION
           Main_Function
-     fi
 
+     fi
+############ FIXME: Opening, exe, cancelling, reopening quits winezgui ####
      # If exe prefix (already created prefix for the exe) does not exist
      if [ "${SELECTION}" = "Run with Default Prefix..." ]
           then
@@ -789,14 +824,16 @@ if [ -f "${EXE_FILE}"  ] ; then
 #            echo "I: Open EXE: Launching Config Script \"${EXE_NOEXE}.sh\""
 #            ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
      else
+     ############ FIXME: Opening, exe, cancelling, reopening other exe quits winezgui ####
           echo "I: Open EXE: Bye!"
-          exit 0
+          echo "I am in the else of Open EXE function"
+          return
      fi
 fi
 }
 
 # Initialize Wineprefix for use
-INITIALIZE_WINEPREFIX
+INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
 
 # Start WineZGUI when no argument is supplied
 if [ $# -eq 0 ]

@@ -1,0 +1,50 @@
+# winezgui-templates
+# Create, Set default, Clone Delete Templates
+# So that users with custom winetricks verbs can use them
+TEMPLATES()
+{
+ echo "Templates Selected!!!"
+ unset SELECTION
+ SELECTION=$( zenity --title "${APP_WITH_VER}"                   \
+              --list   --hide-header                             \
+              --width=360 --height=180                           \
+              --radiolist --column " "                           \
+              --column "Action"                                  \
+                  TRUE "Select a template..."                    \
+                     0 "Create a template..."                    \
+                     0 "Delete a template..."                    \
+              --text   "<b>WineZGUI Templates...</b>"            \
+               )
+
+ # Exit if Cancel is clicked
+if [ -z "${SELECTION}" ]; then
+     echo "I: Templates: Cancel Selected!"
+     Main_Function
+fi
+
+# Create, Modify, Delete Templates
+if [ "${SELECTION}" = "Select a template..." ]; then
+     # Find all directories inside WINE_TEMPLATE directory
+     # List here, use find exe 
+     # on selection link that to default, that's all!
+     LIST_AVAILABLE_TEMPLATES
+     
+     # Change Template to the selected one to be used from now on
+     # if default link is broken then create link do wine_template
+     find ${TEMPLATES_DIR} -maxdepth 1 -xtype l -delete
+
+     if [ -L "${DEFAULT_TEMPLATE}" ]; then
+          echo "=-----------------------="
+          echo "using ${SELECTED_TEMPLATE}"
+          rm -v "${DEFAULT_TEMPLATE}"
+          ln -svf "${SELECTED_TEMPLATE}" "${DEFAULT_TEMPLATE}"
+          ls -l "${DEFAULT_TEMPLATE}"
+          echo "=-----------------------="
+     fi
+
+     
+     Main_Function
+fi
+                     
+               
+ }
