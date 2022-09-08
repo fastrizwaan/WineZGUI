@@ -22,8 +22,12 @@
   - Old Games Midi Supported
 
 0.88
+- [ ] clone prefix from script itself
+  - [ ] Basically Copy prefix, i.e., Change EXE (with cp without mv) 
 - [ ] wzt management
     - [ ] Split
+        - [ ] Number or Parts
+        - [ ] Size of Parts
     - [ ] Join
     - [ ] Extract wzt (unplayable)
     - [ ] Extract and restore wzt (playable)
