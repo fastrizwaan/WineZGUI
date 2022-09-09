@@ -38,7 +38,7 @@
             #unset SELECTION ; # Empty variable
             Game_Function    ; # Go back to Game Window
        fi
- fi
+  fi
        # If another exe is selected
        echo "I: Script: Open Other EXE: ${OTHER_EXE} selected"
        base=$(basename "${OTHER_EXE}")
@@ -50,6 +50,8 @@
        ${WINE_CMD} "$base"
        echo "I: Script: Open Other EXE... Finished!"
        
+       source ${WINEZGUI_SCRIPTS}/winezgui-script-remove-wine-created-shortcuts
+       REMOVE_WINE_CREATED_SHORTCUTS
        source ${WINEZGUI_SCRIPTS}/winezgui-script-find-installed-exe
        FIND_INSTALLED_EXE
 

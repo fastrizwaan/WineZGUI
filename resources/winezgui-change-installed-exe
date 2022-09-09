@@ -11,7 +11,8 @@ CHANGE_INSTALLED_EXE()
  unset FILES
  unset RESULT
  unset search_list
- 
+
+ SAVEIFS=${IFS}
  IFS=$(echo -en "\n\b")
 
  count=0
