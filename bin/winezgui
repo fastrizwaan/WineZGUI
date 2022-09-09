@@ -46,7 +46,7 @@ export WINETRICKS="$(which winetricks)"
 export WINE_CMD="${WINEEXE}"
 
 export INFOFILE="${PREFIXDIR}/Info.yml"
-export ABOUTFILE="${PREFIXDIR}/About.yml"
+export ABOUTFILE="About.yml"
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Where to install .desktop shortcuts?
@@ -92,6 +92,68 @@ if [ ! -f "${WINEZPREFIX}/DepsCheckOK.txt" ]; then
      fi
 fi
 
+# Create Template Directory
+mkdir -p "${TEMPLATES_DIR}"
+
+INITIALIZE_WINEPREFIX()
+{
+   if [ ! -f ${1}/ReplacedSymLinks.txt ] && \
+      [ $(which wine) ]
+        then
+        echo "I: Startup: Initializing wine Prefix... PREFIX arch is ${WINEARCH}"
+        # Create Prefix then delete host linked directories
+        WINEDLLOVERRIDES="mscoree,mshtml=" \
+        WINEPREFIX=${1} \
+        WINEDEBUG=-all \
+        wineboot -i 2>/dev/null
+
+        # Replace home liked directory links with normal directories
+        # For Games which saves in ~/Documents now will save in
+        # Prefix-dir/drive_c/users/${USER}/Documents
+        SAVEIFS=${IFS}
+        IFS=$(echo -en "\n\b")
+
+        echo "I: Startup: Removing symlinks from wineprefix"
+
+        for i in $(find "${1}/drive_c/users/${USER}" -type l); do
+                   rm $i && mkdir -p $i && \
+                   echo $i >> ${1}/ReplacedSymLinks.txt
+        done
+        IFS=${SAVEIFS}
+
+        # Create an empty file to test whether prefix is created
+        touch ${1}/ReplacedSymLinks.txt
+        echo "I: Startup: Default Wine Prefix at ${1} Created"
+
+        # Create H: for HOME Directory for Wine Explorer
+        ln -sf ${HOME} "${1}/dosdevices/h:"
+        echo "I: Startup: Created H: symlink to ${HOME}"
+   fi
+
+
+    ### End of Create a default wine prefix directory ###
+
+
+# Create Metadata Info.yml for the default wine prefix
+# Update info only when wine is found
+if [ ! -f ${1}/${ABOUTFILE} ] && [ $(which wine) ]; then
+echo -e   "
+Application     : ${APPNAME}
+Version         : ${APPVERSION}
+Copyright       : ${COPYRIGHT}
+Website         : ${WEBSITE}
+Author          : ${AUTHOR}
+E-mail          : ${EMAIL}
+Wine            : ${WINEEXE}
+Wine Version    : ${WINEVER}
+Wine Arch       : ${WINEARCH}
+WineZGUI Prefix : ${WINEZPREFIX}
+Wine Prefix     : ${DEFAULT}
+Creation Date   : $(date)
+" > ${1}/${ABOUTFILE}
+echo "I: Startup: Created ${1}/${ABOUTFILE}"
+fi
+}
 
 
 # Create wine template and link it to defaults
@@ -104,6 +166,7 @@ find ${TEMPLATES_DIR} -maxdepth 1 -xtype l -delete
 
 if [ ! -L "${DEFAULT_TEMPLATE}" ]; then
      echo "Could not find default template, using wine_template"
+     rm -rf "${DEFAULT_TEMPLATE}" # Delete if existing default directory exist
      ln -sf "${WINE_TEMPLATE}" "${DEFAULT_TEMPLATE}"
 fi
 
@@ -657,9 +720,9 @@ source ${DATADIR}/winezgui-restore-wzt
 
 ## On 1st launch create default wine prefix
 ### Create a default wine prefix directory ###
-   if ! [ -d "${DEFAULT}" ]; then
-        echo "I: Startup: ${DEFAULT} does not exist, creating.."
-        mkdir -p "${DEFAULT}"
+   if ! [ -d "${WINE_TEMPLATE}" ]; then
+        echo "I: Startup: ${WINE_TEMPLATE} does not exist, creating.."
+        mkdir -p "${WINE_TEMPLATE}"
    fi
    # Wine creates some dirs which are linked to directories inside user home
    # To prevent games/programs from writing to host ~/Documents
@@ -668,66 +731,6 @@ source ${DATADIR}/winezgui-restore-wzt
 
    # Check if default prefix was created and symlinks removed
    # and create prefix only when wine is found
-
-INITIALIZE_WINEPREFIX()
-{
-   if [ ! -f ${1}/ReplacedSymLinks.txt ] && \
-      [ $(which wine) ]
-        then
-        echo "I: Startup: Initializing wine Prefix... PREFIX arch is ${WINEARCH}"
-        # Create Prefix then delete host linked directories
-        WINEDLLOVERRIDES="mscoree,mshtml=" \
-        WINEPREFIX=${1} \
-        WINEDEBUG=-all \
-        wineboot -i 2>/dev/null
-
-        # Replace home liked directory links with normal directories
-        # For Games which saves in ~/Documents now will save in
-        # Prefix-dir/drive_c/users/${USER}/Documents
-        SAVEIFS=${IFS}
-        IFS=$(echo -en "\n\b")
-
-        echo "I: Startup: Removing symlinks from wineprefix"
-
-        for i in $(find "${1}/drive_c/users/${USER}" -type l); do
-                   rm $i && mkdir -p $i && \
-                   echo $i >> ${1}/ReplacedSymLinks.txt
-        done
-        IFS=${SAVEIFS}
-
-        # Create an empty file to test whether prefix is created
-        touch ${1}/ReplacedSymLinks.txt
-        echo "I: Startup: Default Wine Prefix at ${1} Created"
-
-        # Create H: for HOME Directory for Wine Explorer
-        ln -sf ${HOME} "${1}/dosdevices/h:"
-        echo "I: Startup: Created H: symlink to ${HOME}"
-   fi
-
-
-    ### End of Create a default wine prefix directory ###
-
-
-# Create Metadata Info.yml for the default wine prefix
-# Update info only when wine is found
-if [ ! -f ${1}/${ABOUTFILE} ] && [ $(which wine) ]; then
-echo -e   "
-Application     : ${APPNAME}
-Version         : ${APPVERSION}
-Copyright       : ${COPYRIGHT}
-Website         : ${WEBSITE}
-Author          : ${AUTHOR}
-E-mail          : ${EMAIL}
-Wine            : ${WINEEXE}
-Wine Version    : ${WINEVER}
-Wine Arch       : ${WINEARCH}
-WineZGUI Prefix : ${WINEZPREFIX}
-Wine Prefix     : ${DEFAULT}
-Creation Date   : $(date)
-" > ${1}/${ABOUTFILE}
-echo "I: Startup: Created ${1}/${ABOUTFILE}"
-fi
-}
 
 # If an exe file is provided as argument or selected by the Open EXE...
 # TODO: list all available prefixes to install Redist softwares

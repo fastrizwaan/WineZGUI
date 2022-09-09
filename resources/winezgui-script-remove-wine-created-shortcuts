@@ -10,6 +10,16 @@ REMOVE_WINE_CREATED_SHORTCUTS()
   WINE_SHORTCUT_DIR="$(realpath -m ~/.local/share/applications/wine)"
   # e.g., ~/.local/share/winezgui/npp.8.4.2.Installer.x64 for npp created by
   # Installed at $WINE_SHORTCUT_DIR, 
-  rm $(grep -r "${PREFIXDIR}" ${WINE_SHORTCUT_DIR}|cut -f1 -d ":"|sort -u) && \
-  echo "I: Script: Launch: Remove Wine Shortcuts: Removed wine create shortcuts" 
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  
+  WINE_SHORTCUTS=$(grep -r "${PREFIXDIR}" "${WINE_SHORTCUT_DIR}" \
+                  |cut -f1 -d ":"|sort -u)
+  
+  if [ ! -z "$WINE_SHORTCUTS" ]; then
+       rm $WINE_SHORTCUTS  && \
+       echo "I: Script: Launch: Remove Wine Created Shortcuts: Removed!"
+  fi
+  IFS=${SAVEIFS}
+  unset WINE_SHORTCUTS
 }
