@@ -78,7 +78,9 @@
 - [x] Sort found exe list before presenting 
 - [x] winezgui-script-locate-exe-function: use | instead of / sed FIXME
 - [x] copy default to create-prefixdir then run winezgui-create-prefix
-
+- [ ] Templates should include template info, in Templates, about current template
+- [ ] About.yml should be at winezprefix
+- [ ] fix templates select, create, delete, rename, clone
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
       Name->Name-anything will repeat -anything...

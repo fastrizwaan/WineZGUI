@@ -136,7 +136,7 @@ INITIALIZE_WINEPREFIX()
 
 # Create Metadata Info.yml for the default wine prefix
 # Update info only when wine is found
-if [ ! -f ${1}/${ABOUTFILE} ] && [ $(which wine) ]; then
+if [ ! -f "${WINEZPREFIX}/${ABOUTFILE}" ] && [ $(which wine) ]; then
 echo -e   "
 Application     : ${APPNAME}
 Version         : ${APPVERSION}
@@ -150,8 +150,8 @@ Wine Arch       : ${WINEARCH}
 WineZGUI Prefix : ${WINEZPREFIX}
 Wine Prefix     : ${DEFAULT}
 Creation Date   : $(date)
-" > ${1}/${ABOUTFILE}
-echo "I: Startup: Created ${1}/${ABOUTFILE}"
+" > "${WINEZPREFIX}/${ABOUTFILE}"
+echo "I: Startup: Created ${WINEZPREFIX}/${ABOUTFILE}"
 fi
 }
 
@@ -419,7 +419,7 @@ source ${DATADIR}/winezgui-restore-wzt
              echo "I: About... Selected!"
              # Text is more, so we need to format it, with sed in pango markup
              ZCMD="zenity --info --no-wrap --text"
-             ${ZCMD} "$(cat ${DEFAULT}/${ABOUTFILE} | \
+             ${ZCMD} "$(cat ${WINEZPREFIX}/${ABOUTFILE} | \
                       sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
                       sed -E "s/^(.*)$/<small>\1<\/small>/g")"
              Main_Function
@@ -614,6 +614,15 @@ source ${DATADIR}/winezgui-restore-wzt
       elif [ "${SELECTION}" = "Delete..." ]
              then
              echo "I: Delete... Selected!"
+             TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+             TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
+             echo "-------------------"
+             echo "TEMPLATE_NAME = $TEMPLATE_NAME"
+             if [ -z "${TEMPLATE_IN_USE}" ]; then
+                  TEMPLATE_IN_USE="${WINE_TEMPLATE}"
+             fi
+             echo "TEMPLATE_IN_USE = $TEMPLATE_IN_USE"
+             echo "--------------------------------"
              RESPONSE=$( zenity \
              --title "${APP_WITH_VER}"     \
              --list   --hide-header                 \
@@ -622,7 +631,7 @@ source ${DATADIR}/winezgui-restore-wzt
              --column "Action"                      \
                  TRUE "Delete and Re-Initialize..." \
                  0    "Delete and Quit..."          \
-             --text   "<b>Default Prefix...</b>"    \
+             --text   "<b>Template ${TEMPLATE_NAME}...</b>"    \
              )
              # If Cancel is clicked
              if [ -z "${RESPONSE}" ]; then
@@ -631,8 +640,8 @@ source ${DATADIR}/winezgui-restore-wzt
              fi
 
              # Delete Shortcuts and Prefix Directory
-             rm -rf ${DEFAULT};
-             echo "I: Delete: Deleted default prefix"
+             rm -rvf ${TEMPLATE_IN_USE};
+             echo "I: Delete: Deleted ${TEMPLATE_IN_USE} prefix"
 
              if [ -d "${DESKTOPDIR}" ]; then
                   # Delete all broken links which points to winezgui
@@ -650,7 +659,7 @@ source ${DATADIR}/winezgui-restore-wzt
                   exit 0
              else
                   echo "W: Delete: Re-initializing default prefix"
-                  INITIALIZE_WINEPREFIX "${DEFAULT_TEMPLATE}"
+                  INITIALIZE_WINEPREFIX "${TEMPLATE_IN_USE}"
              fi
                   Main_Function
       # ====================== Open Explorer ========================== #

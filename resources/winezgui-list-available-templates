@@ -59,7 +59,7 @@ LIST_AVAILABLE_TEMPLATES()
  
  if [ -z "${RESULT}" ]; then
       echo "Cancelled!"
-      Game_Function
+      Main_Function
  fi
  
  count=0
