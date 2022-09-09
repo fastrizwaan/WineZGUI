@@ -327,7 +327,7 @@ unset SELECTION
 
 SELECTION=$(zenity --title       "${PROGNAME}"        \
                    --window-icon="${ICON}"            \
-                   --width=360 --height=480           \
+                   --width=360 --height=450           \
                    --list      --hide-header          \
                    --radiolist --column " "           \
                    --column "Action"                  \
