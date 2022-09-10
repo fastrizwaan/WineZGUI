@@ -16,9 +16,10 @@ fi
 export APPNAME=WineZGUI
 export WINEVER="$(wine --version|cut -f1 -d " ")"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-export UPDATE_ICON_CACHE="gtk-update-icon-cache -f --ignore-theme-index \
-                          ~/.local/share/icons 2>/dev/null"
-export UPDATE_DESKTOP_DATABASE="update-desktop-database"
+
+export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
+
 export WINE_CMD="$(which wine)"
 export WINEEXE=${WINE_CMD}
 export WTRICKS_CMD=$(which winetricks)
@@ -96,8 +97,8 @@ TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
 TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
 # Copy the Default Prefix linked wine to avoid showing dialog
 if [ ! -d "${PREFIXDIR}" ]; then
-   echo "${PREFIXDIR} not found, copying..."
-   cp -rvf "${WINEZPREFIX}/default/" "${PREFIXDIR}"
+   echo "${PREFIXNAME} not found, copying...${TEMPLATE_NAME}"
+   cp -rf "${WINEZPREFIX}/default/" "${PREFIXDIR}"
 fi
 
 # Create required directories
@@ -326,7 +327,9 @@ Game_Function ()
 {
 unset SELECTION
 # EXE handling by providing dialog
-
+# update templates 
+export TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+export TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
 SELECTION=$(zenity --title       "${PROGNAME}"        \
                    --window-icon="${ICON}"            \
                    --width=360 --height=450           \
@@ -570,8 +573,7 @@ fi
 source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
 
 # Start WineZGUI when no argument is supplied
-if [ $# -eq 0 ]
-     then
+if [ $# -eq 0 ] ; then
      echo "I: Script: Launching ${EXE_NAME} script"
      Game_Function
 fi
@@ -605,10 +607,12 @@ Categories=$appCategory;
          "at ${DESKTOPDIR}/${EXE_NOEXE}"
     # Test if the app link was created sucessfully on applications menu
     if [ $? -eq 0 ]; then
-        ${UPDATE_ICON_CACHE}
-        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
          echo "I: Create Prefix: Shortcut ${EXE_NOEXE}.desktop created"
          echo "I: Create Prefix: Shortcut: Name: ${PROGNAME}"
          echo "I: Create Prefix: Can use \"Rename...\" to change name"
          echo "I: Create Prefix: Shortcut: Exe: ${EXE_NAME}"
     fi
+    # Update Menu, Icon cache and Desktop shortcuts
+    ${UPDATE_ICON}
+    ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+

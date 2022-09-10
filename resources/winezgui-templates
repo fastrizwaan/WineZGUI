@@ -27,7 +27,7 @@ TEMPLATES()
  # Exit if Cancel is clicked
 if [ -z "${SELECT_TEMPLATE}" ]; then
      echo "I: Templates: Cancel Selected!"
-     Main_Function
+     return 1
 fi
 
 # Create, Modify, Delete Templates
@@ -49,11 +49,15 @@ if [ "${SELECT_TEMPLATE}" = "Set default template..." ]; then
           rm -v "${DEFAULT_TEMPLATE}"
           ln -svf "${SELECTED_TEMPLATE}" "${DEFAULT_TEMPLATE}"
           ls -l "${DEFAULT_TEMPLATE}"
+         export DEFAULT="${SELECTED_TEMPLATE}"
+         export TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+         export TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
+ 
           echo "=-----------------------="
      fi
 
      
-     Main_Function
+     return 0
 fi
 #if [ "${SELECT_TEMPLATE}" = "Create a template..." ]; then
 #     # Ask for Name
@@ -63,7 +67,7 @@ fi
 #                           
 #     if [ -z "${GET_TEMPLATE_NAME}" ]; then #if no name is given use filename
 #        #zenity --info --title="Shortcut... " --text="no Change"
-#        # Return to Game window
+#        # return to Game window
 #        echo "I: Script: Rename Shortcut: Cancelled"
 #        Main_Function
 #     fi
