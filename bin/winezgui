@@ -81,7 +81,7 @@ if [ ! -f "${WINEZPREFIX}/DepsCheckOK.txt" ]; then
      # Show found and not found dependencies for WineZGUI
      if [ ! -z "${NOTFOUND}" ]; then
           echo "Dependencies..."
-          echo "Found    : ${FOUND}"
+          echo "Found: ${FOUND}"
           echo "Not Found: ${NOTFOUND}"
           zenity --info --no-wrap --title="Missing Dependencies" \
                  --text="Please install these in your system:\n${NOTFOUND}"
@@ -136,18 +136,18 @@ INITIALIZE_WINEPREFIX()
 # Update info only when wine is found
 if [ ! -f "${WINEZPREFIX}/${ABOUTFILE}" ] && [ $(which wine) ]; then
 echo -e   "
-Application     : ${APPNAME}
-Version         : ${APPVERSION}
-Copyright       : ${COPYRIGHT}
-Website         : ${WEBSITE}
-Author          : ${AUTHOR}
-E-mail          : ${EMAIL}
-Wine            : ${WINEEXE}
-Wine Version    : ${WINEVER}
-Wine Arch       : ${WINEARCH}
-WineZGUI Prefix : ${WINEZPREFIX}
-Wine Prefix     : ${DEFAULT}
-Creation Date   : $(date)
+Application:${APPNAME}
+Version:${APPVERSION}
+Copyright:${COPYRIGHT}
+Website:${WEBSITE}
+Author:${AUTHOR}
+E-mail:${EMAIL}
+Wine:${WINEEXE}
+Wine Version:${WINEVER}
+Wine Arch:${WINEARCH}
+WineZGUI Prefix:${WINEZPREFIX}
+Wine Prefix:${DEFAULT}
+Creation Date:$(date)
 " > "${WINEZPREFIX}/${ABOUTFILE}"
 echo "I: Startup: Created ${WINEZPREFIX}/${ABOUTFILE}"
 fi
@@ -191,7 +191,7 @@ source ${DATADIR}/winezgui-restore-wzt
                                  0 "Launch Winecfg..."                       \
                                  0 "Open Explorer..."                        \
                                  0 "Open Shell..."                           \
-                                 0 "Templates..."                             \
+                                 0 "Templates..."                            \
                                  0 "Backup..."                               \
                                  0 "Restore..."                              \
                                  0 "Delete..."                               \
@@ -214,7 +214,7 @@ source ${DATADIR}/winezgui-restore-wzt
            TEMPLATES
            Main_Function
       fi
-      
+
       # Open EXE... Opens file dialog
       if [ "${SELECTION}" = "Open EXE..." ]; then
            echo "I: 1:Open EXE... Selected!"
@@ -401,10 +401,17 @@ source ${DATADIR}/winezgui-restore-wzt
       elif [ "${SELECTION}" = "About..." ]; then
              echo "I: About... Selected!"
              # Text is more, so we need to format it, with sed in pango markup
-             ZCMD="zenity --info --no-wrap --text"
-             ${ZCMD} "$(cat ${WINEZPREFIX}/${ABOUTFILE} | \
-                      sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
-                      sed -E "s/^(.*)$/<small>\1<\/small>/g")"
+             unset TEXT
+             TEXT="$(cat ${WINEZPREFIX}/${ABOUTFILE} \
+                                     |sed "s/https:/https|/g" \
+                                     |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+                                     |sed "s/:/,:,/g" \
+                                     |column -t -s ","      \
+                                     |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+                                     |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+                                     |sed "s/|/:/g" )"
+
+             zenity --info --no-wrap --text "${TEXT}"
              Main_Function
       # ====================== Backup ================================= #
       elif [ "${SELECTION}" = "Backup..." ]; then

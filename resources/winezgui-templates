@@ -49,70 +49,74 @@ if [ "${SELECT_TEMPLATE}" = "Set default template..." ]; then
           rm -v "${DEFAULT_TEMPLATE}"
           ln -svf "${SELECTED_TEMPLATE}" "${DEFAULT_TEMPLATE}"
           ls -l "${DEFAULT_TEMPLATE}"
-         export DEFAULT="${SELECTED_TEMPLATE}"
-         export TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
-         export TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
  
           echo "=-----------------------="
      fi
-
-     
-     return 0
+     export DEFAULT="${SELECTED_TEMPLATE}"
+     export TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+     export TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
 fi
-#if [ "${SELECT_TEMPLATE}" = "Create a template..." ]; then
-#     # Ask for Name
-#     GET_TEMPLATE_NAME=$(zenity --title "Create Template..." \
-#                           --text  "Enter a name for new template:" \
-#                           --width=500 --entry)
-#                           
-#     if [ -z "${GET_TEMPLATE_NAME}" ]; then #if no name is given use filename
-#        #zenity --info --title="Shortcut... " --text="no Change"
-#        # return to Game window
-#        echo "I: Script: Rename Shortcut: Cancelled"
-#        Main_Function
-#     fi
-#     
-#     if [ -d "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}" ]; then
-#          zenity --error --title "${APP_WITH_VER}" \
-#                 --text "Template Directory Already Exists!"
-#          Main_Function
-#     fi
-#     
-#     # Create
-#     INITIALIZE_WINEPREFIX "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}"
-#     TEMPLATES "Set default template..."
+if [ "${SELECT_TEMPLATE}" = "Create a template..." ]; then
+     # Ask for Name
+     GET_TEMPLATE_NAME=$(zenity --title "Create Template..." \
+                           --text  "Enter a name for new template:" \
+                           --width=500 --entry)
+                           
+     if [ -z "${GET_TEMPLATE_NAME}" ]; then #if no name is given use filename
+        #zenity --info --title="Shortcut... " --text="no Change"
+        # return to Game window
+        echo "I: Script: Rename Shortcut: Cancelled"
+        Main_Function
+     fi
+     
+     if [ -d "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}" ]; then
+          zenity --error --title "${APP_WITH_VER}" \
+                 --text "Template Directory Already Exists!"
+          Main_Function
+     fi
+     
+     # Create
+     INITIALIZE_WINEPREFIX "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}"
+     # Ask the sue to change template
+     TEMPLATES "Set default template..."
 
-#fi
-#        
-##FIXME DELETE  Delete Templates current template delete won't change to wine
-#if [ "${SELECT_TEMPLATE}" = "Delete a template..." ]; then
-#     echo "+_+_+_+_+_+_+Delete template_+_+_+_+_"
-#     # Find all directories inside WINE_TEMPLATE directory
-#     # List here, use find exe 
-#     # on selection link that to default, that's all!
-#     LIST_AVAILABLE_TEMPLATES
+fi
+        
+#FIXME DELETE  Delete Templates current template delete won't change to wine
+if [ "${SELECT_TEMPLATE}" = "Delete a template..." ]; then
+     echo "+_+_+_+_+_+_+Delete template_+_+_+_+_"
+     # Find all directories inside WINE_TEMPLATE directory
+     # List here, use find exe 
+     # on selection link that to default, that's all!
+     LIST_AVAILABLE_TEMPLATES
 
-#     # remove selected template
-#     rm -rf "${SELECTED_TEMPLATE}"
-#     echo "_+_+_+ rm -rf   ${SELECTED_TEMPLATE}"
-#          
-#     # Create wine template and link it to defaults
-#     if [ ! -d "${WINE_TEMPLATE}" ]; then
-#           echo "_+_+_+_ initializing ${WINE_TEMPLATE}"
-#           INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
-#     fi
+     # remove selected template
+     rm -rf "${SELECTED_TEMPLATE}"
+     rm -f "${LINK_TO_TEMPLATE_IN_USE}"
+     echo "1. !!!! DELETED ${SELECTED_TEMPLATE}"
+          
+     # Create wine template and link it to defaults
+     if [ ! -d "${WINE_TEMPLATE}" ]; then
+           echo "2. !!!! -d not found, initializing ${WINE_TEMPLATE}"
+           INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
+     fi
 
-#     # if default link is broken then create link do wine_template
-#     find ${TEMPLATES_DIR} -maxdepth 1 -xtype l -delete
+     # if default link is broken then create link do wine_template
+     find ${WINEZPREFIX} -maxdepth 1 -xtype l -delete
+     ls  "${LINK_TO_TEMPLATE_IN_USE}"
+     if [ ! -L "${LINK_TO_TEMPLATE_IN_USE}" ]; then
+          echo "_+_+_+_Could not find default template, using wine_template"
+           # Delete if existing default directory exist
+          INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
+          ln -sf "${WINE_TEMPLATE}" "${WINEZPREFIX}/default"
+     fi
+     unset SELECTED_TEMPLATE
+     export TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+     export TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
+     Main_Function
+fi           
 
-#     if [ ! -L "${DEFAULT_TEMPLATE}" ]; then
-#          echo "_+_+_+_Could not find default template, using wine_template"
-#          rm -f "${DEFAULT_TEMPLATE}" # Delete if existing default directory exist
-#          ln -sf "${WINE_TEMPLATE}" "${DEFAULT_TEMPLATE}"
-#     fi
-#     unset SELECTED_TEMPLATE
-#     Main_Function
-#fi           
-#               
-# 
+               
+
+
 }
