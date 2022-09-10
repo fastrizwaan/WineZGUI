@@ -155,7 +155,8 @@ echo "I: Startup: Created ${WINEZPREFIX}/${ABOUTFILE}"
 fi
 }
 
-
+TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
 # Create wine template and link it to defaults
 if [ ! -d "${WINE_TEMPLATE}" ]; then
       INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"

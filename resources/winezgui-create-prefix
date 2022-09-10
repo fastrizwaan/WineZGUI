@@ -92,10 +92,12 @@ echo "I: Create Prefix: Preparing prefix for exe file"
 # winetricks verbs and save as a template. default will be the link to using
 # Template.
 
+TEMPLATE_IN_USE="$(realpath -m ${DEFAULT})"
+TEMPLATE_NAME="$(basename $(realpath -m ${DEFAULT}))"
 # Copy the Default Prefix linked wine to avoid showing dialog
 if [ ! -d "${PREFIXDIR}" ]; then
    echo "${PREFIXDIR} not found, copying..."
-   cp -rf "${WINEZPREFIX}/default/" "${PREFIXDIR}"
+   cp -rvf "${WINEZPREFIX}/default/" "${PREFIXDIR}"
 fi
 
 # Create required directories
