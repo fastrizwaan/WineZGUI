@@ -115,17 +115,6 @@ APP19_SRC="./resources/winezgui-restore-wzt"
 APP20_SRC="./resources/winezgui-create-wzt-info"
 APP21_SRC="./resources/winezgui-rename-name"
 APP22_SRC="./resources/winezgui-rename-prefix"
-APP23_SRC="./resources/winezgui-script-change-exe"
-APP24_SRC="./resources/winezgui-change-installed-exe"
-APP25_SRC="./resources/winezgui-change-any-other-exe"
-APP26_SRC="./resources/winezgui-change-exe-variables-in-files"
-APP27_SRC="./resources/winezgui-script-backup-bundle"
-APP28_SRC="./resources/winezgui-script-backup-prefix"
-APP29_SRC="./resources/winezgui-script-find-installed-exe"
-APP30_SRC="./resources/winezgui-script-remove-wine-created-shortcuts"
-APP31_SRC="./resources/winezgui-create-change-prefix-file"
-APP32_SRC="./resources/winezgui-templates"
-APP33_SRC="./resources/winezgui-list-available-templates"
 
 DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
 MIME_SRC="./resources/winezgui-wzt.xml"
@@ -158,17 +147,6 @@ APP19=$(basename $APP19_SRC)
 APP20=$(basename $APP20_SRC)
 APP21=$(basename $APP21_SRC)
 APP22=$(basename $APP22_SRC)
-APP23=$(basename $APP23_SRC)
-APP24=$(basename $APP24_SRC)
-APP25=$(basename $APP25_SRC)
-APP26=$(basename $APP26_SRC)
-APP27=$(basename $APP27_SRC)
-APP28=$(basename $APP28_SRC)
-APP29=$(basename $APP29_SRC)
-APP30=$(basename $APP30_SRC)
-APP31=$(basename $APP31_SRC)
-APP32=$(basename $APP32_SRC)
-APP33=$(basename $APP33_SRC)
 
 DESK=$(basename $DESK_SRC)
 MIME=$(basename $MIME_SRC)
@@ -222,17 +200,6 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm755 $APP20_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP20'"
      install -Dm755 $APP21_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP21'"
      install -Dm755 $APP22_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP22'"
-     install -Dm755 $APP23_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP23'"
-     install -Dm755 $APP24_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP24'"
-     install -Dm755 $APP25_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP25'"
-     install -Dm755 $APP26_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP26'"
-     install -Dm755 $APP27_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP27'"
-     install -Dm755 $APP28_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP28'"
-     install -Dm755 $APP29_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP29'"
-     install -Dm755 $APP30_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP30'"
-     install -Dm755 $APP31_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP31'"
-     install -Dm755 $APP32_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP32'"
-     install -Dm755 $APP33_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP33'"
      
      install -Dm644 $DESK_SRC $DESK_DIR  && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $MIME_SRC $MIME_DIR  && echo "Installed '$MIME_DIR/$MIME'"
@@ -252,8 +219,7 @@ if [ "${INSTALL}" = "true"  ]
      # Update mime and desktop paths
      update-mime-database ${INSTALL_PREFIX}/share/mime &
      update-desktop-database ${DESK_DIR} &
-     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons \
-                           2>/dev/null &
+     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons &
 
      # Change Variables in winezgui and winezgui-create-prefix scripts
      # for system or flatpak install
@@ -299,17 +265,6 @@ if [ "${INSTALL}" = "true"  ]
      rm -vf $DATA_DIR/$APP20
      rm -vf $DATA_DIR/$APP21
      rm -vf $DATA_DIR/$APP22
-     rm -vf $DATA_DIR/$APP23
-     rm -vf $DATA_DIR/$APP24
-     rm -vf $DATA_DIR/$APP25
-     rm -vf $DATA_DIR/$APP26
-     rm -vf $DATA_DIR/$APP27
-     rm -vf $DATA_DIR/$APP28
-     rm -vf $DATA_DIR/$APP29
-     rm -vf $DATA_DIR/$APP30
-     rm -vf $DATA_DIR/$APP31
-     rm -vf $DATA_DIR/$APP32
-     rm -vf $DATA_DIR/$APP33
      
      rm -vf $DESK_DIR/$DESK
      rm -vf $MIME_DIR/$MIME

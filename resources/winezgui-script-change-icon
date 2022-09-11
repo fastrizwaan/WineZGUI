@@ -1,14 +1,7 @@
        # Ask user to select an image icon or exe file to extract icon from
-       # If No argument is given ask
-       CHANGE_ICON()
-{
-        if [ -z "${1}" ]; then
-            GET_ICON=$(zenity --file-selection \
+       GET_ICON=$(zenity --file-selection \
                          --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
-       else
-            GET_ICON="${1}"  
-       fi
-       
+
        # If he/she cancels, why prompt?
        if [ -z "${GET_ICON}" ]; then #if no icon is selected
             echo "I: Script: Change Icon: Cancelled!"
@@ -21,27 +14,26 @@
        
        if [ "${GET_ICON_EXT}" = "exe" ]; then
             echo "I: Script: Change Icon: Exe file selected to extract icon!"
-            unset TEMP_DIR
-            TEMP_DIR="${WINEZPREFIX}/tmp"
+            TEMPDIR="${WINEZPREFIX}/tmp"
             # Extract icon and convert it to several png files of diferent quality,
             # Create a temporary Directory to extract icon from the exe file
             echo "I: Script: Change Icon: Extraction from ${GET_ICON}"
-            mkdir -p ${TEMP_DIR} && \
-            echo "I: Script: Change Icon: Created directory ${TEMP_DIR}"
+            mkdir -p ${TEMPDIR} && \
+            echo "I: Script: Change Icon: Created directory ${TEMPDIR}"
             
             # wrestool extracts ico file from EXE
-            echo "wrestool -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_NOEXE}.ico "
-            wrestool -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_NOEXE}.ico" 2> /dev/null && \
+            echo "wrestool -x -t 14 ${GET_ICON} > ${TEMPDIR}/${EXE_NOEXE}.ico "
+            wrestool -x -t 14 "${GET_ICON}" > "${TEMPDIR}/${EXE_NOEXE}.ico" 2> /dev/null && \
             echo "I: Script: Change Icon: Wrestool executed"
 
             # Only try to extract Icon when Icon is Found in the EXE
             # icotool extracts all png files from ico files
             # Select and copy the best png image file by sorting using ls -S1.
-            echo "icotool -x ${TEMP_DIR}/${EXE_NOEXE}.ico"
-            icotool -x "${TEMP_DIR}/${EXE_NOEXE}.ico" -o "${TEMP_DIR}" 2>/dev/null && \
+            echo "icotool -x ${TEMPDIR}/${EXE_NOEXE}.ico"
+            icotool -x "${TEMPDIR}/${EXE_NOEXE}.ico" -o "${TEMPDIR}" 2>/dev/null && \
             echo "I: Script: Change Icon: Icotool: Extracting png files from" \
-                 "${TEMP_DIR}/${EXE_NOEXE}.ico" && \
-            cp -f $(ls -S1 ${TEMP_DIR}/${EXE_NOEXE}*.png|head -n 1) \
+                 "${TEMPDIR}/${EXE_NOEXE}.ico" && \
+            cp -f $(ls -S1 ${TEMPDIR}/${EXE_NOEXE}*.png|head -n 1) \
                            "${ICONFILE}" && \
             echo "I: Script: Change Icon: Copied successfully..." && WARN="false"
 
@@ -57,8 +49,8 @@
             unset WARN
 
             #remove tmp directory after copying icon png
-            rm -rf "${TEMP_DIR}" && \
-            echo "I: Script: Change Icon: Cleanup ${TEMP_DIR}"
+            rm -rf "${TEMPDIR}" && \
+            echo "I: Script: Change Icon: Cleanup ${TEMPDIR}"
        else
             echo "I: Script: Change Icon: ${GET_ICON} selected"
             cp -f "${GET_ICON}" "${ICONFILE}"  
@@ -80,19 +72,12 @@
        ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
        # Inform user
-       #If CHANGE_ICON_DO_NOT_PROMPT has no value then prompt
-       #When we change exe, we do not want to see icon change prompt
-       #The value will be set before calling this function by find-installed-exe
-       if [ -z "${CHANGE_ICON_DO_NOT_PROMPT}" ] ; then
-            zenity --info --no-wrap --title="${DESKTOPFILE}" \
-                   --text="Icon Changed sucessfuly: ${GET_ICON}"
-       fi
-       # next time let it prompt
-       unset CHANGE_ICON_DO_NOT_PROMPT
+       zenity --info --no-wrap --title="${DESKTOPFILE}" \
+              --text="Icon Changed sucessfuly: ${GET_ICON}"
+
        # Change Runtime Icon as soon as it is changed
        # Main Window is going to use ICON variable.
        export ICON="${ICONFILE}"
        
        # Update icon cache for gtk based desktops
-       ${UPDATE_ICON_CACHE}
-}
+       gtk-update-icon-cache -f --ignore-theme-index ~/.local/share/icons

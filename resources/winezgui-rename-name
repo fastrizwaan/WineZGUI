@@ -39,7 +39,7 @@ RENAME_NAME ()
   sed "s|\(Keywords.* game;\).*|\1 ${GET_PROGNAME};|g" -i ${DESKTOPFILE}
 
   # Change Game Name
-  sed "s|Name:.*|Name:${GET_PROGNAME}|g"            -i "${INFOFILE}"
+  sed "s|\(Game Name *: \).*|\1${GET_PROGNAME}|g" -i ${INFOFILE}
 
   # rename script file
   SED_SEARCH="^export PROGNAME=.*"
