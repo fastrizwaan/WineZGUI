@@ -3,6 +3,7 @@
 # and set the variable SELECTED_PREFIX
 LIST_AVAILABLE_PREFIXES()
 {
+ DBUG "I: Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION
@@ -58,7 +59,7 @@ LIST_AVAILABLE_PREFIXES()
  RESULT=$(eval ${COMMAND})
 
  if [ -z "${RESULT}" ]; then
-      echo "Cancelled!"
+      DBUG "I: ${FUNCNAME[0]}... Cancelled!"
       WineZGUI_Window
  fi
 

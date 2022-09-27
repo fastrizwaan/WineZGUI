@@ -3,6 +3,7 @@
 # and set the variable SELECTED_SCRIPT
 LIST_AVAILABLE_SCRIPTS()
 {
+ DBUG "I: Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION
@@ -56,7 +57,7 @@ LIST_AVAILABLE_SCRIPTS()
  RESULT="$(eval ${COMMAND})"
 
  if [ -z "${RESULT}" ]; then
-      echo "Cancelled!"
+      DBUG "I: ${FUNCNAME[0]}... Cancelled!"
       WineZGUI_Window
  fi
 

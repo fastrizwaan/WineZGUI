@@ -1,0 +1,25 @@
+WineZGUI_Kill_All()
+{
+  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: Kill all: exiting ${APPNAME}!"
+  # for killing all wine instance from flaptak sandbox
+  if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then
+       # flatpak wine and winezgui will be killed
+       flatpak-spawn --host flatpak kill ${FLATPAK_NAME}
+  else
+       # Find all process which ends with .exe and kill them
+       WINE_PROCESSES=$( ps -aux     | \
+                 grep -i "\.exe"     | \
+                 sed "s/\( \)*/\1/g" | \
+                 cut -f2 -d " "      )
+       for PROCESS in ${WINE_PROCESSES}; do
+            kill -9 ${PROCESS} 2>/dev/null
+       done
+       # also kill wineserver to kill explorer, etc.
+       wineserver -k
+       # exit winezgui also for consistent behavior with flatpak
+       # else host will not exit, but flatpak version will exit
+       # on using Kill all process
+       exit 0
+  fi
+}

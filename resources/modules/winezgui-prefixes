@@ -1,0 +1,11 @@
+WineZGUI_Prefixes()
+{
+  DBUG "I: Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-prefixes
+  LIST_AVAILABLE_PREFIXES
+
+  # Launch the script
+  SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+  export LAUNCH="False"
+  ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh
+}

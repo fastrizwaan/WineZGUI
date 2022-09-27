@@ -1,0 +1,29 @@
+WineZGUI_Open_Exe()
+{
+  DBUG "I: Launched ${FUNCNAME[0]}"
+  unset SELECT_FILE
+  SELECT_FILE="$(zenity --file-filter="*.exe *.msi" \
+                        --file-selection            \
+                        --title="Select a File"     )"
+  #
+  SELECT_FILE_ANSWER=$?
+  echo "SELECT_FILE = $SELECT_FILE"
+  # If no exe is selected
+  if [ -z "${SELECT_FILE}" ];  then
+       DBUG "I: Open EXE... Cancelled!"
+       WineZGUI_Window   ; # Go back to Main Window
+  fi
+  
+  # If user selects a file
+  if [ ${SELECT_FILE_ANSWER} -eq 0 ]; then
+       DBUG "I: Open Exe:\"${EXE_FILE}\" Selected!";
+       export EXE_FILE="${SELECT_FILE}"
+       OPEN_EXE_FUNCTION
+  fi
+
+  # If User selects cancel / no
+  if [ ${SELECT_FILE_ANSWER} -eq 1 ]; then
+       DBUG "I: ANSWER = 1 Cancelled!"
+       WineZGUI_Window
+  fi
+}
