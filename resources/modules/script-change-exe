@@ -1,0 +1,51 @@
+# script-change-exe
+# Change Default EXE for the prefix, required for installers
+# Any given exe can set to default be it from inside prefix or outside prefix
+# Steps:
+# 1. Ask whether to Find Exe inside prefix (for installers) or any Other exe
+# 2. Change EXE values in Script
+
+CHANGE_EXE_FUNCTION()
+{
+       unset RESPONSE
+       DBUG "I: Script: Change Exe... Selected!"
+       RESPONSE=$(zenity    --title "Change EXE for ${PREFIXNAME}"       \
+                            --list --hide-header --width=360 --height=30 \
+                            --radiolist --column " "                     \
+                            --column "Change"                            \
+                                TRUE "Installed Exe (after Setup)"       \
+                                   0 "Any other Exe"                     \
+                            --text   "<b>Set default exe...</b>"         )
+       # If Cancel is clicked
+       if [ -z "${RESPONSE}" ]; then
+            DBUG "I: Change Exe: Cancelled!"
+            Script_Window
+       fi
+       # Print response
+       DBUG "I: Script: Change Exe: ${RESPONSE} Selected!"
+
+       # If only name, append (wine-xx)
+       if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
+              # Call SCRIPT_GET_SELECTED_EXE
+              SCRIPT_GET_SELECTED_EXE
+              DBUG "I: Script: Change Exe: ${SELECTED_EXE} Selected!"
+       elif [ "$RESPONSE" = "Any other Exe" ]; then
+              # CHANGE_ANY_OTHER_EXE
+              CHANGE_ANY_OTHER_EXE
+              # use locate exe
+       fi
+       # Change Icon
+       source ${WINEZGUI_SCRIPTS}/script-change-icon
+       # We do not want to see zenity dialog of icon change success
+       export SCRIPT_CHANGE_ICON_DO_NOT_PROMPT="true"
+       SCRIPT_CHANGE_ICON "${SELECTED_EXE}"
+
+       # Change Prefix
+       source ${WINEZGUI_SCRIPTS}/winezgui-create-change-prefix-file
+       CREATE_CHANGE_PREFIX_FILE
+       # Update files
+       # Change EXE_NAME and EXE_PATH in all the required files
+       # Change Sha256sum etc.
+       SCRIPT_CHANGE_EXE_VARIABLES
+
+}

@@ -1,0 +1,213 @@
+# winezgui-settings
+
+SETTINGS()
+{
+     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+     unset TEXT
+     TEXT+="Set..."
+     echo "Settings Selected!"
+     unset SETTINGS_OPTION
+     SETTINGS_OPTION=$(zenity --title "${APP_WITH_VER} - Settings"    \
+                              --list   --hide-header                  \
+                              --width=360 --height=240                \
+                              --radiolist --column " "                \
+                              --column "Action"                       \
+                                     0 "Wine Arch..."             \
+                                     0 "Prefix Template..."       \
+                                     0 "Launch Behavior..."       \
+                                     0 "Debug Messages..."       \
+                                  TRUE "Help..."                      \
+                              --text   "${TEXT}"                      )
+
+     # Exit if Cancel is clicked
+     if [ -z "${SETTINGS_OPTION}" ]; then
+          DBUG "I: Settings: Cancel Selected!"
+          return 1
+     fi
+
+     # WineZGUI show debug messages
+     if [ "${SETTINGS_OPTION}" = "Debug Messages..." ]; then
+          DEBUG_OPTION=$(zenity --title "${APP_WITH_VER}"        \
+                                --list   --hide-header           \
+                                --width=360 --height=240         \
+                                --radiolist --column " "         \
+                                --column "Action"                \
+                                    TRUE "No"                    \
+                                       0 "Yes"                   \
+                                --text   "Debug Messages...")
+
+          if [ -z "${DEBUG_OPTION}" ]; then
+               echo "Cancelled!"
+               return 1
+          fi
+
+          # If user selects No, delete debug from Settings.yml
+          if [ "${DEBUG_OPTION}" = "No" ]; then
+               unset DEBUG
+               sed "/debug:/d" -i "${SETTINGS_FILE}"
+          else
+               # Add debug:Y to Settings.yml and export DEBUG
+               if [ -w "${SETTINGS_FILE}" ]; then
+                    echo "debug:Y" >> "${SETTINGS_FILE}" # add to Settings
+               else
+                    echo "Cannot write to ${SETTINGS_FILE}"
+               fi
+               DEBUG="Y"
+          fi
+          export DEBUG # Apply runtime
+
+     fi
+
+     if [ "${SETTINGS_OPTION}" = "Help..." ]; then
+          DBUG "I: Help... Selected!"
+          unset HELP_TEXT
+          HELP_TEXT+="Wine Arch...: Set wine arch for new prefixes!|"
+          HELP_TEXT+="Help...: This is it!|"
+
+          # Text is more, so we need to format it, with sed in pango markup
+          unset TEXT
+          TEXT="$(echo ${HELP_TEXT}                         \
+                  |tr "|" "\n"                              \
+                  |sed "s/https:/https|/g"                  \
+                  |sed -E "s/([0-9]):([0-9])/\1|\2/g"       \
+                  |sed "s/:/;:;/g"                          \
+                  |column -t -s ";"                         \
+                  |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/"  \
+                  |sed "s/|/:/g" )"
+          #       |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+          zenity --info --text "${TEXT}" --title "${APP_WITH_VER} - Settings!"
+          unset HELP_TEXT
+          unset TEXT
+          # Go back to Settings after showing help!
+          return 0
+
+     fi
+     
+     # Wine Arch Settings
+     if [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
+          CURRENT_ARCH=${WINEARCH}
+          WINEARCH_OPTION=$(zenity --title "${APP_WITH_VER}"  \
+                                   --list   --hide-header     \
+                                   --width=360 --height=240   \
+                                   --radiolist --column " "   \
+                                   --column "Action"          \
+                                          0 "win32"  \
+                                          0 "win64"  \
+                                   --text   "Set winearch...")
+
+          if [ -z "${WINEARCH_OPTION}" ]; then
+               echo "Cancelled!"
+               return 1
+          fi
+
+          if [ "${WINEARCH_OPTION}" = "win32" ]; then
+               DBUG "I: Settings: winearch set to 32 bit"
+               # Change values in Settings
+               if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
+                    sed "s|arch:.*|arch:win32|g" -i "${SETTINGS_FILE}"
+               else
+                    if [ -w "${SETTINGS_FILE}" ]; then # update Settings
+                         echo "arch:win32" >> "${SETTINGS_FILE}" 
+                    else
+                         echo "Cannot write to ${SETTINGS_FILE}"
+                    fi
+               fi
+               export WINEARCH="win32" # Runtime update
+
+          fi
+
+          if [ "${WINEARCH_OPTION}" = "win64" ]; then
+               DBUG "I: Settings: winearch set to 64 bit"
+               # If grep can get value from Settings then replace else add it
+               if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
+                    sed "s|arch:.*|arch:win64|g" -i "${SETTINGS_FILE}"
+               else
+                    if [ -w "${SETTINGS_FILE}" ]; then
+                         echo "arch:win64" >> "${SETTINGS_FILE}"
+                    else
+                         echo "Cannot write to ${SETTINGS_FILE}"
+                    fi
+               fi
+               export WINEARCH="win64"
+          fi
+
+          # Update Wine arch in About.yml
+          export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+          INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
+          sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
+
+
+          if [ "${CURRENT_ARCH}" != "${WINEARCH}" ]; then
+               zenity --question --title "${APP_WITH_VER} - Wine Arch Changed!"\
+                      --text "Change Prefix to WineZGUI-${WINEARCH}?"
+               ANSWER=$?
+
+               if [ -z "${ANSWER}" ] || [ ${ANSWER} -eq 1 ]; then
+                    unset TEXT
+                    TEXT="Make sure to change template to ${WINEARCH} to work!"
+                    zenity --warning --text "${TEXT}"
+                    echo "Cancelled!"
+                    unset TEXT
+               fi
+
+               if [ ${ANSWER} -eq 0 ]; then
+                    source ${DATADIR}/winezgui-templates
+                    TEMPLATES "Change Template..."
+               fi
+
+          fi
+     fi
+
+     if [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
+          source ${DATADIR}/winezgui-templates
+          TEMPLATES "Change Template..."
+     fi
+
+
+
+
+     if [ "${SETTINGS_OPTION}" = "Launch Behavior..." ]; then
+          source ${DATADIR}/winezgui-list-available-prefixes
+          LIST_AVAILABLE_PREFIXES
+
+          GET_LAUNCH_BEHAVIOR=$(zenity  --title "${APP_WITH_VER}"          \
+                                        --list   --hide-header             \
+                                        --width=360 --height=240           \
+                                        --radiolist --column " "           \
+                                        --column "Action"                  \
+                                               0 "Directly..."       \
+                                               0 "Script Window..."   \
+                                        --text   "Launch..."        )
+
+          if [ -z "${GET_LAUNCH_BEHAVIOR}" ]; then
+               echo "Cancelled!"
+               return 1
+          fi
+          if [ "${GET_LAUNCH_BEHAVIOR}" = "Directly..." ]; then
+               
+               if [ -w "${SELECTED_PREFIX}" ]; then
+                    echo "Yes" > "${SELECTED_PREFIX}/launch"
+                    ls  "${SELECTED_PREFIX}/launch"
+                    DBUG "I: Settings: launch file created!"
+               fi
+               DBUG "I: Settings: ${SELECTED_PREFIX} is set to launch directly"
+          else
+               if [ -f "${SELECTED_PREFIX}/launch" ]; then
+                    DBUG "I: Settings: Removing Direct launch file"
+                    echo "rm ${SELECTED_PREFIX}/launch"
+                    rm "${SELECTED_PREFIX}/launch"
+               else
+                    DBUG "I: Settings: launch file not found..."
+                    DBUG "I: Settings: Already set to open script window"
+               fi
+
+          fi
+     fi
+     # Update About.yml Template
+     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+     sed "s|Template:.*|Template:${TEMPLATE_NAME}|g" -i "${ABOUTFILE}"
+
+
+}

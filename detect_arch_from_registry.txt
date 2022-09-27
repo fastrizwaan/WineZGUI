@@ -1,0 +1,2 @@
+user.reg:#arch=win64
+

@@ -4,21 +4,90 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
-#set -x
-# Variables
 export APPNAME=WineZGUI
+export APPVERSION="git"
+export APP_WITH_VER="${APPNAME}-${APPVERSION}"
+
+# HANDLE CLI ARGUMENT
+# Function Show help
+ShowHelp ()
+{
+     echo "WineZGUI - Wine GUI using Zenity "
+     echo "Usage:"
+     echo "$0 <argument>"
+     echo ""
+     echo "Argument:"
+     echo "exe/msi file      Creates prefix for the given exe file, else launch"
+     echo "wzt file          Restore a backed up prefix or bundle file (.wzt)"
+     echo "Options:"
+     echo "-v, --version     WinzeGUI version"
+     echo "-h, --help        Shows this help!"
+     echo ""
+     echo "Examples:"
+     echo "$0 setup.exe"
+     echo "$0 putty_installer.msi"
+     echo "$0 Notepadd.wzt"
+
+}
+
+# parse command line arguments
+for i in "$@"
+do
+case $i in
+    -v|--version)
+    echo "${APPVERSION}"
+    exit
+    ;;
+    -h|--help)
+    ShowHelp
+    exit
+    ;;
+esac
+done
+
+
+# If prefix=nothing then install to /usr
+if [ -z "${INSTALL_PREFIX}" ]; then
+     INSTALL_PREFIX="/usr"
+fi
+
+# Flatpak Specific Commands and Variables
+if [ "${FLATPAK}" = "true" ]; then
+     echo setting prefix and paths for flatpak
+     INSTALL_PREFIX="/app"
+     TEMPDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/tmp)"
+     WINEZGUIDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/winezgui)"
+     INSTALL_TYPE=\"flatpak\"
+fi
+# HANDLE CLI ARGUMENT
+
+# set -x
+# Variables
+
+# Only show debug message when DEBUG="Y" or DEBUG="anything"
+# Use unset DEBUG will stop messages.
+DBUG()
+{ 
+     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
+          echo "${1}"
+     fi
+}
+
 # These values will be assigned by Setup using sed command
 # Post install ${PREFIX}/bin/winezgui file will be different
 export DATADIR=/usr/share/winezgui # /usr will be replaced by prefix
-export APPVERSION="git"
-export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
-export WINEZPREFIX=$(realpath -m ~/.local/share/winezgui)
-export FLATPAK_NAME="io.github.WineZGUI"
+export WINEZGUIDIR=$(realpath -m ~/.local/share/winezgui)
+
+export FLATPAK_NAME="io.github.fastrizwaan.WineZGUI"
 #/These values will be changed  by Setup using sed command
 
-export UPDATE_ICON_CACHE="gtk-update-icon-cache -f --ignore-theme-index \
-                          ~/.local/share/icons"
+# We prefer arch to win64 as wine uses wow64
+export SETTINGS_FILE="${WINEZGUIDIR}/Settings.yml"
+export TEMPLATES_DIR="${WINEZGUIDIR}/Templates"
+export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+
+export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 
 export AUTHOR="Mohammed Asif Ali Rizvan"
@@ -27,782 +96,526 @@ export COPYRIGHT="GNU General Public License (GPLv3)"
 export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d " ")
+export WBOOT_CMD="$(which wineboot) -i"
 
-export DEFAULT="${WINEZPREFIX}/default"
-export WINEARCH=win64
-export LD_LIBRARY_PATH="/app/lib:/app/lib32:/app/lib64:\
-                        /app/lib/i386-linux-gnu:/app/lib/wine:\
-                        /app/lib64/wine:/app/${NAME}:$(pwd)"
+# Create Template and Prefixes Directory
+mkdir -p "${WINEZGUIDIR}"
+mkdir -p "${TEMPLATES_DIR}"
+mkdir -p "${PREFIXES_DIR}"
+
+
+
+#  -- Handle Wine Arch... -- #
+# If Settings.yml exists and debug: is set to true
+# If Settings.yml exists, get arch value from it: win32 or win64
+if [ -f "${SETTINGS_FILE}" ]; then
+     export WINEARCH=$(grep arch     ${SETTINGS_FILE}|cut -f2 -d ":")
+     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+     export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+fi
+
+# If Settings.yml does not exists, add arch:win64 and template:WineZGUI-win64
+if [ ! -f "${SETTINGS_FILE}" ] && [ -w ${WINEZGUIDIR} ]; then
+     export WINEARCH="win64"
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+     DBUG "I: Winearch not defined in ${SETTINGS_FILE}; setting arch to win64"
+     DBUG "I: Prefix template not defined in ${SETTINGS_FILE}"
+     DBUG "I: using ${WINEZGUI_TEMPLATE}"
+     echo "arch:win64" >> "${SETTINGS_FILE}"
+     echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
+     export TEMPLATE="${WINEZGUI_TEMPLATE}"
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+fi
+
+# If Settings.yml exists and arch: value do not match win32 or win64; use win64
+if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ] ; then
+     export WINEARCH="win64"
+     echo "E: arch:wine32/wine64 not found in ${SETTINGS_FILE}; using win64"
+     echo "arch:win64" >> "${SETTINGS_FILE}"
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+fi
+
+# -- HANDLE TEMPLATES -- #
+# If Template Directory not found, set to WineZGUI-win64 prefix template
+if [ ! -d "${TEMPLATE}" ]; then
+     sed "s|template:.*|template:${WINEZGUI_TEMPLATE}|g" -i "${SETTINGS_FILE}"
+     export TEMPLATE="${WINEZGUI_TEMPLATE}"
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+fi
+
+
+
+# Use current TEMPLATE as default prefix and wineprefix for WineZGUI
+export DEFAULT="${TEMPLATE}"
+
+# LD_LIBRARY_PATH
+if [ -z "${LD_LIBRARY_PATH}" ]; then
+     LD_LIBRARY_PATH+="/lib:/lib32:/lib64"
+fi
+LD_LIBRARY_PATH+="${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64:"
+LD_LIBRARY_PATH+="/app/lib/i386-linux-gnu:/app/lib/wine:"
+LD_LIBRARY_PATH+="/app/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib/x86_64-linux-gnu/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
+LD_LIBRARY_PATH+="$(pwd)"
+export LD_LIBRARY_PATH
+
+
 
 export PATH=${PATH}:$(pwd)
 export ARGV="$@"
-export WINEPREFIX=${DEFAULT}
-export WINEEXE="$(which wine)"
+export WINEPREFIX="${DEFAULT}"
+export WINE_CMD="$(which wine)"
 export WINETRICKS="$(which winetricks)"
-export WINE_CMD=${WINEEXE}
 
+export INFOFILE="${PREFIXDIR}/Info.yml"
+export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "${INSTALL_TYPE}" = "system" ]; then
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-else
-    # for flatpak create subdirectory with flatpakname
-    export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else # for flatpak create subdirectory with flatpakname
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR
 fi
+
 
 # winezgui backup file extension
 export BKP_EXT="wzt"
 
 # On launch check required runtime dependencies
-if [ ! -f "${WINEZPREFIX}/DepsCheckOK.txt" ]; then
+if [ ! -f "${WINEZGUIDIR}/DepsCheckOK.txt" ]; then
      # Function to print if dependencies are installed.
      FOUND=()    # Array/list to hold all found commands
      NOTFOUND=() # Array/list to hold all not found commands
 
      RUNTIME="wine winetricks icotool exiftool zenity wget"
      for i in ${RUNTIME} ; do
-         if [ $(which $i) ]; then
-                FOUND+="$i"
-                FOUND+=" "
-         else
-                NOTFOUND+="$i"
-                NOTFOUND+=" "
-         fi
+          if [ $(which $i) ]; then
+               FOUND+="$i"
+               FOUND+=" "
+          else
+               NOTFOUND+="$i"
+               NOTFOUND+=" "
+          fi
      done
 
      # Show found and not found dependencies for WineZGUI
      if [ ! -z "${NOTFOUND}" ]; then
           echo "Dependencies..."
-          echo "Found    : ${FOUND}"
+          echo "Found: ${FOUND}"
           echo "Not Found: ${NOTFOUND}"
           zenity --info --no-wrap --title="Missing Dependencies" \
-                 --text="Please install these in your system:\n${NOTFOUND}"
+               --text="Please install these in your system:\n${NOTFOUND}"
      else
-          mkdir -p "${WINEZPREFIX}"
-          echo "Yes" > "${WINEZPREFIX}/DepsCheckOK.txt"
+          mkdir -p "${WINEZGUIDIR}"
+          echo "Yes" > "${WINEZGUIDIR}/DepsCheckOK.txt"
      fi
 fi
 
-# Preprocessing files for Backup and Restore Function
-# include backup and restore preprocess function
-# which can be used both by default prefix and game prefix script
-# Backup_Restore_Function()
-source ${DATADIR}/winezgui-backup-restore-function
-source ${DATADIR}/winezgui-restore-wzt
 
 
-    # Main WineZGUI application window function
-    Main_Function ()
-    {
-      SELECTION=$( \
-      zenity --title "${APP_WITH_VER}" \
-             --list   --hide-header                             \
-             --width=360 --height=400                           \
-             --radiolist --column " "                           \
-             --column "Action"                                  \
-                 TRUE "Open EXE..."                             \
-                    0 "Winetricks GUI..."                       \
-                    0 "Winetricks CLI..."                       \
-                    0 "Launch Winecfg..."                       \
-                    0 "Open Explorer..."                        \
-                    0 "Open Shell..."                           \
-                    0 "Kill all..."                             \
-                    0 "Backup..."                               \
-                    0 "Restore..."                              \
-                    0 "Delete..."                               \
-                    0 "About..."                                \
-                    0 "Quit..."                                 \
-             --text   "<b>Wine GUI using Zenity...</b>" \
-              )
-
-      # Exit if Cancel is clicked
-      if [ -z "${SELECTION}" ]
-           then
-           echo "I: Cancel Selected. Bye!"
-           exit 0
-      fi
-
-      # Open EXE... Opens file dialog
-      if [ "${SELECTION}" = "Open EXE..." ]
-           then
-           echo "I: Open EXE... Selected!"
-      	   EXE_FILE="$( zenity                  \
-      	                --file-filter="*.exe *.msi" \
-      	                --file-selection        \
-      	                --title="Select a File" \
-      	              )"
-
-      	   # If no exe is selected
-      	   if [ -z "${EXE_FILE}" ]
-                then
-      	        echo "I: Open EXE... Cancelled!"
-                Main_Function    ; # Go back to Main Window
-      	   fi
-
-          # Redundant check
-          case $? in
-           0)
-              echo "I: Open Exe:\"${EXE_FILE}\" Selected!";
-              export EXE_FILE;;
-
-           1)
-              echo "I: Open Exe: No file selected.";
-      	      Main_Function;;
-          -1)
-              echo "E: Open Exe: An unexpected error has occurred.";;
-          esac
-
-      # ====================== Winetricks GUI ========================= #
-      elif [ "${SELECTION}" = "Winetricks GUI..." ]
-             then
-             echo "I: Winetricks GUI... Selected!"
-             WINEPREFIX=${DEFAULT} ${WINETRICKS} --gui
-             echo "I: Winetricks GUI ended..."
-             Main_Function
-
-      # ====================== Winetricks CLI ========================= #
-      # Provide text entry command Line to enter multiple Dependencies
-      elif [ "${SELECTION}" = "Winetricks CLI..." ]
-             then
-             echo "I: Winetricks CLI... Selected!"
-             # Present some preselected winetricks verbs
-             VERB_LIST="xact xinput xna31 dotnet48 \
-                        vcrun2003 vcrun2005        \
-                        vcrun2008 vcrun2010        \
-                        vcrun2019 dxvk faudio      \
-                        quartz corefonts"
-             MESSAGE="Change & Press Enter to install these using Winetricks:"
-             TITLE_TEXT="Winetricks CLI - Paste winetricks verb list"
-             # Remove multiple spaces from variable
-             # from the above VERB_LIST
-             VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
-
-             # Show the dialog
-             VERBS=$( \
-             zenity                       \
-             --title "${TITLE_TEXT}"      \
-             --width=800 --height=30      \
-             --text  "${MESSAGE}"         \
-             --entry-text "${VERB_LIST}"  \
-             --entry)
-
-             # If Cancel is clicked or nothing is entered
-             if [ -z "${VERBS}" ]
-                  then
-                  echo "I: Winetricks CLI: Cancelled!"
-                  Main_Function ; # Return to main application window
-             else
-                  echo "I: Winetricks CLI: Selected verbs:"
-                  echo "I: Winetricks CLI: ${VERBS}"
-                  VERBS=(${VERBS}) ; # convert string to array
-
-
-                  # Report user the time it took to install winetricks
-                  TIMER_START=${SECONDS}
-                  # Start of Show Progress using zenity dialog
-                  ( for i in ${VERBS[*]}; do
-
-                  # Show Progress Info
-                  echo "# Installing ${i}..."
-
-                  # Install winetricks verbs and put output to logs
-                  ${WINETRICKS} --force --unattended  "${i}"
-                  done
-                  TOOK=$(( SECONDS - ${TIMER_START} ))
-                  echo "# Time Taken: ${TOOK} seconds!"
-                  ) |zenity --width=500                   \
-                      --title "Please Wait... This will take time!"   \
-                      --progress --pulsate --auto-kill
-
-             # End of Show Progress using zenity dialog
-             fi
-             echo "I: Winetricks CLI: Exited!"
-             Main_Function ; # Return to Main Application Window
-
-      # ====================== Launch Winecfg ========================= #
-      elif [ "${SELECTION}" = "Launch Winecfg..." ]
-             then
-             echo "I: Launch Winecfg... Selected!"
-             ${WINE_CMD} winecfg
-             Main_Function
-
-      # ========================= Kill all ============================ #
-      # It is a required feature, users will have trouble if
-      # some wine application hang or stay resident
-      elif [ "${SELECTION}" = "Kill all..." ]
-             then
-             echo "I: Kill all... Selected!"
-             echo "I: Kill all: exiting ${APPNAME}!"
-            # for killing all wine instance from flaptak sandbox
-            if [ $(flatpak-spawn echo 0 2>/dev/null) ]
-                 then
-                 # flatpak wine and winezgui will be killed
-                 flatpak-spawn --host flatpak kill ${FLATPAK_NAME}
-            else
-                 # Find all process which ends with .exe and kill them
-                 WINE_PROCESSES=$( \
-                                   ps -aux             | \
-                                   grep -i "\.exe"     | \
-                                   sed "s/\( \)*/\1/g" | \
-                                   cut -f2 -d " "
-                                 )
-                 for PROCESS in ${WINE_PROCESSES}; do
-                     kill -9 ${PROCESS} 2>/dev/null
-                 done
-                 # also kill wineserver to kill explorer, etc.
-                 wineserver -k
-                 # exit winezgui also for consistent behavior with flatpak
-                 # else host will not exit, but flatpak version will exit
-                 # on using Kill all process
-                 exit
-            fi
-
-            # Go back to menu, exit above will not let next line work
-            # Main_Function
-      # ====================== Open Shell ========================= #
-      elif [ "${SELECTION}" = "Open Shell..." ]
-             then
-
-            echo "I: Open Shell... Selected!"
-             # Check if "gnome-terminal" is installed on the Host
-             # Required for "Open Shell..." feature
-
-             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-                [ $(flatpak-spawn  --host which gnome-terminal) ]
-                 then
-                 echo "I: Open Shell: Gnome-terminal found via flatpak-spawn"
-                 export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-            elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-                 [ $(which gnome-terminal) ];
-                   then
-                   echo "I: Open Shell: Gnome-terminal found on host system"
-                   export GNOME_TERMINAL=0 ; #Available on host install
-            else
-                 echo "I: Open Shell: Gnome-terminal not found"
-                 export GNOME_TERMINAL=1 ; #Unavailable on host
-            fi
-
-
-            # Using Variable, If gnome terminal is not found inform user
-            if [ ${GNOME_TERMINAL} -eq 1 ]
-                 then
-                 zenity --title "${SELECTION}" \
-                        --width=500 --height=30 --info  \
-                        --text "This feature requires \"gnome-terminal\""
-                 # and return to main application window
-                 Main_Function
-            fi
-
-             # If found in flatpak sandbox, use flatpak-spawn
-             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-                [ $(flatpak-spawn --host echo 0) ]
-                  then
-                  echo -e "I: Open Shell: "
-                  echo    "Opening gnome-terminal from flatpak sandbox"
-                  # Shell needs WINEPREFIX as we are working with wine
-                  export WINEPREFIX=${DEFAULT}
-                  flatpak-spawn --host gnome-terminal --wait --        \
-                  flatpak --command=bash run ${FLATPAK_NAME}           \
-                  -c "cd ${WINEPREFIX}; export WINEPREFIX=${WINEPREFIX}; \
-                  exec bash -i"
-
-             # If found on host, run gnome-terminal
-             else
-                 echo "I: Open Shell: Opening gnome-terminal from host"
-                 export WINEPREFIX=${DEFAULT}
-                 gnome-terminal --wait --                              \
-                 bash -c "export WINEPREFIX=${WINEPREFIX};             \
-                 cd ${WINEPREFIX};                                       \
-                 exec bash -i"
-             fi
-              # on closing shell, go back to main application window
-              Main_Function
-      # ====================== About ================================== #
-      elif [ "${SELECTION}" = "About..." ]; then
-             echo "I: About... Selected!"
-             # Text is more, so we need to format it, with sed in pango markup
-             ZCMD="zenity --info --no-wrap --text"
-             ${ZCMD} "$(cat ${DEFAULT}/info.txt | \
-                      sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
-                      sed -E "s/^(.*)$/<small>\1<\/small>/g")"
-             Main_Function
-      # ====================== Backup ================================= #
-      elif [ "${SELECTION}" = "Backup..." ]; then
-         echo "I: Backup... Selected!"
-         PREFIX_SIZE=$(du  -sh ${DEFAULT}|cut -f1)
-         echo "I: Backup: Prefix = ${DEFAULT}"
-         echo "I: Backup: Prefix size = ${PREFIX_SIZE}"
-         # Ask Before Backing up Default prefix
-         # Ask Backup filename
-         DATE=$(date +%F_%H%M)
-         PREFIXNAME="default"
-
-         # Not setting flatpak or system name
-         BKPFNAME="${PREFIXNAME}-${DATE}.${BKP_EXT}"
-
-         BACKUP_FILE=$( zenity                    \
-           --title="Backup ${PREFIXNAME} Prefix!" \
-           --width=500 --height=30                \
-           --text="Size: ${PREFIX_SIZE}\nName:"   \
-           --entry-text="${BKPFNAME}"             \
-           --entry)
-
-         # if backup file is empty / cancel clicked
-         if [ -z "${BACKUP_FILE}" ]; then
-             echo "I: Backup: Cancelled!"
-             Main_Function
-         fi
-
-         # Select Backup Target Directory
-         Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-         TARGET_DIR=$(zenity --file-selection     \
-                             --title="${Z_TITLE}" \
-                             --directory)
-         # Cleanup variable after use
-         unset Z_TITLE
-
-         # If no directory is selected or cancel is clicked by the user
-         if [ -z "${TARGET_DIR}" ]; then
-             # Retun to Main window
-             Main_Function
-         fi
-
-         # Required extension is .wzt
-         # If substring (suffix *.wzt") is NOT found add it
-         if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
-               BACKUP_FILE="${BACKUP_FILE}.${BKP_EXT}"
-         fi
-
-         # Check for available disk space in target directory before backing up
-         # Get available target dir partition size in kilobytes (df)
-         # and du -s prefix to get usage of the prefix to be
-         
-         ### CLEAN THIS UP
-         TGTDISKFREE=$(df ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-         PREFIXKSIZE=$(du -s ${DEFAULT}|cut -f1)
-         TGTSIZEH=$(df -h ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-         TOTAL_BACKUP_SIZE=$(du -sh ${DEFAULT}|cut -f1)
-         TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --from iec)
-         echo "I: Backup: Target size: ${TGTSIZEH}"
-         echo "I: Backup: Prefix size: ${PREFIX_SIZE}"
-
-         if [ ${TGTDISKFREE} -gt ${PREFIXKSIZE} ];then
-              echo "I: Backup: ${TARGET_DIR} has enough available disk space"
-         else
-              echo "W: Backup: ${TARGET_DIR} does not have free disk space!!!"
-              unset MSG
-              MSG+="${TARGET_DIR} has only ${TGTSIZEH} free disk space left!\n"
-              MSG+="Prefix backup requires ${PREFIX_SIZE} free disk space."
-              RESPONSE=$(zenity --warning --title "Not Enough Disk Space!" \
-              --text "${MSG}")
-
-              echo "W: Backup: Backup Cancelled!"
-              Main_Function
-
-         fi
-
-         # Check if the user can write to the selected Backup Directory
-         if [ ! -w "${TARGET_DIR}" ]; then
-              echo "I: Backup: ${TARGET_DIR} not writable"
-              zenity --error --no-wrap --title="Backup Error!" \
-                     --text "${TARGET_DIR} not writable\nAborting Backup!"
-         else
-              cd "${WINEZPREFIX}"
-              echo "I: Backup: Creating ${BACKUP_FILE} backup..."
-
-              # Preprocess: Prepare *.reg *.sh and *.txt for Backup
-              Backup_Restore_Function
-
-              # Create Backup archive and restore changes as soon as tar is done
-              source ${DATADIR}/winezgui-create-wzt-info
-
-              # Create Bundle
-              echo "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"
-              echo "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
-
-              # Detect Number of CPU Cores for faster compression
-              CPU_CORES=$(grep "cores" /proc/cpuinfo|sed 's/ //g'|cut -f2 -d ":"|head -n1)
-              # if a non number is not found in the variable CPU_CORES (i.e., only digits)
-              if ! [[ ${CPU_CORES} == *[!0-9]* ]]; then
-                   echo "I: Backup: Found ${CPU_CORES} CPU Cores!"
-              else
-                   echo "I: Backup: Unknown ${CPU_CORES} Cores, using 2 cores!"
-                    CPU_CORES=2
-              fi
-
-              (tar -I "zstd -T${CPU_CORES}" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-                      -C "${WINEZPREFIX}" "${PREFIXNAME}" &) | \
-              zenity --progress --pulsate --auto-close \
-                     --title="Creating ${PREFIXNAME} backup!" \
-                     --width=500 --text="${BACKUP_FILE}..."
-              echo "I: Backup: ${BACKUP_FILE} created successfully"
-
-              # If user clicks cancel, kill tar commands
-              # zenity progress won't kill the process, so we do it
-              PID_OF_TAR=$(ps -aux|grep tar|grep wzt \
-                                  |sed 's/  */ /g'|cut -f2 -d " ")
-              if ! [ -z "${PID_OF_TAR}" ]; then
-                   kill -9 ${PID_OF_TAR} && \
-                   echo "I: Backup: Cancelled! Killed tar!"  && \
-                   rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
-                   echo "I: Backup: Removed unusable ${BACKUP_FILE}"
-
-                   # Report Size also
-                   BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-                   # Backup Sucess Message
-                   MSG=("${PREFIXNAME} backup cancelled!")
-
-              else
-                   echo "I: Backup: ${BACKUP_FILE} created, success!"
-                   # Report Size also
-                   BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-                   # Backup Sucess Message
-                   MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
-                   MSG+="<b>Filename:</b> ${BACKUP_FILE}"
-                   MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-                   MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
-
-              fi
-                            # Restore changed values after backup
-              echo "I: Backup: Restoring Registry and Info files"
-              Backup_Restore_Function "restore"
-
-              echo "I: Backup: Created ${BACKUP_FILE} at ${TARGET_DIR}" && \
-              zenity --no-wrap \
-                     --info     \
-                     --title="${BACKUP_FILE} Prefix Backup!" \
-                     --text="${MSG[@]}"
-         fi # ! -w
-         # Cleanup variables after use
-         unset MSG
-         unset BACKUP_SIZE
-         unset TARGET_DIR
-         unset BACKUP_SIZE
-         unset BACKUP_FILE
-
-         # Return to Game window after backup or target directory write error
-         Main_Function
-      # ====================== Restore ================================= #
-      elif [ "${SELECTION}" = "Restore..." ]
-             then
-             echo "I: Restore... Selected!"
-             # Ask user to select the .wzt backup file to restore
-             WZT_FILE="$(zenity                      \
-                           --file-filter=*.${BKP_EXT}          \
-                           --file-selection                      \
-                           --title="Select WineZGUI Backup File" \
-                         )"
-
-             # If no Backup file is selected, or cancel is clicked
-             if [ -z "${WZT_FILE}" ]; then
-                  echo "I: Restore: Cancelled!"
-        	        unset WZT_FILE  ; # Empty variable
-
-             else
-                  RESTORE_WZT_FILE
-         	   fi # -z "${WZT_FILE}"
-
-         	   # Clear temporary used variables
-         	   unset WZT_FILE
-         	   unset FOUND_PREFIX_DIR
-         	   unset FOUND_DESKTOP_FILE
-         	   unset FOUND_SCRIPT_FILE
-         	   unset PREFIXNAME
-         	   unset GN
-
-         	   # Go back to Main Window
-         	   Main_Function
-
-      # ====================== Delete ================================= #
-      elif [ "${SELECTION}" = "Delete..." ]
-             then
-             echo "I: Delete... Selected!"
-             RESPONSE=$( zenity \
-             --title "${APP_WITH_VER}"     \
-             --list   --hide-header                 \
-             --width=360 --height=30                \
-             --radiolist --column " "               \
-             --column "Action"                      \
-                 TRUE "Delete and Re-Initialize..." \
-                 0    "Delete and Quit..."          \
-             --text   "<b>Default Prefix...</b>"    \
-             )
-             # If Cancel is clicked
-             if [ -z "${RESPONSE}" ]; then
-                 echo "I: Delete: Cancelled!"
-                 Main_Function
-             fi
-
-             # Delete Shortcuts and Prefix Directory
-             rm -rf ${DEFAULT};
-             echo "I: Delete: Deleted default prefix"
-
-             if [ -d "${DESKTOPDIR}" ]; then
-                  # Delete all broken links which points to winezgui
-                  # only from desktop dir
-                  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-                  echo "I: Delete: Removed broken WineZGUI .desktop links"
-                  # Update menus
-                  ${UPDATE_ICON_CACHE}
-                  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-                  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
-                  # Return to Main window after deleting default prefix
-             fi
-             if [ "${RESPONSE}" = "Delete and Quit..." ]; then
-                  echo "W: Delete: Exiting ${APPNAME}. Bye!"
-                  exit 0
-             else
-                  echo "W: Delete: Re-initializing default prefix"
-                  INITIALIZE_WINEPREFIX
-             fi
-                  Main_Function
-      # ====================== Open Explorer ========================== #
-      elif [ "${SELECTION}" = "Open Explorer..." ]
-             then
-             echo "I: Open Explorer... Selected!"
-             echo "I: Open Explorer: Opening Explorer..."
-             # Open home directory using windows explorer
-             ${WINE_CMD} explorer ${HOME} && \
-             echo "I: Open Explorer: Explorer Exited..." || \
-             echo "I: Open Explorer: Explorer Eror..."
-             # Return to Main window, when explorer exits
-             Main_Function
-      # ====================== Open Explorer ========================== #
-      elif [ "${SELECTION}" = "Quit..." ]
-             then
-             echo "I: Quit Selected..."
-             echo "I: Bye!"
-             exit 0
-      else
-            echo "W: Unknown selection = ${SELECTION}"
-            exit 1
-
-      fi
-
-
-    } # End of Main_Function
-  # END of "Start WineZGUI when no argument is supplied" section
-
-#------------------------------- Startup -----------------------------#
-  # on launch, if no argument is provided
-  if [ $# -eq 0  ]
-       then
-       # info
-       echo "I: Startup: No arguments supplied..."
-
-  else
-
-       echo "I: Startup: Checking ${EXE_FILE}"
-       EXE_FILE="$(realpath -m "$1")"
-       EXE_NAME=$(basename "${EXE_FILE}")
-       EXE_PATH=$(dirname  "${EXE_FILE}")
-       EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
-       EXE_NOEXE=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
-                                   |sed "s/\.[Mm][Ss][Ii]//")
-       EXE_EXT="${EXE_FILE##*.}"
-       WINEPREFIX_SUBDIR="${WINEZPREFIX}/${EXE_NOEXE}"
-
-       # some games need to cd to the dir to work
-       export base=$(basename "$1")
-       export dire=$(dirname  "$1")
-
-       # if arugment is not an exe file, then quit
-       IS_EXE="$(echo ${EXE_EXT}|tr A-Z a-z)"
-
-       # Check if the argument is exe or msi or wzt
-       if [ "${IS_EXE}" != "exe" ] && \
-          [ "${IS_EXE}" != "msi" ] && \
-          [ "${IS_EXE}" != "wzt" ] ; then
-
-            echo "W: Startup:  \"${EXE_NAME}\" is not an EXE file"
-            echo "I: Startup:  Please provide a .exe, .msi, or .wzt file as argument"
-            echo "I: Startup:  Exiting..."
-            exit 1
-       fi
-  fi
-
-## On 1st launch create default wine prefix
-### Create a default wine prefix directory ###
-   if ! [ -d "${DEFAULT}" ]; then
-        echo "I: Startup: ${DEFAULT} does not exist, creating.."
-        mkdir -p "${DEFAULT}"
-   fi
-   # Wine creates some dirs which are linked to directories inside user home
-   # To prevent games/programs from writing to host ~/Documents
-   # and to allow sandbox backup we need to remove the links
-   # and create normal directories inside wine prefix
-
-   # Check if default prefix was created and symlinks removed
-   # and create prefix only when wine is found
-
-INITIALIZE_WINEPREFIX(){
-   if [ ! -f ${DEFAULT}/ReplacedSymLinks.txt ] && \
-      [ $(which wine) ]
-        then
-        echo "I: Startup: Initializing wine Prefix... PREFIX arch is ${WINEARCH}"
-        # Create Prefix then delete host linked directories
-        WINEDLLOVERRIDES="mscoree,mshtml=" \
-        WINEPREFIX=${DEFAULT} \
-        WINEDEBUG=-all \
-        wineboot -i 2>/dev/null
-
-        # Replace home liked directory links with normal directories
-        # For Games which saves in ~/Documents now will save in
-        # Prefix-dir/drive_c/users/${USER}/Documents
-        SAVEIFS=${IFS}
-        IFS=$(echo -en "\n\b")
-
-        echo "I: Startup: Removing symlinks from wineprefix"
-
-        for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
-                   rm $i && mkdir -p $i && \
-                   echo $i >> ${DEFAULT}/ReplacedSymLinks.txt
-        done
-        IFS=${SAVEIFS}
-
-        # Create an empty file to test whether prefix is created
-        touch ${DEFAULT}/ReplacedSymLinks.txt
-        echo "I: Startup: Default Wine Prefix at ${DEFAULT} Created"
-
-        # Create H: for HOME Directory for Wine Explorer
-        ln -sf ${HOME} "${DEFAULT}/dosdevices/h:"
-        echo "I: Startup: Created H: symlink to ${HOME}"
-   fi
-
-
-    ### End of Create a default wine prefix directory ###
-
-
-# Create Metadata info.txt for the default wine prefix
-# Update info only when wine is found
-if [ ! -f ${DEFAULT}/info.txt ] && [ $(which wine) ]; then
-echo -e   "
-Application     : ${APPNAME}
-Version         : ${APPVERSION}
-Copyright       : ${COPYRIGHT}
-Website         : ${WEBSITE}
-Author          : ${AUTHOR}
-E-mail          : ${EMAIL}
-Wine            : ${WINEEXE}
-Wine Version    : ${WINEVER}
-Wine Arch       : ${WINEARCH}
-WineZGUI Prefix : ${WINEZPREFIX}
-Wine Prefix     : ${DEFAULT}
-Creation Date   : $(date)
-" > ${DEFAULT}/info.txt
-echo "I: Startup: Created ${DEFAULT}/info.txt"
-fi
+INITIALIZE_WINEPREFIX()
+{
+     if [ ! -f "${1}/ReplacedSymLinks.txt" ] && [ $(which wine) ] ; then
+          DBUG "I: Startup: Initializing wine Prefix... arch is ${WINEARCH}"
+          # Create Prefix then delete host linked directories
+          WINEDLLOVERRIDES="mscoree,mshtml=" \
+          WINEPREFIX=${1} \
+          WINEDEBUG=-all \
+          ${WBOOT_CMD} 2>/dev/null
+
+          # Replace home liked directory links with normal directories
+          # For Games which saves in ~/Documents now will save in
+          # Prefix-dir/drive_c/users/${USER}/Documents
+          SAVEIFS=${IFS}
+          IFS=$(echo -en "\n\b")
+
+          DBUG "I: Startup: Removing symlinks from wineprefix"
+
+          for i in $(find "${1}/drive_c/users/${USER}" -type l); do
+               rm "${i}" && mkdir -p "${i}" && \
+                    echo "${i}" >> "${1}/ReplacedSymLinks.txt"
+          done
+          IFS=${SAVEIFS}
+
+          # Create an empty file to test whether prefix is created
+          touch "${1}/ReplacedSymLinks.txt"
+          DBUG "I: Startup: Default Wine Prefix at ${1} Created"
+
+          # Create H: for HOME Directory for Wine Explorer
+          ln -sf ${HOME} "${1}/dosdevices/h:"
+          DBUG "I: Startup: Created H: symlink to ${HOME}"
+     fi
+
+
+     # Create Metadata About.yml for the default wine prefix
+     # Update info only when wine is found
+     if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then
+          echo "Application:${APPNAME}"        >  "${ABOUTFILE}"
+          echo "Version:${APPVERSION}"         >> "${ABOUTFILE}"
+          echo "Copyright:${COPYRIGHT}"        >> "${ABOUTFILE}"
+          echo "Website:${WEBSITE}"            >> "${ABOUTFILE}"
+          echo "Author:${AUTHOR}"              >> "${ABOUTFILE}"
+          echo "E-mail:${EMAIL}"               >> "${ABOUTFILE}"
+          echo "Wine:${WINE_CMD}"              >> "${ABOUTFILE}"
+          echo "Template:${TEMPLATE_NAME}"     >> "${ABOUTFILE}"
+          echo "Wine Version:${WINEVER}"       >> "${ABOUTFILE}"
+          echo "Wine Arch:${WINEARCH}"         >> "${ABOUTFILE}"
+          echo "WineZGUI Prefix:${WINEZGUIDIR}">> "${ABOUTFILE}"
+          echo "Wine Prefix:${DEFAULT}"        >> "${ABOUTFILE}"
+          echo "Creation Date:$(date)"         >> "${ABOUTFILE}"
+          echo "Install Type:${INSTALL_TYPE}"  >> "${ABOUTFILE}"
+          if ! [ -z "${FLATPAK_NAME}" ]; then  # If flatpak (variable has value)
+          echo "Flatpak Name:${FLATPAK_NAME}"  >> "${ABOUTFILE}"
+          fi
+          DBUG "I: Startup: Created ${ABOUTFILE}"
+     fi
 }
 
-# If an exe file is provided as argument or selected by the Open EXE...
-# TODO: list all available prefixes to install Redist softwares
-# ====================== Open EXE ================================= #
-OPEN_EXE_FUNCTION(){
-if [ -f "${EXE_FILE}"  ] ; then
 
-     if [ "${IS_EXE}" = "wzt" ]; then
-          export WZT_FILE="${EXE_FILE}"
-          echo "I: Startup: WineZGUI Backup file submitted"
-          RESTORE_WZT_FILE
-          echo "I: Startup: Exiting main program after restoring backup"
-          exit 0;
+# Create wine template and link it to defaults
+# If Default (WINEZGUI_TEMPLATE) is not found initialize it
+if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
+     INITIALIZE_WINEPREFIX "${WINEZGUI_TEMPLATE}"
+fi
+
+# Main WineZGUI application window function
+WineZGUI_Window()
+{
+     SELECTION=$(zenity --list --hide-header                      \
+                        --title "${APP_WITH_VER}"                 \
+                        --width=360 --height=440                  \
+                        --radiolist --column " "                  \
+                        --column "Action"                         \
+                            TRUE "Open Exe..."                    \
+                               0 "Shortcuts..."                   \
+                               0 "Launchers..."                   \
+                               0 "Backup..."                      \
+                               0 "Restore..."                     \
+                               0 "Delete..."                      \
+                               0 "Configure..."                   \
+                               0 "Settings..."                    \
+                               0 "Kill all..."                    \
+                               0 "More..."                        \
+                               0 "Help..."                        \
+                               0 "About..."                       \
+                               0 "Quit..."                        \
+                          --text "<b>Wine GUI using Zenity...</b>")
+
+     # Exit if Cancel is clicked
+     if [ -z "${SELECTION}" ] ; then
+          DBUG "I: Cancel Selected. Bye!"
+          exit 0
      fi
-     echo "I: Open EXE: exe is ${EXE_FILE}"
-     # Prompt to Launch exe with default or existing Prefix of that exe
-     EXE_FILE=$(realpath -m "${EXE_FILE}")
+
+     # Open EXE... Opens file dialog
+     if [ "${SELECTION}" = "Open Exe..." ]; then
+          DBUG "I: 1:Open EXE... Selected!"
+          unset SELECT_FILE
+          SELECT_FILE="$(zenity --file-filter="*.exe *.msi" --file-selection \
+                                --title="Select a File" )"
+          #
+          SELECT_FILE_ANSWER=$?
+          echo "SELECT_FILE = $SELECT_FILE"
+          # If no exe is selected
+          if [ -z "${SELECT_FILE}" ];  then
+               DBUG "I: 2:Open EXE... Cancelled!"
+               WineZGUI_Window   ; # Go back to Main Window
+          fi
+
+          # 2.3 if User selects cancel / no
+          if [ ${SELECT_FILE_ANSWER} -eq 0 ]; then
+               DBUG "I: 3:Open Exe:\"${EXE_FILE}\" Selected!";
+               export EXE_FILE="${SELECT_FILE}"
+               OPEN_EXE_FUNCTION
+          fi
+
+          if [ ${SELECT_FILE_ANSWER} -eq 1 ]; then
+               DBUG "I: 4:ANSWER = 1 Cancelled!"
+               WineZGUI_Window
+          fi
+     fi
+
+     if [ "${SELECTION}" = "Shortcuts..."  ]; then
+          source ${DATADIR}/winezgui-list-available-scripts
+          LIST_AVAILABLE_SCRIPTS
+
+          # Directly start the exe with wine program
+          SCRIPT_NAME="$(echo ${SELECTED_SCRIPT}|grep -E "PROGNAME=")"
+          echo "SELECTED_SCRIPT = $SELECTED_SCRIPT"
+          export LAUNCH="True"
+          ${SELECTED_SCRIPT} launch
+          WineZGUI_Window
+     fi
+
+     if [ "${SELECTION}" = "Launchers..."  ]; then
+          source ${DATADIR}/winezgui-list-available-prefixes
+          LIST_AVAILABLE_PREFIXES
+
+          # Launch the script
+          SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+          export LAUNCH="False"
+          ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh
+          WineZGUI_Window
+     fi
+
+     # Create, Modify, Delete Templates
+     if [ "${SELECTION}" = "Backup..." ]; then
+          source ${DATADIR}/winezgui-backup-restore-function
+          source ${DATADIR}/winezgui-list-available-prefixes
+          LIST_AVAILABLE_PREFIXES
+
+          # Launch Backup from the selected prefix script
+          SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+          ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh backup
+          WineZGUI_Window
+
+     fi
+
+     # ====================== Restore ================================= #
+     if [ "${SELECTION}" = "Restore..." ] ; then
+          DBUG "I: Restore... Selected!"
+          # Ask user to select the .wzt backup file to restore
+          WZT_FILE="$(zenity                     \
+          --file-filter=*.${BKP_EXT}          \
+          --file-selection                      \
+          --title="Select WineZGUI Backup File" \
+     )"
+
+          # If no Backup file is selected, or cancel is clicked
+          if [ -z "${WZT_FILE}" ]; then
+               DBUG "I: Restore: Cancelled!"
+               unset WZT_FILE  ; # Empty variable
+
+          else
+               # Backup_Function Restore_Function()
+               source ${DATADIR}/winezgui-backup-restore-function
+               source ${DATADIR}/winezgui-restore-wzt
+               RESTORE_WZT_FILE
+          fi # -z "${WZT_FILE}"
+
+          # Clear temporary used variables
+          unset WZT_FILE
+          unset FOUND_PREFIX_DIR
+          unset FOUND_DESKTOP_FILE
+          unset FOUND_SCRIPT_FILE
+          unset PREFIXNAME
+          unset GN
+
+          # Go back to Main Window
+          WineZGUI_Window
+     fi
+
+
+     if [ "${SELECTION}" = "Configure..." ] ;then
+          source ${DATADIR}/winezgui-configure
+          CONFIGURE
+          WineZGUI_Window
+     fi
+
+     # Settings
+     if [ "${SELECTION}" = "Settings..."  ]; then
+          source ${DATADIR}/winezgui-settings
+          SETTINGS
+          WineZGUI_Window
+     fi
+
+     # More
+     if [ "${SELECTION}" = "More..."  ]; then
+          source ${DATADIR}/winezgui-more
+          MORE
+          WineZGUI_Window
+     fi
+     # Delete
+     if [ "${SELECTION}" = "Delete..."  ]; then
+          source ${DATADIR}/winezgui-delete-prefix
+          DELETE_PREFIX
+          WineZGUI_Window
+     fi
+
+     if [ "${SELECTION}" = "Help..." ]; then
+          DBUG "I: Help... Selected!"
+          source ${DATADIR}/winezgui-show-help
+          SHOW_HELP
+          WineZGUI_Window
+          # Customize
+     fi
+
+     # ====================== About ================================== #
+     if [ "${SELECTION}" = "About..." ]; then
+          DBUG "I: About... Selected!"
+          # Text is more, so we need to format it, with sed in pango markup
+          unset TEXT
+          TEXT="$(cat ${ABOUTFILE} \
+          |sed "s/https:/https|/g" \
+          |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+          |sed "s/:/,:,/g" \
+          |column -t -s ","      \
+          |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+          |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+          |sed "s/|/:/g" )"
+          zenity --info --no-wrap --text "${TEXT}"
+          WineZGUI_Window
+     fi
+     # ========================= Kill all ============================ #
+     # It is a required feature, users will have trouble if
+     # some wine application hang or stay resident
+     if [ "${SELECTION}" = "Kill all..." ] ; then
+          DBUG "I: Kill all... Selected!"
+          DBUG "I: Kill all: exiting ${APPNAME}!"
+          # for killing all wine instance from flaptak sandbox
+          if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then
+               # flatpak wine and winezgui will be killed
+               flatpak-spawn --host flatpak kill ${FLATPAK_NAME}
+          else
+               # Find all process which ends with .exe and kill them
+               WINE_PROCESSES=$( ps -aux             | \
+                         grep -i "\.exe"     | \
+                         sed "s/\( \)*/\1/g" | \
+                         cut -f2 -d " "
+               )
+               for PROCESS in ${WINE_PROCESSES}; do
+                    kill -9 ${PROCESS} 2>/dev/null
+               done
+               # also kill wineserver to kill explorer, etc.
+               wineserver -k
+               # exit winezgui also for consistent behavior with flatpak
+               # else host will not exit, but flatpak version will exit
+               # on using Kill all process
+               exit 0
+          fi
+
+          # Go back to menu, exit above will not let next line work
+     fi
+
+
+     # ====================== Quit ================================== #
+     if [ "${SELECTION}" = "Quit..." ] ; then
+          DBUG "I: Quit Selected..."
+          DBUG "I: Magic! :-)"
+          exit 0
+     fi
+
+
+
+} # End of WineZGUI_Window
+# END of "Start WineZGUI window when no argument is supplied" section
+
+#------------------------------- Startup -----------------------------#
+# on launch, if no argument is provided
+if [ $# -eq 0  ]; then
+     DBUG "I: Startup: No arguments supplied..."
+else
+
+     DBUG "I: Startup: Checking ${EXE_FILE}"
+     EXE_FILE="$(realpath -m "$1")"
      EXE_NAME=$(basename "${EXE_FILE}")
      EXE_PATH=$(dirname  "${EXE_FILE}")
      EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
-     EXE_NOEXE=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
-                                 |sed "s/\.[Mm][Ss][Ii]//")
+     EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
+          |sed "s/\.[Mm][Ss][Ii]//")
      EXE_EXT="${EXE_FILE##*.}"
-     WINEPREFIX_SUBDIR="${WINEZPREFIX}/${EXE_NOEXE}"
+     WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
 
-     # If existing prefix exists for the exe
-     if [ -f  ${WINEZPREFIX}/${EXE_NOEXE}/"${EXE_NOEXE}.sh" ]
-          then
-          echo "I: Open EXE: ${EXE_NAME}: Existing Prefix found for the exe!" \
-               "Launching..."
-          ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
-#          SELECTION=$( \
-#          zenity \
-#          --title "${APPNAME} (${WINEVER})" \
-#          --width=500 --height=300 \
-#          --list \
-#          --radiolist --column " " \
-#          --column "Action"                                             \
-#                 0 "Run with Default Prefix..."               \
-#              TRUE "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix"  \
-#                 0 "Run ${EXE_NAME} configuration"                      \
-#            --text "Select Action for ${EXE_NAME} " )
-     else
-          echo "I: Open EXE: ${EXE_NAME}: No Prefix! Create a prefix or Run?"
-          SELECTION=$(zenity  --title "${APP_WITH_VER}"             \
-                              --width=500 --height=300              \
-                              --list  --hide-header                 \
-                              --radiolist --column " "              \
-                              --column "Action"                     \
-                                  TRUE "Run with Default Prefix..." \
-                                     0 "Create Prefix..."           \
-                                --text "<b>${EXE_NAME}...</b>" )
-     fi
+     # some games need to cd to the dir to work
+     export base=$(basename "$1")
+     export dire=$(dirname  "$1")
 
-     # Exit if Cancel is clicked go back to main menu
-     if [ -z "${SELECTION}" ]
-          then
-          echo "I: Open EXE: Cancelled!"
-          Main_Function
-     fi
+     # if arugment is not an exe file, then quit
+     IS_EXE="$(echo ${EXE_EXT}|tr A-Z a-z)"
 
-     # If exe prefix (already created prefix for the exe) does not exist
-     if [ "${SELECTION}" = "Run with Default Prefix..." ]
-          then
-          cd "${EXE_PATH}" 2>/dev/null; # Go to the exe directory then run
-          echo "I: Open EXE: Running EXE with default prefix"
-          echo "I: Open EXE: Launching ${EXE_NAME}!"
-          echo "W: Open EXE: ${APPNAME} exits!"
-          WINEPREFIX=${DEFAULT} ${WINE_CMD} "${EXE_NAME}" # "$@"
+     # Check if the argument is exe or msi or wzt
+     if [ "${IS_EXE}" != "exe" ] && [ "${IS_EXE}" != "msi" ] && \
+        [ "${IS_EXE}" != "wzt" ] ; then
 
-     # Create Prefix for the selected EXE
-     elif [ "${SELECTION}" = "Create Prefix..." ]
-            then
-            echo "I: Open EXE: Creating Prefix for ${EXE_FILE}"
-            ${DATADIR}/winezgui-create-prefix "${EXE_FILE}"
-          	# Launch after creating new prefix
-            echo "I: Open EXE: Created Script:" \
-                 "${WINEPREFIX_SUBDIR}/${EXE_NOEXE}.sh"
-            echo "I: Open EXE: Created Script: Launching ${EXE_NOEXE}.sh"
-          	${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
+          echo "E: Startup: \"${EXE_NAME}\" is not an EXE file"
+          Mesg "I: Startup: Please provide an exe, msi, or a wzt file..."
+          DBUG "I: Startup: Exiting..."
+          exit 1
 
-#	   # Run with existing exe prefix?
-#     elif [ "${SELECTION}" = \
-#            "Run ${EXE_NAME} with existing ${EXE_NOEXE} Prefix" ]
-#            then
-#            echo "I: Open EXE: Launching \"${EXE_NOEXE}.sh\""
-#	          ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh" "launch"
-
-#     # Show exe prefix configuration
-#     elif [ "${SELECTION}" = "Run ${EXE_NAME} configuration" ]
-#            then
-#            echo "I: Open EXE: Launching Config Script \"${EXE_NOEXE}.sh\""
-#            ${WINEPREFIX_SUBDIR}/"${EXE_NOEXE}.sh"
-     else
-          echo "I: Open EXE: Bye!"
-          exit 0
      fi
 fi
+
+## On 1st launch create default wine prefix
+### Create a default wine prefix directory ###
+if ! [ -d "${WINEZGUI_TEMPLATE}" ]; then
+     DBUG "I: Startup: ${WINEZGUI_TEMPLATE} does not exist, creating.."
+     mkdir -p "${WINEZGUI_TEMPLATE}"
+fi
+
+# ====================== Open EXE ================================= #
+OPEN_EXE_FUNCTION(){
+     if [ -f "${EXE_FILE}"  ] ; then
+
+          if [ "${IS_EXE}" = "wzt" ]; then
+               export WZT_FILE="${EXE_FILE}"
+               DBUG "I: Startup: WineZGUI Backup file submitted"
+               source ${DATADIR}/winezgui-backup-restore-function
+               source ${DATADIR}/winezgui-restore-wzt
+               RESTORE_WZT_FILE
+               DBUG "I: Startup: Exiting main program after restoring backup"
+               exit 0;
+          fi
+          DBUG "I: Open EXE: exe is ${EXE_FILE}"
+          # Prompt to Launch exe with default or existing Prefix of that exe
+          EXE_FILE=$(realpath -m "${EXE_FILE}")
+          EXE_NAME=$(basename    "${EXE_FILE}")
+          EXE_PATH=$(dirname     "${EXE_FILE}")
+          EXE_NOSP=$(echo ${EXE_NAME} |tr " " "_");
+          EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
+               |sed "s/\.[Mm][Ss][Ii]//")
+          EXE_EXT="${EXE_FILE##*.}"
+          WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
+          # If existing prefix exists for the exe
+          SCRIPT_TO_RUN="${WINEZGUIDIR}/${EXE_LESS}/${EXE_LESS}.sh"
+          DEBUG="y"
+          DBUG "SCRIPT_TO_RUN $SCRIPT_TO_RUN"
+          unset DEBUG
+          if [ -f  "${SCRIPT_TO_RUN}" ] ; then
+               DBUG "I:OE: Prefix found for ${EXE_NAME}! Launching..."
+               
+               "${SCRIPT_TO_RUN}" # Run the script file associated with the exe
+
+               # If open exe closes/deleted/cancelled by user from winezgui,
+               #  continue with winezgui, this is more of an expected behavior
+               DBUG "I: Open EXE: Re-Launching Main function after ${EXE_LESS}.sh"
+               WineZGUI_Window
+
+          else
+               DBUG "I: Open EXE: Creating Prefix for ${EXE_FILE}"
+               ${DATADIR}/winezgui-create-prefix "${EXE_FILE}"
+               # Launch after creating new prefix
+               DBUG "I: Open EXE: Created Script:" \
+                    "${WINEPREFIX_SUBDIR}/${EXE_LESS}.sh"
+               DBUG "I: Open EXE: Created Script: Launching ${EXE_LESS}.sh"
+               ${WINEPREFIX_SUBDIR}/"${EXE_LESS}.sh"
+
+               # Exit after script file is created
+               echo "WineZGUI !!!not!!! Exiting after launching ${EXE_LESS}.sh..."
+               #exit 0
+               WineZGUI_Window
+          fi
+     fi
 }
 
 # Initialize Wineprefix for use
-INITIALIZE_WINEPREFIX
+INITIALIZE_WINEPREFIX "${WINEZGUI_TEMPLATE}"
 
 # Start WineZGUI when no argument is supplied
-if [ $# -eq 0 ]
-     then
-     echo "I: Startup: Launching WineZGUI"
-     Main_Function
+if [ $# -eq 0 ] ; then
+     DBUG "I: Startup: Launching WineZGUI"
+     WineZGUI_Window
 fi
 # Open exe function handles exe argument
 OPEN_EXE_FUNCTION
+

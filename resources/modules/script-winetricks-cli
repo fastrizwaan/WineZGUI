@@ -1,0 +1,54 @@
+SCRIPT_WINETRICKS_CLI()
+{
+  VERB_LIST="xact xinput gmdls xna31 dotnet48 \
+            vcrun2003 vcrun2005              \
+            vcrun2008 vcrun2010              \
+            vcrun2019 dxvk faudio            \
+            quartz avifil32 d3dx9_43 corefonts"
+
+# Old Games with MIDI support
+# d3dx9 xact quartz gmdls avifil32 faudio d3dx9_43 dmusic32 vcrun2008 dirac \
+# dmband dmcompos dmime dmloader dmscript dmstyle dmsynth dmusic dsound dswave \
+# directmusic directplay amstream
+
+  MESSAGE="Change & Press Enter to install these using Winetricks:"
+  TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
+  # Remove multiple spaces from variable
+  VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
+
+  VERBS=$( zenity --title "${TITLE_TEXT}"   \
+                 --width=800 --height=30    \
+                 --text  "${MESSAGE}"         \
+                 --entry-text "${VERB_LIST}"  \
+                 --entry)
+
+  if [ -z "${VERBS}" ]; then #if no dlls are given
+       #go back to Main function
+       DBUG "I: Script: Winetricks CLI: no verbs are given!"
+  else
+       VERBS=(${VERBS}) ; #convert string to array
+       DBUG "I: Script: Winetricks CLI: Selected verbs:"
+       DBUG "I: Script: ${VERBS[*]}"
+
+       # Report user the time it took to install winetricks
+       TIMER_START=${SECONDS}
+
+       # Start of Show Progress using zenity dialog
+       ( for i in ${VERBS[*]}; do
+
+       # Show Progress Percentage and Info
+       echo "# Installing ${i}..."
+
+       # Install winetricks verbs and put output to logs
+       ${WTRICKS_CMD} --unattended ${i}
+       done
+       TOOK=$(( SECONDS - ${TIMER_START} ))
+       echo "# Time Taken: ${TOOK} seconds!"
+       ) | zenity --width=500 \
+                 --title="Please Wait... This will take time!" \
+                 --progress --pulsate --auto-kill
+       # Inform about time taken
+
+       DBUG "I: Script: Winetricks CLI: Exited!"
+  fi
+}

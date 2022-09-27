@@ -10,7 +10,7 @@ wine start /unix "$(echo $OUT|xargs winepath)"
 
 #########
 # Flatpak data/application -> ~/.local/share/applications
-env WINEPREFIX="/home/rizvan/.var/app/io.github.WineZGUI/data/prefixes/AngelWriterSetup/dosdevices/h:/.var/app/io.github.WineZGUI/data/prefixes/AngelWriterSetup" flatpak run --command=wine io.github.WineZGUI start /unix  "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Angel Writer\\Angel Writer.lnk"
+env WINEPREFIX="/home/rizvan/.var/app/io.github.WineZGUI/data/winezgui/Prefixes/AngelWriterSetup/dosdevices/h:/.var/app/io.github.WineZGUI/data/winezgui/Prefixes/AngelWriterSetup" flatpak run --command=wine io.github.WineZGUI start /unix  "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Angel Writer\\Angel Writer.lnk"
 
 ############# SED ME
 cat ~/.local/share/applications/ANGEL_WRITER.desktop |sed 's/\\\\/\\/g' |sed 's/ wine C/ flatpak run --command=wine io.github.WineZGUI start \/unix  C/g'

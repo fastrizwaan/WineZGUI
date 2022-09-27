@@ -1,0 +1,258 @@
+GENERATE_SEARCH_AND_REPLACE()
+{
+      # Unset any previously initialized variables
+      unset SEARCH
+      unset REPLACE
+      unset FPNAME
+      unset LEN
+      ##################### I. PREPARE SEARCH AND REPLACE VALUES ###################
+      # A. *.reg files
+      # flatpak name has .(period) which confuses sed
+      # Only sed if FLATPAK_NAME has value
+      # 1. Check if FLATPAK_NAME variable exist (usually only flatpak version has)
+      if ! [ -z "$FLATPAK_NAME" ]; then
+      # replace . with \. for sed
+      FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+      fi
+
+      # 2. Paths needs flatpak/system specific replacement
+      # Registry file config value
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
+      else  SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
+            REPLACE=("XOCONFIGXO")
+
+      # B. *.desktop and *.sh files
+      # 3. Change Prefix directory
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            SEARCH+=("\.var\/app\/${FPNAME}\/data\/winezgui\/Prefixes")
+      else  SEARCH+=("\.local\/share\/winezgui\/Prefixes"); fi
+            REPLACE+=("XOPREFIXXO")
+
+
+      # *.desktop and *.sh files
+      # 4. Chagne WINEZGUIDIR dir
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            SEARCH+=("\.var\/app\/${FPNAME}\/data\/winezgui")
+      else  SEARCH+=("\.local\/share\/winezgui"); fi
+            REPLACE+=("XOWINEZGUIDIRXO")
+
+      # *.desktop and *.sh files
+      # 5. Change DESKTOP shortcuts directory name
+      # where we link the script related .desktop files
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            SEARCH+=("\.local\/share\/applications\/winezgui\/${FPNAME}")
+      else  SEARCH+=("\.local\/share\/applications\/winezgui"); fi
+            REPLACE+=("XODESKTOPDIRXO")
+
+      # *.reg files
+      # 6. Applications direcotry for registry
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            SSSSSSS=("\.var\\\\\\\\app\\\\\\\\${FPNAME}")
+            SEARCH+=("${SSSSSSS}\\\\\\\\data\\\\\\\\applications")
+      else  SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications");  fi
+            REPLACE+=("XOAPPLICATIONSXO")
+
+      # C. Paths
+      # 7. Applications directory (desktop files related)
+      SEARCH+=("\.local\/share\/applications")
+      REPLACE+=("XOAPPLICATIONSDIRXO")
+
+      # D. \\user\\user *.reg
+      # 8. Replace username
+      SEARCH+=("\\\\\\\\users\\\\\\\\${USER}")
+      REPLACE+=("XOREGUSERSUSERXO")
+
+      # E. \\home\\user\\ *.reg
+      # 9. Replace HOME\USER
+      SEARCH+=("\\\\\\\\home\\\\\\\\${USER}")
+      REPLACE+=("XOREGHOMEUSERXO")
+
+      # F. "USERNAME"="user" user.reg
+      # 10. same as above
+      SEARCH+=(\"USERNAME\"=\"${USER}\")
+      REPLACE+=("XOREGUSERNAMEUSERXO")
+
+      # G. Registry
+      # 11. Replace "InstalledBy"="USER"
+      SEARCH+=(\"InstalledBy\"=\"${USER}\")
+      REPLACE+=("XOREGINSTALLEDBYUSERXO")
+
+      # H. Home directory scripts and desktop file
+      # 12. /home/$user
+      SEARCH+=("\/home\/${USER}")
+      REPLACE+=("XOUSERHOMEXO")
+
+      # I. drive_c/users/$user
+      # 13. users/$user
+      SEARCH+=("\/users\/${USER}")
+      REPLACE+=("XOUSERSUSERXO")
+
+      # J. Variables
+      # Sed can't change empty string/variables,
+      # e.g., flatpakid in system install is empty
+      # 14. change FLATPAK_NAME if found
+      if ! [ -z "$FLATPAK_NAME" ]; then
+      FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+      SEARCH+=("${FPNAME}")
+      REPLACE+=("XOFLATPAKIDXO")
+      fi
+
+      # 15. Change /{user,app}/bin/wine -> XOWINEEXEXO and vice versa
+      WEXE=$(echo ${WINE_CMD}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+      SEARCH+=("${WEXE}")
+      REPLACE+=("XOWINEEXEXO")
+
+      # 16. Change wine version
+      WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+      SEARCH+=("${WVER}")
+      REPLACE+=("XOWINEVERXO")
+
+      # Not changing user only
+      #  SEARCH+=("${USER}")
+      #  REPLACE+=("XOUSERXO")
+
+      # Now do the processing with the above search and replace values
+
+      LEN=${#SEARCH[@]}
+}
+
+GET_FILES_TO_CHANGE()
+{
+      if [ -z "${1}" ]; then
+            echo "Must provide Prefix or Template Directory to process"
+            return 1
+      else
+            TOPDIR=$(dirname  "${1}")
+            SUBDIR=$(basename "${1}")
+            echo "SUBDIR=$SUBDIR"
+      fi
+      # Find files to change in the Prefix
+      cd "${TOPDIR}"
+      
+      unset FILE_LIST
+      FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "Info.yml" 2>/dev/null)
+      FILE_LIST+=" "
+      FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.reg" 2>/dev/null)
+      FILE_LIST+=" "
+      FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.sh" 2>/dev/null)
+      FILE_LIST+=" "
+      FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.desktop" 2>/dev/null)
+      FILE_LIST+=" "
+}
+
+
+RESTORE_FUNCTION()
+{
+      if [ -z "${1}" ]; then
+            echo "Must provide Prefix or Template Directory to process"
+            return 1
+      else
+            TOPDIR=$(dirname  "${1}")
+            SUBDIR=$(basename "${1}")
+            echo "SUBDIR=$SUBDIR"
+      fi      
+
+      GENERATE_SEARCH_AND_REPLACE
+      GET_FILES_TO_CHANGE "${1}"
+      
+      cd "${TOPDIR}"
+
+      DBUG "I: Restore: Processing files inside ${SUBDIR}"
+      for (( i=0; i <${LEN}; i++ )); do
+            sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}
+            #&& \
+            # DBUG "I: Restore: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
+
+      done
+      # Rename Directory on Restore
+      DSOURCE="${SUBDIR}/drive_c/users/${USER}"
+      DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+      # If not restored from a backup file, revert xouserxo->user
+      # Make sure that directory for the user exists, before moving
+      if [ -d "${SUBDIR}/drive_c/users/XOUSERXO" ]; then
+            mv "${DTARGET}" "${DSOURCE}" && \
+            echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+      fi
+      # Recreate Links to H: link to $HOME on Restore
+      DBUG "I: Restore: Recreating Links to H: in ${SUBDIR} prefix"
+
+      ln -sf "${HOME}" "${PWD}/${SUBDIR}/dosdevices/h:" && \
+      DBUG "I: Restore: Created H: symlink ${HOME}" \
+            "to ${SUBDIR}/dosdevices/h:"
+
+      # Process desktop and script files if the prefix is not default
+      # For Install Type and Flatpak Name
+      if ! [ "${SUBDIR}" = "default" ]; then
+            # Set install type
+            sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
+                  ${SUBDIR}/*.sh && \
+                  DBUG "I: Restore: Updated ${INSTALL_TYPE} in script file"
+            # set flatpak name on restoring (flatpak)
+            sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
+                  ${SUBDIR}/*.sh && \
+                  DBUG "I: Restore: Updated ${FLATPAK_NAME} in script file"
+      fi
+      # Cleanup variables
+      unset LEN
+      unset SSSSSSS
+      unset SEARCH
+      unset REPLACE
+      unset FIND_EXE_PATH
+      unset FPNAME
+      unset WEXE
+      unset WVER
+      unset FILE_LIST
+      unset DTARGET
+      unset DSOURCE
+ }
+BACKUP_FUNCTION()
+{
+      if [ -z "${1}" ]; then
+            echo "Must provide Prefix or Template Directory to process"
+            return 1
+      else
+            TOPDIR=$(dirname  "${1}")
+            SUBDIR=$(basename "${1}")
+            echo "SUBDIR=$SUBDIR"
+      fi      
+
+      GENERATE_SEARCH_AND_REPLACE
+      GET_FILES_TO_CHANGE "${1}"
+      cd "${TOPDIR}"
+      DBUG "I: Backup: Processing files inside ${SUBDIR}"
+      for (( i=0; i <${LEN}; i++ ))
+          do
+          sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST}
+          #&& \
+          #DBUG "I: Backup: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      done
+
+      # Rename Directory for Backup
+      DSOURCE="${SUBDIR}/drive_c/users/${USER}"
+      DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+      # Make sure that directory for the user exists, before moving
+      if [ -d "${SUBDIR}/drive_c/users/${USER}" ]; then
+           mv "${DSOURCE}" "${DTARGET}" && \
+           echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+      fi
+
+
+      # Remove H: links on Backup
+      rm  "${SUBDIR}/dosdevices/h:" && \
+      DBUG "I: Backup: Removed H: symlink ${SUBDIR}/dosdevices/h:"
+
+ # Cleanup variables
+ unset LEN
+ unset SSSSSSS
+ unset SEARCH
+ unset REPLACE
+ unset FIND_EXE_PATH
+ unset FPNAME
+ unset WEXE
+ unset WVER
+ unset FILE_LIST
+ unset DTARGET
+ unset DSOURCE
+
+}

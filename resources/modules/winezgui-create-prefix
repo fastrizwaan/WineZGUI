@@ -1,0 +1,639 @@
+#!/usr/bin/env bash
+# ============================================================================ #
+# winez-create-prefix (C) GPL3 Mohammed Asif Ali Rizvan <fast.rizwaan@gmail.com>
+# URL: https://github.com/fastrizwaan/WineZGUI
+# Creates Application shortcut when called from winezgui.
+# ============================================================================ #
+DBUG()
+{ 
+     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
+          echo "${1}"
+     fi
+}
+
+DBUG "I: Create Prefix: Starting WineZGUI Create Script ($0)"
+
+# Exit if no arguments are provided
+if [ -z "${1}" ]; then
+     DBUG "I: Create Prefix: No Arguments... bye";
+fi
+
+export APPNAME=WineZGUI
+export WINEVER="$(wine --version|cut -f1 -d " ")"
+export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+
+export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
+
+export WINE_CMD="$(which wine)"
+export WTRICKS_CMD=$(which winetricks)
+export TEMPDIR="${WINEZGUIDIR}/tmp"
+export EXIFTOOL=$(which exiftool)
+
+# These values will be assigned by Setup using sed command
+# Post install ${PREFIX}/bin/winezgui-create-prefix file will be different
+export APPVERSION="git"
+export APP_WITH_VER="${APPNAME}-${APPVERSION}"
+export INSTALL_TYPE="system"
+export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
+export FLATPAK_NAME="io.github.WineZGUI"
+
+export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
+
+# Where to install .desktop shortcuts?
+# for system install (./setup -i) use ~/.local/share/applications/winezgui
+if [ "${INSTALL_TYPE}" = "system" ]; then
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+     export DESKTOPDIR
+else
+     # for flatpak create subdirectory with flatpakname
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     export DESKTOPDIR
+fi
+
+# winezgui backup file extension
+export BKP_EXT="wzt"
+
+DBUG "I: Create Prefix: Checking if an exe file is provided"
+EXE_FILE=$(realpath -m "$1")
+EXE_NAME=$(basename "${EXE_FILE}")
+EXE_PATH=$(dirname  "${EXE_FILE}")
+EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
+EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+EXE_EXT="${EXE_FILE##*.}"
+export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export PREFIXDIR="${PREFIXES_DIR}/${EXE_LESS}"
+export PREFIXNAME="${EXE_LESS}"
+export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
+# Files
+export INFOFILE="${PREFIXDIR}/Info.yml"
+export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
+export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
+export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
+
+ICON="${ICONFILE}"
+
+# If argument is not an exe file, then quit
+# Make it small case to compare
+EXTENSION="$(echo ${EXE_EXT}|tr A-Z a-z)"
+EXE="exe"
+MSI="msi"
+
+
+# If exe or msi file is not given, we can't create script for other files
+if [ "${EXTENSION}" != "${EXE}" ] && [ "${EXTENSION}" != "${MSI}" ]; then
+     echo "E: Create Prefix: \"${EXE_NAME}\" is not an ${EXE} or ${MSI} file"
+     DBUG "I: Create Prefix: Please, give an ${EXE} or ${MSI} file as argument"
+     DBUG "I: Usage: ${0} path/to/app.exe "
+     exit 1
+fi
+
+# Clear variables
+unset EXTENSION
+unset EXE
+unset MSI
+
+# Create required directories
+mkdir -p  "${PREFIXES_DIR}" && \
+DBUG "I: Create Prefix: Created directory ${PREFIXES_DIR}"
+
+mkdir -p  "${DESKTOPDIR}" && \
+DBUG "I: Create Prefix: Created directory ${DESKTOPDIR}"
+
+# Extract icon and convert it to several png files of diferent quality,
+# Create a temporary Directory to extract icon from the exe file
+DBUG "I: Create Prefix: Icon: Extraction from ${EXE_NAME}"
+mkdir -p ${TEMPDIR} && \
+DBUG "I: Create Prefix: Icon: Created directory ${TEMPDIR}"
+cd ${TEMPDIR}
+
+# Start processing submitted exe file
+DBUG "I: Create Prefix: Preparing prefix for exe file"
+
+# We are switching to Template based system, where user can install all
+# winetricks verbs and save as a template. default will be the link to using
+# Template.
+
+export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+export TEMPLATE_NAME=$(basename ${TEMPLATE})
+
+# Copy the Default Prefix linked wine to avoid showing dialog
+if [ ! -d "${PREFIXDIR}" ]; then
+   echo "${PREFIXNAME} not found, copying...${TEMPLATE_NAME}"
+
+   ( cp -rf "${TEMPLATE}" "${PREFIXDIR}" )| \
+     zenity  --progress --pulsate --auto-close --width=500 \
+     --title="${APP_WITH_VER} - Create Game Prefix" \
+     --text="Copying template <b>${TEMPLATE_NAME}</b> to <b>${PREFIXNAME}!</b>"
+
+fi
+
+
+# wrestool extracts ico file from EXE
+wrestool -x -t 14 "${EXE_FILE}" > "${TEMPDIR}/${EXE_LESS}.ico" 2> /dev/null && \
+DBUG "I: Create Prefix: Icon: Wrestool executed"
+
+# Only try to extract Icon when Icon is Found in the EXE
+# icotool extracts all png files from ico files
+# Select and copy the best png image file by sorting using ls -S1.
+icotool -x "${TEMPDIR}/${EXE_LESS}.ico" 2>/dev/null && \
+DBUG "I: Create Prefix: Icon: Icotool: Extracting png files from" \
+     "${EXE_LESS}.ico" && \
+cp $(ls -S -1 ${TEMPDIR}/${EXE_LESS}*.png  | head -n 1) ${ICON} && \
+DBUG "I: Create Prefix: Icon: Copied successfully..." && WARN="false"
+
+# If icon could not be copied, warn the user
+if [ "${WARN}" != "false" ]; then
+     DBUG "I: Create Prefix: Icon could not be copied..." \
+          "use \"Change Icon...\" option"
+fi
+
+# Cleanup tempdir and clear variable
+unset WARN
+
+#remove tmp directory after copying icon png
+rm -rf "${TEMPDIR}" && \
+DBUG "I: Create Prefix: Icon: Cleanup ${TEMPDIR}"
+
+
+
+# Prepare Desktop file
+appCategory="Game"
+DBUG "I: Create Prefix: Setting Category - ${appCategory}"
+
+# Create Desktop Shortcut
+
+DBUG "I: Create Prefix: Name: Program Name Detection from exe file"
+# Automatically set name, read from pe file, if not found use exe name
+PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i "product name"|cut -f2 -d ":" \
+                                                          |sed "s/^ //")
+# if language is not english inside exe name, or product is "", use exe name
+if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z] ) ] || [ -z "${PRODUCT}" ]; then
+     unset PRODUCT
+     unset PROGNAME
+     PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[mM][Ss][Ii]//g"\
+                                                    |sed "s/\.[eE][Xx][Ee]//g");
+     DBUG "I: Create Prefix: Name: Product Name not found, using exe name"
+else
+     PROGNAME=$(echo "${PRODUCT} (${APP_WITH_VER})");
+     DBUG "I: Create Prefix: Name: Product Name found: \"${PRODUCT}\""
+fi
+
+
+# Generate Sha256sum for the exefile
+CHECKSUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+DBUG "I: Create Prefix: Sha256sum: ${CHECKSUM}"
+
+# Create Launch Script for the provided EXE file
+# ------------------------------------------------
+# Launch script needs
+DBUG "I: Create Prefix: Script: Launch Script Creation..."
+DBUG "I: Create Prefix: Script: Copying required script modules"
+
+# Check PREFIXDIR is writable or not
+if ! [ -w "${PREFIXDIR}" ] ; then
+       echo "E: Create Prefix: Script: Cannot write to ${PREFIXDIR}"
+       echo "W: Create Prefix: Script: Aborting!"
+       exit 1
+fi
+
+#Create scripts directory inside prefixdir
+mkdir -p "${WINEZGUI_SCRIPTS}"
+
+# copy the scripts from datadir to winezgui-scripts directory inside prefixdir
+SAVEIFS=${IFS}
+IFS=$(echo -en "\n\b")
+for SCRIPT in $(ls ${DATADIR}); do
+
+   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" || \
+   (echo "Error copying modules" ; exit)
+done
+IFS=${SAVEIFS}
+
+# Clean up variables
+unset SCRIPT_MODULES
+unset SCRIPT
+
+# need variables from this script
+echo "
+#!/bin/bash
+export APPNAME=\"${APPNAME}\"
+export FLATPAK_NAME=\"${FLATPAK_NAME}\"
+export APPVERSION=\"${APPVERSION}\"
+export APP_WITH_VER=\"${APPNAME}-${APPVERSION}\"
+export WINEVER=\"${WINEVER}\"
+export WINEARCH=\"${WINEARCH}\"
+export PROGNAME=\"${PROGNAME}\"
+export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
+export WINEZGUIDIR=\"${WINEZGUIDIR}\"
+export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
+export PREFIXNAME=\"${EXE_LESS}\"
+export EXE_FILE=\"${EXE_FILE}\"
+export EXE_NAME=\"${EXE_NAME}\"
+export CHECKSUM=\"${CHECKSUM}\"
+export EXE_PATH=\"${EXE_PATH}\"
+export EXE_NOSP=\"${EXE_NOSP}\"
+export EXE_LESS=\"${EXE_LESS}\"
+export EXE_EXT=\"${EXE_FILE##*.}\"
+export PREFIXDIR=\"${PREFIXDIR}\"
+export WINEPREFIX=\"${PREFIXDIR}\"
+export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
+export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
+
+export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
+
+export DESKTOPDIR=\"${DESKTOPDIR}\"
+export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
+export EXIFTOOL=\"\$(which exiftool)\"
+# winezgui backup file extension
+export BKP_EXT=\"${BKP_EXT}\"
+
+# Files
+export INFOFILE=\"${PREFIXDIR}/Info.yml\"
+export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
+export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
+export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
+
+
+
+# if icon is found grep it
+if [ -f \"${ICONFILE}\" ]; then
+     export ICON=\"\$(grep Icon \${DESKTOPFILE}|cut -f2 -d \"=\")\"
+else
+     export ICON="null"
+fi
+" > "${SCRIPTFILE}"
+
+# Append rest
+echo '
+
+DBUG()
+{ 
+     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
+          echo "${1}"
+     fi
+}
+
+# If Settings.yml exists, get arch value from it: win32 or win64
+if [ -f "${SETTINGS_FILE}" ]; then
+     export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+fi
+
+# LD_LIBRARY_PATH
+# If empty LD_LIBRARY_PATH, add lib paths
+if [ -z "${LD_LIBRARY_PATH}" ]; then
+     LD_LIBRARY_PATH+="/lib:/lib32:/lib64"
+fi
+LD_LIBRARY_PATH+="${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64:"
+LD_LIBRARY_PATH+="/app/lib/i386-linux-gnu:/app/lib/wine:"
+LD_LIBRARY_PATH+="/app/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib/x86_64-linux-gnu/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
+LD_LIBRARY_PATH+="$(pwd)"
+export LD_LIBRARY_PATH 
+export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
+
+source ${WINEZGUI_SCRIPTS}/script-locate-exe-function
+# LOCATE_EXE_FUNCTION required on Launch
+
+
+    # If ${FLATPAK_NAME} is installed, and script created using flatpak
+    if [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+         DBUG "I: Script: Install type: Flatpak, Running from host!"
+         WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+         WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
+         WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
+         WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
+         WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
+         WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
+         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
+         export WHICHWINE
+
+    else
+        # flatpak install and running from shell inside flatpak winezgui
+        if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+             DBUG "I: Script: Install type: Flatpak, Running from flatpak!"
+             export WINE_CMD="/app/bin/wine"
+             export WTRICKS_CMD="/app/bin/winetricks"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="$(which wineboot) -i"
+             export WHICHWINE="${WINE_CMD}"
+        else
+             # We are using non flatpak install
+             DBUG "I: Script: Install type: System, Running from host!"
+             export WINE_CMD="$(which wine)"
+             export WTRICKS_CMD="$(which winetricks)"
+             export WINECFG_CMD="${WINE_CMD} winecfg"
+             export WEXPLORER_CMD="${WINE_CMD} explorer"
+             export WBOOT_CMD="$(which wineboot) -i"
+             export WHICHWINE="$(which wine)"
+        fi
+    fi
+
+# Needed for Info.yml and backup and restore function
+
+
+Script_Window ()
+{
+ unset SELECTION
+ # EXE handling by providing dialog
+
+ SELECTION=$(zenity --title       "${PROGNAME}"        \
+                    --window-icon="${ICON}"            \
+                    --width=360 --height=440           \
+                    --list      --hide-header          \
+                    --radiolist --column " "           \
+                    --column "Action"                  \
+                      TRUE   "Launch..."               \
+                      0      "Open Other EXE..."       \
+                      0      "Winetricks GUI..."       \
+                      0      "Winetricks CLI..."       \
+                      0      "Wine Programs..."        \
+                      0      "Open File Manager..."    \
+                      0      "Open Shell..."           \
+                      0      "Change..."               \
+                      0      "Backup..."               \
+                      0      "More..."                 \
+                      0      "About..."                \
+                      0      "Help..."                 \
+                      0      "Quit...."                \
+                  --text     "Select action for <b>${EXE_NAME}</b>..." )
+
+ # Exit if Cancel is clicked
+ if [ -z "${SELECTION}" ]; then
+      DBUG "I: Script: Cancel Selected. Bye!"
+      exit 0
+ fi
+
+ # If launch argument is given or prefix directory has a file named "launch" 
+ if   [ "${SELECTION}" = "Launch..." ]; then
+        DBUG "I: Script: Launch... Selected"
+        source ${WINEZGUI_SCRIPTS}/script-launch
+        SCRIPT_LAUNCH_EXE
+        # Return to Game window
+        Script_Window
+
+ elif [ "${SELECTION}" = "Open Other EXE..." ]; then
+        DBUG "I: Script: Open Other EXE... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-open-other-exe
+        SCRIPT_OPEN_OTHER_EXE
+        # Return to Game window
+        Script_Window
+
+
+        # If Winetricks GUI is selected
+ elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
+        DBUG "I: Script: Winetricks GUI... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-winetricks-gui
+        SCRIPT_WINETRICKS_GUI
+        # Return to Game window
+        Script_Window
+
+      # Provide Command Line to enter multiple Dependencies
+ elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
+        DBUG "I: Script: Winetricks CLI... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-winetricks-cli
+        SCRIPT_WINETRICKS_CLI
+        # Return to Game window
+        Script_Window
+
+
+ elif [ "${SELECTION}" = "Wine Programs..." ]; then
+        DBUG "I: Script: Wine Programs... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-wine-programs
+        SCRIPT_WINE_PROGRAMS
+        # Return to Game window
+        Script_Window
+
+ elif [ "${SELECTION}" = "Open Shell..." ]; then
+        DBUG "I: Script: Open Shell... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-open-shell
+        SCRIPT_OPEN_SHELL
+        # Return to Game window
+        Script_Window
+
+ elif [ "${SELECTION}" = "Open File Manager..." ]; then
+        DBUG "I: Script: Open File Manager... Selected!"
+        xdg-open "${EXE_PATH}"
+        # Return to Game window
+        Script_Window
+
+ elif [ "${SELECTION}" = "Change..." ]; then
+        DBUG "I: Script: Change... Selected!"
+        source  ${WINEZGUI_SCRIPTS}/script-change
+        SCRIPT_CHANGE
+        Script_Window
+        
+        # Ask user to where to save the backup
+ elif [ "${SELECTION}" = "Backup..." ]; then
+        DBUG "I: Script: Backup... Selected!"
+        # source ~/.build/WineZGUI-0.84/SCRIPT_BACKUP_FUNCTION
+        source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_BUNDLE
+        source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_PREFIX
+        source ${WINEZGUI_SCRIPTS}/script-backup
+        SCRIPT_BACKUP_FUNCTION
+        Script_Window
+
+ elif [ "${SELECTION}" = "More..." ]; then
+        DBUG "I: Script: More... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-more
+        SCRIPT_MORE
+        Script_Window
+        
+ elif [ "${SELECTION}" = "About..." ]; then
+        DBUG "I: Script: Executing About... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-about
+        SCRIPT_ABOUT
+        Script_Window
+
+ elif [ "${SELECTION}" = "Help..." ]; then
+        DBUG "I: Script: Help... Selected!"
+        source ${WINEZGUI_SCRIPTS}/script-help
+        SCRIPT_HELP
+        Script_Window
+
+ elif [ "${SELECTION}" = "Quit...." ]; then
+        DBUG "I: Script: Quit... Selected!"
+        exit 0
+
+
+ fi
+}
+
+# Change Prefix on changing EXE
+if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
+     echo "=========================================="
+     DBUG "I: Script: Change Prefix Requested..."
+     PREFIX_NAME_TO_CHANGE="$(grep Prefix "${PREFIXDIR}/Change-Prefix-Name" \
+                             |cut -f2 -d ":")"
+     echo "=========================================="
+     DBUG "I: Script: Launching script-rename-prefix function (RENAME_PREFIX)"
+     source ${WINEZGUI_SCRIPTS}/script-rename-prefix
+     rm "${PREFIXDIR}/Change-Prefix-Name"
+     echo "------------------------------"
+     echo "RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}"
+     echo "------------------------------"
+     RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}
+
+fi
+
+# If restored from Backup, update the wineprefix on different wine version
+# without install mono and install html dialog
+if [ -f ${PREFIXDIR}/restored.txt ]; then
+     DBUG "I: Script: Updating wine prefix on 1st run after restoring backup"
+     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     WINEPREFIX=${PREFIXDIR} \
+     ${WBOOT_CMD} 2>/dev/null
+     rm ${PREFIXDIR}/restored.txt
+fi
+
+# Creating/Updating Prefix for the EXE prefix
+
+# Sandboxify by rm links to ~/Documents ~/Downloads ~/Videos etc.
+if [ ! -f ${PREFIXDIR}/replaced_symlinks.txt  ]; then
+
+     DBUG "I: Script: Prefix: Creating Prefix..."
+     # Create Prefix and delete base system linked directory links
+     DBUG "I: Script: Prefix: wine=$(which wine)"
+     DBUG "I: Script: Prefix: WINEPREFIX=${WINEPREFIX}"
+     DBUG "I: Script: Prefix: Wineboot command = ${WBOOT_CMD}"
+     DBUG "I: Script: Prefix: WINEARCH ${WINEARCH}"
+     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     WINEDEBUG=-all \
+     WINEPREFIX=${PREFIXDIR} \
+     ${WBOOT_CMD} 2>/dev/null
+
+     # Replace home liked directory links with normal directories
+     # For Games which saves in ~/Documents now will save in
+     # Prefix-dir/drive_c/users/${USER}/Documents
+     DBUG "I: Script: Prefix: Replacing symlinks with directories inside prefix"
+     SAVEIFS=${IFS}
+     IFS=$(echo -en "\n\b")
+     for i in $(find ${WINEPREFIX}/drive_c/users/${USER} -type l); do
+           rm $i && mkdir -p $i && \
+           echo $i >> ${PREFIXDIR}/replaced_symlinks.txt
+     done
+     IFS=${SAVEIFS}
+
+     # Create file to check later
+     touch ${PREFIXDIR}/replaced_symlinks.txt
+
+     # Create H: for HOME Directory for Wine Explorer
+     ln -sf "${HOME}" "${PREFIXDIR}/dosdevices/h:"
+     DBUG "I: Script: Prefix: Creating H: symlink to ${HOME}"
+     DBUG "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
+fi
+
+# Create Metadata Info.yml for the prefix
+if [ ! -f "${INFOFILE}" ]; then
+     #  Insert Data into Info.yml
+     DATE=$(date +%F_%H%M)
+
+     echo "Name:${PROGNAME}"                >  "${INFOFILE}"
+     echo "Exe:${EXE_FILE}"                 >> "${INFOFILE}"
+     echo "Sha256sum:${CHECKSUM}"           >> "${INFOFILE}"
+     echo "Exe Path:${EXE_PATH}"            >> "${INFOFILE}"
+     echo "Prefix:${PREFIXNAME}"            >> "${INFOFILE}"
+     echo "Script:${SCRIPTFILE}"            >> "${INFOFILE}"
+     echo "Icon:${ICONFILE}"                >> "${INFOFILE}"
+     echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
+     echo "Created:${DATE}"                 >> "${INFOFILE}"
+     echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
+     echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
+     echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
+     echo "Install:${INSTALL_TYPE}"         >> "${INFOFILE}"
+
+     # Include flatpak id in Info.yml
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          echo "Flatpak:${FLATPAK_NAME}"    >> "${INFOFILE}"
+     fi
+     DBUG "I: Script: Prefix: Created ${INFOFILE}"
+fi
+
+# Handle Commandline Argument ${0} backup, ${0} launch etc.
+# Either we run with argumement from winezgui or from prefixdir manually
+if   [ "$1" = "delete" ]; then
+       source ${WINEZGUI_SCRIPTS}/script-delete
+       SCRIPT_DELETE
+       exit 0;
+elif [ "$1" = "backup" ]; then
+       cd ${PREFIXES_DIR}
+       source ${DATADIR}/winezgui-backup-restore-function
+       source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_BUNDLE
+       source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_PREFIX
+       source ${WINEZGUI_SCRIPTS}/script-backup
+       SCRIPT_BACKUP_FUNCTION
+       exit 0;
+elif [ "$1" = "shortcut" ]; then
+       source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
+       SCRIPT_GET_SELECTED_EXE
+       # Just launching the selected exe, create desktop file and run this
+       source ${WINEZGUI_SCRIPTS}/script-create-other-shortcuts
+       SCRIPT_CREATE_OTHER_SHORTCUTS
+       echo "${SHORTCUT_NEW_EXE}"
+       exit 0;
+elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
+     [ "${LAUNCH}" != "False" ]; then
+       # If asked to run "wine exe" by winezgui using launch option
+       # Launch 
+       # 1. If launch file is found, and it is not running from winezgui window
+       # 2. If Script is called from WineZGUI Shortcuts...
+       # 3. If $LAUNCH variable is not set to False
+
+       source ${WINEZGUI_SCRIPTS}/script-launch
+       SCRIPT_LAUNCH_EXE
+       # Return to Game window
+       # Script_Window
+       exit 0;
+fi
+
+
+# Backup_FUNCTION Restore_Function()
+source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
+
+# Start WineZGUI when no argument is supplied
+if [ $# -eq 0 ] ; then
+     DBUG "I: Script: Launching ${EXE_NAME} script"
+     Script_Window
+fi
+
+' >> "${SCRIPTFILE}"
+# Script file Created, now make it executable
+chmod +x "${SCRIPTFILE}"
+
+# Create desktop shortcut file for menu
+echo "[Desktop Entry]"                       >  "${DESKTOPFILE}"
+echo "Name=${PROGNAME}"                      >> "${DESKTOPFILE}"
+echo "Type=Application"                      >> "${DESKTOPFILE}"
+echo "Exec=bash -c \"'${SCRIPTFILE}'\""      >> "${DESKTOPFILE}"
+echo "Icon=${ICON}"                          >> "${DESKTOPFILE}"
+echo "Keywords=winezgui; game; ${EXE_LESS};" >> "${DESKTOPFILE}"
+echo "NoDisplay=false"                       >> "${DESKTOPFILE}"
+echo "StartupNotify=true"                    >> "${DESKTOPFILE}"
+echo "Terminal=false"                        >> "${DESKTOPFILE}"
+echo "Categories=$appCategory;"              >> "${DESKTOPFILE}"
+
+
+# link the launcher  file to a shortcut on applications menu.
+mkdir -p "${DESKTOPDIR}" && \
+DBUG "I: Create Prefix: Created ${DESKTOPDIR}"
+
+ln -sf "${DESKTOPFILE}" "${DESKTOPDIR}/${EXE_LESS}.desktop" && \
+DBUG "I: Create Prefix: Symlinked ${EXE_LESS}.desktop at ${DESKTOPDIR}"
+# Test if the app link was created sucessfully on applications menu
+if [ $? -eq 0 ]; then
+     DBUG "I: Create Prefix: Shortcut ${EXE_LESS}.desktop created"
+     DBUG "I: Create Prefix: Shortcut: Name: ${PROGNAME}"
+     DBUG "I: Create Prefix: Can use \"Rename...\" to change name"
+     DBUG "I: Create Prefix: Shortcut: Exe: ${EXE_NAME}"
+fi
+# Update Menu, Icon cache and Desktop shortcuts
+${UPDATE_ICON} 2>/dev/null
+${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR} 2>/dev/null

@@ -1,0 +1,111 @@
+# Locate EXE, if exe file is not found on launch
+# Steps:
+# 1. If exe file not found, ask user to locate it
+# 2. Check sha256sum of NEW_EXE
+# 3. Set EXE and EXE path in script file and Info.yml
+# 4. Set EXE and EXE path in Info.yml
+# 5. Allow immediate exe launch by updating
+# 6. If Sha256sum did not match with the NEW_EXE
+LOCATE_EXE_FUNCTION()
+{
+  # 1. If exe file not found, ask user to locate it
+  if [ ! -f "${EXE_FILE}" ]; then
+       echo "E: Script: Locate: ${EXE_FILE} not found at ${EXE_PATH}"
+       zenity --question --no-wrap --title="${EXE_NAME} not found!" \
+              --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
+       ANSWER=$?
+       # 1.1 If user selects no or cancels to locate exe file
+       if [ ${ANSWER} -eq 1 ]; then
+            DBUG "I: Script: Locate: User Cancelled!"
+            Script_Window  # Return to Script window
+       fi
+       # 1.2 Show open file dialog
+       # 1.2.1 Filer out exe name before " " or "("
+       # Let user select ".exe" or ".msi" file
+       FILTER=$(echo ${EXE_NAME}|cut -f1 -d " "|cut -f1 -d "("|cut -f1 -d "." \
+                          |sed "s/\.[Ee][Xx][Ee]//g"|sed "s/\.[Ms][Ss][Ii]//g")
+       # 1.2.2 Show Dialog to select exe file
+       unset NEW_EXE
+       NEW_EXE="$(zenity --file-filter="${FILTER}*.${EXE_EXT}"\
+                         --file-selection --title="Locate ${EXE_NAME} File")"
+       DBUG "I: Script: Locate: Selected ${NEW_EXE}"
+       # 1.2.3 If no exe file is selected, or cancel is clicked
+       if [ -z "${NEW_EXE}" ]; then
+            DBUG "I: Script: Locate: User cancelled locating file"
+            unset NEW_EXE; # Empty variable
+            Script_Window  # Return to Script window
+       fi
+       # 1.2.4 Create new variables for selected NEW_EXE
+       NEW_EXE_NAME=$(basename "${NEW_EXE}")
+       NEW_EXE_PATH=$(dirname  "${NEW_EXE}")
+       NEW_EXE_NOSP=$(echo     "${NEW_EXE_NAME}"|tr " " "_");
+       NEW_EXE_LESS=$(echo    "${NEW_EXE_NOSP}"|sed "s/\.exe//g");
+       DBUG "I: Script: Locate: Matching checksum of ${NEW_EXE}"
+       # 2. Check sha256sum of NEW_EXE
+       NEW_EXE_CHECKSUM=$(sha256sum "${NEW_EXE}"|cut -f1 -d " ")
+       DBUG "I: Script: Locate: ${EXE_FILE} Shasum: ${CHECKSUM}"
+       DBUG "I: Script: Locate: ${NEW_EXE} Shasum: ${NEW_EXE_CHECKSUM}"
+       # 2.1 Compare NEW_EXE_CHECKSUM with one existing in ${SCRIPTFILE}
+       if [ "${CHECKSUM}" = "${NEW_EXE_CHECKSUM}" ]; then
+            DBUG "I: Script: Locate: Checksum matches!"
+            # 2.2 When it matches, ask user whether to set it as default exe
+            zenity --question --no-wrap --title "${EXE_NAME} found!" \
+                   --text "Use ${NEW_EXE_NAME} from now onwards?"
+            ANSWER=$?
+            # 2.3 If user wants to set it as default exe
+            if [ ${ANSWER} -eq 0 ]; then
+                 # 3. Set EXE and EXE path in script file
+                 DBUG "I: Script: Locate: Using ${NEW_EXE} as default"
+                 # Update Script ($0) file
+                 # 3.1 Update EXE_FILE variable
+                 FINDME="\(export EXE\_FILE=\).*"
+                 CHANGE="\1\"${NEW_EXE}\""
+                 sed "s|${FINDME}|${CHANGE}|g" -i "${0}"
+                 DBUG "I: Script: Locate: Update EXE_FILE in ${0}"
+                 # 3.2 Update EXE_PATH variable
+                 FINDME="\(export EXE\_PATH=\).*"
+                 CHANGE="\1\"${NEW_EXE_PATH}\""
+                 sed    "s|${FINDME}|${CHANGE}|g" -i ${0}
+                 echo   "I: Script: Locate: Update EXE_PATH in ${0}"
+                 # 4. Set EXE and EXE path in Info.yml
+                 echo   "I: Script: Locate: Updating prefix Info.yml"
+
+                 # 4.1 Update EXE_FILE in Info.yml
+                 # 4.1.1 sed / with \/ for sed
+                 REPL_EXE_FILE=$(echo ${NEW_EXE}|sed "s|\/|\\\/|g" \
+                                                |sed "s|\\.|\\\.|g")
+
+                 sed  "s/EXE:.*/EXE:${REPL_EXE_FILE}/g" -i ${INFOFILE}
+                 DBUG "I: Script: Locate: Updated EXE_FILE in Info.yml"
+
+                 # 4.2 Update EXE_PATH in Info.yml
+                 # 4.2.1 sed / with \/ for sed
+                 REPL_EXE_PATH=$(echo ${NEW_EXE_PATH}|sed "s|\/|\\\/|g" \
+                                                     |sed "s|\\.|\\\.|g")
+
+                 sed  "s/Exe Path:.*/Exe Path:${REPL_EXE_PATH}/g" -i ${INFOFILE}
+
+                 # 5. Allow immediate exe launch by updating
+                 # runtime variable for current running script
+                 EXE_FILE="${NEW_EXE}"
+                 EXE_PATH="${NEW_EXE_PATH}"
+                 DBUG "I: Script: Locate: Updated EXE_FILE and EXE_PATH"
+            fi # if [ ${ANSWER} -eq 0 ]
+       else    # 6. If Sha256sum did not match with the NEW_EXE
+
+            echo "W: Script: Locate: Warning files are different"
+            # 6.1 Ask user to run once the selected exe with different sha256sum
+            zenity --question --no-wrap --title "${EXE_NAME} Checksum Fail!" \
+                   --text  "Just run ${NEW_EXE_NAME} once?"
+            ANSWER=$?
+            # If the user still want to run the mismatched exe
+            # Let the user run it once
+            if [ ${ANSWER} -eq 0 ]; then
+                 echo "W: Script: Locate: Allowing running once."
+                 NEW_EXE_PATH=$(dirname "${NEW_EXE}")
+                 EXE_FILE="${NEW_EXE}"
+                 EXE_PATH="${NEW_EXE_PATH}"
+            fi
+       fi #if [ "${CHECKSUM}" =
+  fi #if [ ! -f "${EXE_FILE}" ]
+}

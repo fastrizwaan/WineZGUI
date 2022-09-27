@@ -1,0 +1,95 @@
+# source ${DATADIR}/winezgui-restore-shortcuts
+
+RESTORE_SHORTCUTS()
+{
+ unset COMMAND RealName RealFile
+ unset count
+ unset SHOW_OPTION
+ unset NAMES
+ unset FILES
+ unset SELECTED_OPTION
+ unset search_list
+ unset SELECTED_OPTION
+ unset SELECTED_SHORTCUT
+
+ IFS=$(echo -en "\n\b")
+
+ count=0
+ NAMES=()
+ FILES=()
+ # Find all exe files in drive_c Exclude windows directory,
+ # and common exe files present in Program Files directory
+ # Add those files to FILES array and filenames to NAMES array
+
+ search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.desktop" -type f -print| tr '\n' '|')
+ echo "search_list = $search_list"
+ exe_found=$(echo ${search_list})
+
+ if [ -z "${exe_found}" ] ; then
+      zenity --error --title "${APP_WITH_VER} - Prefix!" \
+             --text "No Shortcuts found!"
+      WineZGUI_Window
+ fi
+ # if exe_found has value, then only change exe
+ for i in $(echo ${search_list}|tr '|' '\n'|sort)
+ do
+     RealName=$(basename "$i")
+     RealFile=$(realpath -m "$i")
+
+     # If 1st value is empty, enable it
+     if [ -z "${SHOW_OPTION}" ]; then
+          SHOW_OPTION+="TRUE \"${RealName}\""
+          SHOW_OPTION+=" "
+          NAMES+=("${RealName}")
+          FILES+=("${RealFile}")
+     else
+          SHOW_OPTION+="0 \"${RealName}\""
+          SHOW_OPTION+=" "
+          NAMES+=("${RealName}")
+          FILES+=("${RealFile}")
+     fi
+     count=$(expr ${count} + 1)
+ done
+ IFS=${SAVEIFS}
+
+# 3. Show the found exe files using zenity
+ unset COMMAND count
+ COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Shortcuts\" --radiolist --list "
+ COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+ SELECTED_OPTION=$(eval ${COMMAND})
+
+ unset count
+ echo "${FILES[@]}"
+ echo "^-^-^"
+ # Delete
+ # 4. Find which file the user selected and set the selected exe into variable
+ for NAME in "${NAMES[@]}"; do
+     echo "i = $NAME"
+     if [ "${NAME}" = "${SELECTED_OPTION}" ]; then
+          echo "Selected $NAME"
+          echo "File is ${NAME}"
+          export SELECTED_SHORTCUT="${FILES[count]}"
+          break
+     fi
+     count=$(expr ${count} + 1)
+ done
+ # FIXME shortcut
+ BASENAME=$(basename "${SELECTED_SHORTCUT}")
+
+ if [ -L "${DESKTOPDIR}/${BASENAME}" ]; then
+      echo "${DESKTOPDIR}/${BASENAME} file Already exists"
+      zenity --question --text "${BASENAME} desktop file Already exists, overwrite?" \
+             --title "Desktop file already exists"
+      ANSWER=$?
+      if [ -z "${ANSWER}" ] || [ "$ANSWER" = "1" ]; then
+           echo "Cancelled overwriting ${BASENAME}.desktop"
+             return 1
+      fi
+ fi
+ find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
+ echo "ln -sfv ${SELECTED_SHORTCUT} ${DESKTOPDIR}/${BASENAME}"
+ ln -sfv "${SELECTED_SHORTCUT}" "${DESKTOPDIR}/${BASENAME}"
+ ${UPDATE_ICON}
+ ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+ ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+}

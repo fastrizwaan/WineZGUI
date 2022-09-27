@@ -1,0 +1,29 @@
+###### Rename Application Name and Prefix Dir
+RENAME_FUNCTION ()
+{
+ unset RESPONSE
+ DBUG "I: Script: Rename... Selected!"
+ RESPONSE=$(zenity --title "${APP_WITH_VER}" --list --hide-header   \
+                   --width=360 --height=30 --radiolist --column " " \
+                   --column "Change"                                \
+                       TRUE "Name..."                               \
+                          0 "Prefix..."                             \
+                   --text   "<b>Rename...</b>" )
+ # If Cancel is clicked
+ if [ -z "${RESPONSE}" ]; then
+      DBUG "I: Rename: Cancelled!"
+      Script_Window
+ fi
+
+ # Print response
+ DBUG "I: Script: Rename: ${RESPONSE} Selected!"
+
+ # If only name, append (wine-xx)
+ if   [ "${RESPONSE}" = "Name..." ]; then
+        # Call RENAME_NAME
+        RENAME_NAME
+ elif [ "${RESPONSE}" = "Prefix..." ]; then
+        # Call RENAME_NAME
+        RENAME_PREFIX
+ fi
+}
