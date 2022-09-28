@@ -1,37 +1,37 @@
-SCRIPT_DELETE()
+Script_Delete()
 {
-unset DEL_RESPONSE
-DEL_RESPONSE=$( zenity \
-             --title "${PROGNAME}"                  \
-             --list   --hide-header                 \
-             --width=360 --height=30                \
-             --radiolist --column " "               \
-             --column "Action"                      \
-                 TRUE "Delete and Quit..."          \
-             --text   "<b>${EXE_NAME} Prefix...</b>"    \
-             )
-# If Cancel is clicked
-if [ -z "${DEL_RESPONSE}" ]; then
-     DBUG "I: Script: Delete: Cancelled!"
-     unset DEL_RESPONSE
-     Script_Window
-fi
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  unset DEL_RESPONSE
+  DEL_RESPONSE=$( zenity \
+               --title "${PROGNAME}"                  \
+               --list   --hide-header                 \
+               --width=360 --height=30                \
+               --radiolist --column " "               \
+               --column "Action"                      \
+                   TRUE "Delete and Quit..."          \
+               --text   "<b>${EXE_NAME} Prefix...</b>")
+  # If Cancel is clicked
+  if [ -z "${DEL_RESPONSE}" ]; then
+       DBUG "I: Script: Delete: Cancelled!"
+       unset DEL_RESPONSE
+       return 1
+  fi
 
-SHORTCUT="${DESKTOPDIR}/${EXE_LESS}.desktop"
-# Delete Shortcuts and Prefix Directory
-rm -rf ${SHORTCUT} && \
-DBUG "I: Script: Delete: Removed ${SHORTCUT}" \ ||
-echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
+  SHORTCUT="${DESKTOPDIR}/${EXE_LESS}.desktop"
+  # Delete Shortcuts and Prefix Directory
+  rm -rf ${SHORTCUT} && \
+  DBUG "I: Script: Delete: Removed ${SHORTCUT}" \ ||
+  echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
 
-rm -rf ${PREFIXDIR} && \
-DBUG "I: Script: Delete: Removed ${PREFIXDIR}"
+  rm -rf ${PREFIXDIR} && \
+  DBUG "I: Script: Delete: Removed ${PREFIXDIR}"
 
-# Delete all broken links which points to winezgui game prefix
-find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
-${UPDATE_ICON_CACHE}
-${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-DBUG "I: Script: Delete: Exiting!"
-# Exit after deleting prefix
-exit 0
+  # Delete all broken links which points to winezgui game prefix
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
+  ${UPDATE_ICON_CACHE}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  DBUG "I: Script: Delete: Exiting!"
+  # Exit after deleting prefix
+  exit 0
 }

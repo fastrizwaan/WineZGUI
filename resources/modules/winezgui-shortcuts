@@ -1,8 +1,8 @@
 #winezgui-shortcuts
-SHORTCUTS()
+Shortcuts()
 {
- unset SELECT_SHORTCUTS
- SELECT_SHORTCUTS=$( zenity --title "${APP_WITH_VER} - Shortcuts" \
+ unset SELECT_Shortcuts
+ SELECT_Shortcuts=$( zenity --title "${APP_WITH_VER} - Shortcuts" \
               --list   --hide-header                              \
               --width=360 --height=210                            \
               --radiolist --column " "                            \
@@ -11,16 +11,16 @@ SHORTCUTS()
                      0 "Create..."                                \
                      0 "Delete..."                                \
                      0 "Restore..."                               \
-              --text   "Shortcuts <b>${SHORTCUTS_NAME}</b> in use")
+              --text   "Shortcuts <b>${Shortcuts_NAME}</b> in use")
 
  # Exit if Cancel is clicked
-if [ -z "${SELECT_SHORTCUTS}" ]; then
+if [ -z "${SELECT_Shortcuts}" ]; then
      DBUG "I: Shortcuts: Cancel Selected!"
      return 1
 fi
 
 # FIXME, get list of exe files and show them
-if [ "${SELECT_SHORTCUTS}" = "Clean..." ]; then
+if [ "${SELECT_Shortcuts}" = "Clean..." ]; then
      find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
      DBUG "I: Clean: Removed broken WineZGUI .desktop links"
      ${UPDATE_ICON}
@@ -30,26 +30,26 @@ if [ "${SELECT_SHORTCUTS}" = "Clean..." ]; then
 fi
 
 # Create, Modify, Delete Shortcuts
-if [ "${SELECT_SHORTCUTS}" = "Create..." ]; then
+if [ "${SELECT_Shortcuts}" = "Create..." ]; then
      source ${DATADIR}/winezgui-list-available-prefixes
-     LIST_AVAILABLE_PREFIXES
+     List_Available_Prefixes
      SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
      #NEW_SHORTCUT_EXE="${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut"
      ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut
      WineZGUI_Window
 fi
 
-if [ "${SELECT_SHORTCUTS}" = "Delete..." ]; then
+if [ "${SELECT_Shortcuts}" = "Delete..." ]; then
      source ${DATADIR}/winezgui-delete-shortcuts
      echo "Launching delete Shortcuts!!!"
-     DELETE_SHORTCUTS
+     Delete_Shortcuts
      WineZGUI_Window
 fi
 
-if [ "${SELECT_SHORTCUTS}" = "Restore..." ]; then
+if [ "${SELECT_Shortcuts}" = "Restore..." ]; then
      source ${DATADIR}/winezgui-restore-shortcuts
      echo "Launching delete Shortcuts!!!"
-     RESTORE_SHORTCUTS
+     Restore_Shortcuts
      WineZGUI_Window
 fi
 

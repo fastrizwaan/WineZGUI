@@ -52,9 +52,9 @@ WineZGUI_Configure()
     DBUG "I: Script: Open Setup Installer... Finished!"
 
     source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
-    REMOVE_WINE_CREATED_SHORTCUTS
+    Remove_Wine_Created_Shortcuts
     source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
-    FIND_INSTALLED_EXE
+    Script_Find_Installed_Exe
 
        # ====================== Winetricks GUI ========================= #
   elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]

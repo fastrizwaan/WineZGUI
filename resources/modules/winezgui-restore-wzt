@@ -14,7 +14,7 @@
 # 8.  Update desktop menus and Icon cache
 # 9.  Get Game name from desktop file
 # 10. Ask if the user wants to start the restored game
-RESTORE_WZT_FILE()
+Restore_Wzt_File()
 {
  DBUG "I: Restore: Selected ${WZT_FILE}"
  DBUG "I: Restore: Changing directory to ${PREFIXES_DIR}"
@@ -217,7 +217,7 @@ RESTORE_WZT_FILE()
  export PREFIXNAME="${WZT_PREFIX}"
  DBUG "I: Restore: Processing files inside ${WZT_PREFIX} for use!"
  
- RESTORE_FUNCTION "${PREFIXES_DIR}/${WZT_PREFIX}"
+ Restore_Function "${PREFIXES_DIR}/${WZT_PREFIX}"
 
  # 6 Create desktop dir, process Info file
  # 6.1 Create required applications directory for .desktop files

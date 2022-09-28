@@ -15,7 +15,7 @@ WineZGUI_Restore()
        # Backup_Function Restore_Function()
        source ${DATADIR}/winezgui-backup-restore-function
        source ${DATADIR}/winezgui-restore-wzt
-       RESTORE_WZT_FILE
+       Restore_Wzt_File
   fi # -z "${WZT_FILE}"
 
   # Clear temporary used variables

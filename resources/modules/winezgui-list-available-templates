@@ -1,7 +1,7 @@
 # winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_TEMPLATE
-LIST_AVAILABLE_TEMPLATES()
+List_Available_Templates()
 {
  unset COMMAND
  unset count

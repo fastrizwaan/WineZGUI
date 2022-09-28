@@ -1,5 +1,5 @@
 # script-get-list-of-exe-files-installed
-GET_LIST_OF_EXE_FILES_INSTALLED()
+Get_List_Of_Exe_Files_Installed()
 {
      unset EXE_FILES_FOUND
      EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"    \

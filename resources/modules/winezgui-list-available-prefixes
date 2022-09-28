@@ -1,7 +1,7 @@
 # winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_PREFIX
-LIST_AVAILABLE_PREFIXES()
+List_Available_Prefixes()
 {
  DBUG "I: Launched ${FUNCNAME[0]}"
  unset COMMAND

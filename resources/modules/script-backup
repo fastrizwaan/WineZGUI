@@ -5,49 +5,49 @@
 # 0. Get disk usage of prefix
 # 1. Ask user to choose prefix/bundle
 # 2. Based on Selection, launch create prefix / bundle function
-SCRIPT_BACKUP_FUNCTION()
+Script_Backup()
 {
-     unset RESPONSE
-     export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"
-     # Using Date as part of wzt backup filename
-     DATE=$(date +%F_%H%M)
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  unset RESPONSE
+  export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"
+  # Using Date as part of wzt backup filename
+  DATE=$(date +%F_%H%M)
 
-     # 0. Get disk usage of prefix
-     PREFIX_SIZE_IN_HF=$(du -sh "${PREFIXDIR}")
-     PREFIX_SIZE_IN_BYTES=$(echo ${PREFIX_SIZE_IN_HF}|cut -f1 -d " " \
-          |numfmt --from iec)
+  # 0. Get disk usage of prefix
+  PREFIX_SIZE_IN_HF=$(du -sh "${PREFIXDIR}")
+  PREFIX_SIZE_IN_BYTES=$(echo ${PREFIX_SIZE_IN_HF}|cut -f1 -d " "   \
+                                                  |numfmt --from iec)
+  DBUG "I: Script: Backup... Selected!"
+  DBUG "I: Script: Backup: Prefix = ${PREFIXDIR}"
+  DBUG "I: Script: Backup: Prefix size = ${PREFIX_SIZE_IN_HF}"
 
-     DBUG "I: Script: Backup... Selected!"
-     DBUG "I: Script: Backup: Prefix = ${PREFIXDIR}"
-     DBUG "I: Script: Backup: Prefix size = ${PREFIX_SIZE_IN_HF}"
+  # 1. Ask user to choose prefix/bundle
+  RESPONSE=$(zenity  --title "${APPNAME}-${APPVERSION}"  \
+                     --list   --hide-header              \
+                     --width=360 --height=30             \
+                     --radiolist --column " "            \
+                     --column   "Backup..."              \
+                           TRUE "Prefix Backup..."       \
+                           0    "Create Game Bundle..."  \
+                     --text     "<b>Backup...</b>"       )
+  # If Cancel is clicked
+  if [ -z "${RESPONSE}" ]; then
+       DBUG "I: Script: Backup: Cancelled!"
+       unset RESPONSE
+       return 1
+  fi
 
+  DBUG "I:Script: Backup: ${RESPONSE} Selected!"
 
-     # 1. Ask user to choose prefix/bundle
-     RESPONSE=$(zenity  --title "${APPNAME}-${APPVERSION}"  \
-                        --list   --hide-header              \
-                        --width=360 --height=30             \
-                        --radiolist --column " "            \
-                        --column   "Backup..."              \
-                              TRUE "Prefix Backup..."       \
-                              0    "Create Game Bundle..."  \
-                        --text     "<b>Backup...</b>"       )
-     # If Cancel is clicked
-     if [ -z "${RESPONSE}" ]; then
-          DBUG "I: Script: Backup: Cancelled!"
-          unset RESPONSE
-          Script_Window
-     fi
+  # 2. Based on Selection, launch create prefix / bundle function
+  if   [ "${RESPONSE}" = "Prefix Backup..." ]; then
+         # Call Script_Backup_Prefix
+         source ${WINEZGUI_SCRIPTS}/script-backup-prefix
+         Script_Backup_Prefix "${PREFIXDIR}"
+  elif [ "${RESPONSE}" = "Create Game Bundle..." ]; then
+         # Call WINEZGUI-SCRIPT_BACKUP-BUNDLE
+         source ${WINEZGUI_SCRIPTS}/script-backup-bundle
+         Script_Backup_Bundle "${PREFIXDIR}"
+  fi
 
-     DBUG "I:Script: Backup: ${RESPONSE} Selected!"
-
-     # 2. Based on Selection, launch create prefix / bundle function
-     if   [ "${RESPONSE}" = "Prefix Backup..." ]; then
-            # Call SCRIPT_BACKUP_PREFIX
-            source ${WINEZGUI_SCRIPTS}/script-backup-prefix
-            SCRIPT_BACKUP_PREFIX "${PREFIXDIR}"
-     elif [ "${RESPONSE}" = "Create Game Bundle..." ]; then
-            # Call WINEZGUI-SCRIPT_BACKUP-BUNDLE
-            source ${WINEZGUI_SCRIPTS}/script-backup-bundle
-            SCRIPT_BACKUP_BUNDLE "${PREFIXDIR}"
-     fi
 }

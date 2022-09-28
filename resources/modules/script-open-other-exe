@@ -1,5 +1,6 @@
-SCRIPT_OPEN_OTHER_EXE()
+Script_Open_Other_Exe()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
        DBUG "I: Script: Open Other EXE:... Selected!"
@@ -11,8 +12,8 @@ SCRIPT_OPEN_OTHER_EXE()
                              0    "Any other Exe"           \
                          --text   "<b>Other exe from...</b>" )
   else
-  SELECTED_OTHER_EXE="${1}"
-  OTHER_EXE="${1}"
+       SELECTED_OTHER_EXE="${1}"
+       OTHER_EXE="${1}"
   fi
   # If Cancel is clicked
   if [ -z "${SELECTED_OTHER_EXE}" ]; then
@@ -26,9 +27,9 @@ SCRIPT_OPEN_OTHER_EXE()
 
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
-         # Call SCRIPT_GET_SELECTED_EXE
+         # Call Script_Get_Selected_Exe
          source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
-         SCRIPT_GET_SELECTED_EXE
+         Script_Get_Selected_Exe
          OTHER_EXE="${SELECTED_EXE}"
          DBUG "I: Script: Open Other EXE:  ${SELECTED_EXE} Selected!"
   elif [ "$SELECTED_OTHER_EXE" = "Any other Exe" ]; then
@@ -56,7 +57,7 @@ SCRIPT_OPEN_OTHER_EXE()
        DBUG "I: Script: Open Other EXE... Finished!"
 
        source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
-       REMOVE_WINE_CREATED_SHORTCUTS
+       Remove_Wine_Created_Shortcuts
        source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
-       FIND_INSTALLED_EXE
+       Script_Find_Installed_Exe
 }

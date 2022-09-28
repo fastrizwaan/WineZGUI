@@ -2,7 +2,7 @@
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_EXE
 # FIXME change this to list installed exe function to be used by Open Other EXE and Change EXE
-SCRIPT_GET_SELECTED_EXE()
+Script_Get_Selected_Exe()
 {
  unset COMMAND
  unset count
@@ -23,7 +23,7 @@ SCRIPT_GET_SELECTED_EXE()
  # Add those files to FILES array and filenames to NAMES array
  echo "-----------------------------------------------"
  source ${WINEZGUI_SCRIPTS}/script-get-list-of-exe-files-installed
- GET_LIST_OF_EXE_FILES_INSTALLED
+ Get_List_Of_Exe_Files_Installed
  EXE_LIST="${EXE_FILES_FOUND}"
  echo "EXE_LIST = $EXE_LIST"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")

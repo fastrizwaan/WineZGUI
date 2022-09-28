@@ -1,4 +1,4 @@
-SCRIPT_CHANGE_CATEGORY()
+Script_Change_Category()
 {
      unset GET_CATEGORY
      GET_CATEGORY=$(zenity                   \

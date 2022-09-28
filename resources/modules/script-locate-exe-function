@@ -6,7 +6,7 @@
 # 4. Set EXE and EXE path in Info.yml
 # 5. Allow immediate exe launch by updating
 # 6. If Sha256sum did not match with the NEW_EXE
-LOCATE_EXE_FUNCTION()
+Locate_Exe_Function()
 {
   # 1. If exe file not found, ask user to locate it
   if [ ! -f "${EXE_FILE}" ]; then

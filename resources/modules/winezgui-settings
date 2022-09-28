@@ -153,7 +153,7 @@ WineZGUI_Settings()
 
              if [ ${ANSWER} -eq 0 ]; then
                   source ${DATADIR}/winezgui-templates
-                  TEMPLATES "Change Template..."
+                  Templates "Change Template..."
              fi
 
         fi
@@ -161,7 +161,7 @@ WineZGUI_Settings()
 
    if [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
         source ${DATADIR}/winezgui-templates
-        TEMPLATES "Change Template..."
+        Templates "Change Template..."
    fi
 
 
@@ -169,7 +169,7 @@ WineZGUI_Settings()
 
    if [ "${SETTINGS_OPTION}" = "Launch Behavior..." ]; then
         source ${DATADIR}/winezgui-list-available-prefixes
-        LIST_AVAILABLE_PREFIXES
+        List_Available_Prefixes
 
         GET_LAUNCH_BEHAVIOR=$(zenity  --title "${APP_WITH_VER}"          \
                                       --list   --hide-header             \

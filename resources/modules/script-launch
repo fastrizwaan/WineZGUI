@@ -4,30 +4,30 @@
 # 2. Goto Game Directory
 # 3. Launch The EXE file
 # 4. After the Launch if lnk and .desktop files are found inside wine prefix
-SCRIPT_LAUNCH_EXE()
+Script_Launch()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+       # 1. Test if the given exe exists (if not found ask user to locate it)
+       Locate_Exe_Function
+       exe_name=$(basename "${EXE_FILE}")
+       exe_path=$(dirname  "${EXE_FILE}")
+  else # Use passed argument as exe file
+       exe_name=$(basename "${1}")
+       exe_path=$(dirname  "${1}")
+  fi
+  # 2. Goto Game Directory
+  cd "${exe_path}"
+  DBUG "I: Script: Launching ${exe_name}"
 
- if [ -z "${1}" ]; then
-      # 1. Test if the given exe exists (if not found ask user to locate it)
-      LOCATE_EXE_FUNCTION
-      exe_name=$(basename "${EXE_FILE}")
-      exe_path=$(dirname  "${EXE_FILE}")
- else # Use passed argument as exe file
-      exe_name=$(basename "${1}")
-      exe_path=$(dirname  "${1}")
- fi
- # 2. Goto Game Directory
- cd "${exe_path}"
- DBUG "I: Script: Launching ${exe_name}"
+  # 3. Launch The EXE file
+  ${WINE_CMD} "${exe_name}"
 
- # 3. Launch The EXE file
- ${WINE_CMD} "${exe_name}"
+  # 4. Remove wine installed shortcuts, unclutters menu
+  source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
+  Remove_Wine_Created_Shortcuts
 
- # 4. Remove wine installed shortcuts, unclutters menu
- source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
- REMOVE_WINE_CREATED_SHORTCUTS
-
- # 5. Find any exe files installed by setup or installer
- source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
- FIND_INSTALLED_EXE
+  # 5. Find any exe files installed by setup or installer
+  source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
+  Script_Find_Installed_Exe
 }

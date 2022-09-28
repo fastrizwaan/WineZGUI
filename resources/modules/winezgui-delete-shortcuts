@@ -1,6 +1,6 @@
 # source ${DATADIR}/winezgui-delete-shortcuts
 
-DELETE_SHORTCUTS()
+Delete_Shortcuts()
 {
  unset COMMAND
  unset count

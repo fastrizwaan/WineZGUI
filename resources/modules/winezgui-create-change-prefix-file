@@ -1,5 +1,5 @@
 # winezgui-create-change-prefix-file
-CREATE_CHANGE_PREFIX_FILE()
+Create_Change_Prefix_File()
 {
  NEW_EXE_FILE="${SELECTED_EXE}"
  NEW_EXE_NAME=$(basename "${SELECTED_EXE}")

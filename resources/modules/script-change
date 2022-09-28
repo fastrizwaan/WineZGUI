@@ -1,61 +1,58 @@
 # script-change
-SCRIPT_CHANGE()
+Script_Change()
 {
-     CHANGE_OPTION=$(zenity --title "${PROGNAME} - Change!"    \
-                            --window-icon="${ICON}"            \
-                            --width=360 --height=360           \
-                            --list      --hide-header          \
-                            --radiolist --column " "           \
-                            --column "Action"                  \
-                                   0 "Shortcut Name..."        \
-                                   0 "Prefix Directory Name..."\
-                                   0 "Wine Architecture..."    \
-                                   0 "Default Exe..."          \
-                                   0 "Shortcut Icon..."        \
-                                   0 "Application Category..." \
-                            --text   "Change..." )
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  CHANGE_OPTION=$(zenity --title "${PROGNAME} - Change!"    \
+                         --window-icon="${ICON}"            \
+                         --width=360 --height=360           \
+                         --list      --hide-header          \
+                         --radiolist --column " "           \
+                         --column "Action"                  \
+                                0 "Shortcut Name..."        \
+                                0 "Prefix Directory Name..."\
+                                0 "Wine Architecture..."    \
+                                0 "Default Exe..."          \
+                                0 "Shortcut Icon..."        \
+                                0 "Application Category..." \
+                         --text   "Change..." )
 
-     # Exit if Cancel is clicked
-     if [ -z "${CHANGE_OPTION}" ]; then
-          DBUG "I: Script: Cancel Selected. Bye!"
-          exit 0
-     fi
+  # Exit if Cancel is clicked
+  if   [ -z "${CHANGE_OPTION}" ]; then
+         DBUG "I: Script: Cancel Selected. Bye!"
+         return 1
+  fi
 
-     if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
-            source ${WINEZGUI_SCRIPTS}/script-change-name
-            SCRIPT_CHANGE_NAME
-            Script_Window
+  if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-change-name
+         SCRIPT_CHANGE_NAME
 
-     elif [ "${CHANGE_OPTION}" = "Prefix Directory Name..." ]; then
-            source ${WINEZGUI_SCRIPTS}/script-change-prefix
-            SCRIPT_CHANGE_PREFIX
-            Script_Window
-
-     elif [ "${CHANGE_OPTION}" = "Wine Architecture..." ]; then
-            source ${WINEZGUI_SCRIPTS}/script-change-arch
-            CHANGE_ARCH
-            Script_Window
-
-     elif [ "${CHANGE_OPTION}" = "Default Exe..." ]; then
-            source ${WINEZGUI_SCRIPTS}/script-change-exe
-            source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
-            source ${WINEZGUI_SCRIPTS}/winezgui-change-any-other-exe
-            source ${WINEZGUI_SCRIPTS}/script-change-exe-variables
-            CHANGE_EXE_FUNCTION # Call the function in the above file
-            Script_Window
-
-     elif [ "${CHANGE_OPTION}" = "Shortcut Icon..." ]; then
-            DBUG "I: Script: Shortcut Icon... Selected!"
-            source ${WINEZGUI_SCRIPTS}/script-change-icon
-            SCRIPT_CHANGE_ICON
-            # Return to Game window
-            Script_Window
-
-     elif [ "${CHANGE_OPTION}" = "Application Category..." ]; then
-            DBUG "I: Script: Application Category... Selected!"
-            source ${WINEZGUI_SCRIPTS}/script-change-category
-            SCRIPT_CHANGE_CATEGORY
-            Script_Window
-     fi
+  elif [ "${CHANGE_OPTION}" = "Prefix Directory Name..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-change-prefix
+         Script_Change_Prefix
+         
+  elif [ "${CHANGE_OPTION}" = "Wine Architecture..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-change-arch
+         Script_Change_Arch
+         
+  elif [ "${CHANGE_OPTION}" = "Default Exe..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-change-exe
+         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
+         source ${WINEZGUI_SCRIPTS}/winezgui-change-any-other-exe
+         source ${WINEZGUI_SCRIPTS}/script-change-exe-variables
+         Script_Change_Exe # Call the function in the above file
+         
+  elif [ "${CHANGE_OPTION}" = "Shortcut Icon..." ]; then
+         DBUG "I: Script: Shortcut Icon... Selected!"
+         source ${WINEZGUI_SCRIPTS}/script-change-icon
+         Script_Change_Icon
+         # Return to Game window
+         
+  elif [ "${CHANGE_OPTION}" = "Application Category..." ]; then
+         DBUG "I: Script: Application Category... Selected!"
+         source ${WINEZGUI_SCRIPTS}/script-change-category
+         Script_Change_Category
+  fi
+  # Return
+  return 0
 }
 

@@ -3,7 +3,7 @@ WineZGUI_Backup()
   DBUG "I: Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-backup-restore-function
   source ${DATADIR}/winezgui-list-available-prefixes
-  LIST_AVAILABLE_PREFIXES
+  List_Available_Prefixes
 
   # Launch Backup from the selected prefix script
   SCRIPT_NAME=$(basename ${SELECTED_PREFIX})

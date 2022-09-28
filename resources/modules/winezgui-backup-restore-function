@@ -1,4 +1,4 @@
-GENERATE_SEARCH_AND_REPLACE()
+Generate_Search_And_Replace()
 {
       # Unset any previously initialized variables
       unset SEARCH
@@ -117,7 +117,7 @@ GENERATE_SEARCH_AND_REPLACE()
       LEN=${#SEARCH[@]}
 }
 
-GET_FILES_TO_CHANGE()
+Get_Files_To_Change()
 {
       if [ -z "${1}" ]; then
             echo "Must provide Prefix or Template Directory to process"
@@ -142,7 +142,7 @@ GET_FILES_TO_CHANGE()
 }
 
 
-RESTORE_FUNCTION()
+Restore_Function()
 {
       if [ -z "${1}" ]; then
             echo "Must provide Prefix or Template Directory to process"
@@ -153,8 +153,8 @@ RESTORE_FUNCTION()
             echo "SUBDIR=$SUBDIR"
       fi      
 
-      GENERATE_SEARCH_AND_REPLACE
-      GET_FILES_TO_CHANGE "${1}"
+      Generate_Search_And_Replace
+      Get_Files_To_Change "${1}"
       
       cd "${TOPDIR}"
 
@@ -206,7 +206,7 @@ RESTORE_FUNCTION()
       unset DTARGET
       unset DSOURCE
  }
-BACKUP_FUNCTION()
+Backup_Function()
 {
       if [ -z "${1}" ]; then
             echo "Must provide Prefix or Template Directory to process"
@@ -217,8 +217,8 @@ BACKUP_FUNCTION()
             echo "SUBDIR=$SUBDIR"
       fi      
 
-      GENERATE_SEARCH_AND_REPLACE
-      GET_FILES_TO_CHANGE "${1}"
+      Generate_Search_And_Replace
+      Get_Files_To_Change "${1}"
       cd "${TOPDIR}"
       DBUG "I: Backup: Processing files inside ${SUBDIR}"
       for (( i=0; i <${LEN}; i++ ))

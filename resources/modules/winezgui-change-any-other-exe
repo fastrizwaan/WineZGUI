@@ -1,7 +1,7 @@
 # Change_Any_Other_Exe function
 # This function will ask the user to select an exe file
 # and set the variable SELECTED_EXE
-CHANGE_ANY_OTHER_EXE()
+Change_Any_Other_Exe()
 {
  EXTENSIONS="*.exe *.msi"
  SELECT_EXE_FILE="$(zenity --file-filter="${EXTENSIONS}" \

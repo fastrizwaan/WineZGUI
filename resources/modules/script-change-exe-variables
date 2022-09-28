@@ -7,7 +7,7 @@
 # 6. EXE_NOSP
 # 7. EXE_LESS
 
-SCRIPT_CHANGE_EXE_VARIABLES()
+Script_Change_Exe_Variables()
 {
      # 2. EXE_FILE (SELECTED_EXE is the NEW_EXE_FILE)
      NEW_EXE_FILE="${SELECTED_EXE}"

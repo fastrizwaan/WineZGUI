@@ -1,6 +1,6 @@
 # Ask user to select an image icon or exe file to extract icon from
 # If No argument is given ask
-SCRIPT_CHANGE_ICON()
+Script_Change_Icon()
 {
      if [ -z "${1}" ]; then
           GET_ICON=$(zenity   --file-selection \
@@ -82,15 +82,15 @@ SCRIPT_CHANGE_ICON()
      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
      # Inform user
-     #If SCRIPT_CHANGE_ICON_DO_NOT_PROMPT has no value then prompt
+     #If Script_Change_Icon_DO_NOT_PROMPT has no value then prompt
      #When we change exe, we do not want to see icon change prompt
      #The value will be set before calling this function by find-installed-exe
-     if [ -z "${SCRIPT_CHANGE_ICON_DO_NOT_PROMPT}" ] ; then
+     if [ -z "${Script_Change_Icon_DO_NOT_PROMPT}" ] ; then
           zenity --info --no-wrap --title="${DESKTOPFILE}" \
                  --text="Icon Changed sucessfuly: ${GET_ICON}"
      fi
      # next time let it prompt
-     unset SCRIPT_CHANGE_ICON_DO_NOT_PROMPT
+     unset Script_Change_Icon_DO_NOT_PROMPT
      # Change Runtime Icon as soon as it is changed
      # Main Window is going to use ICON variable.
      export ICON="${ICONFILE}"

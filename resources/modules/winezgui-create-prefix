@@ -158,8 +158,8 @@ DBUG "I: Create Prefix: Icon: Cleanup ${TEMPDIR}"
 
 
 # Prepare Desktop file
-appCategory="Game"
-DBUG "I: Create Prefix: Setting Category - ${appCategory}"
+APP_CATEGORY="Game"
+DBUG "I: Create Prefix: Setting Category - ${APP_CATEGORY}"
 
 # Create Desktop Shortcut
 
@@ -267,11 +267,12 @@ fi
 # Append rest
 echo '
 
+
 DBUG()
 { 
-     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
-          echo "${1}"
-     fi
+  if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
+       echo "${1}"
+  fi
 }
 
 # If Settings.yml exists, get arch value from it: win32 or win64
@@ -301,185 +302,145 @@ source ${WINEZGUI_SCRIPTS}/script-locate-exe-function
 # LOCATE_EXE_FUNCTION required on Launch
 
 
-    # If ${FLATPAK_NAME} is installed, and script created using flatpak
-    if [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
-         DBUG "I: Script: Install type: Flatpak, Running from host!"
-         WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
-         WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-         WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
-         WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
-         WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
-         WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
-         export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
-         export WHICHWINE
+# If ${FLATPAK_NAME} is installed, and script created using flatpak
+if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+    [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+      DBUG "I: Script: Install type: Flatpak, Running from host!"
+      WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+      WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
+      WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
+      WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
+      WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
+      WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
+      export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
+      export WHICHWINE
 
-    else
-        # flatpak install and running from shell inside flatpak winezgui
-        if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-             DBUG "I: Script: Install type: Flatpak, Running from flatpak!"
-             export WINE_CMD="/app/bin/wine"
-             export WTRICKS_CMD="/app/bin/winetricks"
-             export WINECFG_CMD="${WINE_CMD} winecfg"
-             export WEXPLORER_CMD="${WINE_CMD} explorer"
-             export WBOOT_CMD="$(which wineboot) -i"
-             export WHICHWINE="${WINE_CMD}"
-        else
-             # We are using non flatpak install
-             DBUG "I: Script: Install type: System, Running from host!"
-             export WINE_CMD="$(which wine)"
-             export WTRICKS_CMD="$(which winetricks)"
-             export WINECFG_CMD="${WINE_CMD} winecfg"
-             export WEXPLORER_CMD="${WINE_CMD} explorer"
-             export WBOOT_CMD="$(which wineboot) -i"
-             export WHICHWINE="$(which wine)"
-        fi
-    fi
+else
+     # flatpak install and running from shell inside flatpak winezgui
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          DBUG "I: Script: Install type: Flatpak, Running from flatpak!"
+          export WINE_CMD="/app/bin/wine"
+          export WTRICKS_CMD="/app/bin/winetricks"
+          export WINECFG_CMD="${WINE_CMD} winecfg"
+          export WEXPLORER_CMD="${WINE_CMD} explorer"
+          export WBOOT_CMD="$(which wineboot) -i"
+          export WHICHWINE="${WINE_CMD}"
+     else
+          # We are using non flatpak install
+          DBUG "I: Script: Install type: System, Running from host!"
+          export WINE_CMD="$(which wine)"
+          export WTRICKS_CMD="$(which winetricks)"
+          export WINECFG_CMD="${WINE_CMD} winecfg"
+          export WEXPLORER_CMD="${WINE_CMD} explorer"
+          export WBOOT_CMD="$(which wineboot) -i"
+          export WHICHWINE="$(which wine)"
+     fi
+fi
 
 # Needed for Info.yml and backup and restore function
 
 
 Script_Window ()
 {
- unset SELECTION
- # EXE handling by providing dialog
+  unset SELECTION
+  # EXE handling by providing dialog
 
- SELECTION=$(zenity --title       "${PROGNAME}"        \
-                    --window-icon="${ICON}"            \
-                    --width=360 --height=440           \
-                    --list      --hide-header          \
-                    --radiolist --column " "           \
-                    --column "Action"                  \
-                      TRUE   "Launch..."               \
-                      0      "Open Other EXE..."       \
-                      0      "Winetricks GUI..."       \
-                      0      "Winetricks CLI..."       \
-                      0      "Wine Programs..."        \
-                      0      "Open File Manager..."    \
-                      0      "Open Shell..."           \
-                      0      "Change..."               \
-                      0      "Backup..."               \
-                      0      "More..."                 \
-                      0      "About..."                \
-                      0      "Help..."                 \
-                      0      "Quit...."                \
-                  --text     "Select action for <b>${EXE_NAME}</b>..." )
+  SELECTION=$(zenity --title       "${PROGNAME}"        \
+                     --window-icon="${ICON}"            \
+                     --width=360 --height=440           \
+                     --list      --hide-header          \
+                     --radiolist --column " "           \
+                     --column "Action"                  \
+                       TRUE   "Launch..."               \
+                          0   "Open Other EXE..."       \
+                          0   "Winetricks GUI..."       \
+                          0   "Winetricks CLI..."       \
+                          0   "Wine Programs..."        \
+                          0   "Open File Manager..."    \
+                          0   "Open Shell..."           \
+                          0   "Change..."               \
+                          0   "Backup..."               \
+                          0   "More..."                 \
+                          0   "About..."                \
+                          0   "Help..."                 \
+                          0   "Quit...."                \
+                     --text   "Select action for <b>${EXE_NAME}</b>..." )
 
- # Exit if Cancel is clicked
- if [ -z "${SELECTION}" ]; then
-      DBUG "I: Script: Cancel Selected. Bye!"
-      exit 0
- fi
+  # Exit if Cancel is clicked
+  if [ -z "${SELECTION}" ]; then
+       DBUG "I: Script: Cancel Selected. Bye!"
+       exit 0
+  fi
+  
+  # Show What is selected     
+  DBUG "I: ${SELECTION} Selected!"
+ 
+  if   [ "${SELECTION}" = "Launch..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-launch
+         Script_Launch
 
- # If launch argument is given or prefix directory has a file named "launch" 
- if   [ "${SELECTION}" = "Launch..." ]; then
-        DBUG "I: Script: Launch... Selected"
-        source ${WINEZGUI_SCRIPTS}/script-launch
-        SCRIPT_LAUNCH_EXE
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Open Other EXE..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-open-other-exe
+         Script_Open_Other_Exe
 
- elif [ "${SELECTION}" = "Open Other EXE..." ]; then
-        DBUG "I: Script: Open Other EXE... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-open-other-exe
-        SCRIPT_OPEN_OTHER_EXE
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-winetricks-gui
+         Script_Winetricks_Gui
 
+  elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-winetricks-cli
+         Script_Winetricks_Cli
 
-        # If Winetricks GUI is selected
- elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
-        DBUG "I: Script: Winetricks GUI... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-winetricks-gui
-        SCRIPT_WINETRICKS_GUI
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Wine Programs..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-wine-programs
+         Script_Wine_Programs
 
-      # Provide Command Line to enter multiple Dependencies
- elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
-        DBUG "I: Script: Winetricks CLI... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-winetricks-cli
-        SCRIPT_WINETRICKS_CLI
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Open Shell..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-open-shell
+         Script_Open_Shell
 
+  elif [ "${SELECTION}" = "Open File Manager..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-open-file-manager
+         Script_Open_File_Manager
 
- elif [ "${SELECTION}" = "Wine Programs..." ]; then
-        DBUG "I: Script: Wine Programs... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-wine-programs
-        SCRIPT_WINE_PROGRAMS
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Change..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-change
+         Script_Change
+         
+  elif [ "${SELECTION}" = "Backup..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-backup
+         Script_Backup
 
- elif [ "${SELECTION}" = "Open Shell..." ]; then
-        DBUG "I: Script: Open Shell... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-open-shell
-        SCRIPT_OPEN_SHELL
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "More..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-more
+         Script_More
+         
+  elif [ "${SELECTION}" = "About..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-about
+         Script_About
 
- elif [ "${SELECTION}" = "Open File Manager..." ]; then
-        DBUG "I: Script: Open File Manager... Selected!"
-        xdg-open "${EXE_PATH}"
-        # Return to Game window
-        Script_Window
+  elif [ "${SELECTION}" = "Help..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-help
+         Script_Help
 
- elif [ "${SELECTION}" = "Change..." ]; then
-        DBUG "I: Script: Change... Selected!"
-        source  ${WINEZGUI_SCRIPTS}/script-change
-        SCRIPT_CHANGE
-        Script_Window
-        
-        # Ask user to where to save the backup
- elif [ "${SELECTION}" = "Backup..." ]; then
-        DBUG "I: Script: Backup... Selected!"
-        # source ~/.build/WineZGUI-0.84/SCRIPT_BACKUP_FUNCTION
-        source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_BUNDLE
-        source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_PREFIX
-        source ${WINEZGUI_SCRIPTS}/script-backup
-        SCRIPT_BACKUP_FUNCTION
-        Script_Window
-
- elif [ "${SELECTION}" = "More..." ]; then
-        DBUG "I: Script: More... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-more
-        SCRIPT_MORE
-        Script_Window
-        
- elif [ "${SELECTION}" = "About..." ]; then
-        DBUG "I: Script: Executing About... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-about
-        SCRIPT_ABOUT
-        Script_Window
-
- elif [ "${SELECTION}" = "Help..." ]; then
-        DBUG "I: Script: Help... Selected!"
-        source ${WINEZGUI_SCRIPTS}/script-help
-        SCRIPT_HELP
-        Script_Window
-
- elif [ "${SELECTION}" = "Quit...." ]; then
-        DBUG "I: Script: Quit... Selected!"
-        exit 0
-
-
- fi
+  elif [ "${SELECTION}" = "Quit...." ]; then
+         source ${DATADIR}/script-quit
+         Script_Quit
+  fi
+  # After All options 
+  Script_Window
 }
 
 # Change Prefix on changing EXE
 if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
-     echo "=========================================="
      DBUG "I: Script: Change Prefix Requested..."
      PREFIX_NAME_TO_CHANGE="$(grep Prefix "${PREFIXDIR}/Change-Prefix-Name" \
                              |cut -f2 -d ":")"
-     echo "=========================================="
-     DBUG "I: Script: Launching script-rename-prefix function (RENAME_PREFIX)"
+     DBUG "I: Script: Launching script-rename-prefix function (Rename_Prefix)"
      source ${WINEZGUI_SCRIPTS}/script-rename-prefix
      rm "${PREFIXDIR}/Change-Prefix-Name"
-     echo "------------------------------"
-     echo "RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}"
-     echo "------------------------------"
-     RENAME_PREFIX ${PREFIX_NAME_TO_CHANGE}
+     DBUG "I: Script: Change Prefix to ${PREFIX_NAME_TO_CHANGE}"
+     Rename_Prefix ${PREFIX_NAME_TO_CHANGE}
 
 fi
 
@@ -565,11 +526,8 @@ if   [ "$1" = "delete" ]; then
        exit 0;
 elif [ "$1" = "backup" ]; then
        cd ${PREFIXES_DIR}
-       source ${DATADIR}/winezgui-backup-restore-function
-       source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_BUNDLE
-       source ${WINEZGUI_SCRIPTS}/SCRIPT_BACKUP_PREFIX
        source ${WINEZGUI_SCRIPTS}/script-backup
-       SCRIPT_BACKUP_FUNCTION
+       Script_Backup
        exit 0;
 elif [ "$1" = "shortcut" ]; then
        source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
@@ -590,7 +548,7 @@ elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
        source ${WINEZGUI_SCRIPTS}/script-launch
        SCRIPT_LAUNCH_EXE
        # Return to Game window
-       # Script_Window
+       # 
        exit 0;
 fi
 
@@ -603,6 +561,7 @@ if [ $# -eq 0 ] ; then
      DBUG "I: Script: Launching ${EXE_NAME} script"
      Script_Window
 fi
+
 
 ' >> "${SCRIPTFILE}"
 # Script file Created, now make it executable
@@ -618,7 +577,7 @@ echo "Keywords=winezgui; game; ${EXE_LESS};" >> "${DESKTOPFILE}"
 echo "NoDisplay=false"                       >> "${DESKTOPFILE}"
 echo "StartupNotify=true"                    >> "${DESKTOPFILE}"
 echo "Terminal=false"                        >> "${DESKTOPFILE}"
-echo "Categories=$appCategory;"              >> "${DESKTOPFILE}"
+echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 
 
 # link the launcher  file to a shortcut on applications menu.

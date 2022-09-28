@@ -1,6 +1,6 @@
 # source ${DATADIR}/winezgui-restore-shortcuts
 
-RESTORE_SHORTCUTS()
+Restore_Shortcuts()
 {
  unset COMMAND RealName RealFile
  unset count

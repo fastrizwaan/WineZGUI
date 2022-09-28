@@ -2,7 +2,7 @@
 # Create, Set default, Clone Delete Templates
 # So that users with custom winetricks verbs can use them
 #Create, Copy, Delete, Rename, Backup, Restore
-TEMPLATES()
+Templates()
 {
  echo "WINEZGUI_TEMPLATE  = $WINEZGUI_TEMPLATE"
 source ${DATADIR}/winezgui-list-available-templates
@@ -41,7 +41,7 @@ fi
      # Configure current template
      if [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..."  ]; then
           source ${DATADIR}/winezgui-configure-template
-          CONFIGURE_TEMPLATE
+          Configure_Template
           WineZGUI_Window
      fi
      
@@ -49,7 +49,7 @@ fi
 ######################################
 if [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
          DBUG "I: Backup... Selected!"
-         LIST_AVAILABLE_TEMPLATES
+         List_Available_Templates
          SELECTED_TEMPLATE_NAME=$(basename "${SELECTED_TEMPLATE}")
          
          
@@ -133,7 +133,7 @@ if [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
               DBUG "I: Backup: Creating ${BACKUP_FILE} backup..."
 
               # Preprocess: Prepare *.reg *.sh and *.txt for Backup
-              BACKUP_FUNCTION "${SELECTED_TEMPLATE}"
+              Backup_Function "${SELECTED_TEMPLATE}"
               
 # FIXME backup restore function not processing Templaes_dir
               # Create Backup archive and restore changes as soon as tar is done
@@ -183,7 +183,7 @@ if [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
               export PREFIXNAME="${GET_RENAME_TEMPLATE_NAME}"
               echo "----------------------------"
               echo "PREFIXNAME=$PREFIXNAME"
-              RESTORE_FUNCTION "${TEMPLATES_DIR}/${TEMPLATE_NAME_IN_BACKUP}"
+              Restore_Function "${TEMPLATES_DIR}/${TEMPLATE_NAME_IN_BACKUP}"
               export PREFIXNAME="${SAVED_PREFIXNAME}"
               
               DBUG "I: Backup: Created ${BACKUP_FILE} at ${TARGET_DIR}" && \
@@ -210,7 +210,7 @@ if [ "${TEMPLATE_OPTION}" = "Change Template..." ]; then
      # Find all directories inside WINE_TEMPLATE directory
      # List here, use find exe
      # on selection link that to default, that's all!
-     LIST_AVAILABLE_TEMPLATES
+     List_Available_Templates
 
      echo "Changing template for WineZGUI..."
 
@@ -289,7 +289,7 @@ if [ "${TEMPLATE_OPTION}" = "Create..." ]; then
      INITIALIZE_WINEPREFIX "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}"
      export WINEARCH="$SAVED_WINEARCH"
      # Ask the sue to change template
-     TEMPLATES "Change Template..."
+     Templates "Change Template..."
      
      # Prompt the user to change Arch too if it is different
      if [ "${NEW_WINEARCH}" != "${WINEARCH}" ]; then
@@ -305,7 +305,7 @@ if [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
      # Find all directories inside WINE_TEMPLATE directory
      # List here, use find exe
      # on selection link that to default, that's all!
-     LIST_AVAILABLE_TEMPLATES
+     List_Available_Templates
 
      # Detect if current template is being asked to delete
      if [ "${SELECTED_TEMPLATE}" = "${TEMPLATE}" ]; then
@@ -336,7 +336,7 @@ if [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
 fi
 
 if [ "${TEMPLATE_OPTION}" = "Rename..."  ]; then
-     LIST_AVAILABLE_TEMPLATES
+     List_Available_Templates
      SELECTED_TEMPLATE_NAME=$(basename "${SELECTED_TEMPLATE}")
      GET_RENAME_TEMPLATE_NAME=$( zenity        \
          --title="Rename ${SELECTED_TEMPLATE}"      \
@@ -376,7 +376,7 @@ if [ "${TEMPLATE_OPTION}" = "Restore..."  ]; then
       zenity --progress --pulsate --auto-close \
              --title="Creating ${PREFIXNAME} backup!" \
              --width=500 --text="${BACKUP_FILE}..."
-     RESTORE_FUNCTION "${TEMPLATES_DIR}/${TEMPLATE_NAME_IN_BACKUP}"
+     Restore_Function "${TEMPLATES_DIR}/${TEMPLATE_NAME_IN_BACKUP}"
      DBUG "I: Templates: ${TEMPLATE_NAME_IN_BACKUP} restored successfully"
 fi
 

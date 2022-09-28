@@ -9,7 +9,7 @@
 # 6. Rename files as per new prefix name
 # 7. Create new shortcut and delete old one
 # 8. Launch Script from Renamed Directory
-SCRIPT_CHANGE_PREFIX()
+Script_Change_Prefix()
 {
     export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
     # If No argument is given ask

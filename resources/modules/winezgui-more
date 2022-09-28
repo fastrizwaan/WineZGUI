@@ -80,14 +80,14 @@ WineZGUI_More()
   # Create, Modify, Delete Templates
   if [ "${MORE_OPTION}" = "Templates..." ]; then
        source ${DATADIR}/winezgui-templates
-       TEMPLATES
+       Templates
        WineZGUI_Window
   fi
 
   # Shortcuts
   if [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
        source ${DATADIR}/winezgui-shortcuts
-       SHORTCUTS
+       Shortcuts
        WineZGUI_Window
   fi
 

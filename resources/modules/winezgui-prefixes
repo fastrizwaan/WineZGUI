@@ -2,7 +2,7 @@ WineZGUI_Prefixes()
 {
   DBUG "I: Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-list-available-prefixes
-  LIST_AVAILABLE_PREFIXES
+  List_Available_Prefixes
 
   # Launch the script
   SCRIPT_NAME=$(basename ${SELECTED_PREFIX})

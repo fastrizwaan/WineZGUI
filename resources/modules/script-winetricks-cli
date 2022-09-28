@@ -1,5 +1,6 @@
-SCRIPT_WINETRICKS_CLI()
+Script_Winetricks_Cli()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
   VERB_LIST="xact xinput gmdls xna31 dotnet48 \
             vcrun2003 vcrun2005              \
             vcrun2008 vcrun2010              \

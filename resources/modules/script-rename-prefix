@@ -8,9 +8,9 @@
 # 6. Rename files as per new prefix name 
 # 7. Create new shortcut and delete old one
 # 8. Launch Script from Renamed Directory
-RENAME_PREFIX()
+Rename_Prefix()
 {
-
+DBUG "I: Script: Launched ${FUNCNAME[0]}"
 if [ -z "${1}" ]; then
   # 1. Ask for New Prefix Name
   GET_PREFIX_NAME=$(zenity --title "Rename Prefix..." \
@@ -82,7 +82,7 @@ fi
   NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop"
   NEWINFOFILE="${NEWPREFIXDIR}/info.txt"
  
- echo "NEWSCRIPTFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh \
+  DBUG "NEWSCRIPTFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh \
   NEWICONFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.png     \
   NEWDESKTOPFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop \
   NEWINFOFILE=${NEWPREFIXDIR}/info.txt \

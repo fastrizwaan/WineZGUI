@@ -137,7 +137,7 @@ if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ] ; then
      export WineZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
 fi
 
-# -- HANDLE TEMPLATES -- #
+# -- HANDLE Templates -- #
 # If Template Directory not found, set default to WineZGUI-win64 prefix template
 if [ ! -d "${TEMPLATE}" ]; then
      sed "s|template:.*|template:${WineZGUI_TEMPLATE}|g" -i "${SETTINGS_FILE}"
@@ -424,7 +424,7 @@ OPEN_EXE_FUNCTION(){
                DBUG "I: Startup: WineZGUI Backup file submitted"
                source ${DATADIR}/winezgui-backup-restore-function
                source ${DATADIR}/winezgui-restore-wzt
-               RESTORE_WZT_FILE
+               Restore_Wzt_File
                DBUG "I: Startup: Exiting main program after restoring backup"
                exit 0;
           fi

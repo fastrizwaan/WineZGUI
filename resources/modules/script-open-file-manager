@@ -1,0 +1,6 @@
+# script-open-file-manager
+Script_Open_File_Manager()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  xdg-open "${EXE_PATH}"
+}

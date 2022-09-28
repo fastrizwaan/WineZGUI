@@ -5,7 +5,7 @@
 # winezgui needs to keep it clean, like flatpak, system install should also be
 # clutter free!
 # WineZGUI game prefix should not clutter system menu.
-REMOVE_WINE_CREATED_SHORTCUTS()
+Remove_Wine_Created_Shortcuts()
 {
  WINE_SHORTCUT_DIR="$(realpath -m ~/.local/share/applications/wine)"
  # e.g., ~/.local/share/winezgui/npp.8.4.2.Installer.x64 for npp created by
@@ -13,13 +13,13 @@ REMOVE_WINE_CREATED_SHORTCUTS()
  SAVEIFS=${IFS}
  IFS=$(echo -en "\n\b")
 
- WINE_SHORTCUTS=$(grep -r "${PREFIXDIR}" "${WINE_SHORTCUT_DIR}" \
+ WINE_Shortcuts=$(grep -r "${PREFIXDIR}" "${WINE_SHORTCUT_DIR}" \
                  |cut -f1 -d ":"|sort -u)
 
- if [ ! -z "$WINE_SHORTCUTS" ]; then
-      rm $WINE_SHORTCUTS  && \
+ if [ ! -z "$WINE_Shortcuts" ]; then
+      rm $WINE_Shortcuts  && \
       DBUG "I: Script: Launch: Remove Wine Created Shortcuts: Removed!"
  fi
  IFS=${SAVEIFS}
- unset WINE_SHORTCUTS
+ unset WINE_Shortcuts
 }

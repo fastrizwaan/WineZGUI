@@ -1,4 +1,4 @@
-# SCRIPT_BACKUP_PREFIX
+# Script_Backup_Prefix
 # Steps:
 # 1. Set Total Backup size variable
 # 2. Prepare Prefix Name
@@ -8,9 +8,9 @@
 # 6. Ask for Compression Levels
 # 7. Create wzt = tar.zst file
 # 8. Show info about created wzt file
-SCRIPT_BACKUP_PREFIX()
+Script_Backup_Prefix()
 {
-
+     source ${DATADIR}/winezgui-backup-restore-function
      # 1. Set Total Backup size variable
      TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
      TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
@@ -155,7 +155,7 @@ SCRIPT_BACKUP_PREFIX()
 
      # 7.2 Preprocess PREFIXDIR files (remove user name from files)
      cd "${PREFIXDIR}"
-     BACKUP_FUNCTION "${PREFIXDIR}"
+     Backup_Function "${PREFIXDIR}"
 
      # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
      source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
@@ -206,7 +206,7 @@ SCRIPT_BACKUP_PREFIX()
      # 7.7 Restore changed values after backup
      DBUG "I: Script: Backup: Prefix: Restoring Registry and Info files"
      cd "${PREFIXDIR}"
-     RESTORE_FUNCTION "${PREFIXDIR}"
+     Restore_Function "${PREFIXDIR}"
 
      DBUG "I: Script: Backup: Prefix: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

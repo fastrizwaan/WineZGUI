@@ -1,34 +1,35 @@
 # winezgui-show-help
-SCRIPT_HELP()
+Script_Help()
 {
- BASE_EXE_PATH=$(basename "${EXE_PATH}")
- BASE_SCRIPT=$(basename "${SCRIPTFILE}")
- HELP_TEXT+="Launch...: Launches ${PROGNAME} with default exe ${EXE_NAME}|"
- HELP_TEXT+="Open Other EXE... : Run setup or other exe with ${PREFIXNAME} prefix!|"
- HELP_TEXT+="Winetricks GUI...: Launches winetricks gui for the prefix. Use it to configure.|"
- HELP_TEXT+="Winetricks CLI... : Install winetricks verbs unattended/silently|"
- HELP_TEXT+="Wine Programs...  : Run wine programs like regedit, winecfg, etc. |"
- HELP_TEXT+="Open File Manager... : Open <b>${BASE_EXE_PATH}</b> with file manager|"
- HELP_TEXT+="Open Shell...: Open <b>${PREFIXNAME}</b> with gnome-terminal|"
- HELP_TEXT+="Change...: Name, Prefix, Default Exe, Icon, and Category|"
- HELP_TEXT+="Backup...  : Make backups or Create Game Bundles|"
- HELP_TEXT+="About...     : Details about <b>${PREFIXNAME}</b>|"
- HELP_TEXT+="Help...      : This help|"
- HELP_TEXT+="Quit...      : Exits ${BASE_SCRIPT}|"
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  BASE_EXE_PATH=$(basename "${EXE_PATH}")
+  BASE_SCRIPT=$(basename "${SCRIPTFILE}")
+  HELP_TEXT+="Launch...: Launches ${PROGNAME} with default exe ${EXE_NAME}|"
+  HELP_TEXT+="Open Other EXE... : Run setup or other exe with ${PREFIXNAME} prefix!|"
+  HELP_TEXT+="Winetricks GUI...: Launches winetricks gui for the prefix. Use it to configure.|"
+  HELP_TEXT+="Winetricks CLI... : Install winetricks verbs unattended/silently|"
+  HELP_TEXT+="Wine Programs...  : Run wine programs like regedit, winecfg, etc. |"
+  HELP_TEXT+="Open File Manager... : Open <b>${BASE_EXE_PATH}</b> with file manager|"
+  HELP_TEXT+="Open Shell...: Open <b>${PREFIXNAME}</b> with gnome-terminal|"
+  HELP_TEXT+="Change...: Name, Prefix, Default Exe, Icon, and Category|"
+  HELP_TEXT+="Backup...  : Make backups or Create Game Bundles|"
+  HELP_TEXT+="About...     : Details about <b>${PREFIXNAME}</b>|"
+  HELP_TEXT+="Help...      : This help|"
+  HELP_TEXT+="Quit...      : Exits ${BASE_SCRIPT}|"
 
- # Text is more, so we need to format it, with sed in pango markup
- unset TEXT
- TEXT="$(echo ${HELP_TEXT} \
-             |tr "|" "\n" \
-             |sed "s/https:/https|/g" \
-             |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
-             |sed "s/:/;:;/g" \
-             |column -t -s ";"      \
-             |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
-             |sed -E "s/^(.*)$/<small>\1<\/small>/" \
-             |sed "s/|/:/g" )"
- #
- zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
- unset HELP_TEXT
- unset TEXT
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT} \
+              |tr "|" "\n" \
+              |sed "s/https:/https|/g" \
+              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+              |sed "s/:/;:;/g" \
+              |column -t -s ";"      \
+              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+              |sed "s/|/:/g" )"
+  #
+  zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  unset HELP_TEXT
+  unset TEXT
 }
