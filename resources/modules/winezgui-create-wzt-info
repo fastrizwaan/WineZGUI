@@ -50,7 +50,7 @@ echo "Prefix:${WZT_INFO_PREFIXNAME}"   |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 echo "Created:${DATE}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 echo "Wine:${WINEVER}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-echo "Size:${TOTAL_BACKUP_SIZE_IN_HF}" |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
 # 3.1 Include flatpak id in wzt-info.yml
 if [ "${INSTALL_TYPE}" = "flatpak" ]; then

@@ -105,7 +105,7 @@ if [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
          PREFIXKSIZE=$(du -s ${DEFAULT}|cut -f1)
          TGTSIZEH=$(df -h ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
          TOTAL_BACKUP_SIZE=$(du -sh ${DEFAULT}|cut -f1)
-         TOTAL_BACKUP_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --from iec)
+         TOTAL_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --from iec)
          DBUG "I: Backup: Target size: ${TGTSIZEH}"
          DBUG "I: Backup: Prefix size: ${TEMPLATE_SIZE}"
 
