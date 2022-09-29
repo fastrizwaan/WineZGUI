@@ -546,7 +546,7 @@ elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
        # 3. If $LAUNCH variable is not set to False
 
        source ${WINEZGUI_SCRIPTS}/script-launch 
-       SCRIPT_LAUNCH_EXE
+       Script_Launch
        # Return to Game window
        # 
        exit 0;

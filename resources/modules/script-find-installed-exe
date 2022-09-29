@@ -90,7 +90,7 @@ Script_Find_Installed_Exe()
                     rm "${PREFIXDIR}/${NEW_FOUND_EXE_FILES}" && \
                     DBUG "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
                     source ${WINEZGUI_SCRIPTS}/script-launch 
-                    SCRIPT_LAUNCH_EXE "${SELECTED_EXE}"
+                    Script_Launch "${SELECTED_EXE}"
 
                     # Disabled for 2nd time, let user use change exe manually
                     # DBUG "I: Script: Find Exe: Changing icon..."

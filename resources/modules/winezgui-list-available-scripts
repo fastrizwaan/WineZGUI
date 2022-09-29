@@ -52,7 +52,8 @@ List_Available_Scripts()
 
 # 3. Show the found exe files using zenity
  unset COMMAND
- COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Installed\" --radiolist --list "
+ COMMAND+="zenity --title=\"${APP_WITH_VER} - Launch!\" "
+ COMMAND+="--text \"Select Shortcut...\" --radiolist --list "
  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
  RESULT="$(eval ${COMMAND})"
 

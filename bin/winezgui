@@ -298,11 +298,11 @@ WineZGUI_Window()
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \
                             0 "Launch..."                      \
-                            0 "Prefixes..."                   \
+                            0 "Script..."                      \
                             0 "Backup..."                      \
                             0 "Restore..."                     \
                             0 "Delete..."                      \
-                            0 "Template..."                   \
+                            0 "Template..."                    \
                             0 "Settings..."                    \
                             0 "Kill all..."                    \
                             0 "More..."                        \
@@ -328,9 +328,9 @@ WineZGUI_Window()
          source ${DATADIR}/winezgui-launch 
          WineZGUI_Launch
          
-  elif [ "${SELECTION}" = "Prefixes..."  ]; then
-         source ${DATADIR}/winezgui-prefixes 
-         WineZGUI_Prefixes
+  elif [ "${SELECTION}" = "Script..."  ]; then
+         source ${DATADIR}/winezgui-script 
+         WineZGUI_Script
          
   elif [ "${SELECTION}" = "Backup..." ]; then
          source ${DATADIR}/winezgui-backup 
