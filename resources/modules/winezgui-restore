@@ -1,6 +1,6 @@
 WineZGUI_Restore()
 {
-  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   # Ask user to select the .wzt backup file to restore
   WZT_FILE="$(zenity --file-filter=*.${BKP_EXT}            \
                      --file-selection                      \
@@ -13,8 +13,8 @@ WineZGUI_Restore()
 
   else
        # Backup_Function Restore_Function()
-       source ${DATADIR}/winezgui-backup-restore-function
-       source ${DATADIR}/winezgui-restore-wzt
+       source ${DATADIR}/winezgui-backup-restore-function 
+       source ${DATADIR}/winezgui-restore-wzt 
        Restore_Wzt_File
   fi # -z "${WZT_FILE}"
 

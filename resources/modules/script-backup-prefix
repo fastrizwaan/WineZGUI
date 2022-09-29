@@ -10,7 +10,7 @@
 # 8. Show info about created wzt file
 Script_Backup_Prefix()
 {
-     source ${DATADIR}/winezgui-backup-restore-function
+     source ${DATADIR}/winezgui-backup-restore-function 
      # 1. Set Total Backup size variable
      TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
      TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
@@ -158,7 +158,7 @@ Script_Backup_Prefix()
      Backup_Function "${PREFIXDIR}"
 
      # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-     source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
+     source ${DATADIR}/winezgui-create-wzt-info 
 
      DBUG "I: Script: Backup: Prefix: Creating ${BACKUP_FILE} file..."
      # Report user the time it took to bundle

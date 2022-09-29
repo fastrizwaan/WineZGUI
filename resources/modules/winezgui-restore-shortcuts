@@ -1,4 +1,4 @@
-# source ${DATADIR}/winezgui-restore-shortcuts
+# source ${DATADIR}/winezgui-restore-shortcuts 
 
 Restore_Shortcuts()
 {

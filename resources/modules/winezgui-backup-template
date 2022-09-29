@@ -1,0 +1,217 @@
+# winezgui-backup-template
+# FIXME... review 
+WineZGUI_Backup_Template()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
+  source ${DATADIR}/winezgui-backup-restore-function 
+  # 0. Get disk usage of template
+  TEMPLATE_SIZE_IN_HF=$(du -sh "${TEMPLATE}")
+  TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)
+
+  DBUG "============================================="
+  DBUG "TEMPLATE_SIZE_IN_HF=$(du -sh "${TEMPLATE}")
+  TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)"
+  # 1. Set Total Backup size variable
+  TOTAL_SIZE=${TEMPLATE_SIZE_IN_BYTES}
+  TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
+
+  DBUG "I: Backup: Template: Size: ${TOTAL_SIZE_IN_HF}"
+
+  # 2. Prepare TEMPLATE Name
+  # 2.1 Format filename for flatpak or system install type
+  # BKPFNAME="WineZGUI-Template-${TEMPLATE_NAME}-${DATE}.${BKP_EXT}"
+
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       # If "flatpak-" is not part of flatpak name
+       # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
+       if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+            SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+       fi
+       unset FILENAME
+       FILENAME+="template"
+       FILENAME+="-${TEMPLATE_NAME}-"
+       FILENAME+="${SHORT_FLATPAK_NAME}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${BKP_EXT}"
+       # Flatpak: Game-WineZGUI-0.87-TEMPLATE-Backup-flatpak-wine7-20220904_2359.wzt
+  else # for system add wine-version
+       unset FILENAME
+       FILENAME+="template"
+       FILENAME+="-${TEMPLATE_NAME}-"
+       FILENAME+="${WINEVER}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${BKP_EXT}"
+       # Game-WineZGUI-0.87-TEMPLATE-Backup-wine-7.0-20220904_2359.wzt
+  fi
+
+
+  DBUG "I: Backup: Template: Filename Suggestion: ${FILENAME}"
+
+  # For Zenity prompt
+  unset TITLE
+  unset TEXT
+  TITLE="Backup ${TEMPLATE_NAME} TEMPLATE!"
+  TEXT+="${TEMPLATE_SIZE_IN_HF}"
+
+  # 3. Suggest and Ask for wzt file name
+  DBUG "I: Backup: Template: Asking filename"
+  BACKUP_FILE=$( zenity                        \
+                 --title="${TITLE}"            \
+                 --width=700 --height=30       \
+                 --text="${TEXT}"              \
+                 --entry-text="${FILENAME}"    \
+                 --entry)
+
+  # 3.1: if backup file is empty / cancel clicked
+  if [ -z "${BACKUP_FILE}" ]; then
+       DBUG "I: Backup: Template: Cancelled!"
+       unset BACKUP_FILE
+       unset FILENAME
+       return 1
+  fi
+
+  # 4. Ask user to select backup target/destination directory
+  DBUG "I: Backup: Template: Select backup directory"
+  unset TITLE
+  TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
+  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  if [ -z "${TARGET_DIR}" ]; then
+       DBUG "I: Backup: Template:" \
+            "Select backup directory: Cancelled!"
+
+  fi
+
+  # 4.1: Check if the target directory is writable or not?
+  if [ ! -w "${TARGET_DIR}" ]; then
+       echo "E: Backup: Template: ${TARGET_DIR} not writable"
+       zenity --error --no-wrap --title="Backup Error!" \
+              --text "${TARGET_DIR} not writable\nAborting Backup!"
+       return 1
+  fi
+
+
+  # 4.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
+  DBUG "I: Backup: Template: Given ${BACKUP_FILE}"
+
+  if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
+       BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
+       DBUG "I: Backup: Template: added suffix ${BKP_EXT}"
+  fi
+
+  DBUG "I: Backup: Template: Using ${BACKUP_FILE}"
+
+  # 5. Check available disk space in target directory before backing up
+  # to make sure that template size < target dir for backup to start
+
+  # Step 5.1: Get available target dir partition's available space in
+  # Human format (df -h)
+  DBUG "I: Backup: Template: Determining available space"
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
+       |cut -f4 -d " "|tail -n1)
+  DBUG "I: Backup: Template: Available space: ${AVAILABLE_SPACE}"
+
+  # Step 5.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+
+  # Step 5.3: If Target directory does not have sufficient space, abort backup
+  DBUG "I: Backup: Template: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ]; then
+       echo -n "I: Backup: Template: ${TARGET_DIR}"
+       echo    "has enough available disk space"
+  else
+       echo -n "W: Backup: Template: ${TARGET_DIR}"
+       echo    "does not have free disk space!!!"
+       unset MSG
+       unset TITLE
+       TITLE="Not Enough Disk Space!"
+       MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
+       MSG+=" "
+       MSG+="free disk space left!\n"
+       MSG+="TEMPLATE backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+       # Warn user
+       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       echo "E: Backup: Template: Not Enough Disk Space," \
+            "Cancelled!"
+
+
+  fi
+
+  # 6. Ask for Compression Levels
+  unset LEVEL
+  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+       --text "${FILENAME}" --title "Select Compression Level...")
+  # Exit if Cancel is clicked
+  if [ -z "${LEVEL}" ]; then
+       DBUG "I: Backup: Template: Cancel Selected!"
+
+  fi
+  DBUG "I: Backup: Template: Compression Level ${LEVEL} Selected!"
+
+  # 7. Create wzt = tar.zst file
+  # 7.1 Change directory to TEMPLATES_DIR
+  cd "${TEMPLATES_DIR}"
+  DBUG "I: Backup: Template: Preparing files"
+
+  # 7.2 Preprocess TEMPLATES_DIR files (remove user name from files)
+  cd "${TEMPLATES_DIR}"
+  Backup_Function "${TEMPLATE_NAME}"
+
+  # # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
+  # source ${DATADIR}/winezgui-create-wzt-info 
+
+  DBUG "I: Backup: Template: Creating ${BACKUP_FILE} file..."
+  # Report user the time it took to bundle
+  TIMER_START=${SECONDS}
+  # 7.4 Create Backup archive and restore changes as soon as tar is done
+  # add wzt-info.yml 1st then the template directory to the wzt file
+  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               -C  "${TEMPLATES_DIR}" "${TEMPLATE_NAME}" &)| \
+  zenity    --progress --pulsate --auto-close        \
+            --title="Creating ${TEMPLATE_NAME} backup!" \
+            --width=500 --text="${BACKUP_FILE}..."
+  TOOK=$(( SECONDS - ${TIMER_START} ))
+  DBUG "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+
+  # 7.5 If user clicks cancel, kill tar commands
+  # zenity progress won't kill the process, so we do it
+  # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
+  # other wzt file operation like extraction and backup
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}" \
+                      |sed 's/  */ /g'|cut -f2 -d " ")
+
+  # If there is a PID_OF_TAR then we need to kill the tar command
+  if ! [ -z "$PID_OF_TAR" ]; then
+       kill -9 ${PID_OF_TAR} \
+            && DBUG "I: Backup: Template: Cancelled! Killed tar!" \ &&
+       rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
+            DBUG "I: Backup: Template: Removed partial ${BACKUP_FILE}"
+
+       # Backup Sucess Message
+       MSG=("${TEMPLATE_NAME} backup cancelled!")
+  else
+       # If no pid is found, that means wzt=tar.zst is created successfully
+       DBUG "I: Backup: Template: Created ${BACKUP_FILE}, Success!"
+       # 7.6  Crate message
+       BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Backup Sucess Message
+       MSG=("<b>TEMPLATE: </b> ${TEMPLATE_NAME}\n")
+       MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+       MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+       MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+
+  fi
+
+  # 7.7 Restore changed values after backup
+  DBUG "I: Backup: Template: Restoring Registry and Info files"
+  cd "${TEMPLATES_DIR}"
+  Restore_Function "${TEMPLATE_NAME}"
+
+  DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+
+  # 8. Show info about created wzt file
+  zenity --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"
+  return 0
+}
+
+  

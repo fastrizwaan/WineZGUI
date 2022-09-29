@@ -2,10 +2,11 @@
 # Create, Set default, Clone Delete Templates
 # So that users with custom winetricks verbs can use them
 #Create, Copy, Delete, Rename, Backup, Restore
-Templates()
+# FIXME winezgui-templates
+WineZGUI_Templates()
 {
  echo "WINEZGUI_TEMPLATE  = $WINEZGUI_TEMPLATE"
-source ${DATADIR}/winezgui-list-available-templates
+source ${DATADIR}/winezgui-list-available-templates || exit 1
 export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
 export TEMPLATE_NAME=$(basename ${TEMPLATE})
 
@@ -40,7 +41,7 @@ fi
     
      # Configure current template
      if [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..."  ]; then
-          source ${DATADIR}/winezgui-configure-template
+          source ${DATADIR}/winezgui-configure-template || exit 1
           Configure_Template
           WineZGUI_Window
      fi
@@ -137,7 +138,7 @@ if [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
               
 # FIXME backup restore function not processing Templaes_dir
               # Create Backup archive and restore changes as soon as tar is done
-              source ${DATADIR}/winezgui-create-wzt-info
+              source ${DATADIR}/winezgui-create-wzt-info || exit 1
 
               # Create Bundle
               DBUG "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"

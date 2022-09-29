@@ -1,58 +1,55 @@
 #winezgui-shortcuts
-Shortcuts()
+WineZGUI_Shortcuts()
 {
- unset SELECT_Shortcuts
- SELECT_Shortcuts=$( zenity --title "${APP_WITH_VER} - Shortcuts" \
-              --list   --hide-header                              \
-              --width=360 --height=210                            \
-              --radiolist --column " "                            \
-              --column "Action"                                   \
-                  TRUE "Clean..."                                 \
-                     0 "Create..."                                \
-                     0 "Delete..."                                \
-                     0 "Restore..."                               \
-              --text   "Shortcuts <b>${Shortcuts_NAME}</b> in use")
+  
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  unset SELECT_SHORTCUT
+  SELECT_SHORTCUT=$( zenity --title "${APP_WITH_VER} - Shortcuts" \
+               --list   --hide-header                              \
+               --width=360 --height=210                            \
+               --radiolist --column " "                            \
+               --column "Action"                                   \
+                   TRUE "Clean..."                                 \
+                      0 "Create..."                                \
+                      0 "Delete..."                                \
+                      0 "Restore..."                               \
+               --text   "Shortcuts <b>${Shortcuts_NAME}</b> in use")
 
- # Exit if Cancel is clicked
-if [ -z "${SELECT_Shortcuts}" ]; then
-     DBUG "I: Shortcuts: Cancel Selected!"
-     return 1
-fi
+  # Exit if Cancel is clicked
+  if [ -z "${SELECT_SHORTCUT}" ]; then
+       DBUG "I: Shortcuts: Cancel Selected!"
+       return 1
+  fi
 
-# FIXME, get list of exe files and show them
-if [ "${SELECT_Shortcuts}" = "Clean..." ]; then
-     find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-     DBUG "I: Clean: Removed broken WineZGUI .desktop links"
-     ${UPDATE_ICON}
-     ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-     ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
-     WineZGUI_Window
-fi
+  # FIXME, get list of exe files and show them
+  if [ "${SELECT_SHORTCUT}" = "Clean..." ]; then
+       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+       DBUG "I: Clean: Removed broken WineZGUI .desktop links"
+       ${UPDATE_ICON}
+       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+       ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+  fi
 
-# Create, Modify, Delete Shortcuts
-if [ "${SELECT_Shortcuts}" = "Create..." ]; then
-     source ${DATADIR}/winezgui-list-available-prefixes
-     List_Available_Prefixes
-     SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
-     #NEW_SHORTCUT_EXE="${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut"
-     ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut
-     WineZGUI_Window
-fi
+  # Create, Modify, Delete Shortcuts
+  if [ "${SELECT_SHORTCUT}" = "Create..." ]; then
+       source ${DATADIR}/winezgui-list-available-prefixes 
+       List_Available_Prefixes
+       SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+       #NEW_SHORTCUT_EXE="${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut"
+       ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut
+  fi
 
-if [ "${SELECT_Shortcuts}" = "Delete..." ]; then
-     source ${DATADIR}/winezgui-delete-shortcuts
-     echo "Launching delete Shortcuts!!!"
-     Delete_Shortcuts
-     WineZGUI_Window
-fi
+  if [ "${SELECT_SHORTCUT}" = "Delete..." ]; then
+       source ${DATADIR}/winezgui-delete-shortcuts 
+       echo "Launching delete Shortcuts!!!"
+       Delete_Shortcuts
+  fi
 
-if [ "${SELECT_Shortcuts}" = "Restore..." ]; then
-     source ${DATADIR}/winezgui-restore-shortcuts
-     echo "Launching delete Shortcuts!!!"
-     Restore_Shortcuts
-     WineZGUI_Window
-fi
-
-
+  if [ "${SELECT_SHORTCUT}" = "Restore..." ]; then
+       source ${DATADIR}/winezgui-restore-shortcuts 
+       echo "Launching delete Shortcuts!!!"
+       Restore_Shortcuts
+  fi
+  return 0
 
 }

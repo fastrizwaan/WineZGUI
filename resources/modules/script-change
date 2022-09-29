@@ -23,33 +23,33 @@ Script_Change()
   fi
 
   if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-change-name
+         source ${WINEZGUI_SCRIPTS}/script-change-name 
          SCRIPT_CHANGE_NAME
 
   elif [ "${CHANGE_OPTION}" = "Prefix Directory Name..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-change-prefix
+         source ${WINEZGUI_SCRIPTS}/script-change-prefix 
          Script_Change_Prefix
          
   elif [ "${CHANGE_OPTION}" = "Wine Architecture..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-change-arch
+         source ${WINEZGUI_SCRIPTS}/script-change-arch 
          Script_Change_Arch
          
   elif [ "${CHANGE_OPTION}" = "Default Exe..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-change-exe
-         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
-         source ${WINEZGUI_SCRIPTS}/winezgui-change-any-other-exe
-         source ${WINEZGUI_SCRIPTS}/script-change-exe-variables
+         source ${WINEZGUI_SCRIPTS}/script-change-exe 
+         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
+         source ${DATADIR}/winezgui-change-any-other-exe 
+         source ${WINEZGUI_SCRIPTS}/script-change-exe-variables 
          Script_Change_Exe # Call the function in the above file
          
   elif [ "${CHANGE_OPTION}" = "Shortcut Icon..." ]; then
          DBUG "I: Script: Shortcut Icon... Selected!"
-         source ${WINEZGUI_SCRIPTS}/script-change-icon
+         source ${WINEZGUI_SCRIPTS}/script-change-icon 
          Script_Change_Icon
          # Return to Game window
          
   elif [ "${CHANGE_OPTION}" = "Application Category..." ]; then
          DBUG "I: Script: Application Category... Selected!"
-         source ${WINEZGUI_SCRIPTS}/script-change-category
+         source ${WINEZGUI_SCRIPTS}/script-change-category 
          Script_Change_Category
   fi
   # Return

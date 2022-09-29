@@ -3,7 +3,7 @@
 # and set the variable SELECTED_PREFIX
 List_Available_Prefixes()
 {
- DBUG "I: Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION

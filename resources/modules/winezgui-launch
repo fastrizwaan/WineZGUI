@@ -1,8 +1,8 @@
 WineZGUI_Launch()
 {
-  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
-  source ${DATADIR}/winezgui-list-available-scripts
+  source ${DATADIR}/winezgui-list-available-scripts 
   List_Available_Scripts
 
   # Directly start the exe with wine program

@@ -19,7 +19,7 @@ Script_More()
 
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
           DBUG "I: Script: Delete... Selected!"
-          source ${WINEZGUI_SCRIPTS}/script-delete
+          source ${WINEZGUI_SCRIPTS}/script-delete 
           Script_Delete
   fi
 }

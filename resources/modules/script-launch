@@ -24,10 +24,10 @@ Script_Launch()
   ${WINE_CMD} "${exe_name}"
 
   # 4. Remove wine installed shortcuts, unclutters menu
-  source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
+  source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
   Remove_Wine_Created_Shortcuts
 
   # 5. Find any exe files installed by setup or installer
-  source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
+  source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
   Script_Find_Installed_Exe
 }

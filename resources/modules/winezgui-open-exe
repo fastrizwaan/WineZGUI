@@ -1,6 +1,6 @@
 WineZGUI_Open_Exe()
 {
-  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset SELECT_FILE
   SELECT_FILE="$(zenity --file-filter="*.exe *.msi" \
                         --file-selection            \
@@ -18,7 +18,7 @@ WineZGUI_Open_Exe()
   if [ ${SELECT_FILE_ANSWER} -eq 0 ]; then
        DBUG "I: Open Exe:\"${EXE_FILE}\" Selected!";
        export EXE_FILE="${SELECT_FILE}"
-       OPEN_EXE_FUNCTION
+       Open_Exe
   fi
 
   # If User selects cancel / no

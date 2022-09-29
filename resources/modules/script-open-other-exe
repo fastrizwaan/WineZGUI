@@ -28,7 +28,7 @@ Script_Open_Other_Exe()
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
          # Call Script_Get_Selected_Exe
-         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
+         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
          Script_Get_Selected_Exe
          OTHER_EXE="${SELECTED_EXE}"
          DBUG "I: Script: Open Other EXE:  ${SELECTED_EXE} Selected!"
@@ -56,8 +56,8 @@ Script_Open_Other_Exe()
        ${WINE_CMD} "$base"
        DBUG "I: Script: Open Other EXE... Finished!"
 
-       source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
+       source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
        Remove_Wine_Created_Shortcuts
-       source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
+       source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
        Script_Find_Installed_Exe
 }

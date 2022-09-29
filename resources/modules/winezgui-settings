@@ -2,7 +2,7 @@
 
 WineZGUI_Settings()
  {
-   DBUG "I: Launched ${FUNCNAME[0]}"
+   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
    export TEMPLATE_NAME=$(basename ${TEMPLATE})
    unset TEXT
@@ -152,7 +152,7 @@ WineZGUI_Settings()
              fi
 
              if [ ${ANSWER} -eq 0 ]; then
-                  source ${DATADIR}/winezgui-templates
+                  source ${DATADIR}/winezgui-templates 
                   Templates "Change Template..."
              fi
 
@@ -160,7 +160,7 @@ WineZGUI_Settings()
    fi
 
    if [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
-        source ${DATADIR}/winezgui-templates
+        source ${DATADIR}/winezgui-templates 
         Templates "Change Template..."
    fi
 
@@ -168,7 +168,7 @@ WineZGUI_Settings()
 
 
    if [ "${SETTINGS_OPTION}" = "Launch Behavior..." ]; then
-        source ${DATADIR}/winezgui-list-available-prefixes
+        source ${DATADIR}/winezgui-list-available-prefixes 
         List_Available_Prefixes
 
         GET_LAUNCH_BEHAVIOR=$(zenity  --title "${APP_WITH_VER}"          \

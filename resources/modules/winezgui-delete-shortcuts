@@ -1,4 +1,4 @@
-# source ${DATADIR}/winezgui-delete-shortcuts
+# source ${DATADIR}/winezgui-delete-shortcuts 
 
 Delete_Shortcuts()
 {

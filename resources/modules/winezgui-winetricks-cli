@@ -1,4 +1,4 @@
-Script_Winetricks_Cli()
+WineZGUI_Winetricks_Cli()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -44,7 +44,7 @@ Script_Winetricks_Cli()
   echo "# Installing ${i}..."
   
   # Install winetricks verbs and put output to logs
-  ${WTRICKS_CMD} --unattended ${i}
+  ${WINETRICKS} --unattended ${i}
   done
   TOOK=$(( SECONDS - ${TIMER_START} ))
   echo "# Time Taken: ${TOOK} seconds!"
@@ -54,5 +54,5 @@ Script_Winetricks_Cli()
   # Inform about time taken
   
   DBUG "I: Script: Winetricks CLI: Exited!"
-
+  return 0
 }

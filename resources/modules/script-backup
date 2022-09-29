@@ -42,11 +42,11 @@ Script_Backup()
   # 2. Based on Selection, launch create prefix / bundle function
   if   [ "${RESPONSE}" = "Prefix Backup..." ]; then
          # Call Script_Backup_Prefix
-         source ${WINEZGUI_SCRIPTS}/script-backup-prefix
+         source ${WINEZGUI_SCRIPTS}/script-backup-prefix 
          Script_Backup_Prefix "${PREFIXDIR}"
   elif [ "${RESPONSE}" = "Create Game Bundle..." ]; then
          # Call WINEZGUI-SCRIPT_BACKUP-BUNDLE
-         source ${WINEZGUI_SCRIPTS}/script-backup-bundle
+         source ${WINEZGUI_SCRIPTS}/script-backup-bundle 
          Script_Backup_Bundle "${PREFIXDIR}"
   fi
 

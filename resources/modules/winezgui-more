@@ -1,7 +1,7 @@
 # FIXME winezgui-more
 WineZGUI_More()
 {
-  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   MORE_OPTION=$(zenity --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
                  --width=360 --height=240                \
@@ -14,81 +14,24 @@ WineZGUI_More()
                         0 "Help..."                      \
                  --text   "More..."                      )
 
+  DBUG "${0}: ${FUNCNAME[0]}: ${MORE_OPTION} Selected!"
   # Exit if Cancel is clicked
-  if [ -z "${MORE_OPTION}" ]; then
-       DBUG "I: MORE: Cancel Selected!"
-       return 1
+  if   [ -z "${MORE_OPTION}" ]; then
+         DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+         return 1
   fi
-  # File Manager
-  if [ "${MORE_OPTION}" = "File Manager..."  ]; then
-       xdg-open "${WINEZGUIDIR}"
-       WineZGUI_Window
+  
+  if   [ "${MORE_OPTION}" = "File Manager..."  ]; then
+         xdg-open "${WINEZGUIDIR}"
+  elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
+         source ${DATADIR}/winezgui-open-terminal 
+         WineZGUI_Open_Terminal
+  elif [ "${MORE_OPTION}" = "Templates..." ]; then
+         source ${DATADIR}/winezgui-templates 
+         WineZGUI_Templates
+  elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
+         source ${DATADIR}/winezgui-shortcuts 
+         WineZGUI_Shortcuts
   fi
-
-  if [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
-       DBUG "I: Open Terminal... Selected!"
-       # Check if "gnome-terminal" is installed on the Host
-       # Required for "Open Terminal..." feature
-
-       if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-            [ $(flatpak-spawn  --host which gnome-terminal) ]; then
-              DBUG "I: Open Terminal: Gnome-terminal found via flatpak-spawn"
-              export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-       elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-            [ $(which gnome-terminal) ]; then
-              DBUG "I: Open Terminal: Gnome-terminal found on host system"
-              export GNOME_TERMINAL=0 ; #Available on host install
-       else
-              DBUG "I: Open Terminal: Gnome-terminal not found"
-              export GNOME_TERMINAL=1 ; #Unavailable on host
-       fi
-
-
-       # Using Variable, If gnome terminal is not found inform user
-       if [ ${GNOME_TERMINAL} -eq 1 ]; then
-            zenity --title "${SELECTION}" \
-                   --width=500 --height=30 --info  \
-                   --text "This feature requires \"gnome-terminal\""
-            # and return to main application window
-            WineZGUI_Window
-       fi
-
-       # If found in flatpak sandbox, use flatpak-spawn
-       if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-          [ $(flatpak-spawn --host echo 0) ]; then
-            DBUG "I: Open Terminal: Opening gnome-terminal from sandbox"
-            # Shell needs WINEPREFIX as we are working with wine
-            export WINEPREFIX=${DEFAULT}
-            flatpak-spawn --host gnome-terminal --wait --        \
-            flatpak --command=bash run ${FLATPAK_NAME}           \
-                    -c "cd ${WINEZGUIDIR}; export WINEPREFIX=${WINEPREFIX}; \
-                        exec bash -i"
-
-            # If found on host, run gnome-terminal
-       else
-            DBUG "I: Open Terminal: Opening gnome-terminal from host"
-            export WINEPREFIX=${DEFAULT}
-            gnome-terminal --wait --                              \
-                 bash -c "export WINEPREFIX=${WINEPREFIX};        \
-                 cd ${WINEZGUIDIR};                               \
-                 exec bash -i"
-       fi
-       # on closing shell, go back to main application window
-       WineZGUI_Window
-  fi
-
-  # Create, Modify, Delete Templates
-  if [ "${MORE_OPTION}" = "Templates..." ]; then
-       source ${DATADIR}/winezgui-templates
-       Templates
-       WineZGUI_Window
-  fi
-
-  # Shortcuts
-  if [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
-       source ${DATADIR}/winezgui-shortcuts
-       Shortcuts
-       WineZGUI_Window
-  fi
-
+#  return 0
 }

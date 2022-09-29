@@ -1,0 +1,5 @@
+# winezgui-winecfg
+WineZGUI_Winecfg()
+{
+  ${WINE_CMD} winecfg
+}

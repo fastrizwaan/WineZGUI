@@ -3,7 +3,7 @@
 # and set the variable SELECTED_SCRIPT
 List_Available_Scripts()
 {
- DBUG "I: Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION

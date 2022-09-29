@@ -1,0 +1,188 @@
+# winezgui-customize-template
+Configure_Template()
+{
+    DBUG "I: Configure Tempalate: Selected!"
+    Configure_Template_OPTION=$(zenity \
+                    --title "${APP_WITH_VER} - ${TEMPLATE_NAME}" \
+                    --width=360 --height=450           \
+                    --list      --hide-header          \
+                    --radiolist --column " "           \
+                    --column "Action"                  \
+                      0      "Open Exe..."             \
+                      0      "Winetricks GUI..."       \
+                      0      "Winetricks CLI..."       \
+                      0      "Launch Winecfg..."       \
+                      0      "Open Explorer..."        \
+                      0      "Open Shell..."           \
+                  --text     "<b> Customize ${TEMPLATE_NAME} Template...</b>" )
+ 
+ # Open EXE... Opens file dialog
+      if [ "${Configure_Template_OPTION}" = "Open Exe..." ]; then
+           DBUG "I: 1:Open EXE... Selected!"
+           unset SELECT_FILE
+      	    SELECT_FILE="$(zenity --file-filter="*.exe *.msi" \
+                 	               --file-selection            \
+      	                          --title="Select a File" )"
+      	   #
+      	   SELECT_FILE_ANSWER=$?
+          echo "SELECT_FILE = $SELECT_FILE"
+      	   # If no exe is selected
+      	   if [ -z "${SELECT_FILE}" ];  then
+      	        DBUG "I: 2:Open EXE... Cancelled!"
+      	        return 0   ; # Go back to Main Window
+      	   fi
+
+          # 2.3 if User selects cancel / no
+          if [ ${SELECT_FILE_ANSWER} -eq 0 ]; then
+              DBUG "I: 3:Open Exe:\"${SELECT_FILE}\" Selected!";
+              base=$(basename "${SELECT_FILE}")
+              dire=$(dirname "${SELECT_FILE}")
+
+              # Launch other EXE
+              cd "$dire"
+              DBUG "I: Script: Open Other EXE: Launching \"${base}\""
+              ${WINE_CMD} "$base"
+              return 0
+          fi
+
+          if [ ${SELECT_FILE_ANSWER} -eq 1 ]; then
+              DBUG "I: 4:ANSWER = 1 Cancelled!"
+              return 0
+          fi
+
+      # ====================== Winetricks GUI ========================= #
+      elif [ "${Configure_Template_OPTION}" = "Winetricks GUI..." ] ; then
+             DBUG "I: Winetricks GUI... Selected!"
+             WINEPREFIX=${DEFAULT} ${WINETRICKS} --gui
+             DBUG "I: Winetricks GUI ended..."
+             return 0
+
+      # ====================== Winetricks CLI ========================= #
+      # Provide text entry command Line to enter multiple Dependencies
+      elif [ "${Configure_Template_OPTION}" = "Winetricks CLI..." ] ; then
+             DBUG "I: Winetricks CLI... Selected!"
+             # Present some preselected winetricks verbs
+             VERB_LIST="xact xinput xna31 dotnet48 \
+                        vcrun2003 vcrun2005        \
+                        vcrun2008 vcrun2010        \
+                        vcrun2019 dxvk faudio      \
+                        quartz corefonts"
+             MESSAGE="Change & Press Enter to install these using Winetricks:"
+             TITLE_TEXT="Winetricks CLI - Paste winetricks verb list"
+             # Remove multiple spaces from variable
+             # from the above VERB_LIST
+             VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
+
+             # Show the dialog
+             VERBS=$( \
+             zenity                       \
+             --title "${TITLE_TEXT}"      \
+             --width=800 --height=30      \
+             --text  "${MESSAGE}"         \
+             --entry-text "${VERB_LIST}"  \
+             --entry)
+
+             # If Cancel is clicked or nothing is entered
+             if [ -z "${VERBS}" ] ; then
+                  DBUG "I: Winetricks CLI: Cancelled!"
+                  return 0; # Return to main application window
+             else
+                  DBUG "I: Winetricks CLI: Selected verbs:"
+                  DBUG "I: Winetricks CLI: ${VERBS}"
+                  VERBS=(${VERBS}) ; # convert string to array
+
+
+                  # Report user the time it took to install winetricks
+                  TIMER_START=${SECONDS}
+                  # Start of Show Progress using zenity dialog
+                  ( for i in ${VERBS[*]}; do
+
+                  # Show Progress Info
+                  echo "# Installing ${i}..."
+
+                  # Install winetricks verbs and put output to logs
+                  ${WINETRICKS} --force --unattended  "${i}"
+                  done
+                  TOOK=$(( SECONDS - ${TIMER_START} ))
+                  echo "# Time Taken: ${TOOK} seconds!"
+                  ) |zenity --width=500                   \
+                      --title "Please Wait... This will take time!"   \
+                      --progress --pulsate --auto-kill
+
+             # End of Show Progress using zenity dialog
+             fi
+             DBUG "I: Winetricks CLI: Exited!"
+             return 0; # Return to Main Application Window
+
+      # ====================== Launch Winecfg ========================= #
+      elif [ "${Configure_Template_OPTION}" = "Launch Winecfg..." ] ; then
+             DBUG "I: Launch Winecfg... Selected!"
+             ${WINE_CMD} winecfg
+             return 0
+                  return 0
+      # ====================== Open Explorer ========================== #
+      elif [ "${Configure_Template_OPTION}" = "Open Explorer..." ] ; then
+             DBUG "I: Open Explorer... Selected!"
+             DBUG "I: Open Explorer: Opening Explorer..."
+             # Open home directory using windows explorer
+             ${WINE_CMD} explorer ${HOME} && \
+             DBUG "I: Open Explorer: Explorer Exited..." || \
+             DBUG "I: Open Explorer: Explorer Eror..."
+             # Return to Main window, when explorer exits
+             return 0
+    # ====================== Open Shell ========================= #
+      elif [ "${Configure_Template_OPTION}" = "Open Shell..." ] ; then
+
+            DBUG "I: Open Shell... Selected!"
+             # Check if "gnome-terminal" is installed on the Host
+             # Required for "Open Shell..." feature
+
+             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+                [ $(flatpak-spawn  --host which gnome-terminal) ] ; then
+                 DBUG "I: Open Shell: Gnome-terminal found via flatpak-spawn"
+                 export GNOME_TERMINAL=0 ; #Available via flatpak-spawn
+            elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
+                 [ $(which gnome-terminal) ];
+                   then
+                   DBUG "I: Open Shell: Gnome-terminal found on host system"
+                   export GNOME_TERMINAL=0 ; #Available on host install
+            else
+                 DBUG "I: Open Shell: Gnome-terminal not found"
+                 export GNOME_TERMINAL=1 ; #Unavailable on host
+            fi
+
+
+            # Using Variable, If gnome terminal is not found inform user
+            if [ ${GNOME_TERMINAL} -eq 1 ] ; then
+                 zenity --title "${Configure_Template_OPTION}" \
+                        --width=500 --height=30 --info  \
+                        --text "This feature requires \"gnome-terminal\""
+                 # and return to main application window
+                 return 0
+            fi
+
+             # If found in flatpak sandbox, use flatpak-spawn
+             if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+                [ $(flatpak-spawn --host echo 0) ] ; then
+                  echo -e "I: Open Shell: "
+                  echo    "Opening gnome-terminal from flatpak sandbox"
+                  # Shell needs WINEPREFIX as we are working with wine
+                  export WINEPREFIX=${DEFAULT}
+                  flatpak-spawn --host gnome-terminal --wait --        \
+                  flatpak --command=bash run ${FLATPAK_NAME}           \
+                  -c "cd ${WINEPREFIX}; export WINEPREFIX=${WINEPREFIX}; \
+                  exec bash -i"
+
+             # If found on host, run gnome-terminal
+             else
+                 DBUG "I: Open Shell: Opening gnome-terminal from host"
+                 export WINEPREFIX=${DEFAULT}
+                 gnome-terminal --wait --                              \
+                 bash -c "export WINEPREFIX=${WINEPREFIX};             \
+                 cd ${WINEPREFIX};                                       \
+                 exec bash -i"
+             fi
+              # on closing shell, go back to main application window
+              return 0
+        fi
+}

@@ -12,7 +12,7 @@
 Script_Backup_Bundle()
 {
  DBUG "I: Script: Launched ${FUNCNAME[0]}"
-    source ${DATADIR}/winezgui-backup-restore-function
+    source ${DATADIR}/winezgui-backup-restore-function 
     DBUG "I: Script: Backup: Create Game Bundle... Selected!"
     echo -n "I: Script: Backup: Bundle: Checking if ${EXE_NAME} is not"
     echo    "inside a standard directory"
@@ -259,7 +259,7 @@ Script_Backup_Bundle()
         Backup_Function "${PREFIXDIR}"
 
         # 7.5 Create wzt-info.yml required for restoring wzt file.
-        source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
+        source ${DATADIR}/winezgui-create-wzt-info 
 
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
@@ -288,7 +288,7 @@ Script_Backup_Bundle()
         Backup_Function "${PREFIXDIR}"
 
         # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-        source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info
+        source ${DATADIR}/winezgui-create-wzt-info 
 
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"

@@ -1,9 +1,9 @@
 # winezgui-configure
 #  WineZGUI application window function
 # FIXME winezgui-configure
-WineZGUI_Configure()
+WineZGUI_Configure_Template()
 {
-  DBUG "I: Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CONFIGURE_OPTION=$(zenity --title "${APP_WITH_VER} - Configure Template"  \
                             --list   --hide-header                          \
                             --width=360 --height=400                        \
@@ -14,340 +14,36 @@ WineZGUI_Configure()
                                    0 "Winetricks CLI..."                    \
                                    0 "Launch Winecfg..."                    \
                                    0 "Open Shell..."                        \
-                                   0 "Backup..."                            \
-                                   0 "Delete..."                            \
             --text   "Configure Prefix Template <b>${TEMPLATE_NAME}...</b>" )
 
   # Exit if Cancel is clicked
-  if [ -z "${CONFIGURE_OPTION}" ]
-  then
-       DBUG "I: Cancel Selected. Bye!"
-       return 0
+  if [ -z "${CONFIGURE_OPTION}" ]; then
+       DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+       return 1
   fi
 
-  # Open EXE... Opens file dialog
-  if [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]
-  then
-       DBUG "I: Open Setup / Installer... Selected!"
-       OPEN_EXE_SETUP="$(zenity --file-filter="*.exe *.msi"  \
-                        --file-selection        \
-                        --title="Select a File")"
+  # Show What is selected     
+  DBUG "I: ${CONFIGURE_OPTION} Selected!"
 
-    # If no exe is selected
-    if [ -z "${OPEN_EXE_SETUP}" ]; then
-         DBUG "I: Script: Open Setup Installer Cancelled!"
-         #unset SELECTION ; # Empty variable
-         Script_Window    ; # Go back to Game Window
-    fi
-
-    # If another exe is selected
-    DBUG "I: Script: Open Setup Installer ${OPEN_EXE_SETUP} selected"
-    base=$(basename "${OPEN_EXE_SETUP}")
-    dire=$(dirname "${OPEN_EXE_SETUP}")
-
-    # Launch other EXE
-    cd "$dire"
-    DBUG "I: Script: Open Setup Installer Launching \"${base}\""
-    ${WINE_CMD} "$base"
-    DBUG "I: Script: Open Setup Installer... Finished!"
-
-    source ${WINEZGUI_SCRIPTS}/script-remove-wine-created-shortcuts
-    Remove_Wine_Created_Shortcuts
-    source ${WINEZGUI_SCRIPTS}/script-find-installed-exe
-    Script_Find_Installed_Exe
-
-       # ====================== Winetricks GUI ========================= #
-  elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]
-  then
-       DBUG "I: Winetricks GUI... Selected!"
-       WINEPREFIX=${DEFAULT} ${WINETRICKS} --gui
-       DBUG "I: Winetricks GUI ended..."
-       return 0
-
-       # ====================== Winetricks CLI ========================= #
-       # Provide text entry command Line to enter multiple Dependencies
-  elif [ "${CONFIGURE_OPTION}" = "Winetricks CLI..." ]
-  then
-       DBUG "I: Winetricks CLI... Selected!"
-       # Present some preselected winetricks verbs
-       VERB_LIST="xact xinput xna31 dotnet48 \
-                     vcrun2003 vcrun2005        \
-                     vcrun2008 vcrun2010        \
-                     vcrun2019 dxvk faudio      \
-                     quartz corefonts"
-       MESSAGE="Change & Press Enter to install these using Winetricks:"
-       TITLE_TEXT="Winetricks CLI - Paste winetricks verb list"
-       # Remove multiple spaces from variable
-       # from the above VERB_LIST
-       VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
-
-       # Show the dialog
-       VERBS=$(zenity                       \
-                 --title "${TITLE_TEXT}"      \
-                 --width=800 --height=30      \
-                 --text  "${MESSAGE}"         \
-                 --entry-text "${VERB_LIST}"  \
-            --entry)
-
-       # If Cancel is clicked or nothing is entered
-       if [ -z "${VERBS}" ]
-       then
-            DBUG "I: Winetricks CLI: Cancelled!"
-            return 0 ; # Return to main application window
-       else
-            DBUG "I: Winetricks CLI: Selected verbs:"
-            DBUG "I: Winetricks CLI: ${VERBS}"
-            VERBS=(${VERBS}) ; # convert string to array
-
-
-            # Report user the time it took to install winetricks
-            TIMER_START=${SECONDS}
-            # Start of Show Progress using zenity dialog
-            ( for i in ${VERBS[*]}; do
-                      # Show Progress Info
-                      #echo "# Installing ${i}..."
-                      echo "# Installing ${i}..."
-                      # Install winetricks verbs and put output to logs
-                      ${WINETRICKS} --force --unattended  "${i}"
-                 done
-                 TOOK=$(( SECONDS - ${TIMER_START} ))
-                 echo "# Time Taken: ${TOOK} seconds!"
-            ) |zenity --width=500                   \
-                 --title "Please Wait... This will take time!"   \
-                 --progress --pulsate --auto-kill
-
-            # End of Show Progress using zenity dialog
-       fi
-       DBUG "I: Winetricks CLI: Exited!"
-       return 0 ; # Return to Main Application Window
-
-       # ====================== Launch Winecfg ========================= #
-  elif [ "${CONFIGURE_OPTION}" = "Launch Winecfg..." ]
-  then
-       DBUG "I: Launch Winecfg... Selected!"
-       ${WINE_CMD} winecfg
-       return 0
-
-       # ====================== Open Shell ========================= #
-  elif [ "${CONFIGURE_OPTION}" = "Open Shell..." ]
-  then
-
-       DBUG "I: Open Shell... Selected!"
-       # Check if "gnome-terminal" is installed on the Host
-       # Required for "Open Shell..." feature
-
-       if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-            [ $(flatpak-spawn  --host which gnome-terminal) ]
-       then
-            DBUG "I: Open Shell: Gnome-terminal found via flatpak-spawn"
-            export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-       elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-            [ $(which gnome-terminal) ];
-       then
-            DBUG "I: Open Shell: Gnome-terminal found on host system"
-            export GNOME_TERMINAL=0 ; #Available on host install
-       else
-            DBUG "I: Open Shell: Gnome-terminal not found"
-            export GNOME_TERMINAL=1 ; #Unavailable on host
-       fi
-
-
-       # Using Variable, If gnome terminal is not found inform user
-       if [ ${GNOME_TERMINAL} -eq 1 ]
-       then
-            zenity --title "${CONFIGURE_OPTION}" \
-                 --width=500 --height=30 --info  \
-                 --text "This feature requires \"gnome-terminal\""
-            # and return to main application window
-            return 0
-       fi
-
-       # If found in flatpak sandbox, use flatpak-spawn
-       if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-            [ $(flatpak-spawn --host echo 0) ]
-       then
-            echo -e "I: Open Shell: "
-            echo    "Opening gnome-terminal from flatpak sandbox"
-            # Shell needs WINEPREFIX as we are working with wine
-            export WINEPREFIX=${DEFAULT}
-            flatpak-spawn --host gnome-terminal --wait --        \
-                 flatpak --command=bash run ${FLATPAK_NAME}           \
-                 -c "cd ${WINEPREFIX}; export WINEPREFIX=${WINEPREFIX}; \
-                 exec bash -i"
-
-            # If found on host, run gnome-terminal
-       else
-            DBUG "I: Open Shell: Opening gnome-terminal from host"
-            export WINEPREFIX=${DEFAULT}
-            gnome-terminal --wait --                              \
-                 bash -c "export WINEPREFIX=${WINEPREFIX};             \
-              cd ${WINEPREFIX};                                       \
-                 exec bash -i"
-       fi
-       # on closing shell, go back to main application window
-       return 0
-
-       # ====================== Backup ================================= #
-  elif [ "${CONFIGURE_OPTION}" = "Backup..." ]; then
-       DBUG "I: Backup... Selected!"
-       PREFIX_SIZE=$(du  -sh ${DEFAULT}|cut -f1)
-       DBUG "I: Backup: Prefix = ${DEFAULT}"
-       DBUG "I: Backup: Prefix size = ${PREFIX_SIZE}"
-       # Ask Before Backing up Default prefix
-       # Ask Backup filename
-       DATE=$(date +%F_%H%M)
-       PREFIXNAME="default"
-
-       # Not setting flatpak or system name
-       BKPFNAME="${PREFIXNAME}-${DATE}.${BKP_EXT}"
-
-       BACKUP_FILE=$( zenity                    \
-                 --title="Backup ${PREFIXNAME} Prefix!" \
-                 --width=500 --height=30                \
-                 --text="Size: ${PREFIX_SIZE}\nName:"   \
-                 --entry-text="${BKPFNAME}"             \
-            --entry)
-
-       # if backup file is empty / cancel clicked
-       if [ -z "${BACKUP_FILE}" ]; then
-            DBUG "I: Backup: Cancelled!"
-            return 0
-       fi
-
-       # Select Backup Target Directory
-       Z_TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-       TARGET_DIR=$(zenity --file-configure_option     \
-                 --title="${Z_TITLE}" \
-            --directory)
-       # Cleanup variable after use
-       unset Z_TITLE
-
-       # If no directory is selected or cancel is clicked by the user
-       if [ -z "${TARGET_DIR}" ]; then
-            # Retun to Main window
-            return 0
-       fi
-
-       # Required extension is .wzt
-       # If substring (suffix *.wzt") is NOT found add it
-       if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
-            BACKUP_FILE="${BACKUP_FILE}.${BKP_EXT}"
-       fi
-
-       # Check for available disk space in target directory before backing up
-       # Get available target dir partition size in kilobytes (df)
-       # and du -s prefix to get usage of the prefix to be
-
-       ### CLEAN THIS UP
-       TGTDISKFREE=$(df ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-       PREFIXKSIZE=$(du -s ${DEFAULT}|cut -f1)
-       TGTSIZEH=$(df -h ${TARGET_DIR}|sed "s/  */ /g"|cut -f4 -d " "|tail -n1)
-       TOTAL_BACKUP_SIZE=$(du -sh ${DEFAULT}|cut -f1)
-       TOTAL_SIZE_IN_HF=$(echo ${TOTAL_BACKUP_SIZE}|numfmt --from iec)
-       DBUG "I: Backup: Target size: ${TGTSIZEH}"
-       DBUG "I: Backup: Prefix size: ${PREFIX_SIZE}"
-
-       if [ ${TGTDISKFREE} -gt ${PREFIXKSIZE} ];then
-            DBUG "I: Backup: ${TARGET_DIR} has enough available disk space"
-       else
-            echo "W: Backup: ${TARGET_DIR} does not have free disk space!!!"
-            unset MSG
-            MSG+="${TARGET_DIR} has only ${TGTSIZEH} free disk space left!\n"
-            MSG+="Prefix backup requires ${PREFIX_SIZE} free disk space."
-            RESPONSE=$(zenity --warning --title "Not Enough Disk Space!" \
-                 --text "${MSG}")
-
-            echo "W: Backup: Backup Cancelled!"
-            return 0
-
-       fi
-
-       # Check if the user can write to the selected Backup Directory
-       if [ ! -w "${TARGET_DIR}" ]; then
-            DBUG "I: Backup: ${TARGET_DIR} not writable"
-            zenity --error --no-wrap --title="Backup Error!" \
-                 --text "${TARGET_DIR} not writable\nAborting Backup!"
-       else
-            cd "${WINEZPREFIX}"
-            DBUG "I: Backup: Creating ${BACKUP_FILE} backup..."
-
-            # Preprocess: Prepare *.reg *.sh and *.txt for Backup
-            Backup_Restore_Function
-
-            # Create Backup archive and restore changes as soon as tar is done
-            source ${DATADIR}/winezgui-create-wzt-info
-
-            # Create Bundle
-            DBUG "I: Script: Backup: ${BKP_RESP_TXT}: Game Name: ${TAR_GAME_DIR_NAME}"
-            DBUG "I: Script: Backup: ${BKP_RESP_TXT}: Creating ${BACKUP_FILE} file..."
-
-            # Detect Number of CPU Cores for faster compression
-            CPU_CORES=$(grep "cores" /proc/cpuinfo|sed 's/ //g'|cut -f2 -d ":"|head -n1)
-            # if a non number is not found in the variable CPU_CORES (i.e., only digits)
-            if ! [[ ${CPU_CORES} == *[!0-9]* ]]; then
-                 DBUG "I: Backup: Found ${CPU_CORES} CPU Cores!"
-            else
-                 DBUG "I: Backup: Unknown ${CPU_CORES} Cores, using 2 cores!"
-                 CPU_CORES=2
-            fi
-
-            (tar -I "zstd -T${CPU_CORES}" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-                 -C "${WINEZPREFIX}" "${PREFIXNAME}" &) | \
-                 zenity --progress --pulsate --auto-close \
-                 --title="Creating ${PREFIXNAME} backup!" \
-                 --width=500 --text="${BACKUP_FILE}..."
-            DBUG "I: Backup: ${BACKUP_FILE} created successfully"
-
-            # If user clicks cancel, kill tar commands
-            # zenity progress won't kill the process, so we do it
-            PID_OF_TAR=$(ps -aux|grep tar|grep wzt \
-                 |sed 's/  */ /g'|cut -f2 -d " ")
-            if ! [ -z "${PID_OF_TAR}" ]; then
-                 kill -9 ${PID_OF_TAR} && \
-                      DBUG "I: Backup: Cancelled! Killed tar!"  && \
-                      rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
-                      DBUG "I: Backup: Removed unusable ${BACKUP_FILE}"
-
-                 # Report Size also
-                 BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-                 # Backup Sucess Message
-                 MSG=("${PREFIXNAME} backup cancelled!")
-
-            else
-                 DBUG "I: Backup: ${BACKUP_FILE} created, success!"
-                 # Report Size also
-                 BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-                 # Backup Sucess Message
-                 MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
-                 MSG+="<b>Filename:</b> ${BACKUP_FILE}"
-                 MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-                 MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
-
-            fi
-            # Restore changed values after backup
-            DBUG "I: Backup: Restoring Registry and Info files"
-            Backup_Restore_Function "restore"
-
-            DBUG "I: Backup: Created ${BACKUP_FILE} at ${TARGET_DIR}" && \
-                 zenity --no-wrap \
-                 --info     \
-                 --title="${BACKUP_FILE} Prefix Backup!" \
-                 --text="${MSG[@]}"
-       fi # ! -w
-       # Cleanup variables after use
-       unset MSG
-       unset BACKUP_SIZE
-       unset TARGET_DIR
-       unset BACKUP_SIZE
-       unset BACKUP_FILE
-
-       # Return to Game window after backup or target directory write error
-       return 0
+  if   [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]; then
+          source ${DATADIR}/winezgui-open-setup-installer 
+          WineZGUI_Open_Setup_Installer
+  elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]; then
+          source ${DATADIR}/winezgui-winetricks-gui 
+          WineZGUI_Winetricks_Gui
+  elif [ "${CONFIGURE_OPTION}" = "Winetricks CLI..." ]; then
+          source ${DATADIR}/winezgui-winetricks-cli 
+          WineZGUI_Winetricks_Cli
+  elif [ "${CONFIGURE_OPTION}" = "Launch Winecfg..." ]; then
+          source ${DATADIR}/winezgui-winecfg 
+          WineZGUI_Winecfg
+  elif [ "${CONFIGURE_OPTION}" = "Open Shell..." ]; then
+          source ${DATADIR}/winezgui-open-shell 
+          WineZGUI_Open_Shell
   else
-       echo "W: Unknown configure_option = ${CONFIGURE_OPTION}"
+       echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"
        exit 1
-
   fi
 
-
-} # End of return 0
+  return 0
+} 

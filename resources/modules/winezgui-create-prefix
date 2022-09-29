@@ -298,7 +298,7 @@ LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH 
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-source ${WINEZGUI_SCRIPTS}/script-locate-exe-function
+source ${WINEZGUI_SCRIPTS}/script-locate-exe-function 
 # LOCATE_EXE_FUNCTION required on Launch
 
 
@@ -376,55 +376,55 @@ Script_Window ()
   DBUG "I: ${SELECTION} Selected!"
  
   if   [ "${SELECTION}" = "Launch..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-launch
+         source ${WINEZGUI_SCRIPTS}/script-launch 
          Script_Launch
 
   elif [ "${SELECTION}" = "Open Other EXE..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-open-other-exe
+         source ${WINEZGUI_SCRIPTS}/script-open-other-exe 
          Script_Open_Other_Exe
 
   elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-winetricks-gui
+         source ${WINEZGUI_SCRIPTS}/script-winetricks-gui 
          Script_Winetricks_Gui
 
   elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-winetricks-cli
+         source ${WINEZGUI_SCRIPTS}/script-winetricks-cli 
          Script_Winetricks_Cli
 
   elif [ "${SELECTION}" = "Wine Programs..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-wine-programs
+         source ${WINEZGUI_SCRIPTS}/script-wine-programs 
          Script_Wine_Programs
 
   elif [ "${SELECTION}" = "Open Shell..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-open-shell
+         source ${WINEZGUI_SCRIPTS}/script-open-shell 
          Script_Open_Shell
 
   elif [ "${SELECTION}" = "Open File Manager..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-open-file-manager
+         source ${WINEZGUI_SCRIPTS}/script-open-file-manager 
          Script_Open_File_Manager
 
   elif [ "${SELECTION}" = "Change..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-change
+         source ${WINEZGUI_SCRIPTS}/script-change 
          Script_Change
          
   elif [ "${SELECTION}" = "Backup..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-backup
+         source ${WINEZGUI_SCRIPTS}/script-backup 
          Script_Backup
 
   elif [ "${SELECTION}" = "More..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-more
+         source ${WINEZGUI_SCRIPTS}/script-more 
          Script_More
          
   elif [ "${SELECTION}" = "About..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-about
+         source ${WINEZGUI_SCRIPTS}/script-about 
          Script_About
 
   elif [ "${SELECTION}" = "Help..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-help
+         source ${WINEZGUI_SCRIPTS}/script-help 
          Script_Help
 
   elif [ "${SELECTION}" = "Quit...." ]; then
-         source ${DATADIR}/script-quit
+         source ${DATADIR}/script-quit 
          Script_Quit
   fi
   # After All options 
@@ -437,7 +437,7 @@ if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
      PREFIX_NAME_TO_CHANGE="$(grep Prefix "${PREFIXDIR}/Change-Prefix-Name" \
                              |cut -f2 -d ":")"
      DBUG "I: Script: Launching script-rename-prefix function (Rename_Prefix)"
-     source ${WINEZGUI_SCRIPTS}/script-rename-prefix
+     source ${WINEZGUI_SCRIPTS}/script-rename-prefix 
      rm "${PREFIXDIR}/Change-Prefix-Name"
      DBUG "I: Script: Change Prefix to ${PREFIX_NAME_TO_CHANGE}"
      Rename_Prefix ${PREFIX_NAME_TO_CHANGE}
@@ -521,19 +521,19 @@ fi
 # Handle Commandline Argument ${0} backup, ${0} launch etc.
 # Either we run with argumement from winezgui or from prefixdir manually
 if   [ "$1" = "delete" ]; then
-       source ${WINEZGUI_SCRIPTS}/script-delete
+       source ${WINEZGUI_SCRIPTS}/script-delete 
        SCRIPT_DELETE
        exit 0;
 elif [ "$1" = "backup" ]; then
        cd ${PREFIXES_DIR}
-       source ${WINEZGUI_SCRIPTS}/script-backup
+       source ${WINEZGUI_SCRIPTS}/script-backup 
        Script_Backup
        exit 0;
 elif [ "$1" = "shortcut" ]; then
-       source ${WINEZGUI_SCRIPTS}/script-get-selected-exe
+       source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
        SCRIPT_GET_SELECTED_EXE
        # Just launching the selected exe, create desktop file and run this
-       source ${WINEZGUI_SCRIPTS}/script-create-other-shortcuts
+       source ${WINEZGUI_SCRIPTS}/script-create-other-shortcuts 
        SCRIPT_CREATE_OTHER_SHORTCUTS
        echo "${SHORTCUT_NEW_EXE}"
        exit 0;
@@ -545,7 +545,7 @@ elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
        # 2. If Script is called from WineZGUI Shortcuts...
        # 3. If $LAUNCH variable is not set to False
 
-       source ${WINEZGUI_SCRIPTS}/script-launch
+       source ${WINEZGUI_SCRIPTS}/script-launch 
        SCRIPT_LAUNCH_EXE
        # Return to Game window
        # 
@@ -554,7 +554,7 @@ fi
 
 
 # Backup_FUNCTION Restore_Function()
-source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function
+source ${DATADIR}/winezgui-backup-restore-function 
 
 # Start WineZGUI when no argument is supplied
 if [ $# -eq 0 ] ; then
