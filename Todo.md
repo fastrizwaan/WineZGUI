@@ -58,12 +58,13 @@ NEW
     - [ ] Change Compression Level
 
 0.88
+- [ ] Fix Template - Backup
 - [x] Rewrite winezgui to fix
   - [x] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
-- [ ] Modularize even more, every script file be used as function
-- [ ] 80 column rules
-- [ ] Comment every script, what it does
-- [ ] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
+- [x] Modularize even more, every script file be used as function
+- [x] 80 column rules
+- [x] Comment every script, what it does
+- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
 
 0.87
 - [x] Installer Support
