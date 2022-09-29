@@ -225,7 +225,7 @@ Initialize_Wineprefix()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
-       DBUG "I: ${HEADER}: Initializing wine Prefix... arch is ${WINEARCH}"
+       DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
        # Create Prefix then delete host linked directories
        WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${1} \
@@ -248,8 +248,8 @@ Initialize_Wineprefix()
 
        # Create an empty file to test whether prefix is created
        touch "${1}/Prefix_Initialized.txt"
-       DBUG "I: ${HEADER}: Default Wine Prefix at ${1} Created"
-
+       DBUG "I: ${HEADER}: Wine Prefix $(basename ${1}) Created"
+       DBUG "I: ${HEADER}: Full Path: ${1}"
        # Create H: for HOME Directory for Wine Explorer
        ln -sf ${HOME} "${1}/dosdevices/h:"
        DBUG "I: ${HEADER}: Created H: symlink to ${HOME}"

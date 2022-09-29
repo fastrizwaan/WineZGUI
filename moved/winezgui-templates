@@ -287,7 +287,7 @@ if [ "${TEMPLATE_OPTION}" = "Create..." ]; then
 
 
      # Create new Prefix Template
-     INITIALIZE_WINEPREFIX "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}"
+     Initialize_Wineprefix "${TEMPLATES_DIR}/${GET_TEMPLATE_NAME}"
      export WINEARCH="$SAVED_WINEARCH"
      # Ask the sue to change template
      Templates "Change Template..."
@@ -327,7 +327,7 @@ if [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
      # Create wine template and link it to defaults
      if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
            echo "2. !!!! -d not found, initializing ${WINEZGUI_TEMPLATE}"
-           INITIALIZE_WINEPREFIX "${WINEZGUI_TEMPLATE}"
+           Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
      fi
 
      unset SELECTED_TEMPLATE
@@ -350,7 +350,7 @@ if [ "${TEMPLATE_OPTION}" = "Rename..."  ]; then
                  --width=300 --title "${GET_RENAME_TEMPLATE_NAME} already exists!"
      fi
      mv -v "${SELECTED_TEMPLATE}" "${TEMPLATES_DIR}/${GET_RENAME_TEMPLATE_NAME}"
-     INITIALIZE_WINEPREFIX "${WINEZGUI_TEMPLATE}"
+     Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
 
 fi
 

@@ -3,75 +3,107 @@
 # and set the variable SELECTED_TEMPLATE
 List_Available_Templates()
 {
- unset COMMAND
- unset count
- unset SHOW_OPTION
- unset NAMES
- unset FILES
- unset RESULT
- unset search_list
+  unset COMMAND
+  unset count
+  unset SHOW_OPTION
+  unset NAMES
+  unset FILES
+  unset RESULT
+  unset SEARCH_LIST
 
- IFS=$(echo -en "\n\b")
+  IFS=$(echo -en "\n\b")
 
- count=0
- NAMES=()
- FILES=()
- # Find all exe files in drive_c Exclude windows directory,
- # and common exe files present in Program Files directory
- # Add those files to FILES array and filenames to NAMES array
+  count=0
+  NAMES=()
+  FILES=()
+  
+  # List 32bit or 64 bit or All
+  TEMPLATE_TYPE=$(zenity --title "${APP_WITH_VER}"   \
+                         --list   --hide-header      \
+                         --width=360 --height=340    \
+                         --radiolist --column " "    \
+                         --column "Action"           \
+                                0 "Win32"            \
+                                0 "Win64"            \
+                             TRUE "All"              \
+                         --text   "Choose Template by winearch..." )
 
- search_list=$(find ${TEMPLATES_DIR}/* -maxdepth 0 -type d -print| tr '\n' '|')
+   if [ -z "${TEMPLATE_TYPE}" ]; then
+        echo "Cancelled!"
+        return 1
+   fi
+   
+   if [ "${TEMPLATE_TYPE}" = "Win32" ]; then
+        SEARCH_LIST=$(grep -ri "#arch=win32" ${TEMPLATES_DIR}/*/system.reg \
+                     |cut -f1 -d ":"|xargs dirname|tr '\n' '|')
 
- exe_found=$(echo ${search_list})
+   fi
 
- if [ -z "${exe_found}" ] ; then
-      zenity --error --title "${PROGNAME} - no templates found!" \
-             --text "Sorry, no templates found in Templates directory"
-      WineZGUI_Window
- fi
- # if exe_found has value, then only change exe
- for i in $(echo ${search_list}|tr '|' '\n'|sort)
- do
-     RealName=$(basename "$i")
-     RealFile=$(realpath -m "$i")
+   if [ "${TEMPLATE_TYPE}" = "Win64" ]; then
+        SEARCH_LIST=$(grep -ri "#arch=win64" ${TEMPLATES_DIR}/*/system.reg \
+                     |cut -f1 -d ":"|xargs dirname|tr '\n' '|')
+   fi
+  
 
-     # If 1st value is empty, enable it
-     if [ -z "${SHOW_OPTION}" ]; then
-          SHOW_OPTION+="TRUE \"${RealName}\""
-          SHOW_OPTION+=" "
-          NAMES+=("${RealName}")
-          FILES+=("${RealFile}")
-     else
-          SHOW_OPTION+="0 \"${RealName}\""
-          SHOW_OPTION+=" "
-          NAMES+=("${RealName}")
-          FILES+=("${RealFile}")
-     fi
-     count=$(expr ${count} + 1)
- done
- IFS=${SAVEIFS}
+  # Find all exe files in drive_c Exclude windows directory,
+  # and common exe files present in Program Files directory
+  # Add those files to FILES array and filenames to NAMES array
+  if [ "${TEMPLATE_TYPE}" = "All" ]; then
+        SEARCH_LIST=$(find ${TEMPLATES_DIR}/* -maxdepth 0 -type d -print \
+                    | tr '\n' '|')
+  fi
+   
+  TEMPLATES_FOUND=$(echo ${SEARCH_LIST})
 
-# 3. Show the found exe files using zenity
- unset COMMAND
- COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Templates\" --radiolist --list "
- COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
- RESULT=$(eval ${COMMAND})
+  if [ -z "${TEMPLATES_FOUND}" ] ; then
+       zenity --error --title "${PROGNAME} - no templates found!" \
+              --text "Sorry, no templates found in Templates directory"
+       WineZGUI_Window
+  fi
+  # if TEMPLATES_FOUND has value, then only change exe
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort)
+  do
+      RealName=$(basename "$i")
+      RealFile=$(realpath -m "$i")
 
- if [ -z "${RESULT}" ]; then
-      echo "Cancelled!"
-      WineZGUI_Window
- fi
+      # If 1st value is empty, enable it
+      if [ -z "${SHOW_OPTION}" ]; then
+           SHOW_OPTION+="TRUE \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      else
+           SHOW_OPTION+="0 \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      fi
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
 
- count=0
- # 4. Find which file the user selected and set the selected exe into variable
- for i in "${NAMES[@]}"; do
-     if [ "$i" = "$RESULT" ]; then
-          echo "Selected $i"
-          echo "File is ${FILES[${count}]}"
-          export SELECTED_TEMPLATE="${FILES[${count}]}"
-          break
-     fi
-     count=$(expr ${count} + 1)
- done
+ # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
+  COMMAND+="--text \"${TEMPLATE_TYPE} Templates\" --radiolist --list "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  RESULT=$(eval ${COMMAND})
+
+  if [ -z "${RESULT}" ]; then
+       echo "Cancelled!"
+       WineZGUI_Window
+  fi
+
+  count=0
+  # 4. Find which file the user selected and set the selected exe into variable
+  for i in "${NAMES[@]}"; do
+      if [ "$i" = "$RESULT" ]; then
+           echo "Selected $i"
+           echo "File is ${FILES[${count}]}"
+           export SELECTED_TEMPLATE="${FILES[${count}]}"
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
 
 }

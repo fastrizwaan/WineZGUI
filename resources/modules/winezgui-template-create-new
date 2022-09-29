@@ -1,0 +1,71 @@
+WineZGUI_Template_Create_New()
+{
+  # Ask for Name
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset NEW_TEMPLATE
+  NEW_TEMPLATE=$( zenity                                             \
+               --title "${APP_WITH_VER} - Create Template"           \
+               --list   --hide-header                                \
+               --width=360 --height=180                              \
+               --radiolist --column " "                              \
+               --column "Action"                                     \
+                   TRUE "Empty win32 template..."                    \
+                      0 "Empty win64 template..."                    \
+               --text   "Template <b>${TEMPLATE_NAME}</b> in use, Create:" )
+
+  # Exit if Cancel is clicked
+  if [ -z "${NEW_TEMPLATE}" ]; then
+       DBUG "I: Templates: Cancel Selected!"
+       return 1
+  fi
+
+  # If arch specified as win32 then use it else use win64
+  if [ "${NEW_TEMPLATE}" = "Empty win32 template..." ]; then
+       SAVED_WINEARCH="${WINEARCH}"
+       export WINEARCH=win32 
+       export NEW_WINEARCH=${WINEARCH}
+  else
+       SAVED_WINEARCH="${WINEARCH}"
+       export WINEARCH=win64
+       export NEW_WINEARCH=${WINEARCH}
+  fi
+
+  # Get name for the Prefix Template
+  NEW_TEMPLATE=$(zenity --title "Create Prefix Template with ${WINEARCH} arch..." \
+                             --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \
+                             --width=500 --entry)
+
+  if [ -z "${NEW_TEMPLATE}" ]; then #if no name is given use filename
+       #zenity --info --title="Shortcut... " --text="no Change"
+       # return to Game window
+       DBUG "I: Script: Rename Shortcut: Cancelled"
+  fi
+
+
+  if [ -d "${TEMPLATES_DIR}/${NEW_TEMPLATE}" ]; then
+       zenity --error --title "${APP_WITH_VER}" \
+              --text "Template Directory Already Exists!"
+  fi
+
+
+  # Create new Prefix Template
+  Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
+  export WINEARCH="$SAVED_WINEARCH"
+  
+  # Ask whether the user would like to change template
+  unset TEXT
+  TEXT+="New Template <b>${NEW_TEMPLATE}</b> is created...\n"
+  TEXT+="Change Template...?"
+  zenity --question --title "${APP_WITH_VER} New Template!" --text "${TEXT}"
+  ANSWER=$?
+  if [ ${ANSWER} -eq 0 ]; then
+       source ${DATADIR}/winezgui-template-change
+       WineZGUI_Template_Change
+  fi
+  DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
+       
+  # Ask the sue to change template
+  #Templates "Change Template..."
+  return 0
+}

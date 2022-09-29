@@ -134,7 +134,7 @@ WineZGUI_Settings()
 
         # Update Wine arch in About.yml
         export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
-        INITIALIZE_WINEPREFIX "${WINE_TEMPLATE}"
+        Initialize_Wineprefix "${WINE_TEMPLATE}"
         sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
 
 
@@ -152,8 +152,8 @@ WineZGUI_Settings()
              fi
 
              if [ ${ANSWER} -eq 0 ]; then
-                  source ${DATADIR}/winezgui-templates 
-                  Templates "Change Template..."
+                  source ${DATADIR}/winezgui-template-change
+                  WineZGUI_Template_Change
              fi
 
         fi
