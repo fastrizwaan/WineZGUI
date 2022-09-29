@@ -31,8 +31,8 @@ WineZGUI_Template()
           source ${DATADIR}/winezgui-open-setup-installer 
           WineZGUI_Open_Setup_Installer
   elif [ "${TEMPLATE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-backup-template 
-          WineZGUI_Backup_Template
+          source ${DATADIR}/winezgui-template-backup
+          WineZGUI_Template_Backup
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
           source ${DATADIR}/winezgui-template-create-new
           WineZGUI_Template_Create_New

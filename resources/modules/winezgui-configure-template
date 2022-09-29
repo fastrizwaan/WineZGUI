@@ -43,8 +43,8 @@ WineZGUI_Configure_Template()
           source ${DATADIR}/winezgui-open-shell 
           WineZGUI_Open_Shell
   elif [ "${CONFIGURE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-backup-template 
-          WineZGUI_Backup_Template
+          source ${DATADIR}/winezgui-template-backup
+          WineZGUI_Template_Backup
   else
        echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"
        exit 1

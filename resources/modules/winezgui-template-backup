@@ -1,6 +1,6 @@
 # winezgui-backup-template
 # FIXME... review 
-WineZGUI_Backup_Template()
+WineZGUI_Template_Backup()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
   source ${DATADIR}/winezgui-backup-restore-function 
