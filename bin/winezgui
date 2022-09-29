@@ -418,62 +418,6 @@ if ! [ -d "${WINEZGUI_TEMPLATE}" ]; then
      mkdir -p "${WINEZGUI_TEMPLATE}" 
 fi
 
-# ====================== Open EXE ================================= #
-Open_Exe()
-{
-  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  if ! [ -f "${EXE_FILE}"  ]; then
-       echo "E: ${HEADER}: Cannot find ${EXE_FILE}, exiting!"
-       exit 1
-  fi
-
-  if [ "${IS_EXE}" = "wzt" ]; then
-       export WZT_FILE="${EXE_FILE}"
-       DBUG "I: ${HEADER}: WineZGUI Backup file submitted"
-       source ${DATADIR}/winezgui-backup-restore-function 
-       source ${DATADIR}/winezgui-restore-wzt 
-       Restore_Wzt_File
-       DBUG "I: ${HEADER}: Exiting main program after restoring backup"
-       exit 0;
-  fi
-  DBUG "I: ${HEADER}: File is ${EXE_FILE}"
-  # Prompt to Launch exe with default or existing Prefix of that exe
-  EXE_FILE=$(realpath -m "${EXE_FILE}")
-  EXE_NAME=$(basename    "${EXE_FILE}")
-  EXE_PATH=$(dirname     "${EXE_FILE}")
-  EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
-  EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
-  EXE_EXT="${EXE_FILE##*.}"
-  WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
-  # If existing prefix exists for the exe
-  SCRIPT_TO_RUN="${WINEPREFIX_SUBDIR}/${EXE_LESS}.sh"
-  
-  DBUG "I: ${HEADER}: Script to check = $SCRIPT_TO_RUN"
-  
-  if [ -f  "${SCRIPT_TO_RUN}" ]; then
-       DBUG "I: ${HEADER}: Prefix found for ${EXE_NAME}! Launching..."
-       
-       "${SCRIPT_TO_RUN}" # Run the script file associated with the exe
-
-       # If open exe closes/deleted/cancelled by user from winezgui,
-       #  continue with winezgui, this is more of an expected behavior
-       DBUG "I: ${HEADER}: Re-Launching WineZGUI_Window after ${EXE_LESS}.sh"
-       WineZGUI_Window
-
-  else
-       DBUG "I: ${HEADER}: Creating Prefix for ${EXE_FILE}"
-      ${DATADIR}/winezgui-create-prefix "${EXE_FILE}"
-       # Launch after creating new prefix
-       DBUG "I: ${HEADER}: Created Script:" \
-            "${WINEPREFIX_SUBDIR}/${EXE_LESS}.sh"
-       DBUG "I: ${HEADER}: Created Script: Launching ${EXE_LESS}.sh"
-      ${WINEPREFIX_SUBDIR}/"${EXE_LESS}.sh"
-
-       WineZGUI_Window
-  fi
-
-}
 
 # Initialize Wineprefix for use
 Initialize_Wineprefix "${WINEZGUI_TEMPLATE}" 
@@ -488,6 +432,8 @@ elif [ $# -gt 1 ]; then
        ShowHelp
        exit 1
 fi
+
 # Open exe function handles exe argument
-Open_Exe
+source ${DATADIR}/winezgui-open-exe 
+WineZGUI_Open_Exe "${1}"
 

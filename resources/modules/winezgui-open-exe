@@ -1,29 +1,77 @@
 WineZGUI_Open_Exe()
 {
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  unset SELECT_FILE
-  SELECT_FILE="$(zenity --file-filter="*.exe *.msi" \
-                        --file-selection            \
-                        --title="Select a File"     )"
-  #
-  SELECT_FILE_ANSWER=$?
-  echo "SELECT_FILE = $SELECT_FILE"
-  # If no exe is selected
-  if [ -z "${SELECT_FILE}" ];  then
-       DBUG "I: Open EXE... Cancelled!"
-       WineZGUI_Window   ; # Go back to Main Window
+  unset EXE_FILE 
+  unset F
+  unset T
+  
+  # If no argument is given, ask to select and open exe/msi file
+  if [ -z "${1}" ]; then
+       DBUG "I: ${HEADER}: No arugment given. Select an exe/msi file."
+       F="*.exe *.msi"
+       T="Select a File"
+       EXE_FILE="$(zenity --file-filter="${F}" --title="${T}" --file-selection)"
+         # If no exe is selected
+       if [ -z "${EXE_FILE}" ];  then
+            DBUG "I: ${HEADER}: Cancelled!"
+            return 1
+       fi
+       DBUG "I: ${HEADER}: Selected file: ${EXE_FILE}"
+  else
+       export EXE_FILE="${1}"
+       DBUG "I: ${HEADER}: Received Argument ${EXE_FILE}"
   fi
   
-  # If user selects a file
-  if [ ${SELECT_FILE_ANSWER} -eq 0 ]; then
-       DBUG "I: Open Exe:\"${EXE_FILE}\" Selected!";
-       export EXE_FILE="${SELECT_FILE}"
-       Open_Exe
+  ## From Open_Exe Function from WineZGUI ##
+  
+  # If file not found, exit
+  if ! [ -f "${EXE_FILE}"  ]; then
+       echo "E: ${HEADER}: Cannot find ${EXE_FILE}, exiting!"
+       exit 1
   fi
-
-  # If User selects cancel / no
-  if [ ${SELECT_FILE_ANSWER} -eq 1 ]; then
-       DBUG "I: ANSWER = 1 Cancelled!"
-       WineZGUI_Window
+  
+  # If file is wzt (prefix backup or game bundle), restore it
+  if [ "${IS_EXE}" = "wzt" ]; then
+        export WZT_FILE="${EXE_FILE}"
+        DBUG "I: ${HEADER}: WineZGUI Backup file submitted"
+        source ${DATADIR}/winezgui-backup-restore-function 
+        source ${DATADIR}/winezgui-restore-wzt 
+        Restore_Wzt_File
+        DBUG "I: ${HEADER}: Exiting main program after restoring backup"
+        exit 0;
   fi
+  
+  DBUG "I: ${HEADER}: File is ${EXE_FILE}"
+  # Create required variables using EXE_FILE
+  EXE_FILE=$(realpath -m "${EXE_FILE}")
+  EXE_NAME=$(basename    "${EXE_FILE}")
+  EXE_PATH=$(dirname     "${EXE_FILE}")
+  EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_")
+  EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+  EXE_EXT="${EXE_FILE##*.}"
+  
+  # Create temporary variables for this function
+  WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
+  SCRIPT_NAME="${EXE_LESS}.sh"
+  SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
+  WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
+  DBUG "I: ${HEADER}: Checking whether ${SCRIPT_FILE_TO_RUN} exists."
+  # If existing prefix exists for the exe
+  if [ -f  "${SCRIPT_FILE_TO_RUN}" ]; then
+       DBUG "I: ${HEADER}: found Script ${SCRIPT_NAME}! Launching..."
+       "${SCRIPT_FILE_TO_RUN}" # Run the script file associated with the exe
+       DBUG "I: ${HEADER}: Re-Launching WineZGUI_Window after ${SCRIPT_NAME}"
+  else # Create prefix and script for the exe
+       DBUG "I: ${HEADER}: Creating Prefix for ${EXE_NAME}"
+       ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
+       # Launch after creating new prefix
+       DBUG "I: ${HEADER}: Created Script: ${SCRIPT_FILE_TO_RUN}"
+       DBUG "I: ${HEADER}: Launching ${SCRIPT_NAME}"
+       "${SCRIPT_FILE_TO_RUN}"
+  fi
+  unset WINEPREFIX_SUBDIR
+  unset SCRIPT_NAME
+  unset SCRIPT_FILE_TO_RUN
+  return 0
 }
