@@ -1,24 +1,25 @@
 # script-get-list-of-exe-files-installed
 Get_List_Of_Exe_Files_Installed()
 {
-     unset EXE_FILES_FOUND
-     EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"    \
-                      -iname "windows" -prune         \
-                      -o -iname "dw20.exe"            \
-                      -o -iname "wmplayer.exe"        \
-                      -o -iname "iexplore.exe"        \
-                      -o -iname "wordpad.exe"         \
-                      -o -iname "dwtrig20.exe"        \
-                      -o -iname "dx*setup.exe"        \
-                      -o -iname "directx*.exe"        \
-                      -o -iname "dotnet*.exe"         \
-                      -o -iname "UE4PrereqSetup*.exe" \
-                      -o -iname "oalinst.exe"         \
-                      -o -iname "*redist*.exe"        \
-                      -o -iname "7z*.exe"             \
-                      -o -iname "unins*.exe"          \
-                      -o -iname "*.exe"               \
-                      -a -type f -print)
-
-     export EXE_FILES_FOUND
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: Script: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset EXE_FILES_FOUND
+  EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"    \
+                   -iname "windows" -prune         \
+                   -o -iname "dw20.exe"            \
+                   -o -iname "wmplayer.exe"        \
+                   -o -iname "iexplore.exe"        \
+                   -o -iname "wordpad.exe"         \
+                   -o -iname "dwtrig20.exe"        \
+                   -o -iname "dx*setup.exe"        \
+                   -o -iname "directx*.exe"        \
+                   -o -iname "dotnet*.exe"         \
+                   -o -iname "UE4PrereqSetup*.exe" \
+                   -o -iname "oalinst.exe"         \
+                   -o -iname "*redist*.exe"        \
+                   -o -iname "7z*.exe"             \
+                   -o -iname "unins*.exe"          \
+                   -o -iname "*.exe"               \
+                   -a -type f -print)
+  export EXE_FILES_FOUND
 }

@@ -1,27 +1,34 @@
 WineZGUI_Restore_Function()
 {
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
-        echo "Must provide Prefix or Template Directory to process"
+        echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
         return 1
   else
-        DIRECTORY=$(dirname  "${1}")
+        DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
   fi      
-  source ${DATADIR}/winezgui-search-replace-data
-  WineZGUI_Search_Replace_Data
+  source ${DATADIR}/winezgui-fetch-replacement-data
+  WineZGUI_Fetch_Replacement_Data
   
-  source ${DATADIR}/winezgui-search-replace-files 
-  WineZGUI_Search_Replace_Files "${1}"
+  source ${DATADIR}/winezgui-fetch-replacment-files 
+  WineZGUI_Fetch_Replacement_Files "${1}"
   
   cd "${DIRECTORY}"
 
-  DBUG "I: Restore: Processing files inside ${DIRNAME}"
+  DBUG "I: ${HEADER}: Processing files inside ${DIRNAME}"
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b") # needed for sed to work with files in variable
+  
+  # Do search and replace in the files inside given directory
   for (( i=0; i <${LEN}; i++ )); do
-        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}
-        #&& \
-        # DBUG "I: Restore: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
+        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} \
+        && \
+        DBUG "I: ${HEADER}: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
 
   done
+  IFS=${SAVEIFS}
   # Rename Directory on Restore
   DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
   DTARGET="${DIRECTORY}/drive_c/users/XOUSERXO"
@@ -29,27 +36,28 @@ WineZGUI_Restore_Function()
   # Make sure that directory for the user exists, before moving
   if [ -d "${DIRECTORY}/drive_c/users/XOUSERXO" ]; then
         mv "${DTARGET}" "${DSOURCE}" && \
-        echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+        DBUG  "I: ${HEADER}: Renamed ${DSOURCE}"
+        DBUG  "I: ${HEADER}: To      ${DTARGET}"
   fi
   # Recreate Links to H: link to $HOME on Restore
-  DBUG "I: Restore: Recreating Links to H: in ${DIRNAME} prefix"
+  DBUG "I: ${HEADER}: Recreating Links to H: in ${DIRNAME} prefix"
 
   ln -sf "${HOME}" "${DIRECTORY}/dosdevices/h:" && \
-  DBUG "I: Restore: Created H: symlink ${HOME} to ${DIRNAME}/dosdevices/h:"
+  DBUG "I: ${HEADER}: Created H: symlink ${HOME} to ${DIRNAME}/dosdevices/h:"
 
   # Process desktop and script files if the prefix is not default
   # For Install Type and Flatpak Name
   # FIXME do we need this????
-  if ! [ "${SUBDIR}" = "default" ]; then
-        # Set install type
-        sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
-              ${SUBDIR}/*.sh && \
-              DBUG "I: Restore: Updated ${INSTALL_TYPE} in script file"
-        # set flatpak name on restoring (flatpak)
-        sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
-              ${SUBDIR}/*.sh && \
-              DBUG "I: Restore: Updated ${FLATPAK_NAME} in script file"
-  fi
+#  if ! [ "${SUBDIR}" = "default" ]; then
+#        # Set install type
+#        sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
+#              ${SUBDIR}/*.sh && \
+#              DBUG "I: ${HEADER}: Updated ${INSTALL_TYPE} in script file"
+#        # set flatpak name on restoring (flatpak)
+#        sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
+#              ${SUBDIR}/*.sh && \
+#              DBUG "I: ${HEADER}: Updated ${FLATPAK_NAME} in script file"
+#  fi
 #  # Cleanup variables
 #  unset LEN
 #  unset SSSSSSS

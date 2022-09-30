@@ -9,57 +9,49 @@
 ################################################################################
 WineZGUI_Create_Wzt_Info()
 {
-  WZT_INFO_FILE="wzt-info.yml"
-  WZT_INFO_FILE_IN_PREFIX="${PREFIXDIR}/${WZT_INFO_FILE}"
-  # 1. Set Debug Prompt, If prefix is default it is "I: Backup: ..."
-  if [ "${PREFIXNAME}" = "default" ]; then
-       PROMPT="Backup"
-       FUNCTION_TO_RETURN="WineZGUI_Window"
-
-       WZT_INFO_PROGNAME="Default Prefix"
-       WZT_INFO_EXE_NAME="No-EXE"
-       WZT_INFO_PREFIXNAME="${PREFIXNAME}"
-
-       PREFIX_DIR="${WINEZGUIDIR}/${PREFIXNAME}"
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  
+  # 1. Need full path to directory to create file in it
+  if [ -z "${1}" ]; then
+       echo "Must provide Prefix or Template Directory to process"
+       return 1
   else
-       PROMPT="Script: Backup"
-       FUNCTION_TO_RETURN="Script_Window"
-
-       WZT_INFO_PROGNAME="${PROGNAME}"
-       WZT_INFO_EXE_NAME="${EXE_NAME}"
-       WZT_INFO_PREFIXNAME="${PREFIXNAME}"
-       PREFIX_DIR="${PREFIXDIR}"
+       DIRECTORY="${1}"
+       DIRNAME=$(basename "${1}")
   fi
+  
+  WZT_FILE_NAME="wzt-info.yml"
+  WZT_FILE="${DIRECTORY}/${WZT_FILE_NAME}"
 
   # 2. Check if Prefix Directory is writable or not
-  DBUG "I: ${PROMPT}: Creating ${WZT_INFO_FILE} at ${PREFIXNAME}"
-  DBUG "I: ${PROMPT}: is prefix ${PREFIXNAME} writable?"
-  if [ -w "${PREFIX_DIR}" ]; then
-       DBUG "I: ${PROMPT}: Yes!"
+  DBUG "I: ${HEADER}: Creating ${WZT_FILE_NAME} at ${DIRNAME}"
+  DBUG "I: ${HEADER}: is ${DIRNAME} writable?"
+  if [ -w "${DIRECTORY}" ]; then
+       DBUG "I: ${HEADER}: Yes!"
   else
-       DBUG "I: ${PROMPT}: No!"
-       DBUG "I: ${PROMPT}: Aborting!"
-       ${FUNCTION_TO_RETURN}
+       DBUG "I: ${HEADER}: No!"
+       DBUG "I: ${HEADER}: Aborting!"
+       return 1
   fi
 
   # 3. Insert Data into wzt-info.yml
   DATE=$(date +%F_%H%M)
 
-  echo "Name:${WZT_INFO_PROGNAME}"       |tee    "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Exe:${WZT_INFO_EXE_NAME}"        |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Prefix:${WZT_INFO_PREFIXNAME}"   |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Created:${DATE}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Wine:${WINEVER}"                 |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
-  echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+  echo "Name:${PROGNAME}"                |tee    "${WZT_FILE}"
+  echo "Exe:${EXE_NAME}"                 |tee -a "${WZT_FILE}"
+  echo "Prefix:${DIRNAME}"               |tee -a "${WZT_FILE}"
+  echo "Created:${DATE}"                 |tee -a "${WZT_FILE}"
+  echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_FILE}"
+  echo "Wine:${WINEVER}"                 |tee -a "${WZT_FILE}"
+  echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_FILE}"
+  echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_FILE}"
   # 3.1 Include flatpak id in wzt-info.yml
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-       echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${WZT_INFO_FILE_IN_PREFIX}"
+       echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${WZT_FILE}"
   fi
 
   # 4. Check if the file exists after it is created
-  if [ -f "${WZT_INFO_FILE_IN_PREFIX}" ]; then
-       DBUG "I: ${PROMPT}: Created ${WZT_INFO_FILE_IN_PREFIX}"
+  if [ -f "${WZT_FILE}" ]; then
+       DBUG "I: ${HEADER}: Created ${WZT_FILE}"
   fi
 }

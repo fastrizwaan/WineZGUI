@@ -11,7 +11,7 @@
 # 8. Show info about created wzt file
 Script_Backup_Bundle()
 {
- DBUG "I: Script: Launched ${FUNCNAME[0]}"
+    DBUG "I: Script: Launched ${FUNCNAME[0]}"
     source ${DATADIR}/winezgui-backup-restore-function 
     DBUG "I: Script: Backup: Create Game Bundle... Selected!"
     echo -n "I: Script: Backup: Bundle: Checking if ${EXE_NAME} is not"
@@ -265,7 +265,8 @@ Script_Backup_Bundle()
 
         # 7.5 Create wzt-info.yml required for restoring wzt file.
         source ${DATADIR}/winezgui-create-wzt-info 
-        WineZGUI_Create_Wzt_Info
+        WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+        
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
         DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
@@ -274,7 +275,7 @@ Script_Backup_Bundle()
         TIMER_START=${SECONDS}
         # add wzt-info.yml 1st then the prefix directory to the wzt file
         (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
-                  -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"                 \
+                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
                   -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
                   -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
                   --transform \
@@ -295,7 +296,8 @@ Script_Backup_Bundle()
 
         # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
         source ${DATADIR}/winezgui-create-wzt-info 
-        WineZGUI_Create_Wzt_Info
+        WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+        
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
         DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
@@ -305,7 +307,7 @@ Script_Backup_Bundle()
         # Report user the time it took to bundle
         TIMER_START=${SECONDS}
         (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-                  -C "${PREFIX_DIR}"  "${WZT_INFO_FILE}"      \
+                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
               -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
               zenity  --progress --pulsate --auto-close \
               --title="Creating ${PREFIXNAME} Game Bundle...!" \

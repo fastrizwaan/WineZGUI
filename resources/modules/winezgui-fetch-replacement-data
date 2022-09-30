@@ -1,5 +1,5 @@
-# winezgui-search-replace-data
-WineZGUI_Search_Replace_Data()
+# winezgui-fetch-replacement-data
+WineZGUI_Fetch_Replacement_Data()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   # Unset any previously initialized variables

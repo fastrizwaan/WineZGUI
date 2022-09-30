@@ -1,40 +1,49 @@
 WineZGUI_Backup_Function()
 {
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
-        echo "Must provide Prefix or Template Directory to process"
+        echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
         return 1
   else
-        DIRECTORY=$(dirname  "${1}")
+        DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
   fi      
-  source ${DATADIR}/winezgui-search-replace-data
-  WineZGUI_Search_Replace_Data
+  source ${DATADIR}/winezgui-fetch-replacement-data
+  WineZGUI_Fetch_Replacement_Data
   
-  source ${DATADIR}/winezgui-search-replace-files
-  WineZGUI_Search_Replace_Files "${DIRECTORY}"
+  source ${DATADIR}/winezgui-fetch-replacment-files
+  WineZGUI_Fetch_Replacement_Files "${DIRECTORY}"
 
   cd "${DIRECTORY}"  
-  DBUG "I: Backup: Processing files inside ${DIRNAME}"
+  DBUG "I: ${HEADER}: Processing files inside ${DIRNAME}"
+
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b") # needed for sed to work with files in variable
+  
+  # Do search and replace in the files inside given directory
   for (( i=0; i <${LEN}; i++ ))
       do
-      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST}
-      #&& \
-      #DBUG "I: Backup: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${FILE_LIST} \
+      && \
+      DBUG "I: ${HEADER}: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
   done
-
+  echo "==================================================="
+  IFS=${SAVEIFS}
   # Rename Directory for Backup
   DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
   DTARGET="${DIRECTORY}/drive_c/users/XOUSERXO"
   # Make sure that directory for the user exists, before moving
   if [ -d "${DIRECTORY}/drive_c/users/${USER}" ]; then
        mv "${DSOURCE}" "${DTARGET}" && \
-       echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+       echo  "I: ${HEADER}: Renamed ${DSOURCE}"
+       echo  "I: ${HEADER}: to      ${DTARGET}"
   fi
 
 
   # Remove H: links on Backup
   rm  "${DIRECTORY}/dosdevices/h:" && \
-  DBUG "I: Backup: Removed H: symlink ${DIRNAME}/dosdevices/h:"
+  DBUG "I: ${HEADER}: Removed H: symlink ${DIRNAME}/dosdevices/h:"
 
  # Cleanup variables
 # unset LEN

@@ -6,6 +6,7 @@ List_Available_Templates()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   LATHEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset SELECTED_TEMPLATE
   unset COMMAND
   unset count
   unset SHOW_OPTION
@@ -100,13 +101,14 @@ List_Available_Templates()
   count=0
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
-      if [ "$i" = "$RESULT" ]; then
-           echo "I: ${LATHEADER}: Selected $i"
+      if [ "$i" = "${RESULT}" ]; then
+           echo "I: ${LATHEADER}: Selected ${i}"
            echo "I: ${LATHEADER}: Selected ${FILES[${count}]}"
            export SELECTED_TEMPLATE="${FILES[${count}]}"
+           export SELECTED_TEMPLATE_NAME="${i}"
            break
       fi
       count=$(expr ${count} + 1)
   done
-
+  return 0
 }
