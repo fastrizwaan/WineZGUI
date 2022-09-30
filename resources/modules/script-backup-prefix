@@ -10,7 +10,7 @@
 # 8. Show info about created wzt file
 Script_Backup_Prefix()
 {
-     source ${DATADIR}/winezgui-backup-restore-function 
+     # needed? # source ${DATADIR}/winezgui-backup-restore-function 
      # 1. Set Total Backup size variable
      TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
      TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
@@ -155,7 +155,8 @@ Script_Backup_Prefix()
 
      # 7.2 Preprocess PREFIXDIR files (remove user name from files)
      cd "${PREFIXDIR}"
-     Backup_Function "${PREFIXDIR}"
+     source ${DATADIR}/winezgui-backup-function
+     WineZGUI_Backup_Function "${PREFIXDIR}"
 
      # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
      source ${DATADIR}/winezgui-create-wzt-info 
@@ -206,7 +207,8 @@ Script_Backup_Prefix()
      # 7.7 Restore changed values after backup
      DBUG "I: Script: Backup: Prefix: Restoring Registry and Info files"
      cd "${PREFIXDIR}"
-     Restore_Function "${PREFIXDIR}"
+     source ${DATADIR}/winezgui-restore-function
+     WineZGUI_Restore_Function "${PREFIXDIR}"
 
      DBUG "I: Script: Backup: Prefix: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

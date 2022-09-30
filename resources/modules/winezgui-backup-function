@@ -1,0 +1,52 @@
+WineZGUI_Backup_Function()
+{
+  if [ -z "${1}" ]; then
+        echo "Must provide Prefix or Template Directory to process"
+        return 1
+  else
+        TOPDIR=$(dirname  "${1}")
+        SUBDIR=$(basename "${1}")
+        echo "SUBDIR=$SUBDIR"
+  fi      
+  source ${DATADIR}/winezgui-search-replace-data
+  WineZGUI_Search_Replace_Data
+  
+  source ${DATADIR}/winezgui-search-replace-files
+  WineZGUI_Search_Replace_Files "${1}"
+  cd "${TOPDIR}"
+  DBUG "I: Backup: Processing files inside ${SUBDIR}"
+  for (( i=0; i <${LEN}; i++ ))
+      do
+      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST}
+      #&& \
+      #DBUG "I: Backup: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
+  done
+
+  # Rename Directory for Backup
+  DSOURCE="${SUBDIR}/drive_c/users/${USER}"
+  DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+  # Make sure that directory for the user exists, before moving
+  if [ -d "${SUBDIR}/drive_c/users/${USER}" ]; then
+       mv "${DSOURCE}" "${DTARGET}" && \
+       echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+  fi
+
+
+  # Remove H: links on Backup
+  rm  "${SUBDIR}/dosdevices/h:" && \
+  DBUG "I: Backup: Removed H: symlink ${SUBDIR}/dosdevices/h:"
+
+ # Cleanup variables
+# unset LEN
+# unset SSSSSSS
+# unset SEARCH
+# unset REPLACE
+# unset FIND_EXE_PATH
+# unset FPNAME
+# unset WEXE
+# unset WVER
+# unset FILE_LIST
+# unset DTARGET
+# unset DSOURCE
+
+}

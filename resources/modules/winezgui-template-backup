@@ -178,9 +178,10 @@ WineZGUI_Template_Backup()
   # 10.2 Preprocess TEMPLATES_DIR files (remove user name from files)
   DBUG "I: ${HEADER}: Changing Directory to ${TEMPLATES_DIR}"
   cd "${TEMPLATES_DIR}"
-  DBUG "I: ${HEADER}: Launching: Backup_Function ${SELECTED_TEMPLATE}"
-  cd "${SELECTED_TEMPLATE}"
-  Backup_Function "${SELECTED_TEMPLATE}"
+  DBUG "I: ${HEADER}: Launching: source ${DATADIR}/winezgui-backup-function
+  
+  source ${DATADIR}/winezgui-backup-function
+  WineZGUI_Backup_Function "${SELECTED_TEMPLATE}"
 
   # 10.3 Create template-info.yml inside SELECTED_TEMPLATE, not needed though
   
@@ -233,7 +234,8 @@ WineZGUI_Template_Backup()
   # 7.7 Restore changed values after backup
   DBUG "I: Backup: Template: Restoring Registry and Info files"
   cd "${TEMPLATES_DIR}"
-  Restore_Function "${SELECTED_TEMPLATE}"
+  source ${DATADIR}/winezgui-restore-function
+  WineZGUI_Restore_Function "${SELECTED_TEMPLATE}"
 
   DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

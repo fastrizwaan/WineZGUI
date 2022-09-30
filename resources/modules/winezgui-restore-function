@@ -1,0 +1,65 @@
+WineZGUI_Restore_Function()
+{
+  if [ -z "${1}" ]; then
+        echo "Must provide Prefix or Template Directory to process"
+        return 1
+  else
+        TOPDIR=$(dirname  "${1}")
+        SUBDIR=$(basename "${1}")
+  fi      
+  source ${DATADIR}/winezgui-search-replace-data
+  WineZGUI_Search_Replace_Data
+  
+  source ${DATADIR}/winezgui-search-replace-files 
+  WineZGUI_Search_Replace_Files "${1}"
+  
+  cd "${TOPDIR}"
+
+  DBUG "I: Restore: Processing files inside ${SUBDIR}"
+  for (( i=0; i <${LEN}; i++ )); do
+        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}
+        #&& \
+        # DBUG "I: Restore: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
+
+  done
+  # Rename Directory on Restore
+  DSOURCE="${SUBDIR}/drive_c/users/${USER}"
+  DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+  # If not restored from a backup file, revert xouserxo->user
+  # Make sure that directory for the user exists, before moving
+  if [ -d "${SUBDIR}/drive_c/users/XOUSERXO" ]; then
+        mv "${DTARGET}" "${DSOURCE}" && \
+        echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
+  fi
+  # Recreate Links to H: link to $HOME on Restore
+  DBUG "I: Restore: Recreating Links to H: in ${SUBDIR} prefix"
+
+  ln -sf "${HOME}" "${PWD}/${SUBDIR}/dosdevices/h:" && \
+  DBUG "I: Restore: Created H: symlink ${HOME}" \
+        "to ${SUBDIR}/dosdevices/h:"
+
+  # Process desktop and script files if the prefix is not default
+  # For Install Type and Flatpak Name
+  if ! [ "${SUBDIR}" = "default" ]; then
+        # Set install type
+        sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
+              ${SUBDIR}/*.sh && \
+              DBUG "I: Restore: Updated ${INSTALL_TYPE} in script file"
+        # set flatpak name on restoring (flatpak)
+        sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
+              ${SUBDIR}/*.sh && \
+              DBUG "I: Restore: Updated ${FLATPAK_NAME} in script file"
+  fi
+#  # Cleanup variables
+#  unset LEN
+#  unset SSSSSSS
+#  unset SEARCH
+#  unset REPLACE
+#  unset FIND_EXE_PATH
+#  unset FPNAME
+#  unset WEXE
+#  unset WVER
+#  unset FILE_LIST
+#  unset DTARGET
+#  unset DSOURCE
+}

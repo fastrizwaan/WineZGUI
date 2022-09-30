@@ -12,8 +12,6 @@ WineZGUI_Restore()
        unset WZT_FILE  ; # Empty variable
 
   else
-       # Backup_Function Restore_Function()
-       source ${DATADIR}/winezgui-backup-restore-function 
        source ${DATADIR}/winezgui-restore-wzt 
        Restore_Wzt_File
   fi # -z "${WZT_FILE}"

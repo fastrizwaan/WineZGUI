@@ -552,10 +552,6 @@ elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
        exit 0;
 fi
 
-
-# Backup_FUNCTION Restore_Function()
-source ${DATADIR}/winezgui-backup-restore-function 
-
 # Start WineZGUI when no argument is supplied
 if [ $# -eq 0 ] ; then
      DBUG "I: Script: Launching ${EXE_NAME} script"

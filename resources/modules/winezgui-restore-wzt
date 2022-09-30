@@ -217,7 +217,8 @@ Restore_Wzt_File()
  export PREFIXNAME="${WZT_PREFIX}"
  DBUG "I: Restore: Processing files inside ${WZT_PREFIX} for use!"
  
- Restore_Function "${PREFIXES_DIR}/${WZT_PREFIX}"
+ source ${DATADIR}/winezgui-restore-function
+ WineZGUI_Restore_Function "${PREFIXES_DIR}/${WZT_PREFIX}"
 
  # 6 Create desktop dir, process Info file
  # 6.1 Create required applications directory for .desktop files

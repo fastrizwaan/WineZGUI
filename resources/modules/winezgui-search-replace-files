@@ -1,0 +1,26 @@
+# winezgui-search-replace-files
+WineZGUI_Search_Replace_Files()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+        echo "Must provide Prefix or Template Directory to process"
+        return 1
+  else
+        TOPDIR=$(dirname  "${1}")
+        SUBDIR=$(basename "${1}")
+  fi
+  # Find files to change in the Prefix
+  cd "${TOPDIR}"
+  
+  unset FILE_LIST
+  FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "Info.yml" 2>/dev/null)
+  FILE_LIST+=" "
+  FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.reg" 2>/dev/null)
+  FILE_LIST+=" "
+  FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.sh" 2>/dev/null)
+  FILE_LIST+=" "
+  FILE_LIST+=$(find ${SUBDIR} -maxdepth 1 -iname "*.desktop" 2>/dev/null)
+  FILE_LIST+=" "
+
+  export FILE_LIST
+}
