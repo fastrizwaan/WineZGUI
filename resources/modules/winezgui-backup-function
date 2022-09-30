@@ -4,17 +4,17 @@ WineZGUI_Backup_Function()
         echo "Must provide Prefix or Template Directory to process"
         return 1
   else
-        TOPDIR=$(dirname  "${1}")
-        SUBDIR=$(basename "${1}")
-        echo "SUBDIR=$SUBDIR"
+        DIRECTORY=$(dirname  "${1}")
+        DIRNAME=$(basename "${1}")
   fi      
   source ${DATADIR}/winezgui-search-replace-data
   WineZGUI_Search_Replace_Data
   
   source ${DATADIR}/winezgui-search-replace-files
-  WineZGUI_Search_Replace_Files "${1}"
-  cd "${TOPDIR}"
-  DBUG "I: Backup: Processing files inside ${SUBDIR}"
+  WineZGUI_Search_Replace_Files "${DIRECTORY}"
+
+  cd "${DIRECTORY}"  
+  DBUG "I: Backup: Processing files inside ${DIRNAME}"
   for (( i=0; i <${LEN}; i++ ))
       do
       sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST}
@@ -23,18 +23,18 @@ WineZGUI_Backup_Function()
   done
 
   # Rename Directory for Backup
-  DSOURCE="${SUBDIR}/drive_c/users/${USER}"
-  DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+  DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
+  DTARGET="${DIRECTORY}/drive_c/users/XOUSERXO"
   # Make sure that directory for the user exists, before moving
-  if [ -d "${SUBDIR}/drive_c/users/${USER}" ]; then
+  if [ -d "${DIRECTORY}/drive_c/users/${USER}" ]; then
        mv "${DSOURCE}" "${DTARGET}" && \
        echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
   fi
 
 
   # Remove H: links on Backup
-  rm  "${SUBDIR}/dosdevices/h:" && \
-  DBUG "I: Backup: Removed H: symlink ${SUBDIR}/dosdevices/h:"
+  rm  "${DIRECTORY}/dosdevices/h:" && \
+  DBUG "I: Backup: Removed H: symlink ${DIRNAME}/dosdevices/h:"
 
  # Cleanup variables
 # unset LEN

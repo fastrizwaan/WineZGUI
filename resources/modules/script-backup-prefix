@@ -154,13 +154,13 @@ Script_Backup_Prefix()
      DBUG "I: Script: Backup: Prefix: Preparing files"
 
      # 7.2 Preprocess PREFIXDIR files (remove user name from files)
-     cd "${PREFIXDIR}"
      source ${DATADIR}/winezgui-backup-function
      WineZGUI_Backup_Function "${PREFIXDIR}"
 
      # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
      source ${DATADIR}/winezgui-create-wzt-info 
-
+     WineZGUI_Create_Wzt_Info
+     
      DBUG "I: Script: Backup: Prefix: Creating ${BACKUP_FILE} file..."
      # Report user the time it took to bundle
      TIMER_START=${SECONDS}
@@ -206,7 +206,6 @@ Script_Backup_Prefix()
 
      # 7.7 Restore changed values after backup
      DBUG "I: Script: Backup: Prefix: Restoring Registry and Info files"
-     cd "${PREFIXDIR}"
      source ${DATADIR}/winezgui-restore-function
      WineZGUI_Restore_Function "${PREFIXDIR}"
 

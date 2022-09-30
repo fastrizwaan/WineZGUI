@@ -4,8 +4,8 @@ WineZGUI_Restore_Function()
         echo "Must provide Prefix or Template Directory to process"
         return 1
   else
-        TOPDIR=$(dirname  "${1}")
-        SUBDIR=$(basename "${1}")
+        DIRECTORY=$(dirname  "${1}")
+        DIRNAME=$(basename "${1}")
   fi      
   source ${DATADIR}/winezgui-search-replace-data
   WineZGUI_Search_Replace_Data
@@ -13,9 +13,9 @@ WineZGUI_Restore_Function()
   source ${DATADIR}/winezgui-search-replace-files 
   WineZGUI_Search_Replace_Files "${1}"
   
-  cd "${TOPDIR}"
+  cd "${DIRECTORY}"
 
-  DBUG "I: Restore: Processing files inside ${SUBDIR}"
+  DBUG "I: Restore: Processing files inside ${DIRNAME}"
   for (( i=0; i <${LEN}; i++ )); do
         sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}
         #&& \
@@ -23,23 +23,23 @@ WineZGUI_Restore_Function()
 
   done
   # Rename Directory on Restore
-  DSOURCE="${SUBDIR}/drive_c/users/${USER}"
-  DTARGET="${SUBDIR}/drive_c/users/XOUSERXO"
+  DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
+  DTARGET="${DIRECTORY}/drive_c/users/XOUSERXO"
   # If not restored from a backup file, revert xouserxo->user
   # Make sure that directory for the user exists, before moving
-  if [ -d "${SUBDIR}/drive_c/users/XOUSERXO" ]; then
+  if [ -d "${DIRECTORY}/drive_c/users/XOUSERXO" ]; then
         mv "${DTARGET}" "${DSOURCE}" && \
         echo  "I: Backup: Renamed ${DSOURCE} to ${DTARGET}"
   fi
   # Recreate Links to H: link to $HOME on Restore
-  DBUG "I: Restore: Recreating Links to H: in ${SUBDIR} prefix"
+  DBUG "I: Restore: Recreating Links to H: in ${DIRNAME} prefix"
 
-  ln -sf "${HOME}" "${PWD}/${SUBDIR}/dosdevices/h:" && \
-  DBUG "I: Restore: Created H: symlink ${HOME}" \
-        "to ${SUBDIR}/dosdevices/h:"
+  ln -sf "${HOME}" "${DIRECTORY}/dosdevices/h:" && \
+  DBUG "I: Restore: Created H: symlink ${HOME} to ${DIRNAME}/dosdevices/h:"
 
   # Process desktop and script files if the prefix is not default
   # For Install Type and Flatpak Name
+  # FIXME do we need this????
   if ! [ "${SUBDIR}" = "default" ]; then
         # Set install type
         sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \

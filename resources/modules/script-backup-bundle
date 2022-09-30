@@ -265,7 +265,7 @@ Script_Backup_Bundle()
 
         # 7.5 Create wzt-info.yml required for restoring wzt file.
         source ${DATADIR}/winezgui-create-wzt-info 
-
+        WineZGUI_Create_Wzt_Info
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
         DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
@@ -295,7 +295,7 @@ Script_Backup_Bundle()
 
         # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
         source ${DATADIR}/winezgui-create-wzt-info 
-
+        WineZGUI_Create_Wzt_Info
         # 7.6 Create Bundle
         DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
         DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
@@ -348,7 +348,7 @@ Script_Backup_Bundle()
 
     # 7.7 Restore changed values after backup
     DBUG "I: Script: Backup: Bundle: Restoring Registry and Info files"
-    cd "${PREFIXDIR}"
+
     source ${DATADIR}/winezgui-restore-function
     WineZGUI_Restore_Function "${PREFIXDIR}"
 
