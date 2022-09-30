@@ -183,7 +183,11 @@ Script_Backup_Bundle()
     # Step 5.5: Convert the above $AVAILABLE_SPACE into bytes
     # for comparison
     AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
-
+    echo "=============================================================="
+    DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+    DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE}"
+    echo "=============================================================="
+    
     # Step 5.6: If Target directory does not have sufficient space, abort backup
     DBUG "I: Script: Backup: Bundle: Checking if size < target dir space"
     if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then

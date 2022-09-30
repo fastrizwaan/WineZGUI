@@ -1,9 +1,10 @@
 # winezgui-configure
 #  WineZGUI application window function
 # FIXME winezgui-configure
-WineZGUI_Configure_Template()
+WineZGUI_Template_Configure()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   CONFIGURE_OPTION=$(zenity --title "${APP_WITH_VER} - Configure Template"  \
                             --list   --hide-header                          \
                             --width=360 --height=400                        \

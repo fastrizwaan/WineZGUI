@@ -58,7 +58,9 @@ NEW
     - [ ] Change Compression Level
 
 0.88
-- [ ] Fix Template - Backup
+- [ ] Fix Backup_and_Restore_Functions
+- [ ] make sure both prefix and templates are back up
+- [ ] Fix Template - Backup - sed not working
 - [x] Rewrite winezgui to fix
   - [x] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
 - [x] Modularize even more, every script file be used as function

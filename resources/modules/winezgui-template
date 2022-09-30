@@ -28,8 +28,8 @@ WineZGUI_Template()
   DBUG "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
 
   if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-open-setup-installer 
-          WineZGUI_Open_Setup_Installer
+          source ${DATADIR}/winezgui-template-configure
+          WineZGUI_Template_Configure
   elif [ "${TEMPLATE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
           source ${DATADIR}/winezgui-template-backup
           WineZGUI_Template_Backup

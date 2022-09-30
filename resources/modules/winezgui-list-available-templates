@@ -1,8 +1,11 @@
 # winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_TEMPLATE
+# FIXME  List_Available_Templates
 List_Available_Templates()
 {
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  LATHEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset COMMAND
   unset count
   unset SHOW_OPTION
@@ -98,8 +101,8 @@ List_Available_Templates()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "$RESULT" ]; then
-           echo "Selected $i"
-           echo "File is ${FILES[${count}]}"
+           echo "I: ${LATHEADER}: Selected $i"
+           echo "I: ${LATHEADER}: Selected ${FILES[${count}]}"
            export SELECTED_TEMPLATE="${FILES[${count}]}"
            break
       fi
