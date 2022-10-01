@@ -3,15 +3,10 @@
 # and set the variable SELECTED_PREFIX
 List_Available_Prefixes()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  unset COMMAND
-  unset count
-  unset SHOW_OPTION
-  unset NAMES
-  unset FILES
-  unset RESULT
-  unset SEARCH_LIST
-
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset COMMAND count SHOW_OPTION NAMES FILES RESULT SEARCH_LIST
+  
+  SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
 
   count=0

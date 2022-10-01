@@ -1,10 +1,32 @@
 WineZGUI_Template_Change()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-list-available-templates
   List_Available_Templates # get SELECTED_TEMPLATE 
   
+  # Get Arch from Registry files
+  SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"
+  if [ -f "${SYSTEM_REGISTRY_FILE}" ]; then
+       REG_ARCH=$(grep "#arch=" "${SYSTEM_REGISTRY_FILE}" |cut -f2 -d "=")
+       DBUG "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
+       if [ -z "${REG_ARCH}" ]; then
+            zenity --error --text "Could not find arch in system.reg file"
+            unset SELECTED_TEMPLATE
+            WineZGUI_Window
+       fi
+       if [ "${REG_ARCH}" != "win32" ] && [ "${REG_ARCH}" != "win64" ]; then
+            zenity --error --text "Could not find win32 or win64 in system.reg file"
+            unset SELECTED_TEMPLATE
+            WineZGUI_Window
+       fi
+  else 
+       DBUG "I: ${HEADER}: not found ${SYSTEM_REGISTRY_FILE} "
+       zenity --error --text "Could not find file ${SYSTEM_REGISTRY_FILE}"
+       unset SELECTED_TEMPLATE
+       WineZGUI_Window
+  fi  
+
   # If Settings.yml is writable
   if [ -w "${SETTINGS_FILE}" ]; then
        sed "s|template:.*|template:${SELECTED_TEMPLATE}|g" -i "${SETTINGS_FILE}"
@@ -26,16 +48,6 @@ WineZGUI_Template_Change()
   DBUG "I: ${HEADER}: Selected Template is ${TEMPLATE_NAME}"
   DBUG "I: ${HEADER}: Default = ${DEFAULT}"
 
-  # Get Arch from Registry files
-  SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"
-  if [ -f "${SYSTEM_REGISTRY_FILE}" ]; then
-       REG_ARCH=$(grep "#arch=" "${SYSTEM_REGISTRY_FILE}" |cut -f2 -d "=")
-       DBUG "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
-       if [ -z "${REG_ARCH}" ]; then
-            zenity --error --text "Could not find arch in system.reg file"
-            return 1
-       fi
-  fi  
   
   # Prompt the user to change arch too if it is different from the selected one
   if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
