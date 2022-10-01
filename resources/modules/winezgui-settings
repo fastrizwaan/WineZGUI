@@ -134,7 +134,7 @@ WineZGUI_Settings()
 
         # Update Wine arch in About.yml
         export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
-        Initialize_Wineprefix "${WINE_TEMPLATE}"
+        WineZGUI_Initialize_Wineprefix "${WINE_TEMPLATE}"
         sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
 
 

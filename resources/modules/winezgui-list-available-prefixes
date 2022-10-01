@@ -21,7 +21,8 @@ List_Available_Prefixes()
   # and common exe files present in Program Files directory
   # Add those files to FILES array and filenames to NAMES array
 
-  SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print| tr '\n' '|')
+  SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print \
+                2>/dev/null| tr '\n' '|')
 
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 

@@ -321,8 +321,9 @@ Script_Backup_Bundle()
     # zenity progress won't kill the process, so we do it
     # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
     # other wzt file operation like extraction and backup
-    PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}" \
-        |sed 's/  */ /g'|cut -f2 -d " ")
+    PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+                |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+
 
     # If there is a PID_OF_TAR then we need to kill the tar command
     if ! [ -z "$PID_OF_TAR" ]; then

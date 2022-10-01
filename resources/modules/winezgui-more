@@ -9,7 +9,6 @@ WineZGUI_More()
                  --column "Action"                       \
                         0 "File Manager..."              \
                         0 "Open Terminal..."             \
-                        0 "Templates..."                 \
                         0 "Shortcuts..."                 \
                         0 "Help..."                      \
                  --text   "More..."                      )
@@ -26,9 +25,6 @@ WineZGUI_More()
   elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
          source ${DATADIR}/winezgui-open-terminal 
          WineZGUI_Open_Terminal
-  elif [ "${MORE_OPTION}" = "Templates..." ]; then
-         source ${DATADIR}/winezgui-templates 
-         WineZGUI_Templates
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
          source ${DATADIR}/winezgui-shortcuts 
          WineZGUI_Shortcuts

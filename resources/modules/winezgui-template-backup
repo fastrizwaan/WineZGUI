@@ -1,9 +1,6 @@
 # winezgui-backup-template
-# FIXME... sed not working, wtf!!!
 WineZGUI_Template_Backup()
 {
-  # This is needed for Backup and Restore Functions #FIXME create separate BACKUP and RESTORE function
-  DEBUG="Y"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
@@ -187,7 +184,8 @@ WineZGUI_Template_Backup()
   DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
   DBUG "I: ${HEADER}: Executing command"
   DBUG "-------------------------------------------------------------"
-  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" -C  \"${TEMPLATES_DIR}\" \"${SELECTED_TEMPLATE_NAME}\""
+  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+            -C \"${TEMPLATES_DIR}\" \"${SELECTED_TEMPLATE_NAME}\""
   DBUG "-------------------------------------------------------------"
   # Report user the time it took to bundle
   TIMER_START=${SECONDS}
@@ -204,17 +202,19 @@ WineZGUI_Template_Backup()
   # zenity progress won't kill the process, so we do it
   # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
   # other wzt file operation like extraction and backup
-  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}" \
-                      |sed 's/  */ /g'|cut -f2 -d " ")
-
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+              |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+  
   # If there is a PID_OF_TAR then we need to kill the tar command
-  if ! [ -z "$PID_OF_TAR" ]; then
+  if ! [ -z "${PID_OF_TAR}" ]; then
          kill -9 ${PID_OF_TAR} \
          && DBUG "I: Backup: Template: Cancelled! Killed tar!" \ &&
          rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
          DBUG "I: Backup: Template: Removed partial ${BACKUP_FILE}"
 
-       # Backup Sucess Message
+       # Backup Failure Message
+       echo "===================================================="
+       unset MSG
        MSG=("${SELECTED_TEMPLATE_NAME} backup cancelled!")
   else
        # If no pid is found, that means wzt=tar.zst is created successfully
@@ -222,6 +222,7 @@ WineZGUI_Template_Backup()
        # 7.6  Crate message
        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
        # Backup Sucess Message
+       unset MSG
        MSG=("<b>TEMPLATE: </b> ${SELECTED_TEMPLATE_NAME}\n")
        MSG+="<b>Filename:</b> ${BACKUP_FILE}"
        MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
@@ -239,7 +240,6 @@ WineZGUI_Template_Backup()
 
   # 8. Show info about created wzt file
   zenity --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"
-  unset DEBUG
   return 0
 }
 

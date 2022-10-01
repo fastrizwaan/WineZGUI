@@ -1,6 +1,6 @@
 WineZGUI_Launch()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
   source ${DATADIR}/winezgui-list-available-scripts 
   List_Available_Scripts

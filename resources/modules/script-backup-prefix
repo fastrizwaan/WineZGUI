@@ -163,19 +163,19 @@ Script_Backup_Prefix()
      
      DBUG "I: Script: Backup: Prefix: Creating ${BACKUP_FILE} file..."
      
-     echo "=========================================="
-     echo "WZT_FILE_NAME=$WZT_FILE_NAME"
-     echo "Command:"
-     echo "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\"       \
+     DBUG "-------------------------------------------------------------------"
+     DBUG "WZT_FILE_NAME=$WZT_FILE_NAME"
+     DBUG "Command:"
+     DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
                                   -C \"${PREFIXDIR}\"  \"${WZT_FILE_NAME}\"   \
                                   -C \"${PREFIXES_DIR}\" \"${PREFIXNAME}\" "
-          echo "=========================================="
+     DBUG "-------------------------------------------------------------------"
      # Report user the time it took to bundle
      TIMER_START=${SECONDS}
      # 7.4 Create Backup archive and restore changes as soon as tar is done
      # add wzt-info.yml 1st then the prefix directory to the wzt file
      (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
-                                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"   \
+                                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
                                   -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
      zenity    --progress --pulsate --auto-close        \
                --title="Creating ${PREFIXNAME} backup!" \
@@ -187,11 +187,11 @@ Script_Backup_Prefix()
      # zenity progress won't kill the process, so we do it
      # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
      # other wzt file operation like extraction and backup
-     PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}" \
-                         |sed 's/  */ /g'|cut -f2 -d " ")
-
+     PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+                 |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+                 
      # If there is a PID_OF_TAR then we need to kill the tar command
-     if ! [ -z "$PID_OF_TAR" ]; then
+     if ! [ -z "${PID_OF_TAR}" ]; then
           kill -9 ${PID_OF_TAR} \
                && DBUG "I: Script: Backup: Prefix: Cancelled! Killed tar!" \ &&
           rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \

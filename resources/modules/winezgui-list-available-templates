@@ -15,8 +15,6 @@ List_Available_Templates()
   unset RESULT
   unset SEARCH_LIST
 
-  IFS=$(echo -en "\n\b")
-
   count=0
   NAMES=()
   FILES=()
@@ -34,7 +32,7 @@ List_Available_Templates()
 
    if [ -z "${TEMPLATE_TYPE}" ]; then
         echo "Cancelled!"
-        return 1
+        WineZGUI_Window
    fi
    
    if [ "${TEMPLATE_TYPE}" = "Win32" ]; then
@@ -54,7 +52,7 @@ List_Available_Templates()
   # Add those files to FILES array and filenames to NAMES array
   if [ "${TEMPLATE_TYPE}" = "All" ]; then
         SEARCH_LIST=$(find ${TEMPLATES_DIR}/* -maxdepth 0 -type d -print \
-                    | tr '\n' '|')
+                    2>/dev/null| tr '\n' '|')
   fi
    
   TEMPLATES_FOUND=$(echo ${SEARCH_LIST})

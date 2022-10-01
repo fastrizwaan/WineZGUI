@@ -1,0 +1,37 @@
+# winezgui-initialize-wineprefix
+WineZGUI_Initialize_Wineprefix()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "INITIALIZE ARCH = $WINEARCH"
+  if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
+       DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
+       # Create Prefix then delete host linked directories
+       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       WINEPREFIX=${1} \
+       WINEDEBUG=-all \
+      ${WBOOT_CMD} 2>/dev/null
+
+       # Replace home liked directory links with normal directories
+       # For Games which saves in ~/Documents now will save in
+       # Prefix-dir/drive_c/users/${USER}/Documents
+       SAVEIFS=${IFS}
+       IFS=$(echo -en "\n\b")
+
+       DBUG "I: ${HEADER}: Removing symlinks from wineprefix"
+
+       for i in $(find "${1}/drive_c/users/${USER}" -type l); do
+              rm "${i}" && mkdir -p "${i}" && \
+            echo "${i}" >> "${1}/Prefix_Initialized.txt"
+       done
+       IFS=${SAVEIFS}
+
+       # Create an empty file to test whether prefix is created
+       touch "${1}/Prefix_Initialized.txt"
+       DBUG "I: ${HEADER}: Wine Prefix $(basename ${1}) Created"
+       DBUG "I: ${HEADER}: Full Path: ${1}"
+       # Create H: for HOME Directory for Wine Explorer
+       ln -sf ${HOME} "${1}/dosdevices/h:"
+       DBUG "I: ${HEADER}: Created H: symlink to ${HOME}"
+  fi 
+}

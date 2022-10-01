@@ -50,7 +50,8 @@ WineZGUI_Template_Create_New()
 
 
   # Create new Prefix Template
-  Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
+  source ${DATADIR}/winezgui-initialize-wineprefix
+  WineZGUI_Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
   export WINEARCH="$SAVED_WINEARCH"
   
   # Ask whether the user would like to change template

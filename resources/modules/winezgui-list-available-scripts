@@ -3,7 +3,7 @@
 # and set the variable SELECTED_SCRIPT
 List_Available_Scripts()
 {
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION
@@ -21,7 +21,8 @@ List_Available_Scripts()
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
 
- search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.sh" -type f -print| tr '\n' '|')
+ search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.sh" -type f -print \
+               2>/dev/null| tr '\n' '|')
  exe_found=$(echo ${search_list})
 
  if [ -z "${exe_found}" ] ; then

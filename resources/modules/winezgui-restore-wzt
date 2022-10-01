@@ -176,7 +176,9 @@ Restore_Wzt_File()
       # If the user cancels extraction of wzt game bundle during extraction
       # kill the running tar command which has wzt in it
       unset PID_OF_TAR
-      PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt|sed 's/  */ /g'|cut -f2 -d " ")
+      PID_OF_TAR=$(ps -aux|grep tar|grep -i wzt|sed "/.*grep -i.*/d" \
+                          |sed "s/  */ /g" |cut -f2 -d " ")
+
       if ! [ -z "$PID_OF_TAR" ]; then
            kill -9 ${PID_OF_TAR} \
            && DBUG "I: Restore: Cancelled! Stopped extraction!"

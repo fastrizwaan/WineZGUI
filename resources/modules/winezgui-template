@@ -42,13 +42,21 @@ WineZGUI_Template()
   elif [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
           source ${DATADIR}/winezgui-template-backup
           WineZGUI_Template_Backup
-  elif [ "${TEMPLATE_OPTION}" = "Open Shell..." ]; then
-          source ${DATADIR}/winezgui-open-shell 
-          WineZGUI_Open_Shell
+  elif [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
+          source ${DATADIR}/winezgui-template-delete
+          WineZGUI_Template_Delete
   else
        echo "E: Unknown Configure Option = ${TEMPLATE_OPTION}"
        exit 1
   fi
-
+  
+  # Update template and arch from Settings.yml
+  if [ -f "${SETTINGS_FILE}" ]; then
+     export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
+     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+     export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+  fi
   return 0
 } 

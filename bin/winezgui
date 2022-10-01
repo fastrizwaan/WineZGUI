@@ -4,6 +4,8 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
+HEADER="$(basename ${0})"
+echo "I: $(basename ${0}): Launched!"
 export APPNAME=WineZGUI
 export APPVERSION="git"
 export APP_WITH_VER="${APPNAME}-${APPVERSION}"
@@ -67,7 +69,7 @@ fi
 # Only show debug message when DEBUG="Y" or DEBUG="anything"
 # Use unset DEBUG will stop messages.
 DBUG()
-{ 
+{
      if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
           echo "${1}"
      fi
@@ -99,11 +101,24 @@ export PROCESSNAME="$0"
 export WINEVER=$(wine --version|cut -f1 -d " ")
 export WBOOT_CMD="$(which wineboot) -i"
 
-# Create Template and Prefixes Directory
-mkdir -p "${WINEZGUIDIR}"
-mkdir -p "${TEMPLATES_DIR}"
-mkdir -p "${PREFIXES_DIR}"
-
+# Check if writable
+if [ ! -w "$(dirname ${WINEZGUIDIR})" ]; then
+     echo "I: ${HEADER}: Cannot write to HOME directory. Bye!"
+     exit 1
+fi
+# Create Main Directories
+if [ ! -d "${WINEZGUIDIR}" ]; then
+     mkdir -p "${WINEZGUIDIR}" &&   \
+     echo "I: ${HEADER}: Created: ${WINEZGUIDIR}"
+fi
+if [ ! -d "${TEMPLATES_DIR}" ]; then
+     mkdir -p "${TEMPLATES_DIR}" && \
+     echo "I: ${HEADER}: Created: ${TEMPLATES_DIR}"
+fi
+if [ ! -d "${PREFIXES_DIR}" ]; then
+     mkdir -p "${PREFIXES_DIR}"  && \
+     echo "I: ${HEADER}: Created: ${PREFIXES_DIR}"
+fi
 
 
 #  -- Handle Wine Arch... -- #
@@ -113,20 +128,20 @@ if [ -f "${SETTINGS_FILE}" ]; then
      export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
      export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
      export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
-     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}" 
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
      export TEMPLATE_NAME=$(basename ${TEMPLATE})
 fi
 
 # If Settings.yml does not exists, add arch:win64 and template:WineZGUI-win64
 if [ ! -f "${SETTINGS_FILE}" ] && [ -w ${WINEZGUIDIR} ]; then
      export WINEARCH="win64"
-     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}" 
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
      DBUG "I: Winearch not defined in ${SETTINGS_FILE}; setting arch to win64"
      DBUG "I: Prefix template not defined in ${SETTINGS_FILE}"
-     DBUG "I: using ${WINEZGUI_TEMPLATE}" 
+     DBUG "I: using ${WINEZGUI_TEMPLATE}"
      echo "arch:win64" >> "${SETTINGS_FILE}"
-     echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}" 
-     export TEMPLATE="${WINEZGUI_TEMPLATE}" 
+     echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
+     export TEMPLATE="${WINEZGUI_TEMPLATE}"
      export TEMPLATE_NAME=$(basename ${TEMPLATE})
 fi
 
@@ -135,14 +150,14 @@ if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ]; then
      export WINEARCH="win64"
      echo "E: arch:wine32/wine64 not found in ${SETTINGS_FILE}; using win64"
      echo "arch:win64" >> "${SETTINGS_FILE}"
-     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}" 
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
 fi
 
 # -- HANDLE Templates -- #
 # If Template Directory not found, set default to WineZGUI-win64 prefix template
 if [ ! -d "${TEMPLATE}" ]; then
-     sed "s|template:.*|template:${WINEZGUI_TEMPLATE}|g" -i "${SETTINGS_FILE}" 
-     export TEMPLATE="${WINEZGUI_TEMPLATE}" 
+     sed "s|template:.*|template:${WINEZGUI_TEMPLATE}|g" -i "${SETTINGS_FILE}"
+     export TEMPLATE="${WINEZGUI_TEMPLATE}"
      export TEMPLATE_NAME=$(basename ${TEMPLATE})
 fi
 
@@ -219,74 +234,6 @@ if [ ! -f "${WINEZGUIDIR}/DepsCheckOK.txt" ]; then
 fi
 
 
-
-Initialize_Wineprefix()
-{
-  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
-       DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
-       # Create Prefix then delete host linked directories
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${1} \
-       WINEDEBUG=-all \
-      ${WBOOT_CMD} 2>/dev/null
-
-       # Replace home liked directory links with normal directories
-       # For Games which saves in ~/Documents now will save in
-       # Prefix-dir/drive_c/users/${USER}/Documents
-       SAVEIFS=${IFS}
-       IFS=$(echo -en "\n\b")
-
-       DBUG "I: ${HEADER}: Removing symlinks from wineprefix"
-
-       for i in $(find "${1}/drive_c/users/${USER}" -type l); do
-              rm "${i}" && mkdir -p "${i}" && \
-            echo "${i}" >> "${1}/Prefix_Initialized.txt"
-       done
-       IFS=${SAVEIFS}
-
-       # Create an empty file to test whether prefix is created
-       touch "${1}/Prefix_Initialized.txt"
-       DBUG "I: ${HEADER}: Wine Prefix $(basename ${1}) Created"
-       DBUG "I: ${HEADER}: Full Path: ${1}"
-       # Create H: for HOME Directory for Wine Explorer
-       ln -sf ${HOME} "${1}/dosdevices/h:"
-       DBUG "I: ${HEADER}: Created H: symlink to ${HOME}"
-  fi
-
-
-  # Create Metadata About.yml for the default wine prefix
-  # Update info only when wine is found
-  if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then
-       echo "Application:${APPNAME}"        >  "${ABOUTFILE}"
-       echo "Version:${APPVERSION}"         >> "${ABOUTFILE}"
-       echo "Copyright:${COPYRIGHT}"        >> "${ABOUTFILE}"
-       echo "Website:${WEBSITE}"            >> "${ABOUTFILE}"
-       echo "Author:${AUTHOR}"              >> "${ABOUTFILE}"
-       echo "E-mail:${EMAIL}"               >> "${ABOUTFILE}"
-       echo "Wine:${WINE_CMD}"              >> "${ABOUTFILE}"
-       echo "Template:${TEMPLATE_NAME}"     >> "${ABOUTFILE}"
-       echo "Wine Version:${WINEVER}"       >> "${ABOUTFILE}"
-       echo "Wine Arch:${WINEARCH}"         >> "${ABOUTFILE}"
-       echo "WineZGUI Prefix:${WINEZGUIDIR}">> "${ABOUTFILE}"
-       echo "Wine Prefix:${DEFAULT}"        >> "${ABOUTFILE}"
-       echo "Creation Date:$(date)"         >> "${ABOUTFILE}"
-       echo "Install Type:${INSTALL_TYPE}"  >> "${ABOUTFILE}"
-       if ! [ -z "${FLATPAK_NAME}" ]; then  # If flatpak (variable has value)
-       echo "Flatpak Name:${FLATPAK_NAME}"  >> "${ABOUTFILE}"
-       fi
-       DBUG "I: ${HEADER}: Created ${ABOUTFILE}"
-  fi
-}
-
-
-# Create wine template and link it to defaults
-# If Default (WINEZGUI_TEMPLATE) is not found initialize it 
-if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then 
-     Initialize_Wineprefix "${WINEZGUI_TEMPLATE}" 
-fi
-
 # Main WineZGUI application window function
 WineZGUI_Window()
 {
@@ -317,63 +264,63 @@ WineZGUI_Window()
        exit 0
   fi
 
-  # Show What is selected     
+  # Show What is selected
   DBUG "I: ${HEADER}: ${SELECTION} Selected!"
 
   if   [ "${SELECTION}" = "Open Exe..." ]; then
-         source ${DATADIR}/winezgui-open-exe 
+         source ${DATADIR}/winezgui-open-exe
          WineZGUI_Open_Exe
 
   elif [ "${SELECTION}" = "Launch..."  ]; then
-         source ${DATADIR}/winezgui-launch 
+         source ${DATADIR}/winezgui-launch
          WineZGUI_Launch
-         
+
   elif [ "${SELECTION}" = "Script..."  ]; then
-         source ${DATADIR}/winezgui-script 
+         source ${DATADIR}/winezgui-script
          WineZGUI_Script
-         
+
   elif [ "${SELECTION}" = "Backup..." ]; then
-         source ${DATADIR}/winezgui-backup 
+         source ${DATADIR}/winezgui-backup
          WineZGUI_Backup
-         
+
   elif [ "${SELECTION}" = "Restore..." ]; then
-         source ${DATADIR}/winezgui-restore 
+         source ${DATADIR}/winezgui-restore
          WineZGUI_Restore
-         
+
   elif [ "${SELECTION}" = "Template..." ]; then
-         source ${DATADIR}/winezgui-template 
+         source ${DATADIR}/winezgui-template
          WineZGUI_Template
 
   elif [ "${SELECTION}" = "Settings..."  ]; then
-         source ${DATADIR}/winezgui-settings 
+         source ${DATADIR}/winezgui-settings
          WineZGUI_Settings
-         
+
   elif [ "${SELECTION}" = "More..."  ]; then
-         source ${DATADIR}/winezgui-more 
+         source ${DATADIR}/winezgui-more
          WineZGUI_More
-         
+
   elif [ "${SELECTION}" = "Delete..."  ]; then
-         source ${DATADIR}/winezgui-delete-prefix 
+         source ${DATADIR}/winezgui-delete-prefix
          WineZGUI_Delete_Prefix
-         
+
   elif [ "${SELECTION}" = "Help..." ]; then
-         source ${DATADIR}/winezgui-help 
+         source ${DATADIR}/winezgui-help
          WineZGUI_Help
-         
+
   elif [ "${SELECTION}" = "About..." ]; then
-         source ${DATADIR}/winezgui-about 
+         source ${DATADIR}/winezgui-about
          WineZGUI_About
-         
+
   elif [ "${SELECTION}" = "Kill all..." ]; then
-         source ${DATADIR}/winezgui-kill-all 
+         source ${DATADIR}/winezgui-kill-all
          WineZGUI_Kill_All
-         
+
   elif [ "${SELECTION}" = "Quit..." ]; then
-         source ${DATADIR}/winezgui-quit 
+         source ${DATADIR}/winezgui-quit
          WineZGUI_Quit
   fi
-  
-  # After All options 
+
+  # After All options
   WineZGUI_Window
 } # END of "Start WineZGUI window when no argument is supplied" section
 
@@ -411,16 +358,19 @@ if [ $# -gt 0 ] && [ $# -lt 2 ]; then
      fi
 fi
 
-## On 1st launch create default wine prefix
-### Create a default wine prefix directory ###
-if ! [ -d "${WINEZGUI_TEMPLATE}" ]; then 
-     DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..." 
-     mkdir -p "${WINEZGUI_TEMPLATE}" 
+
+# Create wine template and link it to defaults
+# If Default (WINEZGUI_TEMPLATE) is not found initialize it
+
+if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
+     DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
+     mkdir -p "${WINEZGUI_TEMPLATE}"
+     source ${DATADIR}/winezgui-initialize-wineprefix
+     WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
+     source ${DATADIR}/winezgui-create-about-yml
+     WineZGUI_Create_About_Yml   && DBUG "I: ${HEADER}: New: ${ABOUTFILE}"
 fi
 
-
-# Initialize Wineprefix for use
-Initialize_Wineprefix "${WINEZGUI_TEMPLATE}" 
 
 # Start WineZGUI when no argument is supplied
 if   [ $# -eq 0 ]; then
@@ -434,6 +384,6 @@ elif [ $# -gt 1 ]; then
 fi
 
 # Open exe function handles exe argument
-source ${DATADIR}/winezgui-open-exe 
+source ${DATADIR}/winezgui-open-exe
 WineZGUI_Open_Exe "${1}"
 
