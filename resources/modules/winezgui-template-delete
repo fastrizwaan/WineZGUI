@@ -5,7 +5,7 @@ WineZGUI_Template_Delete()
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-list-available-templates
   List_Available_Templates # get SELECTED_TEMPLATE
-
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   rm -rf "${SELECTED_TEMPLATE}" && \
   DBUG "I: ${HEADER}: Deleted ${SELECTED_TEMPLATE}"
   echo "${TEMPLATE} = ${SELECTED_TEMPLATE} "
@@ -25,8 +25,9 @@ WineZGUI_Template_Delete()
        export TEMPLATE
        export TEMPLATE_NAME
        export DEFAULT
-       sed "s|Template:.*|Template:${TEMPLATE_NAME}|g" -i "${ABOUTFILE}"
-       sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g" -i "${ABOUTFILE}"
+       sed "s|template:.*|template:${SELECTED_TEMPLATE}|g" -i "${SETTINGS_FILE}"
+       sed "s|Template:.*|Template:${TEMPLATE_NAME}|g"     -i "${ABOUTFILE}"
+       sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g"     -i "${ABOUTFILE}"
        
        # Initialize Default Template with win64 arch
        export WINEARCH=win64
@@ -34,4 +35,5 @@ WineZGUI_Template_Delete()
        WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
        
   fi
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH AFTER DELETION"
 }

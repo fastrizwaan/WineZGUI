@@ -320,7 +320,16 @@ WineZGUI_Window()
          WineZGUI_Quit
   fi
 
-  # After All options
+  # Update template and arch from Settings.yml
+  if [ -f "${SETTINGS_FILE}" ]; then
+     export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
+     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+     export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+     export TEMPLATE_NAME=$(basename ${TEMPLATE})
+  fi
+  
+  # After All options  
   WineZGUI_Window
 } # END of "Start WineZGUI window when no argument is supplied" section
 

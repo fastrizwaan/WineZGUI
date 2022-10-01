@@ -3,7 +3,8 @@ WineZGUI_Initialize_Wineprefix()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "INITIALIZE ARCH = $WINEARCH"
+ 
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
        DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
        # Create Prefix then delete host linked directories
