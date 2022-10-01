@@ -10,7 +10,7 @@
 WineZGUI_Create_Wzt_Info()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   # 1. Need full path to directory to create file in it
   if [ -z "${1}" ]; then
        echo "Must provide Prefix or Template Directory to process"

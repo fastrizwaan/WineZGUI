@@ -3,7 +3,7 @@
 # FIXME winezgui-configure
 WineZGUI_Template_Configure()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   CONFIGURE_OPTION=$(zenity --title "${APP_WITH_VER} - Configure Template"  \
                             --list   --hide-header                          \
@@ -21,7 +21,7 @@ WineZGUI_Template_Configure()
 
   # Exit if Cancel is clicked
   if [ -z "${CONFIGURE_OPTION}" ]; then
-       DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+      echo "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
        return 1
   fi
 
@@ -45,7 +45,7 @@ WineZGUI_Template_Configure()
           WineZGUI_Open_Shell
   elif [ "${CONFIGURE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
           source ${DATADIR}/winezgui-template-backup
-          WineZGUI_Template_Backup
+          WineZGUI_Template_Backup "${TEMPLATE}"
   else
        echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"
        exit 1

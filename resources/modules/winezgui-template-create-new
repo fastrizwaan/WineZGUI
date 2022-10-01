@@ -1,8 +1,7 @@
 WineZGUI_Template_Create_New()
 {
-  # Ask for Name
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset NEW_TEMPLATE
   NEW_TEMPLATE=$( zenity                                             \
                --title "${APP_WITH_VER} - Create Template"           \
@@ -48,7 +47,6 @@ WineZGUI_Template_Create_New()
               --text "Template Directory Already Exists!"
   fi
 
-
   # Create new Prefix Template
   source ${DATADIR}/winezgui-initialize-wineprefix
   WineZGUI_Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
@@ -65,8 +63,6 @@ WineZGUI_Template_Create_New()
        WineZGUI_Template_Change
   fi
   DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
-       
-  # Ask the sue to change template
-  #Templates "Change Template..."
+
   return 0
 }

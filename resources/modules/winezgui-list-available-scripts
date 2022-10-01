@@ -68,8 +68,8 @@ List_Available_Scripts()
  # 4. Find which file the user selected and set the selected exe into variable
  for i in "${NAMES[@]}"; do
      if [ "$i" = "\"$RESULT\"" ]; then
-          echo "Selected $i"
-          echo "File is ${FILES[${count}]}"
+          DBUG "I: ${FUNCNAME[0]}: Selected $i"
+          DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
           export SELECTED_SCRIPT="${FILES[${count}]}"
 
           break

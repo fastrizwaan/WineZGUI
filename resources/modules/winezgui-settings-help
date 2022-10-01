@@ -1,0 +1,26 @@
+# winezgui-settings-help
+WineZGUI_Settings_Help()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset HELP_TEXT
+  HELP_TEXT+="Winearch...: Set wine arch for new prefixes|"
+  HELP_TEXT+="Prefix Template...: Set default prefix template for new scripts|"
+  HELP_TEXT+="Launch Behavior...: Launch exe directly or show exe script window|"
+  HELP_TEXT+="Debug Messages...: Set On / Off Debug message in terminal!|"
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT}                         \
+          |tr "|" "\n"                              \
+          |sed "s/https:/https|/g"                  \
+          |sed -E "s/([0-9]):([0-9])/\1|\2/g"       \
+          |sed "s/:/;:;/g"                          \
+          |column -t -s ";"                         \
+          |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/"  \
+          |sed "s/|/:/g" )"
+  zenity --info --text "${TEXT}" --title "${APP_WITH_VER} - Settings!"
+  unset HELP_TEXT
+  unset TEXT
+  # Go back to Settings after showing help!
+  return 0
+}

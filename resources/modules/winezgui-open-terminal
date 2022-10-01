@@ -4,7 +4,7 @@
 # and gnome terminal is found on host
 WineZGUI_Open_Terminal()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
 
   if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
        [ $(flatpak-spawn  --host which gnome-terminal) ]; then

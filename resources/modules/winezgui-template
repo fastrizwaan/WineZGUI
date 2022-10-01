@@ -1,7 +1,7 @@
 WineZGUI_Template()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   unset TEMPLATE_OPTION
   TEMPLATE_OPTION=$(zenity                                 \
@@ -43,6 +43,9 @@ WineZGUI_Template()
   elif [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
           source ${DATADIR}/winezgui-template-backup
           WineZGUI_Template_Backup
+  elif [ "${TEMPLATE_OPTION}" = "Restore..." ]; then
+          source ${DATADIR}/winezgui-template-restore
+          WineZGUI_Template_Restore
   elif [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
           source ${DATADIR}/winezgui-template-delete
           WineZGUI_Template_Delete
@@ -51,7 +54,5 @@ WineZGUI_Template()
        exit 1
   fi
   
-  echo "I: ${HEADER}: WINEARCH=$WINEARCH after Template_option"  
-
   return 0
 } 

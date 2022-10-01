@@ -1,0 +1,40 @@
+# winezgui-settings-launch-behavior
+WineZGUI_Settings_Launch_Behavior()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-prefixes 
+  List_Available_Prefixes
+  
+  GET_LAUNCH_BEHAVIOR=$(zenity --title "${APP_WITH_VER}"   \
+                               --list   --hide-header      \
+                               --width=360 --height=240    \
+                               --radiolist --column " "    \
+                               --column "Action"           \
+                                      0 "Directly..."      \
+                                      0 "Script Window..." \
+                                --text   "Launch..."       )
+  
+  if [ -z "${GET_LAUNCH_BEHAVIOR}" ]; then
+       echo "Cancelled!"
+       return 1
+  fi
+  if [ "${GET_LAUNCH_BEHAVIOR}" = "Directly..." ]; then
+          
+        if [ -w "${SELECTED_PREFIX}" ]; then
+             echo "Yes" > "${SELECTED_PREFIX}/launch"
+             DBUG "I: ${HEADER}: launch file created!"
+        fi
+        DBUG "I: ${HEADER}: ${SELECTED_PREFIX} is set to launch directly"
+  else
+        if [ -f "${SELECTED_PREFIX}/launch" ]; then
+             DBUG "I: ${HEADER}: Removing Direct launch file"
+             rm "${SELECTED_PREFIX}/launch"
+        else
+             DBUG "I: ${HEADER}: launch file not found..."
+             DBUG "I: ${HEADER}: Already set to open script window"
+        fi
+  
+  fi
+  return 0
+}

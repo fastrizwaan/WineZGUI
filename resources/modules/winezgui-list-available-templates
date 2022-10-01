@@ -4,7 +4,7 @@
 # FIXME  List_Available_Templates
 List_Available_Templates()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   LATHEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset SELECTED_TEMPLATE
   unset COMMAND
@@ -100,8 +100,8 @@ List_Available_Templates()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "${RESULT}" ]; then
-           echo "I: ${LATHEADER}: Selected ${i}"
-           echo "I: ${LATHEADER}: Selected ${FILES[${count}]}"
+           DBUG "I: ${LATHEADER}: Selected ${i}"
+           DBUG "I: ${LATHEADER}: Selected ${FILES[${count}]}"
            export SELECTED_TEMPLATE="${FILES[${count}]}"
            export SELECTED_TEMPLATE_NAME="${i}"
            break

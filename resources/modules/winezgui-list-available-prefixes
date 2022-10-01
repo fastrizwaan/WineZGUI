@@ -3,7 +3,7 @@
 # and set the variable SELECTED_PREFIX
 List_Available_Prefixes()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset COMMAND
   unset count
   unset SHOW_OPTION
@@ -69,8 +69,8 @@ List_Available_Prefixes()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "$RESULT" ]; then
-           echo "Selected $i"
-           echo "File is ${FILES[${count}]}"
+           DBUG "I: ${FUNCNAME[0]}: Selected $i"
+           DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
            export SELECTED_PREFIX="${FILES[${count}]}"
            break
       fi

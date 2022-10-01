@@ -1,6 +1,6 @@
 WineZGUI_Open_Setup_Installer()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   OPEN_EXE_SETUP="$(zenity --file-filter="*.exe *.msi" \
                              --file-selection            \
                              --title="Select a File"     )"

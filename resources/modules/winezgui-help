@@ -1,7 +1,7 @@
 # winezgui-help
 WineZGUI_Help()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HELP_TEXT+="Open Exe...: Create Exe bottle for any Setup or any exe or msi file!|"
   HELP_TEXT+="Shortcuts... : Run installed Shortcuts for exe, directly!|"
   HELP_TEXT+="Launchers...: Launches main exe script for the prefix. Use it to configure.|"

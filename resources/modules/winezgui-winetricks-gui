@@ -1,7 +1,7 @@
 # winezgui-winetricks-gui
 WineZGUI_Winetricks_Gui()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   ${WINETRICKS} --gui
   # use this after winetricks fixes bug with arch=
   #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui

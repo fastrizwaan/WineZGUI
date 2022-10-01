@@ -14,7 +14,7 @@ export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 # Function Show help
 ShowHelp ()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "WineZGUI - Wine GUI using Zenity "
   echo "Usage:"
   echo "$(basename "${0}") <argument>"
@@ -68,6 +68,7 @@ fi
 
 # Only show debug message when DEBUG="Y" or DEBUG="anything"
 # Use unset DEBUG will stop messages.
+export DEBUG="Y"
 DBUG()
 {
      if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
@@ -120,7 +121,6 @@ if [ ! -d "${PREFIXES_DIR}" ]; then
      echo "I: ${HEADER}: Created: ${PREFIXES_DIR}"
 fi
 
-
 #  -- Handle Wine Arch... -- #
 # If Settings.yml exists and debug: is set to true
 # If Settings.yml exists, get arch value from it: win32 or win64
@@ -143,6 +143,8 @@ if [ ! -f "${SETTINGS_FILE}" ] && [ -w ${WINEZGUIDIR} ]; then
      echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
      export TEMPLATE="${WINEZGUI_TEMPLATE}"
      export TEMPLATE_NAME=$(basename ${TEMPLATE})
+     echo "debug:Y" >> "${SETTINGS_FILE}"
+     export DEBUG="Y"
 fi
 
 # If Settings.yml exists and arch: value do not match win32 or win64; use win64
@@ -320,15 +322,6 @@ WineZGUI_Window()
          WineZGUI_Quit
   fi
 
-  # Update template and arch from Settings.yml
-  if [ -f "${SETTINGS_FILE}" ]; then
-     export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
-     export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
-     export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
-     export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
-     export TEMPLATE_NAME=$(basename ${TEMPLATE})
-  fi
-  
   # After All options  
   WineZGUI_Window
 } # END of "Start WineZGUI window when no argument is supplied" section
