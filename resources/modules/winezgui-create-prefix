@@ -17,15 +17,13 @@ DBUG "I: Create Prefix: Starting WineZGUI Create Script ($0)"
 if [ -z "${1}" ]; then
      DBUG "I: Create Prefix: No Arguments... bye";
 fi
-
+unset WINEPREFIX # for WINEVER
 export APPNAME=WineZGUI
-export WINEVER="$(wine --version|cut -f1 -d " ")"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-
 export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
-
 export WINE_CMD="$(which wine)"
+export WINEVER="$(wine --version|cut -f1 -d " ")"
 export WTRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZGUIDIR}/tmp"
 export EXIFTOOL=$(which exiftool)
@@ -39,6 +37,26 @@ export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 
 export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
+
+DBUG "= = = = = = = = = = = = = = = = = = = 
+  export APPNAME=$APPNAME
+  export WINEVER=$WINEVER
+  export APPLICATIONSDIR=$APPLICATIONSDIR
+  export UPDATE_ICON=$UPDATE_ICON
+  export UPDATE_DESKTOP_DATABASE=$UPDATE_DESKTOP_DATABASE
+  export WINE_CMD=$WINE_CMD
+  export WTRICKS_CMD=$WTRICKS_CMD
+  export TEMPDIR=$TEMPDIR
+  export APPVERSION=$APPVERSION
+  export APP_WITH_VER=$APP_WITH_VER
+  export INSTALL_TYPE=$INSTALL_TYPE
+  export WINEZGUIDIR=$WINEZGUIDIR
+  export FLATPAK_NAME=$FLATPAK_NAME
+  export DATADIR=$DATADIR
+  WINEPREFIX=$WINEPREFIX
+  PREFIXES_DIR=$PREFIXES_DIR
+  PREFIXDIR=$PREFIXDIR
+  = = = = = = = = = = = = = = = = = = ="
 
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
@@ -55,12 +73,13 @@ fi
 export BKP_EXT="wzt"
 
 DBUG "I: Create Prefix: Checking if an exe file is provided"
-EXE_FILE=$(realpath -m "$1")
-EXE_NAME=$(basename "${EXE_FILE}")
-EXE_PATH=$(dirname  "${EXE_FILE}")
-EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
-EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
-EXE_EXT="${EXE_FILE##*.}"
+
+export EXE_FILE=$(realpath -m "$1")
+export EXE_NAME=$(basename "${EXE_FILE}")
+export EXE_PATH=$(dirname  "${EXE_FILE}")
+export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
+export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+export EXE_EXT="${EXE_FILE##*.}"
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
 export PREFIXDIR="${PREFIXES_DIR}/${EXE_LESS}"
 export PREFIXNAME="${EXE_LESS}"

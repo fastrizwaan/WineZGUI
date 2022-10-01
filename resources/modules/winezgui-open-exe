@@ -12,7 +12,7 @@ WineZGUI_Open_Exe()
        F="*.exe *.msi"
        T="Select a File"
        EXE_FILE="$(zenity --file-filter="${F}" --title="${T}" --file-selection)"
-         # If no exe is selected
+       # If no exe is selected
        if [ -z "${EXE_FILE}" ];  then
             DBUG "I: ${HEADER}: Cancelled!"
             return 1
@@ -44,19 +44,37 @@ WineZGUI_Open_Exe()
   
   DBUG "I: ${HEADER}: File is ${EXE_FILE}"
   # Create required variables using EXE_FILE
-  EXE_FILE=$(realpath -m "${EXE_FILE}")
-  EXE_NAME=$(basename    "${EXE_FILE}")
-  EXE_PATH=$(dirname     "${EXE_FILE}")
-  EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_")
-  EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
-  EXE_EXT="${EXE_FILE##*.}"
+  export EXE_FILE=$(realpath -m "${EXE_FILE}")
+  export EXE_NAME=$(basename    "${EXE_FILE}")
+  export EXE_PATH=$(dirname     "${EXE_FILE}")
+  export EXE_NOSP=$(echo "${EXE_NAME}"|tr " " "_")
+  export EXE_LESS=$(echo "${EXE_NOSP}"|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+  export EXE_EXT="${EXE_FILE##*.}"
   
+  
+  DBUG "= = = = = = = = = = = = = = = = = = = 
+  export EXE_FILE=$EXE_FILE
+  export EXE_NAME=$EXE_NAME
+  export EXE_PATH=$EXE_PATH
+  export EXE_NOSP=$EXE_NOSP
+  export EXE_LESS=$EXE_LESS
+  export EXE_EXT=$EXE_EXT
+  "
+
   # Create temporary variables for this function
-  WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
+  export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
   SCRIPT_NAME="${EXE_LESS}.sh"
   SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
+
+  DBUG "= = = = = = = = = = = = = = = = = = = 
+  export WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR
+  export SCRIPT_NAME=$SCRIPT_NAME
+  export SCRIPT_FILE_TO_RUN=$SCRIPT_FILE_TO_RUN
+  export WINEZGUI_CREATE_PREFIX=$WINEZGUI_CREATE_PREFIX
+  ---------------------------------------------"
   DBUG "I: ${HEADER}: Checking whether ${SCRIPT_FILE_TO_RUN} exists."
+  
   # If existing prefix exists for the exe
   if [ -f  "${SCRIPT_FILE_TO_RUN}" ]; then
        DBUG "I: ${HEADER}: found Script ${SCRIPT_NAME}! Launching..."
@@ -65,13 +83,20 @@ WineZGUI_Open_Exe()
   else # Create prefix and script for the exe
        DBUG "I: ${HEADER}: Creating Prefix for ${EXE_NAME}"
        ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
+       echo "${WINEZGUI_CREATE_PREFIX} ${EXE_FILE}"
        # Launch after creating new prefix
        DBUG "I: ${HEADER}: Created Script: ${SCRIPT_FILE_TO_RUN}"
-       DBUG "I: ${HEADER}: Launching ${SCRIPT_NAME}"
-       "${SCRIPT_FILE_TO_RUN}"
+       
+       if [ -f  "${SCRIPT_FILE_TO_RUN}" ]; then
+            DBUG "I: ${HEADER}: Launching ${SCRIPT_NAME}"
+            "${SCRIPT_FILE_TO_RUN}"
+       else
+            echo "E: ${HEADER}: ${SCRIPT_NAME} not found!"
+       fi
   fi
   unset WINEPREFIX_SUBDIR
   unset SCRIPT_NAME
   unset SCRIPT_FILE_TO_RUN
+
   return 0
 }
