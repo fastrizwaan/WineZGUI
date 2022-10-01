@@ -249,12 +249,14 @@ Script_Backup_Bundle()
         DBUG "I: Script: Backup: Bundle: Exe File: ${GAME_EXE_FILE}"
 
         # 7.3 Change EXE path and name in the script and txt file
-        sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;"  -i ${PREFIXDIR}/*.txt   \
-                                                    -i ${PREFIXDIR}/*.sh && \
+        sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                                   -i ${PREFIXDIR}/*.sh        \
+                                                   -i ${PREFIXDIR}/Info.yml && \
         DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
 
-        sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;"  -i ${PREFIXDIR}/*.txt   \
-                                                    -i ${PREFIXDIR}/*.sh && \
+        sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                                   -i ${PREFIXDIR}/*.sh        \
+                                                   -i ${PREFIXDIR}/Info.yml && \
         DBUG "I: Script: Backup: Bundle: Exe File Changed To: ${GAME_EXE_FILE}"
 
         # 7.4 Preprocess
@@ -360,13 +362,15 @@ Script_Backup_Bundle()
     # revert EXE_FILE and EXE_PATH for the gamedir which is outside prefixdir
     if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
         sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
-              -i ${PREFIXDIR}/*.txt   \
-              -i ${PREFIXDIR}/*.sh && \
+              -i ${PREFIXDIR}/*.txt       \
+              -i ${PREFIXDIR}/*.sh        \
+              -i ${PREFIXDIR}/Info.yml && \
             DBUG "I: Script: Backup: Bundle: Reverted Exe Path to: ${EXE_PATH}"
 
         sed "s|${GAME_EXE_FILE}|${EXE_FILE}|g; t;"  \
-              -i ${PREFIXDIR}/*.txt   \
-              -i ${PREFIXDIR}/*.sh && \
+              -i ${PREFIXDIR}/*.txt       \
+              -i ${PREFIXDIR}/*.sh        \
+              -i ${PREFIXDIR}/Info.yml && \
             DBUG "I: Script: Backup: Bundle: Reverted Exe File to: ${EXE_FILE}"
     fi
 

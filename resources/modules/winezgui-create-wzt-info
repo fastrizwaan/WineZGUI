@@ -43,6 +43,7 @@ WineZGUI_Create_Wzt_Info()
   echo "Created:${DATE}"                 |tee -a "${WZT_FILE}"
   echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_FILE}"
   echo "Wine:${WINEVER}"                 |tee -a "${WZT_FILE}"
+  echo "Arch:${WINEARCH}"                |tee -a "${WZT_FILE}"
   echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_FILE}"
   echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_FILE}"
   # 3.1 Include flatpak id in wzt-info.yml
