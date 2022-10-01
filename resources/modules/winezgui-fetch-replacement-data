@@ -23,7 +23,12 @@ WineZGUI_Fetch_Replacement_Data()
         SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
   else  SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
         REPLACE=("XOCONFIGXO")
-
+  
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH=("export INSTALL_TYPE=flatpak")
+  else  SEARCH=("export INSTALL_TYPE=system"); fi
+        REPLACE=("XOINSTALLTYPEXO")
+  
   # B. *.desktop and *.sh files
   # 3. Change Prefix directory
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
