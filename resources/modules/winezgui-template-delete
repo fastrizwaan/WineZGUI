@@ -19,18 +19,17 @@ WineZGUI_Template_Delete()
 
                  
        DBUG "I: ${HEADER}: Resetting Template to ${WINEZGUI_TEMPLATE}"
-       TEMPLATE="${WINEZGUI_TEMPLATE}"
-       TEMPLATE_NAME=$(basename "${TEMPLATE}")
-       DEFAULT="${WINEZGUI_TEMPLATE}"
-       export TEMPLATE
-       export TEMPLATE_NAME
-       export DEFAULT
+       export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+       export TEMPLATE="${WINEZGUI_TEMPLATE}"
+       export TEMPLATE_NAME=$(basename "${TEMPLATE}")
+       export DEFAULT="${WINEZGUI_TEMPLATE}"
+
        sed "s|template:.*|template:${SELECTED_TEMPLATE}|g" -i "${SETTINGS_FILE}"
        sed "s|Template:.*|Template:${TEMPLATE_NAME}|g"     -i "${ABOUTFILE}"
        sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g"     -i "${ABOUTFILE}"
        
        # Initialize Default Template with win64 arch
-       export WINEARCH=win64
+       
        source ${DATADIR}/winezgui-initialize-wineprefix
        WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
        
