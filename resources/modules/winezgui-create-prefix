@@ -4,12 +4,9 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # Creates Application shortcut when called from winezgui.
 # ============================================================================ #
-DBUG()
-{ 
-     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
-          echo "${1}"
-     fi
-}
+
+# Load file with DBUG function
+source ${DATADIR}/winezgui-dbug 
 
 DBUG "I: Create Prefix: Starting WineZGUI Create Script ($0)"
 
@@ -17,7 +14,7 @@ DBUG "I: Create Prefix: Starting WineZGUI Create Script ($0)"
 if [ -z "${1}" ]; then
      DBUG "I: Create Prefix: No Arguments... bye";
 fi
-unset WINEPREFIX # for WINEVER
+#unset WINEPREFIX # for WINEVER
 export APPNAME=WineZGUI
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
@@ -286,13 +283,8 @@ fi
 # Append rest
 echo '
 
-
-DBUG()
-{ 
-  if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
-       echo "${1}"
-  fi
-}
+# Load file with DBUG function
+source ${DATADIR}/winezgui-dbug 
 
 # If Settings.yml exists, get arch value from it: win32 or win64
 if [ -f "${SETTINGS_FILE}" ]; then
@@ -302,8 +294,7 @@ fi
 # LD_LIBRARY_PATH
 # If empty LD_LIBRARY_PATH, add lib paths
 if [ -z "${LD_LIBRARY_PATH}" ]; then
-     LD_LIBRARY_PATH+="/lib:/lib32:/lib64"
-fi
+LD_LIBRARY_PATH+="/lib:/lib32:/lib64"; fi
 LD_LIBRARY_PATH+="${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64:"
 LD_LIBRARY_PATH+="/app/lib/i386-linux-gnu:/app/lib/wine:"
 LD_LIBRARY_PATH+="/app/lib64/wine:"
@@ -386,15 +377,11 @@ Script_Window ()
                      --text   "Select action for <b>${EXE_NAME}</b>..." )
 
   # Exit if Cancel is clicked
-  if [ -z "${SELECTION}" ]; then
-       DBUG "I: Script: Cancel Selected. Bye!"
-       exit 0
-  fi
-  
-  # Show What is selected     
-  DBUG "I: ${SELECTION} Selected!"
- 
-  if   [ "${SELECTION}" = "Launch..." ]; then
+  if   [ -z "${SELECTION}" ]; then
+         echo "I: Script: Cancel Selected. Bye!"
+         exit 0
+         
+  elif [ "${SELECTION}" = "Launch..." ]; then
          source ${WINEZGUI_SCRIPTS}/script-launch 
          Script_Launch
 
@@ -446,8 +433,9 @@ Script_Window ()
          source ${DATADIR}/script-quit 
          Script_Quit
   fi
-  # After All options 
-  Script_Window
+
+  DBUG "I: Script: ${SELECTION} Selected!" # Show What is selected
+  Script_Window # After All options 
 }
 
 # Change Prefix on changing EXE

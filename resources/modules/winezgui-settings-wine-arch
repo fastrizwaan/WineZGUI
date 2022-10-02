@@ -2,7 +2,7 @@
 Winezgui_Settings_Wine_Arch()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CURRENT_ARCH=${WINEARCH}
   WINEARCH_OPTION=$(zenity --title "${APP_WITH_VER}"    \
                               --list   --hide-header    \

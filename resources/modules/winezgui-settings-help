@@ -2,7 +2,7 @@
 WineZGUI_Settings_Help()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset HELP_TEXT
   HELP_TEXT+="Wine Arch...       : Set wine arch for new prefixes|"
   HELP_TEXT+="Prefix Template...: Set default prefix template for new scripts|"

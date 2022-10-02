@@ -2,7 +2,7 @@
 WineZGUI_Template_Restore()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
   # Ask user to select the .wzt backup file to restore
   TAR_FILE="$(zenity --file-filter="*.zst *.gz *.bz2"      \

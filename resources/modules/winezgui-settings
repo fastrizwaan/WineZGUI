@@ -1,7 +1,7 @@
 WineZGUI_Settings()
  {
    HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-   echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
    export TEMPLATE_NAME=$(basename ${TEMPLATE})
    unset TEXT

@@ -5,7 +5,7 @@
 List_Available_Templates()
 {
   OLD_HEADER=${HEADER}
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset SELECTED_TEMPLATE
   unset TEMPLATES_FOUND

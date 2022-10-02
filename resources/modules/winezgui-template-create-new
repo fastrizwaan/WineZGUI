@@ -1,7 +1,7 @@
 WineZGUI_Template_Create_New()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset NEW_TEMPLATE
   NEW_TEMPLATE=$( zenity                                             \
                --title "${APP_WITH_VER} - Create Template"           \

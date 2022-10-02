@@ -2,7 +2,7 @@
 WineZGUI_Check_File_Type()
 {
   if [ -z "${1}" ]; then
-       echo "I: ${HEADER}: No file given"
+       DBUG "I: ${HEADER}: No files given"
        return 1
   fi
   OLD_HEADER="${HEADER}"

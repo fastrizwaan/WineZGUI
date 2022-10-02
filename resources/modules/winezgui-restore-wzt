@@ -17,7 +17,7 @@
 Restore_Wzt_File()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
 

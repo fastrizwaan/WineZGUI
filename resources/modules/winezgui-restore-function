@@ -1,7 +1,7 @@
 WineZGUI_Restore_Function()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
         echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
         return 1

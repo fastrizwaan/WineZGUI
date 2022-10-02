@@ -4,51 +4,59 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
-HEADER="$(basename ${0})"
-echo "I: $(basename ${0}): Launched!"
-export APPNAME=WineZGUI
-export APPVERSION="git"
-export APP_WITH_VER="${APPNAME}-${APPVERSION}"
-
-# HANDLE CLI ARGUMENT
-# Function Show help
-ShowHelp ()
-{
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "WineZGUI - Wine GUI using Zenity "
-  echo "Usage:"
-  echo "$(basename "${0}") <argument>"
-  echo ""
-  echo "Argument:"
-  echo "exe/msi file      Creates prefix for the given exe file, else launch"
-  echo "wzt file          Restore a backed up prefix or bundle file (.wzt)"
-  echo "Options:"
-  echo "-v, --version     WinzeGUI version"
-  echo "-h, --help        Shows this help!"
-  echo ""
-  echo "Examples:"
-  echo "$(basename "${0}") setup.exe"
-  echo "$(basename "${0}") putty_installer.msi"
-  echo "$(basename "${0}") Notepadd.wzt"
-
-}
-
-# parse command line arguments
-# HANDLE CLI ARGUMENT
-for i in "$@"
-do
-case $i in
-    -v|--version)
-    echo "${APPVERSION}"
-    exit
-    ;;
-    -h|--help)
-    ShowHelp
-    exit
-    ;;
-esac
-done
-
+export AUTHOR="Mohammed Asif Ali Rizvan"
+export EMAIL="fast.rizwaan@gmail.com"
+export COPYRIGHT="GNU General Public License (GPLv3+)"
+export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
+# Variables
+export PROCESSNAME="$0"
+export HEADER="$(basename ${0})" # for Terminal Messages
+# These values will be assigned by Setup using sed command
+export APPNAME=WineZGUI   # Application Name
+export APPVERSION="git"   # Number from Version.txt
+export APP_WITH_VER="${APPNAME}-${APPVERSION}" # Example: WineZGUI-0.88
+export DATADIR=/usr/share/winezgui # scripts & data dir; /usr changes to prefix
+export INSTALL_TYPE=system         # system or flatpak
+export WINEZGUIDIR=$(realpath -m ~/.local/share/winezgui) # Local directory in ~
+export FLATPAK_NAME="io.github.fastrizwaan.WineZGUI" # Flatpak name set by setup
+#/These values will be changed  by Setup using sed command
+export SETTINGS_FILE="${WINEZGUIDIR}/Settings.yml" # Settings file 
+export TEMPLATES_DIR="${WINEZGUIDIR}/Templates"    # Prefix Templates Directory
+export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"      # Scripts Prefixes Directory
+# Commands used by WineZGUI and Scripts
+export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
+export UPDATE_DESKTOP_DATABASE="update-desktop-database"
+export WINEVER=$(wine --version|cut -f1 -d " ")
+export WBOOT_CMD="$(which wineboot) -i"
+# LD_LIBRARY_PATH
+if [ -z "${LD_LIBRARY_PATH}" ]; then
+LD_LIBRARY_PATH+="/lib:/lib32:/lib64"; fi
+LD_LIBRARY_PATH+="${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64:"
+LD_LIBRARY_PATH+="/app/lib/i386-linux-gnu:/app/lib/wine:"
+LD_LIBRARY_PATH+="/app/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib/x86_64-linux-gnu/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine:"
+LD_LIBRARY_PATH+="/usr/lib/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine:"
+LD_LIBRARY_PATH+="/usr/lib64/wine/wine:"
+LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
+LD_LIBRARY_PATH+="$(pwd)"
+export LD_LIBRARY_PATH
+export PATH=${PATH}:$(pwd)
+export ARGV="$@"
+export WINE_CMD="$(which wine)"
+export WINETRICKS="$(which winetricks)"
+export INFOFILE="${PREFIXDIR}/Info.yml"
+export ABOUTFILE="${WINEZGUIDIR}/About.yml"
+export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+# Shortcuts directory for winezgui scripts symbolic links
+if [ "${INSTALL_TYPE}" = "system" ]; then 
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+else 
+     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+fi
+export DESKTOPDIR
+export BKP_EXT="wzt" # winezgui backup file extension
 
 # If prefix=nothing then install to /usr
 if [ -z "${INSTALL_PREFIX}" ]; then
@@ -64,94 +72,12 @@ if [ "${FLATPAK}" = "true" ]; then
      INSTALL_TYPE=\"flatpak\"
 fi
 
-# set -x
 
-# Only show debug message when DEBUG="Y" or DEBUG="anything"
-# Use unset DEBUG will stop messages.
-export DEBUG="Y"
-DBUG()
-{
-     if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
-          echo "${1}"
-     fi
-}
-
-# Variables
-# These values will be assigned by Setup using sed command
-# Post install ${PREFIX}/bin/winezgui file will be different
-export DATADIR=/usr/share/winezgui # /usr will be replaced by prefix
-export INSTALL_TYPE=system
-export WINEZGUIDIR=$(realpath -m ~/.local/share/winezgui)
-
-export FLATPAK_NAME="io.github.fastrizwaan.WineZGUI"
-#/These values will be changed  by Setup using sed command
-
-# We prefer arch to win64 as wine uses wow64
-export SETTINGS_FILE="${WINEZGUIDIR}/Settings.yml"
-export TEMPLATES_DIR="${WINEZGUIDIR}/Templates"
-export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
-
-export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
-export UPDATE_DESKTOP_DATABASE="update-desktop-database"
-
-export AUTHOR="Mohammed Asif Ali Rizvan"
-export EMAIL="fast.rizwaan@gmail.com"
-export COPYRIGHT="GNU General Public License (GPLv3)"
-export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
-export PROCESSNAME="$0"
-export WINEVER=$(wine --version|cut -f1 -d " ")
-export WBOOT_CMD="$(which wineboot) -i"
-
-# LD_LIBRARY_PATH
-if [ -z "${LD_LIBRARY_PATH}" ]; then
-     LD_LIBRARY_PATH+="/lib:/lib32:/lib64"
-fi
-LD_LIBRARY_PATH+="${LD_LIBRARY_PATH}:/app/lib:/app/lib32:/app/lib64:"
-LD_LIBRARY_PATH+="/app/lib/i386-linux-gnu:/app/lib/wine:"
-LD_LIBRARY_PATH+="/app/lib64/wine:"
-LD_LIBRARY_PATH+="/usr/lib/x86_64-linux-gnu/wine:"
-LD_LIBRARY_PATH+="/usr/lib/wine:"
-LD_LIBRARY_PATH+="/usr/lib/wine/wine:"
-LD_LIBRARY_PATH+="/usr/lib64/wine:"
-LD_LIBRARY_PATH+="/usr/lib64/wine/wine:"
-LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
-LD_LIBRARY_PATH+="$(pwd)"
-export LD_LIBRARY_PATH
-
-export PATH=${PATH}:$(pwd)
-export ARGV="$@"
-export WINEPREFIX="${DEFAULT}"
-export WINE_CMD="$(which wine)"
-export WINETRICKS="$(which winetricks)"
-
-export INFOFILE="${PREFIXDIR}/Info.yml"
-export ABOUTFILE="${WINEZGUIDIR}/About.yml"
-
-export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-
-# Where to install .desktop shortcuts?
-# for system install (./setup -i) use ~/.local/share/applications/winezgui
-if [ "${INSTALL_TYPE}" = "system" ]; then
-     export DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-else # for flatpak create subdirectory with flatpakname
-     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
-     export DESKTOPDIR
-fi
-
-# winezgui backup file extension
-export BKP_EXT="wzt"
-
-
-
-
-# Main WineZGUI application window function
-WineZGUI_Window()
+WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
-  SELECTION=$(zenity --list --hide-header                      \
-                     --title "${APP_WITH_VER}"                 \
-                     --width=360 --height=440                  \
-                     --radiolist --column " "                  \
+  SELECTION=$(zenity --list --hide-header --title "${APP_WITH_VER}"    \
+                     --width=360 --height=440 --radiolist --column " " \
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \
                             0 "Launch..."                      \
@@ -168,16 +94,11 @@ WineZGUI_Window()
                             0 "Quit..."                        \
                        --text "<b>Wine GUI using Zenity...</b>")
 
-  # Exit if Cancel is clicked
-  if [ -z "${SELECTION}" ]; then
-       DBUG "I: ${HEADER}: Cancel Selected. Bye!"
-       exit 0
-  fi
-
-  # Show What is selected
-  DBUG "I: ${HEADER}: ${SELECTION} Selected!"
-
-  if   [ "${SELECTION}" = "Open Exe..." ]; then
+ if    [ -z "${SELECTION}" ]; then # Exit if Cancel is clicked
+         echo "I: ${HEADER}: Cancel Selected. Bye!"
+         exit 0
+         
+ elif  [ "${SELECTION}" = "Open Exe..." ]; then
          source ${DATADIR}/winezgui-open-exe
          WineZGUI_Open_Exe
 
@@ -230,20 +151,22 @@ WineZGUI_Window()
          WineZGUI_Quit
   fi
 
-  # After All options  
-  WineZGUI_Window
-} # END of "Start WineZGUI window when no argument is supplied" section
+  DBUG "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
+  WineZGUI_Window  # After All options
+} 
 
 #------------------------------- Startup -----------------------------#
+# Load file with DBUG function
+source ${DATADIR}/winezgui-dbug 
+
+source ${DATADIR}/winezgui-cli-arguments
+WineZGUI_Cli_Arguments
+
 source ${DATADIR}/winezgui-startup-checks
 WineZGUI_Startup_Checks
 
 source ${DATADIR}/winezgui-check-file-type
 WineZGUI_Check_File_Type "${1}"
 
-# # Open exe function handles exe argument
-# source ${DATADIR}/winezgui-open-exe
-# WineZGUI_Open_Exe "${1}"
-
-DBUG "I: ${HEADER}: Launching WineZGUI"
+DBUG "I: ${HEADER}: Launching ${APPNAME}"
 WineZGUI_Window

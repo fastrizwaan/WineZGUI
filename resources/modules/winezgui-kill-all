@@ -1,6 +1,6 @@
 WineZGUI_Kill_All()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   DBUG "I: Kill all: exiting ${APPNAME}!"
   # for killing all wine instance from flaptak sandbox
   if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then

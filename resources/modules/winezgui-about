@@ -1,6 +1,6 @@
 WineZGUI_About()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   # Update version in About
   sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
   

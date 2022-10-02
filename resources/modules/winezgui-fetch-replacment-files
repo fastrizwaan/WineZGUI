@@ -2,7 +2,7 @@
 WineZGUI_Fetch_Replacement_Files()
 { 
   DEBUG="y"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
         echo "Must provide Prefix or Template Directory to process"
         return 1

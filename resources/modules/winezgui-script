@@ -1,6 +1,6 @@
 WineZGUI_Script()
 {
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   export SHOW_SCRIPT_FILE="True"
   source ${DATADIR}/winezgui-list-available-prefix-scripts 
   List_Available_Prefix_Scripts

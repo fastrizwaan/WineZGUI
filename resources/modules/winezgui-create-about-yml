@@ -6,7 +6,7 @@ WineZGUI_Create_About_Yml()
   echo ":---------------------------:"
   OLD_HEADER=${HEADER}
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then
        echo "Application:${APPNAME}"        >  "${ABOUTFILE}"
        echo "Version:${APPVERSION}"         >> "${ABOUTFILE}"

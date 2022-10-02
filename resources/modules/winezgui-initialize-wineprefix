@@ -2,7 +2,7 @@
 WineZGUI_Initialize_Wineprefix()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then

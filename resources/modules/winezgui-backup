@@ -1,6 +1,6 @@
 WineZGUI_Backup()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-backup-restore-function 
   source ${DATADIR}/winezgui-list-available-prefixes 
   List_Available_Prefixes

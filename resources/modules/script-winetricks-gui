@@ -1,7 +1,7 @@
 Script_Winetricks_Gui()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   ${WTRICKS_CMD} --gui
   # use this after winetricks fixes bug with arch=
   #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui

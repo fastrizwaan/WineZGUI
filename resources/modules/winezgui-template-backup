@@ -2,7 +2,7 @@
 WineZGUI_Template_Backup()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # 1.0 If No Template name is given, ask for template to backup
   if [ -z "${1}" ]; then

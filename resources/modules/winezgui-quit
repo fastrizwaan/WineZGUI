@@ -1,6 +1,6 @@
 WineZGUI_Quit()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+ DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: Bye! :-)"
   exit 0
 }

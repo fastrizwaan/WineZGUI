@@ -1,7 +1,7 @@
 # winezgui-shortcuts-clean-up
 WineZGUI_Shortcuts_Clean_Up()
 {
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
   SEARCH_LIST=$(find ${DESKTOPDIR} -maxdepth 1 -xtype l 2>/dev/null \

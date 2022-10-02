@@ -1,7 +1,7 @@
 WineZGUI_Template_Change()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-list-available-templates
   List_Available_Templates # get SELECTED_TEMPLATE 
   
