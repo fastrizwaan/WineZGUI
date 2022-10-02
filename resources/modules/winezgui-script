@@ -1,11 +1,14 @@
 WineZGUI_Script()
 {
- echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-list-available-prefixes 
-  List_Available_Prefixes
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  export SHOW_SCRIPT_FILE="True"
+  source ${DATADIR}/winezgui-list-available-prefix-scripts 
+  List_Available_Prefix_Scripts
 
   # Launch the script
-  SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+  SCRIPT_NAME="$(echo ${SELECTED_SCRIPT}|grep -E "PROGNAME=")"
+  echo "SELECTED_SCRIPT = $SELECTED_SCRIPT"
   export LAUNCH="False"
-  ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh
+  
+  ${SELECTED_SCRIPT}
 }

@@ -1,7 +1,7 @@
 # winezgui-list-available-scripts
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_SCRIPT
-List_Available_Scripts()
+List_Available_Launch_Scripts()
 {
  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  unset COMMAND
@@ -12,6 +12,7 @@ List_Available_Scripts()
  unset RESULT
  unset search_list
 
+ SAVEIFS=${IFS}
  IFS=$(echo -en "\n\b")
 
  count=0
@@ -51,17 +52,26 @@ List_Available_Scripts()
  done
  IFS=${SAVEIFS}
 
-# 3. Show the found exe files using zenity
+ # 3. Show the found exe files using zenity
  unset COMMAND
  COMMAND+="zenity --title=\"${APP_WITH_VER} - Launch!\" "
  COMMAND+="--text \"Select Shortcut...\" --radiolist --list "
  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
  RESULT="$(eval ${COMMAND})"
 
- if [ -z "${RESULT}" ]; then
-      DBUG "I: ${FUNCNAME[0]}... Cancelled!"
-      WineZGUI_Window
- fi
+  ANSWER=$?
+  echo "ANSWER = .... $ANSWER"
+  if [ ${ANSWER} -eq 1 ]; then
+       echo "ANSWER IS 1 ... Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
+       WineZGUI_Window
+  fi
+  
+  if [ -z "${RESULT}" ]; then
+       echo "Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
+       WineZGUI_Window
+  fi
 
  count=0
 

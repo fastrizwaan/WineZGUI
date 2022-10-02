@@ -1,33 +1,49 @@
-# winezgui-list-available-templates
+# winezgui-list-available-prefixes
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_PREFIX
+# FIXME  List_Available_Prefixes
 List_Available_Prefixes()
 {
+  OLD_HEADER=${HEADER}
   echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  unset COMMAND count SHOW_OPTION NAMES FILES RESULT SEARCH_LIST
-  
-  SAVEIFS=${IFS}
-  IFS=$(echo -en "\n\b")
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset SELECTED_PREFIX
+  unset PREFIXES_FOUND
+  unset COMMAND
+  unset count
+  unset SHOW_OPTION
+  unset NAMES
+  unset FILES
+  unset RESULT
+  unset SEARCH_LIST
+  unset RealFile
+  unset RealName
+  unset i
 
   count=0
   NAMES=()
   FILES=()
-  # Find all exe files in drive_c Exclude windows directory,
-  # and common exe files present in Program Files directory
-  # Add those files to FILES array and filenames to NAMES array
-
-  SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print \
-                2>/dev/null| tr '\n' '|')
-
+  
+ SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null \
+              | tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
+ echo "
+   SEARCH_LIST $SEARCH_LIST
+   PREFIXES_FOUND $PREFIXES_FOUND
+  "
   if [ -z "${PREFIXES_FOUND}" ] ; then
-       zenity --error --title "${APP_WITH_VER} - Prefix!" \
-              --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
+       zenity --error --title "${PROGNAME} - no prefixes found!" \
+              --text "Sorry, no prefixes found in Prefixes directory"
+              echo SELECTED_PREFIX
+       unset SEARCH_LIST PREFIXES_FOUND
+       IFS=${SAVEIFS}
        WineZGUI_Window
   fi
   # if PREFIXES_FOUND has value, then only change exe
-  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort)
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
   do
       RealName=$(basename "$i")
       RealFile=$(realpath -m "$i")
@@ -51,25 +67,47 @@ List_Available_Prefixes()
  # 3. Show the found exe files using zenity
   unset COMMAND
   COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
-  COMMAND+="--text \"Select Prefix...\" --radiolist --list "
+  COMMAND+="--text \"${PREFIX_TYPE} Prefixes\" --radiolist --list "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
   RESULT=$(eval ${COMMAND})
-
+  
+  ANSWER=$?
+  echo "ANSWER = .... $ANSWER"
+  if [ ${ANSWER} -eq 1 ]; then
+       echo "ANSWER IS 1 ... Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
+       WineZGUI_Window
+  fi
+  
   if [ -z "${RESULT}" ]; then
-       DBUG "I: ${FUNCNAME[0]}... Cancelled!"
+       echo "Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
        WineZGUI_Window
   fi
 
   count=0
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
-      if [ "$i" = "$RESULT" ]; then
-           DBUG "I: ${FUNCNAME[0]}: Selected $i"
-           DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
+      if [ "$i" = "${RESULT}" ]; then
+           DBUG "I: ${HEADER}: Selected ${i}"
+           DBUG "I: ${HEADER}: Selected ${FILES[${count}]}"
            export SELECTED_PREFIX="${FILES[${count}]}"
+           export SELECTED_PREFIX_NAME="${i}"
            break
       fi
       count=$(expr ${count} + 1)
   done
-
+  echo "
+  SELECTED_PREFIX $SELECTED_PREFIX
+  PREFIXES_FOUND $PREFIXES_FOUND
+  COMMAND $COMMAND
+  SHOW_OPTION $SHOWOPTION
+  NAMES $NAMES
+  FILES $FILES
+  RESULT $RESULT
+  SEARCH_LIST $SEARCH_LIST
+  RealFile $RealFile
+  RealName $RealName
+  "
+  HEADER=${OLD_HEADER}
 }
