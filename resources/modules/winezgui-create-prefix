@@ -559,10 +559,10 @@ elif [ "$1" = "backup" ]; then
        exit 0;
 elif [ "$1" = "shortcut" ]; then
        source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
-       SCRIPT_GET_SELECTED_EXE
+       Script_Get_Selected_Exe
        # Just launching the selected exe, create desktop file and run this
        source ${WINEZGUI_SCRIPTS}/script-create-other-shortcuts 
-       SCRIPT_CREATE_OTHER_SHORTCUTS
+       Script_Create_Other_Shortcuts
        echo "${SHORTCUT_NEW_EXE}"
        exit 0;
 elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \

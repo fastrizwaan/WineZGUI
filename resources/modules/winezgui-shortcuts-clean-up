@@ -1,0 +1,53 @@
+# winezgui-shortcuts-clean-up
+WineZGUI_Shortcuts_Clean_Up()
+{
+  echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${DESKTOPDIR} -maxdepth 1 -xtype l 2>/dev/null \
+               | tr '\n' '|')
+
+ echo "SEARCH_LIST = ${SEARCH_LIST}"
+ BROKEN_LINKS_FOUND=$(echo ${SEARCH_LIST})
+ DESKTOPDIR_NAME=$(basename ${DESKTOPDIR})
+  if [ -z "${BROKEN_LINKS_FOUND}" ] ; then
+       zenity --error --title "${APP_WITH_VER} - Clean Up!" \
+              --text "${DESKTOPDIR_NAME} directory has no broken symlinks."
+       WineZGUI_Window
+  fi
+  # if BROKEN_LINKS_FOUND has value, then only change exe
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort)
+  do
+      RealName=$(basename "$i")
+      RealFile=$(realpath -m "$i")
+
+      SHOW_OPTION+="\"${RealName}\""
+      SHOW_OPTION+=" "
+      NAMES+=("${RealName}")
+      FILES+=("${RealFile}")
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+
+ # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="zenity --title=\"${APP_WITH_VER} - Clean Up!\" "
+  COMMAND+="--text=\"Remove these Broken Shortcuts...\" --list "
+  COMMAND+="--hide-header --column \" \" --column \" \" ${SHOW_OPTION}"
+  RESULT=$(eval ${COMMAND})
+  
+  ANSWER=$?
+  if [ -z "${RESULT}" ]; then
+       DBUG "I: ${FUNCNAME[0]}... Cancelled!"
+       WineZGUI_Window
+  fi
+  
+  if [ ${ANSWER} -eq 0 ]; then
+       echo "I: ${HEADER}: Deleted Broken Shortcuts!"
+       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete 2>/dev/null
+  fi
+  DBUG "I: Clean: Removed broken WineZGUI .desktop links"
+  ${UPDATE_ICON}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+}

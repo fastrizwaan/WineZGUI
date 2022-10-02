@@ -1,16 +1,14 @@
-# source ${DATADIR}/winezgui-restore-shortcuts 
+# source ${DATADIR}/winezgui-shortcuts-delete 
 
-Restore_Shortcuts()
+Winezgui_Shortcuts_Delete()
 {
- unset COMMAND RealName RealFile
+ unset COMMAND
  unset count
  unset SHOW_OPTION
  unset NAMES
  unset FILES
  unset SELECTED_OPTION
  unset search_list
- unset SELECTED_OPTION
- unset SELECTED_SHORTCUT
 
  IFS=$(echo -en "\n\b")
 
@@ -20,8 +18,13 @@ Restore_Shortcuts()
  # Find all exe files in drive_c Exclude windows directory,
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
+ BASENAME=$(basename "${SELECTED_EXE}"|sed 's|\.[eE][Xx][eE]||g'\
+                                      |sed 's|\.[mM][Ss][iI]||g')
+ NEW_SCRIPT_FILE="${PREFIXDIR}/${BASENAME}_other.sh"
+ NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
 
- search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.desktop" -type f -print| tr '\n' '|')
+
+ search_list=$(find ${DESKTOPDIR} -maxdepth 1 -iname "*.desktop" -type l -print| tr '\n' '|')
  echo "search_list = $search_list"
  exe_found=$(echo ${search_list})
 
@@ -53,17 +56,15 @@ Restore_Shortcuts()
  IFS=${SAVEIFS}
 
 # 3. Show the found exe files using zenity
- unset COMMAND count
+ unset COMMAND
  COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Shortcuts\" --radiolist --list "
  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
  SELECTED_OPTION=$(eval ${COMMAND})
-
  unset count
  echo "${FILES[@]}"
- echo "^-^-^"
  # Delete
  # 4. Find which file the user selected and set the selected exe into variable
- for NAME in "${NAMES[@]}"; do
+  for NAME in "${NAMES[@]}"; do
      echo "i = $NAME"
      if [ "${NAME}" = "${SELECTED_OPTION}" ]; then
           echo "Selected $NAME"
@@ -73,23 +74,18 @@ Restore_Shortcuts()
      fi
      count=$(expr ${count} + 1)
  done
- # FIXME shortcut
- BASENAME=$(basename "${SELECTED_SHORTCUT}")
-
- if [ -L "${DESKTOPDIR}/${BASENAME}" ]; then
-      echo "${DESKTOPDIR}/${BASENAME} file Already exists"
-      zenity --question --text "${BASENAME} desktop file Already exists, overwrite?" \
-             --title "Desktop file already exists"
-      ANSWER=$?
-      if [ -z "${ANSWER}" ] || [ "$ANSWER" = "1" ]; then
-           echo "Cancelled overwriting ${BASENAME}.desktop"
-             return 1
-      fi
+ unset DELETE_DESKTOP_FILE
+ DELETE_DESKTOP_FILE=$(realpath -m "${SELECTED_SHORTCUT}")
+ # Delete other Script file
+ if [[ "${NAME}" == *"_other."* ]]; then
+       echo "$NAME has _other in it"
+       DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
+       rm -vf "${DELETE_SCRIPT_FILE}"
  fi
+
+ rm -vf "${DELETE_DESKTOP_FILE}"
+ #rm -vf "${PREFIXDIR}/${DELETE_FILENAME}.sh"
+ echo "${DESKTOPDIR}"
  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
- echo "ln -sfv ${SELECTED_SHORTCUT} ${DESKTOPDIR}/${BASENAME}"
- ln -sfv "${SELECTED_SHORTCUT}" "${DESKTOPDIR}/${BASENAME}"
- ${UPDATE_ICON}
- ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
- ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+ 
 }

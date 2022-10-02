@@ -1,5 +1,5 @@
 # winezgui-settings-winearch
-Winezgui_Settings_Winearch()
+Winezgui_Settings_Wine_Arch()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   echo "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

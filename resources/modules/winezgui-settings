@@ -13,7 +13,7 @@ WineZGUI_Settings()
                             --radiolist --column " "             \
                             --column "Action"                    \
                                 TRUE "Help..."                   \
-                                   0 "Winearch..."               \
+                                   0 "Wine Arch..."              \
                                    0 "Prefix Template..."        \
                                    0 "Launch Behavior..."        \
                                    0 "Debug Messages..."         \
@@ -28,9 +28,9 @@ WineZGUI_Settings()
    if   [ "${SETTINGS_OPTION}" = "Help..." ]; then
         source ${DATADIR}/winezgui-settings-help
         WineZGUI_Settings_Help
-   elif [ "${SETTINGS_OPTION}" = "Winearch..." ]; then
-        source ${DATADIR}/winezgui-settings-winearch
-        Winezgui_Settings_Winearch
+   elif [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
+        source ${DATADIR}/winezgui-settings-wine-arch
+        Winezgui_Settings_Wine_Arch
    elif [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
         source ${DATADIR}/winezgui-template-change
         WineZGUI_Template_Change
