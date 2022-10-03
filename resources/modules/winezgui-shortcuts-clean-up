@@ -1,16 +1,17 @@
 # winezgui-shortcuts-clean-up
 WineZGUI_Shortcuts_Clean_Up()
 {
+  unset SHOW_OPTION
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
   SEARCH_LIST=$(find ${DESKTOPDIR} -maxdepth 1 -xtype l 2>/dev/null \
                | tr '\n' '|')
 
- echo "SEARCH_LIST = ${SEARCH_LIST}"
  BROKEN_LINKS_FOUND=$(echo ${SEARCH_LIST})
  DESKTOPDIR_NAME=$(basename ${DESKTOPDIR})
   if [ -z "${BROKEN_LINKS_FOUND}" ] ; then
+       echo "I: ${HEADER}: ${DESKTOPDIR_NAME} directory has no broken symlinks."
        zenity --error --title "${APP_WITH_VER} - Clean Up!" \
               --text "${DESKTOPDIR_NAME} directory has no broken symlinks."
        WineZGUI_Window
@@ -31,22 +32,25 @@ WineZGUI_Shortcuts_Clean_Up()
 
  # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"${APP_WITH_VER} - Clean Up!\" "
-  COMMAND+="--text=\"Remove these Broken Shortcuts...\" --list "
-  COMMAND+="--hide-header --column \" \" --column \" \" ${SHOW_OPTION}"
-  RESULT=$(eval ${COMMAND})
+#   COMMAND+="zenity --title=\"${APP_WITH_VER} - Clean Up!\" "
+#   COMMAND+="--text=\"Remove these Broken Shortcuts...\" --list "
+#   COMMAND+="--hide-header --column \" \" ${SHOW_OPTION}"
+#   RESULT=$(eval ${COMMAND})
   
+  zenity --title="${APP_WITH_VER} - Clean Up!"            \
+         --text="Remove these Broken Shortcuts..." --list \
+         --hide-header --column " " ${SHOW_OPTION}
+
   ANSWER=$?
-  if [ -z "${RESULT}" ]; then
-       DBUG "I: ${FUNCNAME[0]}... Cancelled!"
-       WineZGUI_Window
-  fi
   
   if [ ${ANSWER} -eq 0 ]; then
-       echo "I: ${HEADER}: Deleted Broken Shortcuts!"
+       DBUG "I: ${HEADER}: Deleted Broken Shortcuts!"
        find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete 2>/dev/null
+  else
+       DBUG "I: ${HEADER}: Cancelled!"
+       WineZGUI_Window
   fi
-  DBUG "I: Clean: Removed broken WineZGUI .desktop links"
+   DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
   ${UPDATE_ICON}
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
   ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
