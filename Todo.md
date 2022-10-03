@@ -1,4 +1,26 @@
 ###### Todo
+0.88
+- [ ] Launch setup.exe/install.exe and ask to set default exe
+- [ ] setup/installer -> remove found_exe_files so that user is prompted always
+- [ ] If user says do not want to change default exe, ask whether to stop asking?
+-     Prompt again for Change exe? if No. -> create found_exe_files.
+- [ ] Add shortcuts using [x] check boxes
+- [ ] Change Prefix Exe (exe+icon+prefix)
+- [ ] Change Exe Only
+- [ ] Change Prefix only
+- [ ] Icon only
+- [ ] Fix Backup_and_Restore_Functions
+- [x] make sure both prefix and templates are back up
+- [x] Fix Template - Backup - sed not working
+- [x] Rewrite winezgui to fix
+  - [x] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
+- [x] Modularize even more, every script file be used as function
+- [x] 80 column rules
+- [x] Comment every script, what it does
+- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
+
+
+
 NEW
 - [x] New Menu Layout
 - [x] Show Names instead of Prefix name (grep Name:|cut -f2)
@@ -57,16 +79,6 @@ NEW
     - [ ] Extract and restore wzt (playable)
     - [ ] Change Compression Level
 
-0.88
-- [ ] Fix Backup_and_Restore_Functions
-- [ ] make sure both prefix and templates are back up
-- [ ] Fix Template - Backup - sed not working
-- [x] Rewrite winezgui to fix
-  - [x] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
-- [x] Modularize even more, every script file be used as function
-- [x] 80 column rules
-- [x] Comment every script, what it does
-- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
 
 0.87
 - [x] Installer Support
