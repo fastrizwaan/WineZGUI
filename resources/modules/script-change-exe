@@ -27,10 +27,12 @@ Script_Change_Exe()
        # If only name, append (wine-xx)
        if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
               # Call Script_Get_Selected_Exe
+              source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
               Script_Get_Selected_Exe
               DBUG "I: Script: Change Exe: ${SELECTED_EXE} Selected!"
        elif [ "$RESPONSE" = "Any other Exe" ]; then
               # Change_Any_Other_Exe
+              source ${DATADIR}/winezgui-change-any-other-exe 
               Change_Any_Other_Exe
               # use locate exe
        fi
@@ -46,6 +48,7 @@ Script_Change_Exe()
        # Update files
        # Change EXE_NAME and EXE_PATH in all the required files
        # Change Sha256sum etc.
+       source ${DATADIR}/script-change-exe-variables
        Script_Change_Exe_Variables
 
 }

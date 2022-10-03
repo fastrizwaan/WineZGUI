@@ -36,9 +36,6 @@ Script_Change()
          
   elif [ "${CHANGE_OPTION}" = "Default Exe..." ]; then
          source ${WINEZGUI_SCRIPTS}/script-change-exe 
-         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
-         source ${DATADIR}/winezgui-change-any-other-exe 
-         source ${WINEZGUI_SCRIPTS}/script-change-exe-variables 
          Script_Change_Exe # Call the function in the above file
          
   elif [ "${CHANGE_OPTION}" = "Shortcut Icon..." ]; then
