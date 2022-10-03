@@ -50,16 +50,7 @@ WineZGUI_Open_Exe()
   export EXE_NOSP=$(echo "${EXE_NAME}"|tr " " "_")
   export EXE_LESS=$(echo "${EXE_NOSP}"|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
   export EXE_EXT="${EXE_FILE##*.}"
-  
-  
-  DBUG "= = = = = = = = = = = = = = = = = = = 
-  export EXE_FILE=$EXE_FILE
-  export EXE_NAME=$EXE_NAME
-  export EXE_PATH=$EXE_PATH
-  export EXE_NOSP=$EXE_NOSP
-  export EXE_LESS=$EXE_LESS
-  export EXE_EXT=$EXE_EXT
-  "
+
 
   # Create temporary variables for this function
   export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
@@ -67,12 +58,6 @@ WineZGUI_Open_Exe()
   SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
 
-  DBUG "= = = = = = = = = = = = = = = = = = = 
-  export WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR
-  export SCRIPT_NAME=$SCRIPT_NAME
-  export SCRIPT_FILE_TO_RUN=$SCRIPT_FILE_TO_RUN
-  export WINEZGUI_CREATE_PREFIX=$WINEZGUI_CREATE_PREFIX
-  ---------------------------------------------"
   DBUG "I: ${HEADER}: Checking whether ${SCRIPT_FILE_TO_RUN} exists."
   
   # If existing prefix exists for the exe
@@ -84,6 +69,14 @@ WineZGUI_Open_Exe()
        DBUG "I: ${HEADER}: Creating Prefix for ${EXE_NAME}"
        ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
        echo "${WINEZGUI_CREATE_PREFIX} ${EXE_FILE}"
+       
+       TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
+       if [[ "${TEST_NAME}" == *"setup"* ]] || \
+          [[ "${TEST_NAME}" == *"install"* ]] ; then
+             DBUG "I: ${HEADER}: Installer Detected! Launching ${EXE_NAME}"
+             "${SCRIPT_FILE_TO_RUN}" launch
+             return 0
+       fi
        # Launch after creating new prefix
        DBUG "I: ${HEADER}: Created Script: ${SCRIPT_FILE_TO_RUN}"
        

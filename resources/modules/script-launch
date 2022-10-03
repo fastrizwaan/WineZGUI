@@ -27,7 +27,6 @@ Script_Launch()
   source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
   Remove_Wine_Created_Shortcuts
 
-  # 5. Find any exe files installed by setup or installer
   source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
   Script_Find_Installed_Exe
 }

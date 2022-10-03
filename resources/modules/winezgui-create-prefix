@@ -462,8 +462,8 @@ if [ -f ${PREFIXDIR}/restored.txt ]; then
      # Do not prompt for found new exe after restore
      # On backup bundle, gamedir is copied, so, update found_exe_files 
      FOUND_EXE_FILES="found-exe-files.yml"
-     source ${WINEZGUI_SCRIPTS}/script-get-list-of-exe-files-installed 
-     Get_List_Of_Exe_Files_Installed
+     source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+     Script_Get_Installed_Exe_Files
      EXE_LIST="${EXE_FILES_FOUND}"
      echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                          > "${PREFIXDIR}/${FOUND_EXE_FILES}"

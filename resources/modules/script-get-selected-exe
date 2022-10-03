@@ -22,8 +22,8 @@ Script_Get_Selected_Exe()
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
  echo "-----------------------------------------------"
- source ${WINEZGUI_SCRIPTS}/script-get-list-of-exe-files-installed 
- Get_List_Of_Exe_Files_Installed
+ source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+ Script_Get_Installed_Exe_Files
  EXE_LIST="${EXE_FILES_FOUND}"
  echo "EXE_LIST = $EXE_LIST"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")

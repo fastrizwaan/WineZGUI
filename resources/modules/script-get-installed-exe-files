@@ -1,5 +1,5 @@
-# script-get-list-of-exe-files-installed
-Get_List_Of_Exe_Files_Installed()
+# script-get-installed-exe-files
+Script_Get_Installed_Exe_Files()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: Script: $(basename ${0}): Launched ${FUNCNAME[0]}"
