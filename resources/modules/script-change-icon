@@ -2,6 +2,8 @@
 # If No argument is given ask
 Script_Change_Icon()
 {
+     HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+     DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
      if [ -z "${1}" ]; then
           GET_ICON=$(zenity   --file-selection \
                               --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
@@ -9,9 +11,9 @@ Script_Change_Icon()
           GET_ICON="${1}"
      fi
 
-     # If he/she cancels, why prompt?
+     # If user cancels
      if [ -z "${GET_ICON}" ]; then #if no icon is selected
-          DBUG "I: Script: Change Icon: Cancelled!"
+          DBUG "I: Script: ${HEADER}: Change Icon: Cancelled!"
           # Return to Game window
           Script_Window
      fi
@@ -20,20 +22,20 @@ Script_Change_Icon()
      GET_ICON_EXT="${GET_ICON##*.}"
 
      if [ "${GET_ICON_EXT}" = "exe" ]; then
-          DBUG "I: Script: Change Icon: Exe file selected to extract icon!"
+          DBUG "I: Script: ${HEADER}: Change Icon: Exe file selected to extract icon!"
           unset TEMP_DIR
           TEMP_DIR="${WINEZGUIDIR}/tmp"
           # Extract icon and convert it to several png files of diferent quality,
           # Create a temporary Directory to extract icon from the exe file
-          DBUG "I: Script: Change Icon: Extraction from ${GET_ICON}"
+          DBUG "I: Script: ${HEADER}: Change Icon: Extraction from ${GET_ICON}"
           mkdir -p ${TEMP_DIR} && \
-          DBUG "I: Script: Change Icon: Created directory ${TEMP_DIR}"
+          DBUG "I: Script: ${HEADER}: Change Icon: Created directory ${TEMP_DIR}"
 
           # wrestool extracts ico file from EXE
           echo "wrestool -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_LESS}.ico "
           wrestool -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_LESS}.ico" \
           2> /dev/null && \
-          DBUG "I: Script: Change Icon: Wrestool executed"
+          DBUG "I: Script: ${HEADER}: Change Icon: Wrestool executed"
 
           # Only try to extract Icon when Icon is Found in the EXE
           # icotool extracts all png files from ico files
@@ -41,11 +43,11 @@ Script_Change_Icon()
           echo "icotool -x ${TEMP_DIR}/${EXE_LESS}.ico"
           icotool -x "${TEMP_DIR}/${EXE_LESS}.ico" -o "${TEMP_DIR}" \
           2>/dev/null && \
-          DBUG "I: Script: Change Icon: Icotool: Extracting png files from" \
+          DBUG "I: Script: ${HEADER}: Change Icon: Icotool: Extracting png files from" \
                "${TEMP_DIR}/${EXE_LESS}.ico" && \
           cp -f $(ls -S1 ${TEMP_DIR}/${EXE_LESS}*.png|head -n 1) \
                          "${ICONFILE}" && \
-          DBUG "I: Script: Change Icon: Copied successfully..." && WARN="false"
+          DBUG "I: Script: ${HEADER}: Change Icon: Copied successfully..." && WARN="false"
 
           # If icon could not be copied, warn the user
           if [ "${WARN}" != "false" ]; then
@@ -60,9 +62,9 @@ Script_Change_Icon()
 
           #remove tmp directory after copying icon png
           rm -rf "${TEMP_DIR}" && \
-          DBUG "I: Script: Change Icon: Cleanup ${TEMP_DIR}"
+          DBUG "I: Script: ${HEADER}: Change Icon: Cleanup ${TEMP_DIR}"
      else
-          DBUG "I: Script: Change Icon: ${GET_ICON} selected"
+          DBUG "I: Script: ${HEADER}: Change Icon: ${GET_ICON} selected"
           cp -f "${GET_ICON}" "${ICONFILE}"
           export ICON="${ICONFILE}"
      fi
@@ -76,7 +78,13 @@ Script_Change_Icon()
 
      # set icon to the user selected one
      ${DESKTOP_FILE_EDIT} --set-icon="${ICONFILE}" ${DESKTOPFILE} && \
-     DBUG "I: Script: Change Icon: Icon Changed Successfully!"
+     DBUG "I: Script: ${HEADER}: Change Icon: Icon Changed Successfully!"
+     # update icon in Info.yml
+     if [ -w "${INFOFILE}" ]; then
+          sed "s|Icon:.*|Icon:${ICONFILE}|g" -i "${INFOFILE}"
+     else 
+          echo "I: Script: ${HEADER}: Change Icon: Cannot update ${INFOFILE}"
+     fi
 
      # Update .desktop database
      ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
