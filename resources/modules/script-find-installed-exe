@@ -49,8 +49,8 @@ Script_Find_Installed_Exe()
             Script_Change_Icon "${SELECTED_EXE}"
             # Create a file to change prefix name immediately on next launch
             # On next launch, it will change prefixdir name
-            source ${DATADIR}/winezgui-create-change-prefix-file 
-            Create_Change_Prefix_File
+            source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+            Script_Create_Change_Prefix_File
             Script_Change_Exe_Variables
        else
             TEXT="You can use <b>Change...</b>-><b>Switch Prefix</b> menu to change exe and prefix!"
@@ -102,8 +102,8 @@ Script_Find_Installed_Exe()
                  # Script_Change_Icon "${SELECTED_EXE}"
                  # # Create a file to change prefix name immediately on next launch
                  # # On next launch, it will change prefixdir name
-                 # source ${DATADIR}/winezgui-create-change-prefix-file 
-                 # Create_Change_Prefix_File
+                 # source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+                 # Script_Create_Change_Prefix_File
                  # Script_Change_Exe_Variables
             else
                  DBUG "I: Script: Find Exe: Not changing exe!"

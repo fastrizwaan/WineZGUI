@@ -69,14 +69,7 @@ WineZGUI_Open_Exe()
        DBUG "I: ${HEADER}: Creating Prefix for ${EXE_NAME}"
        ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
        echo "${WINEZGUI_CREATE_PREFIX} ${EXE_FILE}"
-       
-       TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
-       if [[ "${TEST_NAME}" == *"setup"* ]] || \
-          [[ "${TEST_NAME}" == *"install"* ]] ; then
-             DBUG "I: ${HEADER}: Installer Detected! Launching ${EXE_NAME}"
-             "${SCRIPT_FILE_TO_RUN}" launch
-             return 0
-       fi
+
        # Launch after creating new prefix
        DBUG "I: ${HEADER}: Created Script: ${SCRIPT_FILE_TO_RUN}"
        

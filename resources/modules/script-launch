@@ -27,6 +27,16 @@ Script_Launch()
   source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
   Remove_Wine_Created_Shortcuts
 
-  source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
-  Script_Find_Installed_Exe
+  # Detect Setup or Direct Play exe
+  TEST_NAME=$(echo "${exe_name}"| tr [A-Z] [a-z]) # Change case to test
+  if [[ "${TEST_NAME}" == *"setup"* ]]   || \
+     [[ "${TEST_NAME}" == *"install"* ]] ; then
+       DBUG "I: Script: Launching =-= SETUP INSTALLER =-="
+       source ${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix
+       Script_Change_Exe_And_Prefix
+  else
+       DBUG "I: Script: Launching script find exe"
+       source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
+       Script_Find_Installed_Exe
+  fi
 }

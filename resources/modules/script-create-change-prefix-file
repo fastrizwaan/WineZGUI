@@ -1,0 +1,11 @@
+# script-create-change-prefix-file
+Script_Create_Change_Prefix_File()
+{
+  NEW_EXE_FILE="${SELECTED_EXE}"
+  NEW_EXE_NAME=$(basename "${SELECTED_EXE}")
+  NEW_EXE_NOSP=$(echo ${NEW_EXE_NAME}|tr " " "_");
+  NEW_EXE_LESS=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
+                                     |sed "s/\.[Mm][Ss][Ii]//")
+  echo "Prefix:${NEW_EXE_LESS}" > "${PREFIXDIR}/Change-Prefix-Name"
+  DBUG "I: Create Prefix File: Created file with Prefix:${NEW_EXE_LESS}"
+}
