@@ -93,15 +93,15 @@ WineZGUI_Window() # Main WineZGUI application window function
                             0 "About..."                       \
                             0 "Quit..."                        \
                        --text "<b>Wine GUI using Zenity...</b>")
-
+  
+  if    [ -z "${SELECTION}" ]; then # Exit if Cancel is clicked
+          echo "I: ${HEADER}: Cancel Selected. Bye!"
+          exit 0
+  fi         
  
- DBUG "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
+  DBUG "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
  
- if    [ -z "${SELECTION}" ]; then # Exit if Cancel is clicked
-         echo "I: ${HEADER}: Cancel Selected. Bye!"
-         exit 0
-         
- elif  [ "${SELECTION}" = "Open Exe..." ]; then
+  if   [ "${SELECTION}" = "Open Exe..." ]; then
          source ${DATADIR}/winezgui-open-exe
          WineZGUI_Open_Exe
 
@@ -160,16 +160,16 @@ WineZGUI_Window() # Main WineZGUI application window function
 #------------------------------- Startup -----------------------------#
 # Load file with DBUG function
 source ${DATADIR}/winezgui-dbug 
-echo "dbug ${1}"
+
 source ${DATADIR}/winezgui-cli-arguments
 WineZGUI_Cli_Arguments
-echo "cli ${1}"
+
 source ${DATADIR}/winezgui-startup-checks
 WineZGUI_Startup_Checks
-echo "startup checks ${1}"
+
 source ${DATADIR}/winezgui-check-file-type
 WineZGUI_Check_File_Type "${1}"
-echo "check file type"
+
 DBUG "I: ${HEADER}: Launching ${APPNAME}"
 WineZGUI_Window
 
