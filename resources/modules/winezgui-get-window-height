@@ -1,0 +1,18 @@
+#winezgui-get-window-height
+WineZGUI_Get_Window_Height()
+{ 
+  if [ -z "${1}" ]; then
+      DBUG "I: ${HEADER}: Provide a integer value"
+  fi
+  
+  HEIGHT=160 #use Height for number of elements
+  if [ ${1} -gt 2 ]; then
+      HEIGHT=$(expr ${1} \* 20 + ${HEIGHT})
+      
+      # We want max 500 px window height
+      if [ ${HEIGHT} -gt 700 ]; then
+          HEIGHT=700
+      fi
+  fi
+  export HEIGHT
+}

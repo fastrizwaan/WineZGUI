@@ -64,10 +64,15 @@ List_Available_Prefixes()
   done
   IFS=${SAVEIFS}
 
+# Generate Height value
+source ${DATADIR}/winezgui-get-window-height
+WineZGUI_Get_Window_Height ${#FILES[@]}
+
  # 3. Show the found exe files using zenity
   unset COMMAND
   COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
-  COMMAND+="--text \"${PREFIX_TYPE} Prefixes\" --radiolist --list "
+  COMMAND+="--text \"${PREFIX_TYPE} Prefixes\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
   RESULT=$(eval ${COMMAND})
   

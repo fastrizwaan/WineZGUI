@@ -53,14 +53,20 @@ Script_Get_Selected_Exe_For_Prefix()
  done
  IFS=${SAVEIFS}
 
-if [ ${#FILES[@]} -eq 1 ]; then
-     export SELECTED_EXE="${FILES}"
-else
+
+# Generate Height value
+source ${DATADIR}/winezgui-get-window-height
+WineZGUI_Get_Window_Height ${#FILES[@]}
+
+# if [ ${#FILES[@]} -eq 1 ]; then
+#      export SELECTED_EXE="${FILES}"
+# --height=300s     
+# else
      # 3. Show the found exe files using zenity
      unset COMMAND
      COMMAND+="zenity  --title=\"${APP_WITH_VER} - ${PREFIXNAME}\" "
-     COMMAND+="--radiolist --list --width=460 --height=300 "
-     COMMAND+="--text=\" Set Prefix for the installed exe...\" "
+     COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+     COMMAND+="--text=\"Set default exe...\" "
      COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
      RESULT=$(eval ${COMMAND})
 
@@ -81,5 +87,5 @@ else
          fi
          count=$(expr ${count} + 1)
      done
-fi
+# fi
 }

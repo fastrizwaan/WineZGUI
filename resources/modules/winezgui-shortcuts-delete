@@ -54,10 +54,14 @@ Winezgui_Shortcuts_Delete()
      count=$(expr ${count} + 1)
  done
  IFS=${SAVEIFS}
-
-# 3. Show the found exe files using zenity
+ 
+  # Generate Height value
+  source ${DATADIR}/winezgui-get-window-height
+  WineZGUI_Get_Window_Height ${#FILES[@]}
+ # 3. Show the found exe files using zenity
  unset COMMAND
- COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Shortcuts\" --radiolist --list "
+ COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Shortcuts\" "
+ COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
  SELECTED_OPTION=$(eval ${COMMAND})
  unset count
