@@ -31,5 +31,7 @@ WineZGUI_Check_File_Type()
        exit 1
   fi
   HEADER="${OLD_HEADER}"
-
+  
+  source ${DATADIR}/winezgui-open-exe
+  WineZGUI_Open_Exe "${EXE_FILE}"
 }

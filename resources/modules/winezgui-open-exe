@@ -36,7 +36,6 @@ WineZGUI_Open_Exe()
   if [ "${IS_EXE}" = "wzt" ]; then
         export WZT_FILE="${EXE_FILE}"
         DBUG "I: ${HEADER}: WineZGUI Backup file submitted"
-        source ${DATADIR}/winezgui-backup-restore-function 
         source ${DATADIR}/winezgui-restore-wzt 
         Restore_Wzt_File
         DBUG "I: ${HEADER}: Exiting main program after restoring backup"

@@ -1,25 +1,25 @@
 Script_Change_Category()
 {
      unset GET_CATEGORY
-     GET_CATEGORY=$(zenity                   \
-                    --title  "${PROGNAME}"   \
-                    --height=450 --list      \
-                    --radiolist --column " " \
-                    --column  "Categories"   \
-                         0    "AudioVideo"   \
-                         0    "Audio"        \
-                         0    "Video"        \
-                         0    "Development"  \
-                         0    "Education"    \
-                         TRUE "Game"         \
-                         0    "Graphics"     \
-                         0    "Network"      \
-                         0    "Office"       \
-                         0    "Science"      \
-                         0    "Settings"     \
-                         0    "System"       \
-                         0    "Utility"      \
-               --text "<b>Select a Category...</b>" 2> /dev/null)
+     GET_CATEGORY=$(zenity                       \
+                    --title  "Change Category!"  \
+                    --height=480 --list          \
+                    --radiolist --column " "     \
+                    --column  "Categories"       \
+                         0    "AudioVideo"       \
+                         0    "Audio"            \
+                         0    "Video"            \
+                         0    "Development"      \
+                         0    "Education"        \
+                         TRUE "Game"             \
+                         0    "Graphics"         \
+                         0    "Network"          \
+                         0    "Office"           \
+                         0    "Science"          \
+                         0    "Settings"         \
+                         0    "System"           \
+                         0    "Utility"          \
+               --text "<b>${PROGNAME}...</b>" 2> /dev/null)
      if [ -z "${GET_CATEGORY}" ]; then
           DBUG "I: Script: Change Category: Cancelled!"
           Script_Window

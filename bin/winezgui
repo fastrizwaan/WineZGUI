@@ -160,15 +160,16 @@ WineZGUI_Window() # Main WineZGUI application window function
 #------------------------------- Startup -----------------------------#
 # Load file with DBUG function
 source ${DATADIR}/winezgui-dbug 
-
+echo "dbug ${1}"
 source ${DATADIR}/winezgui-cli-arguments
 WineZGUI_Cli_Arguments
-
+echo "cli ${1}"
 source ${DATADIR}/winezgui-startup-checks
 WineZGUI_Startup_Checks
-
+echo "startup checks ${1}"
 source ${DATADIR}/winezgui-check-file-type
 WineZGUI_Check_File_Type "${1}"
-
+echo "check file type"
 DBUG "I: ${HEADER}: Launching ${APPNAME}"
 WineZGUI_Window
+

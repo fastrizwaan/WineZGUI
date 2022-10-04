@@ -10,6 +10,8 @@ Script_Get_Installed_Exe_Files()
                    -o -iname "wmplayer.exe"        \
                    -o -iname "iexplore.exe"        \
                    -o -iname "wordpad.exe"         \
+                   -o -iname "quickSFV*.exe"       \
+                   -o -iname "UnityCrashHand*.exe" \
                    -o -iname "dwtrig20.exe"        \
                    -o -iname "dx*setup.exe"        \
                    -o -iname "directx*.exe"        \

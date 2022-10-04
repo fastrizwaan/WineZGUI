@@ -7,4 +7,5 @@ WineZGUI_Cli_Arguments()
      -h|--help) source ${DATADIR}/winezgui-show-help; WineZGUI_Show_Help; exit; ;;
      esac
   done
+  DBUG "I: ${HEADER}: CLI Arguments completed"
 }
