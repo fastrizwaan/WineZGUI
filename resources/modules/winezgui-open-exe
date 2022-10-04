@@ -1,6 +1,5 @@
 WineZGUI_Open_Exe()
 {
-  DEBUG="Y"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset EXE_FILE F T
