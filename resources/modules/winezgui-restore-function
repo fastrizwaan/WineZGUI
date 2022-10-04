@@ -48,7 +48,7 @@ WineZGUI_Restore_Function()
   # For Install Type and Flatpak Name
   # Check and update Flatpak name if flatpak install else remove flatpak name
 
-  # Set install type
+  # Set install type 
   sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i ${FILE_LIST} && \
   DBUG "I: ${HEADER}: Updated ${INSTALL_TYPE} in script file"
   sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i ${FILE_LIST} && \
