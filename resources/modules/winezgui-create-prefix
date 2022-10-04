@@ -255,7 +255,7 @@ export PREFIXDIR=\"${PREFIXDIR}\"
 export WINEPREFIX=\"${PREFIXDIR}\"
 export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
 export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
-
+export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
 
 export DESKTOPDIR=\"${DESKTOPDIR}\"
@@ -284,7 +284,7 @@ fi
 echo '
 
 # Load file with DBUG function
-source ${DATADIR}/winezgui-dbug 
+source ${WINEZGUI_SCRIPTS}/winezgui-dbug 
 
 # If Settings.yml exists, get arch value from it: win32 or win64
 if [ -f "${SETTINGS_FILE}" ]; then

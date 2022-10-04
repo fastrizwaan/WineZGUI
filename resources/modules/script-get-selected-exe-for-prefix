@@ -55,7 +55,7 @@ Script_Get_Selected_Exe_For_Prefix()
 
 
 # Generate Height value
-source ${DATADIR}/winezgui-get-window-height
+source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
 WineZGUI_Get_Window_Height ${#FILES[@]}
 
 # if [ ${#FILES[@]} -eq 1 ]; then
