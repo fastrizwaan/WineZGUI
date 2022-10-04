@@ -29,10 +29,10 @@ WineZGUI_Template_Restore()
   DBUG "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
 
   (tar -xvf "${TAR_FILE}" -C "${TEMPLATES_DIR}" --transform \
-          "s|XOUSERXO|${USER}|g" &)| \
-  (zenity --progress --width=500                    \
-         --title="Restoring ${TAR_FILE_NAME}!"         \
-         --text="Extracting ${TAR_FILE}..."        \
+          "s|XOUSERXO|${USER}|g" &)|                        \
+  (zenity --progress --width=500                            \
+         --title="Restoring ${TAR_FILE_NAME}!"              \
+         --text="Extracting ${TAR_FILE}..."                 \
          --pulsate --auto-close)
 
   ZENITY_STATUS=$?
@@ -43,7 +43,7 @@ WineZGUI_Template_Restore()
       # kill the running tar command which has wzt in it
       unset PID_OF_TAR
       PID_OF_TAR=$(ps -aux|grep -i tar|sed "/.*grep -i.*/d" \
-                          |sed "s/  */ /g" |cut -f2 -d " ")
+                          |sed "s/  */ /g" |cut -f2 -d " "  )
 
       if ! [ -z "$PID_OF_TAR" ]; then
            kill -9 ${PID_OF_TAR} \
@@ -66,14 +66,19 @@ WineZGUI_Template_Restore()
            fi
            MSG=("${TAR_PREFIX} Restore Cancelled!")
            WineZGUI_Window
-
-      else
-           # If no pid of tar is found means extraction already completed
-           DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
       fi # if ! [ -z "$PID_OF_TAR" ]; then
+ else
+      
+      # PROCESS XO--XO variable inside prefixes and templates directory
+      source ${DATADIR}/winezgui-restore-process-xo
+      WineZGUI_Restore_Process_Xo
+
+      # Inform on successful extraction
+      DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
+      zenity --info --title="${APP_WITH_VER} - Restore Template!" \
+      --text="Extracted ${TAR_FILE} Successfully!" 
+ 
  fi # [ "${ZENITY_STATUS}" = "1" ]; then
-
-
 
 }
 

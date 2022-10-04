@@ -35,7 +35,7 @@ List_Available_Launch_Scripts()
  for i in $(echo ${search_list}|tr '|' '\n'|sort)
  do
      RealFile=$(realpath -m "$i")
-     RealName=$(grep -E "PROGNAME=" $i|cut -f2 -d "=")
+     RealName=$(grep "^export PROGNAME=" $i|cut -f2 -d "=")
      # If 1st value is empty, enable it
      if [ -z "${SHOW_OPTION}" ]; then
           SHOW_OPTION+="TRUE ${RealName}"

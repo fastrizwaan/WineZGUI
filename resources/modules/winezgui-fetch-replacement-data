@@ -1,7 +1,7 @@
 # winezgui-fetch-replacement-data
 WineZGUI_Fetch_Replacement_Data()
 {
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   # Unset any previously initialized variables
   unset SEARCH
   unset REPLACE

@@ -77,11 +77,23 @@ Restore_Wzt_File()
  WZT_VAR=$(cat "${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE}"|tr "\n" "|")
 
  # 1.6 If the WZT_VAR is empty, then WZT_VAR could not read from wzt-info.yml
+ # Force extract..
  if [ -z "${WZT_VAR}" ]; then
       DBUG "I: ${HEADER}: ${WZT_INFO_FILE} not found in tar archive"
-      zenity --info    --title "${WZT_NAME}" \
-             --no-wrap --text "${WZT_INFO_FILE} not found"
-      WineZGUI_Window
+      zenity --question  --title "${WZT_NAME} Force extract?" \
+             --no-wrap --text "${WZT_INFO_FILE} not found, extract anyhow?"
+      ANSWER=$?
+      if [ ${ANSWER} -eq 0 ]; then
+           (tar --zstd -xvf "${WZT_FILE}" -C "${PREFIXES_DIR}" --transform \
+            "s|XOUSERXO|${USER}|g" &)| 
+           (zenity --progress --width=500            \
+            --title="Restoring ${WZT_FILE}!"         \
+            --text="Force Extracting ${WZT_FILE}..." \
+            --pulsate --auto-close)
+     fi
+     source ${DATADIR}/winezgui-restore-process-xo
+     WineZGUI_Restore_Process_Xo
+     WineZGUI_Window
  fi
 
  # 2. Show Content of extracted wzt-info.yml file before restoring
@@ -295,4 +307,8 @@ Restore_Wzt_File()
            exit 0
       fi # zenity --question
  fi # -f "${FOUND_DESKTOP_FILE}"
+ # Repair all files
+ # PROCESS XO--XO variable inside prefixes and templates directory
+ source ${DATADIR}/winezgui-restore-process-xo
+ WineZGUI_Restore_Process_Xo
 }

@@ -1,7 +1,7 @@
 WineZGUI_Restore_Function()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
         echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
         return 1
@@ -23,9 +23,8 @@ WineZGUI_Restore_Function()
   
   # Do search and replace in the files inside given directory
   for (( i=0; i <${LEN}; i++ )); do
-        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} \
-        && \
-        DBUG "I: ${HEADER}: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
+        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}  #      && \
+        #DBUG "I: ${HEADER}: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
 
   done
   IFS=${SAVEIFS}
@@ -45,29 +44,27 @@ WineZGUI_Restore_Function()
   ln -sf "${HOME}" "${DIRECTORY}/dosdevices/h:" && \
   DBUG "I: ${HEADER}: Created H: symlink ${HOME} to ${DIRNAME}/dosdevices/h:"
 
-  # Process desktop and script files if the prefix is not default
+
   # For Install Type and Flatpak Name
-  # FIXME do we need this????
-#  if ! [ "${SUBDIR}" = "default" ]; then
-#        # Set install type
-#        sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i \
-#              ${SUBDIR}/*.sh && \
-#              DBUG "I: ${HEADER}: Updated ${INSTALL_TYPE} in script file"
-#        # set flatpak name on restoring (flatpak)
-#        sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i \
-#              ${SUBDIR}/*.sh && \
-#              DBUG "I: ${HEADER}: Updated ${FLATPAK_NAME} in script file"
-#  fi
-#  # Cleanup variables
-#  unset LEN
-#  unset SSSSSSS
-#  unset SEARCH
-#  unset REPLACE
-#  unset FIND_EXE_PATH
-#  unset FPNAME
-#  unset WEXE
-#  unset WVER
-#  unset FILE_LIST
-#  unset DTARGET
-#  unset DSOURCE
+  # Check and update Flatpak name if flatpak install else remove flatpak name
+
+  # Set install type
+  sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i ${FILE_LIST} && \
+  DBUG "I: ${HEADER}: Updated ${INSTALL_TYPE} in script file"
+  sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i ${FILE_LIST} && \
+  DBUG "I: ${HEADER}: Updated ${FLATPAK_NAME} in script file"
+
+
+ # Cleanup variables
+ unset LEN
+ unset SSSSSSS
+ unset SEARCH
+ unset REPLACE
+ unset FIND_EXE_PATH
+ unset FPNAME
+ unset WEXE
+ unset WVER
+ unset FILE_LIST
+ unset DTARGET
+ unset DSOURCE
 }

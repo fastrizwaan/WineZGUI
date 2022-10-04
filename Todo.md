@@ -1,14 +1,14 @@
 ###### Todo
 0.88
-- [ ] Launch setup.exe/install.exe and ask to set default exe
-- [ ] setup/installer -> remove found_exe_files so that user is prompted always
+- [x] Launch setup.exe/install.exe and ask to set default exe
+- [x] setup/installer -> remove found_exe_files so that user is prompted always
 - [ ] If user says do not want to change default exe, ask whether to stop asking?
 -     Prompt again for Change exe? if No. -> create found_exe_files.
 - [ ] Add shortcuts using [x] check boxes
-- [ ] Change Prefix Exe (exe+icon+prefix)
+- [x] Change Prefix Exe (exe+icon+prefix)
 - [ ] Change Exe Only
 - [ ] Change Prefix only
-- [ ] Icon only
+- [x] Icon only
 - [ ] Fix Backup_and_Restore_Functions
 - [x] make sure both prefix and templates are back up
 - [x] Fix Template - Backup - sed not working
