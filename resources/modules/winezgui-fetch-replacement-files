@@ -16,7 +16,7 @@ WineZGUI_Fetch_Replacement_Files()
   cd "${DIRECTORY}"
 
   unset FILE_LIST
-  FILE_LIST=$(ls Info.yml *.reg *.sh *.desktop 2>/dev/null)
+  FILE_LIST=$(ls Info.yml *.txt *.reg *.sh *.desktop 2>/dev/null)
 
   export FILE_LIST
 }
