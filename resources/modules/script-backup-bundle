@@ -194,11 +194,9 @@ Script_Backup_Bundle()
   # Step 5.6: If Target directory does not have sufficient space, abort backup
   DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
   if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
-        echo -n "I: Script: ${FUNCNAME[0]}: Prefix: ${TARGET_DIR}"
-        echo    "has enough available disk space"
+        DBUG "I: ${HEADER}: ${TARGET_DIR} has enough available disk space"
   else
-        echo -n "W: Script: ${FUNCNAME[0]}: Prefix: ${TARGET_DIR}"
-        echo    "does not have free disk space!!!"
+        echo "E: ${HEADER}: ${TARGET_DIR} does not have free disk space!!!"
         unset MSG
         unset TITLE
         TITLE="Not Enough Disk Space!"
