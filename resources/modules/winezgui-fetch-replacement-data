@@ -49,6 +49,10 @@ WineZGUI_Fetch_Replacement_Data()
   else  SEARCH+=("\.local\/share\/winezgui"); fi
         REPLACE+=("XOWINEZGUIDIRXO")
 
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("export DATADIR=\"\/app\/share\/winezgui\"")
+  else  SEARCH+=("export DATADIR=\"\/usr\/share\/winezgui\""); fi
+
   # *.desktop and *.sh files
   # 5. Change DESKTOP shortcuts directory name
   # where we link the script related .desktop files
