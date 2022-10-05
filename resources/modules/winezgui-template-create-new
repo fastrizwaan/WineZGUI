@@ -38,7 +38,7 @@ WineZGUI_Template_Create_New()
   if [ -z "${NEW_TEMPLATE}" ]; then #if no name is given use filename
        #zenity --info --title="Shortcut... " --text="no Change"
        # return to Game window
-       DBUG "I: Script: Rename Shortcut: Cancelled"
+       DBUG "I: ${HEADER}: Cancelled"
   fi
 
 

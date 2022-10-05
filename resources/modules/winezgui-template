@@ -13,6 +13,7 @@ WineZGUI_Template()
                       TRUE "Configure ${TEMPLATE_NAME}..." \
                          0 "Backup    ${TEMPLATE_NAME}..." \
                          0 "Create New..."                 \
+                         0 "Clone..."                      \
                          0 "Change..."                     \
                          0 "Backup..."                     \
                          0 "Restore..."                    \
@@ -38,6 +39,9 @@ WineZGUI_Template()
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
           source ${DATADIR}/winezgui-template-create-new
           WineZGUI_Template_Create_New
+  elif [ "${TEMPLATE_OPTION}" = "Clone..." ]; then
+          source ${DATADIR}/winezgui-template-clone
+          WineZGUI_Template_Clone
   elif [ "${TEMPLATE_OPTION}" = "Change..." ]; then
           source ${DATADIR}/winezgui-template-change
           WineZGUI_Template_Change

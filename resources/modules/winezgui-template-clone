@@ -1,0 +1,35 @@
+#winezgui-template-clone
+WineZGUI_Template_Clone()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-templates
+  List_Available_Templates # get SELECTED_TEMPLATE 
+
+  CLONE_TEMPLATE=$(zenity --title "Create Prefix Template with ${WINEARCH} arch..." \
+                             --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \
+                             --width=500 --entry)
+
+  if [ -z "${CLONE_TEMPLATE}" ]; then #if no name is given use filename
+       #zenity --info --title="Shortcut... " --text="no Change"
+       # return to Game window
+       DBUG "I: ${HEADER}: Cancelled"
+       return 1
+  fi
+  
+  if [ -d "${TEMPLATES_DIR}/${CLONE_TEMPLATE}" ]; then
+       zenity --error --title "${APP_WITH_VER}" \
+              --text "Template Directory Already Exists!"
+  fi
+
+  # FIXME: Create Function to sanitize file/folder names
+  https://www.oreilly.com/library/view/learning-the-bash/1565923472/ch01s09.html
+  CLONE_DIR=$(echo "${CLONE_TEMPLATE}"|tr " " "_")
+
+  CLONE_DIR="${TEMPLATES_DIR}/${CLONE_DIR}"
+  DBUG "I: ${HEADER}: Copying ${SELECTED_TEMPLATE_NAME}"
+   (cp -rf "${SELECTED_TEMPLATE}" "${CLONE_DIR}" )| \
+     zenity  --progress --pulsate --auto-close --width=500 \
+     --title="${APP_WITH_VER} - Create Game Prefix" \
+     --text="Copying template <b>${TEMPLATE_NAME}</b> to <b>${SELECTED_TEMPLATE_NAME}!</b>"
+}
