@@ -1,0 +1,8 @@
+Script_Winetricks_Gui()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  ${WTRICKS_CMD} --gui
+  # use this after winetricks fixes bug with arch=
+  #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui
+  DBUG "I: Script: ${FUNCNAME[0]}: Winetricks GUI ended..."
+}

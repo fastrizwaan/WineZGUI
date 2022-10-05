@@ -1,0 +1,1 @@
+sudo ./setup -i ; winezgui

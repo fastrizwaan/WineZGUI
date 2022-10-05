@@ -1,0 +1,22 @@
+# winezgui-fetch-replacement-files
+WineZGUI_Fetch_Replacement_Files()
+{ 
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+
+  if [ -z "${1}" ]; then
+       echo "${HEADER}: Must provide Prefix or Template Directory to process"
+       return 1
+  else
+       DIRECTORY="${1}"
+       DIRNAME=$(basename "${1}")
+  fi
+
+  # Find files to change in the Prefix
+  cd "${DIRECTORY}"
+
+  unset FILE_LIST
+  FILE_LIST=$(ls Info.yml *.txt *.reg *.sh *.desktop 2>/dev/null)
+
+  export FILE_LIST
+}

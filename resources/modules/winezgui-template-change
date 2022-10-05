@@ -1,0 +1,75 @@
+WineZGUI_Template_Change()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-templates
+  List_Available_Templates # get SELECTED_TEMPLATE 
+  
+  # Get Arch from Registry files
+  SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"
+  if [ -f "${SYSTEM_REGISTRY_FILE}" ]; then
+       REG_ARCH=$(grep "#arch=" "${SYSTEM_REGISTRY_FILE}" |cut -f2 -d "=")
+       DBUG "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
+       if [ -z "${REG_ARCH}" ]; then
+            zenity --error --text "Could not find arch in system.reg file"
+            unset SELECTED_TEMPLATE
+            WineZGUI_Window
+       fi
+       if [ "${REG_ARCH}" != "win32" ] && [ "${REG_ARCH}" != "win64" ]; then
+            zenity --error --text "Could not find win32 or win64 in system.reg"
+            unset SELECTED_TEMPLATE
+            WineZGUI_Window
+       fi
+  else 
+       DBUG "I: ${HEADER}: not found ${SYSTEM_REGISTRY_FILE} "
+       zenity --error --text "Could not find file ${SYSTEM_REGISTRY_FILE}"
+       unset SELECTED_TEMPLATE
+       WineZGUI_Window
+  fi  
+
+  # If Settings.yml is writable
+  if [ -w "${SETTINGS_FILE}" ]; then
+       sed "s|template:.*|template:${SELECTED_TEMPLATE}|g" -i "${SETTINGS_FILE}"
+       export TEMPLATE="${SELECTED_TEMPLATE}"
+       export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       export DEFAULT="${SELECTED_TEMPLATE}"
+  fi
+  
+  # If About.yml is writable
+  if [ -w "${ABOUTFILE}" ]; then
+       export DEFAULT="${SELECTED_TEMPLATE}"
+       export TEMPLATE="${SELECTED_TEMPLATE}"
+       export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       sed "s|Template:.*|Template:${TEMPLATE_NAME}|g" -i "${ABOUTFILE}"
+       sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g" -i "${ABOUTFILE}"
+  fi
+
+  DBUG "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
+  DBUG "I: ${HEADER}: Selected Template is ${TEMPLATE_NAME}"
+  DBUG "I: ${HEADER}: Default = ${DEFAULT}"
+
+  
+  # Prompt the user to change arch too if it is different from the selected one
+  if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
+       unset TEXT
+       TEXT+="Template <b>${TEMPLATE_NAME}</b> is <b>${REG_ARCH}</b>, "
+       TEXT+="but WineZGUI is using ${WINEARCH}.\nChange to ${REG_ARCH}!?"
+       zenity --question --title "${APP_WITH_VER} Change Arch!?" \
+              --text "${TEXT}"
+       ANSWER=$?
+       # If yes
+       if [ ${ANSWER} -eq 0 ]; then
+            if [ -w "${SETTINGS_FILE}" ] && [ -w "${ABOUTFILE}" ]; then
+                 sed "s|arch:.*|arch:${REG_ARCH}|g" -i "${SETTINGS_FILE}"
+                 sed "s|Wine Arch:.*|Wine Arch:${REG_ARCH}|g" -i "${ABOUTFILE}"
+                 export WINEARCH="${REG_ARCH}"
+                 DBUG "I: ${HEADER}: arch changed to ${REG_ARCH}"       
+            fi
+       else # If no/cancel
+            unset TEXT
+            TEXT="Remember to change to ${REG_ARCH} for ${TEMPLATE_NAME}!"
+            zenity --warning --text="${TEXT}" \
+            --title "${APP_WITH_VER} - ${TEMPLATE_NAME} needs ${REG_ARCH}!"
+       fi
+  fi
+}

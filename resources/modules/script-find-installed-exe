@@ -1,0 +1,122 @@
+# Script_Find_Installed_Exe
+# Find Installed EXE inside prefixdir
+# script-find-installed-exe
+# script-find-installed-exe
+# REVIEW
+Script_Find_Installed_Exe()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
+  NEW_FOUND_EXE_FILES="${PREFIXDIR}/new-found-exe-files.yml"
+  ##############################################################################
+  # 4. Find if exe files installed after setup, ask user to change prefix
+  # Post 1st run, search exe files in prefixdir and add them to EXE_LIST
+  DBUG "I: Script: Find Exe: Searching prefix for newly installed exe files!"
+
+  source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+  Script_Get_Installed_Exe_Files
+  EXE_LIST="${EXE_FILES_FOUND}"
+
+
+  # If EXE_LIST contains files, prompt user to change exe
+  if [ -z "${EXE_LIST}" ]; then
+       DBUG "I: Script: Find Exe: EXE_LIST is empty!"
+       return 1
+  fi
+  DBUG "I: Script: Find Exe: Found exe files inside prefix"
+  echo "${EXE_LIST}"
+  # if found-exe-files.yml file do no exist, create and prompt for change exe
+  if [ ! -f "${FOUND_EXE_FILES}" ]; then
+       DBUG "I: Script: Find Exe: Cannot find ${FOUND_EXE_FILES}, 1st run!"
+       echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
+                 > "${FOUND_EXE_FILES}" && \
+            DBUG "I: Script: Find Exe: created ${FOUND_EXE_FILES}"
+
+       # Ask use to Change the EXE for Installer
+       unset TEXT TITLE
+       TEXT+="New exe files found inside prefix...\\n"
+       TEXT+="Change exe along with prefix\?"
+       TITLE+="${EXE_NAME} ${APP_WITH_VER} - Switch Prefix!"
+       zenity --question --title "${TITLE}" --text "$TEXT"
+
+       ANSWER=$?
+       if [ ${ANSWER} -eq 0 ] ; then
+            source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
+            source ${WINEZGUI_SCRIPTS}/script-change-exe-variables 
+            Script_Get_Selected_Exe
+            source ${WINEZGUI_SCRIPTS}/script-change-icon 
+            # We do not want to see zenity dialog of icon change success
+            export Script_Change_Icon_DO_NOT_PROMPT="true"
+            Script_Change_Icon "${SELECTED_EXE}"
+            # Create a file to change prefix name immediately on next launch
+            # On next launch, it will change prefixdir name
+            source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+            Script_Create_Change_Prefix_File
+            Script_Change_Exe_Variables
+       else
+            TEXT="You can use <b>Change...</b>-><b>Switch Prefix</b> menu to change exe and prefix!"
+            zenity --info --title "${TITLE}" --text "${TEXT}"
+            DBUG "I: Script: Find Exe: Not changing exe!"
+            DBUG "I: Script: Find Exe: use Change EXE... to set default exe"
+       fi
+
+  else # If already existing EXE_LIST file
+       DBUG "I: Script: Find Exe: found found-exe-files.yml"
+       # Create a new file with the list to compare
+       # Remove Prefix name
+
+       echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
+            > "${NEW_FOUND_EXE_FILES}"
+       DBUG "I: Script: Find Exe: Checking for more recent exe files"
+
+       DBUG "I: Script: Find Exe: Checking for any difference"
+       # Check if new files are created, and are different in the list
+       if ! (diff "${FOUND_EXE_FILES}" "${NEW_FOUND_EXE_FILES}") ; then
+            DBUG "I: Script: Find Exe: New exe files found!"
+            # Ask use to Change the EXE for Installer
+            unset TEXT
+            TEXT+="New exe files <b>found</b>, select and Launch?"
+            TEXT+="\\n<i>Default exe can be set using Change Exe...</i>"
+            zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" \
+                 --text "${TEXT}"
+            ANSWER=$?
+            if [ ${ANSWER} -eq 0 ] ; then
+                 # Prompt user to change exe
+                 source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
+                 source ${WINEZGUI_SCRIPTS}/script-change-exe-variables 
+                 Script_Get_Selected_Exe
+                 # And replace new list with old list
+                 echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
+                      > "${FOUND_EXE_FILES}"
+                 DBUG "I: Script: Find Exe: Updated ${FOUND_EXE_FILES}!"
+                 # Remove the new-found-exe-files.yml file
+                 rm "${NEW_FOUND_EXE_FILES}" && \
+                 DBUG "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
+                 source ${WINEZGUI_SCRIPTS}/script-launch 
+                 Script_Launch "${SELECTED_EXE}"
+
+                 # Disabled for 2nd time, let user use change exe manually
+                 # DBUG "I: Script: Find Exe: Changing icon..."
+                 # source ${WINEZGUI_SCRIPTS}/script-change-icon 
+                 # # We do not want to see zenity dialog of icon change success
+                 # export Script_Change_Icon_DO_NOT_PROMPT="true"
+                 # Script_Change_Icon "${SELECTED_EXE}"
+                 # # Create a file to change prefix name immediately on next launch
+                 # # On next launch, it will change prefixdir name
+                 # source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+                 # Script_Create_Change_Prefix_File
+                 # Script_Change_Exe_Variables
+            else
+                 DBUG "I: Script: Find Exe: Not changing exe!"
+                 DBUG "I: Script: Find Exe: use Change EXE... to set default"
+                 echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
+                      > "${FOUND_EXE_FILES}" && \
+                 DBUG "I: Script: Find Exe: Updaing ${FOUND_EXE_FILES}"
+            fi
+       fi
+
+  fi
+
+
+
+}

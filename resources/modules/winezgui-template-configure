@@ -1,0 +1,55 @@
+# winezgui-configure
+#  WineZGUI application window function
+# FIXME winezgui-configure
+WineZGUI_Template_Configure()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  CONFIGURE_OPTION=$(zenity --title "${APP_WITH_VER} - Configure Template"  \
+                            --list   --hide-header                          \
+                            --width=360 --height=400                        \
+                            --radiolist --column " "                        \
+                            --column "Action"                               \
+                                TRUE "Open Setup / Installer..."            \
+                                   0 "Winetricks GUI..."                    \
+                                   0 "Winetricks CLI..."                    \
+                                   0 "Launch Winecfg..."                    \
+                                   0 "Open Shell..."                        \
+                                   0 "Backup ${TEMPLATE_NAME}..."           \
+                                   0 "Delete..."                            \
+            --text   "Configure Prefix Template <b>${TEMPLATE_NAME}...</b>" )
+
+  # Exit if Cancel is clicked
+  if [ -z "${CONFIGURE_OPTION}" ]; then
+      DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+       return 1
+  fi
+
+  # Show What is selected     
+  DBUG "I: ${SELECTION} Selected!"
+
+  if   [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]; then
+          source ${DATADIR}/winezgui-open-setup-installer 
+          WineZGUI_Open_Setup_Installer
+  elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]; then
+          source ${DATADIR}/winezgui-winetricks-gui 
+          WineZGUI_Winetricks_Gui
+  elif [ "${CONFIGURE_OPTION}" = "Winetricks CLI..." ]; then
+          source ${DATADIR}/winezgui-winetricks-cli 
+          WineZGUI_Winetricks_Cli
+  elif [ "${CONFIGURE_OPTION}" = "Launch Winecfg..." ]; then
+          source ${DATADIR}/winezgui-winecfg 
+          WineZGUI_Winecfg
+  elif [ "${CONFIGURE_OPTION}" = "Open Shell..." ]; then
+          source ${DATADIR}/winezgui-open-shell 
+          WineZGUI_Open_Shell
+  elif [ "${CONFIGURE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
+          source ${DATADIR}/winezgui-template-backup
+          WineZGUI_Template_Backup "${TEMPLATE}"
+  else
+       echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"
+       exit 1
+  fi
+
+  return 0
+} 

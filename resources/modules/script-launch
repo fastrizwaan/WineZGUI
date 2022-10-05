@@ -1,0 +1,42 @@
+# Launch the Script file
+#
+# 1. Test if the given exe exists (if not found ask user to locate it)
+# 2. Goto Game Directory
+# 3. Launch The EXE file
+# 4. After the Launch if lnk and .desktop files are found inside wine prefix
+Script_Launch()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+       # 1. Test if the given exe exists (if not found ask user to locate it)
+       Locate_Exe_Function
+       exe_name=$(basename "${EXE_FILE}")
+       exe_path=$(dirname  "${EXE_FILE}")
+  else # Use passed argument as exe file
+       exe_name=$(basename "${1}")
+       exe_path=$(dirname  "${1}")
+  fi
+  # 2. Goto Game Directory
+  cd "${exe_path}"
+  DBUG "I: Script: Launching ${exe_name}"
+
+  # 3. Launch The EXE file
+  ${WINE_CMD} "${exe_name}"
+
+  # 4. Remove wine installed shortcuts, unclutters menu
+  source ${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts 
+  Remove_Wine_Created_Shortcuts
+
+  # Detect Setup or Direct Play exe
+  TEST_NAME=$(echo "${exe_name}"| tr [A-Z] [a-z]) # Change case to test
+  if [[ "${TEST_NAME}" == *"setup"* ]]   || \
+     [[ "${TEST_NAME}" == *"install"* ]] ; then
+       DBUG "I: Script: Launching =-= SETUP INSTALLER =-="
+       source ${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix
+       Script_Change_Exe_And_Prefix
+  else
+       DBUG "I: Script: Launching script find exe"
+       source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
+       Script_Find_Installed_Exe
+  fi
+}

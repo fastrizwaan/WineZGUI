@@ -1,0 +1,82 @@
+# winezgui-settings-winearch
+Winezgui_Settings_Wine_Arch()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  CURRENT_ARCH=${WINEARCH}
+  WINEARCH_OPTION=$(zenity --title "${APP_WITH_VER}" \
+                           --list   --hide-header    \
+                           --width=360 --height=240  \
+                           --radiolist --column " "  \
+                           --column "Action"         \
+                                  0 "win32"          \
+                                  0 "win64"          \
+                           --text   "Set winearch...")
+  
+  if [ -z "${WINEARCH_OPTION}" ]; then
+          echo "Cancelled!"
+          return 1
+  fi
+
+  DBUG "I: ${HEADER}: Selected ${WINEARCH_OPTION}!"
+
+  if [ "${WINEARCH_OPTION}" = "win32" ]; then
+          DBUG "I: ${HEADER}: winearch set to 32 bit"
+          # Change values in Settings
+          if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
+              sed "s|arch:.*|arch:win32|g" -i "${SETTINGS_FILE}"
+          else
+              if [ -w "${SETTINGS_FILE}" ]; then # update Settings
+                  echo "arch:win32" >> "${SETTINGS_FILE}" 
+              else
+                  echo "Cannot write to ${SETTINGS_FILE}"
+              fi
+          fi
+          export WINEARCH="win32" # Runtime update
+  
+  fi
+  
+  if [ "${WINEARCH_OPTION}" = "win64" ]; then
+          DBUG "I: ${HEADER}: winearch set to 64 bit"
+          # If grep can get value from Settings then replace else add it
+          if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
+              sed "s|arch:.*|arch:win64|g" -i "${SETTINGS_FILE}"
+          else
+              if [ -w "${SETTINGS_FILE}" ]; then
+                  echo "arch:win64" >> "${SETTINGS_FILE}"
+              else
+                  echo "Cannot write to ${SETTINGS_FILE}"
+              fi
+          fi
+          export WINEARCH="win64"
+  fi
+  
+  # Update Wine arch in About.yml
+  export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+  source ${DATADIR}/winezgui-initialize-wineprefix
+  WineZGUI_Initialize_Wineprefix "${WINE_TEMPLATE}"
+ 
+  sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
+  
+  
+  if [ "${CURRENT_ARCH}" != "${WINEARCH}" ]; then
+          zenity --question --title "${APP_WITH_VER} - Wine Arch Changed!"\
+              --text "Change Prefix Template to ${WINEARCH}?"
+          ANSWER=$?
+  
+          if [ -z "${ANSWER}" ] || [ ${ANSWER} -eq 1 ]; then
+              unset TEXT
+              TEXT="Make sure to change template to ${WINEARCH} to work!"
+              zenity --warning --text "${TEXT}"
+              echo "Cancelled!"
+              unset TEXT
+          fi
+  
+          if [ ${ANSWER} -eq 0 ]; then
+              source ${DATADIR}/winezgui-template-change
+              WineZGUI_Template_Change
+          fi
+  
+  fi
+  return 0
+}

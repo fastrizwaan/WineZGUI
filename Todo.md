@@ -1,8 +1,100 @@
-###### Todo
-
 0.90
+- [ ] Tempalte Prefix Downloads
+-   Downloadable templates
+  - WineZGUI default (mf-install)
+  - Unreal Engine 4 Prefix
+  - Old Games Midi Supported
 
-- [ ] Create Prefix using setup file, should turn that prefix to game/app specific prefix (gog setup prefix -> game prefix) - rename prefix, directory. find desktop file, lnk etc. for the renaming
+0.89
+- [ ] Fix line-edit names with weird characters.
+- [ ] Add shortcuts using [x] check boxes
+- [x] Shortcuts
+    - [x] Create
+      - Create Script file with New EXE Name,
+      - Create Icon file, and desktop file
+      - Create Prefix should create shortcut!
+    - [ ] Delete
+    - [ ] Restore...
+    - [ ] Delete All Shortcuts
+- [ ] if wine version changes (compared to metada) inform user esp. for system install
+- [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
+- [ ] wzt management
+    - [ ] Split
+        - [ ] Number or Parts
+        - [ ] Size of Parts
+    - [ ] Join
+    - [ ] Extract wzt (unplayable)
+    - [ ] Extract and restore wzt (playable)
+    - [ ] Change Compression Level
+- [ ] Comment every script, what it does
+
+
+
+0.88
+- [x] clone template prefix (Copy prefix)
+- [x] Improve Backup and Restore code before release
+-     Check backup/restore with
+- [x] flatpak->system 
+- [x] system ->flatpak
+- [x] user1 => user2
+- [x] both flatpak and system install for user1, user2 and user3 should work on restore
+- [x] Launch setup.exe/install.exe and ask to set default exe
+- [x] setup/installer -> remove found_exe_files so that user is prompted always
+- [x] Change Prefix Exe (exe+icon+prefix)
+- [x] Icon only
+- [x] Fix Backup_and_Restore_Functions
+- [x] make sure both prefix and templates are back up
+- [x] Fix Template - Backup - sed not working
+- [x] Rewrite winezgui to fix Opening, exe, cancelling, reopening other exe quits winezgui
+- [x] Do not show uninstallers in Change Exe and runtime like vcrun etc.
+- [x] If name contains Setup or Install, ask to change exe after launch
+- [x] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
+- [x] Modularize even more, every script file be used as function
+- [x] 80 column rules
+- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
+- [x] New Menu Layout
+- [x] Show Names instead of Prefix name (grep Name:|cut -f2)
+- [x] Show Template in USE in about
+- [x] Move Templates and Shortcuts inside Configure
+- [x] Beautify Scripts
+- [x] Add / Remove Shortcuts ... proper place More
+- [x] Templates... Fix delete etc..
+- [x] Installer Support
+- [x] Template Support (basic)
+- [x] Change Exe
+- [x] Change Icon from exe too
+- [x] Backup do not double include gamedir when it is inside prefixdir
+- [x] Use GAMEDIR instead of bundled_game directory for Game Bundle.
+- [x] Use wzt-info.yml
+- [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
+      archive. Breaks backward compatibility.
+- [x] Use info.yml for info file instead of info.txt
+- [x] About use Info.yml
+- [x] Use column to format info.yml like restore-wzt does
+- [x] Change Exe update info.yml
+- [x] After Installer, if new exe's are found
+      - [x] Show Change EXE
+      - [x] update name in desktop file
+      - [x] Change Icon from exe when changing exe
+      - [x] do no prompt change icon when run from changing exe
+      - [x] sed ${PREFIXDIR} value to variable ${PREFIXDIR} in found-exe-files.yml
+      - [x] If prefix do not have any installed exe, show error message
+      - [x] Rename/Change Prefix Directory on changing exe
+      - [x] Change EXE path in Info.yml
+      - [x] Existing directory, add name duplicate/prefixdir to desktop file
+      - [x] Open Other EXE, allow Installed and non installed exe to run
+      - [x] winezgui-change-installed-exe and script-find-installed-exe
+      - [x] Script name and Function Name must be same. Script smallcase, Function CAPITALCASE
+- [x] Find and remove Installer Created desktop shortcuts from wine directory
+      grep -r "$WINEPREFIX" ~/.local/share/applications/wine/|cut -f1 -d ":"|sort -u
+- [x] Sort found exe list before presenting
+- [x] script-locate-exe-function: use | instead of / sed FIXME
+- [x] copy default to create-prefixdir then run winezgui-create-prefix
+- [x] About.yml should be at winezprefix
+- [x] fix templates select, create, delete, rename, clone
+
+0.87 
+- [x] No Release
 
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating
@@ -48,7 +140,6 @@ Backup and Restore with Multi user
 
 
 0.81
-
 - [x] Include Appstream Metadata
 - [x] Restore work with filename containing numbers
 - [x] backup / restore work with different flatpak versions (flatpak-wine5, flatpak-wine7, flatpak-WineZGUI)
@@ -56,34 +147,10 @@ Backup and Restore with Multi user
 
 
 0.80
-
 - [x] Backup Restore Support
 - [x] Launch Game after Restoring Backup
 
 0.5
-
 - [x] mf-install support (needed for Unreal Engine 4 games) for wine stable 5 and 7, included as mf-install script
 - [x] Perhaps create and send a verb to winetricks instead with video proof
 - [x] Runtime test of dependency by winezgui, create-prefix, and launch-script
-
-0.6
-
-- [ ] Support Gamedir install (give option, gamedir preferred if writable)
-  - [ ] Create wine prefix inside game directory, for backup up and sharing with friends
-    - [ ] if it is on read only block device, use ~/.var or ~/.local to create prefix
-    - [ ] give option to choose install location, either same directory or ~/.var / ~/.local
-    - [ ] Handling exe launch with different prefix dirs
-      - [ ] on launch, check subdir in
-      - [ ] game dir - for gamedir install if found launch
-      - [ ] else WINEZPREFIX/NO_EXE dir
-- [ ] Change prefix location support, from gamedir to somewhere else and vice versa
-  - [ ] give 2 option, to gamedir or custom location
-  - [ ] if from gamedir only show other location
-- [ ] Backup should store metadata like, wine version and prefix and gamedir, and exe md5sum (to find later on the filesystem)
-- [ ] Backup  Restore: Backup should support (for system install, for flatpak, and prefix in ~/.var or ~/.local or game dir).
-- [ ] a wizard to restore is better?
-  - [ ] on restore, check metadata and inform user, if exe not found, ask user to select or search for the exe, use md5sum to verify same exe.
-  - [ ] if game dir, link shortcut from gamedir to applications
-- [ ] if wine version changes (compared to metada) inform user
-
-

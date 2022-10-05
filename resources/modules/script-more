@@ -1,0 +1,25 @@
+# script-more
+# FIXME add create/rename/delete shortcuts
+Script_More()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  SCRIPT_MORE_OPTION=$(zenity --title "${PROGNAME} - More" \
+                              --list   --hide-header       \
+                              --width=360 --height=240     \
+                              --radiolist --column " "     \
+                              --column "Action"            \
+                                     0 "Delete..."         \
+                                --text "More..."           )
+
+  # Exit if Cancel is clicked
+  if [ -z "${SCRIPT_MORE_OPTION}" ]; then
+       DBUG "I: MORE: Cancel Selected!"
+       return 1
+  fi
+  
+  if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
+          DBUG "I: Script: Delete... Selected!"
+          source ${WINEZGUI_SCRIPTS}/script-delete 
+          Script_Delete
+  fi
+}

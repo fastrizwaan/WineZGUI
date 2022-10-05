@@ -1,0 +1,7 @@
+# winezgui-winecfg
+WineZGUI_Winecfg()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  ${WINE_CMD} winecfg
+}

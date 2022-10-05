@@ -1,0 +1,32 @@
+# FIXME winezgui-more
+WineZGUI_More()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  MORE_OPTION=$(zenity --title "${APP_WITH_VER} - More"  \
+                 --list   --hide-header                  \
+                 --width=360 --height=240                \
+                 --radiolist --column " "                \
+                 --column "Action"                       \
+                        0 "File Manager..."              \
+                        0 "Open Terminal..."             \
+                        0 "Shortcuts..."                 \
+                        0 "Help..."                      \
+                 --text   "More..."                      )
+
+  DBUG "${0}: ${FUNCNAME[0]}: ${MORE_OPTION} Selected!"
+  # Exit if Cancel is clicked
+  if   [ -z "${MORE_OPTION}" ]; then
+         DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+         return 1
+  fi
+  
+  if   [ "${MORE_OPTION}" = "File Manager..."  ]; then
+         xdg-open "${WINEZGUIDIR}"
+  elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
+         source ${DATADIR}/winezgui-open-terminal 
+         WineZGUI_Open_Terminal
+  elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
+         source ${DATADIR}/winezgui-shortcuts 
+         WineZGUI_Shortcuts
+  fi
+}

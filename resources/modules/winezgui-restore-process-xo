@@ -1,0 +1,21 @@
+# winezgui-restore-process-xo
+WineZGUI_Restore_Process_Xo()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  # Process templates_dir for XOXO -> variable values
+  unset D # Directory
+  unset FOUND_INFOFILE
+  
+  source ${DATADIR}/winezgui-restore-function
+  
+  (for D in \
+    $(find ${TEMPLATES_DIR}/* ${PREFIXES_DIR}/* -maxdepth 0 -type d); do
+    echo "# Processing $(basename ${D})"
+    WineZGUI_Restore_Function "${D}"
+    DBUG "I: ${HEADER}: Processed $(basename ${D})"
+  done)|(zenity --progress --width=500              \
+         --title="${APP_WITH_VER} - Process files!" \
+         --text="Extracting ${TAR_FILE}..."         \
+         --pulsate --auto-close)
+}

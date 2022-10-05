@@ -1,0 +1,38 @@
+# script-change-arch
+Script_Change_Arch()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  WINEARCH_OPTION=$(zenity --title "${APP_WITH_VER}"   \
+                           --list   --hide-header      \
+                           --width=360 --height=240    \
+                           --radiolist --column " "    \
+                           --column "Action"           \
+                                  0 "win32"            \
+                                  0 "win64"            \
+                           --text   "Set Wine Arch..." )
+
+  if [ -z "${WINEARCH_OPTION}" ]; then
+       echo "Cancelled!"
+       return 1
+  fi
+  
+  if [ "${WINEARCH_OPTION}" = "win32" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 32 bit"
+       export WINEARCH="win32"
+
+  fi
+
+  if [ "${WINEARCH_OPTION}" = "win64" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 64 bit"
+       export WINEARCH="win64"
+  fi
+
+  # Check before writing files
+  if [ -w "${SCRIPTFILE}" ] && [ -w "${INFOFILE}" ]; then
+       sed "s|export WINEARCH=.*|export WINEARCH=${WINEARCH}|g" -i ${SCRIPTFILE}
+       sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i ${INFOFILE}
+  else
+       echo  "E: Script: ${FUNCNAME[0]}: Cannot write to ${SCRIPTFILE}"
+  fi
+  return 0
+}

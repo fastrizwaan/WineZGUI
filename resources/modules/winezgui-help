@@ -1,0 +1,34 @@
+# winezgui-help
+WineZGUI_Help()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HELP_TEXT+="Open Exe... : Create Exe bottle for any Setup or any exe or msi file!|"
+  HELP_TEXT+="Launch...   : Run installed Shortcuts for exe, directly!|"
+  HELP_TEXT+="Script...   : Launches main exe script for the prefix. Use it to configure.|"
+  HELP_TEXT+="Backup...   : Create \"Game Bundle\" or prefix backup to share!|"
+  HELP_TEXT+="Restore...  : Restore a Prefix backup or Game Bundle|"
+  HELP_TEXT+="Delete...   : Delete an Installed game|"
+  HELP_TEXT+="Template... : Configure, and manage Templates to create other prefixes |"
+  HELP_TEXT+="Settings... : Set arch, default template, debug messages, launch beahvior |"
+  HELP_TEXT+="Kill all... : End all running wine processes|"
+  HELP_TEXT+="More...     : Open File Manager, Terminal at local WineZGUI directory|"
+  HELP_TEXT+="Help...     : This help|"
+  HELP_TEXT+="About...    : Details about WineZGUI|"
+  HELP_TEXT+="Quit...     : Magically vanishes WineZGUI|"
+
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT} \
+              |tr "|" "\n" \
+              |sed "s/https:/https|/g" \
+              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+              |sed "s/:/;:;/g" \
+              |column -t -s ";"      \
+              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+              |sed "s/|/:/g" )"
+  #
+  zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  unset HELP_TEXT
+  unset TEXT
+}

@@ -1,0 +1,63 @@
+# Rename Application Name in .desktop file
+# needed by script-change-name
+
+SCRIPT_CHANGE_NAME ()
+{    
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Name Selected!"
+  # Find if PROGNAME does not have suffix (wine-XX) add it
+  if ! [[ "${PROGNAME}" == *"(${APP_WITH_VER})" ]]; then
+       PROGNAME_WITH_SUFFIX="${PROGNAME} (${APP_WITH_VER})"
+  else
+       PROGNAME_WITH_SUFFIX="${PROGNAME}"
+  fi
+
+  # Find if PROGNAME does not have suffix (wine-XX) add it
+  if ! [[ "${PROGNAME}" == *"(${APP_WITH_VER})" ]]; then
+       PROGNAME_WITH_SUFFIX="${PROGNAME} (${APP_WITH_VER})"
+  else
+       PROGNAME_WITH_SUFFIX="${PROGNAME}"
+  fi
+
+  # Ask for Name
+  GET_PROGNAME=$(zenity --title "Rename Shortcut..."                 \
+                        --text  "Enter a name for the shortcut:"     \
+                        --entry-text "${PROGNAME_WITH_SUFFIX}"       \
+                        --width=500 --entry                          )
+
+  if [ -z "${GET_PROGNAME}" ]; then #if no name is given use filename
+       #zenity --info --title="Shortcut... " --text="no Change"
+       # Return to Game window
+       DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
+       Script_Window
+  fi
+
+  # Set name in desktop file
+  ${DESKTOP_FILE_EDIT} --set-name="${GET_PROGNAME}"      "${DESKTOPFILE}"
+  DBUG "I: Script: Rename Shortcut: Name: ${PROGNAME}  -> ${GET_PROGNAME}"
+
+  # Change keyword in desktop file
+  sed "s|\(Keywords.* game;\).*|\1 ${GET_PROGNAME};|g" -i ${DESKTOPFILE}
+
+  # Change Game Name
+  sed "s|Name:.*|Name:${GET_PROGNAME}|g"               -i "${INFOFILE}"
+
+  # rename script file
+  SED_SEARCH="^export PROGNAME=.*"
+  SED_REPLACE="export PROGNAME=\"${GET_PROGNAME}\""
+  sed -E "s|${SED_SEARCH}|${SED_REPLACE}|" -i "${PREFIXDIR}/${PREFIXNAME}.sh"
+
+  # Remove broken .desktop links
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
+
+
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  DBUG "I: Script: ${FUNCNAME[0]}: Change ${PROGNAME} to ${GET_PROGNAME}"
+
+  # Required for instant change in the GameWindow
+  export PROGNAME="${GET_PROGNAME}"
+  unset GET_PROGNAME
+  unset SED_SEARCH
+  unset SED_REPLACE
+}

@@ -1,6 +1,0 @@
-       # Text is more, so we need to format it, with sed in pango markup
-
-       ZCMD="zenity --info --no-wrap --text"
-       ${ZCMD} "$(cat ${INFOFILE} | \
-                sed -E "s/^(.*: )/<tt><b>\1<\/b><\/tt>/g" | \
-                sed -E "s/^(.*)$/<small>\1<\/small>/g")"

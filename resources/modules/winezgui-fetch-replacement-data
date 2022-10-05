@@ -1,0 +1,138 @@
+# winezgui-fetch-replacement-data
+WineZGUI_Fetch_Replacement_Data()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  # Unset any previously initialized variables
+  unset SEARCH
+  unset REPLACE
+  unset FPNAME
+  unset LEN
+  ##################### I. PREPARE SEARCH AND REPLACE VALUES ###################
+  # A. *.reg files
+  # flatpak name has .(period) which confuses sed
+  # Only sed if FLATPAK_NAME has value
+  # 1. Check if FLATPAK_NAME variable exist (usually only flatpak version has)
+  if ! [ -z "$FLATPAK_NAME" ]; then
+  # replace . with \. for sed
+  FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  fi
+
+  # 2. Paths needs flatpak/system specific replacement
+  # Registry file config value
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH=("\.var\\\\\\\\app\\\\\\\\${FPNAME}\\\\\\\\config")
+  else  SEARCH=("\\\\\\\\?\\\\\\H:\\\\\\\\\.config"); fi
+        REPLACE=("XOCONFIGXO")
+  
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("export FLATPAK_NAME=${FLATPAK_ID}")
+  else  SEARCH+=("export FLATPAK_NAME="); fi
+        REPLACE+=("XOFLATPAKNAMEXO")
+
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("export INSTALL_TYPE=flatpak")
+  else  SEARCH+=("export INSTALL_TYPE=system"); fi
+        REPLACE+=("XOINSTALLTYPEXO")
+  
+  # B. *.desktop and *.sh files
+  # 3. Change Prefix directory
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("\.var\/app\/${FPNAME}\/data\/winezgui\/Prefixes")
+  else  SEARCH+=("\.local\/share\/winezgui\/Prefixes"); fi
+        REPLACE+=("XOPREFIXXO")
+
+
+  # *.desktop and *.sh files
+  # 4. Chagne WINEZGUIDIR dir
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("\.var\/app\/${FPNAME}\/data\/winezgui")
+  else  SEARCH+=("\.local\/share\/winezgui"); fi
+        REPLACE+=("XOWINEZGUIDIRXO")
+
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("export DATADIR=\"\/app\/share\/winezgui\"")
+  else  SEARCH+=("export DATADIR=\"\/usr\/share\/winezgui\""); fi
+        REPLACE+=("XODATADIRXO")
+
+  # *.desktop and *.sh files
+  # 5. Change DESKTOP shortcuts directory name
+  # where we link the script related .desktop files
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SEARCH+=("\.local\/share\/applications\/winezgui\/${FPNAME}")
+  else  SEARCH+=("\.local\/share\/applications\/winezgui"); fi
+        REPLACE+=("XODESKTOPDIRXO")
+
+  # *.reg files
+  # 6. Applications direcotry for registry
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+        SSSSSSS=("\.var\\\\\\\\app\\\\\\\\${FPNAME}")
+        SEARCH+=("${SSSSSSS}\\\\\\\\data\\\\\\\\applications")
+  else  SEARCH+=("\.local\\\\\\\\share\\\\\\\\applications");  fi
+        REPLACE+=("XOAPPLICATIONSXO")
+
+  # C. Paths
+  # 7. Applications directory (desktop files related)
+  SEARCH+=("\.local\/share\/applications")
+  REPLACE+=("XOAPPLICATIONSDIRXO")
+
+  # D. \\user\\user *.reg
+  # 8. Replace username
+  SEARCH+=("\\\\\\\\users\\\\\\\\${USER}")
+  REPLACE+=("XOREGUSERSUSERXO")
+
+  # E. \\home\\user\\ *.reg
+  # 9. Replace HOME\USER
+  SEARCH+=("\\\\\\\\home\\\\\\\\${USER}")
+  REPLACE+=("XOREGHOMEUSERXO")
+
+  # F. "USERNAME"="user" user.reg
+  # 10. same as above
+  SEARCH+=(\"USERNAME\"=\"${USER}\")
+  REPLACE+=("XOREGUSERNAMEUSERXO")
+
+  # G. Registry
+  # 11. Replace "InstalledBy"="USER"
+  SEARCH+=(\"InstalledBy\"=\"${USER}\")
+  REPLACE+=("XOREGINSTALLEDBYUSERXO")
+
+  # H. Home directory scripts and desktop file
+  # 12. /home/$user
+  SEARCH+=("\/home\/${USER}")
+  REPLACE+=("XOUSERHOMEXO")
+
+  # I. drive_c/users/$user
+  # 13. users/$user
+  SEARCH+=("\/users\/${USER}")
+  REPLACE+=("XOUSERSUSERXO")
+
+  # J. Variables
+  # Sed can't change empty string/variables,
+  # e.g., flatpakid in system install is empty
+  # 14. change FLATPAK_NAME if found
+  if [ ! -z "$FLATPAK_NAME" ]; then
+  FPNAME=$(echo ${FLATPAK_NAME}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  SEARCH+=("${FPNAME}")
+  REPLACE+=("XOFLATPAKIDXO")
+  fi
+
+  # 15. Change /{user,app}/bin/wine -> XOWINEEXEXO and vice versa
+  WEXE=$(echo ${WINE_CMD}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  SEARCH+=("${WEXE}")
+  REPLACE+=("XOWINEEXEXO")
+
+  # 16. Change wine version
+  WVER=$(echo ${WINEVER}|sed "s/\\./\\\\./g")
+  SEARCH+=("${WVER}")
+  REPLACE+=("XOWINEVERXO")
+
+  # Not changing user only
+  #  SEARCH+=("${USER}")
+  #  REPLACE+=("XOUSERXO")
+
+  LEN=${#SEARCH[@]}
+  # Export these
+  export SEARCH
+  export REPLACE
+  export LEN
+}
+

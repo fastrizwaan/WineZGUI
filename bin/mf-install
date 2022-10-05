@@ -1,9 +1,9 @@
 # Install Media Foundation Libraries, required for UE4 games
 # https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4
 TEMPDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
-WINEZPREFIX="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/prefixes)"
+WINEZGUIDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/winezgui)"
 
-mkdir -p "${WINEZPREFIX}"
+mkdir -p "${WINEZGUIDIR}"
 mkdir -p "${TEMPDIR}"
 
 cd "${TEMPDIR}"
@@ -12,10 +12,10 @@ wget -c https://github.com/z0z0z/mf-install/archive/refs/tags/1.0.tar.gz
 
 if [ -f "${TEMPDIR}/1.0.tar.gz" ]; then
             echo "found ${TEMPDIR}/1.0.tar.gz"
-            DOWNLOAD_SHA256SUM="$(sha256sum ${TEMPDIR}/1.0.tar.gz|cut -f1 -d ' ')"
+            DOWNLOAD_CHECKSUM="$(sha256sum ${TEMPDIR}/1.0.tar.gz|cut -f1 -d ' ')"
             SHA256="f0274fd22f27dfdf212c3a55ca0269f455150410639b00adc41a578fe4478bec"
             
-            if [ "${SHA256}" = "${DOWNLOAD_SHA256SUM}" ]; then
+            if [ "${SHA256}" = "${DOWNLOAD_CHECKSUM}" ]; then
                  echo "Sha256sum success! Installing..."
                  cd "${TEMPDIR}"
                  tar -zxvf 1.0.tar.gz

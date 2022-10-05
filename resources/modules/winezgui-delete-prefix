@@ -1,0 +1,15 @@
+WineZGUI_Delete_Prefix()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-prefixes 
+  List_Available_Prefixes
+  
+  rm -rf "${SELECTED_PREFIX}" && \
+  DBUG "I:  Delete: Deleted ${SELECTED_PREFIX}!"
+  
+  # Delete all broken links which points to winezgui game prefix
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  DBUG "I: Delete: Removed broken WineZGUI .desktop links"
+  ${UPDATE_ICON_CACHE}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+}

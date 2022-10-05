@@ -4,7 +4,7 @@
 APPLICATIONSDIR='\$(realpath -m \~/.local/share/applications)\'
 WINE_CMD=$(which wine)
 WINETRICKS_CMD=$(which winetricks)
-WINEZPREFIX='\$(realpath -m \~/.local/share/winezgui)'
+WINEZGUIDIR='\$(realpath -m \~/.local/share/winezgui)'
 TEMPDIR="\$(realpath -m  \~/.local/share/winezgui/tmp)"
 INSTALL_TYPE="system"
 
@@ -87,39 +87,25 @@ if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
      TEMPDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/tmp)"
-     WINEZPREFIX="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/prefixes)"
+     WINEZGUIDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/winezgui)"
      INSTALL_TYPE=\"flatpak\"
 fi
 
 
+RESOURCES="./resources"
+ASSETS="./assets"
+BINDIR="./bin"
+MODULES="${RESOURCES}/modules"
+APPDATA="${RESOURCES}/appdata/"
 # Files to install
-APP01_SRC="./bin/winezgui"
-APP02_SRC="./bin/mf-install"
-APP03_SRC="./resources/winezgui-create-prefix"
-APP04_SRC="./resources/winezgui-script-launch"
-APP05_SRC="./resources/winezgui-script-open-other-exe"
-APP06_SRC="./resources/winezgui-script-winetricks-gui"
-APP07_SRC="./resources/winezgui-script-winetricks-cli"
-APP08_SRC="./resources/winezgui-script-launch-winecfg"
-APP09_SRC="./resources/winezgui-script-open-explorer"
-APP10_SRC="./resources/winezgui-script-open-shell"
-APP11_SRC="./resources/winezgui-script-rename"
-APP12_SRC="./resources/winezgui-script-change-icon"
-APP13_SRC="./resources/winezgui-script-change-category"
-APP14_SRC="./resources/winezgui-script-backup"
-APP15_SRC="./resources/winezgui-script-delete"
-APP16_SRC="./resources/winezgui-script-about"
-APP17_SRC="./resources/winezgui-script-locate-exe-function"
-APP18_SRC="./resources/winezgui-backup-restore-function"
-APP19_SRC="./resources/winezgui-restore-wzt"
-APP20_SRC="./resources/winezgui-create-wzt-info"
-APP21_SRC="./resources/winezgui-rename-name"
-APP22_SRC="./resources/winezgui-rename-prefix"
+APP01_SRC="${BINDIR}/winezgui"
+APP02_SRC="${BINDIR}/mf-install"
+APP03_SRC="${MODULES}/winezgui-create-prefix"
 
-DESK_SRC="./resources/io.github.fastrizwaan.WineZGUI.desktop"
-MIME_SRC="./resources/winezgui-wzt.xml"
-ICON_SRC="./assets/io.github.fastrizwaan.WineZGUI.svg"
-META_SRC="./resources/io.github.fastrizwaan.WineZGUI.metainfo.xml"
+DESK_SRC="${RESOURCES}/shortcut/io.github.fastrizwaan.WineZGUI.desktop"
+MIME_SRC="${RESOURCES}/mimetype/winezgui-wzt.xml"
+ICON_SRC="${ASSETS}/io.github.fastrizwaan.WineZGUI.svg"
+META_SRC="${APPDATA}/io.github.fastrizwaan.WineZGUI.metainfo.xml"
 
 MIME_ICO1="application-x-wzt.svg"
 MIME_ICO2="gnome-mime-application-x-wzt.svg"
@@ -128,25 +114,7 @@ MIME_ICO2="gnome-mime-application-x-wzt.svg"
 APP01=$(basename $APP01_SRC)
 APP02=$(basename $APP02_SRC)
 APP03=$(basename $APP03_SRC)
-APP04=$(basename $APP04_SRC)
-APP05=$(basename $APP05_SRC)
-APP06=$(basename $APP06_SRC)
-APP07=$(basename $APP07_SRC)
-APP08=$(basename $APP08_SRC)
-APP09=$(basename $APP09_SRC)
-APP10=$(basename $APP10_SRC)
-APP11=$(basename $APP11_SRC)
-APP12=$(basename $APP12_SRC)
-APP13=$(basename $APP13_SRC)
-APP14=$(basename $APP14_SRC)
-APP15=$(basename $APP15_SRC)
-APP16=$(basename $APP16_SRC)
-APP17=$(basename $APP17_SRC)
-APP18=$(basename $APP18_SRC)
-APP19=$(basename $APP19_SRC)
-APP20=$(basename $APP20_SRC)
-APP21=$(basename $APP21_SRC)
-APP22=$(basename $APP22_SRC)
+
 
 DESK=$(basename $DESK_SRC)
 MIME=$(basename $MIME_SRC)
@@ -179,28 +147,19 @@ if [ "${INSTALL}" = "true"  ]
      echo Installing...
      install -Dm755 $APP01_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP01'"
      install -Dm755 $APP02_SRC $APPS_DIR && echo "Installed '$APPS_DIR/$APP02'"
-
      install -Dm755 $APP03_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP03'"
-     install -Dm755 $APP04_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP04'"
-     install -Dm755 $APP05_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP05'"
-     install -Dm755 $APP06_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP06'"
-     install -Dm755 $APP07_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP07'"
-     install -Dm755 $APP08_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP08'"
-     install -Dm755 $APP09_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP09'"
-     install -Dm755 $APP10_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP10'"
-     install -Dm755 $APP11_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP11'"
-     install -Dm755 $APP12_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP12'"
-     install -Dm755 $APP13_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP13'"
-     install -Dm755 $APP14_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP14'"
-     install -Dm755 $APP15_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP15'"
-     install -Dm755 $APP16_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP16'"
-     install -Dm755 $APP17_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP17'"
-     install -Dm755 $APP18_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP18'"
-     install -Dm755 $APP19_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP19'"
-     install -Dm755 $APP20_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP20'"
-     install -Dm755 $APP21_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP21'"
-     install -Dm755 $APP22_SRC $DATA_DIR && echo "Installed '$DATA_DIR/$APP22'"
      
+     # Install all modules
+     SAVEIFS=${IFS}
+     IFS=$(echo -en "\n\b")
+     for i in $(ls ${MODULES}); do 
+     MODULE_NAME=$(basename $i)
+     MODULE="$MODULES/$i"
+     
+     install -Dm755 $MODULE $DATA_DIR && echo "Installed '$DATA_DIR/$MODULE_NAME'"
+     done
+
+     IFS=${SAVEIFS}
      install -Dm644 $DESK_SRC $DESK_DIR  && echo "Installed '$DESK_DIR/$DESK'"
      install -Dm644 $MIME_SRC $MIME_DIR  && echo "Installed '$MIME_DIR/$MIME'"
      install -Dm644 $ICON_SRC $ICON_DIR  && echo "Installed '$ICON_DIR/$ICON'"
@@ -219,61 +178,50 @@ if [ "${INSTALL}" = "true"  ]
      # Update mime and desktop paths
      update-mime-database ${INSTALL_PREFIX}/share/mime &
      update-desktop-database ${DESK_DIR} &
-     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons &
+     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons \
+                           2>/dev/null &
 
      # Change Variables in winezgui and winezgui-create-prefix scripts
      # for system or flatpak install
      sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $APPS_DIR/$APP01
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP01
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $APPS_DIR/$APP01
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP01
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP01
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP01
 
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $APPS_DIR/$APP02
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $APPS_DIR/$APP02
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP02
 
      sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $DATA_DIR/$APP03
      sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP03
-     sed "s|WINEZPREFIX=.*|WINEZPREFIX=\"$WINEZPREFIX\"|"    -i $DATA_DIR/$APP03
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $DATA_DIR/$APP03
      sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP03
      sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP03
      sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP03
 
 #     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP04
      # Create uninstall script for later removal
-     echo "
-     rm -vf $APPS_DIR/$APP01
-     rm -vf $APPS_DIR/$APP02
-
-     rm -vf $DATA_DIR/$APP03
-     rm -vf $DATA_DIR/$APP04
-     rm -vf $DATA_DIR/$APP05
-     rm -vf $DATA_DIR/$APP06
-     rm -vf $DATA_DIR/$APP07
-     rm -vf $DATA_DIR/$APP08
-     rm -vf $DATA_DIR/$APP09
-     rm -vf $DATA_DIR/$APP10
-     rm -vf $DATA_DIR/$APP11
-     rm -vf $DATA_DIR/$APP12
-     rm -vf $DATA_DIR/$APP13
-     rm -vf $DATA_DIR/$APP14
-     rm -vf $DATA_DIR/$APP15
-     rm -vf $DATA_DIR/$APP16
-     rm -vf $DATA_DIR/$APP17
-     rm -vf $DATA_DIR/$APP18
-     rm -vf $DATA_DIR/$APP19
-     rm -vf $DATA_DIR/$APP20
-     rm -vf $DATA_DIR/$APP21
-     rm -vf $DATA_DIR/$APP22
      
-     rm -vf $DESK_DIR/$DESK
-     rm -vf $MIME_DIR/$MIME
-     rm -vf $ICON_DIR/$ICON
-     rm -vf $META_DIR/$META
-     rm -vf $MIME_ICO/$MIME_ICO1
-     rm -vf $MIME_ICO/$MIME_ICO2
-     rmdir  $DATA_DIR && echo "removed \\\'${DATA_DIR}\\\'"
-     " > ./uninstall
+     echo "rm -vf $APPS_DIR/$APP01" >  ./uninstall
+     echo "rm -vf $APPS_DIR/$APP02" >> ./uninstall
+     echo "rm -vf $DATA_DIR/$APP03" >> ./uninstall
+     
+     SAVEIFS=${IFS}
+     IFS=$(echo -en "\n\b")
+     for i in $(ls ${MODULES}); do 
+
+     echo "rm -vf $DATA_DIR/$i" >> ./uninstall
+     done
+     IFS=${SAVEIFS}
+     
+     echo "rm -vf $DESK_DIR/$DESK" >> ./uninstall
+     echo "rm -vf $MIME_DIR/$MIME" >> ./uninstall
+     echo "rm -vf $ICON_DIR/$ICON" >> ./uninstall
+     echo "rm -vf $META_DIR/$META" >> ./uninstall
+     echo "rm -vf $MIME_ICO/$MIME_ICO1" >> ./uninstall
+     echo "rm -vf $MIME_ICO/$MIME_ICO2" >> ./uninstall
+     echo "rmdir  $DATA_DIR && echo removed '${DATA_DIR}'" >> ./uninstall
+
 
 # For --uninstall, if already installed then uninstall else skip
 elif [ "${UNINSTALL}" = "true" ]; then
@@ -296,11 +244,11 @@ if [ "${DEPENDENCIES}" = "true" ]; then
 
      for i in $RUNTIME ; do
          if ! [ -x "$(command -v $i)" ]; then
-                NOTFOUND+="$i"
-                NOTFOUND+=" "
+                NOTFOUND+=("$i")
+                NOTFOUND+=(" ")
          elif [ -x "$(command -v $i)" ]; then
                 FOUND+=$i
-                FOUND+=" "
+                FOUND+=(" ")
          fi
      done
 

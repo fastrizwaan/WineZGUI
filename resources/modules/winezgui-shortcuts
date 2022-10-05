@@ -1,0 +1,45 @@
+#winezgui-shortcuts
+WineZGUI_Shortcuts()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset SELECT_SHORTCUT
+  SELECT_SHORTCUT=$( zenity --title "${APP_WITH_VER} - Shortcuts"        \
+                     --list   --hide-header                              \
+                     --width=360 --height=210                            \
+                     --radiolist --column " "                            \
+                     --column "Action"                                   \
+                         TRUE "Clean up..."                              \
+                            0 "Create..."                                \
+                            0 "Delete..."                                \
+                            0 "Restore..."                               \
+                     --text   "Shortcuts <b>${Shortcuts_NAME}</b> in use")
+
+  # Exit if Cancel is clicked
+  if [ -z "${SELECT_SHORTCUT}" ]; then
+       DBUG "I: Shortcuts: Cancel Selected!"
+       return 1
+  fi
+ 
+  DBUG "I: ${HEADER}: Selected ${SELECT_SHORTCUT}!"
+ 
+  if  [ "${SELECT_SHORTCUT}" = "Clean up..." ]; then
+        source ${DATADIR}/winezgui-shortcuts-clean-up
+        WineZGUI_Shortcuts_Clean_Up
+ 
+ elif [ "${SELECT_SHORTCUT}" = "Create..." ]; then
+        source ${DATADIR}/winezgui-shortcuts-create
+        WineZGUI_Shortcuts_Create
+ 
+ elif [ "${SELECT_SHORTCUT}" = "Delete..." ]; then
+        source ${DATADIR}/winezgui-shortcuts-delete 
+        echo "Launching delete Shortcuts!!!"
+        Winezgui_Shortcuts_Delete
+
+ elif [ "${SELECT_SHORTCUT}" = "Restore..." ]; then
+        source ${DATADIR}/winezgui-shortcuts-restore 
+        echo "Launching delete Shortcuts!!!"
+        WineZGUI_Shortcuts_Restore
+  fi
+  return 0
+}

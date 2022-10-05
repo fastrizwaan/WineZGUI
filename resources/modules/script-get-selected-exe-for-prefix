@@ -1,0 +1,92 @@
+#script-get-selected-exe-for-prefix
+Script_Get_Selected_Exe_For_Prefix()
+{
+ DBUG "I: Script: Launched ${FUNCNAME[0]}"
+ unset COMMAND
+ unset count
+ unset SHOW_OPTION
+ unset NAMES
+ unset FILES
+ unset RESULT
+ unset search_list
+
+ SAVEIFS=${IFS}
+ IFS=$(echo -en "\n\b")
+
+ count=0
+ NAMES=()
+ FILES=()
+ # Find all exe files in drive_c Exclude windows directory,
+ # and common exe files present in Program Files directory
+ # Add those files to FILES array and filenames to NAMES array
+ source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+ Script_Get_Installed_Exe_Files
+ EXE_LIST="${EXE_FILES_FOUND}"
+ search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
+
+
+ exe_found=$(echo ${search_list}|grep -i "exe")
+
+ if [ -z "${exe_found}" ] ; then
+      zenity --error --title "${PROGNAME} - no exe installed!" \
+             --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
+      Script_Window
+ fi
+ # if exe_found has value, then only change exe
+ for i in $(echo ${search_list}|tr '|' '\n'|sort)
+ do
+     RealName=$(basename "$i")
+     RealFile=$(realpath -m "$i")
+
+     # If 1st value is empty, enable it
+     if [ -z "${SHOW_OPTION}" ]; then
+          SHOW_OPTION+="TRUE \"${RealName}\""
+          SHOW_OPTION+=" "
+          NAMES+=("${RealName}")
+          FILES+=("${RealFile}")
+     else
+          SHOW_OPTION+="0 \"${RealName}\""
+          SHOW_OPTION+=" "
+          NAMES+=("${RealName}")
+          FILES+=("${RealFile}")
+     fi
+     count=$(expr ${count} + 1)
+ done
+ IFS=${SAVEIFS}
+
+
+# Generate Height value
+source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
+WineZGUI_Get_Window_Height ${#FILES[@]}
+
+# if [ ${#FILES[@]} -eq 1 ]; then
+#      export SELECTED_EXE="${FILES}"
+# --height=300s     
+# else
+     # 3. Show the found exe files using zenity
+     unset COMMAND
+     COMMAND+="zenity  --title=\"${APP_WITH_VER} - ${PREFIXNAME}\" "
+     COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+     COMMAND+="--text=\"Set default exe...\" "
+     COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+     RESULT=$(eval ${COMMAND})
+
+     if [ -z "${RESULT}" ]; then
+          echo "Cancelled!"
+          Script_Window
+     fi
+
+
+     count=0
+    # 4. Find which file the user selected and set the selected exe into variable
+     for i in "${NAMES[@]}"; do
+         if [ "$i" = "$RESULT" ]; then
+              echo "Selected $i"
+              echo "File is ${FILES[${count}]}"
+              export SELECTED_EXE="${FILES[${count}]}"
+              break
+         fi
+         count=$(expr ${count} + 1)
+     done
+# fi
+}

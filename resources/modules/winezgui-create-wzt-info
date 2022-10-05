@@ -1,0 +1,61 @@
+################################################################################
+# Create wzt-info.yml yml file for WineZGUI Backup file, which will be used by
+# winezgui-restore-wzt file, to get "Size" and "Game name" from this file
+# Steps:
+# 1. Set Debug Prompt, If prefix is default it is "I: Backup: ..."
+# 2. Check if Prefix Directory is writable or not
+# 3. Insert Data into wzt-info.yml
+# 4. Check if the file exists after it is created
+################################################################################
+WineZGUI_Create_Wzt_Info()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  # 1. Need full path to directory to create file in it
+  if [ -z "${1}" ]; then
+       echo "Must provide Prefix or Template Directory to process"
+       return 1
+  else
+       DIRECTORY="${1}"
+       DIRNAME=$(basename "${1}")
+  fi
+  
+  WZT_FILE_NAME="wzt-info.yml"
+  WZT_FILE="${DIRECTORY}/${WZT_FILE_NAME}"
+
+  # 2. Check if Prefix Directory is writable or not
+  DBUG "I: ${HEADER}: Creating ${WZT_FILE_NAME} at ${DIRNAME}"
+  DBUG "I: ${HEADER}: is ${DIRNAME} writable?"
+  if [ -w "${DIRECTORY}" ]; then
+       DBUG "I: ${HEADER}: Yes!"
+  else
+       DBUG "I: ${HEADER}: No!"
+       DBUG "I: ${HEADER}: Aborting!"
+       return 1
+  fi
+
+  # 3. Insert Data into wzt-info.yml
+  DATE=$(date +%F_%H%M)
+  echo "wzt-info.yml:"
+  echo "- - - - - - - - - - - - - - - - - - - - - - - - - - -"
+  echo "Name:${PROGNAME}"                |tee    "${WZT_FILE}"
+  echo "Exe:${EXE_NAME}"                 |tee -a "${WZT_FILE}"
+  echo "Prefix:${DIRNAME}"               |tee -a "${WZT_FILE}"
+  echo "Created:${DATE}"                 |tee -a "${WZT_FILE}"
+  echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_FILE}"
+  echo "Wine:${WINEVER}"                 |tee -a "${WZT_FILE}"
+  echo "Arch:${WINEARCH}"                |tee -a "${WZT_FILE}"
+  echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_FILE}"
+  echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_FILE}"
+  echo " "
+  
+  # 3.1 Include flatpak id in wzt-info.yml
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${WZT_FILE}"
+  fi
+
+  # 4. Check if the file exists after it is created
+  if [ -f "${WZT_FILE}" ]; then
+       DBUG "I: ${HEADER}: Created ${WZT_FILE}"
+  fi
+}

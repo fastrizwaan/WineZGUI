@@ -1,0 +1,19 @@
+# Function Show help
+WineZGUI_Show_Help()
+{
+  echo "WineZGUI - Wine GUI using Zenity "
+  echo "Usage:"
+  echo "$(basename "${0}") <argument>"
+  echo ""
+  echo "Argument:"
+  echo "exe/msi file      Creates prefix for the given exe file, else launch"
+  echo "wzt file          Restore a backed up prefix or bundle file (.wzt)"
+  echo "Options:"
+  echo "-v, --version     WinzeGUI version"
+  echo "-h, --help        Shows this help!"
+  echo ""
+  echo "Examples:"
+  echo "$(basename "${0}") setup.exe"
+  echo "$(basename "${0}") putty_installer.msi"
+  echo "$(basename "${0}") Notepadd.wzt"
+}

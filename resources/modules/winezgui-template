@@ -1,0 +1,66 @@
+WineZGUI_Template()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH"
+  unset TEMPLATE_OPTION
+  TEMPLATE_OPTION=$(zenity                                 \
+                  --title "${APP_WITH_VER} - Template"     \
+                  --list --hide-header                     \
+                  --width=360 --height=340                 \
+                  --radiolist --column " "                 \
+                  --column "Action"                        \
+                      TRUE "Configure ${TEMPLATE_NAME}..." \
+                         0 "Backup    ${TEMPLATE_NAME}..." \
+                         0 "Create New..."                 \
+                         0 "Clone..."                      \
+                         0 "Change..."                     \
+                         0 "Backup..."                     \
+                         0 "Restore..."                    \
+                         0 "Delete..."                     \
+                         0 "Help..."                       \
+                  --text   "Template..."                   )
+                        
+    # Exit if Cancel is clicked
+  if [ -z "${TEMPLATE_OPTION}" ]; then
+       DBUG "I: ${HEADER}: Cancel Selected!"
+       return 1
+  fi
+
+  # Show What is selected     
+  DBUG "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
+
+  if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
+          source ${DATADIR}/winezgui-template-configure
+          WineZGUI_Template_Configure
+  elif [ "${TEMPLATE_OPTION}" = "Backup    ${TEMPLATE_NAME}..." ]; then
+          source ${DATADIR}/winezgui-template-backup
+          WineZGUI_Template_Backup "${TEMPLATE}"
+  elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
+          source ${DATADIR}/winezgui-template-create-new
+          WineZGUI_Template_Create_New
+  elif [ "${TEMPLATE_OPTION}" = "Clone..." ]; then
+          source ${DATADIR}/winezgui-template-clone
+          WineZGUI_Template_Clone
+  elif [ "${TEMPLATE_OPTION}" = "Change..." ]; then
+          source ${DATADIR}/winezgui-template-change
+          WineZGUI_Template_Change
+  elif [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
+          source ${DATADIR}/winezgui-template-backup
+          WineZGUI_Template_Backup
+  elif [ "${TEMPLATE_OPTION}" = "Restore..." ]; then
+          source ${DATADIR}/winezgui-template-restore
+          WineZGUI_Template_Restore
+  elif [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
+          source ${DATADIR}/winezgui-template-delete
+          WineZGUI_Template_Delete
+  elif [ "${TEMPLATE_OPTION}" = "Help..." ]; then
+          source ${DATADIR}/winezgui-template-help
+          WineZGUI_Template_Help
+  else
+       echo "E: Unknown Configure Option = ${TEMPLATE_OPTION}"
+       exit 1
+  fi
+  
+  return 0
+} 

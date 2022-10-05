@@ -1,0 +1,117 @@
+#winezgui-startup-checks
+WineZGUI_Startup_Checks()
+{
+  OLD_HEADER=${HEADER}
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+
+  # Check if writable
+  if [ ! -w "$(dirname ${WINEZGUIDIR})" ]; then
+       echo "I: ${HEADER}: Cannot write to HOME directory. Bye!"
+       exit 1
+  fi
+  # Create Main Directories
+  if [ ! -d "${WINEZGUIDIR}" ]; then
+       mkdir -p "${WINEZGUIDIR}" &&   \
+       echo "I: ${HEADER}: Created: ${WINEZGUIDIR}"
+  fi
+  if [ ! -d "${TEMPLATES_DIR}" ]; then
+       mkdir -p "${TEMPLATES_DIR}" && \
+       echo "I: ${HEADER}: Created: ${TEMPLATES_DIR}"
+  fi
+  if [ ! -d "${PREFIXES_DIR}" ]; then
+       mkdir -p "${PREFIXES_DIR}"  && \
+       echo "I: ${HEADER}: Created: ${PREFIXES_DIR}"
+  fi
+  #  -- Handle Wine Arch... -- #
+  # If Settings.yml exists and debug: is set to true
+  # If Settings.yml exists, get arch value from it: win32 or win64
+  # On launch check required runtime dependencies
+  if [ ! -f "${WINEZGUIDIR}/DepsCheckOK.txt" ]; then
+       # Function to print if dependencies are installed.
+       FOUND=()    # Array/list to hold all found commands
+       NOTFOUND=() # Array/list to hold all not found commands
+  
+       RUNTIME="wine winetricks icotool exiftool zenity wget"
+       for i in ${RUNTIME} ; do
+            if [ $(which $i) ]; then
+                 FOUND+="$i"
+                 FOUND+=" "
+            else
+                 NOTFOUND+="$i"
+                 NOTFOUND+=" "
+            fi
+       done
+  
+       # Show found and not found dependencies for WineZGUI
+       if [ ! -z "${NOTFOUND}" ]; then
+            echo "Dependencies..."
+            echo "Found: ${FOUND}"
+            echo "Not Found: ${NOTFOUND}"
+            zenity --info --no-wrap --title="Missing Dependencies" \
+                 --text="Please install these in your system:\n${NOTFOUND}"
+       else
+            mkdir -p "${WINEZGUIDIR}"
+            echo "Yes" > "${WINEZGUIDIR}/DepsCheckOK.txt"
+       fi
+  fi
+  
+  if [ -f "${SETTINGS_FILE}" ]; then
+       export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
+       export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
+       export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+       export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+       export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       export DEFAULT="${TEMPLATE}"
+       export WINEPREFIX="${DEFAULT}"
+       
+  fi
+  
+  # If Settings.yml does not exists, add arch:win64 and template:WineZGUI-win64
+  if [ ! -f "${SETTINGS_FILE}" ] && [ -w ${WINEZGUIDIR} ]; then
+       export WINEARCH="win64"
+       export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+       DBUG "I: Winearch not defined in ${SETTINGS_FILE}; setting arch to win64"
+       DBUG "I: Prefix template not defined in ${SETTINGS_FILE}"
+       DBUG "I: using ${WINEZGUI_TEMPLATE}"
+       echo "arch:win64" >> "${SETTINGS_FILE}"
+       echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
+       export TEMPLATE="${WINEZGUI_TEMPLATE}"
+       export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       #echo "debug:Y" >> "${SETTINGS_FILE}"
+       export DEBUG="Y"
+       export DEFAULT="${TEMPLATE}"
+       export WINEPREFIX="${DEFAULT}"
+  fi
+  
+  # If Settings.yml exists and arch: value do not match win32 or win64; use win64
+  if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ]; then
+       export WINEARCH="win64"
+       echo "E: arch:wine32/wine64 not found in ${SETTINGS_FILE}; using win64"
+       echo "arch:win64" >> "${SETTINGS_FILE}"
+       export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
+  fi
+  
+  # -- HANDLE Templates -- #
+  # If Template Directory not found, set default to WineZGUI-win64 prefix template
+  if [ ! -d "${TEMPLATE}" ]; then
+       sed "s|template:.*|template:${WINEZGUI_TEMPLATE}|g" -i "${SETTINGS_FILE}"
+       export TEMPLATE="${WINEZGUI_TEMPLATE}"
+       export TEMPLATE_NAME=$(basename ${TEMPLATE})
+  fi
+  
+  # Use current TEMPLATE as default $WINEPREFIX for WineZGUI
+  export DEFAULT="${TEMPLATE}"
+
+  # Create wine template and link it to defaults
+  # If Default (WINEZGUI_TEMPLATE) is not found initialize it
+  if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
+       DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
+       mkdir -p "${WINEZGUI_TEMPLATE}"
+       source ${DATADIR}/winezgui-initialize-wineprefix
+       WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
+       source ${DATADIR}/winezgui-create-about-yml
+       WineZGUI_Create_About_Yml
+  fi
+  HEADER="${OLD_HEADER}"
+}

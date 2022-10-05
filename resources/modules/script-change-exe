@@ -1,0 +1,53 @@
+# script-change-exe
+# Change Default EXE for the prefix, required for installers
+# Any given exe can set to default be it from inside prefix or outside prefix
+# Steps:
+# 1. Ask whether to Find Exe inside prefix (for installers) or any Other exe
+# 2. Change EXE values in Script
+
+Script_Change_Exe()
+{      
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  unset RESPONSE
+  RESPONSE=$(zenity --title "Change EXE for ${PREFIXNAME}"       \
+                    --list --hide-header --width=360 --height=30 \
+                    --radiolist --column " "                     \
+                    --column "Change"                            \
+                        TRUE "Installed Exe (after Setup)"       \
+                           0 "Any other Exe"                     \
+                    --text   "<b>Set default exe...</b>"         )
+  # If Cancel is clicked
+  if [ -z "${RESPONSE}" ]; then
+       DBUG "I: Change Exe: Cancelled!"
+       Script_Window
+  fi
+  # Print response
+  DBUG "I: Script: ${FUNCNAME[0]}: ${RESPONSE} Selected!"
+
+  # If only name, append (wine-xx)
+  if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
+         # Call Script_Get_Selected_Exe
+         source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
+         Script_Get_Selected_Exe
+         DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
+  elif [ "$RESPONSE" = "Any other Exe" ]; then
+         # Script_Change_Any_Other_Exe
+         source ${WINEZGUI_SCRIPTS}/script-change-any-other-exe 
+         Script_Change_Any_Other_Exe
+         # use locate exe
+  fi
+  # Change Icon
+  source ${WINEZGUI_SCRIPTS}/script-change-icon 
+  # We do not want to see zenity dialog of icon change success
+  export Script_Change_Icon_DO_NOT_PROMPT="true"
+  Script_Change_Icon "${SELECTED_EXE}"
+
+  # Change Prefix
+  source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+  Script_Create_Change_Prefix_File
+  # Update files
+  # Change EXE_NAME and EXE_PATH in all the required files
+  # Change Sha256sum etc.
+  source ${WINEZGUI_SCRIPTS}/script-change-exe-variables
+  Script_Change_Exe_Variables
+}

@@ -92,7 +92,7 @@ if [ "$1" = "bundle" ]; then
      # Create flatpak bundle
 
      flatpak build-bundle ${REPO} ${BUNDLE} ${APP_ID} ${BRANCH} && \
-     echo "Sucessfully built ${BUNDLE}!" || (echo "build bundle failed" && exit 1)
+     echo "Sucessfully built ${BUNDLE}!"||(echo "build bundle failed" && exit 1)
 
      echo "Generating sha256sum of ${APP_ID}"
      SHORT_BUNDLE_ID="$(echo ${BUNDLE}|sed 's/\.flatpak//g')"

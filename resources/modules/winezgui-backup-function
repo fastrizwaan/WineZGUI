@@ -1,0 +1,51 @@
+WineZGUI_Backup_Function()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+        echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
+        return 1
+  else
+        DIRECTORY="${1}"
+        DIRNAME=$(basename "${1}")
+  fi      
+
+  source ${DATADIR}/winezgui-fetch-replacement-data
+  WineZGUI_Fetch_Replacement_Data
+  
+  source ${DATADIR}/winezgui-fetch-replacement-files
+  WineZGUI_Fetch_Replacement_Files "${DIRECTORY}"
+
+  cd "${DIRECTORY}"  
+  DBUG "I: ${HEADER}: Processing files inside ${DIRNAME}"
+
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b") # needed for sed to work with files in variable
+  
+  # Do search and replace in the files inside given directory
+  for (( i=0; i <${LEN}; i++ )); do
+      echo -n "."
+      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST} || \
+      echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}"
+  done
+  echo " "
+  IFS=${SAVEIFS}
+  # Rename Directory for Backup
+  DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
+  DTARGET="${DIRECTORY}/drive_c/users/XOUSERXO"
+  # Make sure that directory for the user exists, before moving
+  if [ -d "${DIRECTORY}/drive_c/users/${USER}" ]; then
+       mv "${DSOURCE}" "${DTARGET}" && \
+       DBUG "I: ${HEADER}: Renamed ${DSOURCE}"
+       DBUG "I: ${HEADER}: to      ${DTARGET}"
+  fi
+
+
+  # Remove H: links on Backup
+  rm  "${DIRECTORY}/dosdevices/h:" && \
+  DBUG "I: ${HEADER}: Removed H: symlink ${DIRNAME}/dosdevices/h:"
+
+  # Cleanup variables 
+  unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH FPNAME 
+  unset WEXE WVER FILE_LIST DTARGET DSOURCE
+}

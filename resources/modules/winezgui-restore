@@ -1,0 +1,21 @@
+WineZGUI_Restore()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  # Ask user to select the .wzt backup file to restore
+  WZT_FILE="$(zenity --file-filter=*.${BKP_EXT}            \
+                     --file-selection                      \
+                     --title="Select WineZGUI Backup File" )"
+
+  # If no Backup file is selected, or cancel is clicked
+  if [ -z "${WZT_FILE}" ]; then
+       DBUG "I: Restore: Cancelled!"
+       unset WZT_FILE  ; # Empty variable
+
+  else
+       source ${DATADIR}/winezgui-restore-wzt 
+       Restore_Wzt_File
+  fi # -z "${WZT_FILE}"
+
+  # Clear temporary used variables
+  unset WZT_FILE
+}

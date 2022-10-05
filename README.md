@@ -14,7 +14,7 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 
 1. Runs windows games or exe files from file manager
 2. Creates application shortcut for easier access.
-3. Focus on running games and not setting up prefixes.
+3. Focus on playing games and not setting up prefixes.
 4. Backup and Restore prefixes for later use.
 5. Create Game Bundles for sharing (prefix+game)
 
