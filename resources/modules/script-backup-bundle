@@ -12,11 +12,8 @@
 Script_Backup_Bundle()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  source ${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function 
-  DBUG "I: Script: ${FUNCNAME[0]}: Create Game Bundle... Selected!"
-  echo -n "I: Script: ${FUNCNAME[0]}: Checking if ${EXE_NAME} is not"
-  echo    "inside a standard directory"
-
+  HEADER="Script: ${FUNCNAME[0]}"
+  DBUG "I: ${HEADER}: Checking if ${EXE_NAME} is inside a standard directory!"
 
   # 1. Exclude Directories for bundling
   # Do not allow game bundle creation if the user has .exe inside
