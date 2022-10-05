@@ -23,8 +23,9 @@ WineZGUI_Restore_Function()
   
   # Do search and replace in the files inside given directory
   for (( i=0; i <${LEN}; i++ )); do
-        sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST}  #      && \
-        #DBUG "I: ${HEADER}: Replaced: ${REPLACE[$i]} => ${SEARCH[$i]}"
+      sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} || \
+      DBUG "I: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      sleep 5s
 
   done
   IFS=${SAVEIFS}

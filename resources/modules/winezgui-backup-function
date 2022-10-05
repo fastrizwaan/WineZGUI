@@ -22,10 +22,10 @@ WineZGUI_Backup_Function()
   IFS=$(echo -en "\n\b") # needed for sed to work with files in variable
   
   # Do search and replace in the files inside given directory
-  for (( i=0; i <${LEN}; i++ ))
-      do
-      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${FILE_LIST} #    && \
-      #DBUG "I: ${HEADER}: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
+  for (( i=0; i <${LEN}; i++ )); do
+      sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST} || \
+      DBUG "I: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      sleep 5s
   done
 
   IFS=${SAVEIFS}
