@@ -23,7 +23,7 @@ Script_Backup_Bundle()
   # 1.1.1 Get root dirs using find to handle of different OS
   ROOT_DIRS="$(find / -maxdepth 1 -type d)"
   # 1.1.2 Get Mounted Partitions using mount command
-  if [ $(flatpak-spawn --host which mount) ] ; then
+  if [ $(flatpak-spawn --host which mount 2>/dev/null) ] ; then
        MOUNTED_PARTITONs="$(flatpak-spawn --host mount |cut -f3 -d " ")"
        DBUG "I: Script: ${FUNCNAME[0]}: using flatpak-spawn --host mount"
   else
