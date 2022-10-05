@@ -27,7 +27,7 @@ WineZGUI_Backup_Function()
       sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g" -i ${FILE_LIST} #    && \
       #DBUG "I: ${HEADER}: Replaced: ${SEARCH[$i]} => ${REPLACE[$i]}"
   done
-  echo "==================================================="
+
   IFS=${SAVEIFS}
   # Rename Directory for Backup
   DSOURCE="${DIRECTORY}/drive_c/users/${USER}"
@@ -35,8 +35,8 @@ WineZGUI_Backup_Function()
   # Make sure that directory for the user exists, before moving
   if [ -d "${DIRECTORY}/drive_c/users/${USER}" ]; then
        mv "${DSOURCE}" "${DTARGET}" && \
-       echo  "I: ${HEADER}: Renamed ${DSOURCE}"
-       echo  "I: ${HEADER}: to      ${DTARGET}"
+       DBUG "I: ${HEADER}: Renamed ${DSOURCE}"
+       DBUG "I: ${HEADER}: to      ${DTARGET}"
   fi
 
 

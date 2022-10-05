@@ -7,18 +7,8 @@ List_Available_Prefixes()
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  unset SELECTED_PREFIX
-  unset PREFIXES_FOUND
-  unset COMMAND
-  unset count
-  unset SHOW_OPTION
-  unset NAMES
-  unset FILES
-  unset RESULT
-  unset SEARCH_LIST
-  unset RealFile
-  unset RealName
-  unset i
+  unset SELECTED_PREFIX PREFIXES_FOUND COMMAND count SHOW_OPTION
+  unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
 
   count=0
   NAMES=()
