@@ -120,8 +120,9 @@ WineZGUI_Fetch_Replacement_Data()
   REPLACE+=("XOWINEEXEXO")
 
   # 16. Change wine version
-  WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
-  SEARCH+=("${WVER}")
+  #WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  #SEARCH+=("${WVER}")
+  SEARCH+=("${WINEVER}")
   REPLACE+=("XOWINEVERXO")
   echo "------------------"
   echo "${WINEVER}"
