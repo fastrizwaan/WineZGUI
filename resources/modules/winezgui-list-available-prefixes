@@ -31,7 +31,7 @@ List_Available_Prefixes()
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
   if [ -z "${PREFIXES_FOUND}" ] ; then
-       zenity --error --title "${PROGNAME} - no prefixes found!" \
+       zenity --error --title "${APP_WITH_VER} - no prefixes found!" \
               --text "Sorry, no prefixes found in Prefixes directory"
        unset SEARCH_LIST PREFIXES_FOUND
        IFS=${SAVEIFS}
