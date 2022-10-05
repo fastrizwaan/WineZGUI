@@ -24,7 +24,7 @@ Script_Launch()
   ${WINE_CMD} "${exe_name}"
 
   # 4. Remove wine installed shortcuts, unclutters menu
-  source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
+  source ${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts 
   Remove_Wine_Created_Shortcuts
 
   # Detect Setup or Direct Play exe
