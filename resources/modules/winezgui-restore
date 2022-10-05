@@ -1,6 +1,6 @@
 WineZGUI_Restore()
 {
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   # Ask user to select the .wzt backup file to restore
   WZT_FILE="$(zenity --file-filter=*.${BKP_EXT}            \
                      --file-selection                      \
@@ -18,9 +18,4 @@ WineZGUI_Restore()
 
   # Clear temporary used variables
   unset WZT_FILE
-  unset FOUND_PREFIX_DIR
-  unset FOUND_DESKTOP_FILE
-  unset FOUND_SCRIPT_FILE
-  unset PREFIXNAME
-  unset GN
 }

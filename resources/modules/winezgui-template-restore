@@ -37,48 +37,46 @@ WineZGUI_Template_Restore()
 
   ZENITY_STATUS=$?
 
- # 4.2.1 If user cancels extraction,  zenity will return 1
- if [ "${ZENITY_STATUS}" = "1" ]; then
-      # If the user cancels extraction of wzt game bundle during extraction
-      # kill the running tar command which has wzt in it
-      unset PID_OF_TAR
-      PID_OF_TAR=$(ps -aux|grep -i tar|sed "/.*grep -i.*/d" \
-                          |sed "s/  */ /g" |cut -f2 -d " "  )
+  # 4.2.1 If user cancels extraction,  zenity will return 1
+  if [ "${ZENITY_STATUS}" = "1" ]; then
+       # If the user cancels extraction of wzt game bundle during extraction
+       # kill the running tar command which has wzt in it
+       unset PID_OF_TAR
+       PID_OF_TAR=$(ps -aux|grep -i tar|sed "/.*grep -i.*/d" \
+                           |sed "s/  */ /g" |cut -f2 -d " "  )
 
-      if ! [ -z "$PID_OF_TAR" ]; then
-           kill -9 ${PID_OF_TAR} \
-           && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
-           # Ask the user whether to delete partially extracted or let it be
-           zenity --question --title "Extraction Cancelled!" \
-                  --text "Delete ${TAR_PREFIX} prefix?"
-           ANSWER=$?
-           if [ "${ANSWER}" = "0" ]; then
-                # User selected Delete
-                rm -rf "${TEMPLATES_DIR}/${TAR_PREFIX}" && \
-                DBUG "I: ${HEADER}: Removed ${TEMPLATES_DIR}/${TAR_PREFIX}"
-                # Cleanup broken links in winezgui shortcuts directory
-                find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-                DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
-           else
-                # user wants to keep prefix
-                DBUG "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${TAR_PREFIX}"
-                # Restore Sucess Message
-           fi
-           MSG=("${TAR_PREFIX} Restore Cancelled!")
-           WineZGUI_Window
-      fi # if ! [ -z "$PID_OF_TAR" ]; then
- else
-      
-      # PROCESS XO--XO variable inside prefixes and templates directory
-      source ${DATADIR}/winezgui-restore-process-xo
-      WineZGUI_Restore_Process_Xo
+       if ! [ -z "$PID_OF_TAR" ]; then
+            kill -9 ${PID_OF_TAR} \
+            && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
+            # Ask the user whether to delete partially extracted or let it be
+            zenity --question --title "Extraction Cancelled!" \
+                   --text "Delete ${TAR_PREFIX} prefix?"
+            ANSWER=$?
+            if [ "${ANSWER}" = "0" ]; then
+                 # User selected Delete
+                 rm -rf "${TEMPLATES_DIR}/${TAR_PREFIX}" && \
+                 DBUG "I: ${HEADER}: Removed ${TEMPLATES_DIR}/${TAR_PREFIX}"
+                 # Cleanup broken links in winezgui shortcuts directory
+                 find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+                 DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+            else
+                 # user wants to keep prefix
+                 DBUG "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${TAR_PREFIX}"
+                 # Restore Sucess Message
+            fi
+            MSG=("${TAR_PREFIX} Restore Cancelled!")
+            WineZGUI_Window
+       fi # if ! [ -z "$PID_OF_TAR" ]; then
+  else
+       # PROCESS XO--XO variable inside prefixes and templates directory
+       source ${DATADIR}/winezgui-restore-process-xo
+       WineZGUI_Restore_Process_Xo
 
-      # Inform on successful extraction
-      DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
-      zenity --info --title="${APP_WITH_VER} - Restore Template!" \
-      --text="Extracted ${TAR_FILE} Successfully!" 
- 
- fi # [ "${ZENITY_STATUS}" = "1" ]; then
-
+       # Inform on successful extraction
+       DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
+       zenity --info --title="${APP_WITH_VER} - Restore Template!" \
+       --text="Extracted ${TAR_FILE} Successfully!" 
+  
+  fi # [ "${ZENITY_STATUS}" = "1" ]; then
 }
 

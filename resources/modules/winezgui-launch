@@ -4,9 +4,6 @@ WineZGUI_Launch()
   source ${DATADIR}/winezgui-list-available-launch-scripts 
   List_Available_Launch_Scripts
 
-  # Directly start the exe with wine program
-  SCRIPT_NAME="$(echo ${SELECTED_SCRIPT}|grep -E "PROGNAME=")"
-  echo "SELECTED_SCRIPT = $SELECTED_SCRIPT"
   export LAUNCH="True"
   
   "${SELECTED_SCRIPT}" launch

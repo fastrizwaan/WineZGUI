@@ -9,9 +9,9 @@ WineZGUI_Initialize_Wineprefix()
        DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
        # Create Prefix then delete host linked directories
        WINEDLLOVERRIDES="mscoree,mshtml=" \
-       WINEPREFIX=${1} \
-       WINEDEBUG=-all \
-      ${WBOOT_CMD} 2>/dev/null
+       WINEPREFIX=${1}                    \
+       WINEDEBUG=-all                     \
+       ${WBOOT_CMD} 2>/dev/null
 
        # Replace home liked directory links with normal directories
        # For Games which saves in ~/Documents now will save in
@@ -22,8 +22,8 @@ WineZGUI_Initialize_Wineprefix()
        DBUG "I: ${HEADER}: Removing symlinks from wineprefix"
 
        for i in $(find "${1}/drive_c/users/${USER}" -type l); do
-              rm "${i}" && mkdir -p "${i}" && \
-            echo "${i}" >> "${1}/Prefix_Initialized.txt"
+             rm "${i}" && mkdir -p "${i}" && \
+             echo "${i}" >> "${1}/Prefix_Initialized.txt"
        done
        IFS=${SAVEIFS}
 
@@ -34,7 +34,8 @@ WineZGUI_Initialize_Wineprefix()
        # Create H: for HOME Directory for Wine Explorer
        ln -sf ${HOME} "${1}/dosdevices/h:"
        DBUG "I: ${HEADER}: Created H: symlink to ${HOME}"
-  fi 
+  fi
+  
   DBUG "I: ${HEADER}: Startup Checks"
   source ${DATADIR}/winezgui-startup-checks
   WineZGUI_Startup_Checks

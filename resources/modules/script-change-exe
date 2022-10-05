@@ -31,9 +31,9 @@ Script_Change_Exe()
               Script_Get_Selected_Exe
               DBUG "I: Script: Change Exe: ${SELECTED_EXE} Selected!"
        elif [ "$RESPONSE" = "Any other Exe" ]; then
-              # Change_Any_Other_Exe
-              source ${DATADIR}/winezgui-change-any-other-exe 
-              Change_Any_Other_Exe
+              # Script_Change_Any_Other_Exe
+              source ${DATADIR}/script-change-any-other-exe 
+              Script_Change_Any_Other_Exe
               # use locate exe
        fi
        # Change Icon

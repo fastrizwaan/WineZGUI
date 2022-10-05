@@ -16,7 +16,7 @@ WineZGUI_Template_Change()
             WineZGUI_Window
        fi
        if [ "${REG_ARCH}" != "win32" ] && [ "${REG_ARCH}" != "win64" ]; then
-            zenity --error --text "Could not find win32 or win64 in system.reg file"
+            zenity --error --text "Could not find win32 or win64 in system.reg"
             unset SELECTED_TEMPLATE
             WineZGUI_Window
        fi
@@ -72,5 +72,4 @@ WineZGUI_Template_Change()
             --title "${APP_WITH_VER} - ${TEMPLATE_NAME} needs ${REG_ARCH}!"
        fi
   fi
-
 }

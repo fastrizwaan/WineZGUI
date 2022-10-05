@@ -24,7 +24,7 @@ List_Available_Prefixes()
   NAMES=()
   FILES=()
   
- SAVEIFS=${IFS}
+  SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
   SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null \
               | tr '\n' '|')
@@ -37,14 +37,12 @@ List_Available_Prefixes()
   if [ -z "${PREFIXES_FOUND}" ] ; then
        zenity --error --title "${PROGNAME} - no prefixes found!" \
               --text "Sorry, no prefixes found in Prefixes directory"
-              echo SELECTED_PREFIX
        unset SEARCH_LIST PREFIXES_FOUND
        IFS=${SAVEIFS}
        WineZGUI_Window
   fi
   # if PREFIXES_FOUND has value, then only change exe
-  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
-  do
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u);  do
       RealName=$(basename "$i")
       RealFile=$(realpath -m "$i")
 
@@ -77,16 +75,17 @@ WineZGUI_Get_Window_Height ${#FILES[@]}
   RESULT=$(eval ${COMMAND})
   
   ANSWER=$?
-  echo "ANSWER = .... $ANSWER"
   if [ ${ANSWER} -eq 1 ]; then
-       echo "ANSWER IS 1 ... Cancelled!"
-       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
+       DBUG "I: ${HEADER}: Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION 
+       unset NAMES FILES COMMAND RESULT count i
        WineZGUI_Window
   fi
   
   if [ -z "${RESULT}" ]; then
-       echo "Cancelled!"
-       unset SEARCH_LIST PREFIXES_FOUND  SHOW_OPTION NAMES FILES COMMAND RESULT count i
+       DBUG "I: ${HEADER}: Cancelled!"
+       unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
        WineZGUI_Window
   fi
 
@@ -102,17 +101,6 @@ WineZGUI_Get_Window_Height ${#FILES[@]}
       fi
       count=$(expr ${count} + 1)
   done
-  echo "
-  SELECTED_PREFIX $SELECTED_PREFIX
-  PREFIXES_FOUND $PREFIXES_FOUND
-  COMMAND $COMMAND
-  SHOW_OPTION $SHOWOPTION
-  NAMES $NAMES
-  FILES $FILES
-  RESULT $RESULT
-  SEARCH_LIST $SEARCH_LIST
-  RealFile $RealFile
-  RealName $RealName
-  "
+
   HEADER=${OLD_HEADER}
 }

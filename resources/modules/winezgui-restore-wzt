@@ -146,7 +146,7 @@ Restore_Wzt_File()
   if [ ${WINEZGUIDIR_DF_IN_BYTES} -gt ${WZT_F_UNCOMPRESSED_SIZE} ];then
        DBUG "I: ${HEADER}: ${WINEZGUIDIR} has enough available disk space!"
   else
-       echo "W: Restore: ${WINEZGUIDIR} does not have free disk space!!!"
+       echo "W: ${HEADER}: ${WINEZGUIDIR} does not have free disk space!!!"
        unset MSG
        MSG+="${WINEZGUIDIR} has only ${WINEZGUIDIR_DF}"
        MSG+=" "

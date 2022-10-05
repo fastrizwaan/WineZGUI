@@ -16,5 +16,4 @@ WineZGUI_Show_Help()
   echo "$(basename "${0}") setup.exe"
   echo "$(basename "${0}") putty_installer.msi"
   echo "$(basename "${0}") Notepadd.wzt"
-
 }

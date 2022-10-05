@@ -1,7 +1,7 @@
 WineZGUI_Template()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   unset TEMPLATE_OPTION
   TEMPLATE_OPTION=$(zenity                                 \

@@ -1,95 +1,89 @@
 # source ${DATADIR}/winezgui-shortcuts-delete 
-
+# REVIEW
 Winezgui_Shortcuts_Delete()
 {
- unset COMMAND
- unset count
- unset SHOW_OPTION
- unset NAMES
- unset FILES
- unset SELECTED_OPTION
- unset search_list
+  unset COMMAND count SHOW_OPTION NAMES FILES SELECTED_OPTION search_list
 
- IFS=$(echo -en "\n\b")
+  IFS=$(echo -en "\n\b")
 
- count=0
- NAMES=()
- FILES=()
- # Find all exe files in drive_c Exclude windows directory,
- # and common exe files present in Program Files directory
- # Add those files to FILES array and filenames to NAMES array
- BASENAME=$(basename "${SELECTED_EXE}"|sed 's|\.[eE][Xx][eE]||g'\
-                                      |sed 's|\.[mM][Ss][iI]||g')
- NEW_SCRIPT_FILE="${PREFIXDIR}/${BASENAME}_other.sh"
- NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
+  count=0
+  NAMES=()
+  FILES=()
+  # Find all exe files in drive_c Exclude windows directory,
+  # and common exe files present in Program Files directory
+  # Add those files to FILES array and filenames to NAMES array
+  BASENAME=$(basename "${SELECTED_EXE}"|sed 's|\.[eE][Xx][eE]||g'\
+                                       |sed 's|\.[mM][Ss][iI]||g')
+  NEW_SCRIPT_FILE="${PREFIXDIR}/${BASENAME}_other.sh"
+  NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
 
 
- search_list=$(find ${DESKTOPDIR} -maxdepth 1 -iname "*.desktop" -type l -print| tr '\n' '|')
- echo "search_list = $search_list"
- exe_found=$(echo ${search_list})
+  search_list=$(find ${DESKTOPDIR} -maxdepth 1 -iname "*.desktop" \
+                                   -type l -print| tr '\n' '|')
 
- if [ -z "${exe_found}" ] ; then
-      zenity --error --title "${APP_WITH_VER} - Prefix!" \
-             --text "No Shortcuts found!"
-      WineZGUI_Window
- fi
- # if exe_found has value, then only change exe
- for i in $(echo ${search_list}|tr '|' '\n'|sort)
- do
-     RealName=$(basename "$i")
-     RealFile=$(realpath -m "$i")
+  exe_found=$(echo ${search_list})
 
-     # If 1st value is empty, enable it
-     if [ -z "${SHOW_OPTION}" ]; then
-          SHOW_OPTION+="TRUE \"${RealName}\""
-          SHOW_OPTION+=" "
-          NAMES+=("${RealName}")
-          FILES+=("${RealFile}")
-     else
-          SHOW_OPTION+="0 \"${RealName}\""
-          SHOW_OPTION+=" "
-          NAMES+=("${RealName}")
-          FILES+=("${RealFile}")
-     fi
-     count=$(expr ${count} + 1)
- done
- IFS=${SAVEIFS}
- 
-  # Generate Height value
-  source ${DATADIR}/winezgui-get-window-height
-  WineZGUI_Get_Window_Height ${#FILES[@]}
- # 3. Show the found exe files using zenity
- unset COMMAND
- COMMAND+="zenity --title=\"${APP_WITH_VER}\" --text \"Shortcuts\" "
- COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
- COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
- SELECTED_OPTION=$(eval ${COMMAND})
- unset count
- echo "${FILES[@]}"
- # Delete
- # 4. Find which file the user selected and set the selected exe into variable
-  for NAME in "${NAMES[@]}"; do
-     echo "i = $NAME"
-     if [ "${NAME}" = "${SELECTED_OPTION}" ]; then
-          echo "Selected $NAME"
-          echo "File is ${NAME}"
-          export SELECTED_SHORTCUT="${FILES[count]}"
-          break
-     fi
-     count=$(expr ${count} + 1)
- done
- unset DELETE_DESKTOP_FILE
- DELETE_DESKTOP_FILE=$(realpath -m "${SELECTED_SHORTCUT}")
- # Delete other Script file
- if [[ "${NAME}" == *"_other."* ]]; then
-       echo "$NAME has _other in it"
-       DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
-       rm -vf "${DELETE_SCRIPT_FILE}"
- fi
+  if [ -z "${exe_found}" ] ; then
+       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+              --text "No Shortcuts found!"
+       WineZGUI_Window
+  fi
+  # if exe_found has value, then only change exe
+  for i in $(echo ${search_list}|tr '|' '\n'|sort)
+  do
+      RealName=$(basename "$i")
+      RealFile=$(realpath -m "$i")
 
- rm -vf "${DELETE_DESKTOP_FILE}"
- #rm -vf "${PREFIXDIR}/${DELETE_FILENAME}.sh"
- echo "${DESKTOPDIR}"
- find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
- 
+      # If 1st value is empty, enable it
+      if [ -z "${SHOW_OPTION}" ]; then
+           SHOW_OPTION+="TRUE \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      else
+           SHOW_OPTION+="0 \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      fi
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+  
+   # Generate Height value
+   source ${DATADIR}/winezgui-get-window-height
+   WineZGUI_Get_Window_Height ${#FILES[@]}
+  # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="zenity --title=\"${APP_WITH_VER} - Delete Shortcut\!\" "
+  COMMAND+="--text \"Delete...\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  SELECTED_OPTION=$(eval ${COMMAND})
+  unset count
+
+  # Delete
+  # 4. Find which file the user selected and set the selected exe into variable
+   for NAME in "${NAMES[@]}"; do
+      if [ "${NAME}" = "${SELECTED_OPTION}" ]; then
+           echo "Selected $NAME"
+           echo "File is ${NAME}"
+           export SELECTED_SHORTCUT="${FILES[count]}"
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
+  unset DELETE_DESKTOP_FILE
+  DELETE_DESKTOP_FILE=$(realpath -m "${SELECTED_SHORTCUT}")
+  # Delete other Script file
+  if [[ "${NAME}" == *"_other."* ]]; then
+    echo "$NAME has _other in it"
+    DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
+    rm -vf "${DELETE_SCRIPT_FILE}"
+  fi
+
+  rm -vf "${DELETE_DESKTOP_FILE}"
+  #rm -vf "${PREFIXDIR}/${DELETE_FILENAME}.sh"
+  echo "${DESKTOPDIR}"
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
 }

@@ -129,6 +129,5 @@ WineZGUI_Fetch_Replacement_Data()
   export SEARCH
   export REPLACE
   export LEN
-
 }
 

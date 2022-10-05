@@ -1,6 +1,6 @@
 WineZGUI_Delete_Prefix()
 {
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-list-available-prefixes 
   List_Available_Prefixes
   
@@ -12,5 +12,4 @@ WineZGUI_Delete_Prefix()
   DBUG "I: Delete: Removed broken WineZGUI .desktop links"
   ${UPDATE_ICON_CACHE}
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-
 }

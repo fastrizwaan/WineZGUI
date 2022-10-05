@@ -3,7 +3,6 @@
 # Update info only when wine is found
 WineZGUI_Create_About_Yml()
 {
-  echo ":---------------------------:"
   OLD_HEADER=${HEADER}
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

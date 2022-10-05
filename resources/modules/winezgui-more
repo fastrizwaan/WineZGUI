@@ -1,7 +1,7 @@
 # FIXME winezgui-more
 WineZGUI_More()
 {
- DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   MORE_OPTION=$(zenity --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
                  --width=360 --height=240                \
@@ -16,7 +16,7 @@ WineZGUI_More()
   DBUG "${0}: ${FUNCNAME[0]}: ${MORE_OPTION} Selected!"
   # Exit if Cancel is clicked
   if   [ -z "${MORE_OPTION}" ]; then
-        DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+         DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
          return 1
   fi
   
@@ -29,5 +29,4 @@ WineZGUI_More()
          source ${DATADIR}/winezgui-shortcuts 
          WineZGUI_Shortcuts
   fi
-#  return 0
 }

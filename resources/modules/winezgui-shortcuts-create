@@ -1,4 +1,4 @@
-winezgui-shortcuts-create
+# winezgui-shortcuts-create
 WineZGUI_Shortcuts_Create()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

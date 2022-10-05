@@ -5,9 +5,6 @@ WineZGUI_Script()
   source ${DATADIR}/winezgui-list-available-prefix-scripts 
   List_Available_Prefix_Scripts
 
-  # Launch the script
-  SCRIPT_NAME="$(echo ${SELECTED_SCRIPT}|grep -E "PROGNAME=")"
-  echo "SELECTED_SCRIPT = $SELECTED_SCRIPT"
   export LAUNCH="False"
   
   ${SELECTED_SCRIPT}
