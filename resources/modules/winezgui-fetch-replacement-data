@@ -53,7 +53,7 @@ WineZGUI_Fetch_Replacement_Data()
         SEARCH+=("export DATADIR=\"\/app\/share\/winezgui\"")
   else  SEARCH+=("export DATADIR=\"\/usr\/share\/winezgui\""); fi
         REPLACE+=("XODATADIRXO")
-        
+
   # *.desktop and *.sh files
   # 5. Change DESKTOP shortcuts directory name
   # where we link the script related .desktop files
@@ -124,10 +124,6 @@ WineZGUI_Fetch_Replacement_Data()
   WVER=$(echo ${WINEVER}|sed "s/\\./\\\\./g")
   SEARCH+=("${WVER}")
   REPLACE+=("XOWINEVERXO")
-  echo "------------------"
-  echo "${WINEVER}"
-  echo "${WVER}"
-  echo "------------------"
 
   # Not changing user only
   #  SEARCH+=("${USER}")
