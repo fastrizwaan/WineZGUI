@@ -8,7 +8,14 @@ WineZGUI_Restore_Function()
   else
         DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
-  fi      
+  fi 
+
+  echo "-+-+-+-+"
+  echo "DATADIR = $DATADIR"
+  ls ${DATADIR}/winezgui-fetch-replacement-data
+  source ${DATADIR}/winezgui-fetch-replacement-files
+  echo "-+-+-+-+"
+       
   source ${DATADIR}/winezgui-fetch-replacement-data
   WineZGUI_Fetch_Replacement_Data # DATA
   
