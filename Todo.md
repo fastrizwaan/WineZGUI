@@ -1,30 +1,12 @@
-###### Todo
-0.88
-- [x] Launch setup.exe/install.exe and ask to set default exe
-- [x] setup/installer -> remove found_exe_files so that user is prompted always
-- [ ] If user says do not want to change default exe, ask whether to stop asking?
--     Prompt again for Change exe? if No. -> create found_exe_files.
+0.90
+- [ ] Tempalte Prefix Downloads
+-   Downloadable templates
+  - WineZGUI default (mf-install)
+  - Unreal Engine 4 Prefix
+  - Old Games Midi Supported
+
+0.89
 - [ ] Add shortcuts using [x] check boxes
-- [x] Change Prefix Exe (exe+icon+prefix)
-- [ ] Change Exe Only
-- [ ] Change Prefix only
-- [x] Icon only
-- [ ] Fix Backup_and_Restore_Functions
-- [x] make sure both prefix and templates are back up
-- [x] Fix Template - Backup - sed not working
-- [x] Rewrite winezgui to fix
-  - [x] winezgui:  Opening, exe, cancelling, reopening other exe quits winezgui
-- [x] Modularize even more, every script file be used as function
-- [x] 80 column rules
-- [x] Comment every script, what it does
-- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
-
-
-
-NEW
-- [x] New Menu Layout
-- [x] Show Names instead of Prefix name (grep Name:|cut -f2)
-- [x] Show Template in USE in about
 - [x] Shortcuts
     - [x] Create
       - Create Script file with New EXE Name,
@@ -33,43 +15,8 @@ NEW
     - [ ] Delete
     - [ ] Restore...
     - [ ] Delete All Shortcuts
-- [x] Move Templates and Shortcuts inside Configure
-- [ ] Beautify Scripts
-- [ ] Improve Backup and Restore code before release
-
-- [ ] Add / Remove Shortcuts ... proper place?
-- [ ] Templates... Fix delete etc..
-
-0.92
-
-0.91
-- [ ] WineZGUI recipe support
-    - [ ] URL
-    - [ ] Image
-    - [ ] EXE
-    - [ ] wine version
-    - [ ] winetricks
-    - [ ] Arch
-    - [ ] Playonlinux -> wzt-install?
-    - [ ] Create wzt-install script from existing install.
-         POL_Shortcut "7zFM.exe" "$TITLE" "" "" "Archiving;"
-         https://www.playonlinux.com/en/app-373-7Zip.html
-
-0.90
-- [ ] Prefix Management (prefixes with winetricks and registry customizations)
-  - Default Prefix
-  - WineZGUI default (mf-install)
-  - Unreal Engine 4 Prefix
-  - Old Games Midi Supported
-
-0.89
 - [ ] if wine version changes (compared to metada) inform user esp. for system install
-- [ ] Do not show uninstallers in Change Exe and runtime like vcrun etc.
-- [ ] If name contains Setup or Install, create Installer prefix
 - [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-- [ ] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
-- [ ] clone prefix from script itself
-  - [ ] Basically Copy prefix, i.e., Change EXE (with cp without mv)
 - [ ] wzt management
     - [ ] Split
         - [ ] Number or Parts
@@ -78,6 +25,41 @@ NEW
     - [ ] Extract wzt (unplayable)
     - [ ] Extract and restore wzt (playable)
     - [ ] Change Compression Level
+- [ ] Comment every script, what it does
+
+
+
+0.88
+- [ ] clone template prefix (Copy prefix)
+- [ ] Improve Backup and Restore code before release
+-     Check backup/restore with
+- [ ] flatpak->system 
+- [ ] system ->flatpak
+- [ ] user1 => user2
+- [ ] user3 => user1
+- [ ] user2 => user3
+- [ ] both flatpak and system install for user1, user2 and user3 should work on restore
+- [x] Launch setup.exe/install.exe and ask to set default exe
+- [x] setup/installer -> remove found_exe_files so that user is prompted always
+- [x] Change Prefix Exe (exe+icon+prefix)
+- [x] Icon only
+- [x] Fix Backup_and_Restore_Functions
+- [x] make sure both prefix and templates are back up
+- [x] Fix Template - Backup - sed not working
+- [x] Rewrite winezgui to fix Opening, exe, cancelling, reopening other exe quits winezgui
+- [x] Do not show uninstallers in Change Exe and runtime like vcrun etc.
+- [x] If name contains Setup or Install, ask to change exe after launch
+- [x] found Installed exe dialog height based on no. of exe found (wc -l found-exe-files.yml)
+- [x] Modularize even more, every script file be used as function
+- [x] 80 column rules
+- [x] Set as direct launch, winezgui find and delete direct-launch.txt to enable disable
+- [x] New Menu Layout
+- [x] Show Names instead of Prefix name (grep Name:|cut -f2)
+- [x] Show Template in USE in about
+- [x] Move Templates and Shortcuts inside Configure
+- [x] Beautify Scripts
+- [x] Add / Remove Shortcuts ... proper place More
+- [x] Templates... Fix delete etc..
 
 
 0.87
