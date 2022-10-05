@@ -63,8 +63,7 @@ WineZGUI_Open_Exe()
   else # Create prefix and script for the exe
        DBUG "I: ${HEADER}: Creating Prefix for ${EXE_NAME}"
        ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
-       echo "${WINEZGUI_CREATE_PREFIX} ${EXE_FILE}"
-
+       
        # Launch after creating new prefix
        DBUG "I: ${HEADER}: Created Script: ${SCRIPT_FILE_TO_RUN}"
        
