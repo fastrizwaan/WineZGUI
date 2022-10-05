@@ -6,6 +6,7 @@
   - Old Games Midi Supported
 
 0.89
+- [ ] Fix line-edit names with weird characters.
 - [ ] Add shortcuts using [x] check boxes
 - [x] Shortcuts
     - [x] Create
@@ -31,14 +32,12 @@
 
 0.88
 - [x] clone template prefix (Copy prefix)
-- [ ] Improve Backup and Restore code before release
+- [x] Improve Backup and Restore code before release
 -     Check backup/restore with
-- [ ] flatpak->system 
-- [ ] system ->flatpak
-- [ ] user1 => user2
-- [ ] user3 => user1
-- [ ] user2 => user3
-- [ ] both flatpak and system install for user1, user2 and user3 should work on restore
+- [x] flatpak->system 
+- [x] system ->flatpak
+- [x] user1 => user2
+- [x] both flatpak and system install for user1, user2 and user3 should work on restore
 - [x] Launch setup.exe/install.exe and ask to set default exe
 - [x] setup/installer -> remove found_exe_files so that user is prompted always
 - [x] Change Prefix Exe (exe+icon+prefix)
@@ -60,9 +59,6 @@
 - [x] Beautify Scripts
 - [x] Add / Remove Shortcuts ... proper place More
 - [x] Templates... Fix delete etc..
-
-
-0.87
 - [x] Installer Support
 - [x] Template Support (basic)
 - [x] Change Exe
@@ -73,7 +69,7 @@
 - [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
       archive. Breaks backward compatibility.
 - [x] Use info.yml for info file instead of info.txt
-- [x] About use info.yml
+- [x] About use Info.yml
 - [x] Use column to format info.yml like restore-wzt does
 - [x] Change Exe update info.yml
 - [x] After Installer, if new exe's are found
@@ -95,7 +91,10 @@
 - [x] script-locate-exe-function: use | instead of / sed FIXME
 - [x] copy default to create-prefixdir then run winezgui-create-prefix
 - [x] About.yml should be at winezprefix
-- [ ] fix templates select, create, delete, rename, clone
+- [x] fix templates select, create, delete, rename, clone
+
+0.87 
+- [x] No Release
 
 0.86.1
 - [x] Fix Project64-3.0.1.5664-2df3434_0.1 Repeating

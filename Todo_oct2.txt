@@ -1,8 +1,0 @@
-filename contains
-
-64 bit suggest 64bit prefix
-install / setup run directly then create prefix for selected exe.
-
-
-fix list-available-prefix (cancel and re-enter doubles the entries)
-use list-available-templates as fixed base
