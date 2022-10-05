@@ -47,7 +47,7 @@ WineZGUI_Fetch_Replacement_Data()
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         SEARCH+=("\.var\/app\/${FPNAME}\/data\/winezgui")
   else  SEARCH+=("\.local\/share\/winezgui"); fi
-        REPLACE+=("XOWINEZGUIDIRXO")
+        REPLACE+=("XODATADIRXO")
 
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
         SEARCH+=("export DATADIR=\"\/app\/share\/winezgui\"")
