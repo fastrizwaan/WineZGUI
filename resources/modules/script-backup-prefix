@@ -10,13 +10,13 @@
 # 8. Show info about created wzt file
 Script_Backup_Prefix()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
   # needed? # source ${DATADIR}/winezgui-backup-restore-function 
   # 1. Set Total Backup size variable
   TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
   TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
 
-  DBUG "I: Script: Backup: Prefix Backup... Selected!"
-  DBUG "I: Script: ${FUNCNAME[0]}: Size: ${TOTAL_SIZE_IN_HF}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Prefix Size: ${TOTAL_SIZE_IN_HF}"
 
   # 2. Prepare Prefix Name
   # 2.1 Format filename for flatpak or system install type
@@ -83,7 +83,7 @@ Script_Backup_Prefix()
 
   # 4.1: Check if the target directory is writable or not?
   if [ ! -w "${TARGET_DIR}" ]; then
-       echo "E: Script: Backup: Prefix: ${TARGET_DIR} not writable"
+       echo "E: Script: ${FUNCNAME[0]}: ${TARGET_DIR} not writable"
        zenity --error --no-wrap --title="Backup Error!" \
             --text "${TARGET_DIR} not writable\nAborting Backup!"
        Script_Window
@@ -116,11 +116,9 @@ Script_Backup_Prefix()
   # Step 5.3: If Target directory does not have sufficient space, abort backup
   DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
   if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ]; then
-       echo -n "I: Script: Backup: Prefix: ${TARGET_DIR}"
-       echo    "has enough available disk space"
+       DBUG "I: Script: ${FUNCNAME[0]}: ${TARGET_DIR} has enough disk space!"
   else
-       echo -n "W: Script: Backup: Prefix: ${TARGET_DIR}"
-       echo    "does not have free disk space!!!"
+       echo "W: Script: ${FUNCNAME[0]}: ${TARGET_DIR} does not have disk space!"
        unset MSG
        unset TITLE
        TITLE="Not Enough Disk Space!"
@@ -131,7 +129,7 @@ Script_Backup_Prefix()
 
        # Warn user
        zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
-       echo "E: Script: Backup: Prefix: Not Enough Disk Space," \
+       echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space," \
             "Cancelled!"
        Script_Window
 
@@ -146,7 +144,7 @@ Script_Backup_Prefix()
        DBUG "I: Script: ${FUNCNAME[0]}: Cancel Selected!"
        Script_Window
   fi
-  DBUG "I: Script Backup: Prefix: Compression Level ${LEVEL} Selected!"
+  DBUG "I: Script ${FUNCNAME[0]}: Compression Level ${LEVEL} Selected!"
 
   # 7. Create wzt = tar.zst file
   # 7.1 Change directory to PREFIXES_DIR

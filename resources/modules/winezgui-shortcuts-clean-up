@@ -5,7 +5,7 @@ WineZGUI_Shortcuts_Clean_Up()
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
-  SEARCH_LIST=$(find ${DESKTOPDIR} -maxdepth 1 -xtype l 2>/dev/null
+  SEARCH_LIST=$(find ${DESKTOPDIR} -maxdepth 1 -xtype l 2>/dev/null \
                |tr '\n' '|')
 
   BROKEN_LINKS_FOUND=$(echo ${SEARCH_LIST})

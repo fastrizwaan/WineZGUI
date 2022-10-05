@@ -11,7 +11,6 @@ WineZGUI_Get_Window_Height()
 
   if [ ${1} -gt 2 ]; then
        HEIGHT=$(expr ${1} \* 24 + ${HEIGHT})
-       echo "gt 10 $1"
   fi    # We want max 500 px window height
 
   if [ ${HEIGHT} -gt 700 ]; then

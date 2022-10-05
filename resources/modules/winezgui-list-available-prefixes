@@ -30,10 +30,6 @@ List_Available_Prefixes()
               | tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
- echo "
-   SEARCH_LIST $SEARCH_LIST
-   PREFIXES_FOUND $PREFIXES_FOUND
-  "
   if [ -z "${PREFIXES_FOUND}" ] ; then
        zenity --error --title "${PROGNAME} - no prefixes found!" \
               --text "Sorry, no prefixes found in Prefixes directory"
