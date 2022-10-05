@@ -30,7 +30,7 @@
 
 
 0.88
-- [ ] clone template prefix (Copy prefix)
+- [x] clone template prefix (Copy prefix)
 - [ ] Improve Backup and Restore code before release
 -     Check backup/restore with
 - [ ] flatpak->system 
