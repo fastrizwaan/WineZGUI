@@ -12,7 +12,7 @@ WineZGUI_Restore_Function()
   source ${DATADIR}/winezgui-fetch-replacement-data
   WineZGUI_Fetch_Replacement_Data # DATA
   
-  source ${DATADIR}/winezgui-fetch-replacment-files 
+  source ${DATADIR}/winezgui-fetch-replacement-files 
   WineZGUI_Fetch_Replacement_Files "${1}" #FILES
   
   cd "${DIRECTORY}"

@@ -1,4 +1,4 @@
-# winezgui-fetch-replacment-files
+# winezgui-fetch-replacement-files
 WineZGUI_Fetch_Replacement_Files()
 { 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
