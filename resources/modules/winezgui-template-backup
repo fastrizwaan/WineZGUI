@@ -159,7 +159,7 @@ WineZGUI_Template_Backup()
   # 9. Ask for Compression Levels
   unset LEVEL
   LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
-       --text "${FILENAME}" --title "Select Compression Level...")
+       --text "${BACKUP_FILE}" --title "Select Compression Level...")
   # 9.1 Return if Cancel is clicked
   if [ -z "${LEVEL}" ]; then
        DBUG "I: ${HEADER}: Cancel Selected!"
