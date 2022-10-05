@@ -75,7 +75,7 @@ Script_Find_Installed_Exe()
             DBUG "I: Script: Find Exe: New exe files found!"
             # Ask use to Change the EXE for Installer
             unset TEXT
-            TEXT+="New exe files <b>found</b>, select and Launch?\!"
+            TEXT+="New exe files <b>found</b>, select and Launch?"
             TEXT+="\\n<i>Default exe can be set using Change Exe...</i>"
             zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" \
                  --text "${TEXT}"

@@ -55,7 +55,7 @@ Winezgui_Shortcuts_Delete()
    WineZGUI_Get_Window_Height ${#FILES[@]}
   # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"${APP_WITH_VER} - Delete Shortcut\!\" "
+  COMMAND+="zenity --title=\"${APP_WITH_VER} - Delete Shortcut!\" "
   COMMAND+="--text \"Delete...\" "
   COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
