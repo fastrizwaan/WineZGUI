@@ -123,6 +123,10 @@ WineZGUI_Fetch_Replacement_Data()
   WVER=$(echo ${WINEVER}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
   SEARCH+=("${WVER}")
   REPLACE+=("XOWINEVERXO")
+  echo "------------------"
+  echo "${WINEVER}"
+  echo "${WVER}"
+  echo "------------------"
 
   # Not changing user only
   #  SEARCH+=("${USER}")

@@ -10,10 +10,10 @@ WineZGUI_Restore_Function()
         DIRNAME=$(basename "${1}")
   fi      
   source ${DATADIR}/winezgui-fetch-replacement-data
-  WineZGUI_Fetch_Replacement_Data
+  WineZGUI_Fetch_Replacement_Data # DATA
   
   source ${DATADIR}/winezgui-fetch-replacment-files 
-  WineZGUI_Fetch_Replacement_Files "${1}"
+  WineZGUI_Fetch_Replacement_Files "${1}" #FILES
   
   cd "${DIRECTORY}"
 
