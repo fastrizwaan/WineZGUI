@@ -9,62 +9,64 @@
 
 Script_Change_Exe_Variables()
 {
-     # 2. EXE_FILE (SELECTED_EXE is the NEW_EXE_FILE)
-     NEW_EXE_FILE="${SELECTED_EXE}"
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  # 2. EXE_FILE (SELECTED_EXE is the NEW_EXE_FILE)
+  NEW_EXE_FILE="${SELECTED_EXE}"
 
-     # 3. EXE_NAME (basename of NEW_EXE_FILE is NEW_EXE_NAME)
-     NEW_EXE_NAME=$(basename "${SELECTED_EXE}")
+  # 3. EXE_NAME (basename of NEW_EXE_FILE is NEW_EXE_NAME)
+  NEW_EXE_NAME=$(basename "${SELECTED_EXE}")
 
-     # 4. CHECKSUM (Generate NEW_CHECKSUM)
-     NEW_CHECKSUM=$(sha256sum "${SELECTED_EXE}"|cut -f1 -d " ")
-     DBUG "I: Script: Change Exe: Sha256sum: ${NEW_CHECKSUM}"
+  # 4. CHECKSUM (Generate NEW_CHECKSUM)
+  NEW_CHECKSUM=$(sha256sum "${SELECTED_EXE}"|cut -f1 -d " ")
+  DBUG "I: Script: ${FUNCNAME[0]}: Sha256sum: ${NEW_CHECKSUM}"
 
-     # 5. EXE_PATH (dirname of SELECTED_EXE is NEW_EXE_PATH)
-     NEW_EXE_PATH=$(dirname  "${SELECTED_EXE}")
+  # 5. EXE_PATH (dirname of SELECTED_EXE is NEW_EXE_PATH)
+  NEW_EXE_PATH=$(dirname  "${SELECTED_EXE}")
 
-     # 6. EXE_NOSP (replace space with underscore of SELECTED_EXE is NEW_EXE_NOSP)
-     NEW_EXE_NOSP=$(echo ${NEW_EXE_NAME}|tr " " "_");
+  # 6. EXE_NOSP (replace space with underscore of SELECTED_EXE is NEW_EXE_NOSP)
+  NEW_EXE_NOSP=$(echo ${NEW_EXE_NAME}|tr " " "_");
 
-     # 7. EXE_LESS (SELECTED_EXE without .exe or .msi is the NEW_EXE_LESS)
-     NEW_EXE_LESS=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
-                                        |sed "s/\.[Mm][Ss][Ii]//")
+  # 7. EXE_LESS (SELECTED_EXE without .exe or .msi is the NEW_EXE_LESS)
+  NEW_EXE_LESS=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
+                                     |sed "s/\.[Mm][Ss][Ii]//")
 
-     # 1. PROGNAME (Get NEW_PROGNAME)
-     # Automatically set name, read from pe file, if not found use exe name
-     NEW_PRODUCT="$(${EXIFTOOL} "${SELECTED_EXE}"| \
-                    grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")"
-     # if language is not english inside exe name, or product is "", use exe name
-     if [ $(echo ${NEW_PRODUCT}|grep -aEv [a-zA-Z]) ] || [ -z "${NEW_PRODUCT}" ] ;
-          then
-          unset NEW_PRODUCT
-          unset NEW_PROGNAME
-          NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})" \
-                         |sed "s/\.[eE][Xx][Ee]//g");
-          DBUG "I: Script: Change Exe: Product Name not found, using exe name"
-     else
-          NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
-          DBUG "I: Script: Change Exe: Product Name found: \"${NEW_PRODUCT}\""
-     fi
-     ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
-     E="export " # for 80 column rule
-     sed "s|${E}PROGNAME=.*|${E}PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}EXE_FILE=.*|${E}EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}EXE_NAME=.*|${E}EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}EXE_PATH=.*|${E}EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}EXE_NOSP=.*|${E}EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}CHECKSUM=.*|${E}CHECKSUM=\"${NEW_CHECKSUM}\"|g" -i ${SCRIPTFILE}
-     sed "s|${E}EXE_LESS=.*|${E}EXE_LESS=\"${NEW_EXE_LESS}\"|g" -i ${SCRIPTFILE}
+  # 1. PROGNAME (Get NEW_PROGNAME)
+  # Automatically set name, read from pe file, if not found use exe name
+  NEW_PRODUCT="$(${EXIFTOOL} "${SELECTED_EXE}"| \
+                 grep -i "product name"|cut -f2 -d ":" |sed "s/^ //")"
+  # if language is not english inside exe name, or product is "", use exe name
+  if [ $(echo ${NEW_PRODUCT}|grep -aEv [a-zA-Z]) ] || [ -z "${NEW_PRODUCT}" ] ;
+       then
+       unset NEW_PRODUCT
+       unset NEW_PROGNAME
+       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})" \
+                      |sed "s/\.[eE][Xx][Ee]//g");
+       DBUG "I: Script: ${FUNCNAME[0]}: Product Name not found, using exe name"
+  else
+       NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
+       DBUG "I: Script: ${FUNCNAME[0]}: Product Name found: \"${NEW_PRODUCT}\""
+  fi
+  ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
+  E="export " # for 80 column rule
+  sed "s|${E}PROGNAME=.*|${E}PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_FILE=.*|${E}EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_NAME=.*|${E}EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_PATH=.*|${E}EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_NOSP=.*|${E}EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}CHECKSUM=.*|${E}CHECKSUM=\"${NEW_CHECKSUM}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}EXE_LESS=.*|${E}EXE_LESS=\"${NEW_EXE_LESS}\"|g" -i ${SCRIPTFILE}
 
-     ####### Change Info.yml
-     sed "s|Name:.*|Name:${NEW_PROGNAME}|g"            -i "${INFOFILE}"
-     sed "s|Exe:.*|Exe:${NEW_EXE_FILE}|g"              -i "${INFOFILE}"
-     sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"    -i "${INFOFILE}"
-     sed "s|Sha256sum:.*|Sha256sum:${NEW_CHECKSUM}|g"  -i "${INFOFILE}"
+  ####### Change Info.yml
+  sed "s|Name:.*|Name:${NEW_PROGNAME}|g"            -i "${INFOFILE}"
+  sed "s|Exe:.*|Exe:${NEW_EXE_FILE}|g"              -i "${INFOFILE}"
+  sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"    -i "${INFOFILE}"
+  sed "s|Sha256sum:.*|Sha256sum:${NEW_CHECKSUM}|g"  -i "${INFOFILE}"
 
-     ####### Change Desktop file
-     sed "s|Name=.*|Name=${NEW_PROGNAME}|g"            -i "${DESKTOPFILE}"
-     sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}" -i "${DESKTOPFILE}"
-     # Launch Script after modification
-     "${SCRIPTFILE}" &
-     exit 0
+  ####### Change Desktop file
+  sed "s|Name=.*|Name=${NEW_PROGNAME}|g"            -i "${DESKTOPFILE}"
+  sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}" \
+                                                    -i "${DESKTOPFILE}"
+  # Launch Script after modification
+  "${SCRIPTFILE}" &
+  exit 0
 }

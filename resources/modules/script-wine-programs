@@ -3,22 +3,22 @@ Script_Wine_Programs()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   WINE_PROGRAMS_OPTION=$(zenity --title "${PROGNAME} - Wine Programs!" \
-                      --window-icon="${ICON}"            \
-                      --width=360 --height=360           \
-                      --list      --hide-header          \
-                      --radiolist --column " "           \
-                      --column "Action"                  \
-                        0      "Wine Configuration..."   \
-                        0      "Windows Explorer..."     \
-                        0      "Add/Remove Programs..."  \
-                        0      "Control Panel..."        \
-                        0      "Registry Editor..."      \
-                        0      "Task Manager..." \
-                        0      "Notepad..." \
-                        0      "Wordpad..." \
-                        0      "Clock..." \
-                        0      "Mine Sweeper..." \
-                      --text   "Run..." )
+                                --window-icon="${ICON}"            \
+                                --width=360 --height=360           \
+                                --list      --hide-header          \
+                                --radiolist --column " "           \
+                                --column "Action"                  \
+                                  0      "Wine Configuration..."   \
+                                  0      "Windows Explorer..."     \
+                                  0      "Add/Remove Programs..."  \
+                                  0      "Control Panel..."        \
+                                  0      "Registry Editor..."      \
+                                  0      "Task Manager..."         \
+                                  0      "Notepad..."              \
+                                  0      "Wordpad..."              \
+                                  0      "Clock..."                \
+                                  0      "Mine Sweeper..."         \
+                                --text   "Run..."                  )
 
    # Exit if Cancel is clicked
   if [ -z "${WINE_PROGRAMS_OPTION}" ]; then
@@ -65,6 +65,6 @@ Script_Wine_Programs()
          ${WINE_CMD} winemine
          
   fi
-  # Return
+
   return 0
 }

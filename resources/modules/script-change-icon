@@ -2,107 +2,107 @@
 # If No argument is given ask
 Script_Change_Icon()
 {
-     HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-     DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-     if [ -z "${1}" ]; then
-          GET_ICON=$(zenity   --file-selection \
-                              --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
-     else
-          GET_ICON="${1}"
-     fi
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+       GET_ICON=$(zenity   --file-selection \
+                           --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
+  else
+       GET_ICON="${1}"
+  fi
 
-     # If user cancels
-     if [ -z "${GET_ICON}" ]; then #if no icon is selected
-          DBUG "I: Script: ${HEADER}: Change Icon: Cancelled!"
-          # Return to Game window
-          Script_Window
-     fi
+  # If user cancels
+  if [ -z "${GET_ICON}" ]; then #if no icon is selected
+       DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
+       # Return to Game window
+       Script_Window
+  fi
 
-     # Determine if exe is given to extract icon
-     GET_ICON_EXT="${GET_ICON##*.}"
+  # Determine if exe is given to extract icon
+  GET_ICON_EXT="${GET_ICON##*.}"
 
-     if [ "${GET_ICON_EXT}" = "exe" ]; then
-          DBUG "I: Script: ${HEADER}: Change Icon: Exe file selected to extract icon!"
-          unset TEMP_DIR
-          TEMP_DIR="${WINEZGUIDIR}/tmp"
-          # Extract icon and convert it to several png files of diferent quality,
-          # Create a temporary Directory to extract icon from the exe file
-          DBUG "I: Script: ${HEADER}: Change Icon: Extraction from ${GET_ICON}"
-          mkdir -p ${TEMP_DIR} && \
-          DBUG "I: Script: ${HEADER}: Change Icon: Created directory ${TEMP_DIR}"
+  if [ "${GET_ICON_EXT}" = "exe" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Exe file selected to extract icon!"
+       unset TEMP_DIR
+       TEMP_DIR="${WINEZGUIDIR}/tmp"
+       # Extract icon and convert it to several png files of diferent quality,
+       # Create a temporary Directory to extract icon from the exe file
+       DBUG "I: Script: ${FUNCNAME[0]}: Extraction from ${GET_ICON}"
+       mkdir -p ${TEMP_DIR} && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Created directory ${TEMP_DIR}"
 
-          # wrestool extracts ico file from EXE
-          echo "wrestool -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_LESS}.ico "
-          wrestool -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_LESS}.ico" \
-          2> /dev/null && \
-          DBUG "I: Script: ${HEADER}: Change Icon: Wrestool executed"
+       # wrestool extracts ico file from EXE
+       echo "wrestool -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_LESS}.ico "
+       wrestool -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_LESS}.ico" \
+       2> /dev/null && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Wrestool executed"
 
-          # Only try to extract Icon when Icon is Found in the EXE
-          # icotool extracts all png files from ico files
-          # Select and copy the best png image file by sorting using ls -S1.
-          echo "icotool -x ${TEMP_DIR}/${EXE_LESS}.ico"
-          icotool -x "${TEMP_DIR}/${EXE_LESS}.ico" -o "${TEMP_DIR}" \
-          2>/dev/null && \
-          DBUG "I: Script: ${HEADER}: Change Icon: Icotool: Extracting png files from" \
-               "${TEMP_DIR}/${EXE_LESS}.ico" && \
-          cp -f $(ls -S1 ${TEMP_DIR}/${EXE_LESS}*.png|head -n 1) \
-                         "${ICONFILE}" && \
-          DBUG "I: Script: ${HEADER}: Change Icon: Copied successfully..." && WARN="false"
+       # Only try to extract Icon when Icon is Found in the EXE
+       # icotool extracts all png files from ico files
+       # Select and copy the best png image file by sorting using ls -S1.
+       echo "icotool -x ${TEMP_DIR}/${EXE_LESS}.ico"
+       icotool -x "${TEMP_DIR}/${EXE_LESS}.ico" -o "${TEMP_DIR}" \
+       2>/dev/null && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Icotool: Extracting png files from" \
+            "${TEMP_DIR}/${EXE_LESS}.ico" && \
+       cp -f $(ls -S1 ${TEMP_DIR}/${EXE_LESS}*.png|head -n 1) \
+                      "${ICONFILE}" && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Copied successfully..." && WARN="false"
 
-          # If icon could not be copied, warn the user
-          if [ "${WARN}" != "false" ]; then
-               DBUG "I: Create Prefix: Icon could not be copied..." \
-                    "use \"Change Icon...\" option"
-               zenity --error --no-wrap --title "Change Icon for ${EXE}" \
-                    --text "Icon from ${GET_ICON} failed!"
-          fi
+       # If icon could not be copied, warn the user
+       if [ "${WARN}" != "false" ]; then
+            DBUG "I: Create Prefix: Icon could not be copied..." \
+                 "use \"Change Icon...\" option"
+            zenity --error --no-wrap --title "Change Icon for ${EXE}" \
+                 --text "Icon from ${GET_ICON} failed!"
+       fi
 
-          # Cleanup tempdir and clear variable
-          unset WARN
+       # Cleanup tempdir and clear variable
+       unset WARN
 
-          #remove tmp directory after copying icon png
-          rm -rf "${TEMP_DIR}" && \
-          DBUG "I: Script: ${HEADER}: Change Icon: Cleanup ${TEMP_DIR}"
-     else
-          DBUG "I: Script: ${HEADER}: Change Icon: ${GET_ICON} selected"
-          cp -f "${GET_ICON}" "${ICONFILE}"
-          export ICON="${ICONFILE}"
-     fi
+       #remove tmp directory after copying icon png
+       rm -rf "${TEMP_DIR}" && \
+       DBUG "I: Script: ${FUNCNAME[0]}: Cleanup ${TEMP_DIR}"
+  else
+       DBUG "I: Script: ${FUNCNAME[0]}: ${GET_ICON} selected"
+       cp -f "${GET_ICON}" "${ICONFILE}"
+       export ICON="${ICONFILE}"
+  fi
 
-     # Now that we have included desktop-file-edit in flatpak, not needed
-     if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
-          export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-     else
-          export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
-     fi
+  # Now that we have included desktop-file-edit in flatpak, not needed
+  if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
+       export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
+  else
+       export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
+  fi
 
-     # set icon to the user selected one
-     ${DESKTOP_FILE_EDIT} --set-icon="${ICONFILE}" ${DESKTOPFILE} && \
-     DBUG "I: Script: ${HEADER}: Change Icon: Icon Changed Successfully!"
-     # update icon in Info.yml
-     if [ -w "${INFOFILE}" ]; then
-          sed "s|Icon:.*|Icon:${ICONFILE}|g" -i "${INFOFILE}"
-     else 
-          echo "I: Script: ${HEADER}: Change Icon: Cannot update ${INFOFILE}"
-     fi
+  # set icon to the user selected one
+  ${DESKTOP_FILE_EDIT} --set-icon="${ICONFILE}" ${DESKTOPFILE} && \
+  DBUG "I: Script: ${FUNCNAME[0]}: Icon Changed Successfully!"
+  # update icon in Info.yml
+  if [ -w "${INFOFILE}" ]; then
+       sed "s|Icon:.*|Icon:${ICONFILE}|g" -i "${INFOFILE}"
+  else 
+       echo "E: Script: ${FUNCNAME[0]}: Cannot update ${INFOFILE}"
+  fi
 
-     # Update .desktop database
-     ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  # Update .desktop database
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
-     # Inform user
-     #If Script_Change_Icon_DO_NOT_PROMPT has no value then prompt
-     #When we change exe, we do not want to see icon change prompt
-     #The value will be set before calling this function by find-installed-exe
-     if [ -z "${Script_Change_Icon_DO_NOT_PROMPT}" ] ; then
-          zenity --info --no-wrap --title="${DESKTOPFILE}" \
-                 --text="Icon Changed sucessfuly: ${GET_ICON}"
-     fi
-     # next time let it prompt
-     unset Script_Change_Icon_DO_NOT_PROMPT
-     # Change Runtime Icon as soon as it is changed
-     # Main Window is going to use ICON variable.
-     export ICON="${ICONFILE}"
+  # Inform user
+  #If Script_Change_Icon_DO_NOT_PROMPT has no value then prompt
+  #When we change exe, we do not want to see icon change prompt
+  #The value will be set before calling this function by find-installed-exe
+  if [ -z "${Script_Change_Icon_DO_NOT_PROMPT}" ] ; then
+       zenity --info --no-wrap --title="${DESKTOPFILE}" \
+              --text="Icon Changed sucessfuly: ${GET_ICON}"
+  fi
+  # next time let it prompt
+  unset Script_Change_Icon_DO_NOT_PROMPT
+  # Change Runtime Icon as soon as it is changed
+  # Main Window is going to use ICON variable.
+  export ICON="${ICONFILE}"
 
-     # Update icon cache for gtk based desktops
-     ${UPDATE_ICON_CACHE}
+  # Update icon cache for gtk based desktops
+  ${UPDATE_ICON_CACHE}
 }

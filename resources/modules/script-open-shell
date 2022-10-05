@@ -4,8 +4,8 @@
 # and gnome terminal is found on host
 Script_Open_Shell()
 {
-  echo "FLATPAKNAME=$FLATPAK_NAME"
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal) ]; then
          DBUG "I: Script: Open Shell: Flatpak script, running from sandbox"

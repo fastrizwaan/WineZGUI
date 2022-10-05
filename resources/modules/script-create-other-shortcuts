@@ -1,133 +1,132 @@
 # script-create-other-shortcuts
 # Create Shortcut function to be called from winezgui
 # to create extra .desktop shortcuts for a particular prefix
-
+# REVIEW
 Script_Create_Other_Shortcuts()
 {
-     # 1. Creaet Script to launch and for .desktop file
-     BASENAME=$(basename "${SELECTED_EXE}"   |sed 's|\.[eE][Xx][eE]||g'\
-                                             |sed 's|\.[mM][Ss][iI]||g')
-     NEW_SCRIPT="${PREFIXDIR}/${BASENAME}_other.sh"
-     NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
-     NEW_SCRIPT_PROGNAME=""
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  # 1. Creaet Script to launch and for .desktop file
+  BASENAME=$(basename "${SELECTED_EXE}"   |sed 's|\.[eE][Xx][eE]||g'\
+                                          |sed 's|\.[mM][Ss][iI]||g')
+  NEW_SCRIPT="${PREFIXDIR}/${BASENAME}_other.sh"
+  NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
+  NEW_SCRIPT_PROGNAME=""
 
-     ### Get Product Name
-     PRODUCT=$(${EXIFTOOL} "${SELECTED_EXE}"|grep -i "product name" \
-                                            | cut -f2 -d ":" |sed "s/^ //")
+  ### Get Product Name
+  PRODUCT=$(${EXIFTOOL} "${SELECTED_EXE}"|grep -i "product name" \
+                                         | cut -f2 -d ":" |sed "s/^ //")
 
-     # if language is not english inside exe name or product is ""; use exe name
-     if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z]) ] || [ -z "${PRODUCT}" ]; then
-          unset PRODUCT
-          unset PROGNAME
-          NEW_SCRIPT_PROGNAME=$(echo "${BASENAME} (${PREFIXNAME})" \
-                    |sed "s/\.[mM][Ss][Ii]//g" |sed "s/\.[eE][Xx][Ee]//g");
-          DBUG "I: Create Other Shortcut: Product Name not found using exe name"
-     else
-          NEW_SCRIPT_PROGNAME=$(echo "${PRODUCT} (${PREFIXNAME})");
-          DBUG "I: Create Other Shortcut: Product Name found: \"${PRODUCT}\""
-     fi
-
-
-     # If already a script file exist, do no create
-     if [ -f "${NEW_SCRIPT}" ]; then
-          zenity    --error --title "Script Already exist!" \
-                    --text "Delete ${NEW_SCRIPT} to recreate it!"
-          return 1
-     fi
-
-     # It is expecting a Name: PROGNAME=...
-     echo "PROGNAME=\"${NEW_SCRIPT_PROGNAME}\"" | tee  "${NEW_SCRIPT}"
-     echo "INSTALL_TYPE = $INSTALL_TYPE"
-
-     # WINE_CMD will change with flatpak
-     # If ${FLATPAK_NAME} is installed, and script created using flatpak
-     echo '
-     if [ ${INSTALL_TYPE} = "flatpak" ] && \
-        [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
-          WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
-          export WINE_CMD
-     else
-          # flatpak install and running from shell inside flatpak winezgui
-          if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-               export WINE_CMD="/app/bin/wine"
-          else # We are using non flatpak install
-               export WINE_CMD="$(which wine)"
-          fi
-     fi' |tee -a ${NEW_SCRIPT}
-
-     # Let's create a script file
-     echo "export WINEPREFIX=\"${PREFIXDIR}\""         | tee -a "${NEW_SCRIPT}"
-     echo "SHORTCUT_EXE=\"${SELECTED_EXE}\""           | tee -a "${NEW_SCRIPT}"
-     echo "BASENAME=\$(basename \"\${SHORTCUT_EXE}\")" | tee -a "${NEW_SCRIPT}"
-     echo "DIRENAME=\$(dirname  \"\${SHORTCUT_EXE}\")" | tee -a "${NEW_SCRIPT}"
-     echo "cd \"\${DIRENAME}\""                        | tee -a "${NEW_SCRIPT}"
-     echo "\${WINE_CMD} \"\${BASENAME}\""              | tee -a "${NEW_SCRIPT}"
-
-     echo "Shortcut Created! by Script_Create_Other_Shortcuts"
-
-     # Make it executable
-     chmod +x "${NEW_SCRIPT}"
-
-     #### ICON for Other EXE
-     unset TEMP_DIR
-     TEMP_DIR="${WINEZGUIDIR}/tmp"
-     # Extract icon and convert it to several png files of diferent quality,
-     # Create a temporary Directory to extract icon from the exe file
-     DBUG "I: Script: Change Icon: Extraction from ${SELECTED_EXE}"
-     mkdir -p ${TEMP_DIR} && \
-          DBUG "I: Script: Change Icon: Created directory ${TEMP_DIR}"
-
-     OTHER_EXE=$(basename ${SELECTED_EXE})
-     OTHER_EXE=$(echo ${OTHER_EXE}|sed "s| |_|g"|sed "s|(|\(|g")
-     OTHER_ICON="${PREFIXDIR}/other.png"
-     # wrestool extracts ico file from EXE
-     wrestool -x -t 14 "${SELECTED_EXE}" > "${TEMP_DIR}/${OTHER_EXE}.ico" \
-     2> /dev/null &&  DBUG "I: Script: Change Icon: Wrestool executed"
-
-     # Only try to extract Icon when Icon is Found in the EXE
-     # icotool extracts all png files from ico files
-     # Select and copy the best png image file by sorting using ls -S1.
-     icotool -x "${TEMP_DIR}/${OTHER_EXE}.ico" -o "${TEMP_DIR}" 2>/dev/null && \
-     DBUG "I: Script: Change Icon: Icotool: Extracting png files from" \
-     "${TEMP_DIR}/${OTHER_EXE}.ico" && \
-     cp -f $(ls -S1 ${TEMP_DIR}/${OTHER_EXE}*.png|head -n 1) \
-     "${OTHER_ICON}" && \
-     DBUG "I: Script: Change Icon: Copied successfully..." && WARN="false"
-
-     # If icon could not be copied, warn the user
-     if [ "${WARN}" != "false" ]; then
-          DBUG "I: Create Prefix: Icon could not be copied..." \
-               "use \"Change Icon...\" option"
-          zenity --error --no-wrap --title "Change Icon for ${SELECTED_EXE}" \
-                 --text "Icon from ${SELECTED_EXE} failed!"
-     fi
-
-     # Cleanup tempdir and clear variable
-     unset WARN
-
-     #remove tmp directory after copying icon png
-     rm -rf "${TEMP_DIR}"
-     #### ICON for Other EXE
+  # if language is not english inside exe name or product is ""; use exe name
+  if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z]) ] || [ -z "${PRODUCT}" ]; then
+       unset PRODUCT
+       unset PROGNAME
+       NEW_SCRIPT_PROGNAME=$(echo "${BASENAME} (${PREFIXNAME})" \
+                 |sed "s/\.[mM][Ss][Ii]//g" |sed "s/\.[eE][Xx][Ee]//g");
+       DBUG "I: Create Other Shortcut: Product Name not found using exe name"
+  else
+       NEW_SCRIPT_PROGNAME=$(echo "${PRODUCT} (${PREFIXNAME})");
+       DBUG "I: Create Other Shortcut: Product Name found: \"${PRODUCT}\""
+  fi
 
 
+  # If already a script file exist, do no create
+  if [ -f "${NEW_SCRIPT}" ]; then
+       zenity    --error --title "Script Already exist!" \
+                 --text "Delete ${NEW_SCRIPT} to recreate it!"
+       return 1
+  fi
 
-     # Create Desktop File
-     APP_CATEGORY="Game"
+  # It is expecting a Name: PROGNAME=...
+  echo "PROGNAME=\"${NEW_SCRIPT_PROGNAME}\"" | tee  "${NEW_SCRIPT}"
+  echo "INSTALL_TYPE = $INSTALL_TYPE"
 
-     echo "
-[Desktop Entry]
-Name=${NEW_SCRIPT_PROGNAME}
-Type=Application
-Exec=bash -c \"'${NEW_SCRIPT}' \"
-Icon=${OTHER_ICON}
-Keywords=winezgui; game; ${BASENAME};
-NoDisplay=false
-StartupNotify=true
-Terminal=false
-Categories=${APP_CATEGORY};
-     " > "${NEW_SCRIPT_DESKTOP_FILE}"
+  # WINE_CMD will change with flatpak
+  # If ${FLATPAK_NAME} is installed, and script created using flatpak
+  echo '
+  if [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+       export WINE_CMD
+  else
+       # flatpak install and running from shell inside flatpak winezgui
+       if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+            export WINE_CMD="/app/bin/wine"
+       else # We are using non flatpak install
+            export WINE_CMD="$(which wine)"
+       fi
+  fi' |tee -a ${NEW_SCRIPT}
 
-     # Link it
-     ln -svf "${NEW_SCRIPT_DESKTOP_FILE}" "${DESKTOPDIR}/${BASENAME}_other.desktop"
-     unset NEW_SCRIPT_DESKTOP_FILE BASENAME NEW_SCRIPT_PROGNAME PRODUCT
+  # Let's create a script file
+  echo "export WINEPREFIX=\"${PREFIXDIR}\""         | tee -a "${NEW_SCRIPT}"
+  echo "SHORTCUT_EXE=\"${SELECTED_EXE}\""           | tee -a "${NEW_SCRIPT}"
+  echo "BASENAME=\$(basename \"\${SHORTCUT_EXE}\")" | tee -a "${NEW_SCRIPT}"
+  echo "DIRENAME=\$(dirname  \"\${SHORTCUT_EXE}\")" | tee -a "${NEW_SCRIPT}"
+  echo "cd \"\${DIRENAME}\""                        | tee -a "${NEW_SCRIPT}"
+  echo "\${WINE_CMD} \"\${BASENAME}\""              | tee -a "${NEW_SCRIPT}"
+
+  echo "Shortcut Created! by Script_Create_Other_Shortcuts"
+
+  # Make it executable
+  chmod +x "${NEW_SCRIPT}"
+
+  #### ICON for Other EXE
+  unset TEMP_DIR
+  TEMP_DIR="${WINEZGUIDIR}/tmp"
+  # Extract icon and convert it to several png files of diferent quality,
+  # Create a temporary Directory to extract icon from the exe file
+  DBUG "I: Script: Change Icon: Extraction from ${SELECTED_EXE}"
+  mkdir -p ${TEMP_DIR} && \
+       DBUG "I: Script: Change Icon: Created directory ${TEMP_DIR}"
+
+  OTHER_EXE=$(basename ${SELECTED_EXE})
+  OTHER_EXE=$(echo ${OTHER_EXE}|sed "s| |_|g"|sed "s|(|\(|g")
+  OTHER_ICON="${PREFIXDIR}/other.png"
+  # wrestool extracts ico file from EXE
+  wrestool -x -t 14 "${SELECTED_EXE}" > "${TEMP_DIR}/${OTHER_EXE}.ico" \
+  2> /dev/null &&  DBUG "I: Script: Change Icon: Wrestool executed"
+
+  # Only try to extract Icon when Icon is Found in the EXE
+  # icotool extracts all png files from ico files
+  # Select and copy the best png image file by sorting using ls -S1.
+  icotool -x "${TEMP_DIR}/${OTHER_EXE}.ico" -o "${TEMP_DIR}" 2>/dev/null && \
+  DBUG "I: Script: Change Icon: Icotool: Extracting png files from" \
+  "${TEMP_DIR}/${OTHER_EXE}.ico" && \
+  cp -f $(ls -S1 ${TEMP_DIR}/${OTHER_EXE}*.png|head -n 1) \
+  "${OTHER_ICON}" && \
+  DBUG "I: Script: Change Icon: Copied successfully..." && WARN="false"
+
+  # If icon could not be copied, warn the user
+  if [ "${WARN}" != "false" ]; then
+       DBUG "I: Create Prefix: Icon could not be copied..." \
+            "use \"Change Icon...\" option"
+       zenity --error --no-wrap --title "Change Icon for ${SELECTED_EXE}" \
+              --text "Icon from ${SELECTED_EXE} failed!"
+  fi
+
+  # Cleanup tempdir and clear variable
+  unset WARN
+
+  #remove tmp directory after copying icon png
+  rm -rf "${TEMP_DIR}"
+  #### ICON for Other EXE
+
+
+
+  # Create Desktop File
+  APP_CATEGORY="Game"
+
+  echo "[Desktop Entry]"                        > "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Name=${NEW_SCRIPT_PROGNAME}"           >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Type=Application"                      >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Exec=bash -c \"'${NEW_SCRIPT}' \""     >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Icon=${OTHER_ICON}"                    >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Keywords=winezgui; game; ${BASENAME};" >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "NoDisplay=false"                       >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "StartupNotify=true"                    >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Terminal=false"                        >> "${NEW_SCRIPT_DESKTOP_FILE}"
+  echo "Categories=${APP_CATEGORY}; "          >> "${NEW_SCRIPT_DESKTOP_FILE}"
+
+  # Link it
+  ln -svf "${NEW_SCRIPT_DESKTOP_FILE}" "${DESKTOPDIR}/${BASENAME}_other.desktop"
+  unset NEW_SCRIPT_DESKTOP_FILE BASENAME NEW_SCRIPT_PROGNAME PRODUCT
 }

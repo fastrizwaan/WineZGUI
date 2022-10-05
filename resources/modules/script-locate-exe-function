@@ -8,6 +8,7 @@
 # 6. If Sha256sum did not match with the NEW_EXE
 Locate_Exe_Function()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
   # 1. If exe file not found, ask user to locate it
   if [ ! -f "${EXE_FILE}" ]; then
        echo "E: Script: Locate: ${EXE_FILE} not found at ${EXE_PATH}"

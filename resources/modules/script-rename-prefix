@@ -10,20 +10,20 @@
 # 8. Launch Script from Renamed Directory
 Rename_Prefix()
 {
-DBUG "I: Script: Launched ${FUNCNAME[0]}"
-if [ -z "${1}" ]; then
-  # 1. Ask for New Prefix Name
-  GET_PREFIX_NAME=$(zenity --title "Rename Prefix..." \
-                           --width=500 --entry \
-                           --text "Enter a name for the prefix" \
-                           --entry-text "${PREFIXNAME}")
-else 
-    GET_PREFIX_NAME="${1}"
-fi
-  
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+    # 1. Ask for New Prefix Name
+    GET_PREFIX_NAME=$(zenity --title "Rename Prefix..."           \
+                             --width=500 --entry                  \
+                             --text "Enter a name for the prefix" \
+                             --entry-text "${PREFIXNAME}"         )
+  else 
+      GET_PREFIX_NAME="${1}"
+  fi
+    
   # 1.1 If User clicks cancel, go back 
   if [ -z "${GET_PREFIX_NAME}" ]; then
-     echo "I: Script: Rename: Prefix: Cancelled"
+     DBUG "I: Script: ${FUNCNAME[0]}: Cancelled"
      Script_Window
   fi
   
@@ -36,8 +36,8 @@ fi
        zenity --error --title="Directory Already Exists!" \
               --text="Cannot change ${PREFIXNAME} to ${NEWPREFIXNAME}"
               
-       echo "I: Script: Rename: Prefix: Cannot change to ${NEWPREFIXNAME}"
-       echo "I: Script: Rename: Prefix: Directory ${PREFIXNAME} Already Exists!"
+       DBUG "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"
+       DBUG "I: Script: ${FUNCNAME[0]}: Directory ${PREFIXNAME} Already Exists!"
        Script_Window
   fi
 
@@ -52,7 +52,7 @@ fi
   # Keep EXE: FILE, PATH, NAME, NOSP when they are outside prefix
   # if not exe_path inside exe_file = if exe_file not inside prefixdir
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-          echo "I: Script: Rename: Prefix: Game directory is outside prefix!"
+          DBUG "I: Script: ${FUNCNAME[0]}: Game directory is outside prefix!"
           sed "s|${EXE_FILE}|XOEXE_FILEXO|g"  \
               -i ${PREFIXDIR}/*.txt           \
               -i ${PREFIXDIR}/*.sh            \
@@ -82,11 +82,6 @@ fi
   NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop"
   NEWINFOFILE="${NEWPREFIXDIR}/info.txt"
  
-  DBUG "NEWSCRIPTFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh \
-  NEWICONFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.png     \
-  NEWDESKTOPFILE=${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop \
-  NEWINFOFILE=${NEWPREFIXDIR}/info.txt \
- "
   # 5.2.1 Replace in .desktop file
   
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${DESKTOPFILE}"
@@ -181,14 +176,14 @@ fi
   # 6.1 Rename .png file
   if [ -f "${ICONFILE}" ]; then
        mv "${ICONFILE}" "${RENAMED_ICON_FILE}" && \
-       echo "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.png ->" \
+       DBUG "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.png ->" \
             "${NEWPREFIXNAME}.png"
   fi
   
   # 6.2 Rename .sh file
   if [ -f "${SCRIPTFILE}" ]; then
        mv "${SCRIPTFILE}" "${RENAMED_SCRIPT_FILE}" && \
-      echo "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.sh ->" \
+      DBUG "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.sh ->" \
            "${NEWPREFIXNAME}.sh"
   fi
   
@@ -207,13 +202,13 @@ fi
   # 7. Create new shortcut and delete old one
   # 7.1 link new .desktop file to desktopdir
   ln -sf "${NEWDESKTOPFILE}" "${DESKTOPDIR}/${NEWPREFIXNAME}.desktop" && \
-  echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
+  DBUG "I: Script: ${FUNCNAME[0]}: Created shortcut for ${NEWDESKTOPFILE}" \
          "at ${DESKTOPDIR}" || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
 
   # 7.2 Delete all broken links which points to winezgui game prefix
   find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-  echo "I: Script: Rename: Prefix: Removed broken WineZGUI .desktop links"
+  DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
   
   # 7.3 update icon cache and desktop menu
   ${UPDATE_ICON_CACHE}
@@ -225,18 +220,12 @@ fi
   export SCRIPTFILE="${NEWSCRIPTFILE}"
   export ICONFILE="${NEWICONFILE}"
   export DESKTOPFILE="${NEWDESKTOPFILE}"
-  echo "I: Script: Rename: Prefix: starting script from renamed dir"
+  DBUG "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
   
   # 8. Launch Script from Renamed Directory
   "${NEWSCRIPTFILE}" &
   
-  unset GET_PREFIX_NAME
-  unset NEWPREFIXNAME
-  unset NEWPREFIXDIR
-  unset NEW_EXE_FILE
-  unset NEW_EXE_PATH
-  unset NEWSCRIPTFILE
-  unset NEWICONFILE
-  unset NEWDESKTOPFILE
+  unset GET_PREFIX_NAME NEWPREFIXNAME NEWPREFIXDIR NEW_EXE_FILE NEW_EXE_PATH
+  unset NEWSCRIPTFILE NEWICONFILE NEWDESKTOPFILE
   exit 0 
 }

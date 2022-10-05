@@ -10,216 +10,215 @@
 # 8. Show info about created wzt file
 Script_Backup_Prefix()
 {
-     # needed? # source ${DATADIR}/winezgui-backup-restore-function 
-     # 1. Set Total Backup size variable
-     TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
-     TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
+  # needed? # source ${DATADIR}/winezgui-backup-restore-function 
+  # 1. Set Total Backup size variable
+  TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
+  TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
 
-     DBUG "I: Script: Backup: Prefix Backup... Selected!"
-     DBUG "I: Script: Backup: Prefix: Size: ${TOTAL_SIZE_IN_HF}"
+  DBUG "I: Script: Backup: Prefix Backup... Selected!"
+  DBUG "I: Script: ${FUNCNAME[0]}: Size: ${TOTAL_SIZE_IN_HF}"
 
-     # 2. Prepare Prefix Name
-     # 2.1 Format filename for flatpak or system install type
+  # 2. Prepare Prefix Name
+  # 2.1 Format filename for flatpak or system install type
 
-     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-          # If "flatpak-" is not part of flatpak name
-          # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
-          if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
-               SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
-          fi
-          unset FILENAME
-          FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          FILENAME+="-Prefix-Backup-"
-          FILENAME+="${SHORT_FLATPAK_NAME}"
-          FILENAME+="-${DATE}"
-          FILENAME+=".${BKP_EXT}"
-          # Flatpak: Game-WineZGUI-0.87-Prefix-Backup-flatpak-wine7-20220904_2359.wzt
-     else # for system add wine-version
-          unset FILENAME
-          FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
-          FILENAME+="-Prefix-Backup-"
-          FILENAME+="${WINEVER}"
-          FILENAME+="-${DATE}"
-          FILENAME+=".${BKP_EXT}"
-          # Game-WineZGUI-0.87-Prefix-Backup-wine-7.0-20220904_2359.wzt
-     fi
-
-
-     DBUG "I: Script: Backup: Prefix: Filename Suggestion: ${FILENAME}"
-
-     # For Zenity prompt
-     unset TITLE
-     unset TEXT
-     TITLE="Backup ${PREFIXNAME} Prefix!"
-     TEXT+="${PREFIX_SIZE_IN_HF}"
-
-     # 3. Suggest and Ask for wzt file name
-     DBUG "I: Script: Backup: Prefix: Asking filename"
-     BACKUP_FILE=$( zenity                        \
-                    --title="${TITLE}"            \
-                    --width=700 --height=30       \
-                    --text="${TEXT}"              \
-                    --entry-text="${FILENAME}"    \
-                    --entry)
-
-     # 3.1: if backup file is empty / cancel clicked
-     if [ -z "${BACKUP_FILE}" ]; then
-          DBUG "I: Script: Backup: Prefix: Cancelled!"
-          unset BACKUP_FILE
-          unset FILENAME
-          Script_Window
-     fi
-
-     # 4. Ask user to select backup target/destination directory
-     DBUG "I: Script: Backup: Prefix: Select backup directory"
-     unset TITLE
-     TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-     TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
-     if [ -z "${TARGET_DIR}" ]; then
-          DBUG "I: Script: Backup: Prefix:" \
-               "Select backup directory: Cancelled!"
-          Script_Window
-     fi
-
-     # 4.1: Check if the target directory is writable or not?
-     if [ ! -w "${TARGET_DIR}" ]; then
-          echo "E: Script: Backup: Prefix: ${TARGET_DIR} not writable"
-          zenity --error --no-wrap --title="Backup Error!" \
-               --text "${TARGET_DIR} not writable\nAborting Backup!"
-          Script_Window
-     fi
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       # If "flatpak-" is not part of flatpak name
+       # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
+       if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+            SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+       fi
+       unset FILENAME
+       FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+       FILENAME+="-Prefix-Backup-"
+       FILENAME+="${SHORT_FLATPAK_NAME}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${BKP_EXT}"
+       # Flatpak: Game-WineZGUI-0.87-Prefix-Backup-flatpak-wine7-20220904_2359.wzt
+  else # for system add wine-version
+       unset FILENAME
+       FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+       FILENAME+="-Prefix-Backup-"
+       FILENAME+="${WINEVER}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${BKP_EXT}"
+       # Game-WineZGUI-0.87-Prefix-Backup-wine-7.0-20220904_2359.wzt
+  fi
 
 
-     # 4.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
-     DBUG "I: Script: Backup: Prefix: Given ${BACKUP_FILE}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Filename Suggestion: ${FILENAME}"
 
-     if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
-          BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
-          DBUG "I: Script: Backup: Prefix: added suffix ${BKP_EXT}"
-     fi
+  # For Zenity prompt
+  unset TITLE
+  unset TEXT
+  TITLE="Backup ${PREFIXNAME} Prefix!"
+  TEXT+="${PREFIX_SIZE_IN_HF}"
 
-     DBUG "I: Script: Backup: Prefix: Using ${BACKUP_FILE}"
+  # 3. Suggest and Ask for wzt file name
+  DBUG "I: Script: ${FUNCNAME[0]}: Asking filename"
+  BACKUP_FILE=$( zenity                        \
+                 --title="${TITLE}"            \
+                 --width=700 --height=30       \
+                 --text="${TEXT}"              \
+                 --entry-text="${FILENAME}"    \
+                 --entry)
 
-     # 5. Check available disk space in target directory before backing up
-     # to make sure that prefix size < target dir for backup to start
+  # 3.1: if backup file is empty / cancel clicked
+  if [ -z "${BACKUP_FILE}" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
+       unset BACKUP_FILE
+       unset FILENAME
+       Script_Window
+  fi
 
-     # Step 5.1: Get available target dir partition's available space in
-     # Human format (df -h)
-     DBUG "I: Script: Backup: Prefix: Determining available space"
-     AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
-          |cut -f4 -d " "|tail -n1)
-     DBUG "I: Script: Backup: Prefix: Available space: ${AVAILABLE_SPACE}"
+  # 4. Ask user to select backup target/destination directory
+  DBUG "I: Script: ${FUNCNAME[0]}: Select backup directory"
+  unset TITLE
+  TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
+  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  if [ -z "${TARGET_DIR}" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}:" \
+            "Select backup directory: Cancelled!"
+       Script_Window
+  fi
 
-     # Step 5.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
-     AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+  # 4.1: Check if the target directory is writable or not?
+  if [ ! -w "${TARGET_DIR}" ]; then
+       echo "E: Script: Backup: Prefix: ${TARGET_DIR} not writable"
+       zenity --error --no-wrap --title="Backup Error!" \
+            --text "${TARGET_DIR} not writable\nAborting Backup!"
+       Script_Window
+  fi
 
-     # Step 5.3: If Target directory does not have sufficient space, abort backup
-     DBUG "I: Script: Backup: Prefix: Checking if size < target dir space"
-     if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ]; then
-          echo -n "I: Script: Backup: Prefix: ${TARGET_DIR}"
-          echo    "has enough available disk space"
-     else
-          echo -n "W: Script: Backup: Prefix: ${TARGET_DIR}"
-          echo    "does not have free disk space!!!"
-          unset MSG
-          unset TITLE
-          TITLE="Not Enough Disk Space!"
-          MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
-          MSG+=" "
-          MSG+="free disk space left!\n"
-          MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
-          # Warn user
-          zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
-          echo "E: Script: Backup: Prefix: Not Enough Disk Space," \
-               "Cancelled!"
-          Script_Window
+  # 4.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
+  DBUG "I: Script: ${FUNCNAME[0]}: Given ${BACKUP_FILE}"
 
-     fi
+  if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
+       BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
+       DBUG "I: Script: ${FUNCNAME[0]}: added suffix ${BKP_EXT}"
+  fi
 
-     # 6. Ask for Compression Levels
-     unset LEVEL
-     LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
-          --text "${FILENAME}" --title "Select Compression Level...")
-     # Exit if Cancel is clicked
-     if [ -z "${LEVEL}" ]; then
-          DBUG "I: Script: Backup: Prefix: Cancel Selected!"
-          Script_Window
-     fi
-     DBUG "I: Script Backup: Prefix: Compression Level ${LEVEL} Selected!"
+  DBUG "I: Script: ${FUNCNAME[0]}: Using ${BACKUP_FILE}"
 
-     # 7. Create wzt = tar.zst file
-     # 7.1 Change directory to PREFIXES_DIR
-     cd "${PREFIXES_DIR}"
-     DBUG "I: Script: Backup: Prefix: Preparing files"
+  # 5. Check available disk space in target directory before backing up
+  # to make sure that prefix size < target dir for backup to start
 
-     # 7.2 Preprocess PREFIXDIR files (remove user name from files)
-     source ${DATADIR}/winezgui-backup-function
-     WineZGUI_Backup_Function "${PREFIXDIR}"
+  # Step 5.1: Get available target dir partition's available space in
+  # Human format (df -h)
+  DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
+       |cut -f4 -d " "|tail -n1)
+  DBUG "I: Script: ${FUNCNAME[0]}: Available space: ${AVAILABLE_SPACE}"
 
-     # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-     source ${DATADIR}/winezgui-create-wzt-info 
-     WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
-     
-     DBUG "I: Script: Backup: Prefix: Creating ${BACKUP_FILE} file..."
-     
-     DBUG "-------------------------------------------------------------------"
-     DBUG "WZT_FILE_NAME=$WZT_FILE_NAME"
-     DBUG "Command:"
-     DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
-                                  -C \"${PREFIXDIR}\"  \"${WZT_FILE_NAME}\"   \
-                                  -C \"${PREFIXES_DIR}\" \"${PREFIXNAME}\" "
-     DBUG "-------------------------------------------------------------------"
-     # Report user the time it took to bundle
-     TIMER_START=${SECONDS}
-     # 7.4 Create Backup archive and restore changes as soon as tar is done
-     # add wzt-info.yml 1st then the prefix directory to the wzt file
-     (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
-                                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
-                                  -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
-     zenity    --progress --pulsate --auto-close        \
-               --title="Creating ${PREFIXNAME} backup!" \
-               --width=500 --text="${BACKUP_FILE}..."
-     TOOK=$(( SECONDS - ${TIMER_START} ))
-     DBUG "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+  # Step 5.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
 
-     # 7.5 If user clicks cancel, kill tar commands
-     # zenity progress won't kill the process, so we do it
-     # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
-     # other wzt file operation like extraction and backup
-     PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
-                 |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
-                 
-     # If there is a PID_OF_TAR then we need to kill the tar command
-     if ! [ -z "${PID_OF_TAR}" ]; then
-          kill -9 ${PID_OF_TAR} \
-               && DBUG "I: Script: Backup: Prefix: Cancelled! Killed tar!" \ &&
-          rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
-               DBUG "I: Script: Backup: Prefix: Removed partial ${BACKUP_FILE}"
+  # Step 5.3: If Target directory does not have sufficient space, abort backup
+  DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ]; then
+       echo -n "I: Script: Backup: Prefix: ${TARGET_DIR}"
+       echo    "has enough available disk space"
+  else
+       echo -n "W: Script: Backup: Prefix: ${TARGET_DIR}"
+       echo    "does not have free disk space!!!"
+       unset MSG
+       unset TITLE
+       TITLE="Not Enough Disk Space!"
+       MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
+       MSG+=" "
+       MSG+="free disk space left!\n"
+       MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
-          # Backup Sucess Message
-          MSG=("${PREFIXNAME} backup cancelled!")
-     else
-          # If no pid is found, that means wzt=tar.zst is created successfully
-          DBUG "I: Script: Backup: Prefix: Created ${BACKUP_FILE}, Success!"
-          # 7.6  Crate message
-          BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-          # Backup Sucess Message
-          MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
-          MSG+="<b>Filename:</b> ${BACKUP_FILE}"
-          MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-          MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+       # Warn user
+       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       echo "E: Script: Backup: Prefix: Not Enough Disk Space," \
+            "Cancelled!"
+       Script_Window
 
-     fi
+  fi
 
-     # 7.7 Restore changed values after backup
-     DBUG "I: Script: Backup: Prefix: Restoring Registry and Info files"
-     source ${DATADIR}/winezgui-restore-function
-     WineZGUI_Restore_Function "${PREFIXDIR}"
+  # 6. Ask for Compression Levels
+  unset LEVEL
+  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+       --text "${FILENAME}" --title "Select Compression Level...")
+  # Exit if Cancel is clicked
+  if [ -z "${LEVEL}" ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Cancel Selected!"
+       Script_Window
+  fi
+  DBUG "I: Script Backup: Prefix: Compression Level ${LEVEL} Selected!"
 
-     DBUG "I: Script: Backup: Prefix: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+  # 7. Create wzt = tar.zst file
+  # 7.1 Change directory to PREFIXES_DIR
+  cd "${PREFIXES_DIR}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
 
-     # 8. Show info about created wzt file
-     zenity --no-wrap --info --title="Prefix Backup!" --text="${MSG[@]}"
+  # 7.2 Preprocess PREFIXDIR files (remove user name from files)
+  source ${DATADIR}/winezgui-backup-function
+  WineZGUI_Backup_Function "${PREFIXDIR}"
 
+  # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
+  source ${DATADIR}/winezgui-create-wzt-info 
+  WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+  
+  DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
+  
+  DBUG "-------------------------------------------------------------------"
+  DBUG "WZT_FILE_NAME=$WZT_FILE_NAME"
+  DBUG "Command:"
+  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+                               -C \"${PREFIXDIR}\"  \"${WZT_FILE_NAME}\"   \
+                               -C \"${PREFIXES_DIR}\" \"${PREFIXNAME}\" "
+  DBUG "-------------------------------------------------------------------"
+  # Report user the time it took to bundle
+  TIMER_START=${SECONDS}
+  # 7.4 Create Backup archive and restore changes as soon as tar is done
+  # add wzt-info.yml 1st then the prefix directory to the wzt file
+  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
+                               -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
+  zenity    --progress --pulsate --auto-close        \
+            --title="Creating ${PREFIXNAME} backup!" \
+            --width=500 --text="${BACKUP_FILE}..."
+  TOOK=$(( SECONDS - ${TIMER_START} ))
+  DBUG "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+
+  # 7.5 If user clicks cancel, kill tar commands
+  # zenity progress won't kill the process, so we do it
+  # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
+  # other wzt file operation like extraction and backup
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+              |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+              
+  # If there is a PID_OF_TAR then we need to kill the tar command
+  if ! [ -z "${PID_OF_TAR}" ]; then
+       kill -9 ${PID_OF_TAR} \
+            && DBUG "I: Script: ${FUNCNAME[0]}: Cancelled! Killed tar!" \ &&
+       rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
+            DBUG "I: Script: ${FUNCNAME[0]}: Removed partial ${BACKUP_FILE}"
+
+       # Backup Sucess Message
+       MSG=("${PREFIXNAME} backup cancelled!")
+  else
+       # If no pid is found, that means wzt=tar.zst is created successfully
+       DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE}, Success!"
+       # 7.6  Crate message
+       BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Backup Sucess Message
+       MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
+       MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+       MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+       MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+
+  fi
+
+  # 7.7 Restore changed values after backup
+  DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
+  source ${DATADIR}/winezgui-restore-function
+  WineZGUI_Restore_Function "${PREFIXDIR}"
+
+  DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+
+  # 8. Show info about created wzt file
+  zenity --no-wrap --info --title="Prefix Backup!" --text="${MSG[@]}"
 }

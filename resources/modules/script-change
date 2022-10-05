@@ -21,7 +21,9 @@ Script_Change()
          DBUG "I: Script: Cancel Selected. Bye!"
          return 1
   fi
-
+  
+  DBUG "I: Script: ${FUNCNAME[0]}: Selected ${CHANGE_OPTION}"
+  
   if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
          source ${WINEZGUI_SCRIPTS}/script-change-name 
          SCRIPT_CHANGE_NAME
@@ -42,14 +44,13 @@ Script_Change()
          DBUG "I: Script: Shortcut Icon... Selected!"
          source ${WINEZGUI_SCRIPTS}/script-change-icon 
          Script_Change_Icon
-         # Return to Game window
          
   elif [ "${CHANGE_OPTION}" = "Application Category..." ]; then
          DBUG "I: Script: Application Category... Selected!"
          source ${WINEZGUI_SCRIPTS}/script-change-category 
          Script_Change_Category
   fi
-  # Return
+
   return 0
 }
 

@@ -17,13 +17,13 @@ Script_Change_Arch()
   fi
   
   if [ "${WINEARCH_OPTION}" = "win32" ]; then
-       DBUG "I: Settings: winearch set to 32 bit"
+       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 32 bit"
        export WINEARCH="win32"
 
   fi
 
   if [ "${WINEARCH_OPTION}" = "win64" ]; then
-       DBUG "I: Settings: winearch set to 64 bit"
+       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 64 bit"
        export WINEARCH="win64"
   fi
 
@@ -32,7 +32,7 @@ Script_Change_Arch()
        sed "s|export WINEARCH=.*|export WINEARCH=${WINEARCH}|g" -i ${SCRIPTFILE}
        sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i ${INFOFILE}
   else
-       echo "Cannot write to ${SCRIPTFILE} ${INFOFILE}"
+       echo  "E: Script: ${FUNCNAME[0]}: Cannot write to ${SCRIPTFILE}"
   fi
   return 0
 }

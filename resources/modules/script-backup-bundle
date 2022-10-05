@@ -11,370 +11,370 @@
 # 8. Show info about created wzt file
 Script_Backup_Bundle()
 {
-    DBUG "I: Script: Launched ${FUNCNAME[0]}"
-    source ${DATADIR}/winezgui-backup-restore-function 
-    DBUG "I: Script: Backup: Create Game Bundle... Selected!"
-    echo -n "I: Script: Backup: Bundle: Checking if ${EXE_NAME} is not"
-    echo    "inside a standard directory"
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-backup-restore-function 
+  DBUG "I: Script: ${FUNCNAME[0]}: Create Game Bundle... Selected!"
+  echo -n "I: Script: ${FUNCNAME[0]}: Checking if ${EXE_NAME} is not"
+  echo    "inside a standard directory"
 
 
-    # 1. Exclude Directories for bundling
-    # Do not allow game bundle creation if the user has .exe inside
-    # standard directories like ~/Documents ~/Downloads etc. to avoid huge file
-    unset DO_NOT_BUNDLE_FROM
-    # 1.1 List of standard Linux directories to avoid
-    # 1.1.1 Get root dirs using find to handle of different OS
-    ROOT_DIRS="$(find / -maxdepth 1 -type d)"
-    # 1.1.2 Get Mounted Partitions using mount command
-    MOUNTED_PARTITONs="$(mount |cut -f3 -d " ")"
-    # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
-    DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
-    DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
-    # 1.1.4 Manually include these known directories
-    DO_NOT_BUNDLE_FROM+="/    /boot /dev  /etc  /home /media "
-    DO_NOT_BUNDLE_FROM+="/mnt /opt  /proc /root /run "
-    DO_NOT_BUNDLE_FROM+="/srv /sys  /tmp  /usr  /var "
-    DO_NOT_BUNDLE_FROM+="${HOME} "
-    DO_NOT_BUNDLE_FROM+="${HOME}/Desktop    ${HOME}/Documents "
-    DO_NOT_BUNDLE_FROM+="${HOME}/Downloads  ${HOME}/Music "
-    DO_NOT_BUNDLE_FROM+="${HOME}/Pictures   ${HOME}/Public "
-    DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
+  # 1. Exclude Directories for bundling
+  # Do not allow game bundle creation if the user has .exe inside
+  # standard directories like ~/Documents ~/Downloads etc. to avoid huge file
+  unset DO_NOT_BUNDLE_FROM
+  # 1.1 List of standard Linux directories to avoid
+  # 1.1.1 Get root dirs using find to handle of different OS
+  ROOT_DIRS="$(find / -maxdepth 1 -type d)"
+  # 1.1.2 Get Mounted Partitions using mount command
+  MOUNTED_PARTITONs="$(mount |cut -f3 -d " ")"
+  # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
+  DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
+  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
+  # 1.1.4 Manually include these known directories
+  DO_NOT_BUNDLE_FROM+="/    /boot /dev  /etc  /home /media "
+  DO_NOT_BUNDLE_FROM+="/mnt /opt  /proc /root /run "
+  DO_NOT_BUNDLE_FROM+="/srv /sys  /tmp  /usr  /var "
+  DO_NOT_BUNDLE_FROM+="${HOME} "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Desktop    ${HOME}/Documents "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Downloads  ${HOME}/Music "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Pictures   ${HOME}/Public "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
 
 
-    # 1.2 If game.exe file is inside standard (DO_NOT_BUNDLE_FROM) directories
-    # Tell user to copy to a separate gamedir then try to create bundle
-    if [[ "${DO_NOT_BUNDLE_FROM}" == *"${EXE_PATH}"* ]]; then
-        MSG1="Will not create bundle with ${EXE_PATH} as Game directory"
-        MSG2="Copy/Move files to a different directory to create bundle!"
+  # 1.2 If game.exe file is inside standard (DO_NOT_BUNDLE_FROM) directories
+  # Tell user to copy to a separate gamedir then try to create bundle
+  if [[ "${DO_NOT_BUNDLE_FROM}" == *"${EXE_PATH}"* ]]; then
+      MSG1="Will not create bundle with ${EXE_PATH} as Game directory"
+      MSG2="Copy/Move files to a different directory to create bundle!"
 
-        DBUG "I: Script: Backup: Bundle: ${EXE_PATH}"
-        echo "E: Script: Backup: Bundle: ${MSG1}"
-        echo "E: Script: Backup: Bundle: ${MSG2}"
-        echo "E: Backup: Cancelling Backup!"
-        zenity --error --no-wrap --text "${MSG1}\n${MSG2}" \
-              --title "Cannot Bundle ${EXE_PATH}"
-        unset DO_NOT_BUNDLE_FROM
-        Script_Window
-    fi
+      DBUG "I: Script: ${FUNCNAME[0]}: ${EXE_PATH}"
+      echo "E: Script: ${FUNCNAME[0]}: ${MSG1}"
+      echo "E: Script: ${FUNCNAME[0]}: ${MSG2}"
+      echo "E:${FUNCNAME[0]}: Cancelling Backup!"
+      zenity --error --no-wrap --text "${MSG1}\n${MSG2}" \
+            --title "Cannot Bundle ${EXE_PATH}"
+      unset DO_NOT_BUNDLE_FROM
+      Script_Window
+  fi
 
-    unset DO_NOT_BUNDLE_FROM
+  unset DO_NOT_BUNDLE_FROM
 
-    # 2. Calculate Backup Size based on Gamedir whether it is in Prefix or not
-    # If gamedir is inside prefixdir, total backup size will be prefix size
-    if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-          DBUG "I: Script: Backup: Bundle: Game Directory inside Prefix!"
-          # Do not include GAMEDIR separately when it is already inside prefix
-          TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
-          TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
-          # Show only Prefix size
-          unset TEXT
-          # for zenity prompt
-          TEXT+="${PREFIX_SIZE_IN_HF}"
-    else
-          # If gamedir is outside prefixdir, total size = prefix size + gamedir
-          GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
-          GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF} \
-                               |cut -f1 -d " " |numfmt --from iec)
-          # Calculate total backup size = prefix + gamedir
-          TOTAL_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES} + $GAMEDIR_DU_IN_BYTES)
-          TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
-
-          # Show Prefix + Gamedir size
-          unset TEXT
-          # for zenity prompt
-          TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
-          TEXT+="${PREFIX_SIZE_IN_HF}"
-    fi
-
-
-    DBUG "I: Script: Backup: Bundle: Prefix  Size:${PREFIX_SIZE_IN_HF}"
-    DBUG "I: Script: Backup: Bundle: Gamedir Size:${GAMEDIR_DISK_USAGE_IN_HF}"
-    DBUG "I: Script: Backup: Bundle: Bundle  Size:${TOTAL_SIZE_IN_HF}"
-
-
-    # 3. Prepare Prefix Name
-    # 3.1 Format filename for flatpak or system install type
-    if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-        # If "flatpak-" is not part of flatpak name
-        # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
-        if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
-              SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
-        fi
-        unset FILENAME
-        FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
-        FILENAME+="-Game-Bundle-"
-        FILENAME+="${SHORT_FLATPAK_NAME}"
-        FILENAME+="-${DATE}"
-        FILENAME+=".${BKP_EXT}"
-        # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
-    else # for system add wine-version
-        unset FILENAME
-        FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
-        FILENAME+="-Game-Bundle-"
-        FILENAME+="${WINEVER}"
-        FILENAME+="-${DATE}"
-        FILENAME+=".${BKP_EXT}"
-        # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
-    fi
-
-    DBUG "I: Script: Backup: Bundle: Filename Suggestion: ${FILENAME}"
-
-    # For Zenity prompt
-    unset TITLE
-    TITLE="Creating bundle for ${PREFIXNAME}"
-
-    # 4. Ask file name for the prefix / bundle
-    DBUG "I: Script: Backup: Bundle: Asking filename"
-    BACKUP_FILE=$( zenity        \
-              --title="${TITLE}"      \
-              --width=700 --height=30    \
-              --text="${TEXT}"     \
-              --entry-text="${FILENAME}" \
-        --entry)
-
-    # Step 4.1: if backup file is empty / cancel clicked
-    if [ -z "${BACKUP_FILE}" ]; then
-        DBUG "I: Script: Backup: Bundle: Cancelled!"
-        unset BACKUP_FILE
-        unset FILENAME
-        Script_Window
-    fi
-
-    # 5. Ask user to select backup target/destination directory
-    DBUG "I: Script: Backup: Bundle: Select backup directory"
-    unset TITLE
-    TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-
-    TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
-    if [ -z "${TARGET_DIR}" ]; then
-        DBUG "I: Script: Backup: Bundle: Select backup directory: Cancelled!"
-        Script_Window
-    fi
-
-    # 5.1: Check if the target directory is writable or not?
-    if [ ! -w "${TARGET_DIR}" ]; then
-        echo "E: Script: Backup: Bundle: ${TARGET_DIR} not writable"
-        zenity --error --no-wrap --title="Backup Error!" \
-              --text "${TARGET_DIR} not writable\nAborting Backup!"
-        Script_Window
-    fi
-
-    # Step 5.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
-    DBUG "I: Script: Backup: Bundle: Given ${BACKUP_FILE}"
-
-    if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
-        BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
-        DBUG "I: Script: Backup: Bundle: added suffix ${BKP_EXT}"
-    fi
-
-    DBUG "I: Script: Backup: Bundle: Using ${BACKUP_FILE}"
-
-    # Step 5.3: Check for available disk space in target directory before backing up
-    # to make sure that prefix size < target dir for backup to start
-
-    # Step 5.4: Get available target dir partition's available space in
-    # Human format (df -h)
-    DBUG "I: Script: Backup: Bundle: Determining available space"
-    AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
-        |cut -f4 -d " "|tail -n1)
-    DBUG "I: Script: Backup: Bundle: Available space is:" \
-        "${AVAILABLE_SPACE}"
-
-    # Step 5.5: Convert the above $AVAILABLE_SPACE into bytes
-    # for comparison
-    AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
-    echo "=============================================================="
-    DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
-    DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE}"
-    echo "=============================================================="
-    
-    # Step 5.6: If Target directory does not have sufficient space, abort backup
-    DBUG "I: Script: Backup: Bundle: Checking if size < target dir space"
-    if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
-          echo -n "I: Script: Backup: Prefix: ${TARGET_DIR}"
-          echo    "has enough available disk space"
-    else
-          echo -n "W: Script: Backup: Prefix: ${TARGET_DIR}"
-          echo    "does not have free disk space!!!"
-          unset MSG
-          unset TITLE
-          TITLE="Not Enough Disk Space!"
-          MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
-          MSG+=" "
-          MSG+="free disk space left!\n"
-          MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
-
-          # Warn user
-          zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
-          echo "E: Script: Backup: Bundle: Not Enough Disk Space, Cancelled!"
-          Script_Window
-
-    fi
-
-    # 6. Ask for Compression Levels
-    unset LEVEL
-    LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
-        --text "${FILENAME}" --title "Select Compression Level...")
-    # Exit if Cancel is clicked
-    if [ -z "${LEVEL}" ]; then
-        DBUG "I: Script: Backup: Bundle: Cancel Selected!"
-        Script_Window
-    fi
-    DBUG "I: Script Backup: Bundle: Compression Level ${LEVEL} Selected!"
-
-
-    # 7. Create wzt = tar.zst file
-    # 7.1 Change directory to PREFIXES_DIR
-    cd "${PREFIXES_DIR}"
-    DBUG "I: Script: Backup: Bundle: Processing ${EXE_NAME}"
-
-    # 7.0
-    # If gamedir is outside prefixdir, bundle the gamedir
-    if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+  # 2. Calculate Backup Size based on Gamedir whether it is in Prefix or not
+  # If gamedir is inside prefixdir, total backup size will be prefix size
+  if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+        DBUG "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix!"
         # Do not include GAMEDIR separately when it is already inside prefix
-        # tar would need these 2 variables to bundle gamedir into tar archive
+        TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
+        TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
+        # Show only Prefix size
+        unset TEXT
+        # for zenity prompt
+        TEXT+="${PREFIX_SIZE_IN_HF}"
+  else
+        # If gamedir is outside prefixdir, total size = prefix size + gamedir
+        GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
+        GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF} \
+                             |cut -f1 -d " " |numfmt --from iec)
+        # Calculate total backup size = prefix + gamedir
+        TOTAL_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES} + $GAMEDIR_DU_IN_BYTES)
+        TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
 
-        TAR_GAME_DIR_NAME=$(basename "${EXE_PATH}")
-        TAR_GAME_DIR_PATH=$(dirname "${EXE_PATH}")
-        DBUG "I: Script: Backup: Bundle: Gamedir at: ${TAR_GAME_DIR_PATH}"
-        DBUG "I: Script: Backup: Bundle: Game Name : ${TAR_GAME_DIR_NAME}"
+        # Show Prefix + Gamedir size
+        unset TEXT
+        # for zenity prompt
+        TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
+        TEXT+="${PREFIX_SIZE_IN_HF}"
+  fi
 
-        # 7.2 Change EXE_FILE and EXE_PATH before bundling
-        # Putting Game directory inside drive_c/GAMEDIR
-        GAME_BUNDLED_DIR="drive_c/GAMEDIR/${TAR_GAME_DIR_NAME}"
-        GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
-        GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
 
-        DBUG "I: Script: Backup: Bundle: Exe Path: ${GAME_EXE_PATH}"
-        DBUG "I: Script: Backup: Bundle: Exe File: ${GAME_EXE_FILE}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Prefix  Size:${PREFIX_SIZE_IN_HF}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Gamedir Size:${GAMEDIR_DISK_USAGE_IN_HF}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Bundle  Size:${TOTAL_SIZE_IN_HF}"
 
-        # 7.3 Change EXE path and name in the script and txt file
-        sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
-                                                   -i ${PREFIXDIR}/*.sh        \
-                                                   -i ${PREFIXDIR}/Info.yml && \
-        DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
 
-        sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
-                                                   -i ${PREFIXDIR}/*.sh        \
-                                                   -i ${PREFIXDIR}/Info.yml && \
-        DBUG "I: Script: Backup: Bundle: Exe File Changed To: ${GAME_EXE_FILE}"
+  # 3. Prepare Prefix Name
+  # 3.1 Format filename for flatpak or system install type
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+      # If "flatpak-" is not part of flatpak name
+      # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
+      if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+            SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+      fi
+      unset FILENAME
+      FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+      FILENAME+="-Game-Bundle-"
+      FILENAME+="${SHORT_FLATPAK_NAME}"
+      FILENAME+="-${DATE}"
+      FILENAME+=".${BKP_EXT}"
+      # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
+  else # for system add wine-version
+      unset FILENAME
+      FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+      FILENAME+="-Game-Bundle-"
+      FILENAME+="${WINEVER}"
+      FILENAME+="-${DATE}"
+      FILENAME+=".${BKP_EXT}"
+      # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
+  fi
 
-        # 7.4 Preprocess
-        DBUG "I: Script: Backup: Bundle: Preparing files"
-        cd "${PREFIXDIR}"
-        source ${DATADIR}/winezgui-backup-function
-        WineZGUI_Backup_Function "${PREFIXDIR}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Filename Suggestion: ${FILENAME}"
 
-        # 7.5 Create wzt-info.yml required for restoring wzt file.
-        source ${DATADIR}/winezgui-create-wzt-info 
-        WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
-        
-        # 7.6 Create Bundle
-        DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
-        DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
+  # For Zenity prompt
+  unset TITLE
+  TITLE="Creating bundle for ${PREFIXNAME}"
 
-        # Report user the time it took to bundle
-        TIMER_START=${SECONDS}
-        # add wzt-info.yml 1st then the prefix directory to the wzt file
-        (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
-                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
-                  -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
-                  -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
-                  --transform \
-          "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
-        zenity  --progress --pulsate --auto-close \
-                --title="Creating ${PREFIXNAME} Game Bundle...!" \
-                --width=500 --text="${BACKUP_FILE}..."
-        TOOK=$(( SECONDS - ${TIMER_START} ))
-        DBUG "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+  # 4. Ask file name for the prefix / bundle
+  DBUG "I: Script: ${FUNCNAME[0]}: Asking filename"
+  BACKUP_FILE=$( zenity        \
+            --title="${TITLE}"      \
+            --width=700 --height=30    \
+            --text="${TEXT}"     \
+            --entry-text="${FILENAME}" \
+      --entry)
 
-    else
-        # If gamedir is inside prefixdir, do not bundle gamedir
-        # 7.4 Preprocess
-        DBUG "I: Script: Backup: Bundle: Preparing files"
-        cd "${PREFIXDIR}"
-        source ${DATADIR}/winezgui-backup-function
-        WineZGUI_Backup_Function "${PREFIXDIR}"
+  # Step 4.1: if backup file is empty / cancel clicked
+  if [ -z "${BACKUP_FILE}" ]; then
+      DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
+      unset BACKUP_FILE
+      unset FILENAME
+      Script_Window
+  fi
 
-        # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-        source ${DATADIR}/winezgui-create-wzt-info 
-        WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
-        
-        # 7.6 Create Bundle
-        DBUG "I: Script: Backup: Bundle: Game Name: ${TAR_GAME_DIR_NAME}"
-        DBUG "I: Script: Backup: Bundle: Creating ${BACKUP_FILE} file..."
+  # 5. Ask user to select backup target/destination directory
+  DBUG "I: Script: ${FUNCNAME[0]}: Select backup directory"
+  unset TITLE
+  TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
 
-        # add wzt-info.yml 1st then the prefix directory to the wzt file
-        # just like prefix
-        # Report user the time it took to bundle
-        TIMER_START=${SECONDS}
-        (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-                  -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
-              -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
-              zenity  --progress --pulsate --auto-close \
+  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  if [ -z "${TARGET_DIR}" ]; then
+      DBUG "I: Script: ${FUNCNAME[0]}: Select backup directory: Cancelled!"
+      Script_Window
+  fi
+
+  # 5.1: Check if the target directory is writable or not?
+  if [ ! -w "${TARGET_DIR}" ]; then
+      echo "E: Script: ${FUNCNAME[0]}: ${TARGET_DIR} not writable"
+      zenity --error --no-wrap --title="Backup Error!" \
+            --text "${TARGET_DIR} not writable\nAborting Backup!"
+      Script_Window
+  fi
+
+  # Step 5.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
+  DBUG "I: Script: ${FUNCNAME[0]}: Given ${BACKUP_FILE}"
+
+  if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
+      BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
+      DBUG "I: Script: ${FUNCNAME[0]}: added suffix ${BKP_EXT}"
+  fi
+
+  DBUG "I: Script: ${FUNCNAME[0]}: Using ${BACKUP_FILE}"
+
+  # Step 5.3: Check for available disk space in target directory before backing up
+  # to make sure that prefix size < target dir for backup to start
+
+  # Step 5.4: Get available target dir partition's available space in
+  # Human format (df -h)
+  DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
+      |cut -f4 -d " "|tail -n1)
+  DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
+      "${AVAILABLE_SPACE}"
+
+  # Step 5.5: Convert the above $AVAILABLE_SPACE into bytes
+  # for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+  echo "=============================================================="
+  DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE}"
+  echo "=============================================================="
+  
+  # Step 5.6: If Target directory does not have sufficient space, abort backup
+  DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
+        echo -n "I: Script: ${FUNCNAME[0]}: Prefix: ${TARGET_DIR}"
+        echo    "has enough available disk space"
+  else
+        echo -n "W: Script: ${FUNCNAME[0]}: Prefix: ${TARGET_DIR}"
+        echo    "does not have free disk space!!!"
+        unset MSG
+        unset TITLE
+        TITLE="Not Enough Disk Space!"
+        MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
+        MSG+=" "
+        MSG+="free disk space left!\n"
+        MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+        # Warn user
+        zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+        echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space, Cancelled!"
+        Script_Window
+
+  fi
+
+  # 6. Ask for Compression Levels
+  unset LEVEL
+  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+      --text "${FILENAME}" --title "Select Compression Level...")
+  # Exit if Cancel is clicked
+  if [ -z "${LEVEL}" ]; then
+      DBUG "I: Script: ${FUNCNAME[0]}: Cancel Selected!"
+      Script_Window
+  fi
+  DBUG "I: Script ${FUNCNAME[0]}: Compression Level ${LEVEL} Selected!"
+
+
+  # 7. Create wzt = tar.zst file
+  # 7.1 Change directory to PREFIXES_DIR
+  cd "${PREFIXES_DIR}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Processing ${EXE_NAME}"
+
+  # 7.0
+  # If gamedir is outside prefixdir, bundle the gamedir
+  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+      # Do not include GAMEDIR separately when it is already inside prefix
+      # tar would need these 2 variables to bundle gamedir into tar archive
+
+      TAR_GAME_DIR_NAME=$(basename "${EXE_PATH}")
+      TAR_GAME_DIR_PATH=$(dirname "${EXE_PATH}")
+      DBUG "I: Script: ${FUNCNAME[0]}: Gamedir at: ${TAR_GAME_DIR_PATH}"
+      DBUG "I: Script: ${FUNCNAME[0]}: Game Name : ${TAR_GAME_DIR_NAME}"
+
+      # 7.2 Change EXE_FILE and EXE_PATH before bundling
+      # Putting Game directory inside drive_c/GAMEDIR
+      GAME_BUNDLED_DIR="drive_c/GAMEDIR/${TAR_GAME_DIR_NAME}"
+      GAME_EXE_PATH="${PREFIXDIR}/${GAME_BUNDLED_DIR}"
+      GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
+
+      DBUG "I: Script: ${FUNCNAME[0]}: Exe Path: ${GAME_EXE_PATH}"
+      DBUG "I: Script: ${FUNCNAME[0]}: Exe File: ${GAME_EXE_FILE}"
+
+      # 7.3 Change EXE path and name in the script and txt file
+      sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                                 -i ${PREFIXDIR}/*.sh        \
+                                                 -i ${PREFIXDIR}/Info.yml && \
+      DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
+
+      sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                                 -i ${PREFIXDIR}/*.sh        \
+                                                 -i ${PREFIXDIR}/Info.yml && \
+      DBUG "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
+
+      # 7.4 Preprocess
+      DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
+      cd "${PREFIXDIR}"
+      source ${DATADIR}/winezgui-backup-function
+      WineZGUI_Backup_Function "${PREFIXDIR}"
+
+      # 7.5 Create wzt-info.yml required for restoring wzt file.
+      source ${DATADIR}/winezgui-create-wzt-info 
+      WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+      
+      # 7.6 Create Bundle
+      DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
+      DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
+
+      # Report user the time it took to bundle
+      TIMER_START=${SECONDS}
+      # add wzt-info.yml 1st then the prefix directory to the wzt file
+      (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
+                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
+                -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
+                -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
+                --transform \
+        "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
+      zenity  --progress --pulsate --auto-close \
               --title="Creating ${PREFIXNAME} Game Bundle...!" \
               --width=500 --text="${BACKUP_FILE}..."
-        TOOK=$(( SECONDS - ${TIMER_START} ))
-        DBUG "I: Script: Backup: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
-    fi
+      TOOK=$(( SECONDS - ${TIMER_START} ))
+      TIME_TAKEN=$(date -d@${TOOK} -u +%H:%M:%S)
+      DBUG "I: Script: ${FUNCNAME[0]}: Time Taken: ${TIME_TAKEN}"
 
-    # 7.7 If user clicks cancel, kill tar commands
-    # Handle Backup interruption
-    # zenity progress won't kill the process, so we do it
-    # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
-    # other wzt file operation like extraction and backup
-    PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
-                |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+  else
+      # If gamedir is inside prefixdir, do not bundle gamedir
+      # 7.4 Preprocess
+      DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
+      cd "${PREFIXDIR}"
+      source ${DATADIR}/winezgui-backup-function
+      WineZGUI_Backup_Function "${PREFIXDIR}"
+
+      # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
+      source ${DATADIR}/winezgui-create-wzt-info 
+      WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+      
+      # 7.6 Create Bundle
+      DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
+      DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
+
+      # add wzt-info.yml 1st then the prefix directory to the wzt file
+      # just like prefix
+      # Report user the time it took to bundle
+      TIMER_START=${SECONDS}
+      (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
+                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
+            -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
+            zenity  --progress --pulsate --auto-close \
+            --title="Creating ${PREFIXNAME} Game Bundle...!" \
+            --width=500 --text="${BACKUP_FILE}..."
+      TOOK=$(( SECONDS - ${TIMER_START} ))
+      DBUG "I: Script: ${FUNCNAME[0]}: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+  fi
+
+  # 7.7 If user clicks cancel, kill tar commands
+  # Handle Backup interruption
+  # zenity progress won't kill the process, so we do it
+  # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
+  # other wzt file operation like extraction and backup
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+              |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
 
 
-    # If there is a PID_OF_TAR then we need to kill the tar command
-    if ! [ -z "$PID_OF_TAR" ]; then
-          kill -9 ${PID_OF_TAR} \
-          && DBUG "I: Script: Backup: Bundle: Cancelled! Killed tar!" && \
-          rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
-          DBUG "I: Script: Backup: Bundle: Removed partial ${BACKUP_FILE}"
+  # If there is a PID_OF_TAR then we need to kill the tar command
+  if ! [ -z "$PID_OF_TAR" ]; then
+        kill -9 ${PID_OF_TAR} \
+        && DBUG "I: Script: ${FUNCNAME[0]}: Cancelled! Killed tar!" && \
+        rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
+        DBUG "I: Script: ${FUNCNAME[0]}: Removed partial ${BACKUP_FILE}"
 
-          # Report Size also
-          BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-          # Backup Sucess Message
-          MSG=("${PREFIXNAME} backup cancelled!")
+        # Report Size also
+        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+        # Backup Sucess Message
+        MSG=("${PREFIXNAME} backup cancelled!")
 
-    else
-          DBUG "I: Script: Backup: Bundle: ${BACKUP_FILE} created, success!"
-          # Report Size also
-          BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
-          # Backup Sucess Message
-          MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
-          MSG+="<b>Filename:</b> ${BACKUP_FILE}"
-          MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
-          MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+  else
+        DBUG "I: Script: ${FUNCNAME[0]}: ${BACKUP_FILE} created, success!"
+        # Report Size also
+        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+        # Backup Sucess Message
+        MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
+        MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+        MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+        MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
 
-    fi
+  fi
 
-    # 7.7 Restore changed values after backup
-    DBUG "I: Script: Backup: Bundle: Restoring Registry and Info files"
+  # 7.7 Restore changed values after backup
+  DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
 
-    source ${DATADIR}/winezgui-restore-function
-    WineZGUI_Restore_Function "${PREFIXDIR}"
+  source ${DATADIR}/winezgui-restore-function
+  WineZGUI_Restore_Function "${PREFIXDIR}"
 
-    # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
-    # Change EXE path and name in the script and txt file for the bundle change
-    # revert EXE_FILE and EXE_PATH for the gamedir which is outside prefixdir
-    if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-        sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
-              -i ${PREFIXDIR}/*.txt       \
-              -i ${PREFIXDIR}/*.sh        \
-              -i ${PREFIXDIR}/Info.yml && \
-            DBUG "I: Script: Backup: Bundle: Reverted Exe Path to: ${EXE_PATH}"
+  # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
+  # Change EXE path and name in the script and txt file for the bundle change
+  # revert EXE_FILE and EXE_PATH for the gamedir which is outside prefixdir
+  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+      sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
+            -i ${PREFIXDIR}/*.txt       \
+            -i ${PREFIXDIR}/*.sh        \
+            -i ${PREFIXDIR}/Info.yml && \
+          DBUG "I: Script: ${FUNCNAME[0]}: Reverted Exe Path to: ${EXE_PATH}"
 
-        sed "s|${GAME_EXE_FILE}|${EXE_FILE}|g; t;"  \
-              -i ${PREFIXDIR}/*.txt       \
-              -i ${PREFIXDIR}/*.sh        \
-              -i ${PREFIXDIR}/Info.yml && \
-            DBUG "I: Script: Backup: Bundle: Reverted Exe File to: ${EXE_FILE}"
-    fi
+      sed "s|${GAME_EXE_FILE}|${EXE_FILE}|g; t;"  \
+            -i ${PREFIXDIR}/*.txt       \
+            -i ${PREFIXDIR}/*.sh        \
+            -i ${PREFIXDIR}/Info.yml && \
+          DBUG "I: Script: ${FUNCNAME[0]}: Reverted Exe File to: ${EXE_FILE}"
+  fi
 
-    DBUG "I: Script: Backup: Bundle: Created ${BACKUP_FILE} at ${TARGET_DIR}" \
-    && zenity --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
-
+  DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}" \
+  && zenity --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
 }

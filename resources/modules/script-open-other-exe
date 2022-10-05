@@ -3,7 +3,7 @@ Script_Open_Other_Exe()
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
-       DBUG "I: Script: Open Other EXE:... Selected!"
+       DBUG "I: Script: ${FUNCNAME[0]}:... Selected!"
        SELECTED_OTHER_EXE=$(zenity --title "Open Other EXE for ${PREFIXNAME}"  \
                          --list --hide-header --width=360 --height=30 \
                          --radiolist --column " "                     \
@@ -23,7 +23,7 @@ Script_Open_Other_Exe()
 
 
   # Print response
-  DBUG "I: Script: Open Other EXE:  ${SELECTED_OTHER_EXE} Selected!"
+  DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_OTHER_EXE} Selected!"
 
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
@@ -31,33 +31,34 @@ Script_Open_Other_Exe()
          source ${WINEZGUI_SCRIPTS}/script-get-selected-exe 
          Script_Get_Selected_Exe
          OTHER_EXE="${SELECTED_EXE}"
-         DBUG "I: Script: Open Other EXE:  ${SELECTED_EXE} Selected!"
+         DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$SELECTED_OTHER_EXE" = "Any other Exe" ]; then
          # Open Any Other Exe
-         OTHER_EXE="$(zenity --file-filter="*.exe *.msi"  \
-                           --file-selection        \
-                           --title="Select a File")"
+         OTHER_EXE="$(zenity --file-filter="*.exe *.msi" \
+                             --file-selection            \
+                             --title="Select a File")"
 
        # If no exe is selected
        if [ -z "${OTHER_EXE}" ]; then
-            DBUG "I: Script: Open Other EXE: Cancelled!"
+            DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
             #unset SELECTION ; # Empty variable
             Script_Window    ; # Go back to Game Window
        fi
   fi
-       # If another exe is selected
-       DBUG "I: Script: Open Other EXE: ${OTHER_EXE} selected"
-       base=$(basename "${OTHER_EXE}")
-       dire=$(dirname "${OTHER_EXE}")
+  
+  # If another exe is selected
+  DBUG "I: Script: ${FUNCNAME[0]}: ${OTHER_EXE} selected"
+  base=$(basename "${OTHER_EXE}")
+  dire=$(dirname "${OTHER_EXE}")
 
-       # Launch other EXE
-       cd "$dire"
-       DBUG "I: Script: Open Other EXE: Launching \"${base}\""
-       ${WINE_CMD} "$base"
-       DBUG "I: Script: Open Other EXE... Finished!"
+  # Launch other EXE
+  cd "$dire"
+  DBUG "I: Script: ${FUNCNAME[0]}: Launching \"${base}\""
+  ${WINE_CMD} "$base"
+  DBUG "I: Script: Open Other EXE... Finished!"
 
-       source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
-       Remove_Wine_Created_Shortcuts
-       source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
-       Script_Find_Installed_Exe
+  source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
+  Remove_Wine_Created_Shortcuts
+  source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
+  Script_Find_Installed_Exe
 }

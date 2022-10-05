@@ -49,5 +49,4 @@ Script_Backup()
          source ${WINEZGUI_SCRIPTS}/script-backup-bundle 
          Script_Backup_Bundle "${PREFIXDIR}"
   fi
-
 }

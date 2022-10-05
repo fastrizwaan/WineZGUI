@@ -1,6 +1,7 @@
 #script-get-selected-exe-for-prefix
 Script_Get_Selected_Exe_For_Prefix()
 {
+ DBUG "I: Script: Launched ${FUNCNAME[0]}"
  unset COMMAND
  unset count
  unset SHOW_OPTION

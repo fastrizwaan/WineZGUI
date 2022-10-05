@@ -2,9 +2,10 @@
 # Find Installed EXE inside prefixdir
 # script-find-installed-exe
 # script-find-installed-exe
-
+# REVIEW
 Script_Find_Installed_Exe()
 {
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
   NEW_FOUND_EXE_FILES="${PREFIXDIR}/new-found-exe-files.yml"
   ##############################################################################
