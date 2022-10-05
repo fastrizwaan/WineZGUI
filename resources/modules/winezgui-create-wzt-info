@@ -36,7 +36,8 @@ WineZGUI_Create_Wzt_Info()
 
   # 3. Insert Data into wzt-info.yml
   DATE=$(date +%F_%H%M)
-
+  echo " -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --"
+  echo " "
   echo "Name:${PROGNAME}"                |tee    "${WZT_FILE}"
   echo "Exe:${EXE_NAME}"                 |tee -a "${WZT_FILE}"
   echo "Prefix:${DIRNAME}"               |tee -a "${WZT_FILE}"
@@ -46,6 +47,8 @@ WineZGUI_Create_Wzt_Info()
   echo "Arch:${WINEARCH}"                |tee -a "${WZT_FILE}"
   echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_FILE}"
   echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_FILE}"
+  echo " "
+  echo " -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --"
   # 3.1 Include flatpak id in wzt-info.yml
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
        echo "Flatpak:${FLATPAK_NAME}"    |tee -a "${WZT_FILE}"
