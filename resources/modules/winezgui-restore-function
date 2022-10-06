@@ -26,7 +26,8 @@ WineZGUI_Restore_Function()
   for (( i=0; i <${LEN}; i++ )); do
       echo -n "."
       sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} || \
-      echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}" \
+      && (echo "\"${REPLACE[i]}\"        ;  \"${SEARCH[i]}\""|column -t -s ";")
   done
   echo " "
   IFS=${SAVEIFS}
