@@ -2,7 +2,7 @@
 
 #### Wine GUI using Zenity
 
-![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/io.github.fastrizwaan.WineZGUI.svg)
+![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
 ![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.88/winezgui-0.88.png)
 
