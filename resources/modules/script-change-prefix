@@ -96,7 +96,7 @@ Script_Change_Prefix()
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${DESKTOPFILE}"
   sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${DESKTOPFILE}"
 
-  # 5.3 Replace in Info.txt
+  # 5.3 Replace in Info.yml
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"

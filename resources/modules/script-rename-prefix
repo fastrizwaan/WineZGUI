@@ -80,7 +80,7 @@ Rename_Prefix()
   NEWSCRIPTFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.sh"
   NEWICONFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.png"
   NEWDESKTOPFILE="${NEWPREFIXDIR}/${NEWPREFIXNAME}.desktop"
-  NEWINFOFILE="${NEWPREFIXDIR}/info.txt"
+  NEWINFOFILE="${NEWPREFIXDIR}/Info.yml"
  
   # 5.2.1 Replace in .desktop file
   
@@ -88,7 +88,7 @@ Rename_Prefix()
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${DESKTOPFILE}"
   sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${DESKTOPFILE}"
   
-  # 5.3 Replace in Info.txt
+  # 5.3 Replace in Info.yml
   sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
   sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
   sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"
@@ -129,8 +129,8 @@ Rename_Prefix()
   R_EXE_PATH="export EXE_PATH=\"${NEW_EXE_PATH}\""
   sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"       -i "${SCRIPTFILE}"
   
-  # 5.4.2 Change values inside info.txt
-  # 5.4.2.1 Change Script file value in info.txt
+  # 5.4.2 Change values inside Info.yml
+  # 5.4.2.1 Change Script file value in Info.yml
   #Game Prefix    : /home/rizvan/.local/share/winezgui/PREFIXNAME
   S_INFO_PREFIXDIR="Game Prefix    : .*"
   R_INFO_PREFIXDIR="Game Prefix    : ${NEWPREFIXDIR}"

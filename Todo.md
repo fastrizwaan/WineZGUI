@@ -1,12 +1,15 @@
 0.90
 - [ ] Tempalte Prefix Downloads
 -   Downloadable templates
-  - WineZGUI default (mf-install)
+  - WineZGUI-Default (mf-install)
   - Unreal Engine 4 Prefix
   - Old Games Midi Supported
 
 0.89
-- [ ] Fix line-edit names with weird characters.
+- [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
+- [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
+- [ ] use Settings.yml, cmdline: for script-exe-cmdline
+- [ ] Fix line-edit names with weird characters. (warn)
 - [ ] Add shortcuts using [x] check boxes
 - [x] Shortcuts
     - [x] Create
@@ -15,16 +18,10 @@
       - Create Prefix should create shortcut!
     - [ ] Delete
     - [ ] Restore...
+    - [ ] Restore all Shorctus (.desktop files)
     - [ ] Delete All Shortcuts
-- [ ] if wine version changes (compared to metada) inform user esp. for system install
+- [ ] If wine version changes (compared to metada) inform user esp. for system install
 - [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-- [ ] wzt management
-    - [ ] Split
-        - [ ] Number or Parts
-        - [ ] Size of Parts
-    - [ ] Join
-    - [ ] Extract wzt (unplayable)
-    - [ ] Extract and restore wzt (playable)
     - [ ] Change Compression Level
 - [ ] Comment every script, what it does
 
@@ -68,7 +65,7 @@
 - [x] Use wzt-info.yml
 - [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
       archive. Breaks backward compatibility.
-- [x] Use info.yml for info file instead of info.txt
+- [x] Use info.yml for info file instead of Info.yml
 - [x] About use Info.yml
 - [x] Use column to format info.yml like restore-wzt does
 - [x] Change Exe update info.yml
@@ -101,7 +98,7 @@
       Name->Name-anything will repeat -anything...
       Name->NEWNAME->Name-anything might fix
       Rather, directly change EXE_FILE=.* and EXE_PATH= in script
-      Game Name: and Game Directory: in info.txt and .desktop file
+      Game Name: and Game Directory: in Info.yml and .desktop file
 
 0.86
 - [x] Restore question dialog should present wzt-info on loading .wzt file
@@ -113,12 +110,12 @@
 - [x] use "zstd -T0" to detect no. of cpu cores
 - [x] Remove --gui and --force in winetricks-cli script
 - [x] Change Game-Bundle and Prefix-Backup naming (do not use date)
-- [x] Include flatpak name in wzt-info.txt on backup/bundle creation
+- [x] Include flatpak name in wzt-Info.yml on backup/bundle creation
 
 0.84
 - [x] Launch script instead of launching game
 - [x] Create Bundle (include gamedir along with prefix) using Backup
-- [x] Create and add wzt-info.txt to get info on restoring .wzt file
+- [x] Create and add wzt-Info.yml to get info on restoring .wzt file
 - [x] Use faster zstd instead of gzip
 - [x] use APPNAME-VERSION in Title
 

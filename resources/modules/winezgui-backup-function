@@ -26,7 +26,8 @@ WineZGUI_Backup_Function()
   for (( i=0; i <${LEN}; i++ )); do
       echo -n "."
       sed "s/${SEARCH[$i]}/${REPLACE[$i]}/g; t;" -i ${FILE_LIST} || \
-      echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}"
+      echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}" \
+      && (echo "\"${SEARCH[i]}\"   ;  \"${REPLACE[i]}\""|column -t -s ";")
   done
   echo " "
   IFS=${SAVEIFS}
@@ -44,6 +45,23 @@ WineZGUI_Backup_Function()
   # Remove H: links on Backup
   rm  "${DIRECTORY}/dosdevices/h:" && \
   DBUG "I: ${HEADER}: Removed H: symlink ${DIRNAME}/dosdevices/h:"
+
+
+   # Values->XO? ; If XOUSERHOMEXO not found then backup_function failed
+  if [ -f ${1}/Info.yml ] && \
+     (! grep -o "XOUSERHOMEXO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null);
+      then
+      echo "E:------------------------------------------"
+      echo "E: ${FUNCNAME[0]}: Identiy Not Removed for ${USER}!"
+      echo "E:------------------------------------------"
+      zenity --error --title "Backup Process XOUSERHOMEXO failed" \
+                 --text "${USER} Identity is not removed, not ok for sharing!"
+  fi
+  # Check if identity is removed
+  if [ -f ${1}/Info.yml ] && \
+     ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
+       DBUG "I: ${FUNCNAME[0]}: Identity removed ${USER}!"
+  fi
 
   # Cleanup variables 
   unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH FPNAME 
