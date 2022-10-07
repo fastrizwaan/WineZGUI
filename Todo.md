@@ -65,7 +65,7 @@
 - [x] Use wzt-info.yml
 - [x] Speed up wzt-info.yml extraction from wzt file by putting it on the top of
       archive. Breaks backward compatibility.
-- [x] Use info.yml for info file instead of info.txt
+- [x] Use info.yml for info file instead of Info.yml
 - [x] About use Info.yml
 - [x] Use column to format info.yml like restore-wzt does
 - [x] Change Exe update info.yml
@@ -98,7 +98,7 @@
       Name->Name-anything will repeat -anything...
       Name->NEWNAME->Name-anything might fix
       Rather, directly change EXE_FILE=.* and EXE_PATH= in script
-      Game Name: and Game Directory: in info.txt and .desktop file
+      Game Name: and Game Directory: in Info.yml and .desktop file
 
 0.86
 - [x] Restore question dialog should present wzt-info on loading .wzt file
@@ -110,12 +110,12 @@
 - [x] use "zstd -T0" to detect no. of cpu cores
 - [x] Remove --gui and --force in winetricks-cli script
 - [x] Change Game-Bundle and Prefix-Backup naming (do not use date)
-- [x] Include flatpak name in wzt-info.txt on backup/bundle creation
+- [x] Include flatpak name in wzt-Info.yml on backup/bundle creation
 
 0.84
 - [x] Launch script instead of launching game
 - [x] Create Bundle (include gamedir along with prefix) using Backup
-- [x] Create and add wzt-info.txt to get info on restoring .wzt file
+- [x] Create and add wzt-Info.yml to get info on restoring .wzt file
 - [x] Use faster zstd instead of gzip
 - [x] use APPNAME-VERSION in Title
 
