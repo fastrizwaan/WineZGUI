@@ -6,7 +6,7 @@
   - Old Games Midi Supported
 
 0.89
-- [-] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
+- [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
 - [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
 - [ ] use Settings.yml, cmdline: for script-exe-cmdline
 - [ ] Fix line-edit names with weird characters. (warn)
