@@ -6,7 +6,17 @@
   - Old Games Midi Supported
 
 0.89
-- [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
+- [ ] Rename Functions
+     - [ ] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
+     - [ ] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
+     - [ ] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
+- [ ] New Function
+     - [ ] WineZGUI_Convert_Wine_Prefix => Winezgui_Identity_Remove then Winezgui_Identity_Restore
+     - [ ] Old_user=$(grep \"USERNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+     - [ ] new_user=${USER}
+     - [ ] find exe files inside wine-prefix
+     - [ ] set main exe
+     - [ ] create shortcut
 - [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
 - [ ] use Settings.yml, cmdline: for script-exe-cmdline
 - [ ] Fix line-edit names with weird characters. (warn)
@@ -25,7 +35,9 @@
     - [ ] Change Compression Level
 - [ ] Comment every script, what it does
 
-
+0.88.1
+- [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
+- [x] Fix info.txt use by info.txt->Info.yml in create-prefix
 
 0.88
 - [x] clone template prefix (Copy prefix)
