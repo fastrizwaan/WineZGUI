@@ -27,7 +27,7 @@ WineZGUI_Restore_Function()
       echo -n "."
       sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} || \
       echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}" \
-      && (echo "\"${REPLACE[i]}\"        ;  \"${SEARCH[i]}\""|column -t -s ";")
+      && (echo "\"${SEARCH[i]}\"   ;  \"${REPLACE[i]}\""|column -t -s ";")
   done
   echo " "
   IFS=${SAVEIFS}
@@ -55,8 +55,18 @@ WineZGUI_Restore_Function()
   sed "s|\(export INSTALL\_TYPE=\).*|\1${INSTALL_TYPE}|g; t;" -i ${FILE_LIST} 
   sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i ${FILE_LIST} 
 
+  # Check if user Identity is restored in prefix
+  if [ -f ${1}/Info.yml ] && \
+     ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
+       echo "E:------------------------------------------"
+       echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
+       echo "E: WineZGUI_Restore_Function: Identity no restored for ${USER}!"
+       echo "E:------------------------------------------"
+       zenity --error --title "Restore Process XOUSERHOMEXO failed" \
+              --text "User Identity is not set for ${USER}, launch may fail!"
+  fi
 
- # Cleanup variables
- unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH 
- unset FPNAME WEXE WVER FILE_LIST DTARGET DSOURCE
+  # Cleanup variables
+  unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH 
+  unset FPNAME WEXE WVER FILE_LIST DTARGET DSOURCE
 }

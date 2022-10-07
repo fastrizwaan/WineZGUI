@@ -375,14 +375,7 @@ Script_Backup_Bundle()
   source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
   WineZGUI_Restore_Function "${PREFIXDIR}"
   
-  # 7.7.5 Confirm whether values change to is back to values from XO$valueXO
-  #   XO=>values, ok?; XO is found, then restore_function failed.
-  if (grep -o "XO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null); then
-      echo "E:------------------------------------------"
-      echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-      echo "E: WineZGUI_Restore_Function: Process values to XO - > VAR failed!"
-      echo "E:------------------------------------------"
-  fi
+if (! grep -o
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change

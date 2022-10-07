@@ -154,14 +154,6 @@ Script_Backup_Prefix()
   source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
   WineZGUI_Backup_Function "${PREFIXDIR}"
   
-  # 7.4.5 Confirm whether values change to XO$valueXO
-  # Values->XO? ; If XO not found then backup_function failed
-  if (! grep -o "XO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null); then
-      echo "E:------------------------------------------"
-      echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-      echo "E: WineZGUI_Backup_Function: Process VAR -> XO... failed!"
-      echo "E:------------------------------------------"
-  fi
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
   source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
