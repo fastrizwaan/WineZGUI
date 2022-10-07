@@ -1,4 +1,4 @@
-WineZGUI_Backup_Function()
+Winezgui_Identity_Remove()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

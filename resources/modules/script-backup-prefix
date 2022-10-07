@@ -152,8 +152,8 @@ Script_Backup_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
 
   # 7.2 Preprocess PREFIXDIR files (remove user name from files)
-  source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
-  WineZGUI_Backup_Function "${PREFIXDIR}"
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-remove
+  Winezgui_Identity_Remove "${PREFIXDIR}"
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
   source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
@@ -212,8 +212,8 @@ Script_Backup_Prefix()
 
   # 7.7 Restore changed values after backup
   DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
-  source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
-  WineZGUI_Restore_Function "${PREFIXDIR}"
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${PREFIXDIR}"
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

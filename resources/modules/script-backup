@@ -1,5 +1,5 @@
 # Create Backup Prefix / Game Bundle
-# winezgui-backup-function
+# winezgui-identity-remove
 # This function can create a prefix backup or a game bundle by including gamedir
 # Steps:
 # 0. Get disk usage of prefix

@@ -1,5 +1,5 @@
-# winezgui-restore-process-xo
-WineZGUI_Restore_Process_Xo()
+# winezgui-identity-restore-all
+Winezgui_Identity_Restore_All()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -7,12 +7,12 @@ WineZGUI_Restore_Process_Xo()
   unset D # Directory
   unset FOUND_INFOFILE
   
-  source ${DATADIR}/winezgui-restore-function
+  source ${DATADIR}/winezgui-identity-restore
   
   (for D in \
     $(find ${TEMPLATES_DIR}/* ${PREFIXES_DIR}/* -maxdepth 0 -type d); do
     echo "# Processing $(basename ${D})"
-    WineZGUI_Restore_Function "${D}"
+    Winezgui_Identity_Restore "${D}"
     DBUG "I: ${HEADER}: Processed $(basename ${D})"
   done)|(zenity --progress --width=500              \
          --title="${APP_WITH_VER} - Process files!" \

@@ -91,8 +91,8 @@ Restore_Wzt_File()
              --text="Force Extracting ${WZT_FILE}..." \
              --pulsate --auto-close)
       fi
-      source ${DATADIR}/winezgui-restore-process-xo
-      WineZGUI_Restore_Process_Xo
+      source ${DATADIR}/winezgui-identity-restore-all
+      Winezgui_Identity_Restore_All
 
       # Show menu after extraction
       source ${DATADIR}/winezgui-launch
@@ -239,8 +239,8 @@ Restore_Wzt_File()
   export PREFIXNAME="${WZT_PREFIX}"
   DBUG "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
-  source ${DATADIR}/winezgui-restore-function
-  WineZGUI_Restore_Function "${PREFIXES_DIR}/${WZT_PREFIX}"
+  source ${DATADIR}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${PREFIXES_DIR}/${WZT_PREFIX}"
  
   # 6 Create desktop dir, process Info file
   # 6.1 Create required applications directory for .desktop files
@@ -314,7 +314,7 @@ Restore_Wzt_File()
   fi # -f "${FOUND_DESKTOP_FILE}"
   # Repair all files
   # PROCESS XO--XO variable inside prefixes and templates directory
-  source ${DATADIR}/winezgui-restore-process-xo
-  WineZGUI_Restore_Process_Xo
+  source ${DATADIR}/winezgui-identity-restore-all
+  Winezgui_Identity_Restore_All
 }
  

@@ -263,8 +263,8 @@ Script_Backup_Bundle()
       # 7.4 Preprocess
       DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
-      source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
-      WineZGUI_Backup_Function "${PREFIXDIR}"
+      source ${WINEZGUI_SCRIPTS}/winezgui-identity-remove
+      Winezgui_Identity_Remove "${PREFIXDIR}"
 
       # 7.5 Create wzt-info.yml required for restoring wzt file.
       source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
@@ -295,8 +295,8 @@ Script_Backup_Bundle()
       # 7.4 Preprocess
       DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
-      source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
-      WineZGUI_Backup_Function "${PREFIXDIR}"
+      source ${WINEZGUI_SCRIPTS}/winezgui-identity-remove
+      Winezgui_Identity_Remove "${PREFIXDIR}"
 
       # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
       source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
@@ -356,8 +356,8 @@ Script_Backup_Bundle()
   # 7.7 Restore changed values after backup
   DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
 
-  source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
-  WineZGUI_Restore_Function "${PREFIXDIR}"
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${PREFIXDIR}"
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change
