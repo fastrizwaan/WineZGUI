@@ -1,26 +1,5 @@
 0.90
-- [ ] Tempalte Prefix Downloads
--   Downloadable templates
-  - WineZGUI-Default (mf-install)
-  - Unreal Engine 4 Prefix
-  - Old Games Midi Supported
-
-0.89
-- [ ] Rename Functions
-     - [ ] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
-     - [ ] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
-     - [ ] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
-- [ ] New Function
-     - [ ] WineZGUI_Convert_Wine_Prefix => Winezgui_Identity_Remove then Winezgui_Identity_Restore
-     - [ ] Old_user=$(grep \"USERNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
-     - [ ] new_user=${USER}
-     - [ ] find exe files inside wine-prefix
-     - [ ] set main exe
-     - [ ] create shortcut
-- [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
-- [ ] use Settings.yml, cmdline: for script-exe-cmdline
-- [ ] Fix line-edit names with weird characters. (warn)
-- [ ] Add shortcuts using [x] check boxes
+- [ ] Comment every script, what it does
 - [x] Shortcuts
     - [x] Create
       - Create Script file with New EXE Name,
@@ -30,10 +9,35 @@
     - [ ] Restore...
     - [ ] Restore all Shorctus (.desktop files)
     - [ ] Delete All Shortcuts
-- [ ] If wine version changes (compared to metada) inform user esp. for system install
-- [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-    - [ ] Change Compression Level
-- [ ] Comment every script, what it does
+- [ ] New Function
+     - [ ] WineZGUI_Import_Wine_Prefix => Winezgui_Identity_Remove then Winezgui_Identity_Restore
+     - [ ] Steps
+           - [ ] Ask to select Directory
+           - [ ] Copy that directory to Prefixes_Dir
+           - [ ] Determine old user; Old_user=$(grep \"USERNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+           - [ ] Determine New User; new_user=${USER}
+           - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
+           - [ ] Find exe files inside wine-prefix, ask to select main exe
+           - [ ] Ask wehter to create shortcuts for remaining exe files? Create rest exe shortcuts
+     - [ ] set main exe
+     - [ ] create shortcut
+
+0.89
+- [ ] Rename Functions
+     - [ ] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
+     - [ ] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
+     - [ ] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
+- [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
+- [ ] cmdline.yml; cmdline: for script-exe-cmdline
+- [ ] Fix line-edit names with weird characters. (warn)
+- [ ] Add shortcuts using [x] check boxes
+- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
+- [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
+- [ ] Tempalte Prefix Downloads
+     - [ ] Downloadable templates from github
+     - [ ] WineZGUI-win64-UE4 (mf-install)
+     - [ ] WineZGUI-win32-UE4
+  
 
 0.88.1
 - [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
