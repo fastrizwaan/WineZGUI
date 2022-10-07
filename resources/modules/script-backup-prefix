@@ -44,6 +44,7 @@ Script_Backup_Prefix()
        # Game-WineZGUI-0.87-Prefix-Backup-wine-7.0-20220904_2359.wzt
   fi
 
+
   DBUG "I: Script: ${FUNCNAME[0]}: Filename Suggestion: ${FILENAME}"
 
   # For Zenity prompt
@@ -153,7 +154,6 @@ Script_Backup_Prefix()
   # 7.2 Preprocess PREFIXDIR files (remove user name from files)
   source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
   WineZGUI_Backup_Function "${PREFIXDIR}"
-  
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
   source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
@@ -172,9 +172,9 @@ Script_Backup_Prefix()
   TIMER_START=${SECONDS}
   # 7.4 Create Backup archive and restore changes as soon as tar is done
   # add wzt-info.yml 1st then the prefix directory to the wzt file
-  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"        \
-                               -C  "${PREFIXDIR}"    "${WZT_FILE_NAME}"  \
-                               -C  "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
+  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
+                               -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
   zenity    --progress --pulsate --auto-close        \
             --title="Creating ${PREFIXNAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
@@ -214,15 +214,6 @@ Script_Backup_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
   source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
   WineZGUI_Restore_Function "${PREFIXDIR}"
-  
-  # 7.7.5 Confirm whether values change to is back to values from XO$valueXO
-  #   XO=>values, ok?; XO is found, then restore_function failed.
-  if (grep -o "XO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null); then
-      echo "E:------------------------------------------"
-      echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-      echo "E: WineZGUI_Restore_Function: Process values to XO - > VAR failed!"
-      echo "E:------------------------------------------"
-  fi
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

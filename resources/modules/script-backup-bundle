@@ -43,6 +43,7 @@ Script_Backup_Bundle()
   DO_NOT_BUNDLE_FROM+="${HOME}/Pictures   ${HOME}/Public "
   DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
 
+
   # 1.2 If game.exe file is inside standard (DO_NOT_BUNDLE_FROM) directories
   # Tell user to copy to a separate gamedir then try to create bundle
   if [[ "${DO_NOT_BUNDLE_FROM}" == *"${EXE_PATH}"* ]]; then
@@ -265,13 +266,6 @@ Script_Backup_Bundle()
       source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
       WineZGUI_Backup_Function "${PREFIXDIR}"
 
-      # 7.4.5 Confirm whether values change to XO$valueXO
-      if (! grep -o "XO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null); then
-          echo "E:------------------------------------------"
-          echo "E: ${FUNCNAME[0]}: Gamedir outside Prefix... "
-          echo "E: WineZGUI_Backup_Function: Process VAR -> XO... failed!"
-          echo "E:------------------------------------------"
-      fi
       # 7.5 Create wzt-info.yml required for restoring wzt file.
       source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
       WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
@@ -280,18 +274,17 @@ Script_Backup_Bundle()
       DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
       DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
 
-
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
       # add wzt-info.yml 1st then the prefix directory to the wzt file
-      (tar -I "zstd -${LEVEL} -T0" -cf       "${TARGET_DIR}/${BACKUP_FILE}"  \
-                 -C "${PREFIXDIR}"           "${WZT_FILE_NAME}"              \
-                 -C "${PREFIXES_DIR}"        "${PREFIXNAME}"                 \
-                 -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"          \
-                 --transform                                                 \
+      (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
+                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
+                -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
+                -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
+                --transform \
         "s|^\./${TAR_GAME_DIR_NAME}|${PREFIXNAME}/${GAME_BUNDLED_DIR}|g" &)| \
-      zenity  --progress --pulsate --auto-close                              \
-              --title="Creating ${PREFIXNAME} Game Bundle...!"               \
+      zenity  --progress --pulsate --auto-close \
+              --title="Creating ${PREFIXNAME} Game Bundle...!" \
               --width=500 --text="${BACKUP_FILE}..."
       TOOK=$(( SECONDS - ${TIMER_START} ))
       TIME_TAKEN=$(date -d@${TOOK} -u +%H:%M:%S)
@@ -305,15 +298,6 @@ Script_Backup_Bundle()
       source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
       WineZGUI_Backup_Function "${PREFIXDIR}"
 
-      # 7.4.5 Confirm whether values change to XO$valueXO
-      # Values->XO? ; If XO not found then backup_function failed
-      if (! grep -o "XO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null); then
-          echo "E:------------------------------------------"
-          echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-          echo "E: WineZGUI_Backup_Function: Process VAR -> XO... failed!"
-          echo "E:------------------------------------------"
-      fi
-      
       # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
       source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
       WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
@@ -327,10 +311,10 @@ Script_Backup_Bundle()
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
       (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
-                 -C "${PREFIXDIR}"     "${WZT_FILE_NAME}"             \
-                 -C "${PREFIXES_DIR}"  "${PREFIXNAME}" &) |           \
-            zenity  --progress --pulsate --auto-close                 \
-            --title="Creating ${PREFIXNAME} Game Bundle...!"          \
+                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
+            -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
+            zenity  --progress --pulsate --auto-close \
+            --title="Creating ${PREFIXNAME} Game Bundle...!" \
             --width=500 --text="${BACKUP_FILE}..."
       TOOK=$(( SECONDS - ${TIMER_START} ))
       DBUG "I: Script: ${FUNCNAME[0]}: Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
@@ -374,8 +358,6 @@ Script_Backup_Bundle()
 
   source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
   WineZGUI_Restore_Function "${PREFIXDIR}"
-  
-if (! grep -o
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change
