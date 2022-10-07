@@ -18,7 +18,7 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 4. Backup and Restore prefixes for later use.
 5. Create Game Bundles for sharing (prefix+game)
 
-## 0.88.1 Release
+## 0.88.2 Release
 1. Installer Support
 2. Prefix Template Support
 3. New Interface
@@ -47,10 +47,10 @@ WineZGUI is packaged in flatpak-wine. Please visit [flatpak-wine](https://github
 
 Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
 
-##### Version 0.88.1 (copy paste this on a terminal)
+##### Version 0.88.2 (copy paste this on a terminal)
 
 ```
-git clone --depth 1 --branch 0.88.1 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.88.2 https://github.com/fastrizwaan/WineZGUI.git
 ./WineZGUI/flatpak-manifest/install.sh
 ```
 
@@ -67,23 +67,23 @@ flatpak's optional requirement is `gnome-terminal` if we need to access prefix u
 
 Setup is instant as it copies a few files to specific directories.
 
-##### Version 0.88.1
+##### Version 0.88.2
 
-Downoad source [WineZGUI-0.88.1.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.88.1.tar.gz) or use `git tag 0.88.1`
+Downoad source [WineZGUI-0.88.2.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.88.2.tar.gz) or use `git tag 0.88.2`
 
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.88.1.tar.gz
-tar -zxvf 0.88.1.tar.gz
-cd WineZGUI-0.88.1
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.88.2.tar.gz
+tar -zxvf 0.88.2.tar.gz
+cd WineZGUI-0.88.2
 sudo ./setup --install ; #systemwide
 ```
 
-##### git tag 0.88.1
+##### git tag 0.88.2
 
 ```
-git clone --depth 1 --branch 0.88.1 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.88.2 https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```
