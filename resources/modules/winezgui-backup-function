@@ -52,12 +52,17 @@ WineZGUI_Backup_Function()
      (! grep -o "XOUSERHOMEXO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null);
       then
       echo "E:------------------------------------------"
-      echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-      echo "E: WineZGUI_Backup_Function: Identiy Not Removed for ${USER}!"
+      echo "E: ${FUNCNAME[0]}: Identiy Not Removed for ${USER}!"
       echo "E:------------------------------------------"
       zenity --error --title "Backup Process XOUSERHOMEXO failed" \
                  --text "${USER} Identity is not removed, not ok for sharing!"
   fi
+  # Check if identity is removed
+  if [ -f ${1}/Info.yml ] && \
+     ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
+       DBUG "I: ${FUNCNAME[0]}: Identity removed ${USER}!"
+  fi
+
   # Cleanup variables 
   unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH FPNAME 
   unset WEXE WVER FILE_LIST DTARGET DSOURCE

@@ -59,11 +59,16 @@ WineZGUI_Restore_Function()
   if [ -f ${1}/Info.yml ] && \
      ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
        echo "E:------------------------------------------"
-       echo "E: ${FUNCNAME[0]}: Gamedir inside Prefix... "
-       echo "E: WineZGUI_Restore_Function: Identity no restored for ${USER}!"
+       echo "E: ${FUNCNAME[0]}: Identity no restored for ${USER}!"
        echo "E:------------------------------------------"
        zenity --error --title "Restore Process XOUSERHOMEXO failed" \
               --text "User Identity is not set for ${USER}, launch may fail!"
+  fi
+  # Check if identity is restored
+  if [ -f ${1}/Info.yml ] && \
+     (! grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null );
+      then
+      DBUG "I: ${FUNCNAME[0]}: Identity Restored for ${USER}!"
   fi
 
   # Cleanup variables
