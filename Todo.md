@@ -33,8 +33,8 @@
 - [ ] Add shortcuts using [x] check boxes
 - [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
 - [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
-- [ ] Tempalte Prefix Downloads
-     - [ ] Downloadable templates from github
+- [ ] Prefix Template Downloads
+     - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
   
