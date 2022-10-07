@@ -18,11 +18,6 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 4. Backup and Restore prefixes for later use.
 5. Create Game Bundles for sharing (prefix+game)
 
-## 0.88.2 Release
-1. Installer Support
-2. Prefix Template Support
-3. New Interface
-
 ## How it works
 
 1. When a windows binary or exe is opened with WineZGUI, 
