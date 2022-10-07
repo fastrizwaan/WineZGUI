@@ -1,12 +1,15 @@
 0.90
 - [ ] Tempalte Prefix Downloads
 -   Downloadable templates
-  - WineZGUI default (mf-install)
+  - WineZGUI-Default (mf-install)
   - Unreal Engine 4 Prefix
   - Old Games Midi Supported
 
 0.89
-- [ ] Fix line-edit names with weird characters.
+- [-] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
+- [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
+- [ ] use Settings.yml, cmdline: for script-exe-cmdline
+- [ ] Fix line-edit names with weird characters. (warn)
 - [ ] Add shortcuts using [x] check boxes
 - [x] Shortcuts
     - [x] Create
@@ -15,16 +18,10 @@
       - Create Prefix should create shortcut!
     - [ ] Delete
     - [ ] Restore...
+    - [ ] Restore all Shorctus (.desktop files)
     - [ ] Delete All Shortcuts
-- [ ] if wine version changes (compared to metada) inform user esp. for system install
+- [ ] If wine version changes (compared to metada) inform user esp. for system install
 - [ ] Use 7 char sha256sum of setup/installer exe for prefixdir name
-- [ ] wzt management
-    - [ ] Split
-        - [ ] Number or Parts
-        - [ ] Size of Parts
-    - [ ] Join
-    - [ ] Extract wzt (unplayable)
-    - [ ] Extract and restore wzt (playable)
     - [ ] Change Compression Level
 - [ ] Comment every script, what it does
 
