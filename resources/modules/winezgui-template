@@ -33,7 +33,7 @@ WineZGUI_Template()
   if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
           source ${DATADIR}/winezgui-template-configure
           WineZGUI_Template_Configure
-  elif [ "${TEMPLATE_OPTION}" = "Backup    ${TEMPLATE_NAME}..." ]; then
+  elif [ "${TEMPLATE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
           source ${DATADIR}/winezgui-template-backup
           WineZGUI_Template_Backup "${TEMPLATE}"
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then

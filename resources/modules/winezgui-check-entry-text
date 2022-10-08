@@ -1,0 +1,21 @@
+# winezgui-check-entry-text
+WineZGUI_Check_Entry_Text()
+{
+
+ DBUG "${FUNCNAME[0]}: Given: ${1}"
+ 
+  if  [ -z "${1}" ]; then
+        echo "Give string as argument!"
+  fi
+
+  unset TEXT
+  TEXT+="Invalid Name: ${1}"
+  TEXT+="\nUse: Alphanumeric and - + _ [ ] ( ) @ { } , and ."
+  if [[ ${1} == *[\`\~\!\#\$\%\^\&\*\:\;\<\>\/\?\'\"\=\|]* ]] ; then
+       zenity --error --title "${APP_WITH_VER} Symbols!" \
+              --text "${TEXT}"
+    return 1
+  fi
+
+  return 0
+}

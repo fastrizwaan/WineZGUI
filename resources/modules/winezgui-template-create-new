@@ -41,6 +41,17 @@ WineZGUI_Template_Create_New()
        DBUG "I: ${HEADER}: Cancelled"
   fi
 
+  # Check if user entered symbols
+  source ${DATADIR}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${NEW_TEMPLATE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
+
 
   if [ -d "${TEMPLATES_DIR}/${NEW_TEMPLATE}" ]; then
        zenity --error --title "${APP_WITH_VER}" \

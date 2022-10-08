@@ -23,13 +23,8 @@
      - [ ] create shortcut
 
 0.89
-- [ ] Rename Functions
-     - [ ] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
-     - [ ] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
-     - [ ] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
 - [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
 - [ ] cmdline.yml; cmdline: for script-exe-cmdline
-- [ ] Fix line-edit names with weird characters. (warn)
 - [ ] Add shortcuts using [x] check boxes
 - [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
 - [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
@@ -38,6 +33,12 @@
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
   
+0.88.2
+- [x] Fix line-edit names with weird characters. (warn)
+- [x] Rename Functions
+     - [x] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
+     - [x] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
+     - [x] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
 
 0.88.1
 - [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)
