@@ -17,6 +17,16 @@ WineZGUI_Template_Clone()
        return 1
   fi
   
+  # Check if user entered symbols
+  source ${DATADIR}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${CLONE_TEMPLATE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
   if [ -d "${TEMPLATES_DIR}/${CLONE_TEMPLATE}" ]; then
        zenity --error --title "${APP_WITH_VER}" \
               --text "Template Directory Already Exists!"

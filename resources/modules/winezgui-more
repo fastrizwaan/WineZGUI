@@ -28,8 +28,5 @@ WineZGUI_More()
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
          source ${DATADIR}/winezgui-shortcuts 
          WineZGUI_Shortcuts
-  elif [ "${MORE_OPTION}" = "Help..."  ]; then
-         source ${DATADIR}/winezgui-more-help
-         WineZGUI_More_Help
   fi
 }

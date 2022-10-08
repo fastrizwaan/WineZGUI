@@ -89,6 +89,17 @@ WineZGUI_Template_Backup()
        return 1
   fi
 
+
+  # Check if user entered symbols
+  source ${DATADIR}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
   # 6.0 Ask user to select target backup directory
   DBUG "I: ${HEADER}: Choose Backup Directory..."
   unset TITLE
@@ -173,10 +184,10 @@ WineZGUI_Template_Backup()
   cd "${TEMPLATES_DIR}"
   # 10.2 Preprocess TEMPLATES_DIR files (remove user name from files)
   DBUG "I: ${HEADER}: Changing Directory to ${TEMPLATES_DIR}"
-  DBUG "I: ${HEADER}: Launching: winezgui-backup-function"
+  DBUG "I: ${HEADER}: Launching: winezgui-identity-remove"
   
-  source ${DATADIR}/winezgui-backup-function
-  WineZGUI_Backup_Function "${SELECTED_TEMPLATE}"
+  source ${DATADIR}/winezgui-identity-remove
+  Winezgui_Identity_Remove "${SELECTED_TEMPLATE}"
 
   # 10.3 Create template-info.yml inside SELECTED_TEMPLATE, not needed though
   
@@ -233,8 +244,8 @@ WineZGUI_Template_Backup()
   # 7.7 Restore changed values after backup
   DBUG "I: Backup: Template: Restoring Registry and Info files"
   cd "${TEMPLATES_DIR}"
-  source ${DATADIR}/winezgui-restore-function
-  WineZGUI_Restore_Function "${SELECTED_TEMPLATE}"
+  source ${DATADIR}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${SELECTED_TEMPLATE}"
 
   DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

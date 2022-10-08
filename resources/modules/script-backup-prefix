@@ -69,7 +69,17 @@ Script_Backup_Prefix()
        unset FILENAME
        Script_Window
   fi
-
+  
+  # Check if user entered symbols
+  source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
   # 4. Ask user to select backup target/destination directory
   DBUG "I: Script: ${FUNCNAME[0]}: Select backup directory"
   unset TITLE
@@ -152,8 +162,8 @@ Script_Backup_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
 
   # 7.2 Preprocess PREFIXDIR files (remove user name from files)
-  source ${WINEZGUI_SCRIPTS}/winezgui-backup-function
-  WineZGUI_Backup_Function "${PREFIXDIR}"
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-remove
+  Winezgui_Identity_Remove "${PREFIXDIR}"
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
   source ${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info 
@@ -212,8 +222,8 @@ Script_Backup_Prefix()
 
   # 7.7 Restore changed values after backup
   DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
-  source ${WINEZGUI_SCRIPTS}/winezgui-restore-function
-  WineZGUI_Restore_Function "${PREFIXDIR}"
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${PREFIXDIR}"
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

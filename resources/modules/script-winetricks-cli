@@ -28,7 +28,17 @@ Script_Winetricks_Cli()
        DBUG "I: Script: Winetricks CLI: no verbs are given!"
        return 1
   fi
-
+  
+  # Check if user entered symbols
+  source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${VERBS}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
   VERBS=(${VERBS}) ; #convert string to array
   DBUG "I: Script: Winetricks CLI: Selected verbs:"
   DBUG "I: Script: ${VERBS[*]}"

@@ -31,7 +31,17 @@ SCRIPT_CHANGE_NAME ()
        DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
        Script_Window
   fi
-
+  
+  # Check if user entered symbols
+  source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${GET_PROGNAME}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
   # Set name in desktop file
   ${DESKTOP_FILE_EDIT} --set-name="${GET_PROGNAME}"      "${DESKTOPFILE}"
   DBUG "I: Script: Rename Shortcut: Name: ${PROGNAME}  -> ${GET_PROGNAME}"
