@@ -168,11 +168,13 @@ PRODUCT=$(${EXIFTOOL} "${EXE_FILE}"|grep -i "product name"|cut -f2 -d ":" \
 if [ $(echo ${PRODUCT} | grep -aEv [a-zA-Z] ) ] || [ -z "${PRODUCT}" ]; then
      unset PRODUCT
      unset PROGNAME
-     PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"|sed "s/\.[mM][Ss][Ii]//g"\
+     # PROGNAME=$(echo "${EXE_NAME} (${APP_WITH_VER})"
+     PROGNAME=$(echo "${EXE_NAME}"|sed "s/\.[mM][Ss][Ii]//g"\
                                                     |sed "s/\.[eE][Xx][Ee]//g");
      DBUG "I: ${HEADER}: Name: Product Name not found, using exe name"
 else
-     PROGNAME=$(echo "${PRODUCT} (${APP_WITH_VER})");
+     # PROGNAME=$(echo "${PRODUCT} (${APP_WITH_VER})");
+     PROGNAME=$(echo "${PRODUCT}");
      DBUG "I: ${HEADER}: Name: Product Name found: \"${PRODUCT}\""
 fi
 
