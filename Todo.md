@@ -35,9 +35,8 @@
 
 
 0.88.5
-- [ ] Do not add branding in Change exe function
-- [ ] Change Exe Should not Change Prefix
-- [ ] Change Prefix and Exe, should change icon, exe, prefix (like in setup)
+- [x] Do not add branding in Change exe function
+- [x] Change Exe Should not Change Prefix
 
 0.88.4
 - [ ] Do not put branding (WineZGUI-xxx) to Program Name
