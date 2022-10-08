@@ -32,7 +32,16 @@
      - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
-  
+
+
+0.88.5
+- [ ] Do not add branding in Change exe function
+- [ ] Change Exe Should not Change Prefix
+- [ ] Change Prefix and Exe, should change icon, exe, prefix (like in setup)
+
+0.88.4
+- [ ] Do not put branding (WineZGUI-xxx) to Program Name
+
 0.88.3
 - [x] Fix line-edit names with weird characters. (warn)
 - [x] Rename Functions
