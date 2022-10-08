@@ -74,6 +74,7 @@ Script_Get_Selected_Exe()
            echo "Selected $i"
            echo "File is ${FILES[${count}]}"
            export SELECTED_EXE="${FILES[${count}]}"
+           export SELECTED_EXE_NAME=$(basename "${SELECTED_EXE}")
            break
       fi
       count=$(expr ${count} + 1)

@@ -32,13 +32,24 @@
      - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
-  
-0.88.2
+
+
+0.88.5
+- [x] Do not add branding in Change exe function
+- [x] Change Exe Should not Change Prefix
+
+0.88.4
+- [ ] Do not put branding (WineZGUI-xxx) to Program Name
+
+0.88.3
 - [x] Fix line-edit names with weird characters. (warn)
 - [x] Rename Functions
      - [x] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
      - [x] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
      - [x] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
+     
+0.88.2
+- [x] fix more-help missing file 
 
 0.88.1
 - [x] Backup_Function should check whether files got processed before tar (grep XO Info.yml *.sh)

@@ -39,33 +39,34 @@ Script_Change_Exe_Variables()
        then
        unset NEW_PRODUCT
        unset NEW_PROGNAME
-       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})" \
+       #NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"
+       NEW_PROGNAME=$(echo "${NEW_EXE_NAME}" \
                       |sed "s/\.[eE][Xx][Ee]//g");
        DBUG "I: Script: ${FUNCNAME[0]}: Product Name not found, using exe name"
   else
-       NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
+       #NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
+       NEW_PROGNAME="$(echo "${NEW_PRODUCT}")"
        DBUG "I: Script: ${FUNCNAME[0]}: Product Name found: \"${NEW_PRODUCT}\""
   fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
   E="export " # for 80 column rule
-  sed "s|${E}PROGNAME=.*|${E}PROGNAME=\"${NEW_PROGNAME}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}EXE_FILE=.*|${E}EXE_FILE=\"${NEW_EXE_FILE}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}EXE_NAME=.*|${E}EXE_NAME=\"${NEW_EXE_NAME}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}EXE_PATH=.*|${E}EXE_PATH=\"${NEW_EXE_PATH}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}EXE_NOSP=.*|${E}EXE_NOSP=\"${NEW_EXE_NOSP}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}CHECKSUM=.*|${E}CHECKSUM=\"${NEW_CHECKSUM}\"|g" -i ${SCRIPTFILE}
-  sed "s|${E}EXE_LESS=.*|${E}EXE_LESS=\"${NEW_EXE_LESS}\"|g" -i ${SCRIPTFILE}
+  sed "s|${E}PROGNAME=.*|${E}PROGNAME=\"${NEW_PROGNAME}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh1: ${NEW_PROGNAME}"
+  sed "s|${E}EXE_FILE=.*|${E}EXE_FILE=\"${NEW_EXE_FILE}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh2: ${NEW_EXE_FILE}"
+  sed "s|${E}EXE_NAME=.*|${E}EXE_NAME=\"${NEW_EXE_NAME}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh3: ${NEW_EXE_NAME}"
+  sed "s|${E}EXE_PATH=.*|${E}EXE_PATH=\"${NEW_EXE_PATH}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh4: ${NEW_EXE_PATH}"
+  sed "s|${E}EXE_NOSP=.*|${E}EXE_NOSP=\"${NEW_EXE_NOSP}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh5: ${NEW_EXE_NOSP}"
+  sed "s|${E}CHECKSUM=.*|${E}CHECKSUM=\"${NEW_CHECKSUM}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh6: ${NEW_CHECKSUM}"
+  sed "s|${E}EXE_LESS=.*|${E}EXE_LESS=\"${NEW_EXE_LESS}\"|g; t;" -i ${SCRIPTFILE} || echo "Failed:sh7: ${NEW_EXE_LESS}"
 
   ####### Change Info.yml
-  sed "s|Name:.*|Name:${NEW_PROGNAME}|g"            -i "${INFOFILE}"
-  sed "s|Exe:.*|Exe:${NEW_EXE_FILE}|g"              -i "${INFOFILE}"
-  sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"    -i "${INFOFILE}"
-  sed "s|Sha256sum:.*|Sha256sum:${NEW_CHECKSUM}|g"  -i "${INFOFILE}"
+  sed "s|Name:.*|Name:${NEW_PROGNAME}|g; t;"            -i "${INFOFILE}" || echo "Failed: Info.yml1:${NEW_PROGNAME}"
+  sed "s|Exe:.*|Exe:${NEW_EXE_FILE}|g; t;"              -i "${INFOFILE}" || echo "Failed: Info.yml2:${NEW_EXE_FILE}"
+  sed "s|Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g; t;"    -i "${INFOFILE}" || echo "Failed: Info.yml3:${NEW_EXE_PATH}"
+  sed "s|Sha256sum:.*|Sha256sum:${NEW_CHECKSUM}|g; t;"  -i "${INFOFILE}" || echo "Failed: Info.yml4:${NEW_CHECKSUM}"
 
   ####### Change Desktop file
-  sed "s|Name=.*|Name=${NEW_PROGNAME}|g"            -i "${DESKTOPFILE}"
-  sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}" \
-                                                    -i "${DESKTOPFILE}"
+  sed "s|Name=.*|Name=${NEW_PROGNAME}|g; t;" -i "${DESKTOPFILE}" || echo "Failed: desktop1:${NEW_PROGNAME}"
+  sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}|g; t;" -i "${DESKTOPFILE}" || echo "Failed: desktop2: ${NEW_PROGNAME}"
   # Launch Script after modification
   "${SCRIPTFILE}" &
   exit 0

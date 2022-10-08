@@ -47,15 +47,18 @@ SCRIPT_CHANGE_NAME ()
   DBUG "I: Script: Rename Shortcut: Name: ${PROGNAME}  -> ${GET_PROGNAME}"
 
   # Change keyword in desktop file
-  sed "s|\(Keywords.* game;\).*|\1 ${GET_PROGNAME};|g" -i ${DESKTOPFILE}
+  sed "s|\(Keywords.* game;\).*|\1 ${GET_PROGNAME};|g" -i ${DESKTOPFILE} \
+   || echo "Failed1: ${FUNCNAME[0]}: Keywords.* game | ${GET_PROGNAME}"
 
   # Change Game Name
-  sed "s|Name:.*|Name:${GET_PROGNAME}|g"               -i "${INFOFILE}"
+  sed "s|Name:.*|Name:${GET_PROGNAME}|g"               -i "${INFOFILE}" \
+   || echo "Failed2: ${FUNCNAME[0]}: Name:.*| ${GET_PROGNAME}"
 
   # rename script file
   SED_SEARCH="^export PROGNAME=.*"
   SED_REPLACE="export PROGNAME=\"${GET_PROGNAME}\""
-  sed -E "s|${SED_SEARCH}|${SED_REPLACE}|" -i "${PREFIXDIR}/${PREFIXNAME}.sh"
+  sed "s|${SED_SEARCH}|${SED_REPLACE}|g; t;" -i "${PREFIXDIR}/${PREFIXNAME}.sh" \
+  || echo "Failed3: ${FUNCNAME[0]}: ^export PROGNAME=.* | ${SED_SEARCH}|${SED_REPLACE}"
 
   # Remove broken .desktop links
   find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
