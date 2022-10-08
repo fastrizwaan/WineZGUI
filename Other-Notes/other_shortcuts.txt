@@ -1,0 +1,21 @@
+copy main.sh -> other_exe.sh
+
+just change the exe_name
+
+Delete should delete the .sh and desktop file not whole directory.
+
+Delete...
+script-delete-other-shortcut
+rm ${0} (other_exe.sh)
+
+Make Every Script main script;
+
+On delete, check if there are other scripts.
+
+if > 1, prompt that delete prefix will delete other exe shortcut,
+
+Only delete Shortcut,
+Delete all with prefix
+
+
+

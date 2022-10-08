@@ -81,7 +81,9 @@ Script_Change_Icon()
   DBUG "I: Script: ${FUNCNAME[0]}: Icon Changed Successfully!"
   # update icon in Info.yml
   if [ -w "${INFOFILE}" ]; then
-       sed "s|Icon:.*|Icon:${ICONFILE}|g" -i "${INFOFILE}"
+       sed "s|Icon:.*|Icon:${ICONFILE}|g; t;" -i "${INFOFILE}" \
+       && echo "Changed Icon file to ${ICONFILE}" \
+       || echo "Cannot sed ${ICONFILE}"
   else 
        echo "E: Script: ${FUNCNAME[0]}: Cannot update ${INFOFILE}"
   fi
