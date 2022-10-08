@@ -39,11 +39,13 @@ Script_Change_Exe_Variables()
        then
        unset NEW_PRODUCT
        unset NEW_PROGNAME
-       NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})" \
+       #NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"
+       NEW_PROGNAME=$(echo "${NEW_EXE_NAME}" \
                       |sed "s/\.[eE][Xx][Ee]//g");
        DBUG "I: Script: ${FUNCNAME[0]}: Product Name not found, using exe name"
   else
-       NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
+       #NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
+       NEW_PROGNAME="$(echo "${NEW_PRODUCT}")"
        DBUG "I: Script: ${FUNCNAME[0]}: Product Name found: \"${NEW_PRODUCT}\""
   fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########

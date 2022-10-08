@@ -43,8 +43,8 @@ Script_Change_Exe()
   Script_Change_Icon "${SELECTED_EXE}"
 
   # Change Prefix
-  source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
-  Script_Create_Change_Prefix_File
+#   source ${WINEZGUI_SCRIPTS}/script-create-change-prefix-file 
+#   Script_Create_Change_Prefix_File
   # Update files
   # Change EXE_NAME and EXE_PATH in all the required files
   # Change Sha256sum etc.
