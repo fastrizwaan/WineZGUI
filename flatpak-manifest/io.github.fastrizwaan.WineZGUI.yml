@@ -16,10 +16,11 @@ finish-args:
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
     # Need to link .desktop files
-  - --filesystem=~/.local/share/applications
+  - --filesystem=~/.local/share/applications/wine:create
+  - --filesystem=~/.local/share/applications/winezgui:create
     # Most Games write to their own directories
-  - --filesystem=host
-    # Desktop shortcut runs wine script from host
+  - --filesystem=host:ro
+  # Desktop shortcut runs wine script from host
   #  Disable flatpak-spawn access for sandboxing
   #- --talk-name=org.freedesktop.Flatpak
   - --share=ipc
@@ -29,12 +30,6 @@ finish-args:
   - --socket=x11
   - --system-talk-name=org.freedesktop.UDisks2
   - --talk-name=org.freedesktop.Notifications
-
-cleanup:
-  - '*.a'
-  - '*.la'
-  - /share/doc
-  - /share/man
 
 inherit-extensions:
   - org.freedesktop.Platform.Compat.i386
@@ -71,6 +66,11 @@ modules:
           - https://download-mirror.savannah.gnu.org/releases/icoutils/icoutils-0.32.3.tar.bz2
           - https://ftp.up.pt/pub/nongnu/icoutils/icoutils-0.32.3.tar.bz2
         sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+    cleanup:
+    - '*.a'
+    - '*.la'
+    - /share/doc
+    - /share/man
 
   - name: perl
     no-autogen: true
@@ -91,7 +91,12 @@ modules:
       - exec ./configure.gnu $@
     post-install:
     - chmod -R u+w /app/lib/perl5
-  
+    cleanup:
+    - '*.a'
+    - '*.la'
+    - /share/doc
+    - /share/man
+
   - name: exiftool
     buildsystem: simple
     build-options:
@@ -116,6 +121,11 @@ modules:
       - type: archive
         url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.26.tar.xz
         sha256: b26dbde79ea72c8c84fb7f9d870ffd857381d049a86d25e0038c4cef4c747309
+    cleanup:
+    - '*.a'
+    - '*.la'
+    - /share/doc
+    - /share/man
 
   - name: WineZGUI
     buildsystem: simple

@@ -47,25 +47,25 @@ WineZGUI_Open_Terminal()
   echo "export WINEPREFIX=\"$WINEPREFIX\""       |tee ${WINEZGUIDIR}/open-terminal.sh
   echo "export WINEZGUIDIR=\"$WINEZGUIDIR\""     |tee -a ${WINEZGUIDIR}/open-terminal.sh
   echo "export FLATPAK_NAME=\"$FLATPAK_NAME\""   |tee -a ${WINEZGUIDIR}/open-terminal.sh
-  
+  echo "export WINE_CMD=\"$WINE_CMD\""   |tee -a ${WINEZGUIDIR}/open-terminal.sh
   echo '
-  # If found in flatpak sandbox, use flatpak-spawn
-  if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-       DBUG "I: Open Terminal: Opening gnome-terminal from sandbox"
-       # Shell needs WINEPREFIX as we are working with wine
-       export WINEPREFIX=${DEFAULT}
-       flatpak-spawn --host gnome-terminal --wait --                  \
-       flatpak --command=bash run ${FLATPAK_NAME}                     \
-       -c "cd ${WINEZGUIDIR}; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
-      
-  else # If found on host, run gnome-terminal
-       DBUG "I: Open Terminal: Opening gnome-terminal from host"
+#  # If found in flatpak sandbox, use flatpak-spawn
+#  if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+#       DBUG "I: Open Terminal: Opening gnome-terminal from sandbox"
+#       # Shell needs WINEPREFIX as we are working with wine
+#       export WINEPREFIX=${DEFAULT}
+#       flatpak-spawn --host gnome-terminal --wait --                  \
+#       flatpak --command=bash run ${FLATPAK_NAME}                     \
+#       -c "cd ${WINEZGUIDIR}; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
+#      
+#  else # If found on host, run gnome-terminal
+       echo "I: Open Terminal: Opening gnome-terminal from host"
        export WINEPREFIX=${DEFAULT}
        gnome-terminal --wait --                              \
             bash -c "export WINEPREFIX=${WINEPREFIX};        \
             cd ${WINEZGUIDIR};                               \
             exec bash -i"
-  fi
+#  fi
   ' |tee -a ${WINEZGUIDIR}/open-terminal.sh
   chmod +rx ${WINEZGUIDIR}/open-terminal.sh
   ${WINEZGUIDIR}/open-terminal.sh
