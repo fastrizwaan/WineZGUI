@@ -15,8 +15,27 @@ APP_ID="io.github.fastrizwaan.WineZGUI"
 SHORT_APP_ID="flatpak-winezgui"
 DATE=$(date +'%Y%m%d')
 
-WINEZGUI_VERSION=0.85
-BRANCH=21.08
+WINEZGUI_VERSION=0.88.3
+
+if [ "${1}" = "sdk" ] ; then
+     sudo flatpak --system remote-add --if-not-exists \
+     flathub https://flathub.org/repo/flathub.flatpakrepo 
+     for i in "org.freedesktop.Platform//22.08" \
+              "org.freedesktop.Platform.Compat.i386//22.08" \
+              "org.freedesktop.Platform.GL.default//22.08" \
+              "org.freedesktop.Platform.GL32.default//22.08" \
+              "org.freedesktop.Platform.ffmpeg-full//22.08" \
+              "org.freedesktop.Sdk//22.08" \
+              "org.freedesktop.Sdk.Compat.i386//22.08" \
+              "org.freedesktop.Sdk.Extension.toolchain-i386//22.08" \
+              "org.winehq.Wine//stable-22.08"
+         do 
+         flatpak --user remove -y "$i"
+         flatpak --system -y install "$i"; 
+     done
+fi
+
+BRANCH=22.08
 
 # handle relative path for building
 SCRIPT_NAME="$(realpath -m $0)"
@@ -42,36 +61,45 @@ cd ${FLATPAK_BUILD_DIR}
 echo "Install these Dependencies in the system or as user"
 echo \
 '#-----------------------system---------------------------------------
-flatpak remove --user --all ; # Run as user
 sudo flatpak --system remote-add --if-not-exists \
 flathub https://flathub.org/repo/flathub.flatpakrepo 
-sudo flatpak --system -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
-sudo flatpak --system -y install flathub org.freedesktop.Platform/x86_64/21.08; 
-sudo flatpak --system -y install flathub org.winehq.Wine/x86_64/stable-21.08
-sudo flatpak --system -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/21.08
-sudo flatpak --system -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/21.08
+flatpak --system -y install flathub org.freedesktop.Platform//22.08
+flatpak --system -y install flathub org.freedesktop.Platform.Compat.i386//22.08
+flatpak --system -y install flathub org.freedesktop.Platform.GL.default//22.08
+flatpak --system -y install flathub org.freedesktop.Platform.GL32.default//22.08
+flatpak --system -y install flathub org.freedesktop.Platform.ffmpeg-full//22.08
+flatpak --system -y install flathub org.freedesktop.Sdk//22.08
+flatpak --system -y install flathub org.freedesktop.Sdk.Compat.i386//22.08
+flatpak --system -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386//22.08
+flatpak --system -y install flathub org.winehq.Wine//stable-22.08
 #------------------------user----------------------------------------------
 flatpak --user remote-add --if-not-exists \
 flathub https://flathub.org/repo/flathub.flatpakrepo 
-flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
-flatpak --user -y install flathub org.freedesktop.Platform/x86_64/21.08; 
-flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
-flatpak --user -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/21.08
-flatpak --user -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/21.08
+flatpak --user -y install flathub org.freedesktop.Platform//22.08
+flatpak --user -y install flathub org.freedesktop.Platform.Compat.i386//22.08
+flatpak --user -y install flathub org.freedesktop.Platform.GL.default//22.08
+flatpak --user -y install flathub org.freedesktop.Platform.GL32.default//22.08
+flatpak --user -y install flathub org.freedesktop.Platform.ffmpeg-full//22.08
+flatpak --user -y install flathub org.freedesktop.Sdk//22.08
+flatpak --user -y install flathub org.freedesktop.Sdk.Compat.i386//22.08
+flatpak --user -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386//22.08
+flatpak --user -y install flathub org.winehq.Wine//stable-22.08
 #------------------------user----------------------------------------------'
 
-flatpak-builder --force-clean build-dir ${APP_ID}.yml || (echo "Build failed" ; exit 1)
+
 
 # Prefer system install
 if [ "$1" = "user" ]; then
      echo "Installing ${APP_ID}..."
-     flatpak-builder --user --install --force-clean build-dir ${APP_ID}.yml && \
+     flatpak-builder --force-clean build-dir ${APP_ID}.yml || (echo "Build failed" ; exit 1)
+     flatpak-builder --user --install --force-clean build-dir ${APP_ID}.yml 2> /dev/null && \
      (echo -e "\n\nSuccessfully installed ${APP_ID} flatpak as user ${USER}!";
    	  echo -e "run:\nflatpak run ${APP_ID}") || (echo "Install failed" ; exit 1)
 
 
 else
      echo "Installing ${APP_ID}... systemwide"
+     flatpak-builder --force-clean build-dir-root ${APP_ID}.yml || (echo "Build failed" ; exit 1)
      sudo flatpak-builder --system --install --force-clean build-dir-root ${APP_ID}.yml && \
      (echo -e "\n\nSuccessfully installed ${APP_ID} flatpak system-wide!";
    	  echo -e "run:\nflatpak run ${APP_ID}") || (echo "Install failed" ; exit 1)
@@ -92,7 +120,7 @@ if [ "$1" = "bundle" ]; then
      # Create flatpak bundle
 
      flatpak build-bundle ${REPO} ${BUNDLE} ${APP_ID} ${BRANCH} && \
-     echo "Sucessfully built ${BUNDLE}!"||(echo "build bundle failed" && exit 1)
+     echo "Sucessfully built ${BUNDLE}!" || (echo "build bundle failed" && exit 1)
 
      echo "Generating sha256sum of ${APP_ID}"
      SHORT_BUNDLE_ID="$(echo ${BUNDLE}|sed 's/\.flatpak//g')"

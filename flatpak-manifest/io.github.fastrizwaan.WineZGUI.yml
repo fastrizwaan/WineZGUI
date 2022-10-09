@@ -1,11 +1,11 @@
 id: io.github.fastrizwaan.WineZGUI
-branch: '21.08'
+branch: '22.08'
 version: '0.83'
 runtime: org.freedesktop.Platform
-runtime-version: '21.08'
+runtime-version: '22.08'
 sdk: org.freedesktop.Sdk
 base: org.winehq.Wine
-base-version: stable-21.08
+base-version: stable-22.08
 command: winezgui
 #rename-icon: winezgui
 #rename-desktop-file: winezgui.desktop
@@ -20,7 +20,8 @@ finish-args:
     # Most Games write to their own directories
   - --filesystem=host
     # Desktop shortcut runs wine script from host
-  - --talk-name=org.freedesktop.Flatpak
+  #  Disable flatpak-spawn access for sandboxing
+  #- --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
   - --socket=pulseaudio
@@ -122,5 +123,5 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        tag: 0.86
+        branch: flathub
         url: https://github.com/fastrizwaan/WineZGUI.git
