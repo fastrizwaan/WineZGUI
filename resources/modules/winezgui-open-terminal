@@ -2,22 +2,38 @@
 # Check if it is a flatpak based script
 # Check if it is running from inside flatpak container
 # and gnome terminal is found on host
+# 0. Create Script in PREFIXDIR/WINEZGUIDIR to 
+# 1. Check gnome-terminal available or not
+# 2. If found set GNOME_TERMINAL value 0 (AVAILABLE) 1 (not available)
+# 3. Check if flatpak is installed flatpak --run ${FLATPAK_NAME} 
+# 4. if not found, prompt flatpak not available.
+#
 WineZGUI_Open_Terminal()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
 
-  if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-       [ $(flatpak-spawn  --host which gnome-terminal) ]; then
-         DBUG "I: Open Terminal: Gnome-terminal found via flatpak-spawn"
-         export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
-  elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
-       [ $(which gnome-terminal) ]; then
-         DBUG "I: Open Terminal: Gnome-terminal found on host system"
-         export GNOME_TERMINAL=0 ; #Available on host install
+  # 1st test gnome-terminal
+  if   [ $(which gnome-terminal) ]; then
+         GNOME_TERMINAL=0
+         echo "Good: Gnome-Terminal Found"
   else
-         DBUG "I: Open Terminal: Gnome-terminal not found"
-         export GNOME_TERMINAL=1 ; #Unavailable on host
+         GNOME_TERMINAL=1
+         echo "Error: Gnome-Terminal NOT Found"
   fi
+#  
+#  if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+#       [ "INSTALL_TYPE" = "flatpak" ]; then
+#       #[ $(flatpak-spawn  --host which gnome-terminal) ]; then
+#         DBUG "I: Open Terminal: Gnome-terminal found via flatpak-spawn"
+#         export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
+#  elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
+#       [ $(which gnome-terminal) ]; then
+#         DBUG "I: Open Terminal: Gnome-terminal found on host system"
+#         export GNOME_TERMINAL=0 ; #Available on host install
+#  else
+#         DBUG "I: Open Terminal: Gnome-terminal not found"
+#         export GNOME_TERMINAL=1 ; #Unavailable on host
+#  fi
 
 
   # Using Variable, If gnome terminal is not found inform user
@@ -27,9 +43,14 @@ WineZGUI_Open_Terminal()
               --text "This feature requires \"gnome-terminal\""
   fi
 
+  # Create Scriptfile
+  echo "export WINEPREFIX=\"$WINEPREFIX\""       |tee ${WINEZGUIDIR}/open-terminal.sh
+  echo "export WINEZGUIDIR=\"$WINEZGUIDIR\""     |tee -a ${WINEZGUIDIR}/open-terminal.sh
+  echo "export FLATPAK_NAME=\"$FLATPAK_NAME\""   |tee -a ${WINEZGUIDIR}/open-terminal.sh
+  
+  echo '
   # If found in flatpak sandbox, use flatpak-spawn
   if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
-     [ $(flatpak-spawn --host echo 0) ]; then
        DBUG "I: Open Terminal: Opening gnome-terminal from sandbox"
        # Shell needs WINEPREFIX as we are working with wine
        export WINEPREFIX=${DEFAULT}
@@ -45,4 +66,7 @@ WineZGUI_Open_Terminal()
             cd ${WINEZGUIDIR};                               \
             exec bash -i"
   fi
+  ' |tee -a ${WINEZGUIDIR}/open-terminal.sh
+  chmod +rx ${WINEZGUIDIR}/open-terminal.sh
+  ${WINEZGUIDIR}/open-terminal.sh
 }
