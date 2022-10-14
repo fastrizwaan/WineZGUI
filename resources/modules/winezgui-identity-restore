@@ -74,4 +74,8 @@ Winezgui_Identity_Restore()
   # Cleanup variables
   unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH 
   unset FPNAME WEXE WVER FILE_LIST DTARGET DSOURCE
+  
+  # Find other files which has username in it.
+  source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
+  WineZGUI_Identity_Restore_From_Drive_C_Files "${1}"
 }

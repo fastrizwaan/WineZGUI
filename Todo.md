@@ -34,10 +34,11 @@
      - [ ] WineZGUI-win32-UE4
 
 0.88.6
-- [ ] Winezgui_Identity_Remove: find ${USER} inside drive_c, if found warn after replacement, especially if it is part of path
-     - [ ] =${USER}    -> XOEQUALUSERXO
+- [x] Winezgui_Identity_Remove: find ${USER} inside drive_c, if found warn after replacement, especially if it is part of path
+     - [x] ${USER}    -> XOUSERXO
        find files using $(grep -r "$USER" drive_c/|cut -f1 -d ":"|sort -u)
-- [ ] ="${USER}"  -> XOEQUALQUOTEUSERXO
+- [x] Winezgui_Identity_Restore: find XOUSERXO and replace it with $USER
+
 
 
 0.88.5

@@ -1,0 +1,35 @@
+# winezgui-identity-restore-from-drive-c-files
+WineZGUI_Identity_Restore_From_Drive_C_Files()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  if [ -z "${1}" ]; then
+        echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
+        return 1
+  else
+        DIRECTORY="${1}"
+        DIRNAME=$(basename "${1}")
+  fi
+
+  # if drive_c is found inside given prefix $1
+  if [ -d "${1}/drive_c" ]; then
+       DBUG "I: ${HEADER}: found drive_c, searching... for XOUSERXO"
+
+       ( FILES_WITH_USERNAME=$(grep -r "XOUSERXO" drive_c/|cut -f1 -d ":" ); \
+         echo $FILES_WITH_USERNAME > "${1}/FILES_WITH_USERNAME.txt")| \
+        zenity  --progress --pulsate --auto-close \
+                --title="Find \"XOUSERXO\"" \
+                --width=500 --text="Finding files with \"XOUSERXO\" in them in drive_c...!"
+       echo "files with username: ${FILES_WITH_USERNAME}"
+
+       # Read from file
+       FILES_WITH_USERNAME=$(cat "${1}/FILES_WITH_USERNAME.txt")
+       if [ -z "${FILES_WITH_USERNAME}" ]; then
+            echo "I: ${HEADER}: Files with XOUSERXO not found!"
+       else
+            echo "I: ${HEADER}: Files with XOUSERXO FOUND!"
+            echo "${FILES_WITH_USERNAME}"
+            sed "s|XOUSERXO|${USER}|g" -i ${FILES_WITH_USERNAME}
+       fi
+  fi
+}
