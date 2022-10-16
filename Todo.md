@@ -35,8 +35,7 @@
 
 0.88.6
 - [x] Winezgui_Identity_Remove: find ${USER} inside drive_c, if found warn after replacement, especially if it is part of path
-     - [x] ${USER}    -> XOUSERXO
-       find files using $(grep -r "$USER" drive_c/|cut -f1 -d ":"|sort -u)
+- [x] ${USER}    -> XOUSERXO  ; find files using $(grep -r "$USER" drive_c/|cut -f1 -d ":"|sort -u)
 - [x] Winezgui_Identity_Restore: find XOUSERXO and replace it with $USER
 
 
@@ -46,7 +45,7 @@
 - [x] Change Exe Should not Change Prefix
 
 0.88.4
-- [ ] Do not put branding (WineZGUI-xxx) to Program Name
+- [x] Do not put branding (WineZGUI-xxx) to Program Name
 
 0.88.3
 - [x] Fix line-edit names with weird characters. (warn)
