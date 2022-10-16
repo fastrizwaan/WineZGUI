@@ -1,0 +1,1 @@
+sudo flatpak override --no-talk-name=org.freedesktop.Flatpak io.github.fastrizwaan.WineZGUI
