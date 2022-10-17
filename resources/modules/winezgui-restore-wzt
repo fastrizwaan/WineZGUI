@@ -320,5 +320,11 @@ Restore_Wzt_File()
   # Find other files which has username in it.
   source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
   WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
+  
+  # Make launch default for restored app/game
+  if [ -w "${FOUND_PREFIX_DIR}" ]; then
+            echo "Yes" > "${FOUND_PREFIX_DIR}/launch"
+            DBUG "I: ${FOUND_PREFIX_DIR}: launch file created!"
+  fi
 }
  

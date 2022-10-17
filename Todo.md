@@ -33,8 +33,12 @@
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
 
+0.88.8
+- [x] Remove branding, again :-D "Name (WineZGUI-xx.xx)" -> "Name"
+- [x] Restore wzt - Set launch as default, since it was working well, that's why it was created.
+
 0.88.7
-[x] Only Search for Username on Backup and Restore, and not for all
+- [x] Only Search for Username on Backup and Restore, and not for all
 
 0.88.6
 - [x] Winezgui_Identity_Remove: find ${USER} inside drive_c, if found warn after replacement, especially if it is part of path
