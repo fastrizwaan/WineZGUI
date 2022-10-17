@@ -33,6 +33,9 @@
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
 
+0.88.7
+[x] Only Search for Username on Backup and Restore, and not for all
+
 0.88.6
 - [x] Winezgui_Identity_Remove: find ${USER} inside drive_c, if found warn after replacement, especially if it is part of path
 - [x] ${USER}    -> XOUSERXO  ; find files using $(grep -r "$USER" drive_c/|cut -f1 -d ":"|sort -u)

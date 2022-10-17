@@ -67,7 +67,7 @@ Winezgui_Identity_Remove()
   unset LEN SSSSSSS SEARCH REPLACE FIND_EXE_PATH FPNAME 
   unset WEXE WVER FILE_LIST DTARGET DSOURCE
 
-  # Find other files which has username in it.
-  source ${DATADIR}/winezgui-identity-remove-from-drive-c-files
-  WineZGUI_Identity_Remove_From_Drive_C_Files "${1}"
+#   # Find other files which has username in it.
+#   source ${DATADIR}/winezgui-identity-remove-from-drive-c-files
+#   WineZGUI_Identity_Remove_From_Drive_C_Files "${1}"
 }

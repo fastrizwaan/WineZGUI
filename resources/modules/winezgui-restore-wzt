@@ -316,5 +316,9 @@ Restore_Wzt_File()
   # PROCESS XO--XO variable inside prefixes and templates directory
   source ${DATADIR}/winezgui-identity-restore-all
   Winezgui_Identity_Restore_All
+  
+  # Find other files which has username in it.
+  source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
+  WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
 }
  
