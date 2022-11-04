@@ -27,6 +27,30 @@ Script_Launch()
        DBUG "I: Script: args=${EXE_ARGUMENTS}"
   fi
 
+  # Check for Wine version change
+  CURRENT_WINE_VERSION=$(wine --version|cut -f1 -d ' ')
+  CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
+  DBUG "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
+  DBUG "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
+
+  if [ ${CURRENT_WINE_VERSION} != "${CREATED_WINE_VERSION}" ]; then
+       DBUG "I: Script: Wine Version is different!"
+       unset TEXTMSG
+       TEXTMSG+="Created using Wine Version:${CREATED_WINE_VERSION}\n"
+       TEXTMSG+="Current Wine Version is   :${CURRENT_WINE_VERSION}\n"
+       TEXTMSG+="Update version Info?"
+       unset TITLEMSG
+       TITLEMSG+="Wine version mismatch!"
+
+       zenity --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
+       ANSWER=$?
+       if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
+            sed "s|${CREATED_WINE_VERSION}|${CURRENT_WINE_VERSION}|g" \
+            -i "${INFOFILE}"
+            DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
+       fi
+  fi
+
   # 3. Launch The EXE file
   ${WINE_CMD} "${exe_name}" "${EXE_ARGUMENTS}"
 

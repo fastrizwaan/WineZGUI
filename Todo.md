@@ -32,9 +32,9 @@
      - [ ] WineZGUI-win32-UE4
 
 0.89.2
-- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
-      -[ ] winezgui-check-wine-version-change
-      -[ ] script file should check, compare wine versin in Info.yml and $(which wine)
+- [x] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
+      -[x] Script_Launch function, check wine version.
+      -[x] script file should check, compare wine versin in Info.yml and $(which wine)
 
 0.89.1
 - [x] Set Debug default
