@@ -15,8 +15,8 @@ APP_ID="io.github.fastrizwaan.WineZGUI"
 SHORT_APP_ID="flatpak-winezgui"
 DATE=$(date +'%Y%m%d')
 
-WINEZGUI_VERSION=0.85
-BRANCH=21.08
+WINEZGUI_VERSION=0.88.6
+BRANCH=22.08
 
 # handle relative path for building
 SCRIPT_NAME="$(realpath -m $0)"

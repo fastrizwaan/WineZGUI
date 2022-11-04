@@ -8,6 +8,7 @@ Script_More()
                               --width=360 --height=240     \
                               --radiolist --column " "     \
                               --column "Action"            \
+                                     0 "Set Exe Arguments" \
                                      0 "Delete..."         \
                                 --text "More..."           )
 
@@ -16,6 +17,12 @@ Script_More()
        DBUG "I: MORE: Cancel Selected!"
        return 1
   fi
+  
+  if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
+          DBUG "I: Script: Delete... Selected!"
+          source ${WINEZGUI_SCRIPTS}/script-exe-cmdline 
+          Script_Exe_Cmdline
+  fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
           DBUG "I: Script: Delete... Selected!"

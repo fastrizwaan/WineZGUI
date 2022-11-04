@@ -20,8 +20,15 @@ Script_Launch()
   cd "${exe_path}"
   DBUG "I: Script: Launching ${exe_name}"
 
+  # CMDLINE exe argument 
+  if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
+       DBUG "I: Script: found CMDLINE arguments"
+       EXE_ARGUMENTS=$(grep args|cut -f2 -d ":")
+       DBUG "I: Script: args=${EXE_ARGUMENTS}"
+  fi
+
   # 3. Launch The EXE file
-  ${WINE_CMD} "${exe_name}"
+  ${WINE_CMD} "${exe_name}" "${EXE_ARGUMENTS}"
 
   # 4. Remove wine installed shortcuts, unclutters menu
   source ${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts 

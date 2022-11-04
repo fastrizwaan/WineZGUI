@@ -22,16 +22,26 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89
-- [ ] CMDLINE for exe, wine ${EXE} ${CMDLINE}
-- [ ] cmdline.yml; cmdline: for script-exe-cmdline
+0.89.3
 - [ ] Add shortcuts using [x] check boxes
-- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
-- [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
+
+0.89.2
 - [ ] Prefix Template Downloads
      - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
+
+0.89.2
+- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
+
+0.89.1
+- [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
+
+0.89.0
+- [x] CMDLINE for exe, wine ${EXE} ${CMDLINE}
+      - [x] script-launch check for cmdline.yml, if found, load CMDLINE values
+      - [x] create cmdline.yml, using more -> Set Exe Arguments
+      - [x] cmdline.yml; cmdline: for script-exe-cmdline
 
 0.88.8
 - [x] Remove branding, again :-D "Name (WineZGUI-xx.xx)" -> "Name"
