@@ -5,7 +5,7 @@ Script_Exe_Cmdline()
 
   # if cmdline.yml is found, get the args
   if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
-       ARGS=$(grep args|cut -f2 -d ":")
+       ARGS=$(grep args "${PREFIXDIR}/cmdline.yml"|cut -f2 -d ":")
   fi
 
   # Ask for Name
@@ -14,27 +14,31 @@ Script_Exe_Cmdline()
                         --entry-text "${ARGS}"       \
                         --width=500 --entry                          )
 
-  if [ -z "${GET_CMDLINE}" ]; then #if no value is given
+  ANSWER=$?
+  if [ ${ANSWER} -eq 1 ]; then #if user clicks cancel
        # Return to Script window
        DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
        return 1
   fi
 
-# Avoid checking for symbols, as cmdline could have / ? @ etc.
-#   # Check if user entered symbols
-#   source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
-#   WineZGUI_Check_Entry_Text "${GET_CMDLINE}"
-  
-#   ENTRY_CHECK=$?
-#   if [ ${ENTRY_CHECK} -eq 1 ]; then
-#        DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
-#        return 1
-#   fi  
+  # Write to file
   if [ -w "${PREFIXDIR}" ]; then
-       echo "args:${GET_CMDLINE}"  >> ${PREFIXDIR}/cmdline.yml
-       DBUG "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE} > ${PREFIXNAME}/cmdline.yml"
-       if [ -f ${PREFIXDIR}/cmdline.yml ]; then
-            zenity --info --title="Command Line argument" --text="${args}"
+       # if use deletes argument
+       if [ -z "${GET_CMDLINE}" ]; then
+            if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
+                 rm "${PREFIXDIR}/cmdline.yml"
+                 zenity --info --width 300 --title="Command Line argument" \
+                        --text="Removed <b>${ARGS}</b>\nand cmdline.yml"
+            fi
+            DBUG "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/cmdline.yml"
+       else #add args to cmdline.yml
+            echo "args:${GET_CMDLINE}"  > "${PREFIXDIR}/cmdline.yml"
+            DBUG "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE}"
+            DBUG "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/cmdline.yml"
+            if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
+                 zenity --info --width 300 --title="Command Line argument" \
+                        --text="${GET_CMDLINE}"
+            fi
        fi
   else
        echo "E: Script: ${FUNCNAME[0]}: Cannot write to ${PREFIXDIR}"
