@@ -9,6 +9,7 @@ export EMAIL="fast.rizwaan@gmail.com"
 export COPYRIGHT="GNU General Public License (GPLv3+)"
 export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 # Variables
+export DEBUG="Y"
 export PROCESSNAME="$0"
 export HEADER="$(basename ${0})" # for Terminal Messages
 # These values will be assigned by Setup using sed command

@@ -13,10 +13,11 @@ Remove_Wine_Created_Shortcuts()
   # Installed at $WINE_SHORTCUT_DIR,
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
-
+  # if applications/wine directory exists and it is writable
+  if [ -d "${WINE_SHORTCUT_DIR}" ] && [ -w "${WINE_SHORTCUT_DIR}" ]; then
   WINE_SHORTCUTS=$(grep -r "${PREFIXDIR}" "${WINE_SHORTCUT_DIR}" \
                   |cut -f1 -d ":"|sort -u)
-
+  fi
   if [ ! -z "$WINE_SHORTCUTS" ]; then
        rm $WINE_SHORTCUTS  && \
        DBUG "I: Script: Launch: Remove Wine Created Shortcuts: Removed!"

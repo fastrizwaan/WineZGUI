@@ -2,7 +2,7 @@
 # Use unset DEBUG will stop messages.
 DBUG()
 {
-  if [ "${DEBUG}" = "Y" ] || [ ! -z "${DEBUG}" ]; then
+  if [ "${DEBUG}" = "y" ] || [ "${DEBUG}" = "Y" ]; then
        echo "${1}"
   fi
 }

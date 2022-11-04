@@ -22,17 +22,24 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89.3
+0.89.4
 - [ ] Add shortcuts using [x] check boxes
 
-0.89.2
+0.89.3
 - [ ] Prefix Template Downloads
      - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
 
-0.89.1
+0.89.2
 - [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
+      -[ ] winezgui-check-wine-version-change
+      -[ ] script file should check, compare wine versin in Info.yml and $(which wine)
+
+0.89.1
+- [x] Set Debug default
+- [x] Remove shortcuts from wine directory only if it exists and writable.
+
 
 0.89.0
 - [x] CMDLINE for exe, wine ${EXE} ${CMDLINE}

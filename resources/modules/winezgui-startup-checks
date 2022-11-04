@@ -78,7 +78,7 @@ WineZGUI_Startup_Checks()
        echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
        export TEMPLATE="${WINEZGUI_TEMPLATE}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
-       #echo "debug:Y" >> "${SETTINGS_FILE}"
+       echo "debug:Y" >> "${SETTINGS_FILE}"
        export DEBUG="Y"
        export DEFAULT="${TEMPLATE}"
        export WINEPREFIX="${DEFAULT}"
