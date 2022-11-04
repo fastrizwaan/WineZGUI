@@ -15,7 +15,7 @@ Remove_Wine_Created_Shortcuts()
   IFS=$(echo -en "\n\b")
   # if applications/wine directory exists and it is writable
   if [ -d "${WINE_SHORTCUT_DIR}" ] && [ -w "${WINE_SHORTCUT_DIR}" ]; then
-  WINE_SHORTCUTS=$(grep -r "${PREFIXDIR}" "${WINE_SHORTCUT_DIR}" \
+  WINE_SHORTCUTS=$(grep -ri "winezgui" "${WINE_SHORTCUT_DIR}" \
                   |cut -f1 -d ":"|sort -u)
   fi
   if [ ! -z "$WINE_SHORTCUTS" ]; then
