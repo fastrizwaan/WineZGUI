@@ -42,6 +42,7 @@
       - [x] script-launch check for cmdline.yml, if found, load CMDLINE values
       - [x] create cmdline.yml, using more -> Set Exe Arguments
       - [x] cmdline.yml; cmdline: for script-exe-cmdline
+      - [x] Set Exe Argument working
 
 0.88.8
 - [x] Remove branding, again :-D "Name (WineZGUI-xx.xx)" -> "Name"
