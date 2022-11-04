@@ -31,11 +31,8 @@
      - [ ] WineZGUI-win64-UE4 (mf-install)
      - [ ] WineZGUI-win32-UE4
 
-0.89.2
-- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
-
 0.89.1
-- [ ] Set Compression Level in Settings.yml and use that. Reduce 1 more dialog
+- [ ] If wine version changes (compared to metada (Settings.yml)) inform user esp. for system install (startup-checks)
 
 0.89.0
 - [x] CMDLINE for exe, wine ${EXE} ${CMDLINE}
