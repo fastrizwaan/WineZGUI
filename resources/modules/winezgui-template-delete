@@ -6,7 +6,7 @@ WineZGUI_Template_Delete()
   source ${DATADIR}/winezgui-list-available-templates
   List_Available_Templates # get SELECTED_TEMPLATE
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
-  rm -rf "\'${SELECTED_TEMPLATE}\'" && \
+  rm -rf "${SELECTED_TEMPLATE}" && \
   DBUG "I: ${HEADER}: Deleted ${SELECTED_TEMPLATE}"
   echo "${TEMPLATE} = ${SELECTED_TEMPLATE} "
 

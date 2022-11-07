@@ -12,6 +12,7 @@ WineZGUI_Template()
                   --column "Action"                        \
                       TRUE "Configure ${TEMPLATE_NAME}..." \
                          0 "Backup    ${TEMPLATE_NAME}..." \
+                         0 "Download  Template..."         \
                          0 "Create New..."                 \
                          0 "Clone..."                      \
                          0 "Change..."                     \
@@ -36,6 +37,9 @@ WineZGUI_Template()
   elif [ "${TEMPLATE_OPTION}" = "Backup    ${TEMPLATE_NAME}..." ]; then
           source ${DATADIR}/winezgui-template-backup
           WineZGUI_Template_Backup "${TEMPLATE}"
+  elif [ "${TEMPLATE_OPTION}" = "Download  Template..." ]; then
+          source ${DATADIR}/winezgui-template-download
+          WineZGUI_Template_Download
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
           source ${DATADIR}/winezgui-template-create-new
           WineZGUI_Template_Create_New
