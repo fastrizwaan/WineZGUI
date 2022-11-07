@@ -10,31 +10,28 @@ WineZGUI_Identity_Remove_From_Drive_C_Files()
         DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
   fi
-
   # if drive_c is found inside given prefix $1
   if [ -d "${1}/drive_c" ]; then
-       DBUG "I: ${HEADER}: found drive_c, searching... for $USER"
-
-       ( FILES_WITH_USERNAME=$(grep -r "$USER" drive_c/|cut -f1 -d ":" ); \
-         echo $FILES_WITH_USERNAME > "${1}/FILES_WITH_USERNAME.txt")| \
-        zenity  --progress --pulsate --auto-close \
-                --title="Find \"${USER}\"" \
-                --width=500 --text="Finding files with $USER in them in drive_c...!"
+       DBUG "I: ${HEADER}: found drive_c, searching... for ${USER}"
+      (FILES_WITH_USERNAME=$(grep -r "${USER}" drive_c|sort -u| cut -f1 -d ":"| tee "${1}/FILES_WITH_USERNAME.txt"))| \
+       zenity  --progress --pulsate --auto-close --title="Find \"${USER}\"" --width=500 --text="Finding files with \"${USER}\" in drive_c!"
+                
        echo "files with username: ${FILES_WITH_USERNAME}"
 
        # Read from file
        FILES_WITH_USERNAME=$(cat "${1}/FILES_WITH_USERNAME.txt")
        if [ -z "${FILES_WITH_USERNAME}" ]; then
-             echo "I: ${HEADER}: Files with $USER not found!"
+            echo "I: ${HEADER}: Files with $USER not found!"
        else
-             echo "I: ${HEADER}: Files with $USER found!"
-             echo "${FILES_WITH_USERNAME}"
-             zenity --question --title "${APP_WITH_VER} - found files with \"${USER}\"" \
-                 --text "Change Username -> XOUSERXO?\n${FILES_WITH_USERNAME}"
-            ANSWER=$?
-            if [ ${ANSWER} -eq 0 ] ; then
-                 sed "s|${USER}|XOUSERXO|g" -i ${FILES_WITH_USERNAME}
-            fi
+            SAVEIFS=${IFS}
+            IFS=$(echo -en "\n\b")
+            echo "I: ${HEADER}: Files with $USER found!"
+            echo "${FILES_WITH_USERNAME}"
+            
+            for i in $(cat "${1}/FILES_WITH_USERNAME.txt"); do
+                sed "s|${USER}|XOUSERXO|g" -i ${i}
+            done
+            IFS=${SAVEIFS}
        fi
   fi
 }

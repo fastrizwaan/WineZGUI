@@ -22,14 +22,17 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89.4
+0.89.5
 - [ ] Add shortcuts using [x] check boxes
 
-0.89.3
+0.89.4
 - [ ] Prefix Template Downloads
      - [ ] Download templates from github
      - [ ] WineZGUI-win64-UE4 (mf-install)
-     - [ ] WineZGUI-win32-UE4
+
+0.89.3
+- [x] Do not prompt to change user->xouser in drive_c
+- [x] Fix identity removal and restoration on backup
 
 0.89.2
 - [x] If wine version changes (compared to metada (Info.yml)) inform user esp. for system install (startup-checks)
