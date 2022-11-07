@@ -26,9 +26,10 @@
 - [ ] Add shortcuts using [x] check boxes
 
 0.89.4
-- [ ] Prefix Template Downloads
-     - [ ] Download templates from github
-     - [ ] WineZGUI-win64-UE4 (mf-install)
+- [x] Prefix Template Downloads
+     - [x] Download templates from github
+     - [x] WineZGUI-win64-UE4 (mf-install)
+     - [x] Fix delete Template
 
 0.89.3
 - [x] Do not prompt to change user->xouser in drive_c
