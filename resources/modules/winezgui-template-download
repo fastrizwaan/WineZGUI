@@ -6,15 +6,19 @@ WineZGUI_Template_Download()
   if [ -w ${TEMPLATES_DIR} ]; then
        DBUG "I: Downloading https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst"
        cd ${TEMPLATES_DIR}
-       (wget -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst;
-        tar -xvf WineZGUI-win64-UE4.tar.zst -C ${TEMPLATES_DIR};)| \
-        zenity  --progress --pulsate --auto-close --title="Downloading \"WineZGUI-win64-UE4.tar.zst\"" --width=500 \
-        --text="Downloading and extracting template WineZGUI-win64-UE4.tar.zst"
+       wget -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst 2>&1 |\
+       sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | \
+       zenity --auto-close --width=500 --progress --title="Downloading \"WineZGUI-win64-UE4.tar.zst\"...";
+       (tar -xvf WineZGUI-win64-UE4.tar.zst -C ${TEMPLATES_DIR};)| \
+        zenity  --progress --pulsate --auto-close --title="Extracting \"WineZGUI-win64-UE4.tar.zst\"" --width=500 \
+        --text="Extracting at ${TEMPLATES_DIR}"
                 
        DBUG "I: Extracted WineZGUI-win64-UE4.tar.zst"
-       rm WineZGUI-win64-UE4.tar.zst && \
+       #rm WineZGUI-win64-UE4.tar.zst && \
        DBUG "I: Removed WineZGUI-win64-UE4.tar.zst after extraction"
-       zenity --info --title="Download Complete!" --text="Change templates using Template->Change..."
+       source ${DATADIR}/winezgui-template-change
+       WineZGUI_Template_Change
+       #zenity --info --title="Download Complete!" --text="Change templates using Template->Change..."
   else 
        echo "E: Cannot write to ${TEMPLATES_DIR}"
   fi
