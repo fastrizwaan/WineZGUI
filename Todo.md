@@ -22,8 +22,12 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89.5
+0.89.6
 - [ ] Add shortcuts using [x] check boxes
+
+0.89.5
+- [x] Show progress for template Download
+- [x] Show Tempaltes Change after extraction
 
 0.89.4
 - [x] Prefix Template Downloads
