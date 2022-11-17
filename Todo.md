@@ -22,8 +22,16 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89.6
+0.89.7
 - [ ] Add shortcuts using [x] check boxes
+
+0.89.6
+- [x] Create all desktop shortcuts for one or more found exe after setup
+- [x] Delete Setup/Installer script after creating shortcuts
+- [x] Restore Multiple .desktop files
+- [x] Revert Direct Launch on restore wzt
+- [x] After Setup, show the list of exe script files to launch for multiple exe found
+- [x] After Setup, launch the single script created
 
 0.89.5
 - [x] Show progress for template Download
