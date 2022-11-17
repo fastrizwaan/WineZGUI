@@ -1,14 +1,9 @@
 0.90
 - [ ] Comment every script, what it does
-- [x] Shortcuts
-    - [x] Create
-      - Create Script file with New EXE Name,
-      - Create Icon file, and desktop file
-      - Create Prefix should create shortcut!
-    - [ ] Delete
-    - [ ] Restore...
-    - [ ] Restore all Shorctus (.desktop files)
-    - [ ] Delete All Shortcuts
+- [ ] Comment who will be calling this current script/function and why
+- [ ] Create Flow Chart
+
+
 - [ ] New Function
      - [ ] WineZGUI_Import_Wine_Prefix => Winezgui_Identity_Remove then Winezgui_Identity_Restore
      - [ ] Steps
@@ -17,12 +12,25 @@
            - [ ] Determine old user; Old_user=$(grep \"USERNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
            - [ ] Determine New User; new_user=${USER}
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
-           - [ ] Find exe files inside wine-prefix, ask to select main exe
-           - [ ] Ask wehter to create shortcuts for remaining exe files? Create rest exe shortcuts
-     - [ ] set main exe
-     - [ ] create shortcut
 
-- [ ] Add shortcuts using [x] check boxes
+
+0.89.10
+      Winezgui_Identity_Restore_All
+- [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+- [ ] Determine New User; new_user=${USER}
+
+0.89.9
+- [ ] Recreate Scripts with current winezgui version (both downgrade and upgrade)
+- [ ] for i in *.sh; do grep EXE_FILE -$i; winezgui-recreate-script $i; done
+- [ ] winezgui-recreate-script should use same prefixdir, same name
+
+0.89.8
+- [ ] Add / Remove shortcuts
+- [ ] Delete Shortcuts... (Delete all shortcuts)
+- [ ] List unchecked/unselected shortcuts, Let user select to delete
+- [ ] Add Shortcuts (Add all shortcuts)
+- [ ] List checked/selected shortcuts,  Let user unselect to skip adding shortcuts
+- [ ] More->Shortcuts->Delete only current shortcut, when multiple found
 
 0.89.7
 - [x] Show list of multiple exe installed after setup
@@ -36,6 +44,11 @@
 - [x] Revert Direct Launch on restore wzt
 - [x] After Setup, show the list of exe script files to launch for multiple exe found
 - [x] After Setup, launch the single script created
+- [x] Shortcuts
+    - [x] Create
+      - [x] Create Script file with New EXE Name,
+      - [x] Create Icon file, and desktop file
+      - [x] Create Prefix should create shortcut!
 
 0.89.5
 - [x] Show progress for template Download
