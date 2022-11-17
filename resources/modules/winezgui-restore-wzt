@@ -272,6 +272,11 @@ Restore_Wzt_File()
        sed "s|Install:flatpak|Install:system|g" -i  "${FOUND_INFOFILE}"
   fi
  
+
+   # 6.1.2 # Find all desktop files and create shortcuts in the menu
+   for i in $(find ${FOUND_PREFIX_DIR} -type f -iname "*.desktop"); do 
+       ln -svf $(realpath $i) ${DESKTOPDIR}; 
+   done
   
   # 6.2 If .desktop file is found inside extracted prefix, then create shortcut
   if [ -f "${FOUND_DESKTOP_FILE}" ]; then
