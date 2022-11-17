@@ -63,8 +63,10 @@ Script_Launch()
   if [[ "${TEST_NAME}" == *"setup"* ]]   || \
      [[ "${TEST_NAME}" == *"install"* ]] ; then
        DBUG "I: Script: Launching =-= SETUP INSTALLER =-="
-       source ${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix
-       Script_Change_Exe_And_Prefix
+     #   source ${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix
+     #   Script_Change_Exe_And_Prefix
+       source ${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes
+       Script_Create_Shortcuts_For_Found_Exes
   else
        DBUG "I: Script: Launching script find exe"
        source ${WINEZGUI_SCRIPTS}/script-find-installed-exe 
