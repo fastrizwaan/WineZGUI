@@ -144,6 +144,35 @@ echo "$search_list"
  IFS=${SAVEIFS}
 
 
+ # Do not prompt with "found new exe files"
+ source ${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file
+ Script_Create_Found_New_Exe_Files_File
+ 
+ # If only 1 exe is found, then set that as Main Exe for the prefixdir
+ count=$(echo ${search_list}|tr '|' '\n'|wc -l)
+ echo "========================================== = = = = "
+ echo "count = $count"
+ # count = 2 means only 1 value, already search_list has \n
+ if [ $count -eq 2  ]; then
+      echo "Only 1 exe found, setting it as default for the prefix"
+      echo "Launching..."
+      # Reset PRODUCT_NAME - Exe.exe -> PRODUCT_NAME, for 1 exe only
+      sed "s|export PROGNAME=.*|export PROGNAME=\"${S_PROGNAME}\"|g" -i "${S_SCRIPTFILE}"
+      sed "s|Name=.*|Name=${S_PROGNAME}|g"       -i "${S_DESKTOPFILE}"
+      # Launch the single one
+      "${S_SCRIPTFILE}" &
+      # Delete setup script
+      rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      exit 0
+ fi
+ 
+ # We do not need setup file again, so remove the shortcut to the setup file
+ # after a single or multiple exes found
+ # Remove desktop file, perhaps user may relaunch setup
+ rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+
+ zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Launch from menu" --width=400
+ exit 0
 # # Generate Height value
 # source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
 # WineZGUI_Get_Window_Height ${#FILES[@]}

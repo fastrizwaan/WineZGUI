@@ -4,6 +4,12 @@
 List_Available_Launch_Scripts()
 { 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  
+  if [ -z "${1}" ]; then
+       SEARCH_PATH="${PREFIXES_DIR}"
+  else
+        SEARCH_PATH="${1}"
+  fi      
   unset COMMAND
   unset count
   unset SHOW_OPTION
@@ -22,7 +28,7 @@ List_Available_Launch_Scripts()
   # and common exe files present in Program Files directory
   # Add those files to FILES array and filenames to NAMES array
  
-  search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.sh" -type f -print \
+  search_list=$(find ${SEARCH_PATH}/* -maxdepth 1 -iname "*.sh" -type f -print \
                 2>/dev/null| tr '\n' '|')
   exe_found=$(echo ${search_list})
  
