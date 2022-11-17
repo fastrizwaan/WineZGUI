@@ -274,7 +274,7 @@ Restore_Wzt_File()
  
 
    # 6.1.2 # Find all desktop files and create shortcuts in the menu
-   for i in $(find ${FOUND_PREFIX_DIR} -type f -iname "*.desktop"); do 
+   for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
        ln -svf $(realpath $i) ${DESKTOPDIR}; 
    done
   
