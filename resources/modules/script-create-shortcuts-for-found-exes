@@ -171,7 +171,10 @@ echo "$search_list"
  # Remove desktop file, perhaps user may relaunch setup
  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 
- zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Launch from menu" --width=400
+ zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
+ source ${DATADIR}/winezgui-list-available-launch-scripts 
+ List_Available_Launch_Scripts ${PREFIXDIR}
+ "${SELECTED_SCRIPT}" &
  exit 0
 # # Generate Height value
 # source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
