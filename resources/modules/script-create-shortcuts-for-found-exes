@@ -171,9 +171,69 @@ echo "$search_list"
  # Remove desktop file, perhaps user may relaunch setup
  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 
- zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
- source ${DATADIR}/winezgui-list-available-launch-scripts 
- List_Available_Launch_Scripts ${PREFIXDIR}
+ # Replace Script file with multiple open dialog
+ # need variables from this script
+echo "
+#!/bin/bash
+source ${WINEZGUI_SCRIPTS}/winezgui-dbug 
+export APPNAME=\"${APPNAME}\"
+export FLATPAK_NAME=\"${FLATPAK_NAME}\"
+export APPVERSION=\"${APPVERSION}\"
+export APP_WITH_VER=\"${APPNAME}-${APPVERSION}\"
+export WINEVER=\"${WINEVER}\"
+export WINEARCH=\"${WINEARCH}\"
+export PROGNAME=\"${PROGNAME}\"
+export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
+export WINEZGUIDIR=\"${WINEZGUIDIR}\"
+export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
+export PREFIXNAME=\"${EXE_LESS}\"
+export EXE_FILE=\"${EXE_FILE}\"
+export EXE_NAME=\"${EXE_NAME}\"
+export CHECKSUM=\"${CHECKSUM}\"
+export EXE_PATH=\"${EXE_PATH}\"
+export EXE_NOSP=\"${EXE_NOSP}\"
+export EXE_LESS=\"${EXE_LESS}\"
+export EXE_EXT=\"${EXE_FILE##*.}\"
+export PREFIXDIR=\"${PREFIXDIR}\"
+export WINEPREFIX=\"${PREFIXDIR}\"
+export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
+export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
+export DATADIR=\"${DATADIR}\"
+export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
+export DESKTOPDIR=\"${DESKTOPDIR}\"
+export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
+export EXIFTOOL=\"\$(which exiftool)\"
+# winezgui backup file extension
+export BKP_EXT=\"${BKP_EXT}\"
+
+# Files
+export INFOFILE=\"${PREFIXDIR}/Info.yml\"
+export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
+export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
+export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
+
+
+
+# if icon is found grep it
+if [ -f \"${ICONFILE}\" ]; then
+     export ICON=\"\$(grep Icon \${DESKTOPFILE}|cut -f2 -d \"=\")\"
+else
+     export ICON="null"
+fi
+" > "${SCRIPTFILE}"
+echo "
+source \${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts 
+Script_List_Available_Launch_Shortcuts \${PREFIXDIR}
+\"\${SELECTED_SCRIPT}\" &
+exit 0
+" >> "${SCRIPTFILE}"
+
+chmod +rx "${SCRIPTFILE}"
+ 
+ # Do no Prompt and launch
+ # zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
+ source ${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts 
+ Script_List_Available_Launch_Shortcuts ${PREFIXDIR}
  "${SELECTED_SCRIPT}" &
  exit 0
 # # Generate Height value

@@ -1,0 +1,107 @@
+# script-list-available-launch-shortcuts
+# Finds winezgui created scripts *.sh, when multiple scripts are found.
+# When we install e.g., putty it installs multiple exe, 
+# so we need a place holder for all of them in SCRIPTFILE and on restoration.
+# this will be called by script-create-shortcuts-for-found-exes
+# 1st after setup/installer finishes
+# 2nd as default scriptfile for the prefix
+# and set the variable SELECTED_SCRIPT
+Script_List_Available_Launch_Shortcuts()
+{ 
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  
+  if [ -z "${1}" ]; then
+       SEARCH_PATH="${PREFIXES_DIR}"
+  else
+        SEARCH_PATH="${1}"
+  fi      
+  unset COMMAND
+  unset count
+  unset SHOW_OPTION
+  unset NAMES
+  unset FILES
+  unset RESULT
+  unset search_list
+ 
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+ 
+  count=0
+  NAMES=()
+  FILES=()
+  # Find all exe files in drive_c Exclude windows directory,
+  # and common exe files present in Program Files directory
+  # Add those files to FILES array and filenames to NAMES array
+  # Do no show script file in the list
+  search_list=$(find ${SEARCH_PATH} -maxdepth 1 -iname "$(basename ${SCRIPTFILE})" -o -iname "*.sh" -a -type f -print \
+                2>/dev/null| tr '\n' '|')
+  exe_found=$(echo ${search_list})
+ 
+  if [ -z "${exe_found}" ] ; then
+       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+              --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
+       WineZGUI_Window
+  fi
+  # if exe_found has value, then only change exe
+  for i in $(echo ${search_list}|tr '|' '\n'|sort)
+  do
+      RealFile=$(realpath -m "$i")
+      RealName=$(grep "^export PROGNAME=" $i|cut -f2 -d "=")
+      # If 1st value is empty, enable it
+      if [ -z "${SHOW_OPTION}" ]; then
+           SHOW_OPTION+="TRUE ${RealName}"
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      else
+           SHOW_OPTION+="0 ${RealName}"
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      fi
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+ 
+  #  Generate Height value
+  source ${DATADIR}/winezgui-get-window-height
+  WineZGUI_Get_Window_Height ${#FILES[@]}
+ 
+  # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
+  COMMAND+="--text \"${EXE_NAME}... Select Shortcut...\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  RESULT="$(eval ${COMMAND})"
+ 
+   ANSWER=$?
+
+   if [ ${ANSWER} -eq 1 ]; then
+        DBUG "I: ${HEADER}: Cancelled!"
+        unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION 
+        unset NAMES FILES COMMAND RESULT count i
+        exit 1
+   fi
+   
+   if [ -z "${RESULT}" ]; then
+        DBUG "I: ${HEADER}: Cancelled!"
+        unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION
+        unset NAMES FILES COMMAND RESULT count i
+        exit 1
+   fi
+ 
+  count=0
+ 
+  # 4. Find which file the user selected and set the selected exe into variable
+  for i in "${NAMES[@]}"; do
+      if [ "$i" = "\"$RESULT\"" ]; then
+           DBUG "I: ${FUNCNAME[0]}: Selected $i"
+           DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
+           export SELECTED_SCRIPT="${FILES[${count}]}"
+ 
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
+} 

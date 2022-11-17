@@ -22,8 +22,12 @@
      - [ ] set main exe
      - [ ] create shortcut
 
-0.89.7
 - [ ] Add shortcuts using [x] check boxes
+
+0.89.7
+- [x] Show list of multiple exe installed after setup
+- [x] default script should show all the available scripts/exe to launch
+- [x] restore works with script which lists multiple exe and single 
 
 0.89.6
 - [x] Create all desktop shortcuts for one or more found exe after setup

@@ -273,50 +273,28 @@ Restore_Wzt_File()
   fi
  
 
-   # 6.1.2 # Find all desktop files and create shortcuts in the menu
-   for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
-       ln -svf $(realpath $i) ${DESKTOPDIR}; 
-   done
+  # 6.1.2 # Find all desktop files and create shortcuts in the menu
+  for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
+      ln -svf $(realpath $i) ${DESKTOPDIR}; 
+  done
+
+  # Create a restored.text to update wineprefix
+  # without mono and gecko install dialog which
+  # winezgui-create-prefix checks on different versions of wine
+  # on 1st lauch on restoring
+  # we'll use restored.txt to launch wineboot with DLLoverrides
   
-  # 6.2 If .desktop file is found inside extracted prefix, then create shortcut
-  if [ -f "${FOUND_DESKTOP_FILE}" ]; then
-       DBUG "I: ${HEADER}: Found ${FOUND_DESKTOP_FILE}," \
-            "creating shortcut!"
-       # Create a restored.text to update wineprefix
-       # without mono and gecko install dialog which
-       # winezgui-create-prefix checks on different versions of wine
-       # on 1st lauch on restoring
-       # we'll use restored.txt to launch wineboot with DLLoverrides
-       echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
- 
-       # link the application shortcut .desktop file
-       ln -sf ${FOUND_DESKTOP_FILE} ${DESKTOPDIR}
- 
-       # 7. Cleanup broken links in winezgui shortcuts directory
-       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-       DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
- 
-       # 8. Update desktop menus and Icon cache
-       ${UPDATE_ICON_CACHE}
-       ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-       ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
- 
-       # 9. Get Game name from desktop file
-       GN="$(grep -i Name ${FOUND_DESKTOP_FILE}|cut -f2 -d "=")"
-       DBUG "I: ${HEADER}: Game Name: $GN"
- 
-       # 10. Ask if the user wants to start the restored game
-       if zenity --question --no-wrap --width=200    \
-                 --title="WineZGUI Backup Restored!" \
-                 --text="Launch: ${GN}?"
-       then
-            # Start the Game script and exit main app
-            DBUG "I: ${HEADER}: Launching Script for" \
-                 "the restored game..."
-            bash ${FOUND_SCRIPT_FILE}
-            exit 0
-       fi # zenity --question
-  fi # -f "${FOUND_DESKTOP_FILE}"
+  echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
+
+  # 7. Cleanup broken links in winezgui shortcuts directory
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+
+  # 8. Update desktop menus and Icon cache
+  ${UPDATE_ICON_CACHE}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+
   # Repair all files
   # PROCESS XO--XO variable inside prefixes and templates directory
   source ${DATADIR}/winezgui-identity-restore-all
@@ -326,6 +304,27 @@ Restore_Wzt_File()
   source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
   WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
   
+  LAUNCH_FILE_NAME=$(basename ${FOUND_SCRIPT_FILE})
+
+  if [ -f "${FOUND_SCRIPT_FILE}" ]; then
+       # 10. Ask if the user wants to start the restored game
+       if zenity --question --no-wrap --width=200    \
+                 --title="WineZGUI Backup Restored!" \
+                 --text="Launch: ${LAUNCH_FILE_NAME}?"
+       then
+            # Start the Game script and exit main app
+            DBUG "I: ${HEADER}: Launching Script for" \
+                 "the restored game..."
+            bash ${FOUND_SCRIPT_FILE}
+            exit 0
+       fi # zenity --question
+  else
+       source ${DATADIR}/script-list-available-launch-shortcuts 
+       Script_List_Available_Launch_Shortcuts ${FOUND_PREFIX_DIR}
+       "${SELECTED_SCRIPT}" &
+       exit 0
+  fi
+
 #   # Make launch default for restored app/game
 #   if [ -w "${FOUND_PREFIX_DIR}" ]; then
 #             echo "Yes" > "${FOUND_PREFIX_DIR}/launch"
