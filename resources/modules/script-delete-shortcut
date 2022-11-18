@@ -1,0 +1,18 @@
+#script-delete-shortcut
+Script_Delete_Shortcut()
+{
+  # Delete Shortcuts and Prefix Directory
+  echo ${DESKTOPFILE}
+  rm -fv ${DESKTOPFILE} && \
+  DBUG "I: Script: Delete: Removed ${DESKTOPFILE}" \ ||
+  echo "E: Script: Delete: Cannot Remove ${DESKTOPFILE} !!"
+
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
+  ${UPDATE_ICON_CACHE}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  DBUG "I: Script: Delete Shortcut: Exiting!"
+  # Exit after deleting prefix
+  zenity --info --no-wrap --text "Deleted ${DESKTOPFILE}" --title "${APP_WITH_VER} - Delete Shortcut!"
+  exit 0
+}

@@ -25,12 +25,11 @@
 - [ ] winezgui-recreate-script should use same prefixdir, same name
 
 0.89.8
-- [ ] Add / Remove shortcuts
-- [ ] Delete Shortcuts... (Delete all shortcuts)
-- [ ] List unchecked/unselected shortcuts, Let user select to delete
-- [ ] Add Shortcuts (Add all shortcuts)
-- [ ] List checked/selected shortcuts,  Let user unselect to skip adding shortcuts
-- [ ] More->Shortcuts->Delete only current shortcut, when multiple found
+- [x] Script Delete - useful for prefix with multiple exes / scripts
+    - [x] Shortcut
+    - [x] Script
+    - [x] Prefix
+
 
 0.89.7
 - [x] Show list of multiple exe installed after setup

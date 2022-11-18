@@ -1,0 +1,27 @@
+#script-delete-help
+Script_Delete_Help()
+{
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  BASE_EXE_PATH=$(basename "${EXE_PATH}")
+  BASE_SCRIPT=$(basename "${SCRIPTFILE}")
+  HELP_TEXT+="Delete Shortcut...   : Deletes only .desktop shortcut from \"<b>${PREFIXNAME}</b>\" prefix!|"
+  HELP_TEXT+="Delete Script...     : Deletes Shortcut and Script file from \"<b>${PREFIXNAME}</b>\" prefix!|"
+  HELP_TEXT+="Delete Prefix...     : Deletes \"<b>${PREFIXNAME}</b>\" prefix and everything in it!|"
+  HELP_TEXT+="Help...              : This help|"
+
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT} \
+              |tr "|" "\n" \
+              |sed "s/https:/https|/g" \
+              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+              |sed "s/:/;:;/g" \
+              |column -t -s ";"      \
+              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+              |sed "s/|/:/g" )"
+  #
+  zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  unset HELP_TEXT
+  unset TEXT
+}

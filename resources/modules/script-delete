@@ -5,10 +5,13 @@ Script_Delete()
   DEL_RESPONSE=$( zenity \
                --title "${PROGNAME}"                  \
                --list   --hide-header                 \
-               --width=360 --height=30                \
+               --width=360 --height=200               \
                --radiolist --column " "               \
                --column "Action"                      \
-                   TRUE "Delete and Quit..."          \
+                   TRUE "Delete Shortcut..."          \
+                      0 "Delete Script..."            \
+                      0 "Delete Prefix..."            \
+                      0 "Help..."                     \
                --text   "<b>${EXE_NAME} Prefix...</b>")
   # If Cancel is clicked
   if [ -z "${DEL_RESPONSE}" ]; then
@@ -16,22 +19,23 @@ Script_Delete()
        unset DEL_RESPONSE
        return 1
   fi
+  
+  if   [ "${DEL_RESPONSE}" = "Delete Shortcut..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-delete-shortcut
+         Script_Delete_Shortcut
 
-  SHORTCUT="${DESKTOPDIR}/${EXE_LESS}.desktop"
-  # Delete Shortcuts and Prefix Directory
-  rm -rf ${SHORTCUT} && \
-  DBUG "I: Script: Delete: Removed ${SHORTCUT}" \ ||
-  echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
+  elif [ "${DEL_RESPONSE}" = "Delete Script..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-delete-scriptfile
+         Script_Delete_Scriptfile
+         
+  elif [ "${DEL_RESPONSE}" = "Delete Prefix..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-delete-prefix
+         Script_Delete_Prefix
+         
+  elif [ "${DEL_RESPONSE}" = "Help..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-delete-help 
+         Script_Delete_Help # Call the function in the above file
 
-  rm -rf ${PREFIXDIR} && \
-  DBUG "I: Script: Delete: Removed ${PREFIXDIR}"
+  fi
 
-  # Delete all broken links which points to winezgui game prefix
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
-  DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
-  ${UPDATE_ICON_CACHE}
-  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-  DBUG "I: Script: Delete: Exiting!"
-  # Exit after deleting prefix
-  exit 0
 }
