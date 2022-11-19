@@ -1,0 +1,46 @@
+#winezgui-recreate-prefix
+WineZGUI_Recreate_Prefix()
+{
+  
+  ### Get Prefixdir name
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  source ${DATADIR}/winezgui-list-available-prefixes 
+  List_Available_Prefixes
+  PREFIXNAME=$(basename ${SELECTED_PREFIX})
+
+  zenity --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
+         --text="This will overwrite all shell scripts associated with this prefix!"
+  ANSWER=$?
+
+  if [ ${ANSWER} -eq 1 ]; then
+       echo "Cancelled"
+       return 1
+  fi
+
+ echo "------------------------------WINEZGUI-RECREATE-PREFIX-----------------------"
+ export PREFIXDIR=${SELECTED_PREFIX}
+ echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
+ find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print
+  search_list=$(find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print \
+                2>/dev/null| tr '\n' '|')
+  exe_found=$(echo ${search_list})
+  
+  if [ -z "${exe_found}" ] ; then
+       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+              --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
+       WineZGUI_Window
+  fi
+  # if exe_found has value, then only change exe
+  for i in $(echo ${search_list}|tr '|' '\n'|sort)
+  do
+     EXE_IN_SCRIPTFILE=$(grep -i "export EXE_FILE=" ${i}|cut -f2 -d "="|sed 's/"//g')
+     echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
+     ${DATADIR}/winezgui-recreate-prefix-script "${EXE_IN_SCRIPTFILE}"
+  done
+  IFS=${SAVEIFS}
+
+  # Inform and offer to Launch
+  zenity --info --title="Re-created Scripts for ${PREFIXNAME}" \
+  --text="Updated scripts to $APP_WITH_VER version, Please launch from menu."
+
+}

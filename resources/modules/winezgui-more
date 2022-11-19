@@ -10,6 +10,7 @@ WineZGUI_More()
                         0 "File Manager..."              \
                         0 "Open Terminal..."             \
                         0 "Shortcuts..."                 \
+                        0 "Recreate All Scripts..."      \
                         0 "Help..."                      \
                  --text   "More..."                      )
 
@@ -28,6 +29,9 @@ WineZGUI_More()
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
          source ${DATADIR}/winezgui-shortcuts 
          WineZGUI_Shortcuts
+  elif [ "${MORE_OPTION}" = "Recreate All Scripts..."  ]; then
+         source ${DATADIR}/winezgui-recreate-prefix
+         WineZGUI_Recreate_Prefix
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
          source ${DATADIR}/winezgui-more-help
          WineZGUI_More_Help

@@ -20,9 +20,9 @@
 - [ ] Determine New User; new_user=${USER}
 
 0.89.9
-- [ ] Recreate Scripts with current winezgui version (both downgrade and upgrade)
-- [ ] for i in *.sh; do grep EXE_FILE -$i; winezgui-recreate-script $i; done
-- [ ] winezgui-recreate-script should use same prefixdir, same name
+- [x] Recreate Scripts with current winezgui version (both downgrade and upgrade)
+- [x] for i in *.sh; do grep EXE_FILE -$i; winezgui-recreate-script $i; done
+- [x] winezgui-recreate-script should use same prefixdir, same name
 
 0.89.8
 - [x] Script Delete - useful for prefix with multiple exes / scripts

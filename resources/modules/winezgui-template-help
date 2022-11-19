@@ -2,13 +2,15 @@
 WineZGUI_Template_Help()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  HELP_TEXT+="Configure ${TEMPLATE_NAME}... : Create Exe bottle for any Setup or any exe or msi file!|"
-  HELP_TEXT+="Backup    ${TEMPLATE_NAME}... : Run installed Shortcuts for exe, directly!|"
-  HELP_TEXT+="Create New...                 : Launches main exe script for the prefix. Use it to configure.|"
-  HELP_TEXT+="Change...                     : Create \"Game Bundle\" or prefix backup to share!|"
-  HELP_TEXT+="Backup...                     : Configure, and manage Templates to create other prefixes |"
-  HELP_TEXT+="Restore...                    : Restore a Prefix backup or Game Bundle|"
-  HELP_TEXT+="Delete...                     : Delete an Installed game|"
+  HELP_TEXT+="Configure ${TEMPLATE_NAME}... : Configure ${TEMPLATE_NAME} prefix template with any Setup or winetricks!|"
+  HELP_TEXT+="Backup    ${TEMPLATE_NAME}... : Backup ${TEMPLATE_NAME} prefix template  as template backup.|"
+  HELP_TEXT+="Download  Template...         : Download WineZGUI-UE4 template, supports Unreal Engine 4 games, has mf-install.|"
+  HELP_TEXT+="Create New...                 : Create a new template prefix to be used by newly created prefix scripts.|"
+  HELP_TEXT+="Clone...                      : Copy an existing template.|"
+  HELP_TEXT+="Change...                     : Set Template as default template to create new app/game prefixes.|"
+  HELP_TEXT+="Backup...                     : Backup a prefix template from a list of available templates. |"
+  HELP_TEXT+="Restore...                    : Restore a previously backed up template|"
+  HELP_TEXT+="Delete...                     : Delete a Prefix Template|"
   
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
