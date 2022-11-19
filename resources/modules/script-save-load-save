@@ -1,0 +1,268 @@
+#script-save-load-save
+#FIXME: remove identity from filename and directory names and content
+Script_Save_Load_Save()
+{
+  # SAVEDGAMEDIRFILE="${PREFIXDIR}/SavedGameDir.yml"
+  # DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  # if [ -f "${SAVEDGAMEDIRFILE}" ]; then
+  #      SAVED_GAME_DIR=$(grep -i "SavedGameDir:" "${SAVEDGAMEDIRFILE}" \
+  #                      |cut -f2 -d ":")
+  # else
+  #     zenity --info --text="Please select Saved Game directory" --title="Saved Game Directory!"
+  #     source ${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory
+  #     Script_Save_Load_Set_Saved_Game_Directory
+  # fi
+  PREFIXNAME=$(basename "${PREFIXDIR}")
+  source ${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory
+  Script_Save_Load_Set_Saved_Game_Directory
+
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  
+  # 1.0 If No SavedGame name is given, ask for template to backup
+  SELECTED_SAVEDGAME=$(dirname "${SAVED_GAME_PATH}")
+ 
+  
+  # 1.1 Need this to print name of template
+  SELECTED_SAVEDGAME_NAME=$(basename "${SAVED_GAME_PATH}")
+
+  DBUG "I: ${HEADER}: SavedGame: ${SELECTED_SAVEDGAME}"
+  DBUG "I: ${HEADER}: SavedGame Name: ${SELECTED_SAVEDGAME_NAME}"
+  
+  
+  # 2.0 Get disk usage of template
+  DATE=$(date +'%Y%m%d')
+  SAVEDGAME_EXT="tar.zst"
+  SAVEDGAME_SIZE_IN_HF=$(du -sh "${SELECTED_SAVEDGAME}"|sed "s/  */ /g" \
+                       |cut -f1 -d " "| cut -f1 )
+  SAVEDGAME_SIZE_IN_BYTES=$(echo ${SAVEDGAME_SIZE_IN_HF}|cut -f1 -d " " \
+                          | numfmt --from iec)
+
+  DBUG "I: ${HEADER}: DATE                  : ${DATE}"
+  DBUG "I: ${HEADER}: SAVEDGAME_EXT          : ${SAVEDGAME_EXT}"
+  DBUG "I: ${HEADER}: SAVEDGAME_SIZE_IN_HF   : ${SAVEDGAME_SIZE_IN_HF}"
+  DBUG "I: ${HEADER}: SAVEDGAME_SIZE_IN_BYTES: ${SAVEDGAME_SIZE_IN_BYTES}"
+  
+  # 3.0 Set Total Backup size variable
+  TOTAL_SIZE_IN_HF=${SAVEDGAME_SIZE_IN_HF}
+  TOTAL_SIZE_IN_BYTES=${SAVEDGAME_SIZE_IN_BYTES}
+
+  DBUG "I: ${HEADER}: TOTAL_SIZE_IN_BYTES   : ${TOTAL_SIZE_IN_BYTES}"
+  DBUG "I: ${HEADER}: TOTAL_SIZE_IN_HF      : ${TOTAL_SIZE_IN_HF}"
+  
+  # 4.0 Prepare SAVEDGAME Name
+  # 4.1 Format filename for flatpak or system install type
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       # If "flatpak-" is not part of flatpak name
+       # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
+       if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+            SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+       fi
+       unset FILENAME
+       FILENAME+="${PREFIXNAME}"
+       FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
+       FILENAME+="${SHORT_FLATPAK_NAME}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${SAVEDGAME_EXT}"
+       # Flatpak: template-SavedGame_Name-flatpak-wine7-20220904.tar.zst
+  else # for system add wine-version
+       unset FILENAME
+       FILENAME+="${PREFIXNAME}"
+       FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
+       FILENAME+="${WINEVER}"
+       FILENAME+="-${DATE}"
+       FILENAME+=".${SAVEDGAME_EXT}"
+       # template-SavedGame_Name-wine-7.0-20220904.tar.zst
+  fi
+
+  DBUG "I: ${HEADER}: Filename Suggestion: ${FILENAME}"
+
+  # 5.0 Ask FILENAME using Zenity Entry dialog
+  unset TITLE
+  unset TEXT
+  TITLE="Backup ${SELECTED_SAVEDGAME_NAME} SavedGame!"
+  TEXT+="${SAVEDGAME_SIZE_IN_HF} ${SELECTED_SAVEDGAME}"
+
+  # 5.1 Suggest and Ask for template file name
+  DBUG "I: ${HEADER}: Asking filename"
+  BACKUP_FILE=$( zenity                        \
+                 --title="${TITLE}"            \
+                 --width=700 --height=30       \
+                 --text="${TEXT}"              \
+                 --entry-text="${FILENAME}"    \
+                 --entry)
+
+  # 5.2: If user cancels or nothing
+  if [ -z "${BACKUP_FILE}" ]; then
+       DBUG "I: ${HEADER}: Cancelled!"
+       unset BACKUP_FILE
+       unset FILENAME
+       return 1
+  fi
+
+
+  # Check if user entered symbols
+  source ${DATADIR}/winezgui-check-entry-text
+  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
+  # 6.0 Ask user to select target backup directory
+  DBUG "I: ${HEADER}: Choose Backup Directory..."
+  unset TITLE
+  TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
+  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  
+  # 6.2: If user cancels or nothing
+  if [ -z "${TARGET_DIR}" ]; then
+       DBUG "I: ${HEADER}: Select backup directory: Cancelled!"
+       return 1
+  fi
+
+  # 6.2: If the target directory is not writable, inform and return
+  if [ ! -w "${TARGET_DIR}" ]; then
+       echo "E: ${HEADER}: ${TARGET_DIR} not writable"
+       zenity --error --no-wrap --title="Backup Error!" \
+              --text "${TARGET_DIR} not writable\nAborting Backup!"
+       return 1
+  fi
+
+  # 7.0 Process Backup file name
+  
+  DBUG "I: ${HEADER}: Given ${BACKUP_FILE}"
+  # 7.1 Required extension is .tar.zst , if not found add it
+  if ! [[ "${BACKUP_FILE}" == *".${SAVEDGAME_EXT}" ]]; then
+       BACKUP_FILE="$(echo ${BACKUP_FILE}.${SAVEDGAME_EXT})"
+       DBUG "I: ${HEADER}: added suffix ${SAVEDGAME_EXT}"
+  fi
+
+  DBUG "I: ${HEADER}: Using ${BACKUP_FILE}"
+
+  # 8.0 Check available disk space in target directory before backing up
+  # to make sure that template size < target dir for backup to start
+  DBUG "I: ${HEADER}: Determining available space at ${TARGET_DIR}"
+
+  # 8.1: Get available target dir partition's available space in
+  # Human format (df -h)
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
+                   |cut -f4 -d " "|tail -n1)
+  # 8.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}| numfmt --from iec)
+  #SAVEDGAME_SIZE_IN_BYTES=$(echo ${SAVEDGAME_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)
+
+  DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+
+  # 8.3: If Target directory does not have sufficient space, abort backup
+  DBUG "I: ${HEADER}: Checking if size < target dir space"
+
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE_IN_BYTES} ]; then
+       DBUG "I: ${HEADER}: ${TARGET_DIR} has ample disk space."
+  else
+       echo "E: ${HEADER}: Insufficient disk space at ${TARGET_DIR}!"
+       unset MSG
+       unset TITLE
+       TITLE="Not Enough Disk Space!"
+       MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
+       MSG+=" "
+       MSG+="free disk space left!\n"
+       MSG+="SAVEDGAME backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+       # Warn user
+       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       echo "E: ${HEADER}: Not Enough Disk Space, Cancelled!"
+       return 1
+  fi
+
+  # 9. Ask for Compression Levels
+  unset LEVEL
+  LEVEL=10
+  # 9.1 Return if Cancel is clicked
+  if [ -z "${LEVEL}" ]; then
+       DBUG "I: ${HEADER}: Cancel Selected!"
+       return 1
+  fi
+  DBUG "I: ${HEADER}: Compression Level ${LEVEL} Selected!"
+
+  # 10.0 Create template backup tar.zst file
+  # 10.1 Change directory to SAVEDGAMES_DIR
+  DBUG "I: ${HEADER}: SavedGame: Preparing files"
+  cd "${SAVEDGAMES_DIR}"
+  # 10.2 Preprocess SAVEDGAMES_DIR files (remove user name from files)
+  DBUG "I: ${HEADER}: Changing Directory to ${SAVEDGAMES_DIR}"
+  DBUG "I: ${HEADER}: Launching: winezgui-identity-remove"
+  
+  source ${DATADIR}/winezgui-identity-remove
+  Winezgui_Identity_Remove "${SELECTED_SAVEDGAME}"
+
+  # 10.3 Create template-info.yml inside SELECTED_SAVEDGAME, not needed though
+  
+  # 11.0 Create SavedGame Backup file using tar and zst
+  DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
+  DBUG "I: ${HEADER}: Executing command"
+  DBUG "-------------------------------------------------------------"
+  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+            -C \"${SELECTED_SAVEDGAME}\" \"${SELECTED_SAVEDGAME_NAME}\""
+  DBUG "-------------------------------------------------------------"
+  # Report user the time it took to bundle
+  TIMER_START=${SECONDS}
+  # 11.1 Create Backup archive and restore changes as soon as tar is done
+  (tar --transform s/${USER}/XOUSERXO/ -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               -C  "${SELECTED_SAVEDGAME}" "${SELECTED_SAVEDGAME_NAME}" &)| \
+  zenity    --progress --pulsate --auto-close        \
+            --title="Creating ${SELECTED_SAVEDGAME_NAME} backup!" \
+            --width=500 --text="${BACKUP_FILE}..."
+  TOOK=$(( SECONDS - ${TIMER_START} ))
+  DBUG "I: ${HEADER}:Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+
+  # 7.5 If user clicks cancel, kill tar commands
+  # zenity progress won't kill the process, so we do it
+  # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
+  # other wzt file operation like extraction and backup
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+              |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+  
+  # If there is a PID_OF_TAR then we need to kill the tar command
+  if ! [ -z "${PID_OF_TAR}" ]; then
+         kill -9 ${PID_OF_TAR} \
+         && DBUG "I: Backup: SavedGame: Cancelled! Killed tar!" \ &&
+         rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
+         DBUG "I: Backup: SavedGame: Removed partial ${BACKUP_FILE}"
+
+       # Backup Failure Message
+       echo "===================================================="
+       unset MSG
+       MSG=("${SELECTED_SAVEDGAME_NAME} backup cancelled!")
+  else
+       # If no pid is found, that means wzt=tar.zst is created successfully
+       DBUG "I: Backup: SavedGame: Created ${BACKUP_FILE}, Success!"
+       # 7.6  Crate message
+       BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Backup Sucess Message
+       unset MSG
+       MSG=("<b>SAVEDGAME: </b> ${SELECTED_SAVEDGAME_NAME}\n")
+       MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+       MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+       MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+
+  fi
+
+  # 7.7 Restore changed values after backup
+  DBUG "I: Backup: SavedGame: Restoring Registry and Info files"
+  cd "${SAVEDGAMES_DIR}"
+  source ${DATADIR}/winezgui-identity-restore
+  Winezgui_Identity_Restore "${SELECTED_SAVEDGAME}"
+
+  DBUG "I: Backup: SavedGame: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+
+  # 8. Show info about created wzt file
+  zenity --no-wrap --info --title="SAVEDGAME Backup!" --text="${MSG[@]}"
+  return 0
+}
+
+
+

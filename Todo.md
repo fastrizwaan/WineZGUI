@@ -19,6 +19,13 @@
 - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 - [ ] Determine New User; new_user=${USER}
 
+0.89.10
+- [ ] Save/Load...
+     -[ ] Set Saved Game directory...
+     -[ ] Save...
+     -[ ] Restore...
+     -[ ] PREFIXNAME-DATE_TIME_save.tar.zst
+
 0.89.9
 - [x] Recreate Scripts with current winezgui version (both downgrade and upgrade)
 - [x] for i in *.sh; do grep EXE_FILE -$i; winezgui-recreate-script $i; done

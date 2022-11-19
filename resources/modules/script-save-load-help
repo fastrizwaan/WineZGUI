@@ -1,0 +1,25 @@
+# script-save-load-help
+Script_Save_Load_Help()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HELP_TEXT+="Set Saved Game directory...   : Choose save game directory to backup, i.e., where game saves its settings and progress|"
+  HELP_TEXT+="Save...                       : Save saved game directory as sav.tar.zst|"
+  HELP_TEXT+="Load...                       : Load saved game file *.sav.tar.zst|"
+    
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT} \
+              |tr "|" "\n" \
+              |sed "s/https:/https|/g" \
+              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+              |sed "s/:/;:;/g" \
+              |column -t -s ";"      \
+              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+              |sed "s/|/:/g" )"
+              
+  #
+  zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  unset HELP_TEXT
+  unset TEXT
+}

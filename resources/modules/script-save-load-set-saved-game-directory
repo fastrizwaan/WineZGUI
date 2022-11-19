@@ -1,0 +1,27 @@
+#script-save-load-set-saved-game-directory
+Script_Save_Load_Set_Saved_Game_Directory()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  # SAVEDGAMEDIRFILE="${PREFIXDIR}/SavedGameDir.yml"
+  # if [ -f "${SAVEDGAMEDIRFILE}" ]; then
+  #      SAVED_GAME_PATH=$(grep -i "SavedGameDir:" "${SAVEDGAMEDIRFILE}" \
+  #                      |cut -f2 -d ":")
+  # else
+  #      SAVED_GAME_PATH="${PREFIXDIR}/drive_c/users/${USER}/"
+  # fi
+  
+  # unset TITLE
+  # TITLE="Choose Saved Game Directory to backup!"
+  
+  # SAVED_GAME_DIR=$(zenity  --file-selection \
+  #                  --title="${TITLE}" \
+  #                  --directory        \
+  #                  --filename "${SAVED_GAME_PATH}")
+  
+  #echo "Creating SaveGameDir.yml"
+  #echo "SavedGameDir:${SAVED_GAME_DIR}" > "${SAVEDGAMEDIRFILE}"
+  #export SAVED_GAME_DIR
+  SAVED_GAME_PATH="${PREFIXDIR}/drive_c/users/${USER}/"
+  #zenity --info --title="user directory is used to save" --text="${SAVED_GAME_PATH}"
+  export SAVED_GAME_PATH
+}

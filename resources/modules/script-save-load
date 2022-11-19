@@ -1,0 +1,36 @@
+#script-save-load 
+Script_Save_Load()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  SAVE_LOAD_OPTION=$(zenity --title "${APP_WITH_VER} - Save/Load" \
+                    --list   --hide-header                   \
+                    --width=360 --height=240                 \
+                    --radiolist --column " "                 \
+                    --column "Action"                        \
+                            0 "Set Saved Game directory..."  \
+                            0 "Save..."                      \
+                            0 "Load..."                      \
+                            0 "Help..."                      \
+                    --text   "Save/Load..."                  )
+
+  DBUG "${0}: ${FUNCNAME[0]}: ${SAVE_LOAD_OPTION} Selected!"
+  # Exit if Cancel is clicked
+  if   [ -z "${SAVE_LOAD_OPTION}" ]; then
+         DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+         return 1
+  fi
+  
+  if   [ "${SAVE_LOAD_OPTION}" = "Set Saved Game directory..."  ]; then
+         source ${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory
+         Script_Save_Load_Set_Saved_Game_Directory
+  elif [ "${SAVE_LOAD_OPTION}" = "Save..."  ]; then
+         source ${WINEZGUI_SCRIPTS}/script-save-load-save
+         Script_Save_Load_Save
+  elif [ "${SAVE_LOAD_OPTION}" = "Load..."  ]; then
+         source ${WINEZGUI_SCRIPTS}/script-save-load-load
+         Script_Save_Load_Load
+  elif [ "${SAVE_LOAD_OPTION}" = "Help..."  ]; then
+         source ${WINEZGUI_SCRIPTS}/script-save-load-help
+         Script_Save_Load_Help
+  fi
+}

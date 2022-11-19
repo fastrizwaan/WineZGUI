@@ -400,6 +400,7 @@ Script_Window ()
                           0   "Open Shell..."           \
                           0   "Change..."               \
                           0   "Backup..."               \
+                          0   "Save/Load..."            \
                           0   "More..."                 \
                           0   "About..."                \
                           0   "Help..."                 \
@@ -446,6 +447,10 @@ Script_Window ()
   elif [ "${SELECTION}" = "Backup..." ]; then
          source ${WINEZGUI_SCRIPTS}/script-backup 
          Script_Backup
+         
+  elif [ "${SELECTION}" = "Save/Load..." ]; then
+         source ${WINEZGUI_SCRIPTS}/script-save-load 
+         Script_Save_Load
 
   elif [ "${SELECTION}" = "More..." ]; then
          source ${WINEZGUI_SCRIPTS}/script-more 
