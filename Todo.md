@@ -12,19 +12,17 @@
            - [ ] Determine old user; Old_user=$(grep \"USERNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
            - [ ] Determine New User; new_user=${USER}
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
+     - [ ] Determine New User; new_user=${USER}
+     - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.89.11
+- [ ] Set Saved Game directory... within drive_c/users/${USER}/
 
 0.89.10
-      Winezgui_Identity_Restore_All
-- [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
-- [ ] Determine New User; new_user=${USER}
-
-0.89.10
-- [ ] Save/Load...
-     -[ ] Set Saved Game directory...
-     -[ ] Save...
-     -[ ] Restore...
-     -[ ] PREFIXNAME-DATE_TIME_save.tar.zst
+- [x] Save/Load...
+     -[x] Save...
+     -[x] Restore...
+     -[x] PREFIXNAME-DATE_TIME_save.tar.zst
 
 0.89.9
 - [x] Recreate Scripts with current winezgui version (both downgrade and upgrade)
