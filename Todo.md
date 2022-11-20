@@ -16,7 +16,11 @@
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
 0.89.11
-- [ ] Set Saved Game directory... within drive_c/users/${USER}/
+- [x] Remove Set Saved Game directory... within drive_c/users/${USER}/
+- [x] Sha256sum check for Template Download
+
+
+
 
 0.89.10
 - [x] Save/Load...

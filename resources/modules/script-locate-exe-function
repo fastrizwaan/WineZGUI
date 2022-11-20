@@ -97,7 +97,7 @@ Locate_Exe_Function()
             echo "W: Script: Locate: Warning files are different"
             # 6.1 Ask user to run once the selected exe with different sha256sum
             zenity --question --no-wrap --title "${EXE_NAME} Checksum Fail!" \
-                   --text  "Just run ${NEW_EXE_NAME} once?"
+                   --text  "Just run ${NEW_EXE_NAME} once?\nTo use this: Use Change->Default Exe"
             ANSWER=$?
             # If the user still want to run the mismatched exe
             # Let the user run it once
