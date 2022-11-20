@@ -88,7 +88,7 @@ Script_Save_Load_Load()
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
-       zenity --info --title="${APP_WITH_VER} - Restore Template!" \
+       zenity --info --title="${APP_WITH_VER} - Load Saved Game!" \
        --text="Extracted ${TAR_FILE} Successfully!" 
   
   fi # [ "${ZENITY_STATUS}" = "1" ]; then

@@ -60,16 +60,16 @@ Script_Save_Load_Save()
        fi
        unset FILENAME
        FILENAME+="${PREFIXNAME}"
-       FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
-       FILENAME+="${SHORT_FLATPAK_NAME}"
+     #   FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
+     #   FILENAME+="${SHORT_FLATPAK_NAME}"
        FILENAME+="-${DATE}"
        FILENAME+=".${SAVEDGAME_EXT}"
        # Flatpak: template-SavedGame_Name-flatpak-wine7-20220904.tar.zst
   else # for system add wine-version
        unset FILENAME
        FILENAME+="${PREFIXNAME}"
-       FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
-       FILENAME+="${WINEVER}"
+     #   FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
+     #   FILENAME+="${WINEVER}"
        FILENAME+="-${DATE}"
        FILENAME+=".${SAVEDGAME_EXT}"
        # template-SavedGame_Name-wine-7.0-20220904.tar.zst
@@ -80,7 +80,7 @@ Script_Save_Load_Save()
   # 5.0 Ask FILENAME using Zenity Entry dialog
   unset TITLE
   unset TEXT
-  TITLE="Backup ${SELECTED_SAVEDGAME_NAME} SavedGame!"
+  TITLE="Backup \"${SELECTED_SAVEDGAME_NAME}\" SavedGame!"
   TEXT+="${SAVEDGAME_SIZE_IN_HF} ${SELECTED_SAVEDGAME}"
 
   # 5.1 Suggest and Ask for template file name
