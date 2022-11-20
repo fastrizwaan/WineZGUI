@@ -19,9 +19,9 @@ Script_Save_Load_Load()
   SELECTED_SAVEDGAME_NAME=$(basename "${SAVED_GAME_PATH}")
 
   # Ask user to select the .wzt backup file to restore
-  TAR_FILE="$(zenity --file-filter="*.zst *.gz *.bz2"      \
+  TAR_FILE="$(zenity --file-filter="*sav.tar.zst"      \
                      --file-selection                      \
-                     --title="Select Prefix Template Backup File" )"
+                     --title="Load Saved Game" )"
   TAR_FILE_NAME=$(basename "${TAR_FILE}")
   # If no Backup file is selected, or cancel is clicked
   if [ -z "${TAR_FILE}" ]; then

@@ -31,8 +31,8 @@ Script_Save_Load_Save()
   
   
   # 2.0 Get disk usage of template
-  DATE=$(date +'%Y%m%d')
-  SAVEDGAME_EXT="tar.zst"
+  DATE=$(date +'%Y-%m-%d_%H%M%S')
+  SAVEDGAME_EXT="sav.tar.zst"
   SAVEDGAME_SIZE_IN_HF=$(du -sh "${SELECTED_SAVEDGAME}"|sed "s/  */ /g" \
                        |cut -f1 -d " "| cut -f1 )
   SAVEDGAME_SIZE_IN_BYTES=$(echo ${SAVEDGAME_SIZE_IN_HF}|cut -f1 -d " " \
