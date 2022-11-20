@@ -7,7 +7,6 @@ Script_Save_Load()
                     --width=360 --height=240                 \
                     --radiolist --column " "                 \
                     --column "Action"                        \
-                            0 "Set Saved Game directory..."  \
                             0 "Save..."                      \
                             0 "Load..."                      \
                             0 "Help..."                      \

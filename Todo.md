@@ -15,8 +15,11 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+
+0.89.12
+- [x] Remove Set Saved Game directory...
+
 0.89.11
-- [x] Remove Set Saved Game directory... within drive_c/users/${USER}/
 - [x] Sha256sum check for Template Download
 
 
