@@ -15,6 +15,8 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.89.13
+- [x] bug fix, wine version always mismatch
 
 0.89.12
 - [x] Remove Set Saved Game directory...
@@ -22,8 +24,6 @@
 
 0.89.11
 - [x] Sha256sum check for Template Download
-
-
 
 
 0.89.10

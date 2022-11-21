@@ -33,7 +33,7 @@ Script_Launch()
   DBUG "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   DBUG "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
 
-  if [ ${CURRENT_WINE_VERSION} != "${CREATED_WINE_VERSION}" ]; then
+  if [ "${CURRENT_WINE_VERSION}" != "${CREATED_WINE_VERSION}" ]; then
        DBUG "I: Script: Wine Version is different!"
        unset TEXTMSG
        TEXTMSG+="Created using Wine Version:${CREATED_WINE_VERSION}\n"
