@@ -18,6 +18,7 @@
 
 0.89.12
 - [x] Remove Set Saved Game directory...
+- [x] More->Set Launch Behavior-> directly/script
 
 0.89.11
 - [x] Sha256sum check for Template Download

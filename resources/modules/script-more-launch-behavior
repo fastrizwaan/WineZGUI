@@ -1,0 +1,39 @@
+# script-more-launch-behavior
+Script_More_Launch_Behavior()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+
+  SCRIPT_LAUNCH_BEHAVIOR=$(zenity --title "${APP_WITH_VER}"   \
+                               --list   --hide-header      \
+                               --width=360 --height=240    \
+                               --radiolist --column " "    \
+                               --column "Action"           \
+                                      0 "Directly..."      \
+                                      0 "Script Window..." \
+                                --text   "Launch..."       )
+  
+  if [ -z "${SCRIPT_LAUNCH_BEHAVIOR}" ]; then
+       echo "Cancelled!"
+       return 1
+  fi
+  
+  DBUG "I: ${HEADER}: Selected ${SCRIPT_LAUNCH_BEHAVIOR}!"
+  
+  if [ "${SCRIPT_LAUNCH_BEHAVIOR}" = "Directly..." ]; then
+       if [ -w "${PREFIXDIR}" ]; then
+            echo "Yes" > "${PREFIXDIR}/launch"
+            DBUG "I: ${HEADER}: launch file created!"
+       fi
+       DBUG "I: ${HEADER}: ${PREFIXDIR} is set to launch directly"
+  else
+       if [ -f "${PREFIXDIR}/launch" ]; then
+            DBUG "I: ${HEADER}: Removing Direct launch file"
+            rm "${PREFIXDIR}/launch"
+       else
+            DBUG "I: ${HEADER}: launch file not found..."
+            DBUG "I: ${HEADER}: Already set to open script window"
+       fi
+  fi
+  return 0
+}
