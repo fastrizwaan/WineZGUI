@@ -167,7 +167,7 @@ Script_Backup_Prefix()
 
   # Remove Identities from files
   # Find other files which has username in it.
-  source ${DATADIR}/winezgui-identity-remove-from-drive-c-files
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files
   WineZGUI_Identity_Remove_From_Drive_C_Files "${PREFIXDIR}"
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
@@ -231,7 +231,7 @@ Script_Backup_Prefix()
   Winezgui_Identity_Restore "${PREFIXDIR}"
  
   # Find other files which has username in it.
-  source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
+  source ${WINEZGUI_SCRIPTS}/winezgui-identity-restore-from-drive-c-files
   WineZGUI_Identity_Restore_From_Drive_C_Files "${PREFIXDIR}"
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"

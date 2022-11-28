@@ -64,7 +64,7 @@ Script_List_Available_Launch_Shortcuts()
   IFS=${SAVEIFS}
  
   #  Generate Height value
-  source ${DATADIR}/winezgui-get-window-height
+  source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
   WineZGUI_Get_Window_Height ${#FILES[@]}
  
   # 3. Show the found exe files using zenity

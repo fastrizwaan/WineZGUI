@@ -83,7 +83,7 @@ Script_Save_Load_Load()
        fi # if ! [ -z "$PID_OF_TAR" ]; then
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
-       source ${DATADIR}/winezgui-identity-restore
+       source ${WINEZGUI_SCRIPTS}/winezgui-identity-restore
        Winezgui_Identity_Restore "${SELECTED_SAVEDGAME}"
 
        # Inform on successful extraction
