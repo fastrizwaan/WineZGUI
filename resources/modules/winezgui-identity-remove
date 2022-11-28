@@ -9,11 +9,19 @@ Winezgui_Identity_Remove()
         DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
   fi      
-
-  source ${DATADIR}/winezgui-fetch-replacement-data
+  
+  if [ -f ${DATADIR}/winezgui-fetch-replacement-data ]; then
+       source ${DATADIR}/winezgui-fetch-replacement-data
+  else
+       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data
+  fi
   WineZGUI_Fetch_Replacement_Data
   
-  source ${DATADIR}/winezgui-fetch-replacement-files
+  if [ -f ${DATADIR}/winezgui-fetch-replacement-files ]; then
+       source ${DATADIR}/winezgui-fetch-replacement-files
+  else
+       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files
+  fi
   WineZGUI_Fetch_Replacement_Files "${DIRECTORY}"
 
   cd "${DIRECTORY}"  

@@ -10,10 +10,22 @@ Winezgui_Identity_Restore()
         DIRNAME=$(basename "${1}")
   fi 
 
-  source ${DATADIR}/winezgui-fetch-replacement-data
+  # flatpak install based Script from system needs to load from it's own directory
+  # WINEZGUI_SCRIPTS
+  if [ -f ${DATADIR}/winezgui-fetch-replacement-data ]; then
+       source ${DATADIR}/winezgui-fetch-replacement-data
+  else
+       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data
+  fi
   WineZGUI_Fetch_Replacement_Data # DATA
   
-  source ${DATADIR}/winezgui-fetch-replacement-files 
+  # flatpak install based Script from system needs to load from it's own directory
+  # WINEZGUI_SCRIPTS
+  if [ -f ${DATADIR}/winezgui-fetch-replacement-files ]; then
+       source ${DATADIR}/winezgui-fetch-replacement-files
+  else
+       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files
+  fi
   WineZGUI_Fetch_Replacement_Files "${1}" #FILES
   
   cd "${DIRECTORY}"
