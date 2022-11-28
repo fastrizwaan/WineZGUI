@@ -15,6 +15,12 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.89.15
+- [ ] exe with same name (e.g., setup.exe), check sha256sum, create new prefix if dissimilar
+
+0.89.14
+- [x] for flatpak use $WINE_CMD --version instead of wine --version 
+
 0.89.13
 - [x] bug fix, wine version always mismatch
 

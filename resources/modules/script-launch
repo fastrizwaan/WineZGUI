@@ -28,7 +28,7 @@ Script_Launch()
   fi
 
   # Check for Wine version change
-  CURRENT_WINE_VERSION=$(wine --version|cut -f1 -d ' ')
+  CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d ' ')
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
   DBUG "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   DBUG "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
