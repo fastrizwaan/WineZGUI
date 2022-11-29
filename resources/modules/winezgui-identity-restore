@@ -73,7 +73,7 @@ Winezgui_Identity_Restore()
        echo "E:------------------------------------------"
        echo "E: ${FUNCNAME[0]}: Identity Not Restored for ${USER}!"
        echo "E:------------------------------------------"
-       zenity --error --title "Restore Process XOUSERHOMEXO failed" \
+       ${ZENITY_CMD} --error --title "Restore Process XOUSERHOMEXO failed" \
               --text "User Identity is not set for ${USER}, launch may fail!"
   fi
   # Check if identity is restored

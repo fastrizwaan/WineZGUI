@@ -7,7 +7,7 @@ WineZGUI_Settings()
    unset TEXT
    TEXT+="Set..."
    unset SETTINGS_OPTION
-   SETTINGS_OPTION=$(zenity --title "${APP_WITH_VER} - Settings" \
+   SETTINGS_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Settings" \
                             --list   --hide-header               \
                             --width=360 --height=240             \
                             --radiolist --column " "             \

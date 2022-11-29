@@ -29,6 +29,7 @@ export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
 export WINEVER=$(wine --version|cut -f1 -d " ")
 export WBOOT_CMD="$(which wineboot) -i"
+export ZENITY_CMD="$(which zenity)"
 # LD_LIBRARY_PATH
 if [ -z "${LD_LIBRARY_PATH}" ]; then
 LD_LIBRARY_PATH+="/lib:/lib32:/lib64"; fi
@@ -77,7 +78,7 @@ fi
 WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
-  SELECTION=$(zenity --list --hide-header --title "${APP_WITH_VER}"    \
+  SELECTION=$(${ZENITY_CMD} --list --hide-header --title "${APP_WITH_VER}"    \
                      --width=360 --height=440 --radiolist --column " " \
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \

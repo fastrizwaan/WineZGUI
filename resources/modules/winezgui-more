@@ -2,7 +2,7 @@
 WineZGUI_More()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  MORE_OPTION=$(zenity --title "${APP_WITH_VER} - More"  \
+  MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
                  --width=360 --height=240                \
                  --radiolist --column " "                \

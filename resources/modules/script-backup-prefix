@@ -94,7 +94,7 @@ Script_Backup_Prefix()
   # 4.1: Check if the target directory is writable or not?
   if [ ! -w "${TARGET_DIR}" ]; then
        echo "E: Script: ${FUNCNAME[0]}: ${TARGET_DIR} not writable"
-       zenity --error --no-wrap --title="Backup Error!" \
+       ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
             --text "${TARGET_DIR} not writable\nAborting Backup!"
        Script_Window
   fi
@@ -138,7 +138,7 @@ Script_Backup_Prefix()
        MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
        # Warn user
-       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
        echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space," \
             "Cancelled!"
        Script_Window
@@ -147,7 +147,7 @@ Script_Backup_Prefix()
 
   # 6. Ask for Compression Levels
   unset LEVEL
-  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+  LEVEL=$(${ZENITY_CMD} --scale --value 10 --min-value 1 --max-value 19 \
        --text "${BACKUP_FILE}" --title "Select Compression Level...")
   # Exit if Cancel is clicked
   if [ -z "${LEVEL}" ]; then
@@ -179,7 +179,7 @@ Script_Backup_Prefix()
   DBUG "-------------------------------------------------------------------"
   DBUG "WZT_FILE_NAME=$WZT_FILE_NAME"
   DBUG "Command:"
-  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+  DBUG "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
                                -C \"${PREFIXDIR}\"  \"${WZT_FILE_NAME}\"   \
                                -C \"${PREFIXES_DIR}\" \"${PREFIXNAME}\" "
   DBUG "-------------------------------------------------------------------"
@@ -187,7 +187,7 @@ Script_Backup_Prefix()
   TIMER_START=${SECONDS}
   # 7.4 Create Backup archive and restore changes as soon as tar is done
   # add wzt-info.yml 1st then the prefix directory to the wzt file
-  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+  (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
                                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
                                -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
   zenity    --progress --pulsate --auto-close        \
@@ -237,5 +237,5 @@ Script_Backup_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
   # 8. Show info about created wzt file
-  zenity --no-wrap --info --title="Prefix Backup!" --text="${MSG[@]}"
+  ${ZENITY_CMD} --no-wrap --info --title="Prefix Backup!" --text="${MSG[@]}"
 }

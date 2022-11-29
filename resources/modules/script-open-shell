@@ -34,7 +34,7 @@ Script_Open_Shell()
          # gnome terminal is not found
   else
          DBUG "I: Script: Open Shell: Gnome-terminal not found"
-         zenity --title "${SELECTION}" --width=500 --height=30 --info  \
+         ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
                 --text "This feature requires \"gnome-terminal\""
   fi
 }

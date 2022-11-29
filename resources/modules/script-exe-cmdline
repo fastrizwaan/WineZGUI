@@ -9,7 +9,7 @@ Script_Exe_Cmdline()
   fi
 
   # Ask for Name
-  GET_CMDLINE=$(zenity --title "Set Exe Argument..."                 \
+  GET_CMDLINE=$(${ZENITY_CMD} --title "Set Exe Argument..."                 \
                         --text  "Enter commandline exe argument to save:"     \
                         --entry-text "${ARGS}"       \
                         --width=500 --entry                          )
@@ -27,7 +27,7 @@ Script_Exe_Cmdline()
        if [ -z "${GET_CMDLINE}" ]; then
             if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
                  rm "${PREFIXDIR}/cmdline.yml"
-                 zenity --info --width 300 --title="Command Line argument" \
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
                         --text="Removed <b>${ARGS}</b>\nand cmdline.yml"
             fi
             DBUG "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/cmdline.yml"
@@ -36,7 +36,7 @@ Script_Exe_Cmdline()
             DBUG "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE}"
             DBUG "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/cmdline.yml"
             if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
-                 zenity --info --width 300 --title="Command Line argument" \
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
                         --text="${GET_CMDLINE}"
             fi
        fi

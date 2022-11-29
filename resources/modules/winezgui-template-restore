@@ -5,7 +5,7 @@ WineZGUI_Template_Restore()
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
   # Ask user to select the .wzt backup file to restore
-  TAR_FILE="$(zenity --file-filter="*.zst *.gz *.bz2"      \
+  TAR_FILE="$(${ZENITY_CMD} --file-filter="*.zst *.gz *.bz2"      \
                      --file-selection                      \
                      --title="Select Prefix Template Backup File" )"
   TAR_FILE_NAME=$(basename "${TAR_FILE}")
@@ -21,16 +21,16 @@ WineZGUI_Template_Restore()
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if [ ! -w "${TEMPLATES_DIR}" ]; then
        DBUG "I: ${HEADER}: ${TEMPLATES_DIR} is not writable. Aborting!"
-       zenity --error --title "${APP_WITH_VER}" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "${TEMPLATES_DIR} is not writable"
        return 1
   fi
-  TAR_PREFIX=$(tar -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
+  TAR_PREFIX=$(${TAR_CMD} -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
   DBUG "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
 
-  (tar -xvf "${TAR_FILE}" -C "${TEMPLATES_DIR}" --transform \
+  (${TAR_CMD} -xvf "${TAR_FILE}" -C "${TEMPLATES_DIR}" --transform \
           "s|XOUSERXO|${USER}|g" &)|                        \
-  (zenity --progress --width=500                            \
+  (${ZENITY_CMD} --progress --width=500                            \
          --title="Restoring ${TAR_FILE_NAME}!"              \
          --text="Extracting ${TAR_FILE}..."                 \
          --pulsate --auto-close)
@@ -49,7 +49,7 @@ WineZGUI_Template_Restore()
             kill -9 ${PID_OF_TAR} \
             && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
             # Ask the user whether to delete partially extracted or let it be
-            zenity --question --title "Extraction Cancelled!" \
+            ${ZENITY_CMD} --question --title "Extraction Cancelled!" \
                    --text "Delete ${TAR_PREFIX} prefix?"
             ANSWER=$?
             if [ "${ANSWER}" = "0" ]; then
@@ -74,7 +74,7 @@ WineZGUI_Template_Restore()
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
-       zenity --info --title="${APP_WITH_VER} - Restore Template!" \
+       ${ZENITY_CMD} --info --title="${APP_WITH_VER} - Restore Template!" \
        --text="Extracted ${TAR_FILE} Successfully!" 
   
   fi # [ "${ZENITY_STATUS}" = "1" ]; then

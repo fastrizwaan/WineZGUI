@@ -48,7 +48,7 @@ WineZGUI_Startup_Checks()
             echo "Dependencies..."
             echo "Found: ${FOUND}"
             echo "Not Found: ${NOTFOUND}"
-            zenity --info --no-wrap --title="Missing Dependencies" \
+            ${ZENITY_CMD} --info --no-wrap --title="Missing Dependencies" \
                  --text="Please install these in your system:\n${NOTFOUND}"
        else
             mkdir -p "${WINEZGUIDIR}"

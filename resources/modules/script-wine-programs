@@ -2,7 +2,7 @@
 Script_Wine_Programs()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  WINE_PROGRAMS_OPTION=$(zenity --title "${PROGNAME} - Wine Programs!" \
+  WINE_PROGRAMS_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - Wine Programs!" \
                                 --window-icon="${ICON}"            \
                                 --width=360 --height=360           \
                                 --list      --hide-header          \

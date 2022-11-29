@@ -6,12 +6,12 @@ WineZGUI_Template_Clone()
   source ${DATADIR}/winezgui-list-available-templates
   List_Available_Templates # get SELECTED_TEMPLATE 
 
-  CLONE_TEMPLATE=$(zenity --title "Create Prefix Template with ${WINEARCH} arch..." \
+  CLONE_TEMPLATE=$(${ZENITY_CMD} --title "Create Prefix Template with ${WINEARCH} arch..." \
                              --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \
                              --width=500 --entry)
 
   if [ -z "${CLONE_TEMPLATE}" ]; then #if no name is given use filename
-       #zenity --info --title="Shortcut... " --text="no Change"
+       #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # return to Game window
        DBUG "I: ${HEADER}: Cancelled"
        return 1
@@ -28,7 +28,7 @@ WineZGUI_Template_Clone()
   fi
   
   if [ -d "${TEMPLATES_DIR}/${CLONE_TEMPLATE}" ]; then
-       zenity --error --title "${APP_WITH_VER}" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "Template Directory Already Exists!"
   fi
 

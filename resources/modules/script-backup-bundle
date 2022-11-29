@@ -54,7 +54,7 @@ Script_Backup_Bundle()
       echo "E: Script: ${FUNCNAME[0]}: ${MSG1}"
       echo "E: Script: ${FUNCNAME[0]}: ${MSG2}"
       echo "E:${FUNCNAME[0]}: Cancelling Backup!"
-      zenity --error --no-wrap --text "${MSG1}\n${MSG2}" \
+      ${ZENITY_CMD} --error --no-wrap --text "${MSG1}\n${MSG2}" \
             --title "Cannot Bundle ${EXE_PATH}"
       unset DO_NOT_BUNDLE_FROM
       Script_Window
@@ -168,7 +168,7 @@ Script_Backup_Bundle()
   # 5.1: Check if the target directory is writable or not?
   if [ ! -w "${TARGET_DIR}" ]; then
       echo "E: Script: ${FUNCNAME[0]}: ${TARGET_DIR} not writable"
-      zenity --error --no-wrap --title="Backup Error!" \
+      ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
             --text "${TARGET_DIR} not writable\nAborting Backup!"
       Script_Window
   fi
@@ -217,7 +217,7 @@ Script_Backup_Bundle()
         MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
         # Warn user
-        zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+        ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
         echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space, Cancelled!"
         Script_Window
 
@@ -225,7 +225,7 @@ Script_Backup_Bundle()
 
   # 6. Ask for Compression Levels
   unset LEVEL
-  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+  LEVEL=$(${ZENITY_CMD} --scale --value 10 --min-value 1 --max-value 19 \
       --text "${BACKUP_FILE}" --title "Select Compression Level...")
   # Exit if Cancel is clicked
   if [ -z "${LEVEL}" ]; then
@@ -293,7 +293,7 @@ Script_Backup_Bundle()
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
       # add wzt-info.yml 1st then the prefix directory to the wzt file
-      (tar -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
+      (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
                 -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
                 -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
                 -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
@@ -331,7 +331,7 @@ Script_Backup_Bundle()
       # just like prefix
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
-      (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
+      (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
                 -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
             -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
             zenity  --progress --pulsate --auto-close \
@@ -402,5 +402,5 @@ Script_Backup_Bundle()
   fi
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}" \
-  && zenity --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
+  && ${ZENITY_CMD} --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
 }

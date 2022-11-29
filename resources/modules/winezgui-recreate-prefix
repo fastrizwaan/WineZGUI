@@ -8,7 +8,7 @@ WineZGUI_Recreate_Prefix()
   List_Available_Prefixes
   PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
-  zenity --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
+  ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
          --text="This will overwrite all shell scripts associated with this prefix!"
   ANSWER=$?
 
@@ -26,7 +26,7 @@ WineZGUI_Recreate_Prefix()
   exe_found=$(echo ${search_list})
   
   if [ -z "${exe_found}" ] ; then
-       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
               --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
        WineZGUI_Window
   fi
@@ -40,7 +40,7 @@ WineZGUI_Recreate_Prefix()
   IFS=${SAVEIFS}
 
   # Inform and offer to Launch
-  zenity --info --title="Re-created Scripts for ${PREFIXNAME}" \
+  ${ZENITY_CMD} --info --title="Re-created Scripts for ${PREFIXNAME}" \
   --text="Updated scripts to $APP_WITH_VER version, Please launch from menu."
 
 }

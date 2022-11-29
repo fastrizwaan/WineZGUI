@@ -46,6 +46,7 @@ Script_Create_Other_Shortcuts()
   if [ ${INSTALL_TYPE} = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
        WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+
        export WINE_CMD
   else
        # flatpak install and running from shell inside flatpak winezgui
@@ -82,13 +83,13 @@ Script_Create_Other_Shortcuts()
   OTHER_EXE=$(echo ${OTHER_EXE}|sed "s| |_|g"|sed "s|(|\(|g")
   OTHER_ICON="${PREFIXDIR}/other.png"
   # wrestool extracts ico file from EXE
-  wrestool -x -t 14 "${SELECTED_EXE}" > "${TEMP_DIR}/${OTHER_EXE}.ico" \
+  ${WRESTOOL_CMD} -x -t 14 "${SELECTED_EXE}" > "${TEMP_DIR}/${OTHER_EXE}.ico" \
   2> /dev/null &&  DBUG "I: Script: Change Icon: Wrestool executed"
 
   # Only try to extract Icon when Icon is Found in the EXE
   # icotool extracts all png files from ico files
   # Select and copy the best png image file by sorting using ls -S1.
-  icotool -x "${TEMP_DIR}/${OTHER_EXE}.ico" -o "${TEMP_DIR}" 2>/dev/null && \
+  ${ICOTOOL_CMD} -x "${TEMP_DIR}/${OTHER_EXE}.ico" -o "${TEMP_DIR}" 2>/dev/null && \
   DBUG "I: Script: Change Icon: Icotool: Extracting png files from" \
   "${TEMP_DIR}/${OTHER_EXE}.ico" && \
   cp -f $(ls -S1 ${TEMP_DIR}/${OTHER_EXE}*.png|head -n 1) \
@@ -99,7 +100,7 @@ Script_Create_Other_Shortcuts()
   if [ "${WARN}" != "false" ]; then
        DBUG "I: Create Prefix: Icon could not be copied..." \
             "use \"Change Icon...\" option"
-       zenity --error --no-wrap --title "Change Icon for ${SELECTED_EXE}" \
+       ${ZENITY_CMD} --error --no-wrap --title "Change Icon for ${SELECTED_EXE}" \
               --text "Icon from ${SELECTED_EXE} failed!"
   fi
 

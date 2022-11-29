@@ -42,7 +42,7 @@ Script_Launch()
        unset TITLEMSG
        TITLEMSG+="Wine version mismatch!"
 
-       zenity --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
+       ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
             sed "s|${CREATED_WINE_VERSION}|${CURRENT_WINE_VERSION}|g" \

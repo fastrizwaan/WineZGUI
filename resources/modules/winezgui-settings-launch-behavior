@@ -6,7 +6,7 @@ WineZGUI_Settings_Launch_Behavior()
   source ${DATADIR}/winezgui-list-available-prefixes 
   List_Available_Prefixes
 
-  GET_LAUNCH_BEHAVIOR=$(zenity --title "${APP_WITH_VER}"   \
+  GET_LAUNCH_BEHAVIOR=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                                --list   --hide-header      \
                                --width=360 --height=240    \
                                --radiolist --column " "    \

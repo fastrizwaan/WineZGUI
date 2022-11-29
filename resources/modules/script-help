@@ -30,7 +30,7 @@ Script_Help()
               |sed -E "s/^(.*)$/<small>\1<\/small>/" \
               |sed "s/|/:/g" )"
   #
-  zenity --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  ${ZENITY_CMD} --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
   unset HELP_TEXT
   unset TEXT
 }

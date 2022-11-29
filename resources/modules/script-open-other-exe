@@ -4,7 +4,7 @@ Script_Open_Other_Exe()
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
        DBUG "I: Script: ${FUNCNAME[0]}:... Selected!"
-       SELECTED_OTHER_EXE=$(zenity --title "Open Other EXE for ${PREFIXNAME}"  \
+       SELECTED_OTHER_EXE=$(${ZENITY_CMD} --title "Open Other EXE for ${PREFIXNAME}"  \
                          --list --hide-header --width=360 --height=30 \
                          --radiolist --column " "                     \
                          --column "Change"                            \
@@ -34,7 +34,7 @@ Script_Open_Other_Exe()
          DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$SELECTED_OTHER_EXE" = "Any other Exe" ]; then
          # Open Any Other Exe
-         OTHER_EXE="$(zenity --file-filter="*.exe *.msi" \
+         OTHER_EXE="$(${ZENITY_CMD} --file-filter="*.exe *.msi" \
                              --file-selection            \
                              --title="Select a File")"
 

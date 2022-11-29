@@ -11,18 +11,18 @@ WineZGUI_Template_Change()
        REG_ARCH=$(grep "#arch=" "${SYSTEM_REGISTRY_FILE}" |cut -f2 -d "=")
        DBUG "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
        if [ -z "${REG_ARCH}" ]; then
-            zenity --error --text "Could not find arch in system.reg file"
+            ${ZENITY_CMD} --error --text "Could not find arch in system.reg file"
             unset SELECTED_TEMPLATE
             WineZGUI_Window
        fi
        if [ "${REG_ARCH}" != "win32" ] && [ "${REG_ARCH}" != "win64" ]; then
-            zenity --error --text "Could not find win32 or win64 in system.reg"
+            ${ZENITY_CMD} --error --text "Could not find win32 or win64 in system.reg"
             unset SELECTED_TEMPLATE
             WineZGUI_Window
        fi
   else 
        DBUG "I: ${HEADER}: not found ${SYSTEM_REGISTRY_FILE} "
-       zenity --error --text "Could not find file ${SYSTEM_REGISTRY_FILE}"
+       ${ZENITY_CMD} --error --text "Could not find file ${SYSTEM_REGISTRY_FILE}"
        unset SELECTED_TEMPLATE
        WineZGUI_Window
   fi  
@@ -54,7 +54,7 @@ WineZGUI_Template_Change()
        unset TEXT
        TEXT+="Template <b>${TEMPLATE_NAME}</b> is <b>${REG_ARCH}</b>, "
        TEXT+="but WineZGUI is using ${WINEARCH}.\nChange to ${REG_ARCH}!?"
-       zenity --question --title "${APP_WITH_VER} Change Arch!?" \
+       ${ZENITY_CMD} --question --title "${APP_WITH_VER} Change Arch!?" \
               --text "${TEXT}"
        ANSWER=$?
        # If yes
@@ -68,7 +68,7 @@ WineZGUI_Template_Change()
        else # If no/cancel
             unset TEXT
             TEXT="Remember to change to ${REG_ARCH} for ${TEMPLATE_NAME}!"
-            zenity --warning --text="${TEXT}" \
+            ${ZENITY_CMD} --warning --text="${TEXT}" \
             --title "${APP_WITH_VER} - ${TEMPLATE_NAME} needs ${REG_ARCH}!"
        fi
   fi

@@ -32,16 +32,16 @@ Script_Change_Icon()
        DBUG "I: Script: ${FUNCNAME[0]}: Created directory ${TEMP_DIR}"
 
        # wrestool extracts ico file from EXE
-       echo "wrestool -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_LESS}.ico "
-       wrestool -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_LESS}.ico" \
+       echo "${WRESTOOL_CMD} -x -t 14 ${GET_ICON} > ${TEMP_DIR}/${EXE_LESS}.ico "
+       ${WRESTOOL_CMD} -x -t 14 "${GET_ICON}" > "${TEMP_DIR}/${EXE_LESS}.ico" \
        2> /dev/null && \
        DBUG "I: Script: ${FUNCNAME[0]}: Wrestool executed"
 
        # Only try to extract Icon when Icon is Found in the EXE
        # icotool extracts all png files from ico files
        # Select and copy the best png image file by sorting using ls -S1.
-       echo "icotool -x ${TEMP_DIR}/${EXE_LESS}.ico"
-       icotool -x "${TEMP_DIR}/${EXE_LESS}.ico" -o "${TEMP_DIR}" \
+       echo "${ICOTOOL_CMD} -x ${TEMP_DIR}/${EXE_LESS}.ico"
+       ${ICOTOOL_CMD} -x "${TEMP_DIR}/${EXE_LESS}.ico" -o "${TEMP_DIR}" \
        2>/dev/null && \
        DBUG "I: Script: ${FUNCNAME[0]}: Icotool: Extracting png files from" \
             "${TEMP_DIR}/${EXE_LESS}.ico" && \
@@ -53,7 +53,7 @@ Script_Change_Icon()
        if [ "${WARN}" != "false" ]; then
             DBUG "I: Create Prefix: Icon could not be copied..." \
                  "use \"Change Icon...\" option"
-            zenity --error --no-wrap --title "Change Icon for ${EXE}" \
+            ${ZENITY_CMD} --error --no-wrap --title "Change Icon for ${EXE}" \
                  --text "Icon from ${GET_ICON} failed!"
        fi
 
@@ -96,7 +96,7 @@ Script_Change_Icon()
   #When we change exe, we do not want to see icon change prompt
   #The value will be set before calling this function by find-installed-exe
   if [ -z "${Script_Change_Icon_DO_NOT_PROMPT}" ] ; then
-       zenity --info --no-wrap --title="${DESKTOPFILE}" \
+       ${ZENITY_CMD} --info --no-wrap --title="${DESKTOPFILE}" \
               --text="Icon Changed sucessfuly: ${GET_ICON}"
   fi
   # next time let it prompt

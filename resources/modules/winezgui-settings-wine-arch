@@ -4,7 +4,7 @@ Winezgui_Settings_Wine_Arch()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CURRENT_ARCH=${WINEARCH}
-  WINEARCH_OPTION=$(zenity --title "${APP_WITH_VER}" \
+  WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}" \
                            --list   --hide-header    \
                            --width=360 --height=240  \
                            --radiolist --column " "  \
@@ -60,14 +60,14 @@ Winezgui_Settings_Wine_Arch()
   
   
   if [ "${CURRENT_ARCH}" != "${WINEARCH}" ]; then
-          zenity --question --title "${APP_WITH_VER} - Wine Arch Changed!"\
+          ${ZENITY_CMD} --question --title "${APP_WITH_VER} - Wine Arch Changed!"\
               --text "Change Prefix Template to ${WINEARCH}?"
           ANSWER=$?
   
           if [ -z "${ANSWER}" ] || [ ${ANSWER} -eq 1 ]; then
               unset TEXT
               TEXT="Make sure to change template to ${WINEARCH} to work!"
-              zenity --warning --text "${TEXT}"
+              ${ZENITY_CMD} --warning --text "${TEXT}"
               echo "Cancelled!"
               unset TEXT
           fi

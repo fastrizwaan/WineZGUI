@@ -18,7 +18,7 @@ WineZGUI_Winetricks_Cli()
   # Remove multiple spaces from variable
   VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
 
-  VERBS=$( zenity --title "${TITLE_TEXT}"     \
+  VERBS=$( ${ZENITY_CMD} --title "${TITLE_TEXT}"     \
                   --width=800 --height=30     \
                   --text  "${MESSAGE}"        \
                   --entry-text "${VERB_LIST}" \
@@ -60,7 +60,7 @@ WineZGUI_Winetricks_Cli()
   done
   TOOK=$(( SECONDS - ${TIMER_START} ))
   echo "# Time Taken: ${TOOK} seconds!"
-  ) | zenity --width=500 \
+  ) | ${ZENITY_CMD} --width=500 \
             --title="Please Wait... This will take time!" \
             --progress --pulsate --auto-kill
   # Inform about time taken
