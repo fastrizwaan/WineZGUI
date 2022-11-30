@@ -247,7 +247,7 @@ Restore_Wzt_File()
   unset MAKEDIR
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
        # 6.1.1 Make Shortcuts dir for flatpak
-       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR=("${HOME}/.local/share/applications/")
        MAKEDIR+="winezgui/${FLATPAK_ID}"
        mkdir -p "${MAKEDIR}"
        DBUG "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"
@@ -262,7 +262,7 @@ Restore_Wzt_File()
        fi
   else
        # 6.1.1 Make Shortcuts dir for flatpak
-       MAKEDIR=("/home/${USER}/.local/share/applications/")
+       MAKEDIR=("${HOME}/.local/share/applications/")
        MAKEDIR+="winezgui"
        mkdir -p "${MAKEDIR}"
        DBUG "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"

@@ -97,7 +97,8 @@ WineZGUI_Fetch_Replacement_Data()
 
   # H. Home directory scripts and desktop file
   # 12. /home/$user
-  SEARCH+=("\/home\/${USER}")
+  #SEARCH+=("\/home\/${USER}")
+  SEARCH+=("${HOME}")
   REPLACE+=("XOUSERHOMEXO")
 
   # I. drive_c/users/$user
