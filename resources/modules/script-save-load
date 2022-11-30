@@ -2,7 +2,7 @@
 Script_Save_Load()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  SAVE_LOAD_OPTION=$(zenity --title "${APP_WITH_VER} - Save/Load" \
+  SAVE_LOAD_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Save/Load" \
                     --list   --hide-header                   \
                     --width=360 --height=240                 \
                     --radiolist --column " "                 \

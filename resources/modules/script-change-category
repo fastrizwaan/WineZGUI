@@ -43,6 +43,6 @@ Script_Change_Category()
 
   # Inform user
   DBUG "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"
-  zenity --info --no-wrap --title="${PROGNAME}" \
+  ${ZENITY_CMD} --info --no-wrap --title="${PROGNAME}" \
          --text="Category Changed sucessfuly: ${GET_CATEGORY}"
 }

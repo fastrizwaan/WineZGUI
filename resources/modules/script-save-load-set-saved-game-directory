@@ -22,6 +22,6 @@ Script_Save_Load_Set_Saved_Game_Directory()
   #echo "SavedGameDir:${SAVED_GAME_DIR}" > "${SAVEDGAMEDIRFILE}"
   #export SAVED_GAME_DIR
   SAVED_GAME_PATH="${PREFIXDIR}/drive_c/users/${USER}/"
-  #zenity --info --title="user directory is used to save" --text="${SAVED_GAME_PATH}"
+  #${ZENITY_CMD} --info --title="user directory is used to save" --text="${SAVED_GAME_PATH}"
   export SAVED_GAME_PATH
 }

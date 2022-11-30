@@ -30,7 +30,7 @@ echo "$search_list"
  exe_found=$(echo ${search_list}|grep -i "exe")
 
  if [ -z "${exe_found}" ] ; then
-      zenity --error --title "${PROGNAME} - no exe installed!" \
+      ${ZENITY_CMD} --error --title "${PROGNAME} - no exe installed!" \
              --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
       return 1
  fi

@@ -62,7 +62,7 @@ Winezgui_Identity_Remove()
       echo "E:------------------------------------------"
       echo "E: ${FUNCNAME[0]}: Identiy Not Removed for ${USER}!"
       echo "E:------------------------------------------"
-      zenity --error --title "Backup Process XOUSERHOMEXO failed" \
+      ${ZENITY_CMD} --error --title "Backup Process XOUSERHOMEXO failed" \
                  --text "${USER} Identity is not removed, not ok for sharing!"
   fi
   # Check if identity is removed

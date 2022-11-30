@@ -37,7 +37,7 @@ Script_Find_Installed_Exe()
        TEXT+="New exe files found inside prefix...\\n"
        TEXT+="Change exe along with prefix\?"
        TITLE+="${EXE_NAME} ${APP_WITH_VER} - Switch Prefix!"
-       zenity --question --title "${TITLE}" --text "$TEXT"
+       ${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
 
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ] ; then
@@ -55,7 +55,7 @@ Script_Find_Installed_Exe()
             Script_Change_Exe_Variables
        else
             TEXT="You can use <b>Change...</b>-><b>Switch Prefix</b> menu to change exe and prefix!"
-            zenity --info --title "${TITLE}" --text "${TEXT}"
+            ${ZENITY_CMD} --info --title "${TITLE}" --text "${TEXT}"
             DBUG "I: Script: Find Exe: Not changing exe!"
             DBUG "I: Script: Find Exe: use Change EXE... to set default exe"
        fi
@@ -77,7 +77,7 @@ Script_Find_Installed_Exe()
             unset TEXT
             TEXT+="New exe files <b>found</b>, select and Launch?"
             TEXT+="\\n<i>Default exe can be set using Change Exe...</i>"
-            zenity --question --title "${EXE_NAME} ${APP_WITH_VER}" \
+            ${ZENITY_CMD} --question --title "${EXE_NAME} ${APP_WITH_VER}" \
                  --text "${TEXT}"
             ANSWER=$?
             if [ ${ANSWER} -eq 0 ] ; then

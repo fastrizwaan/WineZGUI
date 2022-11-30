@@ -21,7 +21,7 @@ List_Available_Templates()
   TEMPLATES_FOUND=$(echo ${SEARCH_LIST})
 
   if [ -z "${TEMPLATES_FOUND}" ] ; then
-       zenity --error --title "${PROGNAME} - no templates found!" \
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no templates found!" \
               --text "Sorry, no templates found in Templates directory"
               echo SELECTED_TEMPLATE
        unset SEARCH_LIST TEMPLATES_FOUND
@@ -56,7 +56,7 @@ List_Available_Templates()
 
  # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER}\" "
   COMMAND+="--text \"${TEMPLATE_TYPE} Templates\" "
   COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"

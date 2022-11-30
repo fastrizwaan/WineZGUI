@@ -38,7 +38,7 @@ Script_List_Available_Launch_Shortcuts()
   exe_found=$(echo ${search_list})
  
   if [ -z "${exe_found}" ] ; then
-       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
               --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
        WineZGUI_Window
   fi
@@ -69,7 +69,7 @@ Script_List_Available_Launch_Shortcuts()
  
   # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"${APP_WITH_VER}\" "
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER}\" "
   COMMAND+="--text \"${EXE_NAME}... Select Shortcut...\" "
   COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"

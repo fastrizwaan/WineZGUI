@@ -8,7 +8,7 @@ Script_Save_Load_Save()
   #      SAVED_GAME_DIR=$(grep -i "SavedGameDir:" "${SAVEDGAMEDIRFILE}" \
   #                      |cut -f2 -d ":")
   # else
-  #     zenity --info --text="Please select Saved Game directory" --title="Saved Game Directory!"
+  #     ${ZENITY_CMD} --info --text="Please select Saved Game directory" --title="Saved Game Directory!"
   #     source ${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory
   #     Script_Save_Load_Set_Saved_Game_Directory
   # fi
@@ -126,7 +126,7 @@ Script_Save_Load_Save()
   # 6.2: If the target directory is not writable, inform and return
   if [ ! -w "${TARGET_DIR}" ]; then
        echo "E: ${HEADER}: ${TARGET_DIR} not writable"
-       zenity --error --no-wrap --title="Backup Error!" \
+       ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
               --text "${TARGET_DIR} not writable\nAborting Backup!"
        return 1
   fi
@@ -173,7 +173,7 @@ Script_Save_Load_Save()
        MSG+="SAVEDGAME backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
        # Warn user
-       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
        echo "E: ${HEADER}: Not Enough Disk Space, Cancelled!"
        return 1
   fi
@@ -205,13 +205,13 @@ Script_Save_Load_Save()
   DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
   DBUG "I: ${HEADER}: Executing command"
   DBUG "-------------------------------------------------------------"
-  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+  DBUG "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
             -C \"${SELECTED_SAVEDGAME}\" \"${SELECTED_SAVEDGAME_NAME}\""
   DBUG "-------------------------------------------------------------"
   # Report user the time it took to bundle
   TIMER_START=${SECONDS}
   # 11.1 Create Backup archive and restore changes as soon as tar is done
-  (tar --transform s/${USER}/XOUSERXO/ -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+  (${TAR_CMD} --transform s/${USER}/XOUSERXO/ -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
                                -C  "${SELECTED_SAVEDGAME}" "${SELECTED_SAVEDGAME_NAME}" &)| \
   zenity    --progress --pulsate --auto-close        \
             --title="Creating ${SELECTED_SAVEDGAME_NAME} backup!" \
@@ -260,7 +260,7 @@ Script_Save_Load_Save()
   DBUG "I: Backup: SavedGame: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
   # 8. Show info about created wzt file
-  zenity --no-wrap --info --title="SAVEDGAME Backup!" --text="${MSG[@]}"
+  ${ZENITY_CMD} --no-wrap --info --title="SAVEDGAME Backup!" --text="${MSG[@]}"
   return 0
 }
 

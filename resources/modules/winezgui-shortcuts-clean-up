@@ -13,7 +13,7 @@ WineZGUI_Shortcuts_Clean_Up()
   
   if [ -z "${BROKEN_LINKS_FOUND}" ] ; then
        echo "I: ${HEADER}: ${DESKTOPDIR_NAME} directory has no broken symlinks."
-       zenity --error --title "${APP_WITH_VER} - Clean Up!" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Clean Up!" \
               --text "${DESKTOPDIR_NAME} directory has no broken symlinks."
        WineZGUI_Window
   fi
@@ -37,7 +37,7 @@ WineZGUI_Shortcuts_Clean_Up()
 
  
   # 3. Show the found exe files using zenity
-  zenity --title="${APP_WITH_VER} - Clean Up!"            \
+  ${ZENITY_CMD} --title="${APP_WITH_VER} - Clean Up!"            \
          --text="Remove these Broken Shortcuts..." --list \
          --width=460 --height=${HEIGHT} \
          --hide-header --column " " ${SHOW_OPTION}

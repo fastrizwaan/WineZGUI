@@ -24,7 +24,7 @@ Script_Get_Selected_Exe()
   exe_found=$(echo ${search_list}|grep -i "exe")
  
   if [ -z "${exe_found}" ] ; then
-       zenity --error --title "${PROGNAME} - no exe installed!" \
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no exe installed!" \
               --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
        Script_Window
   fi
@@ -56,7 +56,7 @@ Script_Get_Selected_Exe()
  
   # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"Exe inside ${PREFIXNAME}\" "
+  COMMAND+="${ZENITY_CMD} --title=\"Exe inside ${PREFIXNAME}\" "
   COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--text=\"Select Exe...\" "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"

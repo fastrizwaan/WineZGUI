@@ -115,7 +115,7 @@ WineZGUI_Template_Backup()
   # 6.2: If the target directory is not writable, inform and return
   if [ ! -w "${TARGET_DIR}" ]; then
        echo "E: ${HEADER}: ${TARGET_DIR} not writable"
-       zenity --error --no-wrap --title="Backup Error!" \
+       ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
               --text "${TARGET_DIR} not writable\nAborting Backup!"
        return 1
   fi
@@ -162,14 +162,14 @@ WineZGUI_Template_Backup()
        MSG+="TEMPLATE backup requires ${TOTAL_SIZE_IN_HF} free disk space."
 
        # Warn user
-       zenity --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
        echo "E: ${HEADER}: Not Enough Disk Space, Cancelled!"
        return 1
   fi
 
   # 9. Ask for Compression Levels
   unset LEVEL
-  LEVEL=$(zenity --scale --value 10 --min-value 1 --max-value 19 \
+  LEVEL=$(${ZENITY_CMD} --scale --value 10 --min-value 1 --max-value 19 \
        --text "${BACKUP_FILE}" --title "Select Compression Level...")
   # 9.1 Return if Cancel is clicked
   if [ -z "${LEVEL}" ]; then
@@ -195,13 +195,13 @@ WineZGUI_Template_Backup()
   DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
   DBUG "I: ${HEADER}: Executing command"
   DBUG "-------------------------------------------------------------"
-  DBUG "tar -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+  DBUG "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
             -C \"${TEMPLATES_DIR}\" \"${SELECTED_TEMPLATE_NAME}\""
   DBUG "-------------------------------------------------------------"
   # Report user the time it took to bundle
   TIMER_START=${SECONDS}
   # 11.1 Create Backup archive and restore changes as soon as tar is done
-  (tar -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+  (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
                                -C  "${TEMPLATES_DIR}" "${SELECTED_TEMPLATE_NAME}" &)| \
   zenity    --progress --pulsate --auto-close        \
             --title="Creating ${SELECTED_TEMPLATE_NAME} backup!" \
@@ -250,7 +250,7 @@ WineZGUI_Template_Backup()
   DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
   # 8. Show info about created wzt file
-  zenity --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"
+  ${ZENITY_CMD} --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"
   return 0
 }
 

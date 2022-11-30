@@ -4,7 +4,7 @@ WineZGUI_Shortcuts()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset SELECT_SHORTCUT
-  SELECT_SHORTCUT=$( zenity --title "${APP_WITH_VER} - Shortcuts"        \
+  SELECT_SHORTCUT=$( ${ZENITY_CMD} --title "${APP_WITH_VER} - Shortcuts"        \
                      --list   --hide-header                              \
                      --width=360 --height=210                            \
                      --radiolist --column " "                            \

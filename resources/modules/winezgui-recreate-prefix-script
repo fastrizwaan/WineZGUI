@@ -172,13 +172,13 @@ DBUG "I: ${HEADER}: Icon: Created directory ${TEMPDIR}"
 cd ${TEMPDIR}
 
 # wrestool extracts ico file from EXE
-wrestool -x -t 14 "${EXE_FILE}" > "${TEMPDIR}/${EXE_LESS}.ico" 2> /dev/null && \
+${WRESTOOL_CMD} -x -t 14 "${EXE_FILE}" > "${TEMPDIR}/${EXE_LESS}.ico" 2> /dev/null && \
 DBUG "I: ${HEADER}: Icon: Wrestool executed"
 
 # Only try to extract Icon when Icon is Found in the EXE
 # icotool extracts all png files from ico files
 # Select and copy the best png image file by sorting using ls -S1.
-icotool -x "${TEMPDIR}/${EXE_LESS}.ico" 2>/dev/null && \
+${ICOTOOL_CMD} -x "${TEMPDIR}/${EXE_LESS}.ico" 2>/dev/null && \
 DBUG "I: ${HEADER}: Icotool: Extracting png files from" "${EXE_LESS}.ico" && \
 cp $(ls -S -1 ${TEMPDIR}/${EXE_LESS}*.png  | head -n 1) ${ICON} && \
 DBUG "I: ${HEADER}: Icon: Copied successfully..." && WARN="false"
@@ -352,7 +352,16 @@ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
       WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
       WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
+      # wine winetricks icotool exiftool zenity gnome-terminal zstd"
+      ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
+      WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
+      ZENITY_CMD="flatpak run --command=zenity ${FLATPAK_NAME}"
+      EXIFTOOL_CMD="flatpak run --command=exiftool ${FLATPAK_NAME}"
+      ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
+      TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
+      WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
+      export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
       export WHICHWINE
 
 else
@@ -365,6 +374,14 @@ else
           export WEXPLORER_CMD="${WINE_CMD} explorer"
           export WBOOT_CMD="$(which wineboot) -i"
           export WHICHWINE="${WINE_CMD}"
+          export ICOTOOL_CMD="$(which icotool)"
+          export WRESTOOL_CMD="$(which wrestool)"
+          export ZENITY_CMD="$(which zenity)"
+          export EXIFTOOL_CMD="$(which exiftool)"
+          export ZSTD_CMD="$(which zstd)"
+          export TAR_CMD="$(which tar)"
+          export WGET_CMD="$(which wget)"
+          
      else
           # We are using non flatpak install
           DBUG "I: Script: Install type: System, Running from host!"
@@ -374,6 +391,13 @@ else
           export WEXPLORER_CMD="${WINE_CMD} explorer"
           export WBOOT_CMD="$(which wineboot) -i"
           export WHICHWINE="$(which wine)"
+          export ICOTOOL_CMD="$(which icotool)"
+          export WRESTOOL_CMD="$(which wrestool)"
+          export ZENITY_CMD="$(which zenity)"
+          export EXIFTOOL_CMD="$(which exiftool)"
+          export ZSTD_CMD="$(which zstd)"
+          export TAR_CMD="$(which tar)"
+          export WGET_CMD="$(which wget)"
      fi
 fi
 
@@ -385,7 +409,7 @@ Script_Window ()
   unset SELECTION
   # EXE handling by providing dialog
 
-  SELECTION=$(zenity --title       "${PROGNAME}"        \
+  SELECTION=$(${ZENITY_CMD} --title       "${PROGNAME}"        \
                      --window-icon="${ICON}"            \
                      --width=360 --height=440           \
                      --list      --hide-header          \

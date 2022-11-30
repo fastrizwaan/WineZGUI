@@ -20,13 +20,13 @@ SCRIPT_CHANGE_NAME ()
   fi
 
   # Ask for Name
-  GET_PROGNAME=$(zenity --title "Rename Shortcut..."                 \
+  GET_PROGNAME=$(${ZENITY_CMD} --title "Rename Shortcut..."                 \
                         --text  "Enter a name for the shortcut:"     \
                         --entry-text "${PROGNAME_WITH_SUFFIX}"       \
                         --width=500 --entry                          )
 
   if [ -z "${GET_PROGNAME}" ]; then #if no name is given use filename
-       #zenity --info --title="Shortcut... " --text="no Change"
+       #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # Return to Game window
        DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
        Script_Window

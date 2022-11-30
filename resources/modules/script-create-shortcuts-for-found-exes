@@ -32,7 +32,7 @@ echo "$search_list"
  exe_found=$(echo ${search_list}|grep -i "exe")
 
  if [ -z "${exe_found}" ] ; then
-      zenity --error --title "${PROGNAME} - no exe installed!" \
+      ${ZENITY_CMD} --error --title "${PROGNAME} - no exe installed!" \
              --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
       return 1
  fi
@@ -92,13 +92,13 @@ echo "$search_list"
      cd ${TEMPDIR}
      
      # wrestool extracts ico file from EXE
-     wrestool -x -t 14 "${S_EXE_FILE}" > "${TEMPDIR}/${S_EXE_LESS}.ico" 2> /dev/null && \
+     ${WRESTOOL_CMD} -x -t 14 "${S_EXE_FILE}" > "${TEMPDIR}/${S_EXE_LESS}.ico" 2> /dev/null && \
      DBUG "I: ${HEADER}: Icon: Wrestool executed"
      
      # Only try to extract Icon when Icon is Found in the EXE
      # icotool extracts all png files from ico files
      # Select and copy the best png image file by sorting using ls -S1.
-     icotool -x "${TEMPDIR}/${S_EXE_LESS}.ico" 2>/dev/null && \
+     ${ICOTOOL_CMD} -x "${TEMPDIR}/${S_EXE_LESS}.ico" 2>/dev/null && \
      DBUG "I: ${HEADER}: Icotool: Extracting png files from" "${S_EXE_LESS}.ico" && \
      cp $(ls -S -1 ${TEMPDIR}/${S_EXE_LESS}*.png  | head -n 1) ${S_ICONFILE} && \
      DBUG "I: ${HEADER}: Icon: Copied successfully..." && WARN="false"
@@ -231,7 +231,7 @@ exit 0
 chmod +rx "${SCRIPTFILE}"
  
  # Do no Prompt and launch
- # zenity --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
+ # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
  source ${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts 
  Script_List_Available_Launch_Shortcuts ${PREFIXDIR}
  "${SELECTED_SCRIPT}" &

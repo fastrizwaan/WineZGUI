@@ -31,12 +31,12 @@ WineZGUI_Template_Create_New()
   fi
 
   # Get name for the Prefix Template
-  NEW_TEMPLATE=$(zenity --title "Create Prefix Template with ${WINEARCH} arch..." \
+  NEW_TEMPLATE=$(${ZENITY_CMD} --title "Create Prefix Template with ${WINEARCH} arch..." \
                              --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \
                              --width=500 --entry)
 
   if [ -z "${NEW_TEMPLATE}" ]; then #if no name is given use filename
-       #zenity --info --title="Shortcut... " --text="no Change"
+       #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # return to Game window
        DBUG "I: ${HEADER}: Cancelled"
   fi
@@ -54,7 +54,7 @@ WineZGUI_Template_Create_New()
 
 
   if [ -d "${TEMPLATES_DIR}/${NEW_TEMPLATE}" ]; then
-       zenity --error --title "${APP_WITH_VER}" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "Template Directory Already Exists!"
   fi
 
@@ -67,7 +67,7 @@ WineZGUI_Template_Create_New()
   unset TEXT
   TEXT+="New Template <b>${NEW_TEMPLATE}</b> is created...\n"
   TEXT+="Change Template...?"
-  zenity --question --title "${APP_WITH_VER} New Template!" --text "${TEXT}"
+  ${ZENITY_CMD} --question --title "${APP_WITH_VER} New Template!" --text "${TEXT}"
   ANSWER=$?
   if [ ${ANSWER} -eq 0 ]; then
        source ${DATADIR}/winezgui-template-change

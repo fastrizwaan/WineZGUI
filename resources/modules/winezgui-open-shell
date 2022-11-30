@@ -22,7 +22,7 @@ WineZGUI_Open_Shell()
 
   # Using Variable, If gnome terminal is not found inform user
   if [ ${GNOME_TERMINAL} -eq 1 ]; then
-       zenity --title "${SELECTION}" \
+       ${ZENITY_CMD} --title "${SELECTION}" \
               --width=500 --height=30 --info  \
               --text "This feature requires \"gnome-terminal\""
   fi

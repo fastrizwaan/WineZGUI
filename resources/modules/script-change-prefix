@@ -16,7 +16,7 @@ Script_Change_Prefix()
   # If No argument is given ask
   if [ -z "${1}" ]; then
       # 1. Ask for New Prefix Name if not provided by argument
-      GET_PREFIX_NAME=$(zenity --title "Rename Prefix..."             \
+      GET_PREFIX_NAME=$(${ZENITY_CMD} --title "Rename Prefix..."             \
                                --width=500 --entry                    \
                                --text "Enter a name for the prefix"   \
                                --entry-text "${PREFIXNAME}"           )
@@ -47,7 +47,7 @@ Script_Change_Prefix()
 
   # 3. If a prefix with given name already exist, inform
   if [ -d "${PREFIXES_DIR}/${NEWPREFIXNAME}" ]; then
-      zenity --error --title="Directory Already Exists!" \
+      ${ZENITY_CMD} --error --title="Directory Already Exists!" \
               --text="Cannot change ${PREFIXNAME} to ${NEWPREFIXNAME}"
 
       DBUG "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"

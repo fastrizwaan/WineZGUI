@@ -19,7 +19,7 @@ Script_Save_Load_Load()
   SELECTED_SAVEDGAME_NAME=$(basename "${SAVED_GAME_PATH}")
 
   # Ask user to select the .wzt backup file to restore
-  TAR_FILE="$(zenity --file-filter="*sav.tar.zst"      \
+  TAR_FILE="$(${ZENITY_CMD} --file-filter="*sav.tar.zst"      \
                      --file-selection                      \
                      --title="Load Saved Game" )"
   TAR_FILE_NAME=$(basename "${TAR_FILE}")
@@ -35,16 +35,16 @@ Script_Save_Load_Load()
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if [ ! -w "${SELECTED_SAVEDGAME}" ]; then
        DBUG "I: ${HEADER}: ${SELECTED_SAVEDGAME} is not writable. Aborting!"
-       zenity --error --title "${APP_WITH_VER}" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "${SELECTED_SAVEDGAME} is not writable"
        return 1
   fi
-  TAR_PREFIX=$(tar -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
+  TAR_PREFIX=$(${TAR_CMD} -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
   DBUG "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
 
-  (tar -xvf "${TAR_FILE}" -C "${SELECTED_SAVEDGAME}" --transform \
+  (${TAR_CMD} -xvf "${TAR_FILE}" -C "${SELECTED_SAVEDGAME}" --transform \
           "s|XOUSERXO|${USER}|g" &)|                        \
-  (zenity --progress --width=500                            \
+  (${ZENITY_CMD} --progress --width=500                            \
          --title="Restoring ${TAR_FILE_NAME}!"              \
          --text="Extracting ${TAR_FILE}..."                 \
          --pulsate --auto-close)
@@ -63,7 +63,7 @@ Script_Save_Load_Load()
             kill -9 ${PID_OF_TAR} \
             && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
             # Ask the user whether to delete partially extracted or let it be
-            zenity --question --title "Extraction Cancelled!" \
+            ${ZENITY_CMD} --question --title "Extraction Cancelled!" \
                    --text "Delete ${TAR_PREFIX} prefix?"
             ANSWER=$?
             if [ "${ANSWER}" = "0" ]; then
@@ -88,7 +88,7 @@ Script_Save_Load_Load()
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
-       zenity --info --title="${APP_WITH_VER} - Load Saved Game!" \
+       ${ZENITY_CMD} --info --title="${APP_WITH_VER} - Load Saved Game!" \
        --text="Extracted ${TAR_FILE} Successfully!" 
   
   fi # [ "${ZENITY_STATUS}" = "1" ]; then

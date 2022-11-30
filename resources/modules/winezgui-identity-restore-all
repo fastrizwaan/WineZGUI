@@ -15,7 +15,7 @@ Winezgui_Identity_Restore_All()
     echo "# Processing $(basename ${D})"
     Winezgui_Identity_Restore "${D}"
     DBUG "I: ${HEADER}: Processed $(basename ${D})"
-  done)|(zenity --progress --width=500              \
+  done)|(${ZENITY_CMD} --progress --width=500              \
          --title="${APP_WITH_VER} - Process files!" \
          --text="Extracting ${TAR_FILE}..."         \
          --pulsate --auto-close)

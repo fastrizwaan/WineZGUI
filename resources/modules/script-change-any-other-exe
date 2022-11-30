@@ -4,7 +4,7 @@
 Script_Change_Any_Other_Exe()
 {
   EXTENSIONS="*.exe *.msi"
-  SELECT_EXE_FILE="$(zenity --file-filter="${EXTENSIONS}" --file-selection \
+  SELECT_EXE_FILE="$(${ZENITY_CMD} --file-filter="${EXTENSIONS}" --file-selection \
                             --title="Change EXE for ${PREFIXNAME}" )"
 
   DBUG "I: Script: ${FUNCNAME[0]}: Any Other Exe: ${SELECT_EXE_FILE}"

@@ -14,6 +14,6 @@ WineZGUI_About()
   |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
   |sed -E "s/^(.*)$/<small>\1<\/small>/" \
   |sed "s/|/:/g" )"
-  zenity --info --no-wrap --text "${TEXT}"
+  ${ZENITY_CMD} --info --no-wrap --text "${TEXT}"
   
 }

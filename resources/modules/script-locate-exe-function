@@ -12,7 +12,7 @@ Locate_Exe_Function()
   # 1. If exe file not found, ask user to locate it
   if [ ! -f "${EXE_FILE}" ]; then
        echo "E: Script: Locate: ${EXE_FILE} not found at ${EXE_PATH}"
-       zenity --question --no-wrap --title="${EXE_NAME} not found!" \
+       ${ZENITY_CMD} --question --no-wrap --title="${EXE_NAME} not found!" \
               --text "${EXE_FILE}\nLocate ${EXE_NAME}?"
        ANSWER=$?
        # 1.1 If user selects no or cancels to locate exe file
@@ -27,7 +27,7 @@ Locate_Exe_Function()
                           |sed "s/\.[Ee][Xx][Ee]//g"|sed "s/\.[Ms][Ss][Ii]//g")
        # 1.2.2 Show Dialog to select exe file
        unset NEW_EXE
-       NEW_EXE="$(zenity --file-filter="${FILTER}*.${EXE_EXT}"\
+       NEW_EXE="$(${ZENITY_CMD} --file-filter="${FILTER}*.${EXE_EXT}"\
                          --file-selection --title="Locate ${EXE_NAME} File")"
        DBUG "I: Script: Locate: Selected ${NEW_EXE}"
        # 1.2.3 If no exe file is selected, or cancel is clicked
@@ -50,7 +50,7 @@ Locate_Exe_Function()
        if [ "${CHECKSUM}" = "${NEW_EXE_CHECKSUM}" ]; then
             DBUG "I: Script: Locate: Checksum matches!"
             # 2.2 When it matches, ask user whether to set it as default exe
-            zenity --question --no-wrap --title "${EXE_NAME} found!" \
+            ${ZENITY_CMD} --question --no-wrap --title "${EXE_NAME} found!" \
                    --text "Use ${NEW_EXE_NAME} from now onwards?"
             ANSWER=$?
             # 2.3 If user wants to set it as default exe
@@ -96,7 +96,7 @@ Locate_Exe_Function()
 
             echo "W: Script: Locate: Warning files are different"
             # 6.1 Ask user to run once the selected exe with different sha256sum
-            zenity --question --no-wrap --title "${EXE_NAME} Checksum Fail!" \
+            ${ZENITY_CMD} --question --no-wrap --title "${EXE_NAME} Checksum Fail!" \
                    --text  "Just run ${NEW_EXE_NAME} once?\nTo use this: Use Change->Default Exe"
             ANSWER=$?
             # If the user still want to run the mismatched exe

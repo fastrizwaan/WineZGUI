@@ -9,7 +9,7 @@ WineZGUI_Open_Exe()
        DBUG "I: ${HEADER}: No arugment given. Select an exe/msi file."
        F="*.exe *.msi"
        T="Select a File"
-       EXE_FILE="$(zenity --file-filter="${F}" --title="${T}" --file-selection)"
+       EXE_FILE="$(${ZENITY_CMD} --file-filter="${F}" --title="${T}" --file-selection)"
        if [ -z "${EXE_FILE}" ];  then # If no exe is selected
             DBUG "I: ${HEADER}: Cancelled!"
             return 1

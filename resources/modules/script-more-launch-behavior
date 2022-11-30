@@ -4,7 +4,7 @@ Script_More_Launch_Behavior()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
-  SCRIPT_LAUNCH_BEHAVIOR=$(zenity --title "${APP_WITH_VER}"   \
+  SCRIPT_LAUNCH_BEHAVIOR=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                                --list   --hide-header      \
                                --width=360 --height=240    \
                                --radiolist --column " "    \

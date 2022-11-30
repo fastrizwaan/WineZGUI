@@ -9,7 +9,7 @@ Script_Change_Exe()
 {      
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   unset RESPONSE
-  RESPONSE=$(zenity --title "Change EXE for ${PREFIXNAME}"       \
+  RESPONSE=$(${ZENITY_CMD} --title "Change EXE for ${PREFIXNAME}"       \
                     --list --hide-header --width=360 --height=30 \
                     --radiolist --column " "                     \
                     --column "Change"                            \

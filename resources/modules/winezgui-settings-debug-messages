@@ -3,7 +3,7 @@ WineZGUI_Settings_Debug_Messages()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  DEBUG_OPTION=$(zenity --title "${APP_WITH_VER}"   \
+  DEBUG_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                         --list   --hide-header      \
                         --width=360 --height=240    \
                         --radiolist --column " "    \
