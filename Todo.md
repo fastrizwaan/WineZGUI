@@ -1,4 +1,4 @@
-0.90
+
 - [ ] Comment every script, what it does
 - [ ] Comment who will be calling this current script/function and why
 - [ ] Create Flow Chart
@@ -15,8 +15,27 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
-0.89.15
+
+0.92
+- [ ] 
+
+0.91
+- [ ] Remove user Identity ($user->XOSUERXO) On Restore WZT file, find XOUSERXO only if it was found while creating wzt file.
+- [ ] Detect PREFIXDIR/restore-identity, if found only then do a XOUSERXO -> $user conversion of the files
+- [ ] Delete drive_c/users/$user/Temp directory after install
 - [ ] exe with same name (e.g., setup.exe), check sha256sum, create new prefix if dissimilar
+
+0.90 
+- [x] flatpak install use tools from using flatpak --command
+- [x] Use exiftool, icotool, zenity, tar and wget from flatpak. Silverblue does not have them installed.
+- [x] Use ${HOME} insetad of /home/${user}. Needed for silverblue's $HOME is at /var/home and not at /home.
+
+
+0.89.16
+- [x] Flatpak: if datadir/file is found use it, else use from winezgui-scripts dir
+
+0.89.15
+- [x] Flatpak: use winezgui-scripts dir for flatpak created script running from system that needs winezgui-* scripts
 
 0.89.14
 - [x] for flatpak use $WINE_CMD --version instead of wine --version 
