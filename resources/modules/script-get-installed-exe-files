@@ -8,6 +8,9 @@ Script_Get_Installed_Exe_Files()
   EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"      \
                    -iname "windows" -prune           \
                    -o -iname "dw20.exe"              \
+                   -o -iname "Rar.exe"               \
+                   -o -iname "RarExtInstaller.exe"   \
+                   -o -iname "UnRAR.exe"             \
                    -o -iname "wmplayer.exe"          \
                    -o -iname "iexplore.exe"          \
                    -o -iname "wordpad.exe"           \

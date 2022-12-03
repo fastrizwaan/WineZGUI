@@ -235,6 +235,13 @@ chmod +rx "${SCRIPTFILE}"
  source ${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts 
  Script_List_Available_Launch_Shortcuts ${PREFIXDIR}
  "${SELECTED_SCRIPT}" &
+
+ # Remove Tempdir inside drive_c/users/$USER/Temp
+ if [ -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
+      rm -rf "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+ fi
+ 
  exit 0
 # # Generate Height value
 # source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height

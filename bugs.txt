@@ -1,0 +1,13 @@
+Change Prefix should Change all scripts *.sh *Info.yml
+Change Setup/Install script file also to Prefix Name/delete
+
+Winrar fails 
+"${EXE_ARGUMENTS}" -> ${EXE_ARGUMENTS}
+
+winrar 
+Setup could not
+
+Prune these:
+Rar.exe
+RarExtInstaller.exe
+UnRAR.exe

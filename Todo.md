@@ -16,14 +16,15 @@
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
 
-0.92
-- [ ] 
-
-0.91
+0.90.2
+- [ ] exe with same name (e.g., setup.exe), check sha256sum, create new prefix if dissimilar
 - [ ] Remove user Identity ($user->XOSUERXO) On Restore WZT file, find XOUSERXO only if it was found while creating wzt file.
 - [ ] Detect PREFIXDIR/restore-identity, if found only then do a XOUSERXO -> $user conversion of the files
-- [ ] Delete drive_c/users/$user/Temp directory after install
-- [ ] exe with same name (e.g., setup.exe), check sha256sum, create new prefix if dissimilar
+
+0.90.1
+- [x] fix winrar launch by unquoting "${EXE_ARGUMENTS}"
+- [x] Skip winrar exes like unrar.exe RarExtInstaller.exe Rar.exe
+- [x] Delete drive_c/users/$user/Temp directory after install
 
 0.90 
 - [x] flatpak install use tools from using flatpak --command

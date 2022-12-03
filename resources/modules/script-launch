@@ -52,7 +52,7 @@ Script_Launch()
   fi
 
   # 3. Launch The EXE file
-  ${WINE_CMD} "${exe_name}" "${EXE_ARGUMENTS}"
+  ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
   source ${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts 

@@ -116,6 +116,12 @@ Script_Find_Installed_Exe()
        fi
 
   fi
+  
+ # Remove Tempdir inside drive_c/users/$USER/Temp
+ if [ -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
+      rm -rf "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+ fi
 
 
 
