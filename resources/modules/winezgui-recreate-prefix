@@ -4,7 +4,7 @@ WineZGUI_Recreate_Prefix()
   
   ### Get Prefixdir name
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-list-available-prefixes 
+  source "${DATADIR}/winezgui-list-available-prefixes"
   List_Available_Prefixes
   PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
@@ -21,7 +21,7 @@ WineZGUI_Recreate_Prefix()
  export PREFIXDIR=${SELECTED_PREFIX}
  echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
  find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print
-  search_list=$(find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print \
+  search_list=$(find "${PREFIXDIR}" -maxdepth 1 -iname "*.sh" -type f -print \
                 2>/dev/null| tr '\n' '|')
   exe_found=$(echo ${search_list})
   

@@ -22,7 +22,7 @@ WineZGUI_Open_Setup_Installer()
   ${WINE_CMD} "$base"
   DBUG "I: ${HEADER}: Open Setup Installer... Finished!"
 
-  source ${DATADIR}/winezgui-remove-wine-created-shortcuts 
+  source "${DATADIR}/winezgui-remove-wine-created-shortcuts"
   Remove_Wine_Created_Shortcuts
   return 0
 }

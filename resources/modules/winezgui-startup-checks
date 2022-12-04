@@ -108,9 +108,9 @@ WineZGUI_Startup_Checks()
   if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
        DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
        mkdir -p "${WINEZGUI_TEMPLATE}"
-       source ${DATADIR}/winezgui-initialize-wineprefix
+       source "${DATADIR}/winezgui-initialize-wineprefix"
        WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
-       source ${DATADIR}/winezgui-create-about-yml
+       source "${DATADIR}/winezgui-create-about-yml"
        WineZGUI_Create_About_Yml
   fi
   HEADER="${OLD_HEADER}"

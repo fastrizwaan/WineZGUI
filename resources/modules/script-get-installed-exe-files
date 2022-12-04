@@ -9,6 +9,7 @@ Script_Get_Installed_Exe_Files()
                    -iname "windows" -prune           \
                    -o -iname "dw20.exe"              \
                    -o -iname "Rar.exe"               \
+                   -o -iname "tdu2k.exe"             \
                    -o -iname "RarExtInstaller.exe"   \
                    -o -iname "UnRAR.exe"             \
                    -o -iname "wmplayer.exe"          \

@@ -33,7 +33,7 @@ SCRIPT_CHANGE_NAME ()
   fi
   
   # Check if user entered symbols
-  source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
+  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
   WineZGUI_Check_Entry_Text "${GET_PROGNAME}"
   
   ENTRY_CHECK=$?

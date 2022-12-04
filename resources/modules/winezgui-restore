@@ -12,7 +12,7 @@ WineZGUI_Restore()
        unset WZT_FILE  ; # Empty variable
 
   else
-       source ${DATADIR}/winezgui-restore-wzt 
+       source "${DATADIR}/winezgui-restore-wzt"
        Restore_Wzt_File
   fi # -z "${WZT_FILE}"
 

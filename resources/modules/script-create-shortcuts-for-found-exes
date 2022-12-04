@@ -12,7 +12,6 @@ Script_Create_Shortcuts_For_Found_Exes()
  unset FILES
  unset LIST_OF_EXES_FOR_SHORTCUTS
  unset search_list
-
  SAVEIFS=${IFS}
  IFS=$(echo -en "\n\b")
 
@@ -22,7 +21,7 @@ Script_Create_Shortcuts_For_Found_Exes()
  # Find all exe files in drive_c Exclude windows directory,
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
- source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+ source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
  Script_Get_Installed_Exe_Files
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
@@ -145,7 +144,7 @@ echo "$search_list"
 
 
  # Do not prompt with "found new exe files"
- source ${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file
+ source "${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file"
  Script_Create_Found_New_Exe_Files_File
  
  # If only 1 exe is found, then set that as Main Exe for the prefixdir
@@ -175,7 +174,7 @@ echo "$search_list"
  # need variables from this script
 echo "
 #!/bin/bash
-source ${WINEZGUI_SCRIPTS}/winezgui-dbug 
+source "${WINEZGUI_SCRIPTS}/winezgui-dbug"
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"
@@ -232,8 +231,8 @@ chmod +rx "${SCRIPTFILE}"
  
  # Do no Prompt and launch
  # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
- source ${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts 
- Script_List_Available_Launch_Shortcuts ${PREFIXDIR}
+ source "${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts"
+ Script_List_Available_Launch_Shortcuts "${PREFIXDIR}"
  "${SELECTED_SCRIPT}" &
 
  # Remove Tempdir inside drive_c/users/$USER/Temp
@@ -244,7 +243,7 @@ chmod +rx "${SCRIPTFILE}"
  
  exit 0
 # # Generate Height value
-# source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
+# source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
 # WineZGUI_Get_Window_Height ${#FILES[@]}
 
 # # if [ ${#FILES[@]} -eq 1 ]; then
@@ -280,7 +279,7 @@ chmod +rx "${SCRIPTFILE}"
     #  done
 # fi
   # get the variable LIST_OF_EXES_FOR_SHORTCUTS filled
-#   source ${WINEZGUI_SCRIPTS}/script-get-selected-exes-for-shortcuts
+#   source "${WINEZGUI_SCRIPTS}/script-get-selected-exes-for-shortcuts"
 #   Script_Get_Selected_Exes_For_Shortcuts
 #   echo "x==x==x==x==x==x==x==x==x==x==x==x==x==x==x==x"
 #   for i in $(echo ${LIST_OF_EXES_FOR_SHORTCUTS}|tr '|' '\n'|sort); do

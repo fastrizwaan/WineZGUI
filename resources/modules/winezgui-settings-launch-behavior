@@ -3,7 +3,7 @@ WineZGUI_Settings_Launch_Behavior()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-list-available-prefixes 
+  source "${DATADIR}/winezgui-list-available-prefixes"
   List_Available_Prefixes
 
   GET_LAUNCH_BEHAVIOR=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \

@@ -20,16 +20,16 @@ Script_Save_Load()
   fi
   
   if   [ "${SAVE_LOAD_OPTION}" = "Set Saved Game directory..."  ]; then
-         source ${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory
+         source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
          Script_Save_Load_Set_Saved_Game_Directory
   elif [ "${SAVE_LOAD_OPTION}" = "Save..."  ]; then
-         source ${WINEZGUI_SCRIPTS}/script-save-load-save
+         source "${WINEZGUI_SCRIPTS}/script-save-load-save"
          Script_Save_Load_Save
   elif [ "${SAVE_LOAD_OPTION}" = "Load..."  ]; then
-         source ${WINEZGUI_SCRIPTS}/script-save-load-load
+         source "${WINEZGUI_SCRIPTS}/script-save-load-load"
          Script_Save_Load_Load
   elif [ "${SAVE_LOAD_OPTION}" = "Help..."  ]; then
-         source ${WINEZGUI_SCRIPTS}/script-save-load-help
+         source "${WINEZGUI_SCRIPTS}/script-save-load-help"
          Script_Save_Load_Help
   fi
 }

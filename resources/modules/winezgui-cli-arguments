@@ -4,7 +4,7 @@ WineZGUI_Cli_Arguments()
   for i in "${ARGV}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;
-     -h|--help) source ${DATADIR}/winezgui-show-help; WineZGUI_Show_Help; exit; ;;
+     -h|--help) source "${DATADIR}/winezgui-show-help; WineZGUI_Show_Help; exit; ;;"
      esac
   done
   DBUG "I: ${HEADER}: CLI Arguments completed"

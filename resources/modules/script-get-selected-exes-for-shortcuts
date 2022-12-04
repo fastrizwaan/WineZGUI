@@ -20,7 +20,7 @@ Script_Get_Selected_Exes_For_Shortcuts()
  # Find all exe files in drive_c Exclude windows directory,
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
- source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+ source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
  Script_Get_Installed_Exe_Files
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
@@ -52,7 +52,7 @@ echo "$search_list"
 
 
 # Generate Height value
-source ${WINEZGUI_SCRIPTS}/winezgui-get-window-height
+source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
 WineZGUI_Get_Window_Height ${#FILES[@]}
 
 # if [ ${#FILES[@]} -eq 1 ]; then

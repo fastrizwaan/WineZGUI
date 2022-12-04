@@ -32,34 +32,34 @@ WineZGUI_Template()
   DBUG "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
 
   if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-template-configure
+          source "${DATADIR}/winezgui-template-configure"
           WineZGUI_Template_Configure
   elif [ "${TEMPLATE_OPTION}" = "Backup    ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-template-backup
+          source "${DATADIR}/winezgui-template-backup"
           WineZGUI_Template_Backup "${TEMPLATE}"
   elif [ "${TEMPLATE_OPTION}" = "Download  Template..." ]; then
-          source ${DATADIR}/winezgui-template-download
+          source "${DATADIR}/winezgui-template-download"
           WineZGUI_Template_Download
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
-          source ${DATADIR}/winezgui-template-create-new
+          source "${DATADIR}/winezgui-template-create-new"
           WineZGUI_Template_Create_New
   elif [ "${TEMPLATE_OPTION}" = "Clone..." ]; then
-          source ${DATADIR}/winezgui-template-clone
+          source "${DATADIR}/winezgui-template-clone"
           WineZGUI_Template_Clone
   elif [ "${TEMPLATE_OPTION}" = "Change..." ]; then
-          source ${DATADIR}/winezgui-template-change
+          source "${DATADIR}/winezgui-template-change"
           WineZGUI_Template_Change
   elif [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
-          source ${DATADIR}/winezgui-template-backup
+          source "${DATADIR}/winezgui-template-backup"
           WineZGUI_Template_Backup
   elif [ "${TEMPLATE_OPTION}" = "Restore..." ]; then
-          source ${DATADIR}/winezgui-template-restore
+          source "${DATADIR}/winezgui-template-restore"
           WineZGUI_Template_Restore
   elif [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
-          source ${DATADIR}/winezgui-template-delete
+          source "${DATADIR}/winezgui-template-delete"
           WineZGUI_Template_Delete
   elif [ "${TEMPLATE_OPTION}" = "Help..." ]; then
-          source ${DATADIR}/winezgui-template-help
+          source "${DATADIR}/winezgui-template-help"
           WineZGUI_Template_Help
   else
        echo "E: Unknown Configure Option = ${TEMPLATE_OPTION}"

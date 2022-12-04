@@ -28,23 +28,23 @@ WineZGUI_Settings()
    DBUG "I: ${HEADER}: Selected ${SETTINGS_OPTION}!"
    
    if   [ "${SETTINGS_OPTION}" = "Help..." ]; then
-        source ${DATADIR}/winezgui-settings-help
+        source "${DATADIR}/winezgui-settings-help"
         WineZGUI_Settings_Help
         
    elif [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
-        source ${DATADIR}/winezgui-settings-wine-arch
+        source "${DATADIR}/winezgui-settings-wine-arch"
         Winezgui_Settings_Wine_Arch
         
    elif [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
-        source ${DATADIR}/winezgui-template-change
+        source "${DATADIR}/winezgui-template-change"
         WineZGUI_Template_Change
         
    elif [ "${SETTINGS_OPTION}" = "Launch Behavior..." ]; then
-        source ${DATADIR}/winezgui-settings-launch-behavior
+        source "${DATADIR}/winezgui-settings-launch-behavior"
         WineZGUI_Settings_Launch_Behavior
         
    elif [ "${SETTINGS_OPTION}" = "Debug Messages..." ]; then
-        source ${DATADIR}/winezgui-settings-debug-messages
+        source "${DATADIR}/winezgui-settings-debug-messages"
         WineZGUI_Settings_Debug_Messages
         
    fi

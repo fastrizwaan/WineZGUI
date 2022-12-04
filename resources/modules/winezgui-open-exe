@@ -30,7 +30,7 @@ WineZGUI_Open_Exe()
   if [ "${IS_EXE}" = "wzt" ]; then
        export WZT_FILE="${EXE_FILE}"
        DBUG "I: ${HEADER}: WineZGUI Backup file submitted"
-       source ${DATADIR}/winezgui-restore-wzt 
+       source "${DATADIR}/winezgui-restore-wzt"
        Restore_Wzt_File
        DBUG "I: ${HEADER}: Exiting main program after restoring backup"
        exit 0;
@@ -46,16 +46,37 @@ WineZGUI_Open_Exe()
   export EXE_EXT="${EXE_FILE##*.}"
   export EXE_LESS=$(echo "${EXE_NOSP}"|sed "s/\.[Ee][Xx][Ee]//" \
                                       |sed "s/\.[Mm][Ss][Ii]//")
+  export EXE_NOEXE=$(echo "${EXE_NOSP}"           |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+  # setup.exe/installer.exe needs to have different directory
+# 
+echo "============================================ x ========================"
+TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
+if [[ "${TEST_NAME}" == *"setup"* ]]   || \
+   [[ "${TEST_NAME}" == *"install"* ]] ; then
+     DBUG "I: Script: Using sha256sum of the exe"
+     x=$(sha256sum "${EXE_FILE}")
+     EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+     SHASUM10CHARS=${x:0:10}
+     export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
+     echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+else
+     export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
+     echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"  
+fi
 
   # Create temporary variables for this function
-  export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
+  
   SCRIPT_NAME="${EXE_LESS}.sh"
   SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
-
   DBUG "I: ${HEADER}: Checking whether ${SCRIPT_FILE_TO_RUN} exists."
   
   # If existing prefix exists for the exe
+  echo "***********************************************"
+  echo "testing"
   if [ -f  "${SCRIPT_FILE_TO_RUN}" ]; then
        DBUG "I: ${HEADER}: found Script ${SCRIPT_NAME}! Launching..."
        "${SCRIPT_FILE_TO_RUN}" # Run the script file associated with the exe

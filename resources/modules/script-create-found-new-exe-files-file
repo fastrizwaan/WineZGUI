@@ -4,7 +4,7 @@ Script_Create_Found_New_Exe_Files_File()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   FOUND_EXE_FILES="found-exe-files.yml"
-  source ${WINEZGUI_SCRIPTS}/script-get-installed-exe-files
+  source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
   Script_Get_Installed_Exe_Files
   EXE_LIST="${EXE_FILES_FOUND}"
   echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \

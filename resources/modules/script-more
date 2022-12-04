@@ -21,19 +21,19 @@ Script_More()
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
        DBUG "I: Script: Delete... Selected!"
-       source ${WINEZGUI_SCRIPTS}/script-exe-cmdline 
+       source "${WINEZGUI_SCRIPTS}/script-exe-cmdline"
        Script_Exe_Cmdline
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Launch Behavior" ]; then
        DBUG "I: Script: Set Launch Behavior... Selected!"
-       source ${WINEZGUI_SCRIPTS}/script-more-launch-behavior
+       source "${WINEZGUI_SCRIPTS}/script-more-launch-behavior"
        Script_More_Launch_Behavior
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
        DBUG "I: Script: Delete... Selected!"
-       source ${WINEZGUI_SCRIPTS}/script-delete 
+       source "${WINEZGUI_SCRIPTS}/script-delete"
        Script_Delete
   fi
 }

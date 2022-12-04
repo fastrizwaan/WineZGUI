@@ -8,7 +8,7 @@ Winezgui_Identity_Restore_All()
   unset D # Directory
   unset FOUND_INFOFILE
   
-  source ${DATADIR}/winezgui-identity-restore
+  source "${DATADIR}/winezgui-identity-restore"
   
   (for D in \
     $(find ${TEMPLATES_DIR}/* ${PREFIXES_DIR}/* -maxdepth 0 -type d); do

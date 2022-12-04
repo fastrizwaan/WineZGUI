@@ -10,17 +10,17 @@ Winezgui_Identity_Remove()
         DIRNAME=$(basename "${1}")
   fi      
   
-  if [ -f ${DATADIR}/winezgui-fetch-replacement-data ]; then
-       source ${DATADIR}/winezgui-fetch-replacement-data
+  if [ -f "${DATADIR}/winezgui-fetch-replacement-data" ]; then
+       source "${DATADIR}/winezgui-fetch-replacement-data"
   else
-       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data
+       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data"
   fi
   WineZGUI_Fetch_Replacement_Data
   
-  if [ -f ${DATADIR}/winezgui-fetch-replacement-files ]; then
-       source ${DATADIR}/winezgui-fetch-replacement-files
+  if [ -f "${DATADIR}/winezgui-fetch-replacement-files" ]; then
+       source "${DATADIR}/winezgui-fetch-replacement-files"
   else
-       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files
+       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files"
   fi
   WineZGUI_Fetch_Replacement_Files "${DIRECTORY}"
 
@@ -56,7 +56,7 @@ Winezgui_Identity_Remove()
 
 
    # Values->XO? ; If XOUSERHOMEXO not found then backup_function failed
-  if [ -f ${1}/Info.yml ] && \
+  if [ -f "${1}/Info.yml" ] && \
      (! grep -o "XOUSERHOMEXO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null);
       then
       echo "E:------------------------------------------"
@@ -66,7 +66,7 @@ Winezgui_Identity_Remove()
                  --text "${USER} Identity is not removed, not ok for sharing!"
   fi
   # Check if identity is removed
-  if [ -f ${1}/Info.yml ] && \
+  if [ -f "${1}/Info.yml" ] && \
      ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
        DBUG "I: ${FUNCNAME[0]}: Identity removed ${USER}!"
   fi
@@ -76,6 +76,6 @@ Winezgui_Identity_Remove()
   unset WEXE WVER FILE_LIST DTARGET DSOURCE
 
 #   # Find other files which has username in it.
-#   source ${DATADIR}/winezgui-identity-remove-from-drive-c-files
+#   source "${DATADIR}/winezgui-identity-remove-from-drive-c-files"
 #   WineZGUI_Identity_Remove_From_Drive_C_Files "${1}"
 }

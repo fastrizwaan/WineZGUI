@@ -29,22 +29,22 @@ WineZGUI_Template_Configure()
   DBUG "I: ${SELECTION} Selected!"
 
   if   [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]; then
-          source ${DATADIR}/winezgui-open-setup-installer 
+          source "${DATADIR}/winezgui-open-setup-installer"
           WineZGUI_Open_Setup_Installer
   elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]; then
-          source ${DATADIR}/winezgui-winetricks-gui 
+          source "${DATADIR}/winezgui-winetricks-gui"
           WineZGUI_Winetricks_Gui
   elif [ "${CONFIGURE_OPTION}" = "Winetricks CLI..." ]; then
-          source ${DATADIR}/winezgui-winetricks-cli 
+          source "${DATADIR}/winezgui-winetricks-cli"
           WineZGUI_Winetricks_Cli
   elif [ "${CONFIGURE_OPTION}" = "Launch Winecfg..." ]; then
-          source ${DATADIR}/winezgui-winecfg 
+          source "${DATADIR}/winezgui-winecfg"
           WineZGUI_Winecfg
   elif [ "${CONFIGURE_OPTION}" = "Open Shell..." ]; then
-          source ${DATADIR}/winezgui-open-shell 
+          source "${DATADIR}/winezgui-open-shell"
           WineZGUI_Open_Shell
   elif [ "${CONFIGURE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
-          source ${DATADIR}/winezgui-template-backup
+          source "${DATADIR}/winezgui-template-backup"
           WineZGUI_Template_Backup "${TEMPLATE}"
   else
        echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"

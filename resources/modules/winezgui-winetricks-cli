@@ -32,7 +32,7 @@ WineZGUI_Winetricks_Cli()
 
 
   # Check if user entered symbols
-  source ${DATADIR}/winezgui-check-entry-text
+  source "${DATADIR}/winezgui-check-entry-text"
   WineZGUI_Check_Entry_Text "${VERBS}"
   
   ENTRY_CHECK=$?

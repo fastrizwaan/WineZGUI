@@ -24,16 +24,16 @@ WineZGUI_More()
   if   [ "${MORE_OPTION}" = "File Manager..."  ]; then
          xdg-open "${WINEZGUIDIR}"
   elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
-         source ${DATADIR}/winezgui-open-terminal 
+         source "${DATADIR}/winezgui-open-terminal"
          WineZGUI_Open_Terminal
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
-         source ${DATADIR}/winezgui-shortcuts 
+         source "${DATADIR}/winezgui-shortcuts"
          WineZGUI_Shortcuts
   elif [ "${MORE_OPTION}" = "Recreate All Scripts..."  ]; then
-         source ${DATADIR}/winezgui-recreate-prefix
+         source "${DATADIR}/winezgui-recreate-prefix"
          WineZGUI_Recreate_Prefix
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
-         source ${DATADIR}/winezgui-more-help
+         source "${DATADIR}/winezgui-more-help"
          WineZGUI_More_Help
   fi
 }

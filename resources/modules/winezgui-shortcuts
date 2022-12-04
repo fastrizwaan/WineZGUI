@@ -24,20 +24,20 @@ WineZGUI_Shortcuts()
   DBUG "I: ${HEADER}: Selected ${SELECT_SHORTCUT}!"
  
   if  [ "${SELECT_SHORTCUT}" = "Clean up..." ]; then
-        source ${DATADIR}/winezgui-shortcuts-clean-up
+        source "${DATADIR}/winezgui-shortcuts-clean-up"
         WineZGUI_Shortcuts_Clean_Up
  
  elif [ "${SELECT_SHORTCUT}" = "Create..." ]; then
-        source ${DATADIR}/winezgui-shortcuts-create
+        source "${DATADIR}/winezgui-shortcuts-create"
         WineZGUI_Shortcuts_Create
  
  elif [ "${SELECT_SHORTCUT}" = "Delete..." ]; then
-        source ${DATADIR}/winezgui-shortcuts-delete 
+        source "${DATADIR}/winezgui-shortcuts-delete"
         echo "Launching delete Shortcuts!!!"
         Winezgui_Shortcuts_Delete
 
  elif [ "${SELECT_SHORTCUT}" = "Restore..." ]; then
-        source ${DATADIR}/winezgui-shortcuts-restore 
+        source "${DATADIR}/winezgui-shortcuts-restore"
         echo "Launching delete Shortcuts!!!"
         WineZGUI_Shortcuts_Restore
   fi

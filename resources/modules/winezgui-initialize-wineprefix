@@ -37,6 +37,6 @@ WineZGUI_Initialize_Wineprefix()
   fi
   
   DBUG "I: ${HEADER}: Startup Checks"
-  source ${DATADIR}/winezgui-startup-checks
+  source "${DATADIR}/winezgui-startup-checks"
   WineZGUI_Startup_Checks
 }

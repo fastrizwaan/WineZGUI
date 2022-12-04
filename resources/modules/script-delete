@@ -21,19 +21,19 @@ Script_Delete()
   fi
   
   if   [ "${DEL_RESPONSE}" = "Delete Shortcut..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-delete-shortcut
+         source "${WINEZGUI_SCRIPTS}/script-delete-shortcut"
          Script_Delete_Shortcut
 
   elif [ "${DEL_RESPONSE}" = "Delete Script..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-delete-scriptfile
+         source "${WINEZGUI_SCRIPTS}/script-delete-scriptfile"
          Script_Delete_Scriptfile
          
   elif [ "${DEL_RESPONSE}" = "Delete Prefix..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-delete-prefix
+         source "${WINEZGUI_SCRIPTS}/script-delete-prefix"
          Script_Delete_Prefix
          
   elif [ "${DEL_RESPONSE}" = "Help..." ]; then
-         source ${WINEZGUI_SCRIPTS}/script-delete-help 
+         source "${WINEZGUI_SCRIPTS}/script-delete-help"
          Script_Delete_Help # Call the function in the above file
 
   fi

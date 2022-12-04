@@ -152,9 +152,9 @@ if [ "${INSTALL}" = "true"  ]
      # Install all modules
      SAVEIFS=${IFS}
      IFS=$(echo -en "\n\b")
-     for i in $(ls ${MODULES}); do 
-     MODULE_NAME=$(basename $i)
-     MODULE="$MODULES/$i"
+     for i in $(ls "${MODULES}"); do 
+     MODULE_NAME=$(basename "${i}")
+     MODULE="${MODULES}/${i}"
      
      install -Dm755 $MODULE $DATA_DIR && echo "Installed '$DATA_DIR/$MODULE_NAME'"
      done
@@ -176,28 +176,28 @@ if [ "${INSTALL}" = "true"  ]
 
 
      # Update mime and desktop paths
-     update-mime-database ${INSTALL_PREFIX}/share/mime &
-     update-desktop-database ${DESK_DIR} &
-     gtk-update-icon-cache --ignore-theme-index ${INSTALL_PREFIX}/share/icons \
+     update-mime-database "${INSTALL_PREFIX}/share/mime" &
+     update-desktop-database "${DESK_DIR}" &
+     gtk-update-icon-cache --ignore-theme-index "${INSTALL_PREFIX}/share/icons" \
                            2>/dev/null &
 
      # Change Variables in winezgui and winezgui-create-prefix scripts
      # for system or flatpak install
-     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $APPS_DIR/$APP01
-     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $APPS_DIR/$APP01
-     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $APPS_DIR/$APP01
-     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $APPS_DIR/$APP01
-     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $APPS_DIR/$APP01
+     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i "$APPS_DIR/$APP01"
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i "$APPS_DIR/$APP01"
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i "$APPS_DIR/$APP01"
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i "$APPS_DIR/$APP01"
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i "$APPS_DIR/$APP01"
 
-     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $APPS_DIR/$APP02
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $APPS_DIR/$APP02
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i "$APPS_DIR/$APP02"
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i "$APPS_DIR/$APP02"
 
-     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i $DATA_DIR/$APP03
-     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i $DATA_DIR/$APP03
-     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i $DATA_DIR/$APP03
-     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP03
-     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i $DATA_DIR/$APP03
-     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i $DATA_DIR/$APP03
+     sed "s|DATADIR=/usr|DATADIR=$INSTALL_PREFIX|"           -i "$DATA_DIR/$APP03"
+     sed "s|TEMPDIR=.*|TEMPDIR=\"$TEMPDIR\"|"                -i "$DATA_DIR/$APP03"
+     sed "s|WINEZGUIDIR=.*|WINEZGUIDIR=\"$WINEZGUIDIR\"|"    -i "$DATA_DIR/$APP03"
+     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i "$DATA_DIR/$APP03"
+     sed "s|APPVERSION=.*|APPVERSION=\"$APPVERSION\"|"       -i "$DATA_DIR/$APP03"
+     sed "s|FLATPAK_NAME=.*|FLATPAK_NAME=\"$FLATPAK_NAME\"|" -i "$DATA_DIR/$APP03"
 
 #     sed "s|INSTALL_TYPE=.*|INSTALL_TYPE=\"$INSTALL_TYPE\"|" -i $DATA_DIR/$APP04
      # Create uninstall script for later removal
@@ -208,7 +208,7 @@ if [ "${INSTALL}" = "true"  ]
      
      SAVEIFS=${IFS}
      IFS=$(echo -en "\n\b")
-     for i in $(ls ${MODULES}); do 
+     for i in $(ls "${MODULES}"); do 
 
      echo "rm -vf $DATA_DIR/$i" >> ./uninstall
      done

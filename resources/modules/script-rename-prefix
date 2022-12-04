@@ -28,7 +28,7 @@ Rename_Prefix()
   fi
   
   # Check if user entered symbols
-  source ${WINEZGUI_SCRIPTS}/winezgui-check-entry-text
+  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
   WineZGUI_Check_Entry_Text "${GET_PREFIX_NAME}"
   
   ENTRY_CHECK=$?
@@ -65,21 +65,21 @@ Rename_Prefix()
   # if not exe_path inside exe_file = if exe_file not inside prefixdir
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           DBUG "I: Script: ${FUNCNAME[0]}: Game directory is outside prefix!"
-          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed1:${FUNCNAME[0]}"
-          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed2:${FUNCNAME[0]}"
-          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed3:${FUNCNAME[0]}"
+          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed1:${FUNCNAME[0]}"
+          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed2:${FUNCNAME[0]}"
+          sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed3:${FUNCNAME[0]}"
 
-          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed4:${FUNCNAME[0]}"
-          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed5:${FUNCNAME[0]}"
-          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed6:${FUNCNAME[0]}"
+          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed4:${FUNCNAME[0]}"
+          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed5:${FUNCNAME[0]}"
+          sed "s|${EXE_PATH}|XOEXE_PATHXO|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed6:${FUNCNAME[0]}"
 
-          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed7:${FUNCNAME[0]}"
-          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed8:${FUNCNAME[0]}"
-          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed9:${FUNCNAME[0]}"
+          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed7:${FUNCNAME[0]}"
+          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed8:${FUNCNAME[0]}"
+          sed "s|${EXE_NAME}|XOEXE_NAMEXO|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed9:${FUNCNAME[0]}"
 
-          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed10:${FUNCNAME[0]}"
-          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed11:${FUNCNAME[0]}"
-          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed12:${FUNCNAME[0]}"
+          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed10:${FUNCNAME[0]}"
+          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed11:${FUNCNAME[0]}"
+          sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed12:${FUNCNAME[0]}"
   fi
 
   # 5.2 Replace PREFIX values inside .desktop, .txt and .sh files
@@ -155,18 +155,18 @@ Rename_Prefix()
   # 5.5 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           
-          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed33:${FUNCNAME[0]}"
-          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed34:${FUNCNAME[0]}"
-          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed35:${FUNCNAME[0]}"
-          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed36:${FUNCNAME[0]}"
-          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed37:${FUNCNAME[0]}"
-          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed38:${FUNCNAME[0]}"
-          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed39:${FUNCNAME[0]}"
-          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed40:${FUNCNAME[0]}"
-          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed41:${FUNCNAME[0]}"
-          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i ${PREFIXDIR}/${INFOFILE}    || echo "Failed42:${FUNCNAME[0]}"
-          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i ${PREFIXDIR}/${SCRIPTFILE}  || echo "Failed43:${FUNCNAME[0]}"
-          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i ${PREFIXDIR}/${DESKTOPFILE} || echo "Failed44:${FUNCNAME[0]}"
+          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed33:${FUNCNAME[0]}"
+          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed34:${FUNCNAME[0]}"
+          sed "s|XOEXE_FILEXO|${EXE_FILE}|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed35:${FUNCNAME[0]}"
+          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed36:${FUNCNAME[0]}"
+          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed37:${FUNCNAME[0]}"
+          sed "s|XOEXE_PATHXO|${EXE_PATH}|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed38:${FUNCNAME[0]}"
+          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed39:${FUNCNAME[0]}"
+          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed40:${FUNCNAME[0]}"
+          sed "s|XOEXE_NAMEXO|${EXE_NAME}|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed41:${FUNCNAME[0]}"
+          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed42:${FUNCNAME[0]}"
+          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed43:${FUNCNAME[0]}"
+          sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed44:${FUNCNAME[0]}"
   fi
   
   # 6. Rename files having prefix as part of file name, with new prefix name 
@@ -197,7 +197,7 @@ Rename_Prefix()
   fi
   
   # 6.4 Rename: Prefix Directory
-  mv ${PREFIXDIR} ${PREFIXES_DIR}/${NEWPREFIXNAME} && \
+  mv "${PREFIXDIR}" "${PREFIXES_DIR}/${NEWPREFIXNAME}" && \
   echo  "I: Script: Rename: Prefix: Renamed directory ${PREFIXNAME}" \
         "-> ${NEWPREFIXNAME}"
 
@@ -209,7 +209,7 @@ Rename_Prefix()
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
 
   # 7.2 Delete all broken links which points to winezgui game prefix
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  find "${DESKTOPDIR}" -maxdepth 1 -xtype l -delete && \
   DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
   
   # 7.3 update icon cache and desktop menu

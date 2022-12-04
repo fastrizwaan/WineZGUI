@@ -69,7 +69,7 @@ WineZGUI_Template_Restore()
        fi # if ! [ -z "$PID_OF_TAR" ]; then
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
-       source ${DATADIR}/winezgui-identity-restore-all
+       source "${DATADIR}/winezgui-identity-restore-all"
        Winezgui_Identity_Restore_All
 
        # Inform on successful extraction

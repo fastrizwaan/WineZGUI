@@ -91,11 +91,11 @@ Restore_Wzt_File()
              --text="Force Extracting ${WZT_FILE}..." \
              --pulsate --auto-close)
       fi
-      source ${DATADIR}/winezgui-identity-restore-all
+      source "${DATADIR}/winezgui-identity-restore-all"
       Winezgui_Identity_Restore_All
 
       # Show menu after extraction
-      source ${DATADIR}/winezgui-launch
+      source "${DATADIR}/winezgui-launch"
       WineZGUI_Launch
       WineZGUI_Window
 
@@ -239,7 +239,7 @@ Restore_Wzt_File()
   export PREFIXNAME="${WZT_PREFIX}"
   DBUG "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
-  source ${DATADIR}/winezgui-identity-restore
+  source "${DATADIR}/winezgui-identity-restore"
   Winezgui_Identity_Restore "${PREFIXES_DIR}/${WZT_PREFIX}"
  
   # 6 Create desktop dir, process Info file
@@ -297,11 +297,11 @@ Restore_Wzt_File()
 
   # Repair all files
   # PROCESS XO--XO variable inside prefixes and templates directory
-  source ${DATADIR}/winezgui-identity-restore-all
+  source "${DATADIR}/winezgui-identity-restore-all"
   Winezgui_Identity_Restore_All
   
   # Find other files which has username in it.
-  source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
+  source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
   WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
   
   LAUNCH_FILE_NAME=$(basename ${FOUND_SCRIPT_FILE})
@@ -319,7 +319,7 @@ Restore_Wzt_File()
             exit 0
        fi # ${ZENITY_CMD} --question
   else
-       source ${DATADIR}/script-list-available-launch-shortcuts 
+       source "${DATADIR}/script-list-available-launch-shortcuts"
        Script_List_Available_Launch_Shortcuts ${FOUND_PREFIX_DIR}
        "${SELECTED_SCRIPT}" &
        exit 0

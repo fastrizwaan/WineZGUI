@@ -23,7 +23,7 @@ WineZGUI_Template_Download()
             DBUG "I: Extracted WineZGUI-win64-UE4.tar.zst"
             #rm WineZGUI-win64-UE4.tar.zst && \
             DBUG "I: Removed WineZGUI-win64-UE4.tar.zst after extraction"
-            source ${DATADIR}/winezgui-template-change
+            source "${DATADIR}/winezgui-template-change"
             WineZGUI_Template_Change
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        else

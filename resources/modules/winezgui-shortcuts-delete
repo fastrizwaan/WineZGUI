@@ -1,4 +1,4 @@
-# source ${DATADIR}/winezgui-shortcuts-delete 
+# source "${DATADIR}/winezgui-shortcuts-delete"
 # REVIEW
 Winezgui_Shortcuts_Delete()
 {
@@ -51,7 +51,7 @@ Winezgui_Shortcuts_Delete()
   IFS=${SAVEIFS}
   
    # Generate Height value
-   source ${DATADIR}/winezgui-get-window-height
+   source "${DATADIR}/winezgui-get-window-height"
    WineZGUI_Get_Window_Height ${#FILES[@]}
   # 3. Show the found exe files using zenity
   unset COMMAND

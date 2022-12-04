@@ -3,7 +3,7 @@ WineZGUI_Template_Delete()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-list-available-templates
+  source "${DATADIR}/winezgui-list-available-templates"
   List_Available_Templates # get SELECTED_TEMPLATE
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   rm -rf "${SELECTED_TEMPLATE}" && \

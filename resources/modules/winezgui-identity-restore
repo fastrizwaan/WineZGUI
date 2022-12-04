@@ -12,19 +12,19 @@ Winezgui_Identity_Restore()
 
   # flatpak install based Script from system needs to load from it's own directory
   # WINEZGUI_SCRIPTS
-  if [ -f ${DATADIR}/winezgui-fetch-replacement-data ]; then
-       source ${DATADIR}/winezgui-fetch-replacement-data
+  if [ -f "${DATADIR}/winezgui-fetch-replacement-data" ]; then
+       source "${DATADIR}/winezgui-fetch-replacement-data"
   else
-       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data
+       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data"
   fi
   WineZGUI_Fetch_Replacement_Data # DATA
   
   # flatpak install based Script from system needs to load from it's own directory
   # WINEZGUI_SCRIPTS
-  if [ -f ${DATADIR}/winezgui-fetch-replacement-files ]; then
-       source ${DATADIR}/winezgui-fetch-replacement-files
+  if [ -f "${DATADIR}/winezgui-fetch-replacement-files" ]; then
+       source "${DATADIR}/winezgui-fetch-replacement-files"
   else
-       source ${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files
+       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files"
   fi
   WineZGUI_Fetch_Replacement_Files "${1}" #FILES
   
@@ -68,7 +68,7 @@ Winezgui_Identity_Restore()
   sed "s|\(export FLATPAK\_NAME=\).*|\1${FLATPAK_NAME}|g; t;" -i ${FILE_LIST} 
 
   # Check if user Identity is restored in prefix
-  if [ -f ${1}/Info.yml ] && \
+  if [ -f "${1}/Info.yml" ] && \
      ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
        echo "E:------------------------------------------"
        echo "E: ${FUNCNAME[0]}: Identity Not Restored for ${USER}!"
@@ -77,7 +77,7 @@ Winezgui_Identity_Restore()
               --text "User Identity is not set for ${USER}, launch may fail!"
   fi
   # Check if identity is restored
-  if [ -f ${1}/Info.yml ] && \
+  if [ -f "${1}/Info.yml" ] && \
      (! grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null );
       then
       DBUG "I: ${FUNCNAME[0]}: Identity Restored for ${USER}!"
@@ -88,6 +88,6 @@ Winezgui_Identity_Restore()
   unset FPNAME WEXE WVER FILE_LIST DTARGET DSOURCE
   
 #   # Find other files which has username in it.
-#   source ${DATADIR}/winezgui-identity-restore-from-drive-c-files
+#   source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
 #   WineZGUI_Identity_Restore_From_Drive_C_Files "${1}"
 }

@@ -42,7 +42,7 @@ WineZGUI_Template_Create_New()
   fi
 
   # Check if user entered symbols
-  source ${DATADIR}/winezgui-check-entry-text
+  source "${DATADIR}/winezgui-check-entry-text"
   WineZGUI_Check_Entry_Text "${NEW_TEMPLATE}"
   
   ENTRY_CHECK=$?
@@ -59,7 +59,7 @@ WineZGUI_Template_Create_New()
   fi
 
   # Create new Prefix Template
-  source ${DATADIR}/winezgui-initialize-wineprefix
+  source "${DATADIR}/winezgui-initialize-wineprefix"
   WineZGUI_Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
   export WINEARCH="$SAVED_WINEARCH"
   
@@ -70,7 +70,7 @@ WineZGUI_Template_Create_New()
   ${ZENITY_CMD} --question --title "${APP_WITH_VER} New Template!" --text "${TEXT}"
   ANSWER=$?
   if [ ${ANSWER} -eq 0 ]; then
-       source ${DATADIR}/winezgui-template-change
+       source "${DATADIR}/winezgui-template-change"
        WineZGUI_Template_Change
   fi
   DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"

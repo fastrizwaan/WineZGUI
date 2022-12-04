@@ -32,7 +32,7 @@ WineZGUI_Shortcuts_Clean_Up()
   IFS=${SAVEIFS}
 
 # Generate Height value
- source ${DATADIR}/winezgui-get-window-height
+ source "${DATADIR}/winezgui-get-window-height"
  WineZGUI_Get_Window_Height ${#FILES[@]}
 
  

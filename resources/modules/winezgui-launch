@@ -1,7 +1,7 @@
 WineZGUI_Launch()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-list-available-launch-scripts 
+  source "${DATADIR}/winezgui-list-available-launch-scripts"
   List_Available_Launch_Scripts
 
   export LAUNCH="True"
