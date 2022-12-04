@@ -30,8 +30,8 @@ echo "$search_list"
  exe_found=$(echo ${search_list}|grep -i "exe")
 
  if [ -z "${exe_found}" ] ; then
-      ${ZENITY_CMD} --error --title "${PROGNAME} - no exe installed!" \
-             --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
+ #     ${ZENITY_CMD} --error --title "${PROGNAME} - no exe installed!" \
+ #            --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
       return 1
  fi
  # if exe_found has value, then only change exe
