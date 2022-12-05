@@ -8,6 +8,10 @@
 # Load file with DBUG function
 source "${DATADIR}/winezgui-dbug"
 DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
 HEADER="$(basename ${0})"
 
 DBUG "I: ${HEADER}: Starting WineZGUI Create Script ($0)"
@@ -377,6 +381,18 @@ else
           export WGET_CMD="$(which wget)"
      fi
 fi
+
+# Debug output for Variables created 
+for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \
+         EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD WHICHWINE; do
+         if [ ! -z "${i}" ]; then
+              echo "Exporting: $i = ${!i}" && export $i 
+         else
+              echo "=e=e=e=e=e=e=e=e=e=e=e="
+              echo "Failed to export: $i"
+              echo "=e=e=e=e=e=e=e=e=e=e=e="
+         fi
+done
 
 # Needed for Info.yml and backup and restore function
 

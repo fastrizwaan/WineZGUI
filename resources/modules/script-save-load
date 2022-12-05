@@ -2,6 +2,9 @@
 Script_Save_Load()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   SAVE_LOAD_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Save/Load" \
                     --list   --hide-header                   \
                     --width=360 --height=240                 \

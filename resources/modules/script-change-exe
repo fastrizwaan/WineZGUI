@@ -8,6 +8,9 @@
 Script_Change_Exe()
 {      
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   unset RESPONSE
   RESPONSE=$(${ZENITY_CMD} --title "Change EXE for ${PREFIXNAME}"       \
                     --list --hide-header --width=360 --height=30 \

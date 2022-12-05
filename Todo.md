@@ -15,8 +15,11 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
-- [ ] Remove user Identity ($user->XOSUERXO) On Restore WZT file, find XOUSERXO only if it was found while creating wzt file.
-- [ ] Detect PREFIXDIR/restore-identity, if found only then do a XOUSERXO -> $user conversion of the files
+0.90.3
+- [x] Detect PREFIXDIR/FILES_WITH_USERNAME.txt, if found only then do a XOUSERXO -> $user conversion of the files
+- [x] Remove setup's script file after creating shortcuts
+- [x] show debug variable messages to be removed after flatpak variable issues are resolved.
+- [x] change all zenity, wget to $ZENITY_CMD and WGET_CMD
 
 
 0.90.2

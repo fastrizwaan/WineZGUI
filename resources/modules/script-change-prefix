@@ -12,6 +12,9 @@
 Script_Change_Prefix()
 { 
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
   # If No argument is given ask
   if [ -z "${1}" ]; then

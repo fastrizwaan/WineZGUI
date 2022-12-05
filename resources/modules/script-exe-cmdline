@@ -2,7 +2,9 @@
 Script_Exe_Cmdline()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   # if cmdline.yml is found, get the args
   if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
        ARGS=$(grep args "${PREFIXDIR}/cmdline.yml"|cut -f2 -d ":")

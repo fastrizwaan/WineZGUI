@@ -4,8 +4,13 @@
 List_Available_Prefix_Scripts()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  unset COMMAND count SHOW_OPTION NAMES FILES RESULT search_list
+  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
 
+  unset COMMAND count SHOW_OPTION NAMES FILES RESULT search_list
+  
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
 
@@ -21,7 +26,7 @@ List_Available_Prefix_Scripts()
   exe_found=$(echo ${search_list})
 
   if [ -z "${exe_found}" ] ; then
-       zenity --error --title "${APP_WITH_VER} - Prefix!" \
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
               --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
        WineZGUI_Window
   fi
@@ -52,7 +57,7 @@ List_Available_Prefix_Scripts()
 
   # 3. Show the found exe files using zenity
   unset COMMAND
-  COMMAND+="zenity --title=\"${APP_WITH_VER} - Script!\" "
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER} - Script!\" "
   COMMAND+="--text \"Select Prefix Script...\" "
   COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"

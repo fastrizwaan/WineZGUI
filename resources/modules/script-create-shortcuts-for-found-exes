@@ -2,7 +2,9 @@
 Script_Create_Shortcuts_For_Found_Exes()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   export TEMPDIR="${WINEZGUIDIR}/tmp"
 
  unset COMMAND
@@ -228,6 +230,8 @@ exit 0
 " >> "${SCRIPTFILE}"
 
 chmod +rx "${SCRIPTFILE}"
+# remove Shortcut for the prefix setup file
+rm "${DESKTOPFILE}"
  
  # Do no Prompt and launch
  # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400

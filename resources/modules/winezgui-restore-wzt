@@ -17,6 +17,9 @@
 Restore_Wzt_File()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
@@ -295,14 +298,17 @@ Restore_Wzt_File()
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
   ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
-  # Repair all files
+  # Repair all files 
   # PROCESS XO--XO variable inside prefixes and templates directory
   source "${DATADIR}/winezgui-identity-restore-all"
   Winezgui_Identity_Restore_All
   
   # Find other files which has username in it.
-  source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
-  WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
+  # Read from file
+  if [ -f "${FOUND_PREFIX_DIR}/FILES_WITH_USERNAME.txt" ]; then
+       source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
+       WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
+  fi
   
   LAUNCH_FILE_NAME=$(basename ${FOUND_SCRIPT_FILE})
 

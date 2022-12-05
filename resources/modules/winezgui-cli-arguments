@@ -1,6 +1,10 @@
 # winezgui-cli-arguments
 WineZGUI_Cli_Arguments()
 {
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
   for i in "${ARGV}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;

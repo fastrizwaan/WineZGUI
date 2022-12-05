@@ -2,6 +2,9 @@
 Script_Help()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   BASE_EXE_PATH=$(basename "${EXE_PATH}")
   BASE_SCRIPT=$(basename "${SCRIPTFILE}")
   HELP_TEXT+="Launch...            : Launches \"<b>${PROGNAME}</b>\" with default exe ${EXE_NAME}|"

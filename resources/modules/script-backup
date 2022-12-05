@@ -8,6 +8,9 @@
 Script_Backup()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   HEADER="Script: ${FUNCNAME[0]}"
   unset RESPONSE
   export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"

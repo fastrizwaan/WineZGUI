@@ -2,6 +2,10 @@
 WineZGUI_More()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
   MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
                  --width=360 --height=240                \

@@ -6,6 +6,9 @@
 Script_About()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   unset TEXT
   TEXT="$(cat ${INFOFILE}| sed "s/:/ ,:, /g"|column -t -s ","        \
                          | sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/g"  \

@@ -2,6 +2,9 @@
 Script_Save_Load_Help()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   #HELP_TEXT+="Set Saved Game directory...   : Choose save game directory to backup, i.e., where game saves its settings and progress|"
   HELP_TEXT+="Save...                       : Save saved game directory as sav.tar.zst|"
   HELP_TEXT+="Load...                       : Load saved game file *.sav.tar.zst|"

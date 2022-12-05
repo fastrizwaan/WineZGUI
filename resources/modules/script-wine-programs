@@ -2,6 +2,9 @@
 Script_Wine_Programs()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   WINE_PROGRAMS_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - Wine Programs!" \
                                 --window-icon="${ICON}"            \
                                 --width=360 --height=360           \

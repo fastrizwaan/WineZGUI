@@ -2,6 +2,9 @@
 # REVIEW
 WineZGUI_Shortcuts_Restore()
 {
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   unset COMMAND RealName RealFile count TEXT search_list SELECTED_OPTION
   unset SHOW_OPTION NAMES FILES SELECTED_OPTION SELECTED_SHORTCUT
   

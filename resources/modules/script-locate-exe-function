@@ -9,6 +9,9 @@
 Locate_Exe_Function()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   # 1. If exe file not found, ask user to locate it
   if [ ! -f "${EXE_FILE}" ]; then
        echo "E: Script: Locate: ${EXE_FILE} not found at ${EXE_PATH}"

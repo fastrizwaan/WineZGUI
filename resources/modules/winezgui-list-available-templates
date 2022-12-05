@@ -6,6 +6,10 @@ List_Available_Templates()
 {
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset SELECTED_TEMPLATE TEMPLATES_FOUND COMMAND count SHOW_OPTION
   unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i

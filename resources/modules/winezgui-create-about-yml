@@ -5,6 +5,10 @@ WineZGUI_Create_About_Yml()
 {
   OLD_HEADER=${HEADER}
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+ echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then
        echo "Application:${APPNAME}"        >  "${ABOUTFILE}"

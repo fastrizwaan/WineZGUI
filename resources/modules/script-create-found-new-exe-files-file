@@ -3,6 +3,9 @@
 Script_Create_Found_New_Exe_Files_File()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   FOUND_EXE_FILES="found-exe-files.yml"
   source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
   Script_Get_Installed_Exe_Files

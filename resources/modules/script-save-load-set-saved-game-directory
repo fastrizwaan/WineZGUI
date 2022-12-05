@@ -2,6 +2,9 @@
 Script_Save_Load_Set_Saved_Game_Directory()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "---------------------${FUNCNAME[0]}-------------------------"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
   # SAVEDGAMEDIRFILE="${PREFIXDIR}/SavedGameDir.yml"
   # if [ -f "${SAVEDGAMEDIRFILE}" ]; then
   #      SAVED_GAME_PATH=$(grep -i "SavedGameDir:" "${SAVEDGAMEDIRFILE}" \
