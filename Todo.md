@@ -15,6 +15,13 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.90.6
+- [ ] if flatpak script running from system and zstd/tar available from system, use it to backup. 
+- [ ] if running from sandbox ask user to give permission to the target dir.
+
+0.90.5
+- [x] fix zenity --error message for flatpak-spawn
+
 0.90.4
 - [x] Ask user to allow flatpak system access for kill and open terminal
 - [x] Use df instead of mount to find mounted partitions

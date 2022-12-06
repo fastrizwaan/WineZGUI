@@ -14,8 +14,8 @@ WineZGUI_Open_Shell()
  # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
        TEXT+="WineZGUI needs to Launch gnome-terminal from the system.\n"
-       TEXT+="Temporary: <b>flatpak run --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}<.b>\n"
-       TEXT+="Permanent: <b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}<.b>\n"
+       TEXT+="Temporary: <b>flatpak run --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b>\n"
+       TEXT+="Permanent: <b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b>\n"
        flatpak-spawn --host pwd 1>/dev/null || \
        (echo "E: Open Terminal: Gnome-terminal needs to access system via flatpak-spawn";\
         zenity --error --title="${APP_WITH_VER}: System Access Required!" --text="${TEXT}" )
