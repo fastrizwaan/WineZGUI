@@ -15,6 +15,17 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.90.4
+- [x] Ask user to allow flatpak system access for kill and open terminal
+- [x] Use df instead of mount to find mounted partitions
+- [x] Change Category run update icon cache, desktop database.
+- [x] mf-install use wget and tar directly instead of $WGET_CMD and $TAR_CMD
+- [x] use wget instead of WGET_CMD in Template Download
+- [x] Remove broken links after deleting setup's .desktop file
+- [x] Flathub requirements (io.github.fastrizwaan.WineZGUI)
+- [x] Disable --talk-name=org.freedesktop.Flatpak
+- [x] Read only access to filesystem --filesystem=host:ro
+
 0.90.3
 - [x] Detect PREFIXDIR/FILES_WITH_USERNAME.txt, if found only then do a XOUSERXO -> $user conversion of the files
 - [x] Remove setup's script file after creating shortcuts

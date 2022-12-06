@@ -25,14 +25,18 @@ Script_Backup_Bundle()
   # 1.1 List of standard Linux directories to avoid
   # 1.1.1 Get root dirs using find to handle of different OS
   ROOT_DIRS="$(find / -maxdepth 1 -type d)"
-  # 1.1.2 Get Mounted Partitions using mount command
-  if [ $(flatpak-spawn --host which mount 2>/dev/null) ] ; then
-       MOUNTED_PARTITONs="$(flatpak-spawn --host mount |cut -f3 -d " ")"
-       DBUG "I: Script: ${FUNCNAME[0]}: using flatpak-spawn --host mount"
-  else
-       MOUNTED_PARTITONs="$(mount |cut -f3 -d " ")"
-       DBUG "I: Script: ${FUNCNAME[0]}: using system mount command"
-  fi
+  
+# 1.1.2 Get Mounted Partitions using df command
+#   if [ $(flatpak-spawn --host which mount 2>/dev/null) ] ; then
+#        MOUNTED_PARTITONs="$(flatpak-spawn --host mount |cut -f3 -d " ")"
+#        DBUG "I: Script: ${FUNCNAME[0]}: using flatpak-spawn --host mount"
+#   else
+#        MOUNTED_PARTITONs="$(mount |cut -f3 -d " ")"
+#        DBUG "I: Script: ${FUNCNAME[0]}: using system mount command"
+#   fi
+  # 1.1.2 Get Mounted Partitions using df command
+  # Use df command instead of mount
+  MOUNTED_PARTITONs="$(df |grep "/"|sed "s/  */ /g"|cut -f6 -d " ")"
   # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
   DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
   DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "

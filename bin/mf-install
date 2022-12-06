@@ -8,7 +8,7 @@ mkdir -p "${TEMPDIR}"
 
 cd "${TEMPDIR}"
 echo "Downloading mf-install..."
-${WGET_CMD} -c https://github.com/z0z0z/mf-install/archive/refs/tags/1.0.tar.gz
+wget -c https://github.com/z0z0z/mf-install/archive/refs/tags/1.0.tar.gz
 
 if [ -f "${TEMPDIR}/1.0.tar.gz" ]; then
             echo "found ${TEMPDIR}/1.0.tar.gz"
@@ -18,7 +18,7 @@ if [ -f "${TEMPDIR}/1.0.tar.gz" ]; then
             if [ "${SHA256}" = "${DOWNLOAD_CHECKSUM}" ]; then
                  echo "Sha256sum success! Installing..."
                  cd "${TEMPDIR}"
-                 ${TAR_CMD} -zxvf 1.0.tar.gz
+                 tar -zxvf 1.0.tar.gz
                  cd "${TEMPDIR}/mf-install-1.0/"
                  sh ./mf-install.sh
             else

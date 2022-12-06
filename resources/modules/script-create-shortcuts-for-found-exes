@@ -232,7 +232,15 @@ exit 0
 chmod +rx "${SCRIPTFILE}"
 # remove Shortcut for the prefix setup file
 rm "${DESKTOPFILE}"
- 
+
+# Cleanup broken links in winezgui shortcuts directory
+find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+# Update desktop menus and Icon cache
+${UPDATE_ICON_CACHE}
+${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+
  # Do no Prompt and launch
  # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
  source "${WINEZGUI_SCRIPTS}/script-list-available-launch-shortcuts"

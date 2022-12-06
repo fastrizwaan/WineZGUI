@@ -40,12 +40,16 @@ Script_Change_Category()
   ${DESKTOP_FILE_EDIT} --set-key="Categories"  \
                       --set-value="${GET_CATEGORY}" \
                       ${DESKTOPFILE}
-
-  # Update .desktop database
+  
+  # Update desktop menus and Icon cache
+  ${UPDATE_ICON_CACHE}
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
   # Inform user
   DBUG "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"
   ${ZENITY_CMD} --info --no-wrap --title="${PROGNAME}" \
          --text="Category Changed sucessfuly: ${GET_CATEGORY}"
+  
+
 }

@@ -9,7 +9,7 @@ WineZGUI_Template_Download()
   if [ -w ${TEMPLATES_DIR} ]; then
        DBUG "I: Downloading https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst"
        cd ${TEMPLATES_DIR}
-       ${WGET_CMD} -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst 2>&1 |\
+       wget -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst 2>&1 |\
        sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | \
        ${ZENITY_CMD} --auto-close --width=500 --progress --title="Downloading \"WineZGUI-win64-UE4.tar.zst\"...";
        
