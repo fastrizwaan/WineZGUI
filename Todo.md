@@ -15,6 +15,9 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.90.7
+- [x] Fix && with || to check write permission.
+
 0.90.6
 - [x] Prompt user to give portal access to system for kill, open terminal
 - [x] Check no write access to the target directory on backup/save using touch
