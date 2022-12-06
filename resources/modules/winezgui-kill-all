@@ -8,12 +8,16 @@ WineZGUI_Kill_All()
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
-       TEXT+="WineZGUI needs to stop ${FLATPAK_NAME} from the system to exit all instances.\n"
-       TEXT+="Temporary: <b>flatpak run --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b>\n"
-       TEXT+="Permanent: <b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b>\n"
+       TEXT+="In a terminal or Press ALT+F2, run:\n"
+       TEXT+="<tt><b>flatpak kill ${FLATPAK_NAME}</b></tt>\n"
+       TEXT+="To allow this feature to work.\n"
+       TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n"
+       TEXT+="To remove the above permission, run:\n"
+       TEXT+="<tt>flatpak override --reset ${FLATPAK_NAME}</tt>"
        flatpak-spawn --host pwd 1>/dev/null || \
        (echo "E: $(basename ${0}): Kill all: needs to access system to run flatpak kill ${FLATPAK_NAME} via flatpak-spawn";\
-        zenity --error --title="${APP_WITH_VER}: System Access Required!" --text="${TEXT}" )
+        zenity --error --title="${APP_WITH_VER}: No System Access!" --text="${TEXT}" )
+       unset TEXT
 
   fi
 

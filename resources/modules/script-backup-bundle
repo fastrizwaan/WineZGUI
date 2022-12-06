@@ -173,7 +173,7 @@ Script_Backup_Bundle()
   fi
 
   # 5.1: Check if the target directory is writable or not?
-  if [ ! -w "${TARGET_DIR}" ]; then
+  if [ $(touch "${TARGET_DIR}") ] && [ ! -w "${TARGET_DIR}" ]; then
       echo "E: Script: ${FUNCNAME[0]}: ${TARGET_DIR} not writable"
       ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
             --text "${TARGET_DIR} not writable\nAborting Backup!"

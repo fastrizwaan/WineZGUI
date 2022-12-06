@@ -16,8 +16,8 @@
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
 0.90.6
-- [ ] if flatpak script running from system and zstd/tar available from system, use it to backup. 
-- [ ] if running from sandbox ask user to give permission to the target dir.
+- [x] Prompt user to give portal access to system for kill, open terminal
+- [x] Check no write access to the target directory on backup/save using touch
 
 0.90.5
 - [x] fix zenity --error message for flatpak-spawn
