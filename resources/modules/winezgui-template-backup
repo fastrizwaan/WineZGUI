@@ -116,7 +116,7 @@ WineZGUI_Template_Backup()
   fi
 
   # 6.2: If the target directory is not writable, inform and return
-  if [ ! $(touch "${TARGET_DIR}") ] || [ ! -w "${TARGET_DIR}" ]; then
+  if [ ! -w "${TARGET_DIR}" ]; then
        echo "E: ${HEADER}: ${TARGET_DIR} not writable"
        ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
               --text "${TARGET_DIR} not writable\nAborting Backup!"
