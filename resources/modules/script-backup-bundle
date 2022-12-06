@@ -297,6 +297,12 @@ Script_Backup_Bundle()
       DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
       DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
 
+
+      # Find Local Tar and ZSTD command
+      if [ $(which tar) ] && [ $(which zstd) ]; then
+           TAR_CMD="$(which tar)"
+      fi
+      
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
       # add wzt-info.yml 1st then the prefix directory to the wzt file

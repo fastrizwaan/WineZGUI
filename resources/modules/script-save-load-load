@@ -42,6 +42,12 @@ Script_Save_Load_Load()
               --text "${SELECTED_SAVEDGAME} is not writable"
        return 1
   fi
+  
+  # Find Local Tar and ZSTD command
+  if [ $(which tar) ] && [ $(which zstd) ]; then
+       TAR_CMD="$(which tar)"
+  fi
+
   TAR_PREFIX=$(${TAR_CMD} -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
   DBUG "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
 

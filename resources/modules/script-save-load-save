@@ -204,6 +204,11 @@ Script_Save_Load_Save()
 
   # 10.3 Create template-info.yml inside SELECTED_SAVEDGAME, not needed though
   
+  # Find Local Tar and ZSTD command
+  if [ $(which tar) ] && [ $(which zstd) ]; then
+       TAR_CMD="$(which tar)"
+  fi
+  
   # 11.0 Create SavedGame Backup file using tar and zst
   DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
   DBUG "I: ${HEADER}: Executing command"

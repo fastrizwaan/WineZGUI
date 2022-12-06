@@ -177,6 +177,12 @@ Script_Backup_Prefix()
   source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
   WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
   
+
+  # Find Local Tar and ZSTD command
+  if [ $(which tar) ] && [ $(which zstd) ]; then
+       TAR_CMD="$(which tar)"
+  fi
+
   DBUG "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
   
   DBUG "-------------------------------------------------------------------"

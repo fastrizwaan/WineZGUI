@@ -13,7 +13,7 @@ Script_Open_Shell()
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
        TEXT+="To allow this feature to work.\n"
-       TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n"
+       TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"
        TEXT+="To remove the above permission, run:\n"
        TEXT+="<tt>flatpak override --reset ${FLATPAK_NAME}</tt>"
        flatpak-spawn --host pwd 1>/dev/null || \

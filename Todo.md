@@ -15,6 +15,11 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.90.8
+- [x] Use system's tar and zstd if found, to backup/save
+- [x] revert 0.90.6-7
+- [x] Add \n to prompt
+
 0.90.7
 - [x] Fix && with || to check write permission.
 

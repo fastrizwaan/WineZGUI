@@ -11,7 +11,7 @@ WineZGUI_Template_Download()
        cd ${TEMPLATES_DIR}
        wget -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.0/WineZGUI-win64-UE4.tar.zst 2>&1 |\
        sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | \
-       ${ZENITY_CMD} --auto-close --width=500 --progress --title="Downloading \"WineZGUI-win64-UE4.tar.zst\"...";
+       zenity --auto-close --width=500 --progress --title="Downloading \"WineZGUI-win64-UE4.tar.zst\"...";
        
        TEMPLATE_CHECKSUM="699fd192893d4342513c4d843d737c9abff09b09e414f250515271acf3d0e3a2"
        DOWNLOAD_CHECKSUM=$(sha256sum "WineZGUI-win64-UE4.tar.zst"|cut -f1 -d " ")
@@ -30,7 +30,7 @@ WineZGUI_Template_Download()
             WineZGUI_Template_Change
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        else
-            ${ZENITY_CMD} --info --title="Download Checksum Mismatch!" --text="Retry downloading Template..."
+            zenity --info --title="Download Checksum Mismatch!" --text="Retry downloading Template..."
        fi
   else 
        echo "E: Cannot write to ${TEMPLATES_DIR}"
