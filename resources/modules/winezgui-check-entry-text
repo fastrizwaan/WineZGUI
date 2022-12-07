@@ -3,8 +3,8 @@ WineZGUI_Check_Entry_Text()
 {
 
  DBUG "${FUNCNAME[0]}: Given: ${1}"
- echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+     echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
  
@@ -20,6 +20,6 @@ WineZGUI_Check_Entry_Text()
               --text "${TEXT}"
     return 1
   fi
-
+  unset TEXT
   return 0
 }

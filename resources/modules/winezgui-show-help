@@ -1,8 +1,8 @@
 # Function Show help
 WineZGUI_Show_Help()
 {
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   echo "WineZGUI - Wine GUI using Zenity "
   echo "Usage:"

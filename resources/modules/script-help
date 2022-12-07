@@ -2,11 +2,12 @@
 Script_Help()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   BASE_EXE_PATH=$(basename "${EXE_PATH}")
   BASE_SCRIPT=$(basename "${SCRIPTFILE}")
+  unset HELP_TEXT
   HELP_TEXT+="Launch...            : Launches \"<b>${PROGNAME}</b>\" with default exe ${EXE_NAME}|"
   HELP_TEXT+="Open Other EXE...    : Run setup or other exe with \"<b>${PREFIXNAME}</b>\" prefix!|"
   HELP_TEXT+="Winetricks GUI...    : Launches winetricks gui for the prefix. Use it to configure.|"
@@ -16,6 +17,7 @@ Script_Help()
   HELP_TEXT+="Open Shell...        : Open directory \"<b>${PREFIXNAME}</b>\" with gnome-terminal|"
   HELP_TEXT+="Change...            : Name, Prefix, Default Exe, Icon, and Category|"
   HELP_TEXT+="Backup...            : Make backups or Create Game Bundles|"
+  HELP_TEXT+="Save/Load...         : Save/Load drive_c/${USER} directory inside prefix|"
   HELP_TEXT+="More...              : More options like Delete, etc.|"
   HELP_TEXT+="About...             : Details about \"<b>${PREFIXNAME}</b>\"|"
   HELP_TEXT+="Help...              : This help|"
@@ -35,5 +37,5 @@ Script_Help()
   #
   ${ZENITY_CMD} --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
   unset HELP_TEXT
-  unset TEXT
+  unset TEXT BASE_SCRIPT BASE_EXE_PATH
 }

@@ -57,6 +57,7 @@ export WINETRICKS="$(which winetricks)"
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+export COUNTER=0
 # Shortcuts directory for winezgui scripts symbolic links
 if [ "${INSTALL_TYPE}" = "system" ]; then 
      DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"

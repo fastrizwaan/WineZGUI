@@ -2,8 +2,8 @@
 WineZGUI_Template_Backup()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
@@ -254,6 +254,7 @@ WineZGUI_Template_Backup()
 
   # 8. Show info about created wzt file
   ${ZENITY_CMD} --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"
+  unset TEXT TITLE MSG
   return 0
 }
 

@@ -2,8 +2,8 @@
 # REVIEW
 WineZGUI_Shortcuts_Restore()
 {
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   unset COMMAND RealName RealFile count TEXT search_list SELECTED_OPTION
   unset SHOW_OPTION NAMES FILES SELECTED_OPTION SELECTED_SHORTCUT
@@ -75,7 +75,7 @@ WineZGUI_Shortcuts_Restore()
   BASENAME=$(basename "${SELECTED_SHORTCUT}")
 
   if [ -L "${DESKTOPDIR}/${BASENAME}" ]; then
-       
+       unset TEXT
        TEXT+="${BASENAME} desktop file exists, overwrite?"
        TEXT+="\nUse <b>Launch...</b> or <b>Script...</b> later."
        DBUG "I: ${HEADER}: ${DESKTOPDIR}/${BASENAME} file Already exists"
@@ -93,4 +93,5 @@ WineZGUI_Shortcuts_Restore()
   ${UPDATE_ICON}
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
   ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+  unset TEXT
 }

@@ -2,10 +2,10 @@
 WineZGUI_Help()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
-
+  unset HELP_TEXT
   HELP_TEXT+="Open Exe... : Create Exe bottle for any Setup or any exe or msi file!|"
   HELP_TEXT+="Launch...   : Run installed Shortcuts for exe, directly!|"
   HELP_TEXT+="Script...   : Launches main exe script for the prefix. Use it to configure.|"

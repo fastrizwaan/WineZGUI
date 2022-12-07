@@ -3,7 +3,7 @@
 Script_More()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   SCRIPT_MORE_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - More" \

@@ -2,8 +2,8 @@ WineZGUI_Template_Create_New()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   unset NEW_TEMPLATE
   NEW_TEMPLATE=$( zenity                                             \
@@ -77,6 +77,6 @@ WineZGUI_Template_Create_New()
        WineZGUI_Template_Change
   fi
   DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
-
+  unset TEXT
   return 0
 }

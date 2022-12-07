@@ -9,11 +9,12 @@
 # 6. Ask for Compression Levels
 # 7. Create wzt = tar.zst file
 # 8. Show info about created wzt file
+
 Script_Backup_Bundle()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   HEADER="Script: ${FUNCNAME[0]}"
   DBUG "I: ${HEADER}: Checking if ${EXE_NAME} is inside a standard directory!"
@@ -416,4 +417,5 @@ Script_Backup_Bundle()
 
   DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}" \
   && ${ZENITY_CMD} --no-wrap --info --title="Game Bundle!" --text="${MSG[@]}"
+  unset TEXT TITLE
 }

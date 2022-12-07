@@ -2,12 +2,13 @@ WineZGUI_Kill_All()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Kill all: exiting ${APPNAME}!"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
+       unset TEXT
        TEXT+="In a terminal or Press ALT+F2, run:\n"
        TEXT+="<tt><b>flatpak kill ${FLATPAK_NAME}</b></tt>\n\n"
        TEXT+="To allow this feature to work.\n"
@@ -41,4 +42,5 @@ WineZGUI_Kill_All()
        # on using Kill all process
        exit 0
   fi
+  unset TEXT
 }

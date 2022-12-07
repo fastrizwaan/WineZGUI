@@ -5,7 +5,7 @@
 Script_Create_Other_Shortcuts()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   # 1. Creaet Script to launch and for .desktop file

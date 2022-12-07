@@ -8,8 +8,8 @@
 Remove_Wine_Created_Shortcuts()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   WINE_SHORTCUT_DIR="$(realpath -m ~/.local/share/applications/wine)"
   # e.g., ~/.local/share/winezgui/npp.8.4.2.Installer.x64 for npp created by

@@ -6,7 +6,7 @@
 Script_Find_Installed_Exe()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
@@ -126,6 +126,6 @@ Script_Find_Installed_Exe()
       DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
  fi
 
-
+ unset TEXT TITLE
 
 }

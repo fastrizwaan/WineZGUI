@@ -5,12 +5,13 @@
 WineZGUI_Open_Terminal()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
-  echo "---------------------${FUNCNAME[0]}-------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+    echo "--------------------- ${FUNCNAME[0]} -------------------------"
+source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
+       unset TEXT
        TEXT+="To allow this feature to work.\n"
        TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"
        TEXT+="To remove the above permission, run:\n"
@@ -61,4 +62,5 @@ WineZGUI_Open_Terminal()
             cd ${WINEZGUIDIR};                               \
             exec bash -i"
   fi
+  unset TEXT
 }

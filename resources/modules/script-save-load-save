@@ -12,7 +12,7 @@ Script_Save_Load_Save()
   #     source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
   #     Script_Save_Load_Set_Saved_Game_Directory
   # fi
-  echo "---------------------${FUNCNAME[0]}-------------------------"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   PREFIXNAME=$(basename "${PREFIXDIR}")

@@ -14,6 +14,13 @@
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+0.91
+- [ ] Import/Copy Gamedir inside sandbox/prefix
+
+0.90.9
+- [x] unset TEXT, to fix dialog showing previous dialog's data
+- [x] Update Script help
+
 
 0.90.8
 - [x] Use system's tar and zstd if found, to backup/save
