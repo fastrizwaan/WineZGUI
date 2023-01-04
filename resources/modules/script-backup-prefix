@@ -30,8 +30,8 @@ Script_Backup_Prefix()
        if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
             SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
        fi
-       unset FILENAME
-       FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+       unset FILENAME 
+       FILENAME+="${PROGNAME}-${APP_WITH_VER}"
        FILENAME+="-Prefix-Backup-"
        FILENAME+="${SHORT_FLATPAK_NAME}"
        FILENAME+="-${DATE}"
@@ -39,7 +39,7 @@ Script_Backup_Prefix()
        # Flatpak: Game-WineZGUI-0.87-Prefix-Backup-flatpak-wine7-20220904_2359.wzt
   else # for system add wine-version
        unset FILENAME
-       FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+       FILENAME+="${PROGNAME}-${APP_WITH_VER}"
        FILENAME+="-Prefix-Backup-"
        FILENAME+="${WINEVER}"
        FILENAME+="-${DATE}"
@@ -47,7 +47,8 @@ Script_Backup_Prefix()
        # Game-WineZGUI-0.87-Prefix-Backup-wine-7.0-20220904_2359.wzt
   fi
 
-
+  # remove spaces->_ from FILENAME
+  FILENAME=$(echo ${FILENAME}|tr " " "_")
   DBUG "I: Script: ${FUNCNAME[0]}: Filename Suggestion: ${FILENAME}"
 
   # For Zenity prompt

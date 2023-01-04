@@ -16,6 +16,10 @@
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 0.91
 - [ ] Import/Copy Gamedir inside sandbox/prefix
+- [ ] use \$HOME in scripts while backup/restore
+
+0.90.11
+- [x] While creating bundle/prefix backup, suggest PRODUCT NAME instead of PREFIXNAME as filename
 
 0.90.9
 - [x] unset TEXT, to fix dialog showing previous dialog's data

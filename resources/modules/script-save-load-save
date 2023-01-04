@@ -62,7 +62,7 @@ Script_Save_Load_Save()
             SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
        fi
        unset FILENAME
-       FILENAME+="${PREFIXNAME}"
+       FILENAME+="${PROGNAME}"
      #   FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
      #   FILENAME+="${SHORT_FLATPAK_NAME}"
        FILENAME+="-${DATE}"
@@ -70,14 +70,16 @@ Script_Save_Load_Save()
        # Flatpak: template-SavedGame_Name-flatpak-wine7-20220904.tar.zst
   else # for system add wine-version
        unset FILENAME
-       FILENAME+="${PREFIXNAME}"
+       FILENAME+="${PROGNAME}"
      #   FILENAME+="-${SELECTED_SAVEDGAME_NAME}-"
      #   FILENAME+="${WINEVER}"
        FILENAME+="-${DATE}"
        FILENAME+=".${SAVEDGAME_EXT}"
        # template-SavedGame_Name-wine-7.0-20220904.tar.zst
   fi
-
+  # remove spaces->_ from FILENAME
+  FILENAME=$(echo ${FILENAME}|tr " " "_")
+  
   DBUG "I: ${HEADER}: Filename Suggestion: ${FILENAME}"
 
   # 5.0 Ask FILENAME using Zenity Entry dialog

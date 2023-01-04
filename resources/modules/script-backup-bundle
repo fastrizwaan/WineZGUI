@@ -112,7 +112,7 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
             SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
       fi
       unset FILENAME
-      FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+      FILENAME+="${PROGNAME}-${APP_WITH_VER}"
       FILENAME+="-Game-Bundle-"
       FILENAME+="${SHORT_FLATPAK_NAME}"
       FILENAME+="-${DATE}"
@@ -120,14 +120,15 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
   else # for system add wine-version
       unset FILENAME
-      FILENAME+="${PREFIXNAME}-${APP_WITH_VER}"
+      FILENAME+="${PROGNAME}-${APP_WITH_VER}"
       FILENAME+="-Game-Bundle-"
       FILENAME+="${WINEVER}"
       FILENAME+="-${DATE}"
       FILENAME+=".${BKP_EXT}"
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
   fi
-
+  # remove spaces->_ from FILENAME
+  FILENAME=$(echo ${FILENAME}|tr " " "_")
   DBUG "I: Script: ${FUNCNAME[0]}: Filename Suggestion: ${FILENAME}"
 
   # For Zenity prompt
