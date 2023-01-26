@@ -18,6 +18,9 @@
 - [ ] Import/Copy Gamedir inside sandbox/prefix
 - [ ] use \$HOME in scripts while backup/restore
 
+0.90.12
+- [x] Allow ~ @ # $ % ^ etc symbols for file and directory names
+
 0.90.11
 - [x] While creating bundle/prefix backup, suggest PRODUCT NAME instead of PREFIXNAME as filename
 

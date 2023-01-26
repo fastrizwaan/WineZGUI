@@ -15,7 +15,8 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   unset TEXT
   TEXT+="Invalid Name: ${1}"
   TEXT+="\nUse: Alphanumeric and - + _ [ ] ( ) @ { } , and ."
-  if [[ ${1} == *[\`\~\!\#\$\%\^\&\*\:\;\<\>\/\?\'\"\=\|]* ]] ; then
+  # *[\`\~\!\#\$\%\^\&\*\:\;\<\>\/\?\'\"\=\|]*
+  if [[ ${1} == *[\`\!\&\*\/\?\'\"\|]* ]] ; then
        ${ZENITY_CMD} --error --title "${APP_WITH_VER} Symbols!" \
               --text "${TEXT}"
     return 1
