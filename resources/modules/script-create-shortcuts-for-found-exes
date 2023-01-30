@@ -162,8 +162,19 @@ echo "$search_list"
       sed "s|Name=.*|Name=${S_PROGNAME}|g"       -i "${S_DESKTOPFILE}"
       # Launch the single one
       "${S_SCRIPTFILE}" &
+
       # Delete setup script
-      rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      DBUG "I: ${HEADER}: S_SCRIPTFILE = $S_SCRIPTFILE" 
+      DBUG "I: ${HEADER}: SCRIPTFILE = $SCRIPTFILE" 
+
+      # Only delete if newscript is different from scriptfile
+      # Do not delete scriptfile which was created from a directplay exe
+      # This is for setup or "non directplay" exe
+      if [ ${S_SCRIPTFILE} != ${SCRIPTFILE} ]; then
+           rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      fi
+
+ 
       exit 0
  fi
  

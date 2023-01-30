@@ -15,8 +15,7 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 0.91
-- [ ] Import/Copy Gamedir inside sandbox/prefix
-- [ ] use \$HOME in scripts while backup/restore
+- [x] Import/Copy Gamedir inside sandbox/prefix
 
 0.90.12
 - [x] Allow ~ @ # $ % ^ etc symbols for file and directory names

@@ -1,0 +1,154 @@
+#script-import-gamedir-into-prefix
+Script_Import_Gamedir_Into_Prefix()
+{
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+  # 1: if gamedir is already inside prefixdir return
+  if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+        DBUG "I: Script: ${FUNCNAME[0]}: Game Directory already inside Prefix!"
+        ZENITY_CMD --error --title="Import Gamedir" --text="Game Directory already inside Prefix!"
+        return 1
+  fi
+ 
+  # 2: Check if the target directory is writable or not?
+  if [ ! -w "${PREFIXDIR}" ]; then
+      echo "E: Script: ${FUNCNAME[0]}: ${PREFIXDIR} not writable"
+      ${ZENITY_CMD} --error --no-wrap --title="Error!" \
+            --text "${PREFIXDIR} is not writable\nAborting import gamdir into prefix!"
+      return 1
+  fi
+  # Confirm
+  GAME_EXE_DIR=$(basename "$EXE_PATH") 
+  ${ZENITY_CMD} --question --no-wrap --title="Import ${GAME_EXE_DIR} to ${PREFIXNAME}?" \
+              --text "This will copy all files from ${GAME_EXE_DIR} to ${PREFIXNAME}\nContinue..?"
+       ANSWER=$?
+       # 1.1 If user selects no or cancels to locate exe file
+       if [ ${ANSWER} -eq 1 ]; then
+            DBUG "I: Script: Import: User Cancelled!"
+            return 1  # Return to Script window
+       fi
+
+  unset DO_NOT_BUNDLE_FROM
+  # 1.1 List of standard Linux directories to avoid
+  # 1.1.1 Get root dirs using find to handle of different OS
+  ROOT_DIRS="$(find / -maxdepth 1 -type d)"
+  
+  MOUNTED_PARTITONs="$(df |grep "/"|sed "s/  */ /g"|cut -f6 -d " ")"
+  # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
+  DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
+  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
+  # 1.1.4 Manually include these known directories
+  DO_NOT_BUNDLE_FROM+="/    /boot /dev  /etc  /home /media "
+  DO_NOT_BUNDLE_FROM+="/mnt /opt  /proc /root /run "
+  DO_NOT_BUNDLE_FROM+="/srv /sys  /tmp  /usr  /var "
+  DO_NOT_BUNDLE_FROM+="${HOME} "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Desktop    ${HOME}/Documents "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Downloads  ${HOME}/Music "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Pictures   ${HOME}/Public "
+  DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
+
+
+  # 1.2 If game.exe file is inside standard (DO_NOT_BUNDLE_FROM) directories
+  # Tell user to copy to a separate gamedir then try to create bundle
+  if [[ "${DO_NOT_BUNDLE_FROM}" == *"${EXE_PATH}"* ]]; then
+      MSG1="Cannot Copy ${EXE_PATH} as Game directory"
+      MSG2="Copy/Move files to a different directory to create bundle!"
+
+      DBUG "I: Script: ${FUNCNAME[0]}: ${EXE_PATH}"
+      echo "E: Script: ${FUNCNAME[0]}: ${MSG1}"
+      echo "E: Script: ${FUNCNAME[0]}: ${MSG2}"
+      echo "E:${FUNCNAME[0]}: Cancelling Backup!"
+      ${ZENITY_CMD} --error --no-wrap --text "${MSG1}\n${MSG2}" \
+            --title "Cannot copy ${EXE_PATH}"
+      unset DO_NOT_BUNDLE_FROM
+      return 1
+  fi
+
+  #FIXME
+
+  # TEST GAMEDIR SIZE
+  # CHECK WINEZGUI AVAILABLE SPACE BEFORE COPYING
+  # COPY FILES AND
+  # UPDATE EXE_PATH in each script file
+  # If gamedir is inside prefixdir, No need to import
+  # total size =  gamedir size
+  GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
+  GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF} \
+                      |cut -f1 -d " " |numfmt --from iec)
+  # Calculate total backup size = prefix + gamedir
+  TOTAL_SIZE=$(expr ${GAMEDIR_DU_IN_BYTES})
+  TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
+
+  DBUG "-----------------------------------------------------------------------------"
+
+  DBUG "I: Script: ${FUNCNAME[0]}: GAMEDIR_DISK_USAGE_IN_HF=$GAMEDIR_DISK_USAGE_IN_HF"
+  DBUG "I: Script: ${FUNCNAME[0]}: GAMEDIR_DU_IN_BYTES=$GAMEDIR_DU_IN_BYTES"
+  DBUG "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE=$TOTAL_SIZE"
+  DBUG "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE_IN_HF=$TOTAL_SIZE_IN_HF"
+  
+  
+  DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
+  DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
+      "${AVAILABLE_SPACE}"
+  # Check available disk space inside prefix
+  AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|sed "s/  */ /g" \
+      |cut -f4 -d " "|tail -n1)
+  # Step 5.5: Convert the above $AVAILABLE_SPACE into bytes
+  # for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+
+  DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+  DBUG "-----------------------------------------------------------------------------"
+  # Step 5.6: If Target directory does not have sufficient space, abort backup
+  DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
+        DBUG "I: ${HEADER}: ${PREFIXDIR} has enough available disk space"
+  else
+        echo "E: ${HEADER}: ${PREFIXDIR} does not have free disk space!!!"
+        unset MSG
+        unset TITLE
+        TITLE="Not Enough Disk Space!"
+        MSG+="${PREFIXDIR} has only ${AVAILABLE_SPACE}"
+        MSG+=" "
+        MSG+="free disk space left!\n"
+        MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+        # Warn user
+        ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+        echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space, Cancelled!"
+        return 1
+
+  fi
+
+  mkdir -p "${PREFIXDIR}/drive_c/GAMEDIR"
+  (cp -rv "${EXE_PATH}" "${PREFIXDIR}/drive_c/GAMEDIR") |\
+  ${ZENITY_CMD}  --progress --pulsate --auto-close \
+              --text="Copying ${GAME_EXE_DIR} to ${PREFIXNAME}...!" \
+              --width=500 --title="Importing..."
+
+  # Putting Game directory inside drive_c/GAMEDIR
+  GAME_EXE_DIR=$(basename "$EXE_PATH") 
+  GAME_EXE_PATH="${PREFIXDIR}/drive_c/GAMEDIR/${GAME_EXE_DIR}"
+  GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
+
+  DBUG "I: Script: ${FUNCNAME[0]}: Exe Path: ${GAME_EXE_PATH}"
+  DBUG "I: Script: ${FUNCNAME[0]}: Exe File: ${GAME_EXE_FILE}"
+
+  # 7.3 Change EXE path and name in the script and txt file
+  sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                             -i ${PREFIXDIR}/*.sh        \
+                                             -i ${PREFIXDIR}/Info.yml && \
+  DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
+
+  sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
+                                             -i ${PREFIXDIR}/*.sh        \
+                                             -i ${PREFIXDIR}/Info.yml && \
+  DBUG "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
+
+  ${ZENITY_CMD} --info --title="Import Gamedir to Prefix" text="Copied Gamedir to Prefix!"
+
+  # Launch Script after modification
+  "${SCRIPTFILE}" &
+  exit 0
+}

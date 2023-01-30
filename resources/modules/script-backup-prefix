@@ -16,7 +16,7 @@ Script_Backup_Prefix()
   Script_Check_Variables_Loaded_Or_Not
   # needed? # source "${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function"
   # 1. Set Total Backup size variable
-  TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
+  TOTAL_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES})
   TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
 
   DBUG "I: Script: ${FUNCNAME[0]}: Prefix Size: ${TOTAL_SIZE_IN_HF}"

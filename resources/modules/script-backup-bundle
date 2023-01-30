@@ -75,7 +75,7 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
         DBUG "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix!"
         # Do not include GAMEDIR separately when it is already inside prefix
-        TOTAL_SIZE=${PREFIX_SIZE_IN_BYTES}
+        TOTAL_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES})
         TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
         # Show only Prefix size
         unset TEXT
