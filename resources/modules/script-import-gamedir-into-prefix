@@ -6,7 +6,7 @@ Script_Import_Gamedir_Into_Prefix()
   # 1: if gamedir is already inside prefixdir return
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
         DBUG "I: Script: ${FUNCNAME[0]}: Game Directory already inside Prefix!"
-        ZENITY_CMD --error --title="Import Gamedir" --text="Game Directory already inside Prefix!"
+        ${ZENITY_CMD} --error --title="Import Gamedir" --text="Game Directory already inside Prefix!"
         return 1
   fi
  
@@ -149,7 +149,7 @@ Script_Import_Gamedir_Into_Prefix()
                                              -i ${PREFIXDIR}/Info.yml && \
   DBUG "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
 
-  ${ZENITY_CMD} --info --title="Import Gamedir to Prefix" text="Copied Gamedir to Prefix!"
+  ${ZENITY_CMD} --info --title="Import Gamedir to Prefix" --text="Copied Gamedir to Prefix!"
 
   # Launch Script after modification
   "${SCRIPTFILE}" &
