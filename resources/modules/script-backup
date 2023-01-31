@@ -18,7 +18,7 @@ Script_Backup()
   DATE=$(date +%F_%H%M)
 
   # 0. Get disk usage of prefix
-  PREFIX_SIZE_IN_HF=$(du -sh "${PREFIXDIR}")
+  PREFIX_SIZE_IN_HF=$(du -sh "${PREFIXDIR}"|cut -f1)
   PREFIX_SIZE_IN_BYTES=$(echo ${PREFIX_SIZE_IN_HF}|cut -f1 -d " "   \
                                                   |numfmt --from iec)
   DBUG "I: ${HEADER}: Prefix = ${PREFIXDIR}"

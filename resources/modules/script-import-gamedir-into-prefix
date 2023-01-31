@@ -72,9 +72,8 @@ Script_Import_Gamedir_Into_Prefix()
   # UPDATE EXE_PATH in each script file
   # If gamedir is inside prefixdir, No need to import
   # total size =  gamedir size
-  GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
-  GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF} \
-                      |cut -f1 -d " " |numfmt --from iec)
+  GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}"|cut -f1)
+  GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF}|numfmt --from iec)
   # Calculate total backup size = prefix + gamedir
   TOTAL_SIZE=$(expr ${GAMEDIR_DU_IN_BYTES})
   TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
