@@ -140,8 +140,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
 
   # 8.1: Get available target dir partition's available space in
   # Human format (df -h)
-  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
-                   |cut -f4 -d " "|tail -n1)
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
   # 8.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
   AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}| numfmt --from iec)
   #TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)

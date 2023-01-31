@@ -120,8 +120,7 @@ Script_Backup_Prefix()
   # Step 5.1: Get available target dir partition's available space in
   # Human format (df -h)
   DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
-  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
-       |cut -f4 -d " "|tail -n1)
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
   DBUG "I: Script: ${FUNCNAME[0]}: Available space: ${AVAILABLE_SPACE}"
 
   # Step 5.2: Convert the above $AVAILABLE_SPACE into bytes for comparison

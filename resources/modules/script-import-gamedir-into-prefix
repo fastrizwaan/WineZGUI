@@ -91,9 +91,13 @@ Script_Import_Gamedir_Into_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
       "${AVAILABLE_SPACE}"
   # Check available disk space inside prefix
-  AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|sed "s/  */ /g" \
-      |cut -f4 -d " "|tail -n1)
+  #AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|sed "s/  */ /g" \
+   #   |cut -f4 -d " "|tail -n1)
+
+  AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  
   # Step 5.5: Convert the above $AVAILABLE_SPACE into bytes
+
   # for comparison
   AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
 

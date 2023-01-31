@@ -198,8 +198,7 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   # Step 5.4: Get available target dir partition's available space in
   # Human format (df -h)
   DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
-  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|sed "s/  */ /g" \
-      |cut -f4 -d " "|tail -n1)
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
   DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
       "${AVAILABLE_SPACE}"
 

@@ -1,7 +1,7 @@
 WineZGUI_Winetricks_Cli()
 {
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -15,7 +15,13 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   # d3dx9 xact quartz gmdls avifil32 faudio d3dx9_43 dmusic32 vcrun2008 dirac \
   # dmband dmcompos dmime dmloader dmscript dmstyle dmsynth dmusic dsound dswave \
   # directmusic directplay amstream
-
+  
+  # Create Temp dir
+  if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
+      mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+  fi
+  
   MESSAGE="Change & Press Enter to install these using Winetricks:"
   TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
   # Remove multiple spaces from variable
