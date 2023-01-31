@@ -14,6 +14,9 @@
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+
+0.91.1
+- [x] mfc42
 0.91
 - [x] Import/Copy Gamedir inside sandbox/prefix
 - [x] df, du issue fix

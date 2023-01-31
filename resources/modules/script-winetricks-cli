@@ -4,7 +4,7 @@ Script_Winetricks_Cli()
   echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
-  VERB_LIST="xact xact_x64 xinput gmdls xna31 dotnet48 \
+  VERB_LIST="mfc42 xact xact_x64 xinput gmdls xna31 dotnet48 \
             vcrun2003 vcrun2005              \
             vcrun2008 vcrun2010              \
             vcrun2019 dxvk faudio            \
