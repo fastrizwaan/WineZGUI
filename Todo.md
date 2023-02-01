@@ -17,6 +17,7 @@
 
 0.91.1
 - [x] mfc42
+- [ ] fix du -sh and df -h output empty value, -z backup->game bundle fails when gamedir is not inside 
 0.91
 - [x] Import/Copy Gamedir inside sandbox/prefix
 - [x] df, du issue fix
