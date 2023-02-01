@@ -304,11 +304,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
   ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
-#   # Repair all files 
-#   # PROCESS XO--XO variable inside prefixes and templates directory
-#   source "${DATADIR}/winezgui-identity-restore-all"
-#   Winezgui_Identity_Restore_All
-  
+ 
   # Find other files which has username in it.
   # Read from file
   if [ -f "${FOUND_PREFIX_DIR}/FILES_WITH_USERNAME.txt" ]; then

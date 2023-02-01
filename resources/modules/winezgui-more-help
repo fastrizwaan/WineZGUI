@@ -9,6 +9,8 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   HELP_TEXT+="File Manager... : Open File manager at WineZGUI prefix!|"
   HELP_TEXT+="Open Terminal... : Open Terminal at WineZGUI prefix!|"
   HELP_TEXT+="Shortcuts...     : Clean Up broken shortcuts, add/remove/restore shortcuts.|"
+  HELP_TEXT+="Recreate All Scripts... : Update WineZGUI script version|"
+  HELP_TEXT+="Restore All Identity... : Replace variables with XO like XOUSERXO caused by failed backup|"
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
   TEXT="$(echo ${HELP_TEXT} \
