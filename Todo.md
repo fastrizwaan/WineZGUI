@@ -17,7 +17,7 @@
 
 0.91.1
 - [x] mfc42
-- [ ] fix du -sh and df -h output empty value, -z backup->game bundle fails when gamedir is not inside 
+- [x] add debug to check and fix du -sh and df -h output empty value, -z backup->game bundle fails when gamedir is not inside 
 - [ ] On restore do not do repair xoxo->$user
 - [ ] WineZGUI->More->Repair-> Recreate Scripts and Restore Identity (Fix Scripts with XOXO)
 0.91

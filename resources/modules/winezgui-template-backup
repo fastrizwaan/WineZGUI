@@ -27,6 +27,13 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   TEMPLATE_EXT="tar.zst"
   TEMPLATE_SIZE_IN_HF=$(du -sh "${SELECTED_TEMPLATE}"|sed "s/  */ /g" \
                        |cut -f1 -d " "| cut -f1 )
+  # Check du value assignment
+        if [ -z "${TEMPLATE_SIZE_IN_HF}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: TEMPLATE_SIZE_IN_HF not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
+
   TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " " \
                           | numfmt --from iec)
 
@@ -141,6 +148,12 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   # 8.1: Get available target dir partition's available space in
   # Human format (df -h)
   AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
   # 8.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
   AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}| numfmt --from iec)
   #TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)
@@ -234,6 +247,12 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
        DBUG "I: Backup: Template: Created ${BACKUP_FILE}, Success!"
        # 7.6  Crate message
        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Check du value assignment
+        if [ -z "${BACKUP_SIZE}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: BACKUP_SIZE not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
        # Backup Sucess Message
        unset MSG
        MSG=("<b>TEMPLATE: </b> ${SELECTED_TEMPLATE_NAME}\n")

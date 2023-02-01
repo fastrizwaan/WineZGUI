@@ -121,6 +121,12 @@ Script_Backup_Prefix()
   # Human format (df -h)
   DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
   AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
   DBUG "I: Script: ${FUNCNAME[0]}: Available space: ${AVAILABLE_SPACE}"
 
   # Step 5.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
@@ -226,6 +232,12 @@ Script_Backup_Prefix()
        DBUG "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE}, Success!"
        # 7.6  Crate message
        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Check du value assignment
+        if [ -z "${BACKUP_SIZE}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: BACKUP_SIZE not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
        # Backup Sucess Message
        MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
        MSG+="<b>Filename:</b> ${BACKUP_FILE}"

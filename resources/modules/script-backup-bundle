@@ -37,7 +37,7 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
 #   fi
   # 1.1.2 Get Mounted Partitions using df command
   # Use df command instead of mount
-  MOUNTED_PARTITONs="$(df |grep "/"|sed "s/  */ /g"|cut -f6 -d " ")"
+  MOUNTED_PARTITONs="$(df |grep "/"|tr -s " "|cut -f6 -d " ")"
   # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
   DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
   DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
@@ -83,7 +83,13 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
         TEXT+="${PREFIX_SIZE_IN_HF}"
   else
         # If gamedir is outside prefixdir, total size = prefix size + gamedir
-        GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}")
+        GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}"|cut -f1)
+          #Check whether du gave a value or not
+        if [ -z "${GAMEDIR_DISK_USAGE_IN_HF}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: GAMEDIR_DISK_USAGE_IN_HF not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
         GAMEDIR_DU_IN_BYTES=$(echo ${GAMEDIR_DISK_USAGE_IN_HF} \
                              |cut -f1 -d " " |numfmt --from iec)
         # Calculate total backup size = prefix + gamedir
@@ -199,6 +205,14 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   # Human format (df -h)
   DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
   AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
+
   DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
       "${AVAILABLE_SPACE}"
 
@@ -373,6 +387,12 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
 
         # Report Size also
         BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+        # Check du value assignment
+        if [ -z "${BACKUP_SIZE}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: BACKUP_SIZE not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
         # Backup Sucess Message
         MSG=("${PREFIXNAME} backup cancelled!")
 
@@ -380,6 +400,12 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
         DBUG "I: Script: ${FUNCNAME[0]}: ${BACKUP_FILE} created, success!"
         # Report Size also
         BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+        # Check du value assignment
+        if [ -z "${BACKUP_SIZE}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: BACKUP_SIZE not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
         # Backup Sucess Message
         MSG=("<b>Prefix: </b> ${PREFIXNAME}\n")
         MSG+="<b>Filename:</b> ${BACKUP_FILE}"
