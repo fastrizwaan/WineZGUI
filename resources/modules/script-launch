@@ -49,8 +49,7 @@ Script_Launch()
        ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
-            sed "s|${CREATED_WINE_VERSION}|${CURRENT_WINE_VERSION}|g" \
-            -i "${INFOFILE}"
+            sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g" -i "${INFOFILE}"
             DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
        fi
   fi
