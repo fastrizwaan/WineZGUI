@@ -99,8 +99,8 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
         # Show Prefix + Gamedir size
         unset TEXT
         # for zenity prompt
-        TEXT+="${GAMEDIR_DISK_USAGE_IN_HF}\n"
-        TEXT+="${PREFIX_SIZE_IN_HF}"
+        TEXT+="${GAMEDIR_DISK_USAGE_IN_HF} ${EXE_PATH}\n"
+        TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
   fi
 
 

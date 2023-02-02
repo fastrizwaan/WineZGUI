@@ -55,7 +55,7 @@ Script_Backup_Prefix()
   unset TITLE
   unset TEXT
   TITLE="Backup ${PREFIXNAME} Prefix!"
-  TEXT+="${PREFIX_SIZE_IN_HF}"
+  TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
 
   # 3. Suggest and Ask for wzt file name
   DBUG "I: Script: ${FUNCNAME[0]}: Asking filename"

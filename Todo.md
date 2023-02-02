@@ -21,7 +21,7 @@
 - [x] On restore do not do repair xoxo->$user
 - [x] WineZGUI->More->Repair-> Recreate Scripts and Restore Identity (Fix Scripts with XOXO)
 - [x] Update WineZGUI-More help
-
+- [x] Show Directory path beside size in Prefix and Bundle backup 
 0.91
 - [x] Import/Copy Gamedir inside sandbox/prefix
 - [x] df, du issue fix
