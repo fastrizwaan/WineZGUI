@@ -2,14 +2,14 @@
 WineZGUI_More_Help()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   HELP_TEXT+="File Manager... : Open File manager at WineZGUI prefix!|"
   HELP_TEXT+="Open Terminal... : Open Terminal at WineZGUI prefix!|"
   HELP_TEXT+="Shortcuts...     : Clean Up broken shortcuts, add/remove/restore shortcuts.|"
-  HELP_TEXT+="Recreate All Scripts... : Update WineZGUI script version|"
+  HELP_TEXT+="Recreate All Scripts... : Update WineZGUI created scripts to latest version|"
   HELP_TEXT+="Restore All Identity... : Replace variables with XO like XOUSERXO caused by failed backup|"
   HELP_TEXT+="Update winetricks... : Download and Update latest winetricks from github"
   # Text is more, so we need to format it, with sed in pango markup

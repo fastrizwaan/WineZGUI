@@ -8,7 +8,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
 
   MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
-                 --width=360 --height=340                \
+                 --width=360 --height=320                \
                  --radiolist --column " "                \
                  --column "Action"                       \
                         0 "File Manager..."              \
