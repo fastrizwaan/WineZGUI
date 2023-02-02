@@ -80,7 +80,7 @@ source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
         # Show only Prefix size
         unset TEXT
         # for zenity prompt
-        TEXT+="${PREFIX_SIZE_IN_HF}"
+        TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
   else
         # If gamedir is outside prefixdir, total size = prefix size + gamedir
         GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}"|cut -f1)
