@@ -1,6 +1,6 @@
 # winezgui-identity-restore-all
 # Replace XOUSERXO XO_variable_XO to proper values for all templates and prefix dir
-Winezgui_Identity_Restore_All()
+WineZGUI_Identity_Restore_All()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

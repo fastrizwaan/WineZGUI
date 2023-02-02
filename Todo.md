@@ -15,13 +15,21 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.92
+- [x] Update WineZGUI-More help
+- [x] Show Directory path beside size in Prefix and Bundle backup
+- [x] Update winetricks
+- [x] Download winetricks to ${WINEZGUIDIR}, 
+- [x] On 1st run, check if winetricks is available, if ask download latest from github
+- [x] WineZGUI->More show update winetricks script
+
 0.91.1
 - [x] mfc42
 - [x] add debug to check and fix du -sh and df -h output empty value, -z backup->game bundle fails when gamedir is not inside 
 - [x] On restore do not do repair xoxo->$user
 - [x] WineZGUI->More->Repair-> Recreate Scripts and Restore Identity (Fix Scripts with XOXO)
-- [x] Update WineZGUI-More help
-- [x] Show Directory path beside size in Prefix and Bundle backup 
+
+
 0.91
 - [x] Import/Copy Gamedir inside sandbox/prefix
 - [x] df, du issue fix
@@ -200,7 +208,7 @@
 - [x] Rename Functions
      - [x] WineZGUI_Backup_Function    -> Winezgui_Identity_Remove
      - [x] WineZGUI_Restore_Function   -> Winezgui_Identity_Restore
-     - [x] WineZGUI_Restore_Process_Xo -> Winezgui_Identity_Restore_All
+     - [x] WineZGUI_Restore_Process_Xo -> WineZGUI_Identity_Restore_All
      
 0.88.2
 - [x] fix more-help missing file 

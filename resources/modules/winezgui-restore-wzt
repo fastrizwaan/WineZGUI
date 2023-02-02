@@ -95,7 +95,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
              --pulsate --auto-close)
       fi
       source "${DATADIR}/winezgui-identity-restore-all"
-      Winezgui_Identity_Restore_All
+      WineZGUI_Identity_Restore_All
 
       # Show menu after extraction
       source "${DATADIR}/winezgui-launch"

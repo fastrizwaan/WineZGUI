@@ -73,7 +73,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
        source "${DATADIR}/winezgui-identity-restore-all"
-       Winezgui_Identity_Restore_All
+       WineZGUI_Identity_Restore_All
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"

@@ -8,7 +8,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
 
   MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
-                 --width=360 --height=240                \
+                 --width=360 --height=340                \
                  --radiolist --column " "                \
                  --column "Action"                       \
                         0 "File Manager..."              \
@@ -16,6 +16,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
                         0 "Shortcuts..."                 \
                         0 "Recreate All Scripts..."      \
                         0 "Restore All Identity..."      \
+                        0 "Update winetricks..." \
                         0 "Help..."                      \
                  --text   "More..."                      )
 
@@ -39,7 +40,10 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
          WineZGUI_Recreate_Prefix
   elif [ "${MORE_OPTION}" = "Restore All Identity..."  ]; then
          source "${DATADIR}/winezgui-identity-restore-all"
-         Winezgui_Identity_Restore_All
+         WineZGUI_Identity_Restore_All
+  elif [ "${MORE_OPTION}" = "Update winetricks..."  ]; then
+         source "${DATADIR}/winezgui-download-winetricks"
+         WineZGUI_Download_Winetricks
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
          source "${DATADIR}/winezgui-more-help"
          WineZGUI_More_Help

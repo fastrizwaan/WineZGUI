@@ -1,0 +1,31 @@
+#winezgui-download-winetricks
+WineZGUI_Download_Winetricks()
+{
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "--------------------- ${FUNCNAME[0]} -------------------------"
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
+  WINETRICKS_URL="https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks"
+  TITLE="Download Winetricks"
+  TEXT+="Download and Update Winetricks from github?\n"
+  TEXT+="${WINETRICKS_URL}"
+
+  ${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
+  
+  ANSWER=$?
+  if [ ${ANSWER} -eq 0 ] ; then
+       
+       if [ -f "${WINEZGUIDIR}/winetricks" ] && [ -w "${WINEZGUIDIR}/winetricks" ]; then
+            rm "${WINEZGUIDIR}/winetricks"
+       else
+
+       cd "${WINEZGUIDIR}"
+       wget -c "${WINETRICKS_URL}" && zenity --info --title "Winetricks"
+       fi
+    
+  else
+       DBUG "I: Download Winetricks: Cancelled!"
+       return 1
+  fi  
+}

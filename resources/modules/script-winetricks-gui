@@ -4,6 +4,20 @@ Script_Winetricks_Gui()
   echo "--------------------- ${FUNCNAME[0]} -------------------------"
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
+
+  # Ask user if he'd like to download latest winetricks, everytime
+  if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
+       source "${DATADIR}/winezgui-download-winetricks"
+       WineZGUI_Download_Winetricks
+  fi  
+  
+  # Check if winetricks is available at ${WINEZGUIDIR}
+  if [ -f "${WINEZGUIDIR}/winetricks" ]; then
+       DBUG "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
+       WTRICKS_CMD="${WINEZGUIDIR}/winetricks"
+       chmod 755 "${WTRICKS_CMD}"
+  fi       
+  
   ${WTRICKS_CMD} --gui
   # use this after winetricks fixes bug with arch=
   #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui
