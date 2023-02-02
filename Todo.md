@@ -15,6 +15,9 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.92.1
+- [x] Update wine using sed regex
+
 0.92
 - [x] Update WineZGUI-More help
 - [x] Show Directory path beside size in Prefix and Bundle backup
