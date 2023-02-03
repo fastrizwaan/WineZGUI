@@ -14,7 +14,9 @@
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
-
+0.92.2
+- [ ] Show Correct Backup size, after backup is finished using du -sh of the created wzt
+- [ ] 
 0.92.1
 - [x] Update wine using sed regex
 
