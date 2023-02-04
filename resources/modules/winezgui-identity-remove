@@ -61,7 +61,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
 
    # Values->XO? ; If XOUSERHOMEXO not found then backup_function failed
   if [ -f "${1}/Info.yml" ] && \
-     (! grep -o "XOUSERHOMEXO" ${PREFIXDIR}/Info.yml 1>/dev/null 2>/dev/null);
+     (! grep -o "XOUSERHOMEXO" ${INFOFILE} 1>/dev/null 2>/dev/null);
       then
       echo "E:------------------------------------------"
       echo "E: ${FUNCNAME[0]}: Identiy Not Removed for ${USER}!"

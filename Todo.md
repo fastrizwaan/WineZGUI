@@ -16,7 +16,7 @@
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 0.92.2
 - [ ] Show Correct Backup size, after backup is finished using du -sh of the created wzt
-- [ ] 
+- [x] use ${INFOFILE} variable instead of ${PREFIXDIR}/Info.yml
 0.92.1
 - [x] Update wine using sed regex
 

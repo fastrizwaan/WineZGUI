@@ -152,12 +152,12 @@ Script_Import_Gamedir_Into_Prefix()
   # 7.3 Change EXE path and name in the script and txt file
   sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
                                              -i ${PREFIXDIR}/*.sh        \
-                                             -i ${PREFIXDIR}/Info.yml && \
+                                             -i ${INFOFILE} && \
   DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
 
   sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
                                              -i ${PREFIXDIR}/*.sh        \
-                                             -i ${PREFIXDIR}/Info.yml && \
+                                             -i ${INFOFILE} && \
   DBUG "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
 
   ${ZENITY_CMD} --info --title="Import Gamedir to Prefix" --text="Copied Gamedir to Prefix!"
