@@ -36,8 +36,8 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
          source "${DATADIR}/winezgui-shortcuts"
          WineZGUI_Shortcuts
   elif [ "${MORE_OPTION}" = "Recreate All Scripts..."  ]; then
-         source "${DATADIR}/winezgui-recreate-prefix"
-         WineZGUI_Recreate_Prefix
+         source "${DATADIR}/winezgui-recreate-all-scripts"
+         WineZGUI_Recreate_All_Scripts
   elif [ "${MORE_OPTION}" = "Restore All Identity..."  ]; then
          source "${DATADIR}/winezgui-identity-restore-all"
          WineZGUI_Identity_Restore_All

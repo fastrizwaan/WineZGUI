@@ -17,7 +17,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
 echo "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
 echo "EXE file given = ${1}"
 echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
-# Must be called from WineZGUI_Recreate_Prefix
+# Must be called from WineZGUI_Recreate_All_Scripts
 export PREFIXDIR="${SELECTED_PREFIX}"
 
 

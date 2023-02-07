@@ -14,6 +14,10 @@
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+0.92.3
+- [x] update menus and icon cache after removing shortcuts after setup launch
+- [x] rename winezgui-recreate-prefix to winezgui-recreate-all-scripts
+
 0.92.2
 - [x] use ${INFOFILE} variable instead of ${PREFIXDIR}/Info.yml
 - [x] do not re-create scripts from find new exe for games bundled in GAMEDIR (skip gamedir from exe search)
