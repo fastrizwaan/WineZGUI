@@ -15,8 +15,8 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 0.92.2
-- [ ] Check WZT info file before packing.
 - [x] use ${INFOFILE} variable instead of ${PREFIXDIR}/Info.yml
+- [x] do not re-create scripts from find new exe for games bundled in GAMEDIR (skip gamedir from exe search)
 
 0.92.1
 - [x] Update wine using sed regex
