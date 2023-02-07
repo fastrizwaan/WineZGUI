@@ -4,7 +4,7 @@ Script_Create_Shortcuts_For_Found_Exes()
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   export TEMPDIR="${WINEZGUIDIR}/tmp"
-
+  
  unset COMMAND
  unset count
  unset SHOW_OPTION
@@ -163,6 +163,9 @@ echo "$search_list"
       "${S_SCRIPTFILE}" &
       # Delete setup script
       rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      
+      ${UPDATE_DESKTOP_DATABASE}
+      ${UPDATE_ICON_CACHE}
       exit 0
  fi
  
@@ -170,7 +173,9 @@ echo "$search_list"
  # after a single or multiple exes found
  # Remove desktop file, perhaps user may relaunch setup
  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-
+ 
+ ${UPDATE_DESKTOP_DATABASE}
+ ${UPDATE_ICON_CACHE}
  # Replace Script file with multiple open dialog
  # need variables from this script
 echo "
