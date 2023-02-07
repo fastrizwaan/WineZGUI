@@ -17,6 +17,7 @@
 0.92.3
 - [x] update menus and icon cache after removing shortcuts after setup launch
 - [x] rename winezgui-recreate-prefix to winezgui-recreate-all-scripts
+- [x] Do not show exe not found dialog in Script_Create_Shortcuts_For_Found_Exes for directplay exe
 
 0.92.2
 - [x] use ${INFOFILE} variable instead of ${PREFIXDIR}/Info.yml
