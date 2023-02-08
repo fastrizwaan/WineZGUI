@@ -15,6 +15,9 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+0.92.5
+- [x] Fix Launch PROGNAME with spaces
+
 0.92.4
 - [x] Fix list scripts not listing script names with symbols like ( or )
 
