@@ -14,6 +14,10 @@
            - [ ] Determine wine arch 32/64 (grep "#arch=" system.reg|cut -f2 -d "="); see winezgui-template-change
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
+
+0.92.4
+- [x] Fix list scripts not listing script names with symbols like ( or )
+
 0.92.3
 - [x] update menus and icon cache after removing shortcuts after setup launch
 - [x] rename winezgui-recreate-prefix to winezgui-recreate-all-scripts

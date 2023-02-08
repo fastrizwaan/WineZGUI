@@ -37,12 +37,12 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
       RealName=$(basename "${i}")
       # If 1st value is empty, enable it
       if [ -z "${SHOW_OPTION}" ]; then
-           SHOW_OPTION+="TRUE ${RealName}"
+           SHOW_OPTION+="TRUE \"${RealName}\""
            SHOW_OPTION+=" "
            NAMES+=("${RealName}")
            FILES+=("${RealFile}")
       else
-           SHOW_OPTION+="0 ${RealName}"
+           SHOW_OPTION+="0 \"${RealName}\""
            SHOW_OPTION+=" "
            NAMES+=("${RealName}")
            FILES+=("${RealFile}")
