@@ -15,6 +15,55 @@
      - [ ] Determine New User; new_user=${USER}
      - [ ] RNAME\"=\"${USER}\" ${1}/user.reg|cut -f2 -d "="|sed "s/\"//g")
 
+
+- [ ] TEST Complete these
+- [ ] System Install
+      - [ ] Create Game Prefix with direct play exe
+      - [ ] Launch 2-3 times after exiting app. works?
+      - [ ] Create Prefix Backup for testing
+      - [ ] Create Game Bundle
+      - [ ] Import Gamedir into prefix
+      - [ ] Launch 2-3 times, works?
+      - [ ] Change Name
+      - [ ] Change Icon
+      - [ ] Change Prefix Dir name
+      - [ ] Open Other Exe (directplay, setup like ubisoft installer)
+      - [ ] Delete
+      - [ ] Restore prefix
+      - [ ] Import and run
+      - [ ] Delete
+      - [ ] Restore bundle
+      - [ ] run
+
+- [ ] Test across flatpak<->system wzt prefix and bundle support
+      - [ ] Restore flatpak Prefix and Run
+      - [ ] Restore flatpak Bundle and Run
+      - [ ] Backup/Restore save game and test
+
+- [ ] Flatpak WineZGUI
+      - [ ] Restore System Prefix and Run
+      - [ ] Restore System Bundle and Run
+      - [ ] Create Game Prefix with direct play exe
+      - [ ] Launch 2-3 times after exiting app. works?
+      - [ ] Create Prefix Backup for testing
+      - [ ] Create Game Bundle
+      - [ ] Import Gamedir into prefix
+      - [ ] Launch 2-3 times, works?
+      - [ ] Change Name
+      - [ ] Change Icon
+      - [ ] Change Prefix Dir name
+      - [ ] Open Other Exe (directplay, setup like ubisoft installer)
+      - [ ] Delete
+      - [ ] Restore prefix
+      - [ ] Import and run
+      - [ ] Delete
+      - [ ] Restore bundle
+      - [ ] run
+
+0.92.6
+- [x] Fix Recreate-All-Scripts
+
+
 0.92.5
 - [x] Fix Launch PROGNAME with spaces
 

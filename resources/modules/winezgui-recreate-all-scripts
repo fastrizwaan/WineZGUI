@@ -39,7 +39,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
   do
      EXE_IN_SCRIPTFILE=$(grep -i "export EXE_FILE=" ${i}|cut -f2 -d "="|sed 's/"//g')
      echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
-     ${DATADIR}/winezgui-recreate-all-scripts-script "${EXE_IN_SCRIPTFILE}"
+     ${DATADIR}/winezgui-recreate-all-scripts "${EXE_IN_SCRIPTFILE}"
   done
   IFS=${SAVEIFS}
 
