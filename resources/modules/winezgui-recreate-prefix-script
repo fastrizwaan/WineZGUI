@@ -14,6 +14,9 @@ HEADER="$(basename ${0})"
 source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
+ echo "*-*-*-*-*-*-*-*-*-*-*-*"
+  echo "APPVERSION =$APPVERSION"
+  echo "* * * * * * * * * * * *"
 echo "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
 echo "EXE file given = ${1}"
 echo "${PREFIXDIR} = ${SELECTED_PREFIX}"

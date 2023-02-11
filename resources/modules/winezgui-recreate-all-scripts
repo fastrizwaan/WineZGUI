@@ -8,6 +8,9 @@ WineZGUI_Recreate_All_Scripts()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
+  echo "* * * * * * * * * * * *"
+  echo "APPVERSION = W$APPVERSION"
+  echo "* * * * * * * * * * * *"
   source "${DATADIR}/winezgui-list-available-prefixes"
   List_Available_Prefixes
   PREFIXNAME=$(basename ${SELECTED_PREFIX})
@@ -40,10 +43,22 @@ WineZGUI_Recreate_All_Scripts()
   do
      EXE_IN_SCRIPTFILE=$(grep -i "export EXE_FILE=" ${i}|cut -f2 -d "="|sed 's/"//g')
      echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
+     # rename .desktop and script file to .bak
+     DESKTOP_FILE="$(echo "${i}"|sed "s/\.sh//g").desktop"
+     echo "DESKTOP_FILE = $DESKTOP_FILE"
+     mv -v "${DESKTOP_FILE}" "${DESKTOP_FILE}.bak"
+     mv -v "${i}" "${i}.bak"
      ${DATADIR}/winezgui-recreate-prefix-script "${EXE_IN_SCRIPTFILE}"
+     
   done
   IFS=${SAVEIFS}
-
+  
+  # Update desktop menus and Icon cache
+  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
+  ${UPDATE_ICON_CACHE}
+  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+  
   # Inform and offer to Launch
   ${ZENITY_CMD} --info --title="Re-created Scripts for ${PREFIXNAME}" \
   --text="Updated scripts to $APP_WITH_VER version, Please launch from menu."
