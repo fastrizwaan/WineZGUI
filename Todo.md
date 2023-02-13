@@ -60,6 +60,11 @@
       - [ ] Restore bundle
       - [ ] run
 
+
+0.92.7
+- [x] Use nice 20 (least priority) for extraction
+- [x] Recreate all scripts, use PREFIXNAME same as basename $PREFIXDIR
+
 0.92.6
 - [x] Fix Recreate-All-Scripts
 

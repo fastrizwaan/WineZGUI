@@ -58,8 +58,8 @@ Script_Change_Prefix()
       echo "W: -----------------------------"
       echo "W: setting prefixname in desktop file"
       echo "W: Application (PREFIXNAME)"
-      sed "s|${APP_WITH_VER}|${PREFIXNAME}|g" -i "${DESKTOPFILE}"
-      Script_Window
+      sed "s|${APP_WITH_VER}|${PREFIXNAME}|g" -i "*.desktop"
+      return 1
   fi
 
   # 4. Create Variables for replacement
@@ -77,24 +77,24 @@ Script_Change_Prefix()
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           DBUG "I: Script: ${FUNCNAME[0]}: Game directory is outside prefix!"
           sed "s|${EXE_FILE}|XOEXE_FILEXO|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|${EXE_PATH}|XOEXE_PATHXO|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|${EXE_NAME}|XOEXE_NAMEXO|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|${EXE_NOSP}|XOEXE_NOSPXO|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
   fi
 
   # 5.2 Replace PREFIX values inside .desktop, .txt and .sh files
@@ -106,22 +106,22 @@ Script_Change_Prefix()
 
   # 5.2.1 Replace in .desktop file
 
-  sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${DESKTOPFILE}"
-  sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${DESKTOPFILE}"
-  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${DESKTOPFILE}"
+  sed "s|*.sh|${NEWSCRIPTFILE}|g"       -i "*.desktop"
+  sed "s|${ICONFILE}|${NEWICONFILE}|g"  -i "*.desktop"
+  sed "s|*.yml|${NEWINFOFILE}|g"        -i "*.desktop"
 
   # 5.3 Replace in Info.yml
-  sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${INFOFILE}"
-  sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${INFOFILE}"
-  sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${INFOFILE}"
-  sed "s|${EXE_FILE}|${NEW_EXE_FILE}|g"       -i "${INFOFILE}"
-  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${INFOFILE}"
+  sed "s|*.sh|${NEWSCRIPTFILE}|g"       -i "*.yml"
+  sed "s|${ICONFILE}|${NEWICONFILE}|g"  -i "*.yml"
+  sed "s|*.desktop|${NEWDESKTOPFILE}|g" -i "*.yml"
+  sed "s|${EXE_FILE}|${NEW_EXE_FILE}|g" -i "*.yml"
+  sed "s|*.yml|${NEWINFOFILE}|g"        -i "*.yml"
 
   # 5.3 Change in Script FIle
-  sed "s|${SCRIPTFILE}|${NEWSCRIPTFILE}|g"    -i "${SCRIPTFILE}"
-  sed "s|${ICONFILE}|${NEWICONFILE}|g"        -i "${SCRIPTFILE}"
-  sed "s|${DESKTOPFILE}|${NEWDESKTOPFILE}|g"  -i "${SCRIPTFILE}"
-  sed "s|${INFOFILE}|${NEWINFOFILE}|g"        -i "${SCRIPTFILE}"
+  sed "s|*.sh|${NEWSCRIPTFILE}|g"       -i "*.sh"
+  sed "s|${ICONFILE}|${NEWICONFILE}|g"  -i "*.sh"
+  sed "s|*.desktop|${NEWDESKTOPFILE}|g" -i "*.sh"
+  sed "s|*.yml|${NEWINFOFILE}|g"        -i "*.sh"
 
   ########################### FIX ME SECTION #############################
   # Change Variables inside Script file which has PREFIXNAME
@@ -129,57 +129,57 @@ Script_Change_Prefix()
   # 5.4.1 Change Values inside Script file
   S_PREFIXDIR="^export PREFIXDIR=.*"
   R_PREFIXDIR="export PREFIXDIR=\"${NEWPREFIXDIR}\""
-  sed "s|${S_PREFIXDIR}|${R_PREFIXDIR}|g"     -i "${SCRIPTFILE}"
+  sed "s|${S_PREFIXDIR}|${R_PREFIXDIR}|g"     -i "*.sh"
 
   S_PREFIXNAME="^export PREFIXNAME=.*"
   R_PREFIXNAME="export PREFIXNAME=\"${NEWPREFIXNAME}\""
-  sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"   -i "${SCRIPTFILE}"
+  sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"   -i "*.sh"
 
   S_SCRIPTS_DIR="^export WINEZGUI_SCRIPTS=.*"
   R_SCRIPTS_DIR="export WINEZGUI_SCRIPTS=\"${NEWPREFIXDIR}/winezgui-scripts\""
-  sed "s|${S_SCRIPTS_DIR}|${R_SCRIPTS_DIR}|g"  -i "${SCRIPTFILE}"
+  sed "s|${S_SCRIPTS_DIR}|${R_SCRIPTS_DIR}|g" -i "*.sh"
 
   S_WINEPREFIX="^export WINEPREFIX=.*"
   R_WINEPREFIX="export WINEPREFIX=\"${NEWPREFIXDIR}\""
-  sed "s|${S_WINEPREFIX}|${R_WINEPREFIX}|g"   -i "${SCRIPTFILE}"
+  sed "s|${S_WINEPREFIX}|${R_WINEPREFIX}|g"   -i "*.sh"
 
   S_EXE_FILE="^export EXE_FILE=.*"
   R_EXE_FILE="export EXE_FILE=\"${NEW_EXE_FILE}\""
-  sed "s|${S_EXE_FILE}|${R_EXE_FILE}|g"       -i "${SCRIPTFILE}"
+  sed "s|${S_EXE_FILE}|${R_EXE_FILE}|g"       -i "*.sh"
 
   S_EXE_PATH="^export EXE_PATH=.*"
   R_EXE_PATH="export EXE_PATH=\"${NEW_EXE_PATH}\""
-  sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"       -i "${SCRIPTFILE}"
+  sed "s|${S_EXE_PATH}|${R_EXE_PATH}|g"       -i "*.sh"
 
   # 5.4.2 Change values inside Info.yml
   # 5.4.2.1 Change Script file value in Info.yml
-  sed "s|^Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"     -i "${INFOFILE}"
-  sed "s|^Exe:.*|Exe:${NEW_EXE_FILE}|g"               -i "${INFOFILE}"
-  sed "s|^Prefix:.*|Prefix:${NEWPREFIXNAME}|g"        -i "${INFOFILE}"
+  sed "s|^Exe Path:.*|Exe Path:${NEW_EXE_PATH}|g"     -i "*.yml"
+  sed "s|^Exe:.*|Exe:${NEW_EXE_FILE}|g"               -i "*.yml"
+  sed "s|^Prefix:.*|Prefix:${NEWPREFIXNAME}|g"        -i "*.yml"
 
 
 
   # 5.5 Restore EXE: FILE, PATH, NAME, NOSP, after main changes above
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
           sed "s|XOEXE_FILEXO|${EXE_FILE}|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|XOEXE_PATHXO|${EXE_PATH}|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|XOEXE_NAMEXO|${EXE_NAME}|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
 
           sed "s|XOEXE_NOSPXO|${EXE_NOSP}|g" \
-              -i ${INFOFILE}                 \
-              -i ${SCRIPTFILE}               \
-              -i ${DESKTOPFILE}
+              -i *.yml                 \
+              -i *.sh               \
+              -i *.desktop
   fi
 
   # 6. Rename files having prefix as part of file name, with new prefix name
@@ -196,15 +196,15 @@ Script_Change_Prefix()
   fi
 
   # 6.2 Rename .sh file
-  if [ -f "${SCRIPTFILE}" ]; then
-      mv "${SCRIPTFILE}" "${RENAMED_SCRIPT_FILE}" && \
+  if [ -f "*.sh" ]; then
+      mv "*.sh" "${RENAMED_SCRIPT_FILE}" && \
       DBUG "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.sh ->" \
           "${NEWPREFIXNAME}.sh"
   fi
 
   # 6.3 Rename .desktop and .sh file
-  if [ -f "${DESKTOPFILE}" ]; then
-      mv "${DESKTOPFILE}" "${RENAMED_DESK_FILE}" && \
+  if [ -f "*.desktop" ]; then
+      mv "*.desktop" "${RENAMED_DESK_FILE}" && \
       echo  "I: Script: Rename: Prefix: Renamed ${PREFIXNAME}.desktop" \
               "-> ${NEWPREFIXNAME}.sh"
   fi
@@ -238,7 +238,7 @@ Script_Change_Prefix()
   DBUG "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
 
   # 8. Launch Script from Renamed Directory
-  ${PREFIXES_DIR}/${NEWPREFIXNAME}/${NEWPREFIXNAME}.sh &
+  ${NEWSCRIPTFILE} &
 
   unset GET_PREFIX_NAME
   unset NEWPREFIXNAME

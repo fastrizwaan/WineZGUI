@@ -87,7 +87,7 @@ source "${DATADIR}/script-check-variables-loaded-or-not"
               --no-wrap --text "${WZT_INFO_FILE} not found, extract anyhow?"
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ]; then
-            (${TAR_CMD} --zstd -xvf "${WZT_FILE}" -C "${PREFIXES_DIR}" --transform \
+            (nice -n 19 ${TAR_CMD} --zstd -xvf "${WZT_FILE}" -C "${PREFIXES_DIR}" --transform \
              "s|XOUSERXO|${USER}|g" &)| 
             (${ZENITY_CMD} --progress --width=500            \
              --title="Restoring ${WZT_FILE}!"         \
