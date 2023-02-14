@@ -92,6 +92,7 @@ Script_Change_Icon()
   fi
 
   # Update .desktop database
+  ${UPDATE_ICON_CACHE}
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
   # Inform user
