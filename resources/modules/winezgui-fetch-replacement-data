@@ -2,8 +2,8 @@
 WineZGUI_Fetch_Replacement_Data()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+    
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   # Unset any previously initialized variables

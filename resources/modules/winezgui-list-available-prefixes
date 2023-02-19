@@ -6,8 +6,8 @@ List_Available_Prefixes()
 {
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+    
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"

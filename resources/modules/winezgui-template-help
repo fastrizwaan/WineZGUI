@@ -1,8 +1,8 @@
 # winezgui-template-help
 WineZGUI_Template_Help()
 {
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+  
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HELP_TEXT+="Configure ${TEMPLATE_NAME}... : Configure ${TEMPLATE_NAME} prefix template with any Setup or winetricks!|"

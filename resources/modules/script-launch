@@ -7,7 +7,7 @@
 Script_Launch()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
-  echo "--------------------- ${FUNCNAME[0]} -------------------------"
+  
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
@@ -32,7 +32,7 @@ Script_Launch()
   fi
 
   # Check for Wine version change
-  CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d ' ')
+  CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
   DBUG "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   DBUG "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
@@ -49,7 +49,8 @@ Script_Launch()
        ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
-            sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g" -i "${INFOFILE}"
+            sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g; t;" -i "${INFOFILE}" \
+            || echo "Failed Updating: Info.yml:Wine:${CURRENT_WINE_VERSION}"
             DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
        fi
   fi

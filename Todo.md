@@ -60,6 +60,10 @@
       - [ ] Restore bundle
       - [ ] run
 
+0.92.8
+- [x] Create About.yml if not found
+- [x] Update wine version on about, and launch
+- [x] Remove extra debug messages
 
 0.92.7
 - [x] Use nice 20 (least priority) for extraction

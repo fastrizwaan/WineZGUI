@@ -3,8 +3,8 @@ WineZGUI_Open_Exe()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset EXE_FILE F T
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+    
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   # If no argument is given, ask to select and open exe/msi file

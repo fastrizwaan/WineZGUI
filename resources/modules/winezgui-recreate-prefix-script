@@ -10,8 +10,8 @@ source "${DATADIR}/winezgui-dbug"
 DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 HEADER="$(basename ${0})"
 
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+    
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
  echo "*-*-*-*-*-*-*-*-*-*-*-*"

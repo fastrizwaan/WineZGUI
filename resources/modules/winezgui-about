@@ -1,12 +1,23 @@
 WineZGUI_About()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+  
+    source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
+  # Recreate about file if not found
+  if [ ! -f "${ABOUTFILE}" ]; then
+       DBUG "I: $(basename ${0}): About.yml not found, recreating!"
+       source "${DATADIR}/winezgui-create-about-yml"
+       WineZGUI_Create_About_Yml
+  fi
+
   # Update version in About
-  sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
+  if [ -w "${ABOUTFILE}" ]; then
+       CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
+       sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
+       sed "s|^Wine Version:.*|Wine Version:${CURRENT_WINE_VERSION}|g" -i "${ABOUTFILE}"
+  fi
   
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT

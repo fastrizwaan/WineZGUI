@@ -1,7 +1,7 @@
 # script-change-arch
 Script_Change_Arch()
 {
-  echo "--------------------- ${FUNCNAME[0]} -------------------------"
+  
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: Script: Launched ${FUNCNAME[0]}"

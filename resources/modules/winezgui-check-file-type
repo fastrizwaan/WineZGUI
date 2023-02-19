@@ -1,8 +1,8 @@
 # winezgui-check-file-type
 WineZGUI_Check_File_Type()
 {
-    echo "--------------------- ${FUNCNAME[0]} -------------------------"
-source "${DATADIR}/script-check-variables-loaded-or-not"
+  
+  source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   if [ -z "${1}" ]; then

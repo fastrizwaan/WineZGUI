@@ -4,8 +4,8 @@ WineZGUI_Recreate_All_Scripts()
   
   ### Get Prefixdir name
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  echo "--------------------- ${FUNCNAME[0]} -------------------------"
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  
+    source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
   echo "* * * * * * * * * * * *"
@@ -25,7 +25,7 @@ WineZGUI_Recreate_All_Scripts()
        return 1
   fi
 
- echo "------------------------------winezgui-recreate-all-scripts-----------------------"
+   echo "------------------------------winezgui-recreate-all-scripts-----------------------"
  export PREFIXDIR=${SELECTED_PREFIX}
  echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
  find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print
