@@ -21,22 +21,16 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 ## How it works
 
 1. When a windows binary or exe is opened with WineZGUI, 
-
-2. It asks whether to launch with default wine prefix (~/.local/share/winezgui/default) or create a new prefix associated with the EXE filename. 
-
-3. If the user selects `create prefix`, then WineZGUI creates a desktop shortcut in applications directory. It also tries to extract Product Name and icon from the exe file, if name is found, it uses that else, uses name of the exe file. Both name and icon can be changed later from the gui.
-
-4. Later if the user again opens the previously opened exe which as associated with a prefix, it will recommend to run using that associated prefix, so that game saves, and other settings, etc. can be used.
+2. It create a new prefix (copies template) and a desktop shortcut with the EXE filename.
+3. When the user launches the script, the exe is launched. 
+4. If it is a setup, it will detect installed exe and creates shortcuts in Games menu category.
 
 ### Install WineZGUI
 
 I highly recommend using flatpak version, because, distro based wine (wine-staging) keeps on updating and games may break every few days. Using wine stable from flathub is better or use wine stable 5.0 or 7.0 from the distro packages.
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
-WineZGUI is packaged in flatpak-wine. Please visit [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine)
-
-[WineZGUI with Proton-GE-7.29](https://github.com/fastrizwaan/flatpak-wine#-now-using-winezgui-with-flatpak-wine-505-fltpak-wine-70-and-flatpak-proton-ge-729-)
-
+WineZGUI is packaged in flatpak-wine by yours truly. Please visit [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine)
 
 ### Build and install flatpak from source
 
@@ -110,12 +104,25 @@ sudo ./setup --uninstall
 ## Requirements
 
 `wine` - main program
+
 `winetricks` - must have wine addon script
+
 `perl‑image‑exiftool` - to extract application/game name
+
 `icoutils` - to extract icon from exe file
+
 `gnome-terminal` - (optional) to access prefix directory in shell
 
 ## Install Requirements for Linux OS
+### Flatpak Supported Distros
+Get [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine/releases) which includes all dependencies. Useful for distros who do not package wine.
+
+```
+flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-22.08
+```
+
+## Runtime Dependencies:
 
 ### Fedora 36
 
