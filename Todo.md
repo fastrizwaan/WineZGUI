@@ -60,6 +60,9 @@
       - [ ] Restore bundle
       - [ ] run
 
+0.93.1
+- [x] PREFIXNAME=$(basename $PREFIXDIR) (recreate-all-scripts), fixes backup after recreated scripts
+
 0.93
 - [x] Remove winetricks as runtime dependency
 - [x] Remove  WINEDLLOVERRIDES, let user install mono and gecko (mshtml)
