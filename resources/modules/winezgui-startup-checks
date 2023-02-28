@@ -35,7 +35,7 @@ WineZGUI_Startup_Checks()
        FOUND=()    # Array/list to hold all found commands
        NOTFOUND=() # Array/list to hold all not found commands
   
-       RUNTIME="wine winetricks icotool exiftool zenity wget"
+       RUNTIME="wine icotool exiftool zenity wget"
        for i in ${RUNTIME} ; do
             if [ $(which $i) ]; then
                  FOUND+="$i"

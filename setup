@@ -240,7 +240,7 @@ if [ "${DEPENDENCIES}" = "true" ]; then
      FOUND=()    # Array/list to hold all found commands
      NOTFOUND=() # Array/list to hold all not found commands
 
-     RUNTIME="wine winetricks icotool exiftool zenity gnome-terminal zstd"
+     RUNTIME="wine icotool exiftool zenity gnome-terminal zstd"
 
      for i in $RUNTIME ; do
          if ! [ -x "$(command -v $i)" ]; then
