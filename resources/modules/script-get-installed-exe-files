@@ -14,6 +14,10 @@ Script_Get_Installed_Exe_Files()
                    -o -iname "dw20.exe"              \
                    -o -iname "Rar.exe"               \
                    -o -iname "tdu2k.exe"             \
+                   -o -iname "python.exe"            \
+                   -o -iname "pythonw.exe"           \
+                   -o -iname "zsync.exe"             \
+                   -o -iname "zsyncmake.exe"         \
                    -o -iname "RarExtInstaller.exe"   \
                    -o -iname "UnRAR.exe"             \
                    -o -iname "wmplayer.exe"          \
