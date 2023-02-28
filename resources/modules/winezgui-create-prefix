@@ -507,7 +507,7 @@ fi
 # without install mono and install html dialog
 if [ -f "${PREFIXDIR}/restored.txt" ]; then
      DBUG "I: Script: Updating wine prefix on 1st run after restoring backup"
-     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     #WINEDLLOVERRIDES="mscoree,mshtml=" \
      WINEPREFIX=${PREFIXDIR} \
      ${WBOOT_CMD} 2>/dev/null
      
@@ -529,7 +529,7 @@ if [ ! -f "${PREFIXDIR}/replaced_symlinks.txt" ]; then
      DBUG "I: Script: Prefix: WINEPREFIX=${WINEPREFIX}"
      DBUG "I: Script: Prefix: Wineboot command = ${WBOOT_CMD}"
      DBUG "I: Script: Prefix: WINEARCH ${WINEARCH}"
-     WINEDLLOVERRIDES="mscoree,mshtml=" \
+     #WINEDLLOVERRIDES="mscoree,mshtml=" \
      WINEDEBUG=-all \
      WINEPREFIX=${PREFIXDIR} \
      ${WBOOT_CMD} 2>/dev/null

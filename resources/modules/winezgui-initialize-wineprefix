@@ -12,7 +12,7 @@ WineZGUI_Initialize_Wineprefix()
   if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
        DBUG "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
        # Create Prefix then delete host linked directories
-       WINEDLLOVERRIDES="mscoree,mshtml=" \
+       #WINEDLLOVERRIDES="mscoree,mshtml=" \
        WINEPREFIX=${1}                    \
        WINEDEBUG=-all                     \
        ${WBOOT_CMD} 2>/dev/null
