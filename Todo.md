@@ -63,6 +63,7 @@
 
 0.93.2
 - [x] do not create shortcuts for python.exe pythonw.exe zsync.exe zsyncmake.exe
+- [x] Use latest winetricks from winezguidir
 
 0.93.1
 - [x] PREFIXNAME=$(basename $PREFIXDIR) (recreate-all-scripts), fixes backup after recreated scripts
