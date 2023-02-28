@@ -71,6 +71,11 @@ Script_Winetricks_Cli()
   echo "# Installing ${i}..."
   
   # Install winetricks verbs and put output to logs
+  # use winetricks latest if found
+  if [ -f "${WINEZGUIDIR}/winetricks" ]; then
+       PATH=$PATH:/app/bin
+       WTRICKS_CMD=${WINEZGUIDIR}/winetricks
+  fi
   ${WTRICKS_CMD} --unattended ${i}
   done
   TOOK=$(( SECONDS - ${TIMER_START} ))

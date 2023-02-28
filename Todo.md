@@ -59,6 +59,7 @@
       - [ ] Delete
       - [ ] Restore bundle
       - [ ] run
+[ ] After Recreate All Scripts, do all tests
 
 0.93.2
 - [x] do not create shortcuts for python.exe pythonw.exe zsync.exe zsyncmake.exe
