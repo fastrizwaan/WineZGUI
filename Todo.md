@@ -60,6 +60,10 @@
       - [ ] Restore bundle
       - [ ] run
 
+0.93
+- [x] Remove winetricks as runtime dependency
+- [x] Remove  WINEDLLOVERRIDES, let user install mono and gecko (mshtml)
+
 0.92.8
 - [x] Create About.yml if not found
 - [x] Update wine version on about, and launch
