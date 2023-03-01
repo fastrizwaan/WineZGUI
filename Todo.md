@@ -61,6 +61,9 @@
       - [ ] run
 [ ] After Recreate All Scripts, do all tests
 
+0.93.3
+- [ ] export PATH and WTRICKS_CMD and WINETRICKS variables for winetricks to work.
+
 0.93.2
 - [x] do not create shortcuts for python.exe pythonw.exe zsync.exe zsyncmake.exe
 - [x] Use latest winetricks from winezguidir
