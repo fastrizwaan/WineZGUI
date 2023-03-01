@@ -60,6 +60,9 @@
       - [ ] Restore bundle
       - [ ] run
 [ ] After Recreate All Scripts, do all tests
+0.93.4
+- [ ] Template - XNA31-Wine8 = mfc42 xact xact_x64 xinput gmdls xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2019 faudio corefonts
+- [ ] Template - DotNet48-wine8 = mfc42 xact xact_x64 xinput gmdls xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2019 dotnet48 faudio corefonts
 
 0.93.3
 - [ ] export PATH and WTRICKS_CMD and WINETRICKS variables for winetricks to work.
