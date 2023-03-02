@@ -62,7 +62,7 @@
 [ ] After Recreate All Scripts, do all tests
 
 0.93.5
-- [x] flatpak run --norc command=bash (use --norc to avoid reading .bashrc)
+- [x] skip cls-lolz*.exe, cls-srep*.exe
 
 0.93.4
 - [x] Template - DotNet48-Wine8 = mfc42 xact xact_x64 xinput gmdls xna31 vcrun2003 vcrun2005 vcrun2008 vcrun2010 vcrun2019 dotnet48 faudio corefonts
