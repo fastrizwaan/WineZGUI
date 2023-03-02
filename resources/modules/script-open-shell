@@ -27,10 +27,11 @@ Script_Open_Shell()
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal) ]; then
          DBUG "I: Script: Open Shell: Flatpak script, running from sandbox"
+         cd "${PREFIXDIR}"
          flatpak-spawn --host gnome-terminal --wait -- \
-         flatpak run --command=bash ${FLATPAK_NAME} -c \
-         "export WINEPREFIX=\"${PREFIXDIR}\"; \
-         cd \"${WINEPREFIX}\"; exec bash -i;"
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+         "export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${PREFIXDIR}"
 
        # If flatpak install and script running from host
        # and gnome terminal is found
@@ -38,9 +39,10 @@ Script_Open_Shell()
        [ $(which gnome-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          DBUG "I: Script: Open Shell: Flatpak script, running from host"
-         gnome-terminal --wait -- flatpak \
-         --command=bash run ${FLATPAK_NAME} -c \
-         "cd \"${PREFIXDIR}\"; exec bash -i"
+         gnome-terminal --wait -- \
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+         'export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
+         sh "${PREFIXDIR}"
 
        # Else it is a host install and gnome-terminal is found
   elif [ ${INSTALL_TYPE} = "system" ] && \
