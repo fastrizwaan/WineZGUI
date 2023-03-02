@@ -58,10 +58,14 @@
       - [ ] Import and run
       - [ ] Delete
       - [ ] Restore bundle
-      - [ ] run
+      - [ ] run   
 [ ] After Recreate All Scripts, do all tests
 
+0.93.6
+- [x] revert 0.93.5 --norc does not work with bash -c
+
 0.93.5
+- [x] flatpak run --norc command=bash (use --norc to avoid reading .bashrc)
 - [x] skip cls-lolz*.exe, cls-srep*.exe
 
 0.93.4

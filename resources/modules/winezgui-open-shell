@@ -53,7 +53,7 @@ WineZGUI_Open_Shell()
        # Shell needs WINEPREFIX as we are working with wine
        export WINEPREFIX=${DEFAULT}
         flatpak-spawn --host gnome-terminal --wait --                  \
-        flatpak --norc --command=bash run ${FLATPAK_NAME}                     \
+        flatpak --command=bash run ${FLATPAK_NAME}                     \
                -c "cd ${TEMPLATE}; export WINEPREFIX=${WINEPREFIX};    \
                    exec bash -i"
       

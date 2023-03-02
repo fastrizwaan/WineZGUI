@@ -51,7 +51,7 @@ WineZGUI_Open_Terminal()
        # Shell needs WINEPREFIX as we are working with wine
        export WINEPREFIX=${DEFAULT}
        flatpak-spawn --host gnome-terminal --wait --                  \
-       flatpak --norc --command=bash run ${FLATPAK_NAME}                     \
+       flatpak --command=bash run ${FLATPAK_NAME}                     \
        -c "cd ${WINEZGUIDIR}; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
       
   else # If found on host, run gnome-terminal

@@ -28,7 +28,7 @@ Script_Open_Shell()
        [ $(flatpak-spawn --host which gnome-terminal) ]; then
          DBUG "I: Script: Open Shell: Flatpak script, running from sandbox"
          flatpak-spawn --host gnome-terminal --wait -- \
-         flatpak run --norc --command=bash ${FLATPAK_NAME} -c \
+         flatpak run --command=bash ${FLATPAK_NAME} -c \
          "export WINEPREFIX=\"${PREFIXDIR}\"; \
          cd \"${WINEPREFIX}\"; exec bash -i;"
 
@@ -38,7 +38,7 @@ Script_Open_Shell()
        [ $(which gnome-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          DBUG "I: Script: Open Shell: Flatpak script, running from host"
-         gnome-terminal --wait -- flatpak  --norc \
+         gnome-terminal --wait -- flatpak \
          --command=bash run ${FLATPAK_NAME} -c \
          "cd \"${PREFIXDIR}\"; exec bash -i"
 
