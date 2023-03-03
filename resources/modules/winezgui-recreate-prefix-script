@@ -33,7 +33,7 @@ fi
 #unset WINEPREFIX # for WINEVER
 #export APPNAME=WineZGUI
 #export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-#export UPDATE_ICON="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
+#export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
 #export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
 #export WINE_CMD="$(which wine)"
 #export WINEVER="$(wine --version|cut -f1 -d " ")"
@@ -60,7 +60,7 @@ FLATPAK_NAME= $FLATPAK_NAME
 DATADIR     = $DATADIR
 APPNAME     = $APPNAME 
 APPLICATIONSDIR=$APPLICATIONSDIR
-UPDATE_ICON = $UPDATE_ICON
+UPDATE_ICON_CACHE = $UPDATE_ICON_CACHE
 UPDATE_DESKTOP_DATABASE = $UPDATE_DESKTOP_DATABASE
 WINE_CMD    = $WINE_CMD
 TEMPDIR     = $TEMPDIR
@@ -680,5 +680,5 @@ if [ $? -eq 0 ]; then
      DBUG "I: ${HEADER}: Shortcut: Exe: ${EXE_NAME}"
 fi
 # Update Menu, Icon cache and Desktop shortcuts
-${UPDATE_ICON} 2>/dev/null
+${UPDATE_ICON_CACHE} 2>/dev/null
 ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR} 2>/dev/null

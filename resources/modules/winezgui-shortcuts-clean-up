@@ -40,10 +40,8 @@ WineZGUI_Shortcuts_Clean_Up()
 
  
   # 3. Show the found exe files using zenity
-  ${ZENITY_CMD} --title="${APP_WITH_VER} - Clean Up!"            \
-         --text="Remove these Broken Shortcuts..." --list \
-         --width=460 --height=${HEIGHT} \
-         --hide-header --column " " ${SHOW_OPTION}
+  ${ZENITY_CMD} --title="${APP_WITH_VER} - Clean Up!"  --text="Remove these Broken Shortcuts..." \
+  --list --width=460 --height=${HEIGHT}  --hide-header --column " " ${SHOW_OPTION}
 
   ANSWER=$?
   
@@ -57,7 +55,7 @@ WineZGUI_Shortcuts_Clean_Up()
   
   DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
   
-  ${UPDATE_ICON}
-  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-  ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
+  # Clean up broken shortcuts and update shortcuts menu
+ source "${DATADIR}/winezgui-remove-broken-links"
+ WineZGUI_Remove_Broken_Links
 }

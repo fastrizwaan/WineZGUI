@@ -91,17 +91,17 @@ Script_Change_Icon()
        echo "E: Script: ${FUNCNAME[0]}: Cannot update ${INFOFILE}"
   fi
 
-  # Update .desktop database
-  ${UPDATE_ICON_CACHE}
-  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
+  # Clean up broken shortcuts and update shortcuts menu
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  WineZGUI_Remove_Broken_Links
+
 
   # Inform user
   #If Script_Change_Icon_DO_NOT_PROMPT has no value then prompt
   #When we change exe, we do not want to see icon change prompt
   #The value will be set before calling this function by find-installed-exe
   if [ -z "${Script_Change_Icon_DO_NOT_PROMPT}" ] ; then
-       ${ZENITY_CMD} --info --no-wrap --title="${DESKTOPFILE}" \
-              --text="Icon Changed sucessfuly: ${GET_ICON}"
+       ${ZENITY_CMD} --info --no-wrap --title="${DESKTOPFILE}" --text="Icon Changed sucessfuly: ${GET_ICON}"
   fi
   # next time let it prompt
   unset Script_Change_Icon_DO_NOT_PROMPT
@@ -109,6 +109,4 @@ Script_Change_Icon()
   # Main Window is going to use ICON variable.
   export ICON="${ICONFILE}"
 
-  # Update icon cache for gtk based desktops
-  ${UPDATE_ICON_CACHE}
 }
