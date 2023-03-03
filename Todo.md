@@ -61,6 +61,9 @@
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
 
+0.93.9
+- [x] open terminal from winezgui-more fix
+
 0.93.6
 - [x] revert 0.93.5 --norc does not work with bash -c
 
