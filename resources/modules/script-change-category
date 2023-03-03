@@ -30,18 +30,15 @@ Script_Change_Category()
   fi
 
   # Now that we have included desktop-file-edit in flatpak, not needed
-  if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
-       export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-  else
-       export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
-  fi
 
+  export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
+ 
   # Set category with selected one
   ${DESKTOP_FILE_EDIT} --set-key="Categories" --set-value="${GET_CATEGORY}" ${DESKTOPFILE}
   
- # Clean up broken shortcuts and update shortcuts menu
- source "${DATADIR}/winezgui-remove-broken-links"
- WineZGUI_Remove_Broken_Links
+  # Clean up broken shortcuts and update shortcuts menu
+  source "${DATADIR}/winezgui-remove-broken-links"
+  WineZGUI_Remove_Broken_Links
 
   # Inform user
   DBUG "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"

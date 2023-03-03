@@ -72,12 +72,7 @@ Script_Change_Icon()
        export ICON="${ICONFILE}"
   fi
 
-  # Now that we have included desktop-file-edit in flatpak, not needed
-  if [ $(flatpak-spawn echo 0 2>/dev/null) ]; then
-       export DESKTOP_FILE_EDIT="flatpak-spawn --host desktop-file-edit"
-  else
-       export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
-  fi
+  export DESKTOP_FILE_EDIT="$(which desktop-file-edit)"
 
   # set icon to the user selected one
   ${DESKTOP_FILE_EDIT} --set-icon="${ICONFILE}" ${DESKTOPFILE} && \

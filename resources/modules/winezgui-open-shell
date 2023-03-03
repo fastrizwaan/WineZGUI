@@ -28,7 +28,7 @@ WineZGUI_Open_Shell()
   if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
        [ $(flatpak-spawn  --host which gnome-terminal) ]; then
          DBUG "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
-         export GNOME_TERMINAL=0 ; #Available via flatpak-spwan
+         export GNOME_TERMINAL=0 ; #Available via flatpak-spawn
   elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
        [ $(which gnome-terminal) ]; then
          DBUG "I: ${HEADER}: Gnome-terminal found on host system"
