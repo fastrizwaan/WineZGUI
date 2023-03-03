@@ -50,9 +50,10 @@ WineZGUI_Open_Terminal()
        DBUG "I: Open Terminal: Opening gnome-terminal from sandbox"
        # Shell needs WINEPREFIX as we are working with wine
        export WINEPREFIX=${DEFAULT}
-       flatpak-spawn --host gnome-terminal --wait --                  \
-       flatpak --command=bash run ${FLATPAK_NAME}                     \
-       -c "cd ${WINEZGUIDIR}; export WINEPREFIX=${WINEPREFIX}; exec bash -i"
+       flatpak-spawn --host gnome-terminal --wait -- \
+       flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+       "export WINEPREFIX=\"${DEFAULT}\"; cd \"$1\"; shift; exec bash --norc -i" \
+       sh "${WINEZGUIDIR}"
       
   else # If found on host, run gnome-terminal
        DBUG "I: Open Terminal: Opening gnome-terminal from host"
