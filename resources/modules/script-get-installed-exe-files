@@ -22,6 +22,7 @@ Script_Get_Installed_Exe_Files()
                    -o -iname "UnRAR.exe"             \
                    -o -iname "wmplayer.exe"          \
                    -o -iname "iexplore.exe"          \
+                   -o -iname "LendaModTool.exe"      \
                    -o -iname "wordpad.exe"           \
                    -o -iname "quickSFV*.exe"         \
                    -o -iname "UnityCrashHand*.exe"   \
