@@ -41,7 +41,7 @@ Winezgui_Identity_Restore()
    # Do search and replace in the files inside given directory
   for (( i=0; i <${LEN}; i++ )); do
       echo -n "."
-      sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} || \
+      sed  "s/${REPLACE[$i]}/${SEARCH[$i]}/g; t;" -i ${FILE_LIST} 2>/dev/null || \
       echo "E: ${HEADER}: Failed to Replace: ${SEARCH[$i]} => ${REPLACE[$i]}" \
       && (echo "\"${SEARCH[i]}\"   ;  \"${REPLACE[i]}\""|column -t -s ";")
   done

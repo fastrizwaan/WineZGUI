@@ -273,7 +273,7 @@ SAVEIFS=${IFS}
 IFS=$(echo -en "\n\b")
 for SCRIPT in $(ls ${DATADIR}); do
 
-   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" || \
+   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" 2>/dev/null || \
    (echo "Error copying modules" ; exit)
 done
 IFS=${SAVEIFS}

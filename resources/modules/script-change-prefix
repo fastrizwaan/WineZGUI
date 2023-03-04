@@ -104,7 +104,7 @@ Script_Change_Prefix()
   # 7.1 link new .desktop file to desktopdir
   ln -svf "${NEWPREFIXDIR}"/*.desktop ${DESKTOPDIR} && \
   echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
-          "at ${DESKTOPDIR}" || \
+          "at ${DESKTOPDIR}" 2>/dev/null || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
 
   # 7.2 Delete all broken links which points to winezgui game prefix

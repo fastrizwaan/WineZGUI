@@ -71,7 +71,7 @@ export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
 # 
 echo "============================================ x ========================"
 TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
-if [[ "${TEST_NAME}" == *"setup"* ]]   || \
+if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
    [[ "${TEST_NAME}" == *"install"* ]] ; then
      DBUG "I: Script: Using sha256sum of the exe"
      x=$(sha256sum "${EXE_FILE}")
@@ -232,7 +232,7 @@ SAVEIFS=${IFS}
 IFS=$(echo -en "\n\b")
 for SCRIPT in $(ls ${DATADIR}); do
 
-   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" || \
+   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" 2>/dev/null || \
    (echo "Error copying modules" ; exit)
 done
 IFS=${SAVEIFS}
