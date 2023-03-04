@@ -67,7 +67,7 @@
 0.93.9
 - [x] open terminal from winezgui-more fix
 - [x] Recreate All Scripts -> Ask whether to use existing Shorcut Name and Icon
-- [x] Add PATH=$PATH:/app/bin in launch script, flatpak with --host or --home uses ~/.bashrc PATH, which is a bug, ahem feature
+- [x] Add PATH=${PATH}:/app/bin in launch script, flatpak with --host or --home uses ~/.bashrc PATH, which is a bug, ahem feature
 - [x] Reduce Winetricks Cli 
       VERB_LIST="mfc42 xact xact_x64 gmdls \
                 vcrun2003 vcrun2005        \

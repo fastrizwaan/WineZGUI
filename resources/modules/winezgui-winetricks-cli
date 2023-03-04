@@ -66,7 +66,7 @@ WineZGUI_Winetricks_Cli()
   
   # use winetricks latest if found
   if [ -f "${WINEZGUIDIR}/winetricks" ]; then
-       PATH=$PATH:/app/bin
+       PATH=${PATH}:/app/bin
        export PATH
        WINETRICKS=${WINEZGUIDIR}/winetricks
        export WINETRICKS

@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=$PATH:/app/bin
+export PATH="${PATH}:/app/bin"
 
 # Defaults for non flatpak install
 APPLICATIONSDIR='\$(realpath -m \~/.local/share/applications)\'

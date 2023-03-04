@@ -50,7 +50,7 @@ LD_LIBRARY_PATH+="/usr/lib64/wine/wine:"
 LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
 LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH
-export PATH=${PATH}:$(pwd)
+export PATH="${PATH}:/app/bin:$(pwd)"
 export ARGV="$@"
 export WINE_CMD="$(which wine)"
 export WINETRICKS="$(which winetricks)"
