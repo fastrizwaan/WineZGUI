@@ -9,7 +9,7 @@ WineZGUI_Recreate_All_Scripts()
   Script_Check_Variables_Loaded_Or_Not
 
   echo "* * * * * * * * * * * *"
-  echo "APPVERSION = W$APPVERSION"
+  echo "APPVERSION = $APPVERSION"
   echo "* * * * * * * * * * * *"
   source "${DATADIR}/winezgui-list-available-prefixes"
   List_Available_Prefixes
@@ -41,6 +41,8 @@ WineZGUI_Recreate_All_Scripts()
   # if exe_found has value, then only change exe
   for i in $(echo ${search_list}|tr '|' '\n'|sort)
   do
+     PROGNAME=$(grep -i "export PROGNAME=" ${i}|cut -f2 -d "="|sed 's/"//g')
+     export PROGNAME
      EXE_IN_SCRIPTFILE=$(grep -i "export EXE_FILE=" ${i}|cut -f2 -d "="|sed 's/"//g')
      echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
      # rename .desktop and script file to .bak
@@ -48,6 +50,7 @@ WineZGUI_Recreate_All_Scripts()
      echo "DESKTOP_FILE = $DESKTOP_FILE"
      mv -v "${DESKTOP_FILE}" "${DESKTOP_FILE}.bak"
      mv -v "${i}" "${i}.bak"
+     
      ${DATADIR}/winezgui-recreate-prefix-script "${EXE_IN_SCRIPTFILE}"
      
   done
