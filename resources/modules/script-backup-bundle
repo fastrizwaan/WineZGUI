@@ -14,10 +14,17 @@ Script_Backup_Bundle()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
     
-source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   HEADER="Script: ${FUNCNAME[0]}"
   DBUG "I: ${HEADER}: Checking if ${EXE_NAME} is inside a standard directory!"
+  
+  GAME_DIR_NAME=$(realpath -m "${EXE_PATH}")
+
+  if [ ! -d "${GAME_DIR_NAME}" ] || [ ! -f "${EXE_FILE}" ]; then 
+     ${ZENITY_CMD} --error --title="Game directory not found" --text="${GAME_DIR_NAME}\ndirectory moved? partition not mounted?"
+     return 1
+  fi
 
   # 1. Exclude Directories for bundling
   # Do not allow game bundle creation if the user has .exe inside

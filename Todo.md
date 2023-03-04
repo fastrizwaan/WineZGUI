@@ -61,6 +61,9 @@
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
 
+0.94.0
+- [x] if Gamedir or EXE_FILE is not found, skip Backup Game Bundle
+
 0.93.9
 - [x] open terminal from winezgui-more fix
 - [x] Recreate All Scripts -> Ask whether to use existing Shorcut Name and Icon

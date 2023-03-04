@@ -28,6 +28,8 @@ Script_Get_Installed_Exe_Files()
                    -o -iname "CrashReportClient.exe" \
                    -o -iname "dwtrig20.exe"          \
                    -o -iname "dx*setup.exe"          \
+                   -o -iname "*vshost.exe"           \
+                   -o -iname "*mgcb.exe"             \
                    -o -iname "cls-lolz*.exe"         \
                    -o -iname "cls-srep*.exe"         \
                    -o -iname "directx*.exe"          \
