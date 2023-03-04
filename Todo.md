@@ -64,7 +64,13 @@
 0.93.9
 - [x] open terminal from winezgui-more fix
 - [x] Recreate All Scripts -> Ask whether to use existing Shorcut Name and Icon
-- [ ] Add PATH=$PATH:/app/bin in launch script, flatpak with --host or --home uses ~/.bashrc PATH, which is a bug, ahem feature
+- [x] Add PATH=$PATH:/app/bin in launch script, flatpak with --host or --home uses ~/.bashrc PATH, which is a bug, ahem feature
+- [x] Reduce Winetricks Cli 
+      VERB_LIST="mfc42 xact xact_x64 gmdls \
+                vcrun2003 vcrun2005        \
+                vcrun2008 vcrun2010        \
+                vcrun2019 faudio           \
+                quartz avifil32 corefonts"
 
 0.93.6
 - [x] revert 0.93.5 --norc does not work with bash -c
