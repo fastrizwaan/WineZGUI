@@ -1,3 +1,5 @@
+# DEPRECATED: wine-8.0 has full media foundation support
+# Keeping this for wine-7.0 and wine-5.0.5
 # Install Media Foundation Libraries, required for UE4 games
 # https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4
 TEMPDIR="$(realpath -m ~/.var/app/${FLATPAK_NAME}/data/tmp)"
