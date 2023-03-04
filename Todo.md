@@ -63,6 +63,8 @@
 
 0.93.9
 - [x] open terminal from winezgui-more fix
+- [x] Recreate All Scripts -> Ask whether to use existing Shorcut Name and Icon
+- [ ] Add PATH=$PATH:/app/bin in launch script, flatpak with --host or --home uses ~/.bashrc PATH, which is a bug, ahem feature
 
 0.93.6
 - [x] revert 0.93.5 --norc does not work with bash -c

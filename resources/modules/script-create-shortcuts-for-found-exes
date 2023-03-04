@@ -185,6 +185,7 @@ echo "$search_list"
  # need variables from this script
 echo "
 #!/bin/bash
+export PATH=$PATH:/app/bin
 source ${WINEZGUI_SCRIPTS}/winezgui-dbug 
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"

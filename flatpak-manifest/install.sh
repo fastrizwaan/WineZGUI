@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH=$PATH:/app/bin
 
 # flatpak-builder installed?
 if ! command -v flatpak-builder &>/dev/null; then
