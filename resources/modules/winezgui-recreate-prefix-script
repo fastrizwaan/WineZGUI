@@ -174,15 +174,15 @@ fi
 
 
 # Ask user whether to use existing name and icon
-unset TITLE TEXT
-TITLE="Recreate All Scripts"
-TEXT="Use existing Name and Icon?"
-${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
+# unset TITLE TEXT
+# TITLE="Recreate All Scripts"
+# TEXT="Use existing Name and Icon?"
+# ${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
 
-ANSWER=$?
-unset TITLE TEXT
+# ANSWER=$?
+# unset TITLE TEXT
 
-if [ ${ANSWER} -eq 1 ] ; then
+if [ -z "${PROGNAME}" ] ; then
      # Extract icon and convert it to several png files of diferent quality,
      # Create a temporary Directory to extract icon from the exe file
      DBUG "I: ${HEADER}: Icon: Extraction from ${EXE_NAME}"
