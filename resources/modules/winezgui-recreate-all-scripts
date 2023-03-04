@@ -57,7 +57,8 @@ WineZGUI_Recreate_All_Scripts()
   IFS=${SAVEIFS}
   
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links"
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
   
   # Inform and offer to Launch

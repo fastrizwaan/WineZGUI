@@ -84,12 +84,13 @@ WineZGUI_Shortcuts_Restore()
        ANSWER=$?
        if [ -z "${ANSWER}" ] || [ "$ANSWER" = "1" ]; then
             echo "Cancelled overwriting ${BASENAME}.desktop"
-              return 1
+            return 1
        fi
   fi
 
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links"
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 
   echo "ln -sfv ${SELECTED_SHORTCUT} ${DESKTOPDIR}/${BASENAME}"

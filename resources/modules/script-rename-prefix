@@ -217,6 +217,7 @@ Rename_Prefix()
   
   # 7.3 update icon cache and desktop menu
   # Clean up broken shortcuts and update shortcuts menu
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 

@@ -301,7 +301,8 @@ Restore_Wzt_File()
 
   # 8. Update desktop menus and Icon cache
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links"
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 
  

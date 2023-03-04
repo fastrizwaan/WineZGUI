@@ -13,7 +13,8 @@ WineZGUI_Delete_Prefix()
   
   # Delete all broken links which points to winezgui game prefix
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links"
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
   DBUG "I: Delete: Removed broken WineZGUI .desktop links"
 }

@@ -7,11 +7,12 @@ Script_Delete_Shortcut()
   # Delete Shortcuts and Prefix Directory
   echo ${DESKTOPFILE}
   rm -fv ${DESKTOPFILE} && \
-  DBUG "I: Script: Delete: Removed ${DESKTOPFILE}" \ ||
+  DBUG "I: Script: Delete: Removed ${DESKTOPFILE}"  || \
   echo "E: Script: Delete: Cannot Remove ${DESKTOPFILE} !!"
 
   DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
   # Clean up broken shortcuts and update shortcuts menu
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 

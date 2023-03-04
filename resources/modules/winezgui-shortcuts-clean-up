@@ -56,6 +56,7 @@ WineZGUI_Shortcuts_Clean_Up()
   DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
   
   # Clean up broken shortcuts and update shortcuts menu
- source "${DATADIR}/winezgui-remove-broken-links"
- WineZGUI_Remove_Broken_Links
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  WineZGUI_Remove_Broken_Links
 }
