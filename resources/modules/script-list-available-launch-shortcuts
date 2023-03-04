@@ -10,7 +10,9 @@ Script_List_Available_Launch_Shortcuts()
 { 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not" || \
+  source "${DATADIR}/script-check-variables-loaded-or-not" 
+
   Script_Check_Variables_Loaded_Or_Not
   if [ -z "${1}" ]; then
        SEARCH_PATH="${PREFIXES_DIR}"
@@ -66,7 +68,9 @@ Script_List_Available_Launch_Shortcuts()
   IFS=${SAVEIFS}
  
   #  Generate Height value
-  source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
+  source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height" || \
+  source "${DATADIR}/winezgui-get-window-height" 
+
   WineZGUI_Get_Window_Height ${#FILES[@]}
  
   # 3. Show the found exe files using zenity
