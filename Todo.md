@@ -61,6 +61,10 @@
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
 
+0.94.3
+- [x] use app category from .desktop file
+#- [ ] use ~/.local/share/applications for shortcuts links with app_winezg
+ui.desktop
 0.94.0
 - [x] if Gamedir or EXE_FILE is not found, skip Backup Game Bundle
 
