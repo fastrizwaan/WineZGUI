@@ -47,7 +47,9 @@ WineZGUI_Recreate_All_Scripts()
      echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
      # rename .desktop and script file to .bak
      DESKTOP_FILE="$(echo "${i}"|sed "s/\.sh//g").desktop"
+     APP_CATEGORY=$(grep "Categories=" "${DESKTOP_FILE}"|cut -f2 -d "="|sed "s/;$//g")
      echo "DESKTOP_FILE = $DESKTOP_FILE"
+     export APP_CATEGORY
      mv -v "${DESKTOP_FILE}" "${DESKTOP_FILE}.bak"
      mv -v "${i}" "${i}.bak"
      

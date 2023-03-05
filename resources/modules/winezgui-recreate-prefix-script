@@ -17,7 +17,6 @@ HEADER="$(basename ${0})"
  echo "*-*-*-*-*-*-*-*-*-*-*-*"
   echo "APPVERSION =$APPVERSION"
   echo "* * * * * * * * * * * *"
-echo "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
 echo "EXE file given = ${1}"
 echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
 # Must be called from WineZGUI_Recreate_All_Scripts
@@ -244,9 +243,14 @@ if [ -z "${PROGNAME}" ] ; then
           DBUG "I: ${HEADER}: Name: Product Name found: \"${PRODUCT}\""
      fi
 fi
-echo "==========================="
+
+
+
+echo "-----------------------------------------------------------"
      echo "PROGNAME=$PROGNAME"
      echo "ICON=$ICON"
+     echo "APP_CATEGORY=$APP_CATEGORY"
+echo "-----------------------------------------------------------"
 
 # Generate Sha256sum for the exefile
 CHECKSUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")

@@ -37,7 +37,7 @@ Script_Change_Category()
   ${DESKTOP_FILE_EDIT} --set-key="Categories" --set-value="${GET_CATEGORY}" ${DESKTOPFILE}
   
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null ||\
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 
