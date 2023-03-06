@@ -74,13 +74,14 @@ TEMPDIR     = $TEMPDIR
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "${INSTALL_TYPE}" = "system" ]; then
      DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
-     export DESKTOPDIR
+     SHORTCUT_PREFIX="system_winezgui"
+     
 else
      # for flatpak create subdirectory with flatpakname
      DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
-     export DESKTOPDIR
+     SHORTCUT_PREFIX="${FLATPAK_NAME}"
 fi
-
+export DESKTOPDIR SHORTCUT_PREFIX
 # winezgui backup file extension
 export BKP_EXT="wzt"
 
