@@ -63,8 +63,11 @@ SCRIPT_CHANGE_NAME ()
   sed "s|${SED_SEARCH}|${SED_REPLACE}|g; t;" -i "${SCRIPTFILE}" \
   || echo "Failed3: ${FUNCNAME[0]}: ^export PROGNAME=.* | ${SED_SEARCH}|${SED_REPLACE}"
 
+  DESKTOPFILE_NAME=$(basename ${DESKTOPFILE})
+  SHORTCUT_NAME="${SHORTCUT_PREFIX}_${DESKTOPFILE_NAME}"
+  ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_NAME}"
   # Remove broken .desktop links
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
        DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
 
 

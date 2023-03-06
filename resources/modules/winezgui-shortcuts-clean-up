@@ -47,7 +47,7 @@ WineZGUI_Shortcuts_Clean_Up()
   
   if [ ${ANSWER} -eq 0 ]; then
        DBUG "I: ${HEADER}: Deleted Broken Shortcuts!"
-       find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete 2>/dev/null
+       find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null 2>/dev/null
   else
        DBUG "I: ${HEADER}: Cancelled!"
        WineZGUI_Window

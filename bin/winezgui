@@ -60,10 +60,12 @@ export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 # Shortcuts directory for winezgui scripts symbolic links
 if [ "${INSTALL_TYPE}" = "system" ]; then 
      DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+     SHORTCUT_PREFIX="system_winezgui"
 else 
      DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     SHORTCUT_PREFIX="${FLATPAK_NAME}"
 fi
-export DESKTOPDIR
+export DESKTOPDIR SHORTCUT_PREFIX
 export BKP_EXT="wzt" # winezgui backup file extension
 
 # If prefix=nothing then install to /usr

@@ -14,7 +14,7 @@ Script_Delete_Prefix()
   DBUG "I: Script: Delete: Removed ${PREFIXDIR}"
 
   # Delete all broken links which points to winezgui game prefix
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
   DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
  
   # Clean up broken shortcuts and update shortcuts menu

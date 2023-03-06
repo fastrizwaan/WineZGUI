@@ -316,6 +316,7 @@ export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
 
 export DESKTOPDIR=\"${DESKTOPDIR}\"
+export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 export EXIFTOOL=\"\$(which exiftool)\"
 # winezgui backup file extension
@@ -689,7 +690,8 @@ echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 mkdir -p "${DESKTOPDIR}" && \
 DBUG "I: ${HEADER}: Created ${DESKTOPDIR}"
 
-ln -sf "${DESKTOPFILE}" "${DESKTOPDIR}/${EXE_LESS}.desktop" && \
+#ln -sf "${DESKTOPFILE}" "${DESKTOPDIR}/${EXE_LESS}.desktop" && \
+ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop" && \
 DBUG "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${DESKTOPDIR}"
 # Test if the app link was created sucessfully on applications menu
 if [ $? -eq 0 ]; then

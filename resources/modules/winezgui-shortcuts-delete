@@ -87,5 +87,5 @@ Winezgui_Shortcuts_Delete()
   rm -vf "${DELETE_DESKTOP_FILE}"
   #rm -vf "${PREFIXDIR}/${DELETE_FILENAME}.sh"
   echo "${DESKTOPDIR}"
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete
+  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
 }

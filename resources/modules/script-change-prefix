@@ -89,7 +89,11 @@ Script_Change_Prefix()
   S_PREFIXNAME="^export PREFIXNAME=.*"
   R_PREFIXNAME="export PREFIXNAME=\"${NEWPREFIXNAME}\""
   sed "s|${S_PREFIXNAME}|${R_PREFIXNAME}|g"   -i *.sh
-
+  
+  # For Scripts created using Open Any Other Exe 
+  sed "s|^PROGNAME=\(.*\)(.*)|PROGNAME=\1(${NEWPREFIXNAME})|g" -i *other.sh 
+  sed "s|^Name=\(.*\)(.*)|Name=\1(${NEWPREFIXNAME})|g" -i *other.desktop
+  
   # 5.4.2 Change values inside Info.yml
   sed "s|^Prefix:.*|Prefix:${NEWPREFIXNAME}|g" -i *.yml
 
@@ -102,13 +106,19 @@ Script_Change_Prefix()
 
   # 7. Create new shortcut and delete old one
   # 7.1 link new .desktop file to desktopdir
-  ln -svf "${NEWPREFIXDIR}"/*.desktop ${DESKTOPDIR} && \
+  for x in "${NEWPREFIXDIR}"/*.desktop;
+  do
+      BASENAME=$(basename "${x}")
+      #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DESKTOPDIR} && \
+      #rm "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" -vf 2>/dev/null
+      ln -svf "${x}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" && \
   echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
-          "at ${DESKTOPDIR}" 2>/dev/null || \
+          "at ${APPLICATIONSDIR}" 2>/dev/null || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
+  done
 
   # 7.2 Delete all broken links which points to winezgui game prefix
-  find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
   DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
 
   # 7.3 update icon cache and desktop menu

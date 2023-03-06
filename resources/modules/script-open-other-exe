@@ -47,6 +47,17 @@ Script_Open_Other_Exe()
             #unset SELECTION ; # Empty variable
             Script_Window    ; # Go back to Game Window
        fi
+
+          BASE_SELECTED_EXE=$(basename "${OTHER_EXE}")
+          SELECTED_EXE="${OTHER_EXE}"
+          TITLE="Include ${BASE_SELECTED_EXE} in ${PREFIXNAME}?"
+          TEXT+="Create ${BASE_SELECTED_EXE} script to be used with ${PREFIXNAME}?"
+          ${ZENITY_CMD} --question --title="${TITLE}" --text="${TEXT}"
+          ANSWER=$?
+          if [ $ANSWER -eq 0 ]; then
+               source "${WINEZGUI_SCRIPTS}/script-create-other-shortcuts"
+               Script_Create_Other_Shortcuts
+          fi
   fi
   
   # If another exe is selected

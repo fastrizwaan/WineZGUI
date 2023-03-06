@@ -139,7 +139,10 @@ echo "$search_list"
      sed "s|${ICONFILE}|${S_ICONFILE}|g"                            -i "${S_DESKTOPFILE}"
      sed "s|Keywords=.*|Keywords=Game; winezgui; ${S_PROGNAME}|g"   -i "${S_DESKTOPFILE}"
 
-     ln -sf "${S_DESKTOPFILE}" "${DESKTOPDIR}"
+     #ln -sf "${S_DESKTOPFILE}" "${DESKTOPDIR}"
+     # Now using ~/.local/share/applications directory which gets updated instantly
+     #
+     ln -sf "${S_DESKTOPFILE}" "${APPLICATION_DIR}"
      count=$(expr ${count} + 1)
  done
  IFS=${SAVEIFS}
@@ -177,11 +180,8 @@ echo "$search_list"
  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 
  # Remove empty .desktop shortcuts from applications directory
- find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete 2>/dev/null
- ${UPDATE_ICON_CACHE}
- ${UPDATE_ICON_CACHE}
+ find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
- ${UPDATE_DESKTOP_DATABASE} ${DESKTOPDIR}
 
  # Replace Script file with multiple open dialog
  # need variables from this script
@@ -215,6 +215,7 @@ export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
 export DESKTOPDIR=\"${DESKTOPDIR}\"
+export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 export EXIFTOOL=\"\$(which exiftool)\"
 # winezgui backup file extension

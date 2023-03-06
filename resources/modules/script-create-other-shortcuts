@@ -131,6 +131,6 @@ Script_Create_Other_Shortcuts()
   echo "Categories=${APP_CATEGORY}; "          >> "${NEW_SCRIPT_DESKTOP_FILE}"
 
   # Link it
-  ln -svf "${NEW_SCRIPT_DESKTOP_FILE}" "${DESKTOPDIR}/${BASENAME}_other.desktop"
+  ln -svf "${NEW_SCRIPT_DESKTOP_FILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}_other.desktop"
   unset NEW_SCRIPT_DESKTOP_FILE BASENAME NEW_SCRIPT_PROGNAME PRODUCT
 }

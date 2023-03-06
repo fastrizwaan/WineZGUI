@@ -80,7 +80,7 @@ Script_Save_Load_Load()
                  rm -rf "${SELECTED_SAVEDGAME}/${TAR_PREFIX}" && \
                  DBUG "I: ${HEADER}: Removed ${SELECTED_SAVEDGAME}/${TAR_PREFIX}"
                  # Cleanup broken links in winezgui shortcuts directory
-                 find ${DESKTOPDIR} -maxdepth 1 -xtype l -delete && \
+                 find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
                  DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
             else
                  # user wants to keep prefix
