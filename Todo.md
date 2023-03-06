@@ -60,6 +60,9 @@
       - [ ] Restore bundle
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
+0.94.4
+- [x] use ~/.local/share/applications directory for shortcut symlinks for instant update
+- [x] Open Other Exe -> Any Other exe show, create script with current prefix
 
 0.94.3
 - [x] use app category from .desktop file
