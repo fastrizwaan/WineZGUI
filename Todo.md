@@ -60,6 +60,13 @@
       - [ ] Restore bundle
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
+
+0.94.8
+- [ ] Remove ~/.local/share/applications/winezgui/* from all scripts (DESKTOPDIR)
+
+0.94.7
+- [x] fix open other exe
+
 0.94.4
 - [x] use ~/.local/share/applications directory for shortcut symlinks for instant update
 - [x] Open Other Exe -> Any Other exe show, create script with current prefix

@@ -12,12 +12,12 @@ WineZGUI_Shortcuts_Clean_Up()
                |tr '\n' '|')
 
   BROKEN_LINKS_FOUND=$(echo ${SEARCH_LIST})
-  DESKTOPDIR_NAME=$(basename ${DESKTOPDIR})
+  SHORTCUTS_DIR_NAME=$(basename ${APPLICATIONSDIR})
   
   if [ -z "${BROKEN_LINKS_FOUND}" ] ; then
-       echo "I: ${HEADER}: ${DESKTOPDIR_NAME} directory has no broken symlinks."
+       echo "I: ${HEADER}: ${SHORTCUTS_DIR_NAME} directory has no broken symlinks."
        ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Clean Up!" \
-              --text "${DESKTOPDIR_NAME} directory has no broken symlinks."
+              --text "${SHORTCUTS_DIR_NAME} directory has no broken symlinks."
        WineZGUI_Window
   fi
   # if BROKEN_LINKS_FOUND has value, then only change exe
@@ -47,7 +47,10 @@ WineZGUI_Shortcuts_Clean_Up()
   
   if [ ${ANSWER} -eq 0 ]; then
        DBUG "I: ${HEADER}: Deleted Broken Shortcuts!"
-       find ${APPLICATIONSDIR} -maxdepth 1 -iname "*winezgui*" -xtype l -delete
+       # Clean up broken shortcuts and update shortcuts menu
+       source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+       source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+       WineZGUI_Remove_Broken_Links
   else
        DBUG "I: ${HEADER}: Cancelled!"
        WineZGUI_Window
@@ -55,8 +58,5 @@ WineZGUI_Shortcuts_Clean_Up()
   
   DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
   
-  # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+
 }

@@ -4,19 +4,15 @@ Script_Delete_Prefix()
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
-  SHORTCUT="${DESKTOPDIR}/${EXE_LESS}.desktop"
+  #SHORTCUT="${DEXSKTOPDIR}/${EXE_LESS}.desktop"
   # Delete Shortcuts and Prefix Directory
-  rm -rf ${SHORTCUT} && \
-  DBUG "I: Script: Delete: Removed ${SHORTCUT}" || \
-  echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
+  #rm -rf ${SHORTCUT} && \
+  #DBUG "I: Script: Delete: Removed ${SHORTCUT}" || \
+  #echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
 
   rm -rf ${PREFIXDIR} && \
   DBUG "I: Script: Delete: Removed ${PREFIXDIR}"
 
-  # Delete all broken links which points to winezgui game prefix
-  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-  DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
- 
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"

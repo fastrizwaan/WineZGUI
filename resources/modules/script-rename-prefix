@@ -204,17 +204,15 @@ Rename_Prefix()
   echo  "I: Script: Rename: Prefix: Renamed directory ${PREFIXNAME}" \
         "-> ${NEWPREFIXNAME}"
 
+
+  # FIXME: Does this work???? ln or not required?
   # 7. Create new shortcut and delete old one
-  # 7.1 link new .desktop file to desktopdir
-  #ln -sf "${NEWDESKTOPFILE}" "${DESKTOPDIR}/${NEWPREFIXNAME}.desktop" && \
+  # 7.1 link new .desktop file to desktop directory
+  #ln -sf "${NEWDESKTOPFILE}" "${DEXSKTOPDIR}/${NEWPREFIXNAME}.desktop" && \
   #ln -sf "${NEWDESKTOPFILE}" "${APPLICATIONSDIR/${SHORTCUT_PREFIX}_${NEWPREFIXNAME}.desktop" && \
   DBUG "I: Script: ${FUNCNAME[0]}: Created shortcut for ${NEWDESKTOPFILE}" \
-         "at ${DESKTOPDIR}" 2>/dev/null || \
+         "at ${APPLICATIONSDIR}" 2>/dev/null || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
-
-  # 7.2 Delete all broken links which points to winezgui game prefix
-  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null \
-  DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
   
   # 7.3 update icon cache and desktop menu
   # Clean up broken shortcuts and update shortcuts menu

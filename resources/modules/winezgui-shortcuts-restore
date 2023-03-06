@@ -74,11 +74,11 @@ WineZGUI_Shortcuts_Restore()
   # FIXME shortcut
   BASENAME=$(basename "${SELECTED_SHORTCUT}")
 
-  if [ -L "${DESKTOPDIR}/${BASENAME}" ]; then
+  if [ -L "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" ]; then
        unset TEXT
        TEXT+="${BASENAME} desktop file exists, overwrite?"
        TEXT+="\nUse <b>Launch...</b> or <b>Script...</b> later."
-       DBUG "I: ${HEADER}: ${DESKTOPDIR}/${BASENAME} file Already exists"
+       DBUG "I: ${HEADER}: ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME} file Already exists"
        ${ZENITY_CMD} --question --text  "${TEXT}" \
               --title "Desktop file already exists"
        ANSWER=$?
@@ -93,7 +93,7 @@ WineZGUI_Shortcuts_Restore()
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   WineZGUI_Remove_Broken_Links
 
-  echo "ln -sfv ${SELECTED_SHORTCUT} ${DESKTOPDIR}/${BASENAME}"
-  ln -sfv "${SELECTED_SHORTCUT}" "${DESKTOPDIR}/${BASENAME}"
+  echo "ln -sfv ${SELECTED_SHORTCUT} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
+  ln -sfv "${SELECTED_SHORTCUT}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
   unset TEXT
 }

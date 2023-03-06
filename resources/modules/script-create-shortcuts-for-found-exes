@@ -139,7 +139,7 @@ echo "$search_list"
      sed "s|${ICONFILE}|${S_ICONFILE}|g"                            -i "${S_DESKTOPFILE}"
      sed "s|Keywords=.*|Keywords=Game; winezgui; ${S_PROGNAME}|g"   -i "${S_DESKTOPFILE}"
 
-     #ln -sf "${S_DESKTOPFILE}" "${DESKTOPDIR}"
+     #ln -sf "${S_DESKTOPFILE}" "${DEXSKTOPDIR}"
      # Now using ~/.local/share/applications directory which gets updated instantly
      #
      ln -sf "${S_DESKTOPFILE}" "${APPLICATION_DIR}"
@@ -214,7 +214,7 @@ export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
 export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
-export DESKTOPDIR=\"${DESKTOPDIR}\"
+#export DEXSKTOPDIR=\"${DEXSKTOPDIR}\"
 export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 export EXIFTOOL=\"\$(which exiftool)\"

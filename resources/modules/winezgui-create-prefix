@@ -44,15 +44,15 @@ export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
 # Where to install .desktop shortcuts?
 # for system install (./setup -i) use ~/.local/share/applications/winezgui
 if [ "${INSTALL_TYPE}" = "system" ]; then
-     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
+     #DEXSKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
      SHORTCUT_PREFIX="system_winezgui"
      
 else
      # for flatpak create subdirectory with flatpakname
-     DESKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
+     #DEXSKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
      SHORTCUT_PREFIX="${FLATPAK_NAME}"
 fi
-export DESKTOPDIR SHORTCUT_PREFIX
+export DESXKTOPDIR SHORTCUT_PREFIX
 
 # winezgui backup file extension
 export BKP_EXT="wzt"
@@ -123,8 +123,8 @@ unset MSI
 mkdir -p  "${PREFIXES_DIR}" && \
 DBUG "I: ${HEADER}: Created directory ${PREFIXES_DIR}"
 
-mkdir -p  "${DESKTOPDIR}" && \
-DBUG "I: ${HEADER}: Created directory ${DESKTOPDIR}"
+#mkdir -p  "${DEXSKTOPDIR}" && \
+#DBUG "I: ${HEADER}: Created directory ${DEXSKTOPDIR}"
 
 
 # Start processing submitted exe file
@@ -272,7 +272,7 @@ export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
 
-export DESKTOPDIR=\"${DESKTOPDIR}\"
+#export DEXSKTOPDIR=\"${DEXSKTOPDIR}\"
 export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
 export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
 export EXIFTOOL=\"\$(which exiftool)\"
@@ -643,10 +643,10 @@ echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 
 
 # link the launcher  file to a shortcut on applications menu.
-mkdir -p "${DESKTOPDIR}" && \
-DBUG "I: ${HEADER}: Created ${DESKTOPDIR}"
+#mkdir -p "${DEXSKTOPDIR}" && \
+#DBUG "I: ${HEADER}: Created ${DEXSKTOPDIR}"
 
-#ln -sf "${DESKTOPFILE}" "${DESKTOPDIR}/${EXE_LESS}.desktop" && \
+#ln -sf "${DESKTOPFILE}" "${DEXSKTOPDIR}/${EXE_LESS}.desktop" && \
 ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop" && \
 DBUG "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
 # Test if the app link was created sucessfully on applications menu

@@ -20,7 +20,7 @@ Winezgui_Shortcuts_Delete()
   NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
 
 
-  search_list=$(find ${DESKTOPDIR} -maxdepth 1 -iname "*.desktop" \
+  search_list=$(find ${APPLICATIONSDIR} -maxdepth 1 -iname "*.desktop" \
                                    -type l -print| tr '\n' '|')
 
   exe_found=$(echo ${search_list})
@@ -85,7 +85,8 @@ Winezgui_Shortcuts_Delete()
   fi
 
   rm -vf "${DELETE_DESKTOP_FILE}"
-  #rm -vf "${PREFIXDIR}/${DELETE_FILENAME}.sh"
-  echo "${DESKTOPDIR}"
-  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
+  # Clean up broken shortcuts and update shortcuts menu
+  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  WineZGUI_Remove_Broken_Links
 }

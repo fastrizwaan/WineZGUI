@@ -105,11 +105,11 @@ Script_Change_Prefix()
        "-> ${NEWPREFIXNAME}"
 
   # 7. Create new shortcut and delete old one
-  # 7.1 link new .desktop file to desktopdir
+  # 7.1 link new .desktop file to DEXSKTOPDIR
   for x in "${NEWPREFIXDIR}"/*.desktop;
   do
       BASENAME=$(basename "${x}")
-      #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DESKTOPDIR} && \
+      #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DEXSKTOPDIR} && \
       #rm "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" -vf 2>/dev/null
       ln -svf "${x}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" && \
   echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
