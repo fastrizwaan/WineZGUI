@@ -50,14 +50,16 @@ Script_Create_Other_Shortcuts()
   if [ "${INSTALL_TYPE}" = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
        WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
-
        export WINE_CMD
+       echo "HOST FLATPAK SCRIPT: INSTALLTYPE=FLATPAK + flatpak run command=wine"
   else
        # flatpak install and running from shell inside flatpak winezgui
        if [ "${INSTALL_TYPE}" = "flatpak" ]; then
             export WINE_CMD="/app/bin/wine"
+            echo "SANDBOXED FLATPAK SCRIPT: INSTALLTYPE=FLATPAK + $WINE_CMD"
        else # We are using non flatpak install
             export WINE_CMD="$(which wine)"
+            echo "SYSTEM HOST SCRIPT: INSTALLTYPE=SYSTEM + $WINE_CMD"
        fi
   fi' |tee -a ${NEW_SCRIPT}
 
