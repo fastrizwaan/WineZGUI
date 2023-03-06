@@ -50,6 +50,7 @@ Script_Open_Other_Exe()
 
           BASE_SELECTED_EXE=$(basename "${OTHER_EXE}")
           SELECTED_EXE="${OTHER_EXE}"
+          unset TITLE TEXT
           TITLE="Include ${BASE_SELECTED_EXE} in ${PREFIXNAME}?"
           TEXT+="Create ${BASE_SELECTED_EXE} script to be used with ${PREFIXNAME}?"
           ${ZENITY_CMD} --question --title="${TITLE}" --text="${TEXT}"
@@ -75,4 +76,5 @@ Script_Open_Other_Exe()
   Remove_Wine_Created_Shortcuts
   source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
   Script_Find_Installed_Exe
+  unset TITLE TEXT
 }
