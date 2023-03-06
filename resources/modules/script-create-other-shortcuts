@@ -41,8 +41,8 @@ Script_Create_Other_Shortcuts()
 
   # It is expecting a Name: PROGNAME=...
   echo "PROGNAME=\"${NEW_SCRIPT_PROGNAME}\"" | tee  "${NEW_SCRIPT}"
-  echo "INSTALL_TYPE=\"${INSTALL_TYPE}\""    | tee  "${NEW_SCRIPT}"
-  echo "FLATPAK_NAME=\"${FLATPAK_NAME}\""    | tee  "${NEW_SCRIPT}"
+  echo "INSTALL_TYPE=\"${INSTALL_TYPE}\""    | tee  -a "${NEW_SCRIPT}"
+  echo "FLATPAK_NAME=\"${FLATPAK_NAME}\""    | tee  -a "${NEW_SCRIPT}"
 
   # WINE_CMD will change with flatpak
   # If ${FLATPAK_NAME} is installed, and script created using flatpak
