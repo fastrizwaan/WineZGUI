@@ -46,7 +46,7 @@ Script_Create_Other_Shortcuts()
   # WINE_CMD will change with flatpak
   # If ${FLATPAK_NAME} is installed, and script created using flatpak
   echo '
-  if [ ${INSTALL_TYPE} = "flatpak" ] && \
+  if [ "${INSTALL_TYPE}" = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
        WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
 
