@@ -142,7 +142,10 @@ echo "$search_list"
      #ln -sf "${S_DESKTOPFILE}" "${DEXSKTOPDIR}"
      # Now using ~/.local/share/applications directory which gets updated instantly
      #
-     ln -sf "${S_DESKTOPFILE}" "${APPLICATION_DIR}"
+     
+     DBUG "linking desktop files"
+     XBASE_FILE_NAME=$(basename "${S_DESKTOPFILE}")
+     ln -svf "${S_DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}" 
      count=$(expr ${count} + 1)
  done
  IFS=${SAVEIFS}
