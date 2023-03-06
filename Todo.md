@@ -63,6 +63,7 @@
 0.94.4
 - [x] use ~/.local/share/applications directory for shortcut symlinks for instant update
 - [x] Open Other Exe -> Any Other exe show, create script with current prefix
+- [x] do not touch scripts with _other.sh when recreating all scripts
 
 0.94.3
 - [x] use app category from .desktop file
