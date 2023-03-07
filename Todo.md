@@ -61,6 +61,29 @@
       - [ ] run   
 [ ] After Recreate All Scripts, do all tests
 
+0.96
+- [ ] work with read only host --filesystem=host:ro
+- [ ] offer to import gamedir (by checking sizes)
+
+0.96
+- [ ] switch to filename=function name, script-launch=script-launch instead of Script_Launch
+- [ ] upgrade existing scripts to new naming scheme, in all prefixes
+
+0.95.0 - 0.95.9
+- [ ] check variable assignment show error on failure, output to log file
+- [ ] check sed replacement show error on failure, output to log file
+- [ ] check all files and directories whether they are readable/writable before working with them
+- [ ] check all links creation 
+- [ ] check all dir creation (check if -d, dir already found, not creating, check read/write permission -if -r -w)
+- [ ] for flatpak-spawn to kill/open shell/open terminal, show user the command 
+- [ ] gnome-terminal, if not found, show the command
+- [ ] update all scripts (recreate all scripts) of all prefixes More->Update all exe scripts to WineZGUI Current Version
+- [ ] mini scripts, will they also get properly updated?
+
+
+0.94.9
+- [x] fix setup not creating shortcuts (after switching to ~/.local/share/applications)
+
 0.94.8
 - [ ] Remove ~/.local/share/applications/winezgui/* from all scripts (DESKTOPDIR)
 

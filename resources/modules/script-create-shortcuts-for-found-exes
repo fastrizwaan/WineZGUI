@@ -1,4 +1,5 @@
 #script-create-shortcuts-for-found-exes
+# USEFUL: this can be used for creating new scripts for exe files for a prefix
 Script_Create_Shortcuts_For_Found_Exes()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
