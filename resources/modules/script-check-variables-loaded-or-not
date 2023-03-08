@@ -3,15 +3,50 @@
 Script_Check_Variables_Loaded_Or_Not()
 {
      # Debug output for Variables created 
-     for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \
-          EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD WHICHWINE; do
-          if [ ! -z "${i}" ]; then
+     for i in WINE_CMD WTRICKS_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD WGET_CMD WRESTOOL_CMD WHICHWINE; do
+          if [ ! -z "${!i}" ]; then
                #echo -n "."
                #echo "Loaded: $i = ${!i}"
                echo -n ""
-          else
-                    echo "Missing: $i"
+          else 
+                echo "ERROR -> Missing: $i"
+           #     zenity --error --title="Missing $i" --text "${i} is required for $APP_WITH_VER work!"
           fi
      done
-#         echo ""
+     
+     # If wine command itself is not working, throw error
+     if [ -z "${WINE_CMD}" ]; then
+          zenity --error --title="Missing Wine" --text "wine is required for $APP_WITH_VER work!"
+          exit 1
+     fi
+# # Working good deps check for this
+# # Function to print if dependencies are installed.
+#      FOUND=()    # Array/list to hold all found commands
+#      NOTFOUND=() # Array/list to hold all not found commands
+
+#      RUNTIME="wine icotool exiftool zenity zstd"
+
+#      for i in $RUNTIME ; do
+#          if ! [ -x "$(command -v $i)" ]; then
+#                 NOTFOUND+="$i"
+#                 NOTFOUND+=" "
+#          elif [ -x "$(command -v $i)" ]; then
+#                 FOUND+=$i
+#                 FOUND+=" "
+#          fi
+#      done
+
+#      # Show found and not found dependencies for WineZGUI
+#      echo "Dependencies..."
+
+#      # If NOTFOUND variable has a value
+#      if ! [ -z "$NOTFOUND" ]; then
+#           echo "Found    : $FOUND"
+#           echo "Not Found: $NOTFOUND"
+#      else
+#           echo "$RUNTIME"
+#           echo "Found all dependencies"
+
+#      fi
+
 }
