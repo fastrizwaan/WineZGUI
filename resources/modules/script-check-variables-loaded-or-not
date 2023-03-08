@@ -3,7 +3,7 @@
 Script_Check_Variables_Loaded_Or_Not()
 {
      # Debug output for Variables created 
-     for i in WINE_CMD WTRICKS_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD WGET_CMD WRESTOOL_CMD WHICHWINE; do
+     for i in WINE_CMD WTRICKS_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD WGET_CMD WRESTOOL_CMD; do
           if [ ! -z "${!i}" ]; then
                #echo -n "."
                #echo "Loaded: $i = ${!i}"

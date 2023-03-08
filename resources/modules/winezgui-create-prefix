@@ -336,7 +336,6 @@ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
       WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
       WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
-      WHICHWINE="$(flatpak --command=which run ${FLATPAK_NAME} wine)"
       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
       WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
@@ -347,7 +346,6 @@ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
       WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
       export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
-      export WHICHWINE
 
 else
      # flatpak install and running from shell inside flatpak winezgui
@@ -358,7 +356,6 @@ else
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
           export WBOOT_CMD="$(which wineboot) -i"
-          export WHICHWINE="${WINE_CMD}"
           export ICOTOOL_CMD="$(which icotool)"
           export WRESTOOL_CMD="$(which wrestool)"
           export ZENITY_CMD="$(which zenity)"
@@ -375,7 +372,6 @@ else
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
           export WBOOT_CMD="$(which wineboot) -i"
-          export WHICHWINE="$(which wine)"
           export ICOTOOL_CMD="$(which icotool)"
           export WRESTOOL_CMD="$(which wrestool)"
           export ZENITY_CMD="$(which zenity)"
@@ -388,7 +384,7 @@ fi
 
 # Debug output for Variables created 
 for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \
-         EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD WHICHWINE; do
+         EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD; do
          if [ ! -z "${i}" ]; then
               echo "Exporting: $i = ${!i}" && export $i 
          else
