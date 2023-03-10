@@ -7,12 +7,15 @@
 
 # Load file with DBUG function
 source "${DATADIR}/winezgui-dbug"
+source "${DATADIR}/check-variable"
+
 DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
 HEADER="$(basename ${0})"
+check-variable ${HEADER} HEADER
 
 DBUG "I: ${HEADER}: Starting WineZGUI Create Script ($0)"
 
@@ -246,7 +249,7 @@ unset SCRIPT
 # need variables from this script
 echo "
 #!/bin/bash
-export PATH=\"${PATH}:/app/bin\"
+export PATH=\"${PATH}\"
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"

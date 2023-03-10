@@ -79,11 +79,30 @@ if [ "${FLATPAK}" = "true" ]; then
      echo setting prefix and paths for flatpak
      INSTALL_PREFIX="/app"
      TEMPDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/tmp)"
-     WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
-     INSTALL_TYPE="system"
+     WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"  #FIXME why this here?
+     INSTALL_TYPE="system" #FIXME why this here?
 fi
 
-
+### Check variables which are used in this file up to this point
+source "${DATADIR}/check-variable"
+echo "-----------------------------------------------------------------------------------"
+for VARIABLE in AUTHOR EMAIL COPYRIGHT WEBSITE DEBUG PROCESSNAME HEADER APPNAME \
+                APPVERSION APP_WITH_VER DATADIR INSTALL_TYPE WINEZGUIDIR FLATPAK_NAME \
+                SETTINGS_FILE TEMPLATES_DIR PREFIXES_DIR UPDATE_ICON_CACHE \
+                UPDATE_DESKTOP_DATABASE WINEVER WBOOT_CMD ICOTOOL_CMD WRESTOOL_CMD \
+                ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD LD_LIBRARY_PATH PATH \
+                ARGV WINE_CMD WINETRICKS INFOFILE ABOUTFILE APPLICATIONSDIR SHORTCUT_PREFIX \
+                BKP_EXT INSTALL_PREFIX TEMPDIR WINEZGUIDIR INSTALL_TYPE;
+do
+   if [ "${VARIABLE}" = "FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ]; then
+        continue;
+   elif [ "${VARIABLE}" = "ARGV" ];then
+         continue
+   fi
+         
+check-variable ${0} $VARIABLE
+done
+echo "-----------------------------------------------------------------------------------"
 WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
