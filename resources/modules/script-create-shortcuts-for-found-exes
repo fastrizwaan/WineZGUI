@@ -191,7 +191,7 @@ echo "$search_list"
  # need variables from this script
 echo "
 #!/bin/bash
-export PATH=\"${PATH}:/app/bin\"
+export PATH=\"${PATH}\"
 source ${WINEZGUI_SCRIPTS}/winezgui-dbug 2>/dev/null || \
 source ${DATADIR}/winezgui-dbug
 export APPNAME=\"${APPNAME}\"

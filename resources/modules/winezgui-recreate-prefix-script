@@ -291,7 +291,7 @@ unset SCRIPT
 # need variables from this script
 echo "
 #!/bin/bash
-export PATH=\"${PATH}:/app/bin\"
+export PATH=\"${PATH}\"
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"
