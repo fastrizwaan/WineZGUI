@@ -279,8 +279,8 @@ SAVEIFS=${IFS}
 IFS=$(echo -en "\n\b")
 for SCRIPT in $(ls ${DATADIR}); do
 
-   cp "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" 2>/dev/null || \
-   (echo "Error copying modules" ; exit)
+   cp -f "${DATADIR}/${SCRIPT}" "${WINEZGUI_SCRIPTS}" 2>/dev/null || \
+   (echo "Error copying modules" ; exit 1)
 done
 IFS=${SAVEIFS}
 
@@ -291,7 +291,7 @@ unset SCRIPT
 # need variables from this script
 echo "
 #!/bin/bash
-export PATH=\"${PATH}\"
+export PATH=\"${PATH}\"       
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"

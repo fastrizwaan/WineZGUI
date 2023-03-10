@@ -138,7 +138,7 @@ sudo apt install zenity wine wine32 wine64 winetricks libimage-exiftool-perl ico
 ### Solus
 
 ```
-sudo eopkg it zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget zstd
+sudo eopkg it zenity wine wine-32bit winetricks perl-image-exiftool icoutils gnome-terminal wget zstd diffutils
 ```
 
 ### Arch Linux / EndeavourOS
