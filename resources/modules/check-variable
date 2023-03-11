@@ -6,7 +6,11 @@ check-variable()
   fi
 
   if [ ! -z "${!2}" ]; then
-       echo "Defined... $2 = ${!2} in $1"
+       if [ "${DEBUG}" = "Y" ]; then
+            echo "Defined: $2=${!2}"
+       else
+            echo -n "."
+       fi
   else
        echo "Error $2 not defined in $1"
   fi

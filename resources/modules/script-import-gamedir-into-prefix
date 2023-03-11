@@ -33,10 +33,10 @@ Script_Import_Gamedir_Into_Prefix()
   # 1.1.1 Get root dirs using find to handle of different OS
   ROOT_DIRS="$(find / -maxdepth 1 -type d)"
   
-  MOUNTED_PARTITONs="$(df |grep "/"|tr -s " "|cut -f6 -d " ")"
+  MOUNTED_PARTITIONS="$(df |grep "/"|tr -s " "|cut -f6 -d " ")"
   # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
   DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
-  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
+  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITIONS} "
   # 1.1.4 Manually include these known directories
   DO_NOT_BUNDLE_FROM+="/    /boot /dev  /etc  /home /media "
   DO_NOT_BUNDLE_FROM+="/mnt /opt  /proc /root /run "

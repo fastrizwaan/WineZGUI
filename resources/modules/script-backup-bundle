@@ -36,10 +36,10 @@ Script_Backup_Bundle()
   
   # 1.1.2 Get Mounted Partitions using df command
   # Use df command instead of mount
-  MOUNTED_PARTITONs="$(df |grep "/"|tr -s " "|cut -f6 -d " ")"
+  MOUNTED_PARTITIONS="$(df |grep "/"|tr -s " "|cut -f6 -d " ")"
   # 1.1.3 Add Root dirs and mounted partitions to Do_not_bundle variable
   DO_NOT_BUNDLE_FROM+="${ROOT_DIRS} "
-  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITONs} "
+  DO_NOT_BUNDLE_FROM+="${MOUNTED_PARTITIONS} "
   # 1.1.4 Manually include these known directories
   DO_NOT_BUNDLE_FROM+="/    /boot /dev  /etc  /home /media "
   DO_NOT_BUNDLE_FROM+="/mnt /opt  /proc /root /run "
@@ -49,6 +49,11 @@ Script_Backup_Bundle()
   DO_NOT_BUNDLE_FROM+="${HOME}/Downloads  ${HOME}/Music "
   DO_NOT_BUNDLE_FROM+="${HOME}/Pictures   ${HOME}/Public "
   DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
+
+   ### Debug Check variables which are used in this file up to this point
+   source "${DATADIR}/check-all-variables"
+   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+   check-all-variables "HEADER GAME_DIR_NAME EXE_NAME EXE_PATH EXE_FILE ROOT_DIRS MOUNTED_PARTITIONS DO_NOT_BUNDLE_FROM"
 
 
   # 1.2 If game.exe file is inside standard (DO_NOT_BUNDLE_FROM) directories
@@ -80,6 +85,12 @@ Script_Backup_Bundle()
         unset TEXT
         # for zenity prompt
         TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
+        
+        ### Debug Check variables which are used in this file up to this point
+        source "${DATADIR}/check-all-variables"
+        echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+        check-all-variables "EXE_FILE PREFIXDIR TOTAL_SIZE PREFIX_SIZE_IN_BYTES TOTAL_SIZE_IN_HF TEXT"
+             
   else
         # If gamedir is outside prefixdir, total size = prefix size + gamedir
         GAMEDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}"|cut -f1)
@@ -100,6 +111,12 @@ Script_Backup_Bundle()
         # for zenity prompt
         TEXT+="${GAMEDIR_DISK_USAGE_IN_HF} ${EXE_PATH}\n"
         TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
+
+        ### Debug Check variables which are used in this file up to this point
+        source "${DATADIR}/check-all-variables"
+        echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+        check-all-variables "GAMEDIR_DISK_USAGE_IN_HF EXE_PATH GAMEDIR_DU_IN_BYTES TOTAL_SIZE PREFIX_SIZE_IN_BYTES \
+                             GAMEDIR_DU_IN_BYTES GAMEDIR_DU_IN_BYTES TOTAL_SIZE TEXT"
   fi
 
 
@@ -123,6 +140,11 @@ Script_Backup_Bundle()
       FILENAME+="-${DATE}"
       FILENAME+=".${BKP_EXT}"
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
+
+      ### Debug Check variables which are used in this file up to this point
+      source "${DATADIR}/check-all-variables"
+      echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+      check-all-variables "SHORT_FLATPAK_NAME FILENAME PROGNAME APP_WITH_VER DATE BKP_EXT"
   else # for system add wine-version
       unset FILENAME
       FILENAME+="${PROGNAME}-${APP_WITH_VER}"
@@ -131,6 +153,11 @@ Script_Backup_Bundle()
       FILENAME+="-${DATE}"
       FILENAME+=".${BKP_EXT}"
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
+
+      ### Debug Check variables which are used in this file up to this point
+      source "${DATADIR}/check-all-variables"
+      echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+      check-all-variables "PROGNAME APP_WITH_VER WINEVER DATE BKP_EXT FILENAME DATADIR"
   fi
   # remove spaces->_ from FILENAME
   FILENAME=$(echo ${FILENAME}|tr " " "_")

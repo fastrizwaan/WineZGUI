@@ -1,0 +1,24 @@
+#check-all-variables
+check-all-variables()
+{
+  ### Debug Check variables which are used in this file up to this point
+  source "${DATADIR}/check-variable"
+  echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+  for VARIABLE in $1;
+  do
+     if [ "${VARIABLE}" = "FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ]; then
+          continue;
+     elif [ "${VARIABLE}" = "SHORT_FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ];then
+           continue
+     fi
+           
+     check-variable ${0} $VARIABLE
+  done
+
+  if [ "${DEBUG}" = "Y" ]; then
+       echo ""-----------------------------------------------------------------------------------""
+  else
+       echo ""
+  fi
+  ### Debug Check variables which are used in this file up to this point
+}
