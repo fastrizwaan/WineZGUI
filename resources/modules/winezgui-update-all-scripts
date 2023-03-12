@@ -1,6 +1,27 @@
-#winezgui-recreate-all-scripts
-WineZGUI_Recreate_All_Scripts()
-{
+#winezgui-update-all-scripts
+winezgui-update-all-scripts()
+{  
+  OLD_HEADER=${HEADER}
+  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  zenity --info --text="Work in Progress"
+  return 0  
+  source "${DATADIR}/script-check-variables-loaded-or-not"
+  Script_Check_Variables_Loaded_Or_Not
+
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset PFX PREFIXES_FOUND COMMAND count SHOW_OPTION
+  unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
+
+  count=0
+  NAMES=()
+  FILES=()
+  echo "-----------------------------"
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null) #\
+              #| tr '\n' '|')
+  PREFIXES_FOUND=$(echo ${SEARCH_LIST})
+
   
   ### Get Prefixdir name
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -11,34 +32,43 @@ WineZGUI_Recreate_All_Scripts()
   echo "* * * * * * * * * * * *"
   echo "APPVERSION = $APPVERSION"
   echo "* * * * * * * * * * * *"
-  source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
-  PREFIXNAME=$(basename ${SELECTED_PREFIX})
+  for PFX in ${PREFIXES_FOUND};
+  do
+  PREFIXNAME=$(basename ${PFX})
 
-  ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
-                --text="This will overwrite all shell scripts associated with this prefix!"
+  echo "
+  PREFIXES_DIR=$PREFIXES_DIR
+  SEARCH_LIST=$SEARCH_LIST
+  PREFIXES_FOUND=$PREFIXES_FOUND
+  PREFIXNAME=$PREFIXNAME
+  PFX=$PFX
+  "
   
-  ANSWER=$?
+  #${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
+  #              --text="This will overwrite all shell scripts associated with this prefix!"
+  
+  #ANSWER=$?
 
-  if [ ${ANSWER} -eq 1 ]; then
-       echo "Cancelled"
-       return 1
-  fi
+  #if [ ${ANSWER} -eq 1 ]; then
+  #     echo "Cancelled"
+  #     return 1
+  #fi
 
-   echo "------------------------------winezgui-recreate-all-scripts-----------------------"
- export PREFIXDIR=${SELECTED_PREFIX}
- echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
+   echo "------------------------------winezgui-recreate-prefix-scripts-----------------------"
+ export PREFIXDIR="${PFX}"
+ echo "${PREFIXDIR} = ${PFX}"
  #find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print
  # Do not recreate _other.sh (smaller scripts)
  search_list=$(find "${PREFIXDIR}" -maxdepth 1 -iname "*.sh" -type f -print \
                 2>/dev/null| sed "/_other.sh/d"| tr '\n' '|')
   exe_found=$(echo ${search_list})
   
-  if [ -z "${exe_found}" ] ; then
-       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
-              --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
-       WineZGUI_Window
-  fi
+#   if [ -z "${exe_found}" ] ; then
+#        ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
+#               --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
+#         continue
+##        WineZGUI_Window
+#   fi
   # if exe_found has value, then only change exe
   for i in $(echo ${search_list}|tr '|' '\n'|sort)
   do
@@ -59,6 +89,7 @@ WineZGUI_Recreate_All_Scripts()
   done
   IFS=${SAVEIFS}
   
+  done
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"

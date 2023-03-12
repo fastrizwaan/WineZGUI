@@ -19,7 +19,7 @@ HEADER="$(basename ${0})"
   echo "* * * * * * * * * * * *"
 echo "EXE file given = ${1}"
 echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
-# Must be called from WineZGUI_Recreate_All_Scripts
+# Must be called from WineZGUI_Recreate_Prefix_Scripts
 export PREFIXDIR="${SELECTED_PREFIX}"
 
 

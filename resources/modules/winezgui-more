@@ -14,9 +14,10 @@ WineZGUI_More()
                         0 "File Manager..."              \
                         0 "Open Terminal..."             \
                         0 "Shortcuts..."                 \
-                        0 "Recreate All Scripts..."      \
+                        0 "Recreate Prefix Scripts..."   \
+                        0 "Update All Scripts..."        \
                         0 "Restore All Identity..."      \
-                        0 "Update winetricks..." \
+                        0 "Update winetricks..."         \
                         0 "Help..."                      \
                  --text   "More..."                      )
 
@@ -35,9 +36,12 @@ WineZGUI_More()
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
          source "${DATADIR}/winezgui-shortcuts"
          WineZGUI_Shortcuts
-  elif [ "${MORE_OPTION}" = "Recreate All Scripts..."  ]; then
-         source "${DATADIR}/winezgui-recreate-all-scripts"
-         WineZGUI_Recreate_All_Scripts
+  elif [ "${MORE_OPTION}" = "Recreate Prefix Scripts..."  ]; then
+         source "${DATADIR}/winezgui-recreate-prefix-scripts"
+         WineZGUI_Recreate_Prefix_Scripts
+  elif [ "${MORE_OPTION}" = "Update All Scripts..."  ]; then
+         source "${DATADIR}/winezgui-update-all-scripts"
+         winezgui-update-all-scripts         
   elif [ "${MORE_OPTION}" = "Restore All Identity..."  ]; then
          source "${DATADIR}/winezgui-identity-restore-all"
          WineZGUI_Identity_Restore_All
