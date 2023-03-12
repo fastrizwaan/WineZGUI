@@ -1,0 +1,4 @@
+xfce4-terminal --disable-server -e "bash -c \"export PREFIX=~/.wine; bash -i\""
+
+xfce4-terminal --disable-server -e "flatpak run --command=bash io.github.fastrizwaan.WineZGUI --norc -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=PREFIXDIR; cd ${PREFIXDIR}; exec bash --norc\""
+
