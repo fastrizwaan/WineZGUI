@@ -7,7 +7,7 @@ Script_Exe_Cmdline()
   Script_Check_Variables_Loaded_Or_Not
   # if cmdline.yml is found, get the args
   if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
-       ARGS=$(grep args "${PREFIXDIR}/cmdline.yml"|cut -f2 -d ":")
+       ARGS=$(grep args "${PREFIXDIR}/cmdline.yml"|cut -f2-100 -d ":")
   fi
 
   # Ask for Name
