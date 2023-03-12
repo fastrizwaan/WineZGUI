@@ -9,7 +9,7 @@ Script_Change_Icon()
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
        GET_ICON=$(zenity   --file-selection \
-                           --file-filter=""*.png" "*.jpg" "*.svg" "*.exe"")
+                           --file-filter=""*.png" "*.jpg" "*.svg" "*.exe" "*.ico"")
   else
        GET_ICON="${1}"
   fi
@@ -66,6 +66,37 @@ Script_Change_Icon()
        #remove tmp directory after copying icon png
        rm -rf "${TEMP_DIR}" && \
        DBUG "I: Script: ${FUNCNAME[0]}: Cleanup ${TEMP_DIR}"
+  elif [ "${GET_ICON_EXT}" = "ico" ]; then
+         DBUG "I: Script: ${FUNCNAME[0]}: .ico file selected to extract icon!"
+         unset TEMP_DIR
+         TEMP_DIR="${WINEZGUIDIR}/tmp"
+         # Extract icon and convert it to several png files of diferent quality,
+         # Create a temporary Directory to extract icon from the exe file
+         DBUG "I: Script: ${FUNCNAME[0]}: Extraction from ${GET_ICON}"
+         mkdir -p ${TEMP_DIR} && \
+         DBUG "I: Script: ${FUNCNAME[0]}: Created directory ${TEMP_DIR}"
+
+         ${ICOTOOL_CMD} -x "${GET_ICON}" -o "${TEMP_DIR}"  2>/dev/null && \
+         DBUG "I: Script: ${FUNCNAME[0]}: Icotool: Extracting png files from" \
+              "${TEMP_DIR}/${EXE_LESS}.ico" && \
+         cp -f $(ls -S1 ${TEMP_DIR}/*.png|head -n 1) "${ICONFILE}" && \
+         DBUG "I: Script: ${FUNCNAME[0]}: Copied successfully..." && WARN="false"
+
+         # If icon could not be copied, warn the user
+         if [ "${WARN}" != "false" ]; then
+              DBUG "I: Create Prefix: Icon could not be copied..." \
+                   "use \"Change Icon...\" option"
+              ${ZENITY_CMD} --error --no-wrap --title "Change Icon for ${EXE}" \
+                   --text "Icon from ${GET_ICON} failed!"
+         fi
+
+         # Cleanup tempdir and clear variable
+         unset WARN
+  
+         #remove tmp directory after copying icon png
+         rm -rf "${TEMP_DIR}" && \
+         DBUG "I: Script: ${FUNCNAME[0]}: Cleanup ${TEMP_DIR}"
+
   else
        DBUG "I: Script: ${FUNCNAME[0]}: ${GET_ICON} selected"
        cp -f "${GET_ICON}" "${ICONFILE}"
