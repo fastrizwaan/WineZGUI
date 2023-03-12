@@ -45,13 +45,14 @@ Script_Launch()
        TEXTMSG+="Update version Info?"
        unset TITLEMSG
        TITLEMSG+="Wine version mismatch!"
-    #   ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
-    #   ANSWER=$?
-    #   if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
-    #        sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g; t;" -i "${INFOFILE}" \
-    #        || echo "Failed Updating: Info.yml:Wine:${CURRENT_WINE_VERSION}"
-    #        DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
-    #   fi
+
+       ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
+       ANSWER=$?
+       if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
+            sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g; t;" -i "${INFOFILE}" \
+            || echo "Failed Updating: Info.yml:Wine:${CURRENT_WINE_VERSION}"
+            DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
+       fi
   fi
 
   # 3. Launch The EXE file
