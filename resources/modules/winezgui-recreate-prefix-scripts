@@ -8,17 +8,22 @@ WineZGUI_Recreate_Prefix_Scripts()
     source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
 
-  echo "* * * * * * * * * * * *"
   echo "APPVERSION = $APPVERSION"
-  echo "* * * * * * * * * * * *"
-  source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
-  PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
-  ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" \
-                --text="This will overwrite all shell scripts associated with this prefix!"
+
   
-  ANSWER=$?
+  
+  if [ -z "$SKIP_ASK" ]; then
+      source "${DATADIR}/winezgui-list-available-prefixes"
+      List_Available_Prefixes
+      PREFIXNAME=$(basename ${SELECTED_PREFIX})
+
+      ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" --text="This will overwrite all shell scripts associated with this prefix!"
+      ANSWER=$?
+  else
+      PREFIXNAME=$(basename ${SELECTED_PREFIX})
+      ANSWER=0
+  fi
 
   if [ ${ANSWER} -eq 1 ]; then
        echo "Cancelled"
@@ -65,7 +70,9 @@ WineZGUI_Recreate_Prefix_Scripts()
   WineZGUI_Remove_Broken_Links
   
   # Inform and offer to Launch
-  ${ZENITY_CMD} --info --title="Re-created Scripts for ${PREFIXNAME}" \
-  --text="Updated scripts to $APP_WITH_VER version, Please launch from menu."
+    if [ -z "$SKIP_ASK" ]; then
+         ${ZENITY_CMD} --info --title="Re-created Scripts for ${PREFIXNAME}" \
+         --text="Updated scripts to $APP_WITH_VER version, Please launch from menu."
+    fi
 
 }

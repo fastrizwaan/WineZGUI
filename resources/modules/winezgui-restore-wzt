@@ -112,7 +112,7 @@ Restore_Wzt_File()
   # 2.1 format the wzt-info.yml content for display using zenity
   TEXT_MSG="$(cat ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE} | \
            sed "s/:/ ,:, /g"|column -t -s "," | \
-           sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/g" | \
+           sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" | \
            sed -E "s/^(.*)$/ \1/g")"
   # 2.2 Show message
   ${ZENITY_CMD} --question --no-wrap \
