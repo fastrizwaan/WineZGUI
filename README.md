@@ -147,3 +147,5 @@ sudo eopkg it zenity wine wine-32bit winetricks perl-image-exiftool icoutils gno
 sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget \
                 lib32-alsa-plugins lib32-libpulse lib32-openal zstd
 ```
+#### XBOX compatible controllers
+build and install kernel drivers for xbox 360 compatible controllers from https://github.com/paroj/xpad
