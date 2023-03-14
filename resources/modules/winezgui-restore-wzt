@@ -110,11 +110,9 @@ Restore_Wzt_File()
   DBUG "I: ${HEADER}: Name: ${GAME_NAME}"
  
   # 2.1 format the wzt-info.yml content for display using zenity
-  TEXT_MSG="$(cat ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE} | \
-           sed "s/:/ ,:, /g"|column -t -s "," | \
-           sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" | \
-           sed -E "s/^(.*)$/ \1/g")"
-  # 2.2 Show message
+  TEXT1="$(while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:/g'; done < ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE})"
+  TEXT_MSG="$(echo $TEXT1|sed -e 's/XX /<\/tt>\n/g'|sed -e 's/XX/<\/tt>\n/g'|column -t -s '\`')"
+
   ${ZENITY_CMD} --question --no-wrap \
          --title "Restore ${GAME_NAME}?" --text "${TEXT_MSG}"
   ANSWER=$?
