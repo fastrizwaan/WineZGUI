@@ -25,12 +25,12 @@ Script_Open_Shell()
   fi
 
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(flatpak-spawn --host which gnome-terminal) ]; then
+       [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
          DBUG "I: Script: Open Shell: Flatpak script, running from sandbox"
          cd "${PREFIXDIR}"
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
+         "export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
          sh "${PREFIXDIR}"
 
        # If flatpak install and script running from host
@@ -41,7 +41,7 @@ Script_Open_Shell()
          DBUG "I: Script: Open Shell: Flatpak script, running from host"
          gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         'export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
+         'export PS1="[\u@\h:\w]\$ "; export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
          sh "${PREFIXDIR}"
 
        # Else it is a host install and gnome-terminal is found
@@ -50,7 +50,7 @@ Script_Open_Shell()
          DBUG "I: Script: Open Shell: System script, running from host"
          export WINEPREFIX="${PREFIXDIR}";
          gnome-terminal --wait -- bash -c \
-         "cd \"${WINEPREFIX}\"; exec bash -i"
+         "export PS1='[\u@\h:\w]\$ '; cd \"${WINEPREFIX}\"; exec bash -i"
          # gnome terminal is not found
   else
          DBUG "I: Script: Open Shell: Gnome-terminal not found"
