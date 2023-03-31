@@ -1,6 +1,6 @@
 script-delete()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -18,7 +18,7 @@ script-delete()
                --text   "<b>${EXE_NAME} Prefix...</b>")
   # If Cancel is clicked
   if [ -z "${DEL_RESPONSE}" ]; then
-       DBUG "I: Script: Delete: Cancelled!"
+       dbug "I: Script: Delete: Cancelled!"
        unset DEL_RESPONSE
        return 1
   fi

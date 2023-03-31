@@ -2,7 +2,7 @@
 # FIXME add create/rename/delete shortcuts
 script-more()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -19,30 +19,30 @@ script-more()
 
   # Exit if Cancel is clicked
   if [ -z "${SCRIPT_MORE_OPTION}" ]; then
-       DBUG "I: MORE: Cancel Selected!"
+       dbug "I: MORE: Cancel Selected!"
        return 1
   fi
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
-       DBUG "I: Script: Delete... Selected!"
+       dbug "I: Script: Delete... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-exe-cmdline"
        script-exe-cmdline
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Launch Behavior" ]; then
-       DBUG "I: Script: Set Launch Behavior... Selected!"
+       dbug "I: Script: Set Launch Behavior... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-more-launch-behavior"
        script-more-launch-behavior
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Import Game Directory" ]; then
-       DBUG "I: Script: Set Launch Behavior... Selected!"
+       dbug "I: Script: Set Launch Behavior... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-import-gamedir-into-prefix"
        script-import-gamedir-into-prefix
   fi
 
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
-       DBUG "I: Script: Delete... Selected!"
+       dbug "I: Script: Delete... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-delete"
        script-delete
   fi

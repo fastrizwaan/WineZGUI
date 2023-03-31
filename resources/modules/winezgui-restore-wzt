@@ -20,13 +20,13 @@ winezgui-restore-wzt()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
 
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if ! [ -w "${PREFIXES_DIR}" ]; then
-       DBUG "I: ${HEADER}: ${PREFIXES_DIR} is not writable. Aborting!"
+       dbug "I: ${HEADER}: ${PREFIXES_DIR} is not writable. Aborting!"
        ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "${PREFIXES_DIR} is not writable"
        WineZGUI_Window
@@ -42,7 +42,7 @@ winezgui-restore-wzt()
  
   # 1.1  Extract Prefix Name: Get the directory name from wzt file
   WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
-  DBUG "I: ${HEADER}: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
+  dbug "I: ${HEADER}: Prefix from ${WZT_FILE} is ${WZT_PREFIX}"
  
   # 1.2 Create a temporary directory to extract wzt-info.yml file
   export WINEZGUI_TEMPDIR="${WINEZGUIDIR}/tmp"
@@ -69,11 +69,11 @@ winezgui-restore-wzt()
                    |sed "s/  */ /g" |cut -f2 -d " ")
        if ! [ -z "$PID_OF_TAR" ]; then # if pid is found kill it
             kill -9 ${PID_OF_TAR} \
-            && DBUG "I: ${HEADER}: Getting Info Cancelled!"
+            && dbug "I: ${HEADER}: Getting Info Cancelled!"
             WineZGUI_Window
        fi
   else
-       DBUG "I: ${HEADER}: Read ${WZT_NAME} Successfully!"
+       dbug "I: ${HEADER}: Read ${WZT_NAME} Successfully!"
   fi
  
   # 1.5 Read the wztfile contents into a variable
@@ -82,7 +82,7 @@ winezgui-restore-wzt()
   # 1.6 If the WZT_VAR is empty, then WZT_VAR could not read from wzt-info.yml
   # Force extract..
   if [ -z "${WZT_VAR}" ]; then
-       DBUG "I: ${HEADER}: ${WZT_INFO_FILE} not found in tar archive"
+       dbug "I: ${HEADER}: ${WZT_INFO_FILE} not found in tar archive"
        ${ZENITY_CMD} --question  --title "${WZT_NAME} Force extract?" \
               --no-wrap --text "${WZT_INFO_FILE} not found, extract anyhow?"
        ANSWER=$?
@@ -107,7 +107,7 @@ winezgui-restore-wzt()
   # 2. Show Content of extracted wzt-info.yml file before restoring
   # 2.1 Get Game/App name from the wzt-info.yml file
   GAME_NAME=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep -E "Name*:"|cut -f2 -d ":")
-  DBUG "I: ${HEADER}: Name: ${GAME_NAME}"
+  dbug "I: ${HEADER}: Name: ${GAME_NAME}"
  
   # 2.1 format the wzt-info.yml content for display using zenity
   TEXT1="$(while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:/g'; done < ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE})"
@@ -119,7 +119,7 @@ winezgui-restore-wzt()
  
   # 2.3 if User selects cancel / no
   if [ "$ANSWER" = "1" ]; then
-       DBUG "I: ${HEADER}: Restoring WineZGUI file. Cancelled!"
+       dbug "I: ${HEADER}: Restoring WineZGUI file. Cancelled!"
        WineZGUI_Window
   fi
  
@@ -127,7 +127,7 @@ winezgui-restore-wzt()
   rm -rf ${WINEZGUI_TEMPDIR}
  
   # 3. Determine required disk space to extract the wzt file
-  DBUG "I: ${HEADER}: Determining available space for extraction"
+  dbug "I: ${HEADER}: Determining available space for extraction"
  
   # 3.1 Determine available disk space (df -h) of $HOME / winezgui prefix
   WINEZGUIDIR_DF=$(df -h "${WINEZGUIDIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
@@ -137,21 +137,21 @@ winezgui-restore-wzt()
        echo "Error: ${FUNCNAME[0]}: WINEZGUIDIR_DF not assigned"
        echo "-------------------- Error --------------------------"
   fi
-  DBUG "I: ${HEADER}: Available space is: ${WINEZGUIDIR_DF}"
+  dbug "I: ${HEADER}: Available space is: ${WINEZGUIDIR_DF}"
  
   # 3.2 Convert the above $WINEZGUIDIR_DF into bytes for comparison
   WINEZGUIDIR_DF_IN_BYTES=$(echo ${WINEZGUIDIR_DF}|numfmt --from iec)
  
   # 3.3 Fetch required disk space from wzt variable
-  DBUG "I: ${HEADER}: Fetching required disk space from ${WZT_INFO_FILE}"
+  dbug "I: ${HEADER}: Fetching required disk space from ${WZT_INFO_FILE}"
   WZT_F_UNCOMPRESSED_SIZE=$(echo ${WZT_VAR}|sed "s/|/\n/g"|grep "Size" \
                            |cut -f2 -d ":"|numfmt --from iec)
-  DBUG "I: ${HEADER}: Required space: ${WZT_F_UNCOMPRESSED_SIZE}"
+  dbug "I: ${HEADER}: Required space: ${WZT_F_UNCOMPRESSED_SIZE}"
  
   # 3.4 If Target directory does not have sufficient space, abort backup
-  DBUG "I: ${HEADER}: Checking Available size is more than Required space"
+  dbug "I: ${HEADER}: Checking Available size is more than Required space"
   if [ ${WINEZGUIDIR_DF_IN_BYTES} -gt ${WZT_F_UNCOMPRESSED_SIZE} ];then
-       DBUG "I: ${HEADER}: ${WINEZGUIDIR} has enough available disk space!"
+       dbug "I: ${HEADER}: ${WINEZGUIDIR} has enough available disk space!"
   else
        echo "W: ${HEADER}: ${WINEZGUIDIR} does not have free disk space!!!"
        unset MSG
@@ -169,7 +169,7 @@ winezgui-restore-wzt()
   fi
  
   # 4. Restoring wzt file
-  DBUG "I: ${HEADER}: Restoring ${WZT_NAME}"
+  dbug "I: ${HEADER}: Restoring ${WZT_NAME}"
  
   # 4.1 Check: Existing prefix with the same name!?
   if [ -d "${PREFIXES_DIR}/${WZT_PREFIX}" ]; then
@@ -178,16 +178,16 @@ winezgui-restore-wzt()
               --text "${WZT_PREFIX} already exists, overwrite?"
        ANSWER=$?
        if [ "${ANSWER}" = "1" ]; then
-            DBUG "I: ${HEADER}: User Cancelled Overwriting! Aborting!"
+            dbug "I: ${HEADER}: User Cancelled Overwriting! Aborting!"
             WineZGUI_Window
        else
-            DBUG "I: ${HEADER}: Overwriting existing ${WZT_NAME}"
+            dbug "I: ${HEADER}: Overwriting existing ${WZT_NAME}"
        fi
   fi
  
   # 4.2 Extract file to WineZGUI Prefix and show gui progress dialog
   # Change directory name XOUSERXO to username on restore
-  DBUG "I: ${HEADER}: Extracting ${WZT_NAME} at ${PREFIXES_DIR}"
+  dbug "I: ${HEADER}: Extracting ${WZT_NAME} at ${PREFIXES_DIR}"
   (${TAR_CMD} --zstd -xvf "${WZT_FILE}" -C "${PREFIXES_DIR}" --transform \
            "s|XOUSERXO|${USER}|g" &)| \
   (${ZENITY_CMD} --progress --width=500                    \
@@ -208,7 +208,7 @@ winezgui-restore-wzt()
  
        if ! [ -z "$PID_OF_TAR" ]; then
             kill -9 ${PID_OF_TAR} \
-            && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
+            && dbug "I: ${HEADER}: Cancelled! Stopped extraction!"
             # Ask the user whether to delete partially extracted or let it be
             ${ZENITY_CMD} --question --title "Extraction Cancelled!" \
                    --text "Delete ${WZT_PREFIX} prefix?"
@@ -216,13 +216,13 @@ winezgui-restore-wzt()
             if [ "${ANSWER}" = "0" ]; then
                  # User selected Delete
                  rm -rf "${PREFIXES_DIR}/${WZT_PREFIX}" && \
-                 DBUG "I: ${HEADER}: Removed ${PREFIXES_DIR}/${WZT_PREFIX}"
+                 dbug "I: ${HEADER}: Removed ${PREFIXES_DIR}/${WZT_PREFIX}"
                  # Cleanup broken links in winezgui shortcuts directory
                  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-                 DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+                 dbug "I: ${HEADER}: Removed broken WineZGUI .desktop links"
             else
                  # user wants to keep prefix
-                 DBUG "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${WZT_PREFIX}"
+                 dbug "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${WZT_PREFIX}"
                  # Restore Sucess Message
             fi
             MSG=("${WZT_PREFIX} Restore Cancelled!")
@@ -230,7 +230,7 @@ winezgui-restore-wzt()
  
        else
             # If no pid of tar is found means extraction already completed
-            DBUG "I: ${HEADER}: Extracted ${WZT_FILE} Successfully!"
+            dbug "I: ${HEADER}: Extracted ${WZT_FILE} Successfully!"
        fi # if ! [ -z "$PID_OF_TAR" ]; then
   fi # [ "${ZENITY_STATUS}" = "1" ]; then
  
@@ -244,7 +244,7 @@ winezgui-restore-wzt()
   # cd "${PREFIXES_DIR}/${WZT_PREFIX}"
   cd "${PREFIXES_DIR}"
   export PREFIXNAME="${WZT_PREFIX}"
-  DBUG "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
+  dbug "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
   source "${DATADIR}/winezgui-identity-restore"
   winezgui-identity-restore "${PREFIXES_DIR}/${WZT_PREFIX}"
@@ -257,7 +257,7 @@ winezgui-restore-wzt()
        MAKEDIR=("${HOME}/.local/share/applications/")
        MAKEDIR+="winezgui/${FLATPAK_ID}"
        mkdir -p "${MAKEDIR}"
-       DBUG "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"
+       dbug "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"
  
        # 6.1.2 Add flatpak name to XOFLATPAKIDXO
        sed "s|XOFLATPAKIDXO|${FLATPAK_NAME}|g" -i "${FOUND_INFOFILE}"
@@ -272,7 +272,7 @@ winezgui-restore-wzt()
        MAKEDIR=("${HOME}/.local/share/applications/")
        MAKEDIR+="winezgui"
        mkdir -p "${MAKEDIR}"
-       DBUG "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"
+       dbug "I: ${HEADER}: Created Shortcuts dir: ${MAKEDIR}"
        # 6.1.2 Remove flatpak line containing XOFLATPAKIDXO for system install
        sed "/.*XOFLATPAKIDXO.*/d" -i "${FOUND_INFOFILE}"
        # if Install:flatpak  => Install:system
@@ -297,7 +297,7 @@ winezgui-restore-wzt()
 
   # 7. Cleanup broken links in winezgui shortcuts directory
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-  DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+  dbug "I: ${HEADER}: Removed broken WineZGUI .desktop links"
 
   # 8. Update desktop menus and Icon cache
   # Clean up broken shortcuts and update shortcuts menu
@@ -322,7 +322,7 @@ winezgui-restore-wzt()
                  --text="Launch: ${LAUNCH_FILE_NAME}?"
        then
             # Start the Game script and exit main app
-            DBUG "I: ${HEADER}: Launching Script for" \
+            dbug "I: ${HEADER}: Launching Script for" \
                  "the restored game..."
             bash ${FOUND_SCRIPT_FILE}
             exit 0
@@ -337,7 +337,7 @@ winezgui-restore-wzt()
 #   # Make launch default for restored app/game
 #   if [ -w "${FOUND_PREFIX_DIR}" ]; then
 #             echo "Yes" > "${FOUND_PREFIX_DIR}/launch"
-#             DBUG "I: ${FOUND_PREFIX_DIR}: launch file created!"
+#             dbug "I: ${FOUND_PREFIX_DIR}: launch file created!"
 #   fi
 }
  

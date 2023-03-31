@@ -1,7 +1,7 @@
 # script-create-change-prefix-file
 script-create-change-prefix-file()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -11,5 +11,5 @@ script-create-change-prefix-file()
   NEW_EXE_LESS=$(echo ${NEW_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
                                      |sed "s/\.[Mm][Ss][Ii]//")
   echo "Prefix:${NEW_EXE_LESS}" > "${PREFIXDIR}/Change-Prefix-Name"
-  DBUG "I: Script: ${FUNCNAME[0]}: Created file with Prefix:${NEW_EXE_LESS}"
+  dbug "I: Script: ${FUNCNAME[0]}: Created file with Prefix:${NEW_EXE_LESS}"
 }

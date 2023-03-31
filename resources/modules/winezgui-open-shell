@@ -4,7 +4,7 @@
 # and gnome terminal is found on host
 winezgui-open-shell()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -27,14 +27,14 @@ winezgui-open-shell()
 
   if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
        [ $(flatpak-spawn  --host which gnome-terminal) ]; then
-         DBUG "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
+         dbug "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
          export GNOME_TERMINAL=0 ; #Available via flatpak-spawn
   elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
        [ $(which gnome-terminal) ]; then
-         DBUG "I: ${HEADER}: Gnome-terminal found on host system"
+         dbug "I: ${HEADER}: Gnome-terminal found on host system"
          export GNOME_TERMINAL=0 ; #Available on host install
   else
-         DBUG "I: ${HEADER}: Gnome-terminal not found"
+         dbug "I: ${HEADER}: Gnome-terminal not found"
          export GNOME_TERMINAL=1 ; #Unavailable on host
   fi
 
@@ -49,7 +49,7 @@ winezgui-open-shell()
   # If found in flatpak sandbox, use flatpak-spawn
   if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
      [ $(flatpak-spawn --host echo 0) ]; then
-       DBUG "I: ${HEADER}: Opening gnome-terminal from sandbox"
+       dbug "I: ${HEADER}: Opening gnome-terminal from sandbox"
        # Shell needs WINEPREFIX as we are working with wine
        export WINEPREFIX=${DEFAULT}
         flatpak-spawn --host gnome-terminal --wait --                  \
@@ -58,7 +58,7 @@ winezgui-open-shell()
                    exec bash -i"
       
   else # If found on host, run gnome-terminal
-       DBUG "I: ${HEADER}: Opening gnome-terminal from host"
+       dbug "I: ${HEADER}: Opening gnome-terminal from host"
        export WINEPREFIX=${DEFAULT}
        gnome-terminal --wait -- bash -c "export WINEPREFIX=${WINEPREFIX}; \
                                          cd ${TEMPLATE}; exec bash -i"

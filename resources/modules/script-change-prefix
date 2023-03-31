@@ -11,7 +11,7 @@
 # 8. Launch Script from Renamed Directory
 script-change-prefix()
 { 
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -29,7 +29,7 @@ script-change-prefix()
 
   # 1.1 If User clicks cancel, go back
   if [ -z "${GET_PREFIX_NAME}" ]; then
-      DBUG "I: Script: ${FUNCNAME[0]}: Cancelled"
+      dbug "I: Script: ${FUNCNAME[0]}: Cancelled"
       Script_Window
   fi
 
@@ -39,7 +39,7 @@ script-change-prefix()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
@@ -53,8 +53,8 @@ script-change-prefix()
       ${ZENITY_CMD} --error --title="Directory Already Exists!" \
               --text="Cannot change ${PREFIXNAME} to ${NEWPREFIXNAME}"
 
-      DBUG "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"
-      DBUG "I: Script: ${FUNCNAME[0]}: ${PREFIXNAME} Already Exists!"
+      dbug "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"
+      dbug "I: Script: ${FUNCNAME[0]}: ${PREFIXNAME} Already Exists!"
       echo "W: -----------------------------"
       echo "W: setting prefixname in desktop file"
       echo "W: Application (PREFIXNAME)"
@@ -119,7 +119,7 @@ script-change-prefix()
 
   # 7.2 Delete all broken links which points to winezgui game prefix
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-  DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
+  dbug "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
 
   # 7.3 update icon cache and desktop menu
   # Clean up broken shortcuts and update shortcuts menu
@@ -134,7 +134,7 @@ script-change-prefix()
   #export SCRIPTFILE="${NEWSCRIPTFILE}"
   export ICONFILE="${NEWICONFILE}"
   export DESKTOPFILE="${NEWDESKTOPFILE}"
-  DBUG "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
+  dbug "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
 
   NEW_SCRIPT_FILE="${NEWPREFIXDIR}/$(basename ${SCRIPTFILE})"
 

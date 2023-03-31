@@ -78,7 +78,7 @@ winezgui-shortcuts-restore()
        unset TEXT
        TEXT+="${BASENAME} desktop file exists, overwrite?"
        TEXT+="\nUse <b>Launch...</b> or <b>Script...</b> later."
-       DBUG "I: ${HEADER}: ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME} file Already exists"
+       dbug "I: ${HEADER}: ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME} file Already exists"
        ${ZENITY_CMD} --question --text  "${TEXT}" \
               --title "Desktop file already exists"
        ANSWER=$?

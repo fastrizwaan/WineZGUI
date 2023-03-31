@@ -1,6 +1,6 @@
 # Only show debug message when DEBUG="Y" or DEBUG="anything"
 # Use unset DEBUG will stop messages.
-DBUG()
+dbug()
 {
   if [ "${DEBUG}" = "y" ] || [ "${DEBUG}" = "Y" ]; then
        echo "${1}"

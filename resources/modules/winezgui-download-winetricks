@@ -1,7 +1,7 @@
 #winezgui-download-winetricks
 winezgui-download-winetricks()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -25,7 +25,7 @@ winezgui-download-winetricks()
        fi
     
   else
-       DBUG "I: Download Winetricks: Cancelled!"
+       dbug "I: Download Winetricks: Cancelled!"
        return 1
   fi  
 }

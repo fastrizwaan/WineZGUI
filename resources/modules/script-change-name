@@ -3,11 +3,11 @@
 
 script-change-name()
 {    
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: Script: ${FUNCNAME[0]}: Name Selected!"
+  dbug "I: Script: ${FUNCNAME[0]}: Name Selected!"
   # Find if PROGNAME does not have suffix (wine-XX) add it
   if ! [[ "${PROGNAME}" == *"(${APP_WITH_VER})" ]]; then
        PROGNAME_WITH_SUFFIX="${PROGNAME} (${APP_WITH_VER})"
@@ -31,7 +31,7 @@ script-change-name()
   if [ -z "${GET_PROGNAME}" ]; then #if no name is given use filename
        #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # Return to Game window
-       DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
+       dbug "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
        Script_Window
   fi
   
@@ -41,13 +41,13 @@ script-change-name()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
   # Set name in desktop file
   ${DESKTOP_FILE_EDIT} --set-name="${GET_PROGNAME}"      "${DESKTOPFILE}"
-  DBUG "I: Script: Rename Shortcut: Name: ${PROGNAME}  -> ${GET_PROGNAME}"
+  dbug "I: Script: Rename Shortcut: Name: ${PROGNAME}  -> ${GET_PROGNAME}"
 
   # Change keyword in desktop file
   sed "s|\(Keywords.* game;\).*|\1 ${GET_PROGNAME};|g" -i ${DESKTOPFILE} \
@@ -68,11 +68,11 @@ script-change-name()
   ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_NAME}"
   # Remove broken .desktop links
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-       DBUG "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
+       dbug "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"
 
 
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
-  DBUG "I: Script: ${FUNCNAME[0]}: Change ${PROGNAME} to ${GET_PROGNAME}"
+  dbug "I: Script: ${FUNCNAME[0]}: Change ${PROGNAME} to ${GET_PROGNAME}"
 
   # Required for instant change in the GameWindow
   export PROGNAME="${GET_PROGNAME}"

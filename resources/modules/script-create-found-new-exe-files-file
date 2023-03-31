@@ -2,7 +2,7 @@
 
 script-create-found-new-exe-files-file()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not

@@ -3,7 +3,7 @@
 winezgui-identity-restore-all()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -18,7 +18,7 @@ winezgui-identity-restore-all()
     $(find ${TEMPLATES_DIR}/* ${PREFIXES_DIR}/* -maxdepth 0 -type d); do
     echo "# Processing $(basename ${D})"
     winezgui-identity-restore "${D}"
-    DBUG "I: ${HEADER}: Processed $(basename ${D})"
+    dbug "I: ${HEADER}: Processed $(basename ${D})"
   done)|(${ZENITY_CMD} --progress --width=500              \
          --title="${APP_WITH_VER} - Process files!" \
          --text="Extracting ${TAR_FILE}..."         \

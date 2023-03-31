@@ -1,7 +1,7 @@
 winezgui-template-create-new()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -18,7 +18,7 @@ winezgui-template-create-new()
 
   # Exit if Cancel is clicked
   if [ -z "${NEW_TEMPLATE}" ]; then
-       DBUG "I: Templates: Cancel Selected!"
+       dbug "I: Templates: Cancel Selected!"
        return 1
   fi
 
@@ -41,7 +41,7 @@ winezgui-template-create-new()
   if [ -z "${NEW_TEMPLATE}" ]; then #if no name is given use filename
        #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # return to Game window
-       DBUG "I: ${HEADER}: Cancelled"
+       dbug "I: ${HEADER}: Cancelled"
   fi
 
   # Check if user entered symbols
@@ -50,7 +50,7 @@ winezgui-template-create-new()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
@@ -76,7 +76,7 @@ winezgui-template-create-new()
        source "${DATADIR}/winezgui-template-change"
        winezgui-template-change
   fi
-  DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
+  dbug "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
   unset TEXT
   return 0
 }

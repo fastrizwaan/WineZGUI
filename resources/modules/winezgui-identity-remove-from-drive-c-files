@@ -2,7 +2,7 @@
 winezgui-identity-remove-from-drive-c-files()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -16,7 +16,7 @@ winezgui-identity-remove-from-drive-c-files()
   fi
   # if drive_c is found inside given prefix $1
   if [ -d "${1}/drive_c" ]; then
-       DBUG "I: ${HEADER}: found drive_c, searching... for ${USER}"
+       dbug "I: ${HEADER}: found drive_c, searching... for ${USER}"
       (FILES_WITH_USERNAME=$(grep -r "${USER}" drive_c|sort -u| cut -f1 -d ":"| tee "${1}/FILES_WITH_USERNAME.txt"))| \
        zenity  --progress --pulsate --auto-close --title="Find \"${USER}\"" --width=500 --text="Finding files with \"${USER}\" in drive_c!"
                 

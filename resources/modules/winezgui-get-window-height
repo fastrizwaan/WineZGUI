@@ -1,7 +1,7 @@
 #winezgui-get-window-height
 winezgui-get-window-height()
 { 
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
@@ -9,7 +9,7 @@ winezgui-get-window-height()
 
 
   if [ -z "${1}" ]; then
-      DBUG "I: ${HEADER}: Provide a integer value"
+      dbug "I: ${HEADER}: Provide a integer value"
   fi
   
   HEIGHT=155 #use Height for number of elements
@@ -21,6 +21,6 @@ winezgui-get-window-height()
   if [ ${HEIGHT} -gt 700 ]; then
        HEIGHT=700
   fi
-  DBUG "I: ${HEADER}: HEIGHT=${HEIGHT}"
+  dbug "I: ${HEADER}: HEIGHT=${HEIGHT}"
   export HEIGHT
 }

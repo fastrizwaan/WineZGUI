@@ -1,7 +1,7 @@
 # script_wine_programs
 script-wine-programs()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -25,7 +25,7 @@ script-wine-programs()
 
    # Exit if Cancel is clicked
   if [ -z "${WINE_PROGRAMS_OPTION}" ]; then
-        DBUG "I: Script: Cancel Selected. Bye!"
+        dbug "I: Script: Cancel Selected. Bye!"
         return 0
   fi
 
@@ -36,35 +36,35 @@ script-wine-programs()
          ${WINE_CMD} explorer
          
   elif [ "${WINE_PROGRAMS_OPTION}" = "Wine Configuration..." ]; then
-         DBUG "I: Script: Launch Winecfg... Selected!"
+         dbug "I: Script: Launch Winecfg... Selected!"
          ${WINE_CMD} winecfg
          
   elif [ "${WINE_PROGRAMS_OPTION}" = "Add/Remove Programs..." ]; then
-         DBUG "I: Script: Add/Remove Programs... Selected!"
+         dbug "I: Script: Add/Remove Programs... Selected!"
          ${WINE_CMD} uninstaller
 
   elif [ "${WINE_PROGRAMS_OPTION}" = "Registry Editor..." ]; then
-         DBUG "I: Script: Launch Regedit... Selected!"
+         dbug "I: Script: Launch Regedit... Selected!"
          ${WINE_CMD} regedit
 
   elif [ "${WINE_PROGRAMS_OPTION}" = "Task Manager..." ]; then
-         DBUG "I: Script: Task Manager... Selected!"
+         dbug "I: Script: Task Manager... Selected!"
          ${WINE_CMD} taskmgr
          
   elif [ "${WINE_PROGRAMS_OPTION}" = "Notepad..." ]; then
-         DBUG "I: Script: Launch notepad... Selected!"
+         dbug "I: Script: Launch notepad... Selected!"
          ${WINE_CMD} notepad
          
   elif [ "${WINE_PROGRAMS_OPTION}" = "Wordpad..." ]; then
-         DBUG "I: Script: Launch wordpad... Selected!"
+         dbug "I: Script: Launch wordpad... Selected!"
          ${WINE_CMD} write
          
   elif [ "${WINE_PROGRAMS_OPTION}" = "Clock..." ]; then
-         DBUG "I: Script: Launch wordpad... Selected!"
+         dbug "I: Script: Launch wordpad... Selected!"
          ${WINE_CMD} clock
 
   elif [ "${WINE_PROGRAMS_OPTION}" = "Mine Sweeper..." ]; then
-         DBUG "I: Script: Mine Sweeper... Selected!"
+         dbug "I: Script: Mine Sweeper... Selected!"
          ${WINE_CMD} winemine
          
   fi

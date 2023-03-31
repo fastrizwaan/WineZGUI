@@ -2,7 +2,7 @@
 winezgui-check-entry-text()
 {
 
- DBUG "${FUNCNAME[0]}: Given: ${1}"
+ dbug "${FUNCNAME[0]}: Given: ${1}"
      
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not

@@ -4,7 +4,7 @@
 # FIXME change this to list installed exe function to be used by Open Other EXE and Change EXE
 script-get-selected-exe()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not

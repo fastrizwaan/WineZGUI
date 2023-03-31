@@ -4,7 +4,7 @@ winezgui-winetricks-cli()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
@@ -26,7 +26,7 @@ winezgui-winetricks-cli()
   # Create Temp dir
   if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
       mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
-      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+      dbug "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
   fi
 
   MESSAGE="Change & Press Enter to install these using Winetricks:"
@@ -42,7 +42,7 @@ winezgui-winetricks-cli()
 
   if [ -z "${VERBS}" ]; then #if no dlls are given
        #go back to Main function
-       DBUG "I: ${HEADER}: Winetricks CLI: no verbs are given!"
+       dbug "I: ${HEADER}: Winetricks CLI: no verbs are given!"
        return 1
   fi
 
@@ -53,13 +53,13 @@ winezgui-winetricks-cli()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
   VERBS=(${VERBS}) ; #convert string to array
-  DBUG "I: ${HEADER}: Winetricks CLI: Selected verbs:"
-  DBUG "I: ${HEADER}: ${VERBS[*]}"
+  dbug "I: ${HEADER}: Winetricks CLI: Selected verbs:"
+  dbug "I: ${HEADER}: ${VERBS[*]}"
   
   # Report user the time it took to install winetricks
   TIMER_START=${SECONDS}
@@ -76,7 +76,7 @@ winezgui-winetricks-cli()
   ( for i in ${VERBS[*]}; do
   
   # Show Progress Percentage and Info
-  DBUG "I: ${HEADER}: Installing ${i}..."
+  dbug "I: ${HEADER}: Installing ${i}..."
   echo "# Installing ${i}..."
   
   # Install winetricks verbs and put output to logs
@@ -90,6 +90,6 @@ winezgui-winetricks-cli()
             --progress --pulsate --auto-kill
   # Inform about time taken
   
-  DBUG "I: ${HEADER}: Winetricks CLI: Exited!"
+  dbug "I: ${HEADER}: Winetricks CLI: Exited!"
   return 0
 }

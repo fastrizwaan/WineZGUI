@@ -3,8 +3,8 @@
 # and set the variable SELECTED_SCRIPT
 winezgui-list-available-prefix-scripts()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -66,14 +66,14 @@ winezgui-list-available-prefix-scripts()
    ANSWER=$?
    
    if [ ${ANSWER} -eq 1 ]; then
-        DBUG "I: ${HEADER}: Cancelled!"
+        dbug "I: ${HEADER}: Cancelled!"
         unset SEARCH_LIST TEMPLATES_FOUND SHOW_OPTION
         unset NAMES FILES COMMAND RESULT count i
         WineZGUI_Window
    fi
    
    if [ -z "${RESULT}" ]; then
-        DBUG "I: ${HEADER}: Cancelled!"
+        dbug "I: ${HEADER}: Cancelled!"
         unset SEARCH_LIST TEMPLATES_FOUND SHOW_OPTION
         unset NAMES FILES COMMAND RESULT count i
         WineZGUI_Window
@@ -84,8 +84,8 @@ winezgui-list-available-prefix-scripts()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "$RESULT" ]; then
-           DBUG "I: ${FUNCNAME[0]}: Selected $i"
-           DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
+           dbug "I: ${FUNCNAME[0]}: Selected $i"
+           dbug "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
            export SELECTED_SCRIPT="${FILES[${count}]}"
 
            break

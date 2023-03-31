@@ -6,7 +6,7 @@ winezgui-update-all-scripts()
   echo "$c,$c,$c,$c,$c,$c,$c"; c=$(expr $c + 1)
   
   OLD_HEADER=${HEADER}
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   #zenity --info --text="Work in Progress"
   #return 0  
   #source "${DATADIR}/script-check-variables-loaded-or-not"
@@ -30,7 +30,7 @@ winezgui-update-all-scripts()
   #source ${DATADIR}/check-all-variables
  # check-all-variables "SEARCH_LIST PREFIXES_FOUND"
   ### Get Prefixdir name
-  #DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  #dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source ${DATADIR}/winezgui-recreate-prefix-scripts
   for PFX in $(echo ${PREFIXES_FOUND}|tr '|' '\n'|sort);
   do

@@ -5,7 +5,7 @@ script-import-gamedir-into-prefix()
   script-check-variables-loaded-or-not
   # 1: if gamedir is already inside prefixdir return
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-        DBUG "I: Script: ${FUNCNAME[0]}: Game Directory already inside Prefix!"
+        dbug "I: Script: ${FUNCNAME[0]}: Game Directory already inside Prefix!"
         ${ZENITY_CMD} --error --title="Import Gamedir" --text="Game Directory already inside Prefix!"
         return 1
   fi
@@ -24,7 +24,7 @@ script-import-gamedir-into-prefix()
        ANSWER=$?
        # 1.1 If user selects no or cancels to locate exe file
        if [ ${ANSWER} -eq 1 ]; then
-            DBUG "I: Script: Import: User Cancelled!"
+            dbug "I: Script: Import: User Cancelled!"
             return 1  # Return to Script window
        fi
 
@@ -54,7 +54,7 @@ script-import-gamedir-into-prefix()
       MSG1="Cannot Copy ${EXE_PATH} as Game directory"
       MSG2="Copy/Move files to a different directory to create bundle!"
 
-      DBUG "I: Script: ${FUNCNAME[0]}: ${EXE_PATH}"
+      dbug "I: Script: ${FUNCNAME[0]}: ${EXE_PATH}"
       echo "E: Script: ${FUNCNAME[0]}: ${MSG1}"
       echo "E: Script: ${FUNCNAME[0]}: ${MSG2}"
       echo "E:${FUNCNAME[0]}: Cancelling Backup!"
@@ -84,16 +84,16 @@ script-import-gamedir-into-prefix()
   TOTAL_SIZE=$(expr ${GAMEDIR_DU_IN_BYTES})
   TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
 
-  DBUG "-----------------------------------------------------------------------------"
+  dbug "-----------------------------------------------------------------------------"
 
-  DBUG "I: Script: ${FUNCNAME[0]}: GAMEDIR_DISK_USAGE_IN_HF=$GAMEDIR_DISK_USAGE_IN_HF"
-  DBUG "I: Script: ${FUNCNAME[0]}: GAMEDIR_DU_IN_BYTES=$GAMEDIR_DU_IN_BYTES"
-  DBUG "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE=$TOTAL_SIZE"
-  DBUG "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE_IN_HF=$TOTAL_SIZE_IN_HF"
+  dbug "I: Script: ${FUNCNAME[0]}: GAMEDIR_DISK_USAGE_IN_HF=$GAMEDIR_DISK_USAGE_IN_HF"
+  dbug "I: Script: ${FUNCNAME[0]}: GAMEDIR_DU_IN_BYTES=$GAMEDIR_DU_IN_BYTES"
+  dbug "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE=$TOTAL_SIZE"
+  dbug "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE_IN_HF=$TOTAL_SIZE_IN_HF"
   
   
-  DBUG "I: Script: ${FUNCNAME[0]}: Determining available space"
-  DBUG "I: Script: ${FUNCNAME[0]}: Available space is:" \
+  dbug "I: Script: ${FUNCNAME[0]}: Determining available space"
+  dbug "I: Script: ${FUNCNAME[0]}: Available space is:" \
       "${AVAILABLE_SPACE}"
   # Check available disk space inside prefix
   #AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|sed "s/  */ /g" \
@@ -111,13 +111,13 @@ script-import-gamedir-into-prefix()
   # for comparison
   AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
 
-  DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
-  DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
-  DBUG "-----------------------------------------------------------------------------"
+  dbug "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  dbug "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+  dbug "-----------------------------------------------------------------------------"
   # Step 5.6: If Target directory does not have sufficient space, abort backup
-  DBUG "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
+  dbug "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
   if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
-        DBUG "I: ${HEADER}: ${PREFIXDIR} has enough available disk space"
+        dbug "I: ${HEADER}: ${PREFIXDIR} has enough available disk space"
   else
         echo "E: ${HEADER}: ${PREFIXDIR} does not have free disk space!!!"
         unset MSG
@@ -146,19 +146,19 @@ script-import-gamedir-into-prefix()
   GAME_EXE_PATH="${PREFIXDIR}/drive_c/GAMEDIR/${GAME_EXE_DIR}"
   GAME_EXE_FILE="${GAME_EXE_PATH}/${EXE_NAME}"
 
-  DBUG "I: Script: ${FUNCNAME[0]}: Exe Path: ${GAME_EXE_PATH}"
-  DBUG "I: Script: ${FUNCNAME[0]}: Exe File: ${GAME_EXE_FILE}"
+  dbug "I: Script: ${FUNCNAME[0]}: Exe Path: ${GAME_EXE_PATH}"
+  dbug "I: Script: ${FUNCNAME[0]}: Exe File: ${GAME_EXE_FILE}"
 
   # 7.3 Change EXE path and name in the script and txt file
   sed "s|${EXE_PATH}|${GAME_EXE_PATH}|g; t;" -i ${PREFIXDIR}/*.txt       \
                                              -i ${PREFIXDIR}/*.sh        \
                                              -i ${PREFIXDIR}/*.yml && \
-  DBUG "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
+  dbug "I: Script: Backup Bundle: Exe Path Changed To: ${GAME_EXE_PATH}"
 
   sed "s|${EXE_FILE}|${GAME_EXE_FILE}|g; t;" -i ${PREFIXDIR}/*.txt       \
                                              -i ${PREFIXDIR}/*.sh        \
                                              -i ${PREFIXDIR}/*.yml && \
-  DBUG "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
+  dbug "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
 
   ${ZENITY_CMD} --info --title="Import Gamedir to Prefix" --text="Copied Gamedir to Prefix!"
 

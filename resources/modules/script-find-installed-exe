@@ -5,7 +5,7 @@
 # REVIEW
 script-find-installed-exe()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -14,7 +14,7 @@ script-find-installed-exe()
   ##############################################################################
   # 4. Find if exe files installed after setup, ask user to change prefix
   # Post 1st run, search exe files in prefixdir and add them to EXE_LIST
-  DBUG "I: Script: Find Exe: Searching prefix for newly installed exe files!"
+  dbug "I: Script: Find Exe: Searching prefix for newly installed exe files!"
 
   source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
   script-get-installed-exe-files
@@ -23,17 +23,17 @@ script-find-installed-exe()
 
   # If EXE_LIST contains files, prompt user to change exe
   if [ -z "${EXE_LIST}" ]; then
-       DBUG "I: Script: Find Exe: EXE_LIST is empty!"
+       dbug "I: Script: Find Exe: EXE_LIST is empty!"
        return 1
   fi
-  DBUG "I: Script: Find Exe: Found exe files inside prefix"
+  dbug "I: Script: Find Exe: Found exe files inside prefix"
   echo "${EXE_LIST}"
   # if found-exe-files.yml file do no exist, create and prompt for change exe
   if [ ! -f "${FOUND_EXE_FILES}" ]; then
-       DBUG "I: Script: Find Exe: Cannot find ${FOUND_EXE_FILES}, 1st run!"
+       dbug "I: Script: Find Exe: Cannot find ${FOUND_EXE_FILES}, 1st run!"
        echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                  > "${FOUND_EXE_FILES}" && \
-            DBUG "I: Script: Find Exe: created ${FOUND_EXE_FILES}"
+            dbug "I: Script: Find Exe: created ${FOUND_EXE_FILES}"
 
        # Ask use to Change the EXE for Installer
        unset TEXT TITLE
@@ -59,23 +59,23 @@ script-find-installed-exe()
        else
             TEXT="You can use <b>Change...</b>-><b>Switch Prefix</b> menu to change exe and prefix!"
             ${ZENITY_CMD} --info --title "${TITLE}" --text "${TEXT}"
-            DBUG "I: Script: Find Exe: Not changing exe!"
-            DBUG "I: Script: Find Exe: use Change EXE... to set default exe"
+            dbug "I: Script: Find Exe: Not changing exe!"
+            dbug "I: Script: Find Exe: use Change EXE... to set default exe"
        fi
 
   else # If already existing EXE_LIST file
-       DBUG "I: Script: Find Exe: found found-exe-files.yml"
+       dbug "I: Script: Find Exe: found found-exe-files.yml"
        # Create a new file with the list to compare
        # Remove Prefix name
 
        echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
             > "${NEW_FOUND_EXE_FILES}"
-       DBUG "I: Script: Find Exe: Checking for more recent exe files"
+       dbug "I: Script: Find Exe: Checking for more recent exe files"
 
-       DBUG "I: Script: Find Exe: Checking for any difference"
+       dbug "I: Script: Find Exe: Checking for any difference"
        # Check if new files are created, and are different in the list
        if ! (diff "${FOUND_EXE_FILES}" "${NEW_FOUND_EXE_FILES}") ; then
-            DBUG "I: Script: Find Exe: New exe files found!"
+            dbug "I: Script: Find Exe: New exe files found!"
             # Ask use to Change the EXE for Installer
             unset TEXT
             TEXT+="New exe files <b>found</b>, select and Launch?"
@@ -91,15 +91,15 @@ script-find-installed-exe()
                  # And replace new list with old list
                  echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                       > "${FOUND_EXE_FILES}"
-                 DBUG "I: Script: Find Exe: Updated ${FOUND_EXE_FILES}!"
+                 dbug "I: Script: Find Exe: Updated ${FOUND_EXE_FILES}!"
                  # Remove the new-found-exe-files.yml file
                  rm "${NEW_FOUND_EXE_FILES}" && \
-                 DBUG "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
+                 dbug "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
                  source "${WINEZGUI_SCRIPTS}/script-launch"
                  script-launch "${SELECTED_EXE}"
 
                  # Disabled for 2nd time, let user use change exe manually
-                 # DBUG "I: Script: Find Exe: Changing icon..."
+                 # dbug "I: Script: Find Exe: Changing icon..."
                  # source "${WINEZGUI_SCRIPTS}/script-change-icon"
                  # # We do not want to see zenity dialog of icon change success
                  # export script-change-icon_DO_NOT_PROMPT="true"
@@ -110,11 +110,11 @@ script-find-installed-exe()
                  # script-create-change-prefix-file
                  # script-change-exe-variables
             else
-                 DBUG "I: Script: Find Exe: Not changing exe!"
-                 DBUG "I: Script: Find Exe: use Change EXE... to set default"
+                 dbug "I: Script: Find Exe: Not changing exe!"
+                 dbug "I: Script: Find Exe: use Change EXE... to set default"
                  echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
                       > "${FOUND_EXE_FILES}" && \
-                 DBUG "I: Script: Find Exe: Updaing ${FOUND_EXE_FILES}"
+                 dbug "I: Script: Find Exe: Updaing ${FOUND_EXE_FILES}"
             fi
        fi
 
@@ -123,7 +123,7 @@ script-find-installed-exe()
  # Remove Tempdir inside drive_c/users/$USER/Temp
  if [ -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
       rm -rf "${PREFIXDIR}/drive_c/users/${USER}/Temp"
-      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+      dbug "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
  fi
 
  unset TEXT TITLE

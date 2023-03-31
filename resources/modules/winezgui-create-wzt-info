@@ -9,7 +9,7 @@
 ################################################################################
 winezgui-create-wzt-info()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
@@ -28,13 +28,13 @@ winezgui-create-wzt-info()
   WZT_FILE="${DIRECTORY}/${WZT_FILE_NAME}"
 
   # 2. Check if Prefix Directory is writable or not
-  DBUG "I: ${HEADER}: Creating ${WZT_FILE_NAME} at ${DIRNAME}"
-  DBUG "I: ${HEADER}: is ${DIRNAME} writable?"
+  dbug "I: ${HEADER}: Creating ${WZT_FILE_NAME} at ${DIRNAME}"
+  dbug "I: ${HEADER}: is ${DIRNAME} writable?"
   if [ -w "${DIRECTORY}" ]; then
-       DBUG "I: ${HEADER}: Yes!"
+       dbug "I: ${HEADER}: Yes!"
   else
-       DBUG "I: ${HEADER}: No!"
-       DBUG "I: ${HEADER}: Aborting!"
+       dbug "I: ${HEADER}: No!"
+       dbug "I: ${HEADER}: Aborting!"
        return 1
   fi
 
@@ -60,6 +60,6 @@ winezgui-create-wzt-info()
 
   # 4. Check if the file exists after it is created
   if [ -f "${WZT_FILE}" ]; then
-       DBUG "I: ${HEADER}: Created ${WZT_FILE}"
+       dbug "I: ${HEADER}: Created ${WZT_FILE}"
   fi
 }

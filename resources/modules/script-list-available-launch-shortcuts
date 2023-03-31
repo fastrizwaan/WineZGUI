@@ -8,7 +8,7 @@
 # and set the variable SELECTED_SCRIPT
 script-list-available-launch-shortcuts()
 { 
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not" 2>/dev/null || \
   source "${DATADIR}/script-check-variables-loaded-or-not" 
@@ -84,14 +84,14 @@ script-list-available-launch-shortcuts()
    ANSWER=$?
 
    if [ ${ANSWER} -eq 1 ]; then
-        DBUG "I: ${HEADER}: Cancelled!"
+        dbug "I: ${HEADER}: Cancelled!"
         unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION 
         unset NAMES FILES COMMAND RESULT count i
         exit 1
    fi
    
    if [ -z "${RESULT}" ]; then
-        DBUG "I: ${HEADER}: Cancelled!"
+        dbug "I: ${HEADER}: Cancelled!"
         unset SEARCH_LIST PREFIXES_FOUND SHOW_OPTION
         unset NAMES FILES COMMAND RESULT count i
         exit 1
@@ -102,8 +102,8 @@ script-list-available-launch-shortcuts()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "\"$RESULT\"" ]; then
-           DBUG "I: ${FUNCNAME[0]}: Selected $i"
-           DBUG "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
+           dbug "I: ${FUNCNAME[0]}: Selected $i"
+           dbug "I: ${FUNCNAME[0]}: File is ${FILES[${count}]}"
            export SELECTED_SCRIPT="${FILES[${count}]}"
  
            break

@@ -1,6 +1,6 @@
 script-winetricks-cli()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -14,7 +14,7 @@ script-winetricks-cli()
 
   # Check if winetricks is available at ${WINEZGUIDIR}
   if [ -f "${WINEZGUIDIR}/winetricks" ]; then
-       DBUG "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
+       dbug "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
        WTRICKS_CMD="${WINEZGUIDIR}/winetricks"
        chmod 755 "${WTRICKS_CMD}"
   fi       
@@ -51,7 +51,7 @@ script-winetricks-cli()
 
   if [ -z "${VERBS}" ]; then #if no dlls are given
        #go back to Main function
-       DBUG "I: Script: Winetricks CLI: no verbs are given!"
+       dbug "I: Script: Winetricks CLI: no verbs are given!"
        return 1
   fi
   
@@ -61,13 +61,13 @@ script-winetricks-cli()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
   VERBS=(${VERBS}) ; #convert string to array
-  DBUG "I: Script: Winetricks CLI: Selected verbs:"
-  DBUG "I: Script: ${VERBS[*]}"
+  dbug "I: Script: Winetricks CLI: Selected verbs:"
+  dbug "I: Script: ${VERBS[*]}"
   
   # Report user the time it took to install winetricks
   TIMER_START=${SECONDS}
@@ -95,5 +95,5 @@ script-winetricks-cli()
             --progress --pulsate --auto-kill
   # Inform about time taken
   
-  DBUG "I: Script: Winetricks CLI: Exited!"
+  dbug "I: Script: Winetricks CLI: Exited!"
 }

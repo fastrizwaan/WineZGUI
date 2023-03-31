@@ -1,12 +1,12 @@
 script-open-other-exe()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}:... Selected!"
+       dbug "I: Script: ${FUNCNAME[0]}:... Selected!"
        SELECTED_OTHER_EXE=$(${ZENITY_CMD} --title "Open Other EXE for ${PREFIXNAME}"  \
                          --list --hide-header --width=360 --height=30 \
                          --radiolist --column " "                     \
@@ -20,13 +20,13 @@ script-open-other-exe()
   fi
   # If Cancel is clicked
   if [ -z "${SELECTED_OTHER_EXE}" ]; then
-       DBUG "I: Change Exe: Cancelled!"
+       dbug "I: Change Exe: Cancelled!"
        Script_Window
   fi
 
 
   # Print response
-  DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_OTHER_EXE} Selected!"
+  dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_OTHER_EXE} Selected!"
 
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
@@ -34,7 +34,7 @@ script-open-other-exe()
          source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
          script-get-selected-exe
          OTHER_EXE="${SELECTED_EXE}"
-         DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
+         dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$SELECTED_OTHER_EXE" = "Any other Exe" ]; then
          # Open Any Other Exe
          OTHER_EXE="$(${ZENITY_CMD} --file-filter="*.exe *.msi" \
@@ -43,7 +43,7 @@ script-open-other-exe()
 
        # If no exe is selected
        if [ -z "${OTHER_EXE}" ]; then
-            DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
+            dbug "I: Script: ${FUNCNAME[0]}: Cancelled!"
             #unset SELECTION ; # Empty variable
             Script_Window    ; # Go back to Game Window
        fi
@@ -62,15 +62,15 @@ script-open-other-exe()
   fi
   
   # If another exe is selected
-  DBUG "I: Script: ${FUNCNAME[0]}: ${OTHER_EXE} selected"
+  dbug "I: Script: ${FUNCNAME[0]}: ${OTHER_EXE} selected"
   base=$(basename "${OTHER_EXE}")
   dire=$(dirname "${OTHER_EXE}")
 
   # Launch other EXE
   cd "$dire"
-  DBUG "I: Script: ${FUNCNAME[0]}: Launching \"${base}\""
+  dbug "I: Script: ${FUNCNAME[0]}: Launching \"${base}\""
   ${WINE_CMD} "$base"
-  DBUG "I: Script: Open Other EXE... Finished!"
+  dbug "I: Script: Open Other EXE... Finished!"
 
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts"
   winezgui-remove-wine-created-shortcuts

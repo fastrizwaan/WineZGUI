@@ -5,7 +5,7 @@
 winezgui-list-available-templates()
 {
   OLD_HEADER=${HEADER}
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -69,14 +69,14 @@ winezgui-list-available-templates()
   ANSWER=$?
  
   if [ ${ANSWER} -eq 1 ]; then
-       DBUG "I: ${HEADER} Cancelled!"
+       dbug "I: ${HEADER} Cancelled!"
        unset SEARCH_LIST TEMPLATES_FOUND SHOW_OPTION
        unset NAMES FILES COMMAND RESULT count i
        WineZGUI_Window
   fi
   
   if [ -z "${RESULT}" ]; then
-       DBUG "I: ${HEADER} Cancelled!"
+       dbug "I: ${HEADER} Cancelled!"
        unset SEARCH_LIST TEMPLATES_FOUND SHOW_OPTION
        unset NAMES FILES COMMAND RESULT count i
        WineZGUI_Window
@@ -86,8 +86,8 @@ winezgui-list-available-templates()
   # 4. Find which file the user selected and set the selected exe into variable
   for i in "${NAMES[@]}"; do
       if [ "$i" = "${RESULT}" ]; then
-           DBUG "I: ${HEADER}: Selected ${i}"
-           DBUG "I: ${HEADER}: Selected ${FILES[${count}]}"
+           dbug "I: ${HEADER}: Selected ${i}"
+           dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
            export SELECTED_TEMPLATE="${FILES[${count}]}"
            export SELECTED_TEMPLATE_NAME="${i}"
            break

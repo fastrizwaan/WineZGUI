@@ -4,7 +4,7 @@ winezgui-template-help()
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HELP_TEXT+="Configure ${TEMPLATE_NAME}... : Configure ${TEMPLATE_NAME} prefix template with any Setup or winetricks!|"
   HELP_TEXT+="Backup    ${TEMPLATE_NAME}... : Backup ${TEMPLATE_NAME} prefix template  as template backup.|"
   HELP_TEXT+="Download  Template...         : Download WineZGUI-UE4 template, supports Unreal Engine 4 games, has mf-install.|"

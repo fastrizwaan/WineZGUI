@@ -5,7 +5,7 @@ winezgui-template-clone()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
   winezgui-list-available-templates # get SELECTED_TEMPLATE 
 
@@ -16,7 +16,7 @@ winezgui-template-clone()
   if [ -z "${CLONE_TEMPLATE}" ]; then #if no name is given use filename
        #${ZENITY_CMD} --info --title="Shortcut... " --text="no Change"
        # return to Game window
-       DBUG "I: ${HEADER}: Cancelled"
+       dbug "I: ${HEADER}: Cancelled"
        return 1
   fi
   
@@ -26,7 +26,7 @@ winezgui-template-clone()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
@@ -40,7 +40,7 @@ winezgui-template-clone()
   CLONE_DIR=$(echo "${CLONE_TEMPLATE}"|tr " " "_")
 
   CLONE_DIR="${TEMPLATES_DIR}/${CLONE_DIR}"
-  DBUG "I: ${HEADER}: Copying ${SELECTED_TEMPLATE_NAME}"
+  dbug "I: ${HEADER}: Copying ${SELECTED_TEMPLATE_NAME}"
    (cp -rf "${SELECTED_TEMPLATE}" "${CLONE_DIR}" )| \
      zenity  --progress --pulsate --auto-close --width=500 \
      --title="${APP_WITH_VER} - Create Game Prefix" \

@@ -1,12 +1,12 @@
 # script-get-installed-exe-files
 script-get-installed-exe-files()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: Script: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: Script: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset EXE_FILES_FOUND
   EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"      \
                    -iname "windows" -prune           \

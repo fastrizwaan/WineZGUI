@@ -5,23 +5,23 @@ winezgui-template-delete()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
   winezgui-list-available-templates # get SELECTED_TEMPLATE
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   rm -rf "${SELECTED_TEMPLATE}" && \
-  DBUG "I: ${HEADER}: Deleted ${SELECTED_TEMPLATE}"
+  dbug "I: ${HEADER}: Deleted ${SELECTED_TEMPLATE}"
   echo "${TEMPLATE} = ${SELECTED_TEMPLATE} "
 
   if [ "${TEMPLATE}" = "${SELECTED_TEMPLATE}" ]; then
        echo "I: ${HEADER}: Deleted in use Template! Resetting..."
-       DBUG "I: ${HEADER}: Resetting arch to win64"
+       dbug "I: ${HEADER}: Resetting arch to win64"
        export WINEARCH=win64       
        sed "s|arch:.*|arch:${WINEARCH}|g" -i "${SETTINGS_FILE}"
        sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
 
                  
-       DBUG "I: ${HEADER}: Resetting Template to ${WINEZGUI_TEMPLATE}"
+       dbug "I: ${HEADER}: Resetting Template to ${WINEZGUI_TEMPLATE}"
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
        export TEMPLATE="${WINEZGUI_TEMPLATE}"
        export TEMPLATE_NAME=$(basename "${TEMPLATE}")
@@ -31,7 +31,7 @@ winezgui-template-delete()
        sed "s|Template:.*|Template:${TEMPLATE_NAME}|g"     -i "${ABOUTFILE}"
        sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g"     -i "${ABOUTFILE}"
        # Update template and arch from Settings.yml
-       DBUG "I: ${HEADER}: Restarting ${0}"
+       dbug "I: ${HEADER}: Restarting ${0}"
        # Deleting in use Template causes issues, better restart
        winezgui & exit 0
   fi

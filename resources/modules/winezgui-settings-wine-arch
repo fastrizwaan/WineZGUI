@@ -5,7 +5,7 @@ winezgui-settings-wine-arch()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CURRENT_ARCH=${WINEARCH}
   WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}" \
                            --list   --hide-header    \
@@ -21,10 +21,10 @@ winezgui-settings-wine-arch()
           return 1
   fi
 
-  DBUG "I: ${HEADER}: Selected ${WINEARCH_OPTION}!"
+  dbug "I: ${HEADER}: Selected ${WINEARCH_OPTION}!"
 
   if [ "${WINEARCH_OPTION}" = "win32" ]; then
-          DBUG "I: ${HEADER}: winearch set to 32 bit"
+          dbug "I: ${HEADER}: winearch set to 32 bit"
           # Change values in Settings
           if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
               sed "s|arch:.*|arch:win32|g" -i "${SETTINGS_FILE}"
@@ -40,7 +40,7 @@ winezgui-settings-wine-arch()
   fi
   
   if [ "${WINEARCH_OPTION}" = "win64" ]; then
-          DBUG "I: ${HEADER}: winearch set to 64 bit"
+          dbug "I: ${HEADER}: winearch set to 64 bit"
           # If grep can get value from Settings then replace else add it
           if [ $(grep "arch:" "${SETTINGS_FILE}") ]; then
               sed "s|arch:.*|arch:win64|g" -i "${SETTINGS_FILE}"

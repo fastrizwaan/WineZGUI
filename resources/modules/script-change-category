@@ -1,6 +1,6 @@
 script-change-category()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -25,7 +25,7 @@ script-change-category()
                       0    "Utility"          \
             --text "<b>${PROGNAME}...</b>" 2> /dev/null)
   if [ -z "${GET_CATEGORY}" ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Cancelled!"
+       dbug "I: Script: ${FUNCNAME[0]}: Cancelled!"
        Script_Window
   fi
 
@@ -42,7 +42,7 @@ script-change-category()
   winezgui-remove-broken-links
 
   # Inform user
-  DBUG "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"
+  dbug "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"
   ${ZENITY_CMD} --info --no-wrap --title="${PROGNAME}" \
          --text="Category Changed sucessfuly: ${GET_CATEGORY}"
   

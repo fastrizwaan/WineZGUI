@@ -124,77 +124,77 @@ WineZGUI_Window() # Main WineZGUI application window function
           exit 0
   fi         
  
-  DBUG "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
+  dbug "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
  
   if   [ "${SELECTION}" = "Open Exe..." ]; then
          source "${DATADIR}/winezgui-open-exe"
-         WineZGUI_Open_Exe
+         winezgui-open-exe
 
   elif [ "${SELECTION}" = "Launch..."  ]; then
          source "${DATADIR}/winezgui-launch"
-         WineZGUI_Launch
+         winezgui-launch
 
   elif [ "${SELECTION}" = "Script..."  ]; then
          source "${DATADIR}/winezgui-script"
-         WineZGUI_Script
+         winezgui-script
 
   elif [ "${SELECTION}" = "Backup..." ]; then
          source "${DATADIR}/winezgui-backup"
-         WineZGUI_Backup
+         winezgui-backup
 
   elif [ "${SELECTION}" = "Restore..." ]; then
          source "${DATADIR}/winezgui-restore"
-         WineZGUI_Restore
+         winezgui-restore
 
   elif [ "${SELECTION}" = "Template..." ]; then
          source "${DATADIR}/winezgui-template"
-         WineZGUI_Template
+         winezgui-template
 
   elif [ "${SELECTION}" = "Settings..."  ]; then
          source "${DATADIR}/winezgui-settings"
-         WineZGUI_Settings
+         winezgui-settings
 
   elif [ "${SELECTION}" = "More..."  ]; then
          source "${DATADIR}/winezgui-more"
-         WineZGUI_More
+         winezgui-more
 
   elif [ "${SELECTION}" = "Delete..."  ]; then
          source "${DATADIR}/winezgui-delete-prefix"
-         WineZGUI_Delete_Prefix
+         winezgui-delete-prefix
 
   elif [ "${SELECTION}" = "Help..." ]; then
          source "${DATADIR}/winezgui-help"
-         WineZGUI_Help
+         winezgui-help
 
   elif [ "${SELECTION}" = "About..." ]; then
          source "${DATADIR}/winezgui-about"
-         WineZGUI_About
+         winezgui-about
 
   elif [ "${SELECTION}" = "Kill all..." ]; then
          source "${DATADIR}/winezgui-kill-all"
-         WineZGUI_Kill_All
+         winezgui-kill-all
 
   elif [ "${SELECTION}" = "Quit..." ]; then
          source "${DATADIR}/winezgui-quit"
-         WineZGUI_Quit
+         winezgui-quit
   fi
 
   WineZGUI_Window  # After All options
 } 
 
 #------------------------------- Startup -----------------------------#
-# Load file with DBUG function
+# Load file with dbug function
 source "${DATADIR}/winezgui-dbug"
 
 source "${DATADIR}/winezgui-cli-arguments"
-WineZGUI_Cli_Arguments
+winezgui-cli-arguments
 
 source "${DATADIR}/winezgui-startup-checks"
-WineZGUI_Startup_Checks
+winezgui-startup-checks
 
 source "${DATADIR}/winezgui-check-file-type"
-WineZGUI_Check_File_Type "${1}"
+winezgui-check-file-type "${1}"
 
-DBUG "I: ${HEADER}: Launching ${APPNAME}"
+dbug "I: ${HEADER}: Launching ${APPNAME}"
 WineZGUI_Window
 

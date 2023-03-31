@@ -6,12 +6,12 @@ winezgui-check-file-type()
   script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
-       DBUG "I: ${HEADER}: No files given"
+       dbug "I: ${HEADER}: No files given"
        return 1
   fi
   OLD_HEADER="${HEADER}"
   HEADER="$(basename ${0})"
-  DBUG "I: ${HEADER}: Startup: Checking ${1}"
+  dbug "I: ${HEADER}: Startup: Checking ${1}"
   export EXE_FILE="$(realpath -m "${1}")"
   export EXE_NAME=$(basename "${EXE_FILE}")
   export EXE_PATH=$(dirname  "${EXE_FILE}")
@@ -31,7 +31,7 @@ winezgui-check-file-type()
      [ "${IS_EXE}" != "wzt" ]; then
        echo "E: ${HEADER}: Startup: \"${EXE_NAME}\" is not an EXE file"
        Mesg "I: ${HEADER}: Startup: Please give an exe, msi, or a wzt file."
-       DBUG "I: ${HEADER}: Startup: Exiting..."
+       dbug "I: ${HEADER}: Startup: Exiting..."
        exit 1
   fi
   HEADER="${OLD_HEADER}"

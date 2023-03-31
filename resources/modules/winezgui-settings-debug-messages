@@ -5,7 +5,7 @@ winezgui-settings-debug-messages()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   DEBUG_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                         --list   --hide-header      \
                         --width=360 --height=240    \
@@ -16,13 +16,13 @@ winezgui-settings-debug-messages()
                         --text   "Debug Messages...")
 
   if [ -z "${DEBUG_OPTION}" ]; then
-          DBUG "I: ${HEADER}: Cancelled!"
+          dbug "I: ${HEADER}: Cancelled!"
           return 1
   fi
   
   # If user selects No, delete debug from Settings.yml
   if [ "${DEBUG_OPTION}" = "No" ]; then
-          DBUG "I: ${HEADER}: Disabled."
+          dbug "I: ${HEADER}: Disabled."
           unset DEBUG
           sed "/debug:/d" -i "${SETTINGS_FILE}"
   else
@@ -33,7 +33,7 @@ winezgui-settings-debug-messages()
               echo "Cannot write to ${SETTINGS_FILE}"
           fi
           DEBUG="Y"
-          DBUG "I: ${HEADER}: Enabled."
+          dbug "I: ${HEADER}: Enabled."
   fi
   export DEBUG # Apply runtime
   return 0

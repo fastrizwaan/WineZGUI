@@ -1,7 +1,7 @@
 winezgui-identity-remove()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -29,7 +29,7 @@ winezgui-identity-remove()
   winezgui-fetch-replacement-files "${DIRECTORY}"
 
   cd "${DIRECTORY}"  
-  DBUG "I: ${HEADER}: Processing files inside ${DIRNAME}"
+  dbug "I: ${HEADER}: Processing files inside ${DIRNAME}"
 
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b") # needed for sed to work with files in variable
@@ -49,14 +49,14 @@ winezgui-identity-remove()
   # Make sure that directory for the user exists, before moving
   if [ -d "${DIRECTORY}/drive_c/users/${USER}" ]; then
        mv "${DSOURCE}" "${DTARGET}" && \
-       DBUG "I: ${HEADER}: Renamed ${DSOURCE}"
-       DBUG "I: ${HEADER}: to      ${DTARGET}"
+       dbug "I: ${HEADER}: Renamed ${DSOURCE}"
+       dbug "I: ${HEADER}: to      ${DTARGET}"
   fi
 
 
   # Remove H: links on Backup
   rm  "${DIRECTORY}/dosdevices/h:" && \
-  DBUG "I: ${HEADER}: Removed H: symlink ${DIRNAME}/dosdevices/h:"
+  dbug "I: ${HEADER}: Removed H: symlink ${DIRNAME}/dosdevices/h:"
 
 
    # Values->XO? ; If XOUSERHOMEXO not found then backup_function failed
@@ -72,7 +72,7 @@ winezgui-identity-remove()
   # Check if identity is removed
   if [ -f "${1}/Info.yml" ] && \
      ( grep -o "XOUSERHOMEXO" ${1}/Info.yml 1>/dev/null 2>/dev/null ); then
-       DBUG "I: ${FUNCNAME[0]}: Identity removed ${USER}!"
+       dbug "I: ${FUNCNAME[0]}: Identity removed ${USER}!"
   fi
 
   # Cleanup variables 

@@ -1,7 +1,7 @@
 # script-cmdline
 script-exe-cmdline()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -19,7 +19,7 @@ script-exe-cmdline()
   ANSWER=$?
   if [ ${ANSWER} -eq 1 ]; then #if user clicks cancel
        # Return to Script window
-       DBUG "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
+       dbug "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
        return 1
   fi
 
@@ -32,11 +32,11 @@ script-exe-cmdline()
                  ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
                         --text="Removed <b>${ARGS}</b>\nand cmdline.yml"
             fi
-            DBUG "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/cmdline.yml"
+            dbug "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/cmdline.yml"
        else #add args to cmdline.yml
             echo "args:${GET_CMDLINE}"  > "${PREFIXDIR}/cmdline.yml"
-            DBUG "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE}"
-            DBUG "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/cmdline.yml"
+            dbug "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE}"
+            dbug "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/cmdline.yml"
             if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
                  ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
                         --text="${GET_CMDLINE}"

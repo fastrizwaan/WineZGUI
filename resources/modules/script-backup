@@ -7,7 +7,7 @@
 # 2. Based on Selection, launch create prefix / bundle function
 script-backup()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -30,8 +30,8 @@ script-backup()
 
   PREFIX_SIZE_IN_BYTES=$(echo ${PREFIX_SIZE_IN_HF}|cut -f1 -d " "   \
                                                   |numfmt --from iec)
-  DBUG "I: ${HEADER}: Prefix = ${PREFIXDIR}"
-  DBUG "I: ${HEADER}: Prefix size = ${PREFIX_SIZE_IN_HF}"
+  dbug "I: ${HEADER}: Prefix = ${PREFIXDIR}"
+  dbug "I: ${HEADER}: Prefix size = ${PREFIX_SIZE_IN_HF}"
 
 
 
@@ -52,7 +52,7 @@ check-all-variables "APPNAME APPVERSION HEADER FLATPAK_NAME SHORT_FLATPAK_NAME D
                      --text     "<b>Backup...</b>"       )
   # If Cancel is clicked
   if [ -z "${RESPONSE}" ]; then
-       DBUG "I: ${HEADER}: Cancelled!"
+       dbug "I: ${HEADER}: Cancelled!"
        unset RESPONSE
        return 1
   fi
@@ -61,7 +61,7 @@ check-all-variables "APPNAME APPVERSION HEADER FLATPAK_NAME SHORT_FLATPAK_NAME D
 
 
 
-  DBUG "I: ${HEADER}: ${RESPONSE} Selected!"
+  dbug "I: ${HEADER}: ${RESPONSE} Selected!"
 
   # 2. Based on Selection, launch create prefix / bundle function
   if   [ "${RESPONSE}" = "Prefix Backup..." ]; then

@@ -7,16 +7,16 @@ script-delete-shortcut()
   # Delete Shortcuts and Prefix Directory
   echo ${DESKTOPFILE}
   rm -fv ${DESKTOPFILE} && \
-  DBUG "I: Script: Delete: Removed ${DESKTOPFILE}"  || \
+  dbug "I: Script: Delete: Removed ${DESKTOPFILE}"  || \
   echo "E: Script: Delete: Cannot Remove ${DESKTOPFILE} !!"
 
-  DBUG "I: Script: Delete: Removed broken WineZGUI .desktop links"
+  dbug "I: Script: Delete: Removed broken WineZGUI .desktop links"
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
-  DBUG "I: Script: Delete Shortcut: Exiting!"
+  dbug "I: Script: Delete Shortcut: Exiting!"
   # Exit after deleting prefix
   ${ZENITY_CMD} --info --no-wrap --text "Deleted ${DESKTOPFILE}" --title "${APP_WITH_VER} - Delete Shortcut!"
   exit 0

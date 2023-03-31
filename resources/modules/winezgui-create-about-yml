@@ -9,7 +9,7 @@ winezgui-create-about-yml()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then
        echo "Application:${APPNAME}"        >  "${ABOUTFILE}"
        echo "Version:${APPVERSION}"         >> "${ABOUTFILE}"
@@ -28,7 +28,7 @@ winezgui-create-about-yml()
        if ! [ -z "${FLATPAK_NAME}" ]; then  # If flatpak (variable has value)
        echo "Flatpak Name:${FLATPAK_NAME}"  >> "${ABOUTFILE}"
        fi
-       DBUG "I: ${HEADER}: Created ${ABOUTFILE}"
+       dbug "I: ${HEADER}: Created ${ABOUTFILE}"
   fi
   HEADER=${OLD_HEADER}
   return 0

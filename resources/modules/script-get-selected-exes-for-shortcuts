@@ -2,7 +2,7 @@
 # FIXME perhaps usable for create shortcuts / delete shortcuts
 script-get-selected-exes-for-shortcuts()
 {
- DBUG "I: Script: Launched ${FUNCNAME[0]}"
+ dbug "I: Script: Launched ${FUNCNAME[0]}"
    
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not

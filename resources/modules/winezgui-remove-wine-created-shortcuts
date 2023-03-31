@@ -7,7 +7,7 @@
 # WineZGUI game prefix should not clutter system menu.
 winezgui-remove-wine-created-shortcuts()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -23,7 +23,7 @@ winezgui-remove-wine-created-shortcuts()
   fi
   if [ ! -z "$WINE_SHORTCUTS" ]; then
        rm $WINE_SHORTCUTS  && \
-       DBUG "I: Script: Launch: Remove Wine Created Shortcuts: Removed!"
+       dbug "I: Script: Launch: Remove Wine Created Shortcuts: Removed!"
   fi
   IFS=${SAVEIFS}
   unset WINE_SHORTCUTS

@@ -5,7 +5,7 @@ winezgui-settings-help()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset HELP_TEXT
   HELP_TEXT+="Wine Arch...       : Set wine arch for new prefixes|"
   HELP_TEXT+="Prefix Template...: Set default prefix template for new scripts|"

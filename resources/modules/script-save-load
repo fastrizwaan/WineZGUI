@@ -1,7 +1,7 @@
 #script-save-load 
 script-save-load()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -15,10 +15,10 @@ script-save-load()
                             0 "Help..."                      \
                     --text   "Save/Load..."                  )
 
-  DBUG "${0}: ${FUNCNAME[0]}: ${SAVE_LOAD_OPTION} Selected!"
+  dbug "${0}: ${FUNCNAME[0]}: ${SAVE_LOAD_OPTION} Selected!"
   # Exit if Cancel is clicked
   if   [ -z "${SAVE_LOAD_OPTION}" ]; then
-         DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+         dbug "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
          return 1
   fi
   

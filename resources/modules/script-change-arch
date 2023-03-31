@@ -4,7 +4,7 @@ script-change-arch()
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                            --list   --hide-header      \
                            --width=360 --height=240    \
@@ -20,13 +20,13 @@ script-change-arch()
   fi
   
   if [ "${WINEARCH_OPTION}" = "win32" ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 32 bit"
+       dbug "I: Script: ${FUNCNAME[0]}: winearch set to 32 bit"
        export WINEARCH="win32"
 
   fi
 
   if [ "${WINEARCH_OPTION}" = "win64" ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: winearch set to 64 bit"
+       dbug "I: Script: ${FUNCNAME[0]}: winearch set to 64 bit"
        export WINEARCH="win64"
   fi
 

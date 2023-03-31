@@ -3,7 +3,7 @@
 # FIXME winezgui-configure
 winezgui-template-configure()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -24,12 +24,12 @@ winezgui-template-configure()
 
   # Exit if Cancel is clicked
   if [ -z "${CONFIGURE_OPTION}" ]; then
-      DBUG "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
+      dbug "I: $(basename ${0}): ${FUNCNAME[0]}: Cancel Selected!"
        return 1
   fi
 
   # Show What is selected     
-  DBUG "I: ${SELECTION} Selected!"
+  dbug "I: ${SELECTION} Selected!"
 
   if   [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]; then
           source "${DATADIR}/winezgui-open-setup-installer"

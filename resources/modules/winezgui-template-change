@@ -4,7 +4,7 @@ winezgui-template-change()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
   winezgui-list-available-templates # get SELECTED_TEMPLATE 
   
@@ -12,7 +12,7 @@ winezgui-template-change()
   SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"
   if [ -f "${SYSTEM_REGISTRY_FILE}" ]; then
        REG_ARCH=$(grep "#arch=" "${SYSTEM_REGISTRY_FILE}" |cut -f2 -d "=")
-       DBUG "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
+       dbug "I: ${HEADER}: found arch=${REG_ARCH} in system.reg"
        if [ -z "${REG_ARCH}" ]; then
             ${ZENITY_CMD} --error --text "Could not find arch in system.reg file"
             unset SELECTED_TEMPLATE
@@ -24,7 +24,7 @@ winezgui-template-change()
             WineZGUI_Window
        fi
   else 
-       DBUG "I: ${HEADER}: not found ${SYSTEM_REGISTRY_FILE} "
+       dbug "I: ${HEADER}: not found ${SYSTEM_REGISTRY_FILE} "
        ${ZENITY_CMD} --error --text "Could not find file ${SYSTEM_REGISTRY_FILE}"
        unset SELECTED_TEMPLATE
        WineZGUI_Window
@@ -47,9 +47,9 @@ winezgui-template-change()
        sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g" -i "${ABOUTFILE}"
   fi
 
-  DBUG "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
-  DBUG "I: ${HEADER}: Selected Template is ${TEMPLATE_NAME}"
-  DBUG "I: ${HEADER}: Default = ${DEFAULT}"
+  dbug "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
+  dbug "I: ${HEADER}: Selected Template is ${TEMPLATE_NAME}"
+  dbug "I: ${HEADER}: Default = ${DEFAULT}"
 
   
   # Prompt the user to change arch too if it is different from the selected one
@@ -66,7 +66,7 @@ winezgui-template-change()
                  sed "s|arch:.*|arch:${REG_ARCH}|g" -i "${SETTINGS_FILE}"
                  sed "s|Wine Arch:.*|Wine Arch:${REG_ARCH}|g" -i "${ABOUTFILE}"
                  export WINEARCH="${REG_ARCH}"
-                 DBUG "I: ${HEADER}: arch changed to ${REG_ARCH}"       
+                 dbug "I: ${HEADER}: arch changed to ${REG_ARCH}"       
             fi
        else # If no/cancel
             unset TEXT

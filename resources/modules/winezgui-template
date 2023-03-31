@@ -4,7 +4,7 @@ winezgui-template()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   unset TEMPLATE_OPTION
   TEMPLATE_OPTION=$(zenity                                 \
@@ -27,12 +27,12 @@ winezgui-template()
                         
     # Exit if Cancel is clicked
   if [ -z "${TEMPLATE_OPTION}" ]; then
-       DBUG "I: ${HEADER}: Cancel Selected!"
+       dbug "I: ${HEADER}: Cancel Selected!"
        return 1
   fi
 
   # Show What is selected     
-  DBUG "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
+  dbug "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
 
   if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
           source "${DATADIR}/winezgui-template-configure"

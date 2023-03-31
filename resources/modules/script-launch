@@ -6,7 +6,7 @@
 # 4. After the Launch if lnk and .desktop files are found inside wine prefix
 script-launch()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -22,23 +22,23 @@ script-launch()
   fi
   # 2. Goto Game Directory
   cd "${exe_path}"
-  DBUG "I: Script: Launching ${exe_name}"
+  dbug "I: Script: Launching ${exe_name}"
 
   # CMDLINE exe argument 
   if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
-       DBUG "I: Script: found CMDLINE arguments"
+       dbug "I: Script: found CMDLINE arguments"
        EXE_ARGUMENTS=$(grep args "${PREFIXDIR}/cmdline.yml"|cut -f2 -d ":")
-       DBUG "I: Script: args=${EXE_ARGUMENTS}"
+       dbug "I: Script: args=${EXE_ARGUMENTS}"
   fi
 
   # Check for Wine version change
   CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
-  DBUG "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
-  DBUG "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
+  dbug "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
+  dbug "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
 
   if [ "${CURRENT_WINE_VERSION}" != "${CREATED_WINE_VERSION}" ]; then
-       DBUG "I: Script: Wine Version is different!"
+       dbug "I: Script: Wine Version is different!"
        unset TEXTMSG
        TEXTMSG+="Created using Wine Version:${CREATED_WINE_VERSION}\n"
        TEXTMSG+="Current Wine Version is   :${CURRENT_WINE_VERSION}\n"
@@ -51,7 +51,7 @@ script-launch()
        if [ ${ANSWER} -eq 0 ] && [ -w "${INFOFILE}" ]; then
             sed "s|Wine:.*|Wine:${CURRENT_WINE_VERSION}|g; t;" -i "${INFOFILE}" \
             || echo "Failed Updating: Info.yml:Wine:${CURRENT_WINE_VERSION}"
-            DBUG "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
+            dbug "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
        fi
   fi
 
@@ -66,13 +66,13 @@ script-launch()
 #   TEST_NAME=$(echo "${exe_name}"| tr [A-Z] [a-z]) # Change case to test
 #   if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
 #      [[ "${TEST_NAME}" == *"install"* ]] ; then
-#        DBUG "I: Script: Launching =-= SETUP INSTALLER =-="
+#        dbug "I: Script: Launching =-= SETUP INSTALLER =-="
 #      #   source "${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix"
 #      #   script-change-exe-and-prefix
 #        source "${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes"
 #        script-create-shortcuts-for-found-exes
 #   else
-#        DBUG "I: Script: Launching script find exe"
+#        dbug "I: Script: Launching script find exe"
 #        source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
 #        script-find-installed-exe
 #   fi
@@ -81,7 +81,7 @@ script-launch()
        source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
        script-find-installed-exe
   else # from 2nd run onwards, detect new exe files.
-       DBUG "I: SCRIPT LAUNCH: 1st launch detected........................"
+       dbug "I: SCRIPT LAUNCH: 1st launch detected........................"
        source "${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes"
        script-create-shortcuts-for-found-exes 
   fi

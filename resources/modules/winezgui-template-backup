@@ -5,7 +5,7 @@ winezgui-template-backup()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # 1.0 If No Template name is given, ask for template to backup
   if [ -z "${1}" ]; then
@@ -18,8 +18,8 @@ winezgui-template-backup()
   # 1.1 Need this to print name of template
   SELECTED_TEMPLATE_NAME=$(basename "${SELECTED_TEMPLATE}")
 
-  DBUG "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
-  DBUG "I: ${HEADER}: Template Name: ${SELECTED_TEMPLATE_NAME}"
+  dbug "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
+  dbug "I: ${HEADER}: Template Name: ${SELECTED_TEMPLATE_NAME}"
   
   
   # 2.0 Get disk usage of template
@@ -37,17 +37,17 @@ winezgui-template-backup()
   TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " " \
                           | numfmt --from iec)
 
-  DBUG "I: ${HEADER}: DATE                  : ${DATE}"
-  DBUG "I: ${HEADER}: TEMPLATE_EXT          : ${TEMPLATE_EXT}"
-  DBUG "I: ${HEADER}: TEMPLATE_SIZE_IN_HF   : ${TEMPLATE_SIZE_IN_HF}"
-  DBUG "I: ${HEADER}: TEMPLATE_SIZE_IN_BYTES: ${TEMPLATE_SIZE_IN_BYTES}"
+  dbug "I: ${HEADER}: DATE                  : ${DATE}"
+  dbug "I: ${HEADER}: TEMPLATE_EXT          : ${TEMPLATE_EXT}"
+  dbug "I: ${HEADER}: TEMPLATE_SIZE_IN_HF   : ${TEMPLATE_SIZE_IN_HF}"
+  dbug "I: ${HEADER}: TEMPLATE_SIZE_IN_BYTES: ${TEMPLATE_SIZE_IN_BYTES}"
   
   # 3.0 Set Total Backup size variable
   TOTAL_SIZE_IN_HF=${TEMPLATE_SIZE_IN_HF}
   TOTAL_SIZE_IN_BYTES=${TEMPLATE_SIZE_IN_BYTES}
 
-  DBUG "I: ${HEADER}: TOTAL_SIZE_IN_BYTES   : ${TOTAL_SIZE_IN_BYTES}"
-  DBUG "I: ${HEADER}: TOTAL_SIZE_IN_HF      : ${TOTAL_SIZE_IN_HF}"
+  dbug "I: ${HEADER}: TOTAL_SIZE_IN_BYTES   : ${TOTAL_SIZE_IN_BYTES}"
+  dbug "I: ${HEADER}: TOTAL_SIZE_IN_HF      : ${TOTAL_SIZE_IN_HF}"
   
   # 4.0 Prepare TEMPLATE Name
   # 4.1 Format filename for flatpak or system install type
@@ -74,7 +74,7 @@ winezgui-template-backup()
        # template-Template_Name-wine-7.0-20220904.tar.zst
   fi
 
-  DBUG "I: ${HEADER}: Filename Suggestion: ${FILENAME}"
+  dbug "I: ${HEADER}: Filename Suggestion: ${FILENAME}"
 
   # 5.0 Ask FILENAME using Zenity Entry dialog
   unset TITLE
@@ -83,7 +83,7 @@ winezgui-template-backup()
   TEXT+="${TEMPLATE_SIZE_IN_HF} ${SELECTED_TEMPLATE}"
 
   # 5.1 Suggest and Ask for template file name
-  DBUG "I: ${HEADER}: Asking filename"
+  dbug "I: ${HEADER}: Asking filename"
   BACKUP_FILE=$( zenity                        \
                  --title="${TITLE}"            \
                  --width=700 --height=30       \
@@ -93,7 +93,7 @@ winezgui-template-backup()
 
   # 5.2: If user cancels or nothing
   if [ -z "${BACKUP_FILE}" ]; then
-       DBUG "I: ${HEADER}: Cancelled!"
+       dbug "I: ${HEADER}: Cancelled!"
        unset BACKUP_FILE
        unset FILENAME
        return 1
@@ -106,19 +106,19 @@ winezgui-template-backup()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
   # 6.0 Ask user to select target backup directory
-  DBUG "I: ${HEADER}: Choose Backup Directory..."
+  dbug "I: ${HEADER}: Choose Backup Directory..."
   unset TITLE
   TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
   TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
   
   # 6.2: If user cancels or nothing
   if [ -z "${TARGET_DIR}" ]; then
-       DBUG "I: ${HEADER}: Select backup directory: Cancelled!"
+       dbug "I: ${HEADER}: Select backup directory: Cancelled!"
        return 1
   fi
 
@@ -132,18 +132,18 @@ winezgui-template-backup()
 
   # 7.0 Process Backup file name
   
-  DBUG "I: ${HEADER}: Given ${BACKUP_FILE}"
+  dbug "I: ${HEADER}: Given ${BACKUP_FILE}"
   # 7.1 Required extension is .tar.zst , if not found add it
   if ! [[ "${BACKUP_FILE}" == *".${TEMPLATE_EXT}" ]]; then
        BACKUP_FILE="$(echo ${BACKUP_FILE}.${TEMPLATE_EXT})"
-       DBUG "I: ${HEADER}: added suffix ${TEMPLATE_EXT}"
+       dbug "I: ${HEADER}: added suffix ${TEMPLATE_EXT}"
   fi
 
-  DBUG "I: ${HEADER}: Using ${BACKUP_FILE}"
+  dbug "I: ${HEADER}: Using ${BACKUP_FILE}"
 
   # 8.0 Check available disk space in target directory before backing up
   # to make sure that template size < target dir for backup to start
-  DBUG "I: ${HEADER}: Determining available space at ${TARGET_DIR}"
+  dbug "I: ${HEADER}: Determining available space at ${TARGET_DIR}"
 
   # 8.1: Get available target dir partition's available space in
   # Human format (df -h)
@@ -158,14 +158,14 @@ winezgui-template-backup()
   AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}| numfmt --from iec)
   #TEMPLATE_SIZE_IN_BYTES=$(echo ${TEMPLATE_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)
 
-  DBUG "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
-  DBUG "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+  dbug "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  dbug "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
 
   # 8.3: If Target directory does not have sufficient space, abort backup
-  DBUG "I: ${HEADER}: Checking if size < target dir space"
+  dbug "I: ${HEADER}: Checking if size < target dir space"
 
   if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE_IN_BYTES} ]; then
-       DBUG "I: ${HEADER}: ${TARGET_DIR} has ample disk space."
+       dbug "I: ${HEADER}: ${TARGET_DIR} has ample disk space."
   else
        echo "E: ${HEADER}: Insufficient disk space at ${TARGET_DIR}!"
        unset MSG
@@ -188,18 +188,18 @@ winezgui-template-backup()
        --text "${BACKUP_FILE}" --title "Select Compression Level...")
   # 9.1 Return if Cancel is clicked
   if [ -z "${LEVEL}" ]; then
-       DBUG "I: ${HEADER}: Cancel Selected!"
+       dbug "I: ${HEADER}: Cancel Selected!"
        return 1
   fi
-  DBUG "I: ${HEADER}: Compression Level ${LEVEL} Selected!"
+  dbug "I: ${HEADER}: Compression Level ${LEVEL} Selected!"
 
   # 10.0 Create template backup tar.zst file
   # 10.1 Change directory to TEMPLATES_DIR
-  DBUG "I: ${HEADER}: Template: Preparing files"
+  dbug "I: ${HEADER}: Template: Preparing files"
   cd "${TEMPLATES_DIR}"
   # 10.2 Preprocess TEMPLATES_DIR files (remove user name from files)
-  DBUG "I: ${HEADER}: Changing Directory to ${TEMPLATES_DIR}"
-  DBUG "I: ${HEADER}: Launching: winezgui-identity-remove"
+  dbug "I: ${HEADER}: Changing Directory to ${TEMPLATES_DIR}"
+  dbug "I: ${HEADER}: Launching: winezgui-identity-remove"
   
   source "${DATADIR}/winezgui-identity-remove"
   winezgui-identity-remove "${SELECTED_TEMPLATE}"
@@ -207,12 +207,12 @@ winezgui-template-backup()
   # 10.3 Create template-info.yml inside SELECTED_TEMPLATE, not needed though
   
   # 11.0 Create Template Backup file using tar and zst
-  DBUG "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
-  DBUG "I: ${HEADER}: Executing command"
-  DBUG "-------------------------------------------------------------"
-  DBUG "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+  dbug "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
+  dbug "I: ${HEADER}: Executing command"
+  dbug "-------------------------------------------------------------"
+  dbug "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
             -C \"${TEMPLATES_DIR}\" \"${SELECTED_TEMPLATE_NAME}\""
-  DBUG "-------------------------------------------------------------"
+  dbug "-------------------------------------------------------------"
   # Report user the time it took to bundle
   TIMER_START=${SECONDS}
   # 11.1 Create Backup archive and restore changes as soon as tar is done
@@ -223,7 +223,7 @@ winezgui-template-backup()
             --title="Creating ${SELECTED_TEMPLATE_NAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
   TOOK=$(( SECONDS - ${TIMER_START} ))
-  DBUG "I: ${HEADER}:Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+  dbug "I: ${HEADER}:Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
 
   # 7.5 If user clicks cancel, kill tar commands
   # zenity progress won't kill the process, so we do it
@@ -235,9 +235,9 @@ winezgui-template-backup()
   # If there is a PID_OF_TAR then we need to kill the tar command
   if ! [ -z "${PID_OF_TAR}" ]; then
          kill -9 ${PID_OF_TAR} \
-         && DBUG "I: Backup: Template: Cancelled! Killed tar!" \ &&
+         && dbug "I: Backup: Template: Cancelled! Killed tar!" \ &&
          rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
-         DBUG "I: Backup: Template: Removed partial ${BACKUP_FILE}"
+         dbug "I: Backup: Template: Removed partial ${BACKUP_FILE}"
 
        # Backup Failure Message
        echo "===================================================="
@@ -245,7 +245,7 @@ winezgui-template-backup()
        MSG=("${SELECTED_TEMPLATE_NAME} backup cancelled!")
   else
        # If no pid is found, that means wzt=tar.zst is created successfully
-       DBUG "I: Backup: Template: Created ${BACKUP_FILE}, Success!"
+       dbug "I: Backup: Template: Created ${BACKUP_FILE}, Success!"
        # 7.6  Crate message
        BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
        # Check du value assignment
@@ -264,12 +264,12 @@ winezgui-template-backup()
   fi
 
   # 7.7 Restore changed values after backup
-  DBUG "I: Backup: Template: Restoring Registry and Info files"
+  dbug "I: Backup: Template: Restoring Registry and Info files"
   cd "${TEMPLATES_DIR}"
   source "${DATADIR}/winezgui-identity-restore"
   winezgui-identity-restore "${SELECTED_TEMPLATE}"
 
-  DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+  dbug "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
   # 8. Show info about created wzt file
   ${ZENITY_CMD} --no-wrap --info --title="TEMPLATE Backup!" --text="${MSG[@]}"

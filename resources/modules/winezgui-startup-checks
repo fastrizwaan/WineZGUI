@@ -6,7 +6,7 @@ winezgui-startup-checks()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   # Check if writable
   if [ ! -w "$(dirname ${WINEZGUIDIR})" ]; then
@@ -74,9 +74,9 @@ winezgui-startup-checks()
   if [ ! -f "${SETTINGS_FILE}" ] && [ -w ${WINEZGUIDIR} ]; then
        export WINEARCH="win64"
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
-       DBUG "I: Winearch not defined in ${SETTINGS_FILE}; setting arch to win64"
-       DBUG "I: Prefix template not defined in ${SETTINGS_FILE}"
-       DBUG "I: using ${WINEZGUI_TEMPLATE}"
+       dbug "I: Winearch not defined in ${SETTINGS_FILE}; setting arch to win64"
+       dbug "I: Prefix template not defined in ${SETTINGS_FILE}"
+       dbug "I: using ${WINEZGUI_TEMPLATE}"
        echo "arch:win64" >> "${SETTINGS_FILE}"
        echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
        export TEMPLATE="${WINEZGUI_TEMPLATE}"
@@ -109,7 +109,7 @@ winezgui-startup-checks()
   # Create wine template and link it to defaults
   # If Default (WINEZGUI_TEMPLATE) is not found initialize it
   if [ ! -d "${WINEZGUI_TEMPLATE}" ]; then
-       DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
+       dbug  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
        mkdir -p "${WINEZGUI_TEMPLATE}"
        source "${DATADIR}/winezgui-initialize-wineprefix"
        winezgui-initialize-wineprefix "${WINEZGUI_TEMPLATE}"

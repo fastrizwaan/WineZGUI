@@ -5,26 +5,26 @@ winezgui-open-setup-installer()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   OPEN_EXE_SETUP="$(${ZENITY_CMD} --file-filter="*.exe *.msi" \
                            --file-selection            \
                            --title="Select a File"     )"
   # If no exe is selected
   if [ -z "${OPEN_EXE_SETUP}" ]; then
-       DBUG "I: Script: Open Setup Installer Cancelled!"
+       dbug "I: Script: Open Setup Installer Cancelled!"
        #unset SELECTION ; # Empty variable
        return 1 ; # Go from the calling file
   fi
   # If another exe is selected
-  DBUG "I: ${HEADER}: Open Setup Installer ${OPEN_EXE_SETUP} selected"
+  dbug "I: ${HEADER}: Open Setup Installer ${OPEN_EXE_SETUP} selected"
   base=$(basename "${OPEN_EXE_SETUP}")
   dire=$(dirname "${OPEN_EXE_SETUP}")
 
   # Launch other EXE
   cd "$dire"
-  DBUG "I: ${HEADER}: Open Setup Installer Launching \"${base}\""
+  dbug "I: ${HEADER}: Open Setup Installer Launching \"${base}\""
   ${WINE_CMD} "$base"
-  DBUG "I: ${HEADER}: Open Setup Installer... Finished!"
+  dbug "I: ${HEADER}: Open Setup Installer... Finished!"
 
   source "${DATADIR}/winezgui-remove-wine-created-shortcuts"
   winezgui-remove-wine-created-shortcuts

@@ -1,7 +1,7 @@
 winezgui-kill-all()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Kill all: exiting ${APPNAME}!"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Kill all: exiting ${APPNAME}!"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -25,11 +25,11 @@ winezgui-kill-all()
   # for killing all wine instance from flaptak sandbox
   if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then
        # flatpak wine and winezgui will be killed
-       DBUG "I: WineZGUI: Kill All: Flatpak script, running from sandbox"
+       dbug "I: WineZGUI: Kill All: Flatpak script, running from sandbox"
        flatpak-spawn --host flatpak kill ${FLATPAK_NAME}
   else
        # Find all process which ends with .exe and kill them
-       DBUG "I: WineZGUI: Kill All: System script, running from host"
+       dbug "I: WineZGUI: Kill All: System script, running from host"
        WINE_PROCESSES=$( ps -aux     | \
                  grep -i "\.exe"     | \
                  sed "s/\( \)*/\1/g" | \

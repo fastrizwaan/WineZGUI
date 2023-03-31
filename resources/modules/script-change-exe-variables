@@ -9,7 +9,7 @@
 
 script-change-exe-variables()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -21,7 +21,7 @@ script-change-exe-variables()
 
   # 4. CHECKSUM (Generate NEW_CHECKSUM)
   NEW_CHECKSUM=$(sha256sum "${SELECTED_EXE}"|cut -f1 -d " ")
-  DBUG "I: Script: ${FUNCNAME[0]}: Sha256sum: ${NEW_CHECKSUM}"
+  dbug "I: Script: ${FUNCNAME[0]}: Sha256sum: ${NEW_CHECKSUM}"
 
   # 5. EXE_PATH (dirname of SELECTED_EXE is NEW_EXE_PATH)
   NEW_EXE_PATH=$(dirname  "${SELECTED_EXE}")
@@ -45,11 +45,11 @@ script-change-exe-variables()
        #NEW_PROGNAME=$(echo "${NEW_EXE_NAME} (${APP_WITH_VER})"
        NEW_PROGNAME=$(echo "${NEW_EXE_NAME}" \
                       |sed "s/\.[eE][Xx][Ee]//g");
-       DBUG "I: Script: ${FUNCNAME[0]}: Product Name not found, using exe name"
+       dbug "I: Script: ${FUNCNAME[0]}: Product Name not found, using exe name"
   else
        #NEW_PROGNAME="$(echo "${NEW_PRODUCT} (${APP_WITH_VER})")"
        NEW_PROGNAME="$(echo "${NEW_PRODUCT}")"
-       DBUG "I: Script: ${FUNCNAME[0]}: Product Name found: \"${NEW_PRODUCT}\""
+       dbug "I: Script: ${FUNCNAME[0]}: Product Name found: \"${NEW_PRODUCT}\""
   fi
   ########### NOW CHANGE THE ABOVE IN SCRIPTFILE ###########
   E="export " # for 80 column rule

@@ -10,7 +10,7 @@
 # 8. Launch Script from Renamed Directory
 script-rename-prefix()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -26,7 +26,7 @@ script-rename-prefix()
     
   # 1.1 If User clicks cancel, go back 
   if [ -z "${GET_PREFIX_NAME}" ]; then
-     DBUG "I: Script: ${FUNCNAME[0]}: Cancelled"
+     dbug "I: Script: ${FUNCNAME[0]}: Cancelled"
      Script_Window
   fi
   
@@ -36,7 +36,7 @@ script-rename-prefix()
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
-       DBUG "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
        return 1
   fi
   
@@ -51,8 +51,8 @@ script-rename-prefix()
        ${ZENITY_CMD} --error --title="Directory Already Exists!" \
               --text="Cannot change ${PREFIXNAME} to ${NEWPREFIXNAME}"
               
-       DBUG "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"
-       DBUG "I: Script: ${FUNCNAME[0]}: Directory ${PREFIXNAME} Already Exists!"
+       dbug "I: Script: ${FUNCNAME[0]}: Cannot change to ${NEWPREFIXNAME}"
+       dbug "I: Script: ${FUNCNAME[0]}: Directory ${PREFIXNAME} Already Exists!"
        Script_Window
   fi
 
@@ -67,7 +67,7 @@ script-rename-prefix()
   # Keep EXE: FILE, PATH, NAME, NOSP when they are outside prefix
   # if not exe_path inside exe_file = if exe_file not inside prefixdir
   if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-          DBUG "I: Script: ${FUNCNAME[0]}: Game directory is outside prefix!"
+          dbug "I: Script: ${FUNCNAME[0]}: Game directory is outside prefix!"
           sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${INFOFILE}"    || echo "Failed1:${FUNCNAME[0]}"
           sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${SCRIPTFILE}"  || echo "Failed2:${FUNCNAME[0]}"
           sed "s|${EXE_FILE}|XOEXE_FILEXO|g; t;" -i "${PREFIXDIR}/${DESKTOPFILE}" || echo "Failed3:${FUNCNAME[0]}"
@@ -181,14 +181,14 @@ script-rename-prefix()
   # 6.1 Rename .png file
   if [ -f "${ICONFILE}" ]; then
        mv "${ICONFILE}" "${RENAMED_ICON_FILE}" && \
-       DBUG "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.png ->" \
+       dbug "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.png ->" \
             "${NEWPREFIXNAME}.png"
   fi
   
   # 6.2 Rename .sh file
   if [ -f "${SCRIPTFILE}" ]; then
        mv "${SCRIPTFILE}" "${RENAMED_SCRIPT_FILE}" && \
-      DBUG "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.sh ->" \
+      dbug "I: Script: ${FUNCNAME[0]}: Renamed ${PREFIXNAME}.sh ->" \
            "${NEWPREFIXNAME}.sh"
   fi
   
@@ -210,7 +210,7 @@ script-rename-prefix()
   # 7.1 link new .desktop file to desktop directory
   #ln -sf "${NEWDESKTOPFILE}" "${DEXSKTOPDIR}/${NEWPREFIXNAME}.desktop" && \
   #ln -sf "${NEWDESKTOPFILE}" "${APPLICATIONSDIR/${SHORTCUT_PREFIX}_${NEWPREFIXNAME}.desktop" && \
-  DBUG "I: Script: ${FUNCNAME[0]}: Created shortcut for ${NEWDESKTOPFILE}" \
+  dbug "I: Script: ${FUNCNAME[0]}: Created shortcut for ${NEWDESKTOPFILE}" \
          "at ${APPLICATIONSDIR}" 2>/dev/null || \
   echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
   
@@ -227,7 +227,7 @@ script-rename-prefix()
   export SCRIPTFILE="${NEWSCRIPTFILE}"
   export ICONFILE="${NEWICONFILE}"
   export DESKTOPFILE="${NEWDESKTOPFILE}"
-  DBUG "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
+  dbug "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
   
   # 8. Launch Script from Renamed Directory
   "${NEWSCRIPTFILE}" &

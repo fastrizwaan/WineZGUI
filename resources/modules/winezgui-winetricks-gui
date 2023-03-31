@@ -5,12 +5,12 @@ winezgui-winetricks-gui()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # Create Temp dir
   if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
       mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
-      DBUG "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+      dbug "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
   fi
 
   ${WINETRICKS} --gui

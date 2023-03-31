@@ -7,7 +7,7 @@
 
 script-change-exe()
 {      
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -21,18 +21,18 @@ script-change-exe()
                     --text   "<b>Set default exe...</b>"         )
   # If Cancel is clicked
   if [ -z "${RESPONSE}" ]; then
-       DBUG "I: Change Exe: Cancelled!"
+       dbug "I: Change Exe: Cancelled!"
        Script_Window
   fi
   # Print response
-  DBUG "I: Script: ${FUNCNAME[0]}: ${RESPONSE} Selected!"
+  dbug "I: Script: ${FUNCNAME[0]}: ${RESPONSE} Selected!"
 
   # If only name, append (wine-xx)
   if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
          # Call script-get-selected-exe
          source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
          script-get-selected-exe
-         DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
+         dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$RESPONSE" = "Any other Exe" ]; then
          # script-change-any-other-exe
          source "${WINEZGUI_SCRIPTS}/script-change-any-other-exe"

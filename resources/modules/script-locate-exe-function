@@ -8,7 +8,7 @@
 # 6. If Sha256sum did not match with the NEW_EXE
 script-locate-exe-function()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -20,7 +20,7 @@ script-locate-exe-function()
        ANSWER=$?
        # 1.1 If user selects no or cancels to locate exe file
        if [ ${ANSWER} -eq 1 ]; then
-            DBUG "I: Script: Locate: User Cancelled!"
+            dbug "I: Script: Locate: User Cancelled!"
             Script_Window  # Return to Script window
        fi
        # 1.2 Show open file dialog
@@ -32,10 +32,10 @@ script-locate-exe-function()
        unset NEW_EXE
        NEW_EXE="$(${ZENITY_CMD} --file-filter="${FILTER}*.${EXE_EXT}"\
                          --file-selection --title="Locate ${EXE_NAME} File")"
-       DBUG "I: Script: Locate: Selected ${NEW_EXE}"
+       dbug "I: Script: Locate: Selected ${NEW_EXE}"
        # 1.2.3 If no exe file is selected, or cancel is clicked
        if [ -z "${NEW_EXE}" ]; then
-            DBUG "I: Script: Locate: User cancelled locating file"
+            dbug "I: Script: Locate: User cancelled locating file"
             unset NEW_EXE; # Empty variable
             Script_Window  # Return to Script window
        fi
@@ -44,14 +44,14 @@ script-locate-exe-function()
        NEW_EXE_PATH=$(dirname  "${NEW_EXE}")
        NEW_EXE_NOSP=$(echo     "${NEW_EXE_NAME}"|tr " " "_");
        NEW_EXE_LESS=$(echo    "${NEW_EXE_NOSP}"|sed "s/\.exe//g");
-       DBUG "I: Script: Locate: Matching checksum of ${NEW_EXE}"
+       dbug "I: Script: Locate: Matching checksum of ${NEW_EXE}"
        # 2. Check sha256sum of NEW_EXE
        NEW_EXE_CHECKSUM=$(sha256sum "${NEW_EXE}"|cut -f1 -d " ")
-       DBUG "I: Script: Locate: ${EXE_FILE} Shasum: ${CHECKSUM}"
-       DBUG "I: Script: Locate: ${NEW_EXE} Shasum: ${NEW_EXE_CHECKSUM}"
+       dbug "I: Script: Locate: ${EXE_FILE} Shasum: ${CHECKSUM}"
+       dbug "I: Script: Locate: ${NEW_EXE} Shasum: ${NEW_EXE_CHECKSUM}"
        # 2.1 Compare NEW_EXE_CHECKSUM with one existing in ${SCRIPTFILE}
        if [ "${CHECKSUM}" = "${NEW_EXE_CHECKSUM}" ]; then
-            DBUG "I: Script: Locate: Checksum matches!"
+            dbug "I: Script: Locate: Checksum matches!"
             # 2.2 When it matches, ask user whether to set it as default exe
             ${ZENITY_CMD} --question --no-wrap --title "${EXE_NAME} found!" \
                    --text "Use ${NEW_EXE_NAME} from now onwards?"
@@ -59,13 +59,13 @@ script-locate-exe-function()
             # 2.3 If user wants to set it as default exe
             if [ ${ANSWER} -eq 0 ]; then
                  # 3. Set EXE and EXE path in script file
-                 DBUG "I: Script: Locate: Using ${NEW_EXE} as default"
+                 dbug "I: Script: Locate: Using ${NEW_EXE} as default"
                  # Update Script ($0) file
                  # 3.1 Update EXE_FILE variable
                  FINDME="\(export EXE\_FILE=\).*"
                  CHANGE="\1\"${NEW_EXE}\""
                  sed "s|${FINDME}|${CHANGE}|g" -i "${0}"
-                 DBUG "I: Script: Locate: Update EXE_FILE in ${0}"
+                 dbug "I: Script: Locate: Update EXE_FILE in ${0}"
                  # 3.2 Update EXE_PATH variable
                  FINDME="\(export EXE\_PATH=\).*"
                  CHANGE="\1\"${NEW_EXE_PATH}\""
@@ -80,7 +80,7 @@ script-locate-exe-function()
                                                 |sed "s|\\.|\\\.|g")
 
                  sed  "s/EXE:.*/EXE:${REPL_EXE_FILE}/g" -i ${INFOFILE}
-                 DBUG "I: Script: Locate: Updated EXE_FILE in Info.yml"
+                 dbug "I: Script: Locate: Updated EXE_FILE in Info.yml"
 
                  # 4.2 Update EXE_PATH in Info.yml
                  # 4.2.1 sed / with \/ for sed
@@ -93,7 +93,7 @@ script-locate-exe-function()
                  # runtime variable for current running script
                  EXE_FILE="${NEW_EXE}"
                  EXE_PATH="${NEW_EXE_PATH}"
-                 DBUG "I: Script: Locate: Updated EXE_FILE and EXE_PATH"
+                 dbug "I: Script: Locate: Updated EXE_FILE and EXE_PATH"
             fi # if [ ${ANSWER} -eq 0 ]
        else    # 6. If Sha256sum did not match with the NEW_EXE
 

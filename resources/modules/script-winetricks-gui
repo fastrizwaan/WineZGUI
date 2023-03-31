@@ -1,6 +1,6 @@
 script-winetricks-gui()
 {
-  DBUG "I: Script: Launched ${FUNCNAME[0]}"
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -13,7 +13,7 @@ script-winetricks-gui()
   
   # Check if winetricks is available at ${WINEZGUIDIR}
   if [ -f "${WINEZGUIDIR}/winetricks" ]; then
-       DBUG "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
+       dbug "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
        WTRICKS_CMD="${WINEZGUIDIR}/winetricks"
        chmod 755 "${WTRICKS_CMD}"
   fi       
@@ -29,5 +29,5 @@ script-winetricks-gui()
   ${WTRICKS_CMD} --gui
   # use this after winetricks fixes bug with arch=
   #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui
-  DBUG "I: Script: ${FUNCNAME[0]}: Winetricks GUI ended..."
+  dbug "I: Script: ${FUNCNAME[0]}: Winetricks GUI ended..."
 }

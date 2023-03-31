@@ -4,7 +4,7 @@ winezgui-settings()
      
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
    export TEMPLATE_NAME=$(basename ${TEMPLATE})
    unset TEXT
@@ -24,11 +24,11 @@ winezgui-settings()
 
    # Exit if Cancel is clicked
    if   [ -z "${SETTINGS_OPTION}" ]; then
-          DBUG "I: ${HEADER}: Cancel Selected!"
+          dbug "I: ${HEADER}: Cancel Selected!"
           return 1
    fi
    
-   DBUG "I: ${HEADER}: Selected ${SETTINGS_OPTION}!"
+   dbug "I: ${HEADER}: Selected ${SETTINGS_OPTION}!"
    
    if   [ "${SETTINGS_OPTION}" = "Help..." ]; then
         source "${DATADIR}/winezgui-settings-help"

@@ -1,6 +1,6 @@
 winezgui-restore()
 {
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -11,7 +11,7 @@ winezgui-restore()
 
   # If no Backup file is selected, or cancel is clicked
   if [ -z "${WZT_FILE}" ]; then
-       DBUG "I: Restore: Cancelled!"
+       dbug "I: Restore: Cancelled!"
        unset WZT_FILE  ; # Empty variable
 
   else

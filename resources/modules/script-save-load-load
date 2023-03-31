@@ -6,13 +6,13 @@ script-save-load-load()
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   PREFIXNAME=$(basename "${PREFIXDIR}")
   source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
   script-save-load-set-saved-game-directory
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # 1.0 If No SavedGame name is given, ask for template to backup
   SELECTED_SAVEDGAME=$(dirname "${SAVED_GAME_PATH}")
@@ -28,7 +28,7 @@ script-save-load-load()
   TAR_FILE_NAME=$(basename "${TAR_FILE}")
   # If no Backup file is selected, or cancel is clicked
   if [ -z "${TAR_FILE}" ]; then
-       DBUG "I: Restore: Cancelled!"
+       dbug "I: Restore: Cancelled!"
        unset TAR_FILE  ; # Empty variable
        return 1
   fi # -z "${TAR_FILE}"
@@ -37,7 +37,7 @@ script-save-load-load()
 
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if [ ! -w "${SELECTED_SAVEDGAME}" ]; then
-       DBUG "I: ${HEADER}: ${SELECTED_SAVEDGAME} is not writable. Aborting!"
+       dbug "I: ${HEADER}: ${SELECTED_SAVEDGAME} is not writable. Aborting!"
        ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \
               --text "${SELECTED_SAVEDGAME} is not writable"
        return 1
@@ -49,7 +49,7 @@ script-save-load-load()
   fi
 
   TAR_PREFIX=$(${TAR_CMD} -tf "${TAR_FILE}"|head -n2|grep "/"|cut -f1 -d "/")
-  DBUG "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
+  dbug "I: ${HEADER}: Prefix from ${TAR_FILE} is ${TAR_PREFIX}"
 
   (${TAR_CMD} -xvf "${TAR_FILE}" -C "${SELECTED_SAVEDGAME}" --transform \
           "s|XOUSERXO|${USER}|g" &)|                        \
@@ -70,7 +70,7 @@ script-save-load-load()
 
        if ! [ -z "$PID_OF_TAR" ]; then
             kill -9 ${PID_OF_TAR} \
-            && DBUG "I: ${HEADER}: Cancelled! Stopped extraction!"
+            && dbug "I: ${HEADER}: Cancelled! Stopped extraction!"
             # Ask the user whether to delete partially extracted or let it be
             ${ZENITY_CMD} --question --title "Extraction Cancelled!" \
                    --text "Delete ${TAR_PREFIX} prefix?"
@@ -78,13 +78,13 @@ script-save-load-load()
             if [ "${ANSWER}" = "0" ]; then
                  # User selected Delete
                  rm -rf "${SELECTED_SAVEDGAME}/${TAR_PREFIX}" && \
-                 DBUG "I: ${HEADER}: Removed ${SELECTED_SAVEDGAME}/${TAR_PREFIX}"
+                 dbug "I: ${HEADER}: Removed ${SELECTED_SAVEDGAME}/${TAR_PREFIX}"
                  # Cleanup broken links in winezgui shortcuts directory
                  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
-                 DBUG "I: ${HEADER}: Removed broken WineZGUI .desktop links"
+                 dbug "I: ${HEADER}: Removed broken WineZGUI .desktop links"
             else
                  # user wants to keep prefix
-                 DBUG "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${TAR_PREFIX}"
+                 dbug "I: ${HEADER}: Keeping extracted ${WINEZGUIDIR}/${TAR_PREFIX}"
                  # Restore Sucess Message
             fi
             MSG=("${TAR_PREFIX} Restore Cancelled!")
@@ -96,7 +96,7 @@ script-save-load-load()
        winezgui-identity-restore "${SELECTED_SAVEDGAME}"
 
        # Inform on successful extraction
-       DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
+       dbug "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
        ${ZENITY_CMD} --info --title="${APP_WITH_VER} - Load Saved Game!" \
        --text="Extracted ${TAR_FILE} Successfully!" 
   
