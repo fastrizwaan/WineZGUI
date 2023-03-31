@@ -6,7 +6,7 @@ WineZGUI_Delete_Prefix()
   Script_Check_Variables_Loaded_Or_Not
 
   source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
+  WineZGUI_List_Available_Prefixes
   
   rm -rf "${SELECTED_PREFIX}" && \
   DBUG "I:  Delete: Deleted ${SELECTED_PREFIX}!"

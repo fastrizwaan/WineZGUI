@@ -10,7 +10,7 @@ WineZGUI_Template_Backup()
   # 1.0 If No Template name is given, ask for template to backup
   if [ -z "${1}" ]; then
        source "${DATADIR}/winezgui-list-available-templates"
-       List_Available_Templates # Get SELECTED_TEMPLATE
+       WineZGUI_List_Available_Templates # Get SELECTED_TEMPLATE
   else
        SELECTED_TEMPLATE="${TEMPLATE}"
   fi

@@ -6,7 +6,7 @@ WineZGUI_Launch()
   Script_Check_Variables_Loaded_Or_Not
 
   source "${DATADIR}/winezgui-list-available-launch-scripts"
-  List_Available_Launch_Scripts
+  WineZGUI_List_Available_Launch_Scripts
 
   export LAUNCH="True"
   

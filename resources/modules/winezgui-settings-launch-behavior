@@ -7,7 +7,7 @@ WineZGUI_Settings_Launch_Behavior()
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
+  WineZGUI_List_Available_Prefixes
 
   GET_LAUNCH_BEHAVIOR=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                                --list   --hide-header      \

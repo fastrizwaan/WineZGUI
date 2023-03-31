@@ -15,7 +15,7 @@ WineZGUI_Recreate_Prefix_Scripts()
   
   if [ -z "$SKIP_ASK" ]; then
       source "${DATADIR}/winezgui-list-available-prefixes"
-      List_Available_Prefixes
+      WineZGUI_List_Available_Prefixes
       PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
       ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" --text="This will overwrite all shell scripts associated with this prefix!"

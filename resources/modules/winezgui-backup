@@ -6,7 +6,7 @@ WineZGUI_Backup()
   Script_Check_Variables_Loaded_Or_Not
 
   source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
+  WineZGUI_List_Available_Prefixes
 
   # Launch Backup from the selected prefix script
   SCRIPT_NAME=$(basename ${SELECTED_PREFIX})

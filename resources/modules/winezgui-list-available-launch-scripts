@@ -1,7 +1,7 @@
 # winezgui-list-available-scripts
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_SCRIPT
-List_Available_Launch_Scripts()
+WineZGUI_List_Available_Launch_Scripts()
 { 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     

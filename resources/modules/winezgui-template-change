@@ -6,7 +6,7 @@ WineZGUI_Template_Change()
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
-  List_Available_Templates # get SELECTED_TEMPLATE 
+  WineZGUI_List_Available_Templates # get SELECTED_TEMPLATE 
   
   # Get Arch from Registry files
   SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"

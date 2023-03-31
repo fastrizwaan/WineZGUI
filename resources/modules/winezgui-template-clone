@@ -7,7 +7,7 @@ WineZGUI_Template_Clone()
   Script_Check_Variables_Loaded_Or_Not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
-  List_Available_Templates # get SELECTED_TEMPLATE 
+  WineZGUI_List_Available_Templates # get SELECTED_TEMPLATE 
 
   CLONE_TEMPLATE=$(${ZENITY_CMD} --title "Create Prefix Template with ${WINEARCH} arch..." \
                              --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \

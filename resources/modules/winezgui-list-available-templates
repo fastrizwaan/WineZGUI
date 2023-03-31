@@ -1,8 +1,8 @@
 # winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_TEMPLATE
-# FIXME  List_Available_Templates
-List_Available_Templates()
+# FIXME  WineZGUI_List_Available_Templates
+WineZGUI_List_Available_Templates()
 {
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

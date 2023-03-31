@@ -1,8 +1,8 @@
 # winezgui-list-available-prefixes
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_PREFIX
-# FIXME  List_Available_Prefixes
-List_Available_Prefixes()
+# FIXME  WineZGUI_List_Available_Prefixes
+WineZGUI_List_Available_Prefixes()
 {
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

@@ -6,7 +6,7 @@ WineZGUI_Shortcuts_Create()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   Script_Check_Variables_Loaded_Or_Not
   source "${DATADIR}/winezgui-list-available-prefixes"
-  List_Available_Prefixes
+  WineZGUI_List_Available_Prefixes
   SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
   ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh shortcut
 }

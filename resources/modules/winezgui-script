@@ -6,7 +6,7 @@ WineZGUI_Script()
   Script_Check_Variables_Loaded_Or_Not
   export SHOW_SCRIPT_FILE="True"
   source "${DATADIR}/winezgui-list-available-prefix-scripts"
-  List_Available_Prefix_Scripts
+  WineZGUI_List_Available_Prefix_Scripts
 
   export LAUNCH="False"
   
