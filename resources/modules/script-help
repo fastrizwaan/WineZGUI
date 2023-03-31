@@ -24,18 +24,24 @@ script-help()
   HELP_TEXT+="Quit...              : Exits ${BASE_SCRIPT}|"
 
   # Text is more, so we need to format it, with sed in pango markup
-  unset TEXT
-  TEXT="$(echo ${HELP_TEXT} \
-              |tr "|" "\n" \
-              |sed "s/https:/https|/g" \
-              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
-              |sed "s/:/;:;/g" \
-              |column -t -s ";"      \
-              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
-              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
-              |sed "s/|/:/g" )"
-  #
-  ${ZENITY_CMD} --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+
+  unset TEXT TEXT1
+  TEXT1="$(printf "%s\n" "$VAR" | while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:<small>/g'; done)"
+  TEXT="$(echo $TEXT1|sed -e 's/XX /<\/small><\/tt>\n/g'|sed -e 's/XX/<\/small><\/tt>\n/g'|column -t -s '\`')"
+
+  #unset TEXT
+  # TEXT="$(echo ${HELP_TEXT} \
+  #             |tr "|" "\n" \
+  #             |sed "s/https:/https|/g" \
+  #             |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+  #             |sed "s/:/;:;/g" \
+  #             |column -t -s ";"      \
+  #             |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+  #             |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+  #             |sed "s/|/:/g" )"
+  # #
+  # ${ZENITY_CMD} --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  ${ZENITY_CMD} --info --no-wrap --text "${TEXT}"
   unset HELP_TEXT
   unset TEXT BASE_SCRIPT BASE_EXE_PATH
 }
