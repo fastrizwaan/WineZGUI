@@ -27,7 +27,8 @@ script-help()
 echo "=-------------------------------------------------------=-=
 
 unset TEXT TEXT1
-TEXT1="$(printf "%s\n" "$HELP_TEXT" | while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:<small>/g'; done)"
+
+TEXT1="$(printf "%s\n" "$HELP_TEXT" | tr "|" "\n" | while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:<small>/g'; done)"
 TEXT="$(echo $TEXT1|sed -e 's/XX /<\/small><\/tt>\n/g'|sed -e 's/XX/<\/small><\/tt>\n/g'|column -t -s '\`')"
 
 echo "TEXT1 $TEXT1"
