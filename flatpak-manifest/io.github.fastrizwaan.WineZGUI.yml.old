@@ -1,6 +1,6 @@
 id: io.github.fastrizwaan.WineZGUI
 branch: '22.08'
-version: '0.92.8'
+version: '0.88.6'
 runtime: org.freedesktop.Platform
 runtime-version: '22.08'
 sdk: org.freedesktop.Sdk
@@ -16,11 +16,12 @@ finish-args:
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
     # Need to link .desktop files
-  - --filesystem=~/.local/share/applications:create
+  - --filesystem=~/.local/share/applications
+  - --filesystem=~/.local/share/applications/winezgui:create
     # Most Games write to their own directories
-  - --env=PATH=/app/bin:/usr/bin
+  - --filesystem=host:ro
     # Desktop shortcut runs wine script from host
-  - --talk-name=org.freedesktop.Flatpak
+  #- --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
   - --socket=pulseaudio
@@ -28,7 +29,6 @@ finish-args:
   - --socket=x11
   - --system-talk-name=org.freedesktop.UDisks2
   - --talk-name=org.freedesktop.Notifications
-  - --filesystem=host
 
 cleanup:
   - '*.a'
@@ -58,23 +58,6 @@ add-extensions:
 
 modules:
  
-  # Create 32-bit directories
-  - name: compat
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/lib/i386-linux-gnu
-      - mkdir -p /app/lib/i386-linux-gnu/GL
-      - mkdir -p /app/lib/debug/lib/i386-linux-gnu
-      - mkdir -p /app/lib/dri/intel-vaapi-driver
-      - mkdir -p /app/lib/i386-linux-gnu/dri/intel-vaapi-driver
-      - mkdir -p /app/lib/udev/rules.d
-      - mkdir -p /app/extensions/Plugins
-      - mkdir -p /app/lib64
-      - mkdir -p /app/lib32
-      - mkdir -p /app/lib/ffmpeg
-      - mkdir -p /app/lib32/ffmpeg
-      - mkdir -p /app/utils
-
   - name: icoutils
     build-options:
       make-args: -j $FLATPAK_BUILDER_N_JOBS
@@ -120,8 +103,8 @@ modules:
       - make install 
     sources:
       - type: archive
-        url: https://github.com/exiftool/exiftool/archive/refs/tags/12.57.tar.gz
-        sha256: ffc55c1177e50b819072c500cbbd0fecbb1be671584a0f43217bfba597ffa933
+        url: https://exiftool.org/Image-ExifTool-12.41.tar.gz
+        sha256: 654f401daab0045a8364fa59d3f69b6f9bf23bcef157a3c928e373884a6f9370
         
   - name: desktop-file-utils
     build-options:
