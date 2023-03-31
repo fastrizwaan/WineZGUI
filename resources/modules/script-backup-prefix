@@ -203,9 +203,9 @@ Script_Backup_Prefix()
   # 7.4 Create Backup archive and restore changes as soon as tar is done
   # add wzt-info.yml 1st then the prefix directory to the wzt file
   (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               --exclude="registry_backup*.gz" \
                                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
-                               -C "${PREFIXES_DIR}" "${PREFIXNAME}"     \
-                               --exclude="registry_backup*.gz" &)| \
+                               -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
   zenity    --progress --pulsate --auto-close        \
             --title="Creating ${PREFIXNAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
