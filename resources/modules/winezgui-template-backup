@@ -217,7 +217,8 @@ WineZGUI_Template_Backup()
   TIMER_START=${SECONDS}
   # 11.1 Create Backup archive and restore changes as soon as tar is done
   (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
-                               -C  "${TEMPLATES_DIR}" "${SELECTED_TEMPLATE_NAME}" &)| \
+                               -C  "${TEMPLATES_DIR}" "${SELECTED_TEMPLATE_NAME}" \
+                               --exclude="registry_backup*.gz" &)| \
   zenity    --progress --pulsate --auto-close        \
             --title="Creating ${SELECTED_TEMPLATE_NAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."

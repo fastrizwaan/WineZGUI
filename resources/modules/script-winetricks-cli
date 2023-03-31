@@ -30,6 +30,14 @@ Script_Winetricks_Cli()
 # dmband dmcompos dmime dmloader dmscript dmstyle dmsynth dmusic dsound dswave \
 # directmusic directplay amstream
 
+  # Backup registry files before running winetricks
+  DATE=$(date +%Y%m%d_%H_%M_%S)
+  cd ${PREFIXDIR} && \
+  tar -zcvf registry_backup_${DATE}.tar.gz *.reg;
+
+  ${ZENITY_CMD} --info --title="Registry files Backed up!" \
+  --text="If winetricks messes up the prefix, restore registry files:\ncd ${PREFIXDIR};\ntar -xvf registry_backup_${DATE}.tar.gz"
+  
   MESSAGE="Change & Press Enter to install these using Winetricks:"
   TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
   # Remove multiple spaces from variable

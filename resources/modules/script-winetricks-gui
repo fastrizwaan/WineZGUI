@@ -18,6 +18,14 @@ Script_Winetricks_Gui()
        chmod 755 "${WTRICKS_CMD}"
   fi       
   
+  # Backup registry files before running winetricks
+  DATE=$(date +%Y%m%d_%H_%M_%S)
+  cd ${PREFIXDIR} && \
+  tar -zcvf registry_backup_${DATE}.tar.gz *.reg;
+
+  ${ZENITY_CMD} --info --title="Registry files Backed up!" \
+  --text="If winetricks messes up the prefix, restore registry files:\ncd ${PREFIXDIR};\ntar -xvf registry_backup_${DATE}.tar.gz"
+  
   ${WTRICKS_CMD} --gui
   # use this after winetricks fixes bug with arch=
   #${WTRICKS_CMD} arch=win64 prefix=${PREFIXDIR} --gui
