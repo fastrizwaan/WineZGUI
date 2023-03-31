@@ -254,8 +254,14 @@ echo "-----------------------------------------------------------"
      echo "APP_CATEGORY=$APP_CATEGORY"
 echo "-----------------------------------------------------------"
 
-# Generate Sha256sum for the exefile
-CHECKSUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+# Generate Sha256sum for the exefile if CHECKSUM not found
+# Just inform user that CHECKSUM already exist, using that
+if   [ -z "${CHECKSUM}" ]   ; then
+       CHECKSUM=$(sha256sum "${EXE_FILE}"|cut -f1 -d " ")
+elif [ ! -z "${CHECKSUM}" ] ; then
+       echo "Using existing CHECKSUM=$CHECKSUM"
+fi
+
 DBUG "I: ${HEADER}: Sha256sum: ${CHECKSUM}"
 
 # Create Launch Script for the provided EXE file

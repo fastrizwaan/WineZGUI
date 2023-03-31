@@ -49,6 +49,7 @@ WineZGUI_Recreate_Prefix_Scripts()
   do
      PROGNAME=$(grep -i "export PROGNAME=" ${i}|cut -f2 -d "="|sed 's/"//g')
      export PROGNAME
+     CHECKSUM=$(grep -i "export CHECKSUM=" ${i}|cut -f2 -d "="|sed 's/"//g')
      EXE_IN_SCRIPTFILE=$(grep -i "export EXE_FILE=" ${i}|cut -f2 -d "="|sed 's/"//g')
      echo "Found EXE= ${EXE_IN_SCRIPTFILE}"
      # rename .desktop and script file to .bak

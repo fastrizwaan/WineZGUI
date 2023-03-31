@@ -80,6 +80,26 @@
 - [ ] update all scripts (recreate all scripts) of all prefixes More->Update all exe scripts to WineZGUI Current Version
 - [ ] mini scripts, will they also get properly updated?
 
+0.96.0-9
+rename all files to function name in smallcase like:
+- [ ] eg: source "${DATADIR}/script-check-variables-loaded-or-not"
+          Script_Check_Variables_Loaded_Or_Not() -> script-check-variables-loaded-or-not()
+- [ ] recreate all prefixes for latest version, it is a must.
+- [ ] Do rigourous test with old version and new version
+- [?] use function check, if not found, try older version using alias eval
+
+
+0.95.9
+winetricks-cli
+- [ ] cancel should kill winetricks in flatpak/system
+- [ ] .bak file should include old winezgui version
+- [ ] open cli in terminal (winetricks a b c d e f g)
+Recreate-Prefix-Script
+- [x] use existing sha256sum from script file, useful when file is not accessible and user recreates prefix script
+- [ ] check a script for older version, if it is older, ask once to update?
+
+
+
 
 0.94.9
 - [x] fix setup not creating shortcuts (after switching to ~/.local/share/applications)
