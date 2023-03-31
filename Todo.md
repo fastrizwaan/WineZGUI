@@ -89,14 +89,16 @@ rename all files to function name in smallcase like:
 - [?] use function check, if not found, try older version using alias eval
 
 
-0.95.9
-winetricks-cli
+
+
 - [ ] cancel should kill winetricks in flatpak/system
 - [ ] .bak file should include old winezgui version
 - [ ] open cli in terminal (winetricks a b c d e f g)
-Recreate-Prefix-Script
-- [x] use existing sha256sum from script file, useful when file is not accessible and user recreates prefix script
 - [ ] check a script for older version, if it is older, ask once to update?
+
+0.95.9
+- [x] Recreate-Prefix-Script: use existing sha256sum from script file, useful when file is not accessible and user recreates prefix script
+- [x] winetricks: backup *.reg files before running winetricks, so that user can restore if required.
 
 
 
