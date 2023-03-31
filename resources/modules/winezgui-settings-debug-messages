@@ -1,10 +1,10 @@
 # winezgui-settings-debug-messages
-WineZGUI_Settings_Debug_Messages()
+winezgui-settings-debug-messages()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   DEBUG_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                         --list   --hide-header      \

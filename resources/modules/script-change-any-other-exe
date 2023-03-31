@@ -1,11 +1,11 @@
-# Script_Change_Any_Other_Exe function
+# script-change-any-other-exe function
 # This function will ask the user to select an exe file
 # and set the variable SELECTED_EXE
-Script_Change_Any_Other_Exe()
+script-change-any-other-exe()
 {
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   EXTENSIONS="*.exe *.msi"
   SELECT_EXE_FILE="$(${ZENITY_CMD} --file-filter="${EXTENSIONS}" --file-selection \
                             --title="Change EXE for ${PREFIXNAME}" )"

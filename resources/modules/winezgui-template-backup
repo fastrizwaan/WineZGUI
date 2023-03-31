@@ -1,16 +1,16 @@
 # winezgui-backup-template
-WineZGUI_Template_Backup()
+winezgui-template-backup()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # 1.0 If No Template name is given, ask for template to backup
   if [ -z "${1}" ]; then
        source "${DATADIR}/winezgui-list-available-templates"
-       WineZGUI_List_Available_Templates # Get SELECTED_TEMPLATE
+       winezgui-list-available-templates # Get SELECTED_TEMPLATE
   else
        SELECTED_TEMPLATE="${TEMPLATE}"
   fi
@@ -102,7 +102,7 @@ WineZGUI_Template_Backup()
 
   # Check if user entered symbols
   source "${DATADIR}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
@@ -202,7 +202,7 @@ WineZGUI_Template_Backup()
   DBUG "I: ${HEADER}: Launching: winezgui-identity-remove"
   
   source "${DATADIR}/winezgui-identity-remove"
-  Winezgui_Identity_Remove "${SELECTED_TEMPLATE}"
+  winezgui-identity-remove "${SELECTED_TEMPLATE}"
 
   # 10.3 Create template-info.yml inside SELECTED_TEMPLATE, not needed though
   
@@ -267,7 +267,7 @@ WineZGUI_Template_Backup()
   DBUG "I: Backup: Template: Restoring Registry and Info files"
   cd "${TEMPLATES_DIR}"
   source "${DATADIR}/winezgui-identity-restore"
-  Winezgui_Identity_Restore "${SELECTED_TEMPLATE}"
+  winezgui-identity-restore "${SELECTED_TEMPLATE}"
 
   DBUG "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

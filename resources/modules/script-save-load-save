@@ -1,6 +1,6 @@
 #script-save-load-save
 #FIXME: remove identity from filename and directory names and content
-Script_Save_Load_Save()
+script-save-load-save()
 {
   # SAVEDGAMEDIRFILE="${PREFIXDIR}/SavedGameDir.yml"
   # DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -10,14 +10,14 @@ Script_Save_Load_Save()
   # else
   #     ${ZENITY_CMD} --info --text="Please select Saved Game directory" --title="Saved Game Directory!"
   #     source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
-  #     Script_Save_Load_Set_Saved_Game_Directory
+  #     script-save-load-set-saved-game-directory
   # fi
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   PREFIXNAME=$(basename "${PREFIXDIR}")
   source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
-  Script_Save_Load_Set_Saved_Game_Directory
+  script-save-load-set-saved-game-directory
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -114,7 +114,7 @@ Script_Save_Load_Save()
 
   # Check if user entered symbols
   source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
@@ -213,7 +213,7 @@ Script_Save_Load_Save()
   DBUG "I: ${HEADER}: Launching: winezgui-identity-remove"
   
   source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
-  Winezgui_Identity_Remove "${SELECTED_SAVEDGAME}"
+  winezgui-identity-remove "${SELECTED_SAVEDGAME}"
 
   # 10.3 Create template-info.yml inside SELECTED_SAVEDGAME, not needed though
   
@@ -282,7 +282,7 @@ Script_Save_Load_Save()
   DBUG "I: Backup: SavedGame: Restoring Registry and Info files"
   cd "${SAVEDGAMES_DIR}"
   source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
-  Winezgui_Identity_Restore "${SELECTED_SAVEDGAME}"
+  winezgui-identity-restore "${SELECTED_SAVEDGAME}"
 
   DBUG "I: Backup: SavedGame: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 

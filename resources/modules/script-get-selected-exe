@@ -2,12 +2,12 @@
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_EXE
 # FIXME change this to list installed exe function to be used by Open Other EXE and Change EXE
-Script_Get_Selected_Exe()
+script-get-selected-exe()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   unset COMMAND count SHOW_OPTION NAMES FILES RESULT search_list
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
@@ -20,7 +20,7 @@ Script_Get_Selected_Exe()
   # and common exe files present in Program Files directory
   # Add those files to FILES array and filenames to NAMES array
   source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
-  Script_Get_Installed_Exe_Files
+  script-get-installed-exe-files
   EXE_LIST="${EXE_FILES_FOUND}"
   search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
 
@@ -55,7 +55,7 @@ Script_Get_Selected_Exe()
  
   # Generate Height value
   source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
-  WineZGUI_Get_Window_Height ${#FILES[@]}
+  winezgui-get-window-height ${#FILES[@]}
  
   # 3. Show the found exe files using zenity
   unset COMMAND

@@ -1,9 +1,9 @@
-WineZGUI_Quit()
+winezgui-quit()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   echo "I: Bye! :-)"
   exit 0

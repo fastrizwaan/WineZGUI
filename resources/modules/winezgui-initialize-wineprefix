@@ -1,11 +1,11 @@
 # winezgui-initialize-wineprefix
-WineZGUI_Initialize_Wineprefix()
+winezgui-initialize-wineprefix()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
  
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
@@ -42,5 +42,5 @@ WineZGUI_Initialize_Wineprefix()
   
   DBUG "I: ${HEADER}: Startup Checks"
   source "${DATADIR}/winezgui-startup-checks"
-  WineZGUI_Startup_Checks
+  winezgui-startup-checks
 }

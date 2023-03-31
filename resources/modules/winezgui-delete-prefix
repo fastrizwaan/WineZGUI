@@ -1,12 +1,12 @@
-WineZGUI_Delete_Prefix()
+winezgui-delete-prefix()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   source "${DATADIR}/winezgui-list-available-prefixes"
-  WineZGUI_List_Available_Prefixes
+  winezgui-list-available-prefixes
   
   rm -rf "${SELECTED_PREFIX}" && \
   DBUG "I:  Delete: Deleted ${SELECTED_PREFIX}!"
@@ -15,6 +15,6 @@ WineZGUI_Delete_Prefix()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
   DBUG "I: Delete: Removed broken WineZGUI .desktop links"
 }

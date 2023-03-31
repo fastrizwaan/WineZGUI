@@ -1,10 +1,10 @@
 #winezgui-startup-checks
-WineZGUI_Startup_Checks()
+winezgui-startup-checks()
 {
   OLD_HEADER=${HEADER}
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
@@ -112,9 +112,9 @@ WineZGUI_Startup_Checks()
        DBUG  "I: ${HEADER}: ${WINEZGUI_TEMPLATE} does not exist, creating..."
        mkdir -p "${WINEZGUI_TEMPLATE}"
        source "${DATADIR}/winezgui-initialize-wineprefix"
-       WineZGUI_Initialize_Wineprefix "${WINEZGUI_TEMPLATE}"
+       winezgui-initialize-wineprefix "${WINEZGUI_TEMPLATE}"
        source "${DATADIR}/winezgui-create-about-yml"
-       WineZGUI_Create_About_Yml
+       winezgui-create-about-yml
   fi
 
   HEADER="${OLD_HEADER}"

@@ -10,7 +10,7 @@ winezgui-update-all-scripts()
   #zenity --info --text="Work in Progress"
   #return 0  
   #source "${DATADIR}/script-check-variables-loaded-or-not"
-  #Script_Check_Variables_Loaded_Or_Not
+  #script-check-variables-loaded-or-not
   
   echo "-=-=-=-=-=-=-=-=-=-=-=-=- LAUNCHED  ${FUNCNAME[0]} -=-=-=-=-=-=-=-=-=-=-=-=-"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
@@ -41,7 +41,7 @@ winezgui-update-all-scripts()
    
     echo "SELECTED_PREFIX=$SELECTED_PREFIX"  
      
-    WineZGUI_Recreate_Prefix_Scripts
+    winezgui-recreate-prefix-scripts
     
     
   done
@@ -51,7 +51,7 @@ winezgui-update-all-scripts()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
   
   # Inform and offer to Launch
   ${ZENITY_CMD} --info --title="Updated All Prefix Scripts!" \

@@ -1,10 +1,10 @@
 #script-get-selected-exe-for-prefix
-Script_Get_Selected_Exe_For_Prefix()
+script-get-selected-exe-for-prefix()
 {
  DBUG "I: Script: Launched ${FUNCNAME[0]}"
    
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
  unset COMMAND
  unset count
  unset SHOW_OPTION
@@ -23,7 +23,7 @@ Script_Get_Selected_Exe_For_Prefix()
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
  source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
- Script_Get_Installed_Exe_Files
+ script-get-installed-exe-files
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
 
@@ -60,7 +60,7 @@ Script_Get_Selected_Exe_For_Prefix()
 
 # Generate Height value
 source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
-WineZGUI_Get_Window_Height ${#FILES[@]}
+winezgui-get-window-height ${#FILES[@]}
 
 # if [ ${#FILES[@]} -eq 1 ]; then
 #      export SELECTED_EXE="${FILES}"

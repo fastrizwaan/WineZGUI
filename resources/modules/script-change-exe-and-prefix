@@ -5,38 +5,38 @@
 # 1. Ask whether to Find Exe inside prefix (for installers) or any Other exe
 # 2. Change EXE values in Script
 # Launch after setup
-Script_Change_Exe_And_Prefix()
+script-change-exe-and-prefix()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # Get Selected Exe variable filled
   source "${WINEZGUI_SCRIPTS}/script-get-selected-exe-for-prefix"
-  Script_Get_Selected_Exe_For_Prefix
+  script-get-selected-exe-for-prefix
   DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   
   # Change Icon
   DBUG "I: Script: ${FUNCNAME[0]}: Changing icon..."
   source "${WINEZGUI_SCRIPTS}/script-change-icon"
   # We do not want to see zenity dialog of icon change success
-  export Script_Change_Icon_DO_NOT_PROMPT="true"
-  Script_Change_Icon "${SELECTED_EXE}"
+  export script-change-icon_DO_NOT_PROMPT="true"
+  script-change-icon "${SELECTED_EXE}"
   
   # Change Prefix
   DBUG "I: Script: ${FUNCNAME[0]}: Create Change Prefix file."
   source "${WINEZGUI_SCRIPTS}/script-create-change-prefix-file"
-  Script_Create_Change_Prefix_File
+  script-create-change-prefix-file
   
   # Create found-exe-files.yml
   DBUG "I: Script: ${FUNCNAME[0]}: Created found-exe-files.yml."
   source "${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file"
-  Script_Create_Found_New_Exe_Files_File
+  script-create-found-new-exe-files-file
   
   # Update files
   DBUG "I: Script: ${FUNCNAME[0]}: Updating exe variables..."
   source "${WINEZGUI_SCRIPTS}/script-change-exe-variables"
-  Script_Change_Exe_Variables
+  script-change-exe-variables
   # Change EXE_NAME and EXE_PATH in all the required files
   # Change Sha256sum etc.
 }

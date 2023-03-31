@@ -1,13 +1,13 @@
 # winezgui-list-available-scripts
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_SCRIPT
-WineZGUI_List_Available_Prefix_Scripts()
+winezgui-list-available-prefix-scripts()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   unset COMMAND count SHOW_OPTION NAMES FILES RESULT search_list
   
@@ -53,7 +53,7 @@ WineZGUI_List_Available_Prefix_Scripts()
 
  # Generate Height value
  source "${DATADIR}/winezgui-get-window-height"
- WineZGUI_Get_Window_Height ${#FILES[@]}
+ winezgui-get-window-height ${#FILES[@]}
 
   # 3. Show the found exe files using zenity
   unset COMMAND

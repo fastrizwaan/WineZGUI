@@ -1,10 +1,10 @@
 #winezgui-template-download
 
-WineZGUI_Template_Download()
+winezgui-template-download()
 {
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   mkdir -p "${TEMPLATES_DIR}"
   if [ -w ${TEMPLATES_DIR} ]; then
        DBUG "I: Downloading https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.1/DotNet48-Wine8-20230301.tar.zst"
@@ -26,7 +26,7 @@ WineZGUI_Template_Download()
             #rm DotNet48-Wine8-20230301.tar.zst && \
             DBUG "I: Removed DotNet48-Wine8-20230301.tar.zst after extraction"
             source "${DATADIR}/winezgui-template-change"
-            WineZGUI_Template_Change
+            winezgui-template-change
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        else
             killall -KILL wget

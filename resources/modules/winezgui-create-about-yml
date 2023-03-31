@@ -1,13 +1,13 @@
 # winezgui-create-about-yml
 # Create Metadata About.yml for the default wine prefix
 # Update info only when wine is found
-WineZGUI_Create_About_Yml()
+winezgui-create-about-yml()
 {
   OLD_HEADER=${HEADER}
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
      
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ ! -f "${ABOUTFILE}" ] && [ $(which wine) ]; then

@@ -5,12 +5,12 @@
 # 0. Get disk usage of prefix
 # 1. Ask user to choose prefix/bundle
 # 2. Based on Selection, launch create prefix / bundle function
-Script_Backup()
+script-backup()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="Script: ${FUNCNAME[0]}"
   unset RESPONSE
   export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"
@@ -65,12 +65,12 @@ check-all-variables "APPNAME APPVERSION HEADER FLATPAK_NAME SHORT_FLATPAK_NAME D
 
   # 2. Based on Selection, launch create prefix / bundle function
   if   [ "${RESPONSE}" = "Prefix Backup..." ]; then
-         # Call Script_Backup_Prefix
+         # Call script-backup-prefix
          source "${WINEZGUI_SCRIPTS}/script-backup-prefix"
-         Script_Backup_Prefix "${PREFIXDIR}"
+         script-backup-prefix "${PREFIXDIR}"
   elif [ "${RESPONSE}" = "Create Game Bundle..." ]; then
          # Call WINEZGUI-SCRIPT_BACKUP-BUNDLE
          source "${WINEZGUI_SCRIPTS}/script-backup-bundle"
-         Script_Backup_Bundle "${PREFIXDIR}"
+         script-backup-bundle "${PREFIXDIR}"
   fi
 }

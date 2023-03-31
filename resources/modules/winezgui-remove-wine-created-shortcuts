@@ -5,12 +5,12 @@
 # winezgui needs to keep it clean, like flatpak, system install should also be
 # clutter free!
 # WineZGUI game prefix should not clutter system menu.
-Remove_Wine_Created_Shortcuts()
+winezgui-remove-wine-created-shortcuts()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   WINE_SHORTCUT_DIR="$(realpath -m ~/.local/share/applications/wine)"
   # e.g., ~/.local/share/winezgui/npp.8.4.2.Installer.x64 for npp created by
   # Installed at $WINE_SHORTCUT_DIR,

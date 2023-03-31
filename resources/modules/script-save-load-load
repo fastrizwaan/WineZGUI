@@ -1,15 +1,15 @@
 #script-save-load-load
 #FIXME: remove identity,
-Script_Save_Load_Load()
+script-save-load-load()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   PREFIXNAME=$(basename "${PREFIXDIR}")
   source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
-  Script_Save_Load_Set_Saved_Game_Directory
+  script-save-load-set-saved-game-directory
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -93,7 +93,7 @@ Script_Save_Load_Load()
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
        source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
-       Winezgui_Identity_Restore "${SELECTED_SAVEDGAME}"
+       winezgui-identity-restore "${SELECTED_SAVEDGAME}"
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"

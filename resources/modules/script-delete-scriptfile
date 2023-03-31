@@ -1,9 +1,9 @@
 #script-delete-scriptfile
-Script_Delete_Scriptfile()
+script-delete-scriptfile()
 {
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # Delete Shortcuts and Prefix Directory
   rm -f  "${DESKTOPFILE}" "${SCRIPTFILE}" && \
   DBUG "I: Script: Delete: Removed ${SCRIPTFILE}" || \
@@ -13,7 +13,7 @@ Script_Delete_Scriptfile()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 
   DBUG "I: Script: Delete: Exiting!"
   ${ZENITY_CMD} --info --no-wrap --text "Deleted ${SCRIPTFILE}" --title "${APP_WITH_VER} - Delete Script!"

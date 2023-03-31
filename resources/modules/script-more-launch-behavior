@@ -1,10 +1,10 @@
 # script-more-launch-behavior
-Script_More_Launch_Behavior()
+script-more-launch-behavior()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   SCRIPT_LAUNCH_BEHAVIOR=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \

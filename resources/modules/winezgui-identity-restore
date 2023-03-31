@@ -1,10 +1,10 @@
-Winezgui_Identity_Restore()
+winezgui-identity-restore()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
         echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
@@ -21,7 +21,7 @@ Winezgui_Identity_Restore()
   else
        source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data"
   fi
-  WineZGUI_Fetch_Replacement_Data # DATA
+  winezgui-fetch-replacement-data # DATA
   
   # flatpak install based Script from system needs to load from it's own directory
   # WINEZGUI_SCRIPTS
@@ -30,7 +30,7 @@ Winezgui_Identity_Restore()
   else
        source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files"
   fi
-  WineZGUI_Fetch_Replacement_Files "${1}" #FILES
+  winezgui-fetch-replacement-files "${1}" #FILES
   
   cd "${DIRECTORY}"
 
@@ -93,5 +93,5 @@ Winezgui_Identity_Restore()
   
 #   # Find other files which has username in it.
 #   source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
-#   WineZGUI_Identity_Restore_From_Drive_C_Files "${1}"
+#   winezgui-identity-restore-from-drive-c-files "${1}"
 }

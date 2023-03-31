@@ -1,4 +1,4 @@
-# Script_Backup_Bundle
+# script-backup-bundle
 # Create Bundle from existing wine prefix
 # Steps:
 # 1. Exclude Directories for bundling
@@ -10,12 +10,12 @@
 # 7. Create wzt = tar.zst file
 # 8. Show info about created wzt file
 
-Script_Backup_Bundle()
+script-backup-bundle()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
     
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="Script: ${FUNCNAME[0]}"
   DBUG "I: ${HEADER}: Checking if ${EXE_NAME} is inside a standard directory!"
   
@@ -187,7 +187,7 @@ Script_Backup_Bundle()
 
   # Check if user entered symbols
   source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${BACKUP_FILE}"
+  winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
@@ -323,16 +323,16 @@ Script_Backup_Bundle()
       DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
       source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
-      Winezgui_Identity_Remove "${PREFIXDIR}"
+      winezgui-identity-remove "${PREFIXDIR}"
       
       # Remove Identities from files
       # Find other files which has username in it.
       source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files"
-      WineZGUI_Identity_Remove_From_Drive_C_Files "${PREFIXDIR}"
+      winezgui-identity-remove-from-drive-c-files "${PREFIXDIR}"
 
       # 7.5 Create wzt-info.yml required for restoring wzt file.
       source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
-      WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+      winezgui-create-wzt-info "${PREFIXDIR}"
       
       # 7.6 Create Bundle
       DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
@@ -367,16 +367,16 @@ Script_Backup_Bundle()
       DBUG "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
       source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
-      Winezgui_Identity_Remove "${PREFIXDIR}"
+      winezgui-identity-remove "${PREFIXDIR}"
       
       # Remove Identities from files
       # Find other files which has username in it.
       source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files"
-      WineZGUI_Identity_Remove_From_Drive_C_Files "${PREFIXDIR}"
+      winezgui-identity-remove-from-drive-c-files "${PREFIXDIR}"
       
       # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
       source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
-      WineZGUI_Create_Wzt_Info "${PREFIXDIR}"
+      winezgui-create-wzt-info "${PREFIXDIR}"
       
       # 7.6 Create Bundle
       DBUG "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
@@ -446,11 +446,11 @@ Script_Backup_Bundle()
   DBUG "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
 
   source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
-  Winezgui_Identity_Restore "${PREFIXDIR}"
+  winezgui-identity-restore "${PREFIXDIR}"
 
   # Find other files which has username in it.
   source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore-from-drive-c-files"
-  WineZGUI_Identity_Restore_From_Drive_C_Files "${PREFIXDIR}"
+  winezgui-identity-restore-from-drive-c-files "${PREFIXDIR}"
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change

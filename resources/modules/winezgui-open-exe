@@ -1,11 +1,11 @@
-WineZGUI_Open_Exe()
+winezgui-open-exe()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset EXE_FILE F T
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # If no argument is given, ask to select and open exe/msi file
   if [ -z "${1}" ]; then
@@ -34,7 +34,7 @@ WineZGUI_Open_Exe()
        export WZT_FILE="${EXE_FILE}"
        DBUG "I: ${HEADER}: WineZGUI Backup file submitted"
        source "${DATADIR}/winezgui-restore-wzt"
-       Restore_Wzt_File
+       winezgui-restore-wzt
        DBUG "I: ${HEADER}: Exiting main program after restoring backup"
        exit 0;
   fi

@@ -1,10 +1,10 @@
 #winezgui-shortcuts
-WineZGUI_Shortcuts()
+winezgui-shortcuts()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset SELECT_SHORTCUT
   SELECT_SHORTCUT=$( ${ZENITY_CMD} --title "${APP_WITH_VER} - Shortcuts"        \
@@ -28,21 +28,21 @@ WineZGUI_Shortcuts()
  
   if  [ "${SELECT_SHORTCUT}" = "Clean up..." ]; then
         source "${DATADIR}/winezgui-shortcuts-clean-up"
-        WineZGUI_Shortcuts_Clean_Up
+        winezgui-shortcuts-clean-up
  
  elif [ "${SELECT_SHORTCUT}" = "Create..." ]; then
         source "${DATADIR}/winezgui-shortcuts-create"
-        WineZGUI_Shortcuts_Create
+        winezgui-shortcuts-create
  
  elif [ "${SELECT_SHORTCUT}" = "Delete..." ]; then
         source "${DATADIR}/winezgui-shortcuts-delete"
         echo "Launching delete Shortcuts!!!"
-        Winezgui_Shortcuts_Delete
+        winezgui-shortcuts-delete
 
  elif [ "${SELECT_SHORTCUT}" = "Restore..." ]; then
         source "${DATADIR}/winezgui-shortcuts-restore"
         echo "Launching delete Shortcuts!!!"
-        WineZGUI_Shortcuts_Restore
+        winezgui-shortcuts-restore
   fi
   return 0
 }

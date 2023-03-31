@@ -1,10 +1,10 @@
 # winezgui-fetch-replacement-data
-WineZGUI_Fetch_Replacement_Data()
+winezgui-fetch-replacement-data()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # Unset any previously initialized variables
   unset SEARCH

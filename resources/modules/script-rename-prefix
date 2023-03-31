@@ -8,12 +8,12 @@
 # 6. Rename files as per new prefix name 
 # 7. Create new shortcut and delete old one
 # 8. Launch Script from Renamed Directory
-Rename_Prefix()
+script-rename-prefix()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   if [ -z "${1}" ]; then
     # 1. Ask for New Prefix Name
     GET_PREFIX_NAME=$(${ZENITY_CMD} --title "Rename Prefix..."           \
@@ -32,7 +32,7 @@ Rename_Prefix()
   
   # Check if user entered symbols
   source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${GET_PREFIX_NAME}"
+  winezgui-check-entry-text "${GET_PREFIX_NAME}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
@@ -218,7 +218,7 @@ Rename_Prefix()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 
 
   # Required for instant change in the GameWindow

@@ -1,12 +1,12 @@
 #winezgui-recreate-prefix-scripts
-WineZGUI_Recreate_Prefix_Scripts()
+winezgui-recreate-prefix-scripts()
 {
   
   ### Get Prefixdir name
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   echo "APPVERSION = $APPVERSION"
 
@@ -15,7 +15,7 @@ WineZGUI_Recreate_Prefix_Scripts()
   
   if [ -z "$SKIP_ASK" ]; then
       source "${DATADIR}/winezgui-list-available-prefixes"
-      WineZGUI_List_Available_Prefixes
+      winezgui-list-available-prefixes
       PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
       ${ZENITY_CMD} --question --title="Recreate All Scripts for ${PREFIXNAME}?" --text="This will overwrite all shell scripts associated with this prefix!"
@@ -68,7 +68,7 @@ WineZGUI_Recreate_Prefix_Scripts()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
   
   # Inform and offer to Launch
     if [ -z "$SKIP_ASK" ]; then

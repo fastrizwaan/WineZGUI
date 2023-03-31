@@ -1,15 +1,15 @@
-WineZGUI_About()
+winezgui-about()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # Recreate about file if not found
   if [ ! -f "${ABOUTFILE}" ]; then
        DBUG "I: $(basename ${0}): About.yml not found, recreating!"
        source "${DATADIR}/winezgui-create-about-yml"
-       WineZGUI_Create_About_Yml
+       winezgui-create-about-yml
   fi
 
   # Update version in About

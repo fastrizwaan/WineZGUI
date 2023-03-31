@@ -1,9 +1,9 @@
-Script_Open_Other_Exe()
+script-open-other-exe()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
        DBUG "I: Script: ${FUNCNAME[0]}:... Selected!"
@@ -30,9 +30,9 @@ Script_Open_Other_Exe()
 
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
-         # Call Script_Get_Selected_Exe
+         # Call script-get-selected-exe
          source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
-         Script_Get_Selected_Exe
+         script-get-selected-exe
          OTHER_EXE="${SELECTED_EXE}"
          DBUG "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$SELECTED_OTHER_EXE" = "Any other Exe" ]; then
@@ -57,7 +57,7 @@ Script_Open_Other_Exe()
           ANSWER=$?
           if [ $ANSWER -eq 0 ]; then
                source "${WINEZGUI_SCRIPTS}/script-create-other-shortcuts"
-               Script_Create_Other_Shortcuts &
+               script-create-other-shortcuts &
           fi
   fi
   
@@ -73,8 +73,8 @@ Script_Open_Other_Exe()
   DBUG "I: Script: Open Other EXE... Finished!"
 
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts"
-  Remove_Wine_Created_Shortcuts
+  winezgui-remove-wine-created-shortcuts
   source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
-  Script_Find_Installed_Exe
+  script-find-installed-exe
   unset TITLE TEXT
 }

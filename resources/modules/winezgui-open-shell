@@ -2,12 +2,12 @@
 # Check if it is a flatpak based script
 # Check if it is running from inside flatpak container
 # and gnome terminal is found on host
-WineZGUI_Open_Shell()
+winezgui-open-shell()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
 

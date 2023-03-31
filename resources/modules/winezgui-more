@@ -1,10 +1,10 @@
 # FIXME winezgui-more
-WineZGUI_More()
+winezgui-more()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
                  --list   --hide-header                  \
@@ -32,24 +32,24 @@ WineZGUI_More()
          xdg-open "${WINEZGUIDIR}"
   elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
          source "${DATADIR}/winezgui-open-terminal"
-         WineZGUI_Open_Terminal
+         winezgui-open-terminal
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
          source "${DATADIR}/winezgui-shortcuts"
-         WineZGUI_Shortcuts
+         winezgui-shortcuts
   elif [ "${MORE_OPTION}" = "Recreate Prefix Scripts..."  ]; then
          source "${DATADIR}/winezgui-recreate-prefix-scripts"
-         WineZGUI_Recreate_Prefix_Scripts
+         winezgui-recreate-prefix-scripts
   elif [ "${MORE_OPTION}" = "Update All Scripts..."  ]; then
          source "${DATADIR}/winezgui-update-all-scripts"
          winezgui-update-all-scripts         
   elif [ "${MORE_OPTION}" = "Restore All Identity..."  ]; then
          source "${DATADIR}/winezgui-identity-restore-all"
-         WineZGUI_Identity_Restore_All
+         winezgui-identity-restore-all
   elif [ "${MORE_OPTION}" = "Update winetricks..."  ]; then
          source "${DATADIR}/winezgui-download-winetricks"
-         WineZGUI_Download_Winetricks
+         winezgui-download-winetricks
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
          source "${DATADIR}/winezgui-more-help"
-         WineZGUI_More_Help
+         winezgui-more-help
   fi
 }

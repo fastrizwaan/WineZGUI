@@ -1,9 +1,9 @@
 # winezgui-check-file-type
-WineZGUI_Check_File_Type()
+winezgui-check-file-type()
 {
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
        DBUG "I: ${HEADER}: No files given"
@@ -37,5 +37,5 @@ WineZGUI_Check_File_Type()
   HEADER="${OLD_HEADER}"
   
   source "${DATADIR}/winezgui-open-exe"
-  WineZGUI_Open_Exe "${EXE_FILE}"
+  winezgui-open-exe "${EXE_FILE}"
 }

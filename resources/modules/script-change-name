@@ -1,12 +1,12 @@
 # Rename Application Name in .desktop file
 # needed by script-change-name
 
-SCRIPT_CHANGE_NAME ()
+script-change-name()
 {    
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: Script: ${FUNCNAME[0]}: Name Selected!"
   # Find if PROGNAME does not have suffix (wine-XX) add it
   if ! [[ "${PROGNAME}" == *"(${APP_WITH_VER})" ]]; then
@@ -37,7 +37,7 @@ SCRIPT_CHANGE_NAME ()
   
   # Check if user entered symbols
   source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${GET_PROGNAME}"
+  winezgui-check-entry-text "${GET_PROGNAME}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then

@@ -1,14 +1,14 @@
 # winezgui-list-available-templates
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_TEMPLATE
-# FIXME  WineZGUI_List_Available_Templates
-WineZGUI_List_Available_Templates()
+# FIXME  winezgui-list-available-templates
+winezgui-list-available-templates()
 {
   OLD_HEADER=${HEADER}
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset SELECTED_TEMPLATE TEMPLATES_FOUND COMMAND count SHOW_OPTION
@@ -56,7 +56,7 @@ WineZGUI_List_Available_Templates()
   
   # Generate Height value
   source "${DATADIR}/winezgui-get-window-height"
-  WineZGUI_Get_Window_Height ${#FILES[@]}
+  winezgui-get-window-height ${#FILES[@]}
 
  # 3. Show the found exe files using zenity
   unset COMMAND

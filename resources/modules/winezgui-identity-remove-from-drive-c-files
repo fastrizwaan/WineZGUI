@@ -1,11 +1,11 @@
 # winezgui-identity-remove-from-drive-c-files
-WineZGUI_Identity_Remove_From_Drive_C_Files()
+winezgui-identity-remove-from-drive-c-files()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
         echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"

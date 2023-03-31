@@ -1,11 +1,11 @@
 #winezgui-remove-broken-links
-WineZGUI_Remove_Broken_Links()
+winezgui-remove-broken-links()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not" 2>/dev/null ||\
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # If running from inside flatpak, it can't detect other links properly due to no access to other flatpak's dir ~/.var/app/<other_flatpak>
   if [ $(which flatpak-spawn) ]; then

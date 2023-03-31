@@ -1,9 +1,9 @@
 # script-change-arch
-Script_Change_Arch()
+script-change-arch()
 {
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
                            --list   --hide-header      \

@@ -1,15 +1,15 @@
-WineZGUI_Winetricks_Cli()
+winezgui-winetricks-cli()
 {
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
        source "${DATADIR}/winezgui-download-winetricks"
-       WineZGUI_Download_Winetricks
+       winezgui-download-winetricks
   fi  
 
   VERB_LIST="mfc42 xact xact_x64 gmdls \
@@ -49,7 +49,7 @@ WineZGUI_Winetricks_Cli()
 
   # Check if user entered symbols
   source "${DATADIR}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${VERBS}"
+  winezgui-check-entry-text "${VERBS}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then

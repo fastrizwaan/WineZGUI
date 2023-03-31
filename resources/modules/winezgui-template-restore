@@ -1,9 +1,9 @@
 # winezgui-template-restore
-WineZGUI_Template_Restore()
+winezgui-template-restore()
 {
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
@@ -73,7 +73,7 @@ WineZGUI_Template_Restore()
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
        source "${DATADIR}/winezgui-identity-restore-all"
-       WineZGUI_Identity_Restore_All
+       winezgui-identity-restore-all
 
        # Inform on successful extraction
        DBUG "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"

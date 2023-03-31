@@ -1,10 +1,10 @@
-WineZGUI_Template_Create_New()
+winezgui-template-create-new()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   unset NEW_TEMPLATE
   NEW_TEMPLATE=$( zenity                                             \
                --title "${APP_WITH_VER} - Create Template"           \
@@ -46,7 +46,7 @@ WineZGUI_Template_Create_New()
 
   # Check if user entered symbols
   source "${DATADIR}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${NEW_TEMPLATE}"
+  winezgui-check-entry-text "${NEW_TEMPLATE}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then
@@ -63,7 +63,7 @@ WineZGUI_Template_Create_New()
 
   # Create new Prefix Template
   source "${DATADIR}/winezgui-initialize-wineprefix"
-  WineZGUI_Initialize_Wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
+  winezgui-initialize-wineprefix "${TEMPLATES_DIR}/${NEW_TEMPLATE}"
   export WINEARCH="$SAVED_WINEARCH"
   
   # Ask whether the user would like to change template
@@ -74,7 +74,7 @@ WineZGUI_Template_Create_New()
   ANSWER=$?
   if [ ${ANSWER} -eq 0 ]; then
        source "${DATADIR}/winezgui-template-change"
-       WineZGUI_Template_Change
+       winezgui-template-change
   fi
   DBUG "I: ${HEADER}: Created Template ${NEW_TEMPLATE} with ${NEW_WINEARCH}"
   unset TEXT

@@ -1,11 +1,11 @@
 # winezgui-shortcuts-clean-up
-WineZGUI_Shortcuts_Clean_Up()
+winezgui-shortcuts-clean-up()
 {
   unset SHOW_OPTION
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
   SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -xtype l 2>/dev/null \
@@ -36,7 +36,7 @@ WineZGUI_Shortcuts_Clean_Up()
 
 # Generate Height value
  source "${DATADIR}/winezgui-get-window-height"
- WineZGUI_Get_Window_Height ${#FILES[@]}
+ winezgui-get-window-height ${#FILES[@]}
 
  
   # 3. Show the found exe files using zenity
@@ -50,7 +50,7 @@ WineZGUI_Shortcuts_Clean_Up()
        # Clean up broken shortcuts and update shortcuts menu
        source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
        source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-       WineZGUI_Remove_Broken_Links
+       winezgui-remove-broken-links
   else
        DBUG "I: ${HEADER}: Cancelled!"
        WineZGUI_Window

@@ -1,11 +1,11 @@
 # source "${DATADIR}/winezgui-shortcuts-delete"
 # REVIEW
-Winezgui_Shortcuts_Delete()
+winezgui-shortcuts-delete()
 {
   unset COMMAND count SHOW_OPTION NAMES FILES SELECTED_OPTION search_list
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   IFS=$(echo -en "\n\b")
 
   count=0
@@ -54,7 +54,7 @@ Winezgui_Shortcuts_Delete()
   
    # Generate Height value
    source "${DATADIR}/winezgui-get-window-height"
-   WineZGUI_Get_Window_Height ${#FILES[@]}
+   winezgui-get-window-height ${#FILES[@]}
   # 3. Show the found exe files using zenity
   unset COMMAND
   COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER} - Delete Shortcut!\" "
@@ -88,5 +88,5 @@ Winezgui_Shortcuts_Delete()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 }

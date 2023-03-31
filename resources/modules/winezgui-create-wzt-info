@@ -7,13 +7,13 @@
 # 3. Insert Data into wzt-info.yml
 # 4. Check if the file exists after it is created
 ################################################################################
-WineZGUI_Create_Wzt_Info()
+winezgui-create-wzt-info()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # 1. Need full path to directory to create file in it
   if [ -z "${1}" ]; then

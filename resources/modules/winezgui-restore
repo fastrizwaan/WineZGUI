@@ -1,9 +1,9 @@
-WineZGUI_Restore()
+winezgui-restore()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # Ask user to select the .wzt backup file to restore
   WZT_FILE="$(${ZENITY_CMD} --file-filter=*.${BKP_EXT}            \
                      --file-selection                      \
@@ -16,7 +16,7 @@ WineZGUI_Restore()
 
   else
        source "${DATADIR}/winezgui-restore-wzt"
-       Restore_Wzt_File
+       winezgui-restore-wzt
   fi # -z "${WZT_FILE}"
 
   # Clear temporary used variables

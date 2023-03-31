@@ -1,12 +1,12 @@
 # winezgui-identity-restore-all
 # Replace XOUSERXO XO_variable_XO to proper values for all templates and prefix dir
-WineZGUI_Identity_Restore_All()
+winezgui-identity-restore-all()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   # Process templates_dir for XOXO -> variable values
   unset D # Directory
@@ -17,7 +17,7 @@ WineZGUI_Identity_Restore_All()
   (for D in \
     $(find ${TEMPLATES_DIR}/* ${PREFIXES_DIR}/* -maxdepth 0 -type d); do
     echo "# Processing $(basename ${D})"
-    Winezgui_Identity_Restore "${D}"
+    winezgui-identity-restore "${D}"
     DBUG "I: ${HEADER}: Processed $(basename ${D})"
   done)|(${ZENITY_CMD} --progress --width=500              \
          --title="${APP_WITH_VER} - Process files!" \

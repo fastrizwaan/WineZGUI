@@ -7,12 +7,12 @@
 # 6. EXE_NOSP
 # 7. EXE_LESS
 
-Script_Change_Exe_Variables()
+script-change-exe-variables()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # 2. EXE_FILE (SELECTED_EXE is the NEW_EXE_FILE)
   NEW_EXE_FILE="${SELECTED_EXE}"
 

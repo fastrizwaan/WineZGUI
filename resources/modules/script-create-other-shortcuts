@@ -2,12 +2,12 @@
 # Create Shortcut function to be called from winezgui
 # to create extra .desktop shortcuts for a particular prefix
 # REVIEW
-Script_Create_Other_Shortcuts()
+script-create-other-shortcuts()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # 1. Creaet Script to launch and for .desktop file
   BASENAME=$(basename "${SELECTED_EXE}"   |sed 's|\.[eE][Xx][eE]||g'\
                                           |sed 's|\.[mM][Ss][iI]||g')
@@ -69,7 +69,7 @@ Script_Create_Other_Shortcuts()
   echo "cd \"\${DIRENAME}\""                        | tee -a "${NEW_SCRIPT}"
   echo "\${WINE_CMD} \"\${BASENAME}\""              | tee -a "${NEW_SCRIPT}"
 
-  echo "Shortcut Created! by Script_Create_Other_Shortcuts"
+  echo "Shortcut Created! by script-create-other-shortcuts"
 
   # Make it executable
   chmod +x "${NEW_SCRIPT}"

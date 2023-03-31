@@ -1,8 +1,8 @@
 #script-import-gamedir-into-prefix
-Script_Import_Gamedir_Into_Prefix()
+script-import-gamedir-into-prefix()
 {
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   # 1: if gamedir is already inside prefixdir return
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
         DBUG "I: Script: ${FUNCNAME[0]}: Game Directory already inside Prefix!"

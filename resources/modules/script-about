@@ -3,12 +3,12 @@
 # 1. Format yml data
 # 2. Show dialog
 # Text is more, so we need to format it, with sed in pango markup
-Script_About()
+script-about()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   
   unset TEXT TEXT1
   TEXT1="$(while read -r line; do echo $line|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed 's/`:/<\/b>`:<small>/g'; done <  ${INFOFILE})"

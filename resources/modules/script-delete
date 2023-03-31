@@ -1,9 +1,9 @@
-Script_Delete()
+script-delete()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   unset DEL_RESPONSE
   DEL_RESPONSE=$( zenity \
                --title "${PROGNAME}"                  \
@@ -25,19 +25,19 @@ Script_Delete()
   
   if   [ "${DEL_RESPONSE}" = "Delete Shortcut..." ]; then
          source "${WINEZGUI_SCRIPTS}/script-delete-shortcut"
-         Script_Delete_Shortcut
+         script-delete-shortcut
 
   elif [ "${DEL_RESPONSE}" = "Delete Script..." ]; then
          source "${WINEZGUI_SCRIPTS}/script-delete-scriptfile"
-         Script_Delete_Scriptfile
+         script-delete-scriptfile
          
   elif [ "${DEL_RESPONSE}" = "Delete Prefix..." ]; then
          source "${WINEZGUI_SCRIPTS}/script-delete-prefix"
-         Script_Delete_Prefix
+         script-delete-prefix
          
   elif [ "${DEL_RESPONSE}" = "Help..." ]; then
          source "${WINEZGUI_SCRIPTS}/script-delete-help"
-         Script_Delete_Help # Call the function in the above file
+         script-delete-help # Call the function in the above file
 
   fi
 

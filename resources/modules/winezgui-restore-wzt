@@ -14,12 +14,12 @@
 # 8.  Update desktop menus and Icon cache
 # 9.  Get Game name from desktop file
 # 10. Ask if the user wants to start the restored game
-Restore_Wzt_File()
+winezgui-restore-wzt()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
@@ -95,11 +95,11 @@ Restore_Wzt_File()
              --pulsate --auto-close)
       fi
       source "${DATADIR}/winezgui-identity-restore-all"
-      WineZGUI_Identity_Restore_All
+      winezgui-identity-restore-all
 
       # Show menu after extraction
       source "${DATADIR}/winezgui-launch"
-      WineZGUI_Launch
+      winezgui-launch
       WineZGUI_Window
 
   fi
@@ -247,7 +247,7 @@ Restore_Wzt_File()
   DBUG "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
   source "${DATADIR}/winezgui-identity-restore"
-  Winezgui_Identity_Restore "${PREFIXES_DIR}/${WZT_PREFIX}"
+  winezgui-identity-restore "${PREFIXES_DIR}/${WZT_PREFIX}"
  
   # 6 Create desktop dir, process Info file
   # 6.1 Create required applications directory for .desktop files
@@ -303,14 +303,14 @@ Restore_Wzt_File()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 
  
   # Find other files which has username in it.
   # Read from file
   if [ -f "${FOUND_PREFIX_DIR}/FILES_WITH_USERNAME.txt" ]; then
        source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
-       WineZGUI_Identity_Restore_From_Drive_C_Files "${FOUND_PREFIX_DIR}"
+       winezgui-identity-restore-from-drive-c-files "${FOUND_PREFIX_DIR}"
   fi
   
   LAUNCH_FILE_NAME=$(basename ${FOUND_SCRIPT_FILE})
@@ -329,7 +329,7 @@ Restore_Wzt_File()
        fi # ${ZENITY_CMD} --question
   else
        source "${DATADIR}/script-list-available-launch-shortcuts"
-       Script_List_Available_Launch_Shortcuts ${FOUND_PREFIX_DIR}
+       script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}
        "${SELECTED_SCRIPT}" &
        exit 0
   fi

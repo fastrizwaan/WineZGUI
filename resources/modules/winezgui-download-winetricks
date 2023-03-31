@@ -1,10 +1,10 @@
 #winezgui-download-winetricks
-WineZGUI_Download_Winetricks()
+winezgui-download-winetricks()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
     source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   WINETRICKS_URL="https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks"
   TITLE="Download Winetricks"

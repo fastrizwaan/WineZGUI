@@ -1,12 +1,12 @@
-WineZGUI_Backup()
+winezgui-backup()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   source "${DATADIR}/winezgui-list-available-prefixes"
-  WineZGUI_List_Available_Prefixes
+  winezgui-list-available-prefixes
 
   # Launch Backup from the selected prefix script
   SCRIPT_NAME=$(basename ${SELECTED_PREFIX})

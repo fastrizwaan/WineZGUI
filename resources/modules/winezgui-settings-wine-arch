@@ -1,10 +1,10 @@
 # winezgui-settings-winearch
-Winezgui_Settings_Wine_Arch()
+winezgui-settings-wine-arch()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CURRENT_ARCH=${WINEARCH}
   WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}" \
@@ -57,7 +57,7 @@ Winezgui_Settings_Wine_Arch()
   # Update Wine arch in About.yml
   export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
   source "${DATADIR}/winezgui-initialize-wineprefix"
-  WineZGUI_Initialize_Wineprefix "${WINE_TEMPLATE}"
+  winezgui-initialize-wineprefix "${WINE_TEMPLATE}"
  
   sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
   
@@ -77,7 +77,7 @@ Winezgui_Settings_Wine_Arch()
   
           if [ ${ANSWER} -eq 0 ]; then
               source "${DATADIR}/winezgui-template-change"
-              WineZGUI_Template_Change
+              winezgui-template-change
           fi
   
   fi

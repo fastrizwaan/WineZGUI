@@ -1,13 +1,13 @@
 #winezgui-template-clone
-WineZGUI_Template_Clone()
+winezgui-template-clone()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   source "${DATADIR}/winezgui-list-available-templates"
-  WineZGUI_List_Available_Templates # get SELECTED_TEMPLATE 
+  winezgui-list-available-templates # get SELECTED_TEMPLATE 
 
   CLONE_TEMPLATE=$(${ZENITY_CMD} --title "Create Prefix Template with ${WINEARCH} arch..." \
                              --text  "Current Arch:${SAVED_WINEARCH}\nName new template:" \
@@ -22,7 +22,7 @@ WineZGUI_Template_Clone()
   
   # Check if user entered symbols
   source "${DATADIR}/winezgui-check-entry-text"
-  WineZGUI_Check_Entry_Text "${CLONE_TEMPLATE}"
+  winezgui-check-entry-text "${CLONE_TEMPLATE}"
   
   ENTRY_CHECK=$?
   if [ ${ENTRY_CHECK} -eq 1 ]; then

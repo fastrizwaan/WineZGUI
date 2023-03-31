@@ -1,10 +1,10 @@
-Winezgui_Identity_Remove()
+winezgui-identity-remove()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
         echo "E: ${HEADER}: Must provide Prefix or Template Directory to process"
@@ -19,14 +19,14 @@ Winezgui_Identity_Remove()
   else
        source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data"
   fi
-  WineZGUI_Fetch_Replacement_Data
+  winezgui-fetch-replacement-data
   
   if [ -f "${DATADIR}/winezgui-fetch-replacement-files" ]; then
        source "${DATADIR}/winezgui-fetch-replacement-files"
   else
        source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files"
   fi
-  WineZGUI_Fetch_Replacement_Files "${DIRECTORY}"
+  winezgui-fetch-replacement-files "${DIRECTORY}"
 
   cd "${DIRECTORY}"  
   DBUG "I: ${HEADER}: Processing files inside ${DIRNAME}"
@@ -81,5 +81,5 @@ Winezgui_Identity_Remove()
 
 #   # Find other files which has username in it.
 #   source "${DATADIR}/winezgui-identity-remove-from-drive-c-files"
-#   WineZGUI_Identity_Remove_From_Drive_C_Files "${1}"
+#   winezgui-identity-remove-from-drive-c-files "${1}"
 }

@@ -1,9 +1,9 @@
 #script-delete-prefix
-Script_Delete_Prefix()
+script-delete-prefix()
 {
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   #SHORTCUT="${DEXSKTOPDIR}/${EXE_LESS}.desktop"
   # Delete Shortcuts and Prefix Directory
   #rm -rf ${SHORTCUT} && \
@@ -16,7 +16,7 @@ Script_Delete_Prefix()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 
   DBUG "I: Script: Delete: Exiting!"
   ${ZENITY_CMD} --info --no-wrap --text "Deleted ${PREFIXNAME}" --title "${APP_WITH_VER} - Delete Prefix!"

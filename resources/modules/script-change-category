@@ -1,9 +1,9 @@
-Script_Change_Category()
+script-change-category()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   unset GET_CATEGORY
   GET_CATEGORY=$(zenity                       \
                  --title  "Change Category!"  \
@@ -39,7 +39,7 @@ Script_Change_Category()
   # Clean up broken shortcuts and update shortcuts menu
   source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
   source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
-  WineZGUI_Remove_Broken_Links
+  winezgui-remove-broken-links
 
   # Inform user
   DBUG "I: Script: ${FUNCNAME[0]}: Changed to ${GET_CATEGORY}"

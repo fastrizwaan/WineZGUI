@@ -1,11 +1,11 @@
 # script-more
 # FIXME add create/rename/delete shortcuts
-Script_More()
+script-more()
 {
   DBUG "I: Script: Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   SCRIPT_MORE_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - More" \
                               --list   --hide-header       \
                               --width=360 --height=240     \
@@ -26,24 +26,24 @@ Script_More()
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
        DBUG "I: Script: Delete... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-exe-cmdline"
-       Script_Exe_Cmdline
+       script-exe-cmdline
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Launch Behavior" ]; then
        DBUG "I: Script: Set Launch Behavior... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-more-launch-behavior"
-       Script_More_Launch_Behavior
+       script-more-launch-behavior
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Import Game Directory" ]; then
        DBUG "I: Script: Set Launch Behavior... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-import-gamedir-into-prefix"
-       Script_Import_Gamedir_Into_Prefix
+       script-import-gamedir-into-prefix
   fi
 
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
        DBUG "I: Script: Delete... Selected!"
        source "${WINEZGUI_SCRIPTS}/script-delete"
-       Script_Delete
+       script-delete
   fi
 }

@@ -1,14 +1,14 @@
 # winezgui-cli-arguments
-WineZGUI_Cli_Arguments()
+winezgui-cli-arguments()
 {
   
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   for i in "${ARGV}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;
-     -h|--help) source "${DATADIR}/winezgui-show-help; WineZGUI_Show_Help; exit; ;;"
+     -h|--help) source "${DATADIR}/winezgui-show-help; winezgui-show-help; exit; ;;"
      esac
   done
   DBUG "I: ${HEADER}: CLI Arguments completed"

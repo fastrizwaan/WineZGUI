@@ -6,14 +6,14 @@
 # 1st after setup/installer finishes
 # 2nd as default scriptfile for the prefix
 # and set the variable SELECTED_SCRIPT
-Script_List_Available_Launch_Shortcuts()
+script-list-available-launch-shortcuts()
 { 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not" 2>/dev/null || \
   source "${DATADIR}/script-check-variables-loaded-or-not" 
 
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   if [ -z "${1}" ]; then
        SEARCH_PATH="${PREFIXES_DIR}"
   else
@@ -71,7 +71,7 @@ Script_List_Available_Launch_Shortcuts()
   source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height" 2>/dev/null || \
   source "${DATADIR}/winezgui-get-window-height" 
 
-  WineZGUI_Get_Window_Height ${#FILES[@]}
+  winezgui-get-window-height ${#FILES[@]}
  
   # 3. Show the found exe files using zenity
   unset COMMAND

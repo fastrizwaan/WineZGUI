@@ -1,12 +1,12 @@
 # winezgui-configure
 #  WineZGUI application window function
 # FIXME winezgui-configure
-WineZGUI_Template_Configure()
+winezgui-template-configure()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   CONFIGURE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Configure Template"  \
                             --list   --hide-header                          \
@@ -33,22 +33,22 @@ WineZGUI_Template_Configure()
 
   if   [ "${CONFIGURE_OPTION}" = "Open Setup / Installer..." ]; then
           source "${DATADIR}/winezgui-open-setup-installer"
-          WineZGUI_Open_Setup_Installer
+          winezgui-open-setup-installer
   elif [ "${CONFIGURE_OPTION}" = "Winetricks GUI..." ]; then
           source "${DATADIR}/winezgui-winetricks-gui"
-          WineZGUI_Winetricks_Gui
+          winezgui-winetricks-gui
   elif [ "${CONFIGURE_OPTION}" = "Winetricks CLI..." ]; then
           source "${DATADIR}/winezgui-winetricks-cli"
-          WineZGUI_Winetricks_Cli
+          winezgui-winetricks-cli
   elif [ "${CONFIGURE_OPTION}" = "Launch Winecfg..." ]; then
           source "${DATADIR}/winezgui-winecfg"
-          WineZGUI_Winecfg
+          winezgui-winecfg
   elif [ "${CONFIGURE_OPTION}" = "Open Shell..." ]; then
           source "${DATADIR}/winezgui-open-shell"
-          WineZGUI_Open_Shell
+          winezgui-open-shell
   elif [ "${CONFIGURE_OPTION}" = "Backup ${TEMPLATE_NAME}..." ]; then
           source "${DATADIR}/winezgui-template-backup"
-          WineZGUI_Template_Backup "${TEMPLATE}"
+          winezgui-template-backup "${TEMPLATE}"
   else
        echo "E: Unknown Configure Option = ${CONFIGURE_OPTION}"
        exit 1

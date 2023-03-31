@@ -1,9 +1,9 @@
-WineZGUI_Open_Setup_Installer()
+winezgui-open-setup-installer()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   OPEN_EXE_SETUP="$(${ZENITY_CMD} --file-filter="*.exe *.msi" \
@@ -27,6 +27,6 @@ WineZGUI_Open_Setup_Installer()
   DBUG "I: ${HEADER}: Open Setup Installer... Finished!"
 
   source "${DATADIR}/winezgui-remove-wine-created-shortcuts"
-  Remove_Wine_Created_Shortcuts
+  winezgui-remove-wine-created-shortcuts
   return 0
 }

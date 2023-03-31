@@ -1,11 +1,11 @@
 # winezgui-check-entry-text
-WineZGUI_Check_Entry_Text()
+winezgui-check-entry-text()
 {
 
  DBUG "${FUNCNAME[0]}: Given: ${1}"
      
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
 
  
   if  [ -z "${1}" ]; then

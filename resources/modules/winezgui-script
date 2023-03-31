@@ -1,12 +1,12 @@
-WineZGUI_Script()
+winezgui-script()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   export SHOW_SCRIPT_FILE="True"
   source "${DATADIR}/winezgui-list-available-prefix-scripts"
-  WineZGUI_List_Available_Prefix_Scripts
+  winezgui-list-available-prefix-scripts
 
   export LAUNCH="False"
   

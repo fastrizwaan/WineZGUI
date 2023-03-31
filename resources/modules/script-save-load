@@ -1,10 +1,10 @@
 #script-save-load 
-Script_Save_Load()
+script-save-load()
 {
   DBUG "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
-  Script_Check_Variables_Loaded_Or_Not
+  script-check-variables-loaded-or-not
   SAVE_LOAD_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Save/Load" \
                     --list   --hide-header                   \
                     --width=360 --height=240                 \
@@ -24,15 +24,15 @@ Script_Save_Load()
   
   if   [ "${SAVE_LOAD_OPTION}" = "Set Saved Game directory..."  ]; then
          source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
-         Script_Save_Load_Set_Saved_Game_Directory
+         script-save-load-set-saved-game-directory
   elif [ "${SAVE_LOAD_OPTION}" = "Save..."  ]; then
          source "${WINEZGUI_SCRIPTS}/script-save-load-save"
-         Script_Save_Load_Save
+         script-save-load-save
   elif [ "${SAVE_LOAD_OPTION}" = "Load..."  ]; then
          source "${WINEZGUI_SCRIPTS}/script-save-load-load"
-         Script_Save_Load_Load
+         script-save-load-load
   elif [ "${SAVE_LOAD_OPTION}" = "Help..."  ]; then
          source "${WINEZGUI_SCRIPTS}/script-save-load-help"
-         Script_Save_Load_Help
+         script-save-load-help
   fi
 }
