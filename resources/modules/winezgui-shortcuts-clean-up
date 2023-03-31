@@ -11,7 +11,7 @@ winezgui-shortcuts-clean-up()
   
   # If running from inside flatpak, it can't detect other links properly due to no access to other flatpak's dir ~/.var/app/<other_flatpak>
   if [ $(which flatpak-spawn) ]; then
-       SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -xtype l 2>/dev/null|tr '\n' '|')
+       SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -iname "*${FLATPAK_NAME}*" -xtype l 2>/dev/null|tr '\n' '|')
   else
        SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -iname "*winezgui*" -xtype l 2>/dev/null|tr '\n' '|')
   fi
@@ -25,6 +25,7 @@ winezgui-shortcuts-clean-up()
               --text "${SHORTCUTS_DIR_NAME} directory has no broken symlinks."
        WineZGUI_Window
   fi
+  
   # if BROKEN_LINKS_FOUND has value, then only change exe
   for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort)
   do
