@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
 
-![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.95.7/winezgui-0.95.7.png)
+![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.96.1/winezgui-0.96.1.png)
 
 ## What is WineZGUI
 
@@ -30,6 +30,7 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 I highly recommend using flatpak version, because, distro based wine (wine-staging) keeps on updating and games may break every few days. Using wine stable from flathub is better or use wine stable 5.0 or 7.0 from the distro packages.
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
+
 WineZGUI is packaged in flatpak-wine by yours truly. Please visit [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine)
 
 ### Build and install flatpak from source
@@ -114,7 +115,9 @@ sudo ./setup --uninstall
 `gnome-terminal` - (optional) to access prefix directory in shell
 
 ## Install Requirements for Linux OS
+
 ### Flatpak Supported Distros
+
 Get [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine/releases) which includes all dependencies. Useful for distros who do not package wine.
 
 ```
@@ -147,5 +150,7 @@ sudo eopkg it zenity wine wine-32bit winetricks perl-image-exiftool icoutils gno
 sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget \
                 lib32-alsa-plugins lib32-libpulse lib32-openal zstd
 ```
+
 #### XBOX compatible controllers
+
 build and install kernel drivers for xbox 360 compatible controllers from https://github.com/paroj/xpad
