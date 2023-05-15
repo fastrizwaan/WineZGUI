@@ -108,8 +108,8 @@ MIME_SRC="${RESOURCES}/mimetype/winezgui-wzt.xml"
 ICON_SRC="${ASSETS}/io.github.fastrizwaan.WineZGUI.svg"
 META_SRC="${APPDATA}/io.github.fastrizwaan.WineZGUI.metainfo.xml"
 
-MIME_ICO1="application-x-wzt.svg"
-MIME_ICO2="gnome-mime-application-x-wzt.svg"
+#MIME_ICO1="application-x-wzt.svg"
+#MIME_ICO2="gnome-mime-application-x-wzt.svg"
 
 # Basename
 APP01=$(basename $APP01_SRC)
@@ -130,7 +130,7 @@ DESK_DIR="${INSTALL_PREFIX}/share/applications"
 MIME_DIR="${INSTALL_PREFIX}/share/mime/packages"
 ICON_DIR="${INSTALL_PREFIX}/share/icons/hicolor/scalable/apps"
 META_DIR="${INSTALL_PREFIX}/share/metainfo"
-MIME_ICO="${INSTALL_PREFIX}/share/icons/hicolor/32x32/mimetypes"
+#MIME_ICO="${INSTALL_PREFIX}/share/icons/hicolor/32x32/mimetypes"
 
 # If Install is selected
 if [ "${INSTALL}" = "true"  ]
@@ -142,7 +142,7 @@ if [ "${INSTALL}" = "true"  ]
      mkdir -p $MIME_DIR
      mkdir -p $ICON_DIR
      mkdir -p $META_DIR
-     mkdir -p $MIME_ICO
+     #mkdir -p $MIME_ICO
 
      # Install the files
      echo Installing...
@@ -166,12 +166,12 @@ if [ "${INSTALL}" = "true"  ]
      install -Dm644 $ICON_SRC $ICON_DIR  && echo "Installed '$ICON_DIR/$ICON'"
      install -Dm644 $META_SRC $META_DIR  && echo "Installed '$META_DIR/$META'"
 
-     # mimetype icon same as application icon
-     install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO1 && \
-                    echo "Installed '$MIME_ICO/$MIME_ICO1'"
+     ## mimetype icon same as application icon
+     #install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO1 && \
+     #               echo "Installed '$MIME_ICO/$MIME_ICO1'"
 
-     install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO2 && \
-                    echo "Installed '$MIME_ICO/$MIME_ICO2'"
+     #install -Dm644 $ICON_SRC $MIME_ICO/$MIME_ICO2 && \
+     #               echo "Installed '$MIME_ICO/$MIME_ICO2'"
 
 
 
@@ -219,8 +219,8 @@ if [ "${INSTALL}" = "true"  ]
      echo "rm -vf $MIME_DIR/$MIME" >> ./uninstall
      echo "rm -vf $ICON_DIR/$ICON" >> ./uninstall
      echo "rm -vf $META_DIR/$META" >> ./uninstall
-     echo "rm -vf $MIME_ICO/$MIME_ICO1" >> ./uninstall
-     echo "rm -vf $MIME_ICO/$MIME_ICO2" >> ./uninstall
+     #echo "rm -vf $MIME_ICO/$MIME_ICO1" >> ./uninstall
+     #echo "rm -vf $MIME_ICO/$MIME_ICO2" >> ./uninstall
      echo "rmdir  $DATA_DIR && echo removed '${DATA_DIR}'" >> ./uninstall
 
 

@@ -2,7 +2,7 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
 <mime-type type="application/x-winezgui-backup-file">
 <comment>WineZGUI Backup File</comment>
-<icon name="application-x-wzt"/>
+<generic-icon name="package-x-generic"/>
 <glob pattern="*.wzt"/>
 </mime-type>
 </mime-info>
