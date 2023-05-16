@@ -267,7 +267,7 @@ chmod +rx "${SCRIPTFILE}"
 # # else
 #      # 3. Show the found exe files using zenity
 #      unset COMMAND
-#      COMMAND+="zenity  --title=\"${APP_WITH_VER} - Shortcuts\" "
+#      COMMAND+="${ZENITY_CMD}  --title=\"${APP_WITH_VER} - Shortcuts\" "
 #      COMMAND+="--list --checklist --width=460 --height=${HEIGHT} "
 #      COMMAND+="--text=\"${PREFIXNAME}, choose exe for shortcuts...\" "
 #      COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"

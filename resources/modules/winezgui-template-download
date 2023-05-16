@@ -10,7 +10,7 @@ winezgui-template-download()
        dbug "I: Downloading https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.1/DotNet48-Wine8-20230301.tar.zst"
        cd ${TEMPLATES_DIR}
        (wget -c https://github.com/fastrizwaan/WineZGUI-Templates/releases/download/1.1/DotNet48-Wine8-20230301.tar.zst & )|\
-       zenity --auto-close --width=500 --progress --pulsate --title="Downloading \"DotNet48-Wine8-20230301.tar.zst\"...";
+       ${ZENITY_CMD} --auto-close --width=500 --progress --pulsate --title="Downloading \"DotNet48-Wine8-20230301.tar.zst\"...";
        
        TEMPLATE_CHECKSUM="4ab3761522df9bebd34966b6a6b87eefc6ca470588462cf770ba45fec108f420"
        DOWNLOAD_CHECKSUM=$(sha256sum "DotNet48-Wine8-20230301.tar.zst"|cut -f1 -d " ")
@@ -20,7 +20,7 @@ winezgui-template-download()
        # Compare NEW_EXE_CHECKSUM with one existing in ${SCRIPTFILE}
        if [ "${TEMPLATE_CHECKSUM}" = "${DOWNLOAD_CHECKSUM}" ]; then         
             (${TAR_CMD} -xvf DotNet48-Wine8-20230301.tar.zst -C ${TEMPLATES_DIR};)| \
-            zenity  --progress --pulsate --auto-close --title="Extracting \"DotNet48-Wine8-20230301.tar.zst\"" --width=500 \
+            ${ZENITY_CMD}  --progress --pulsate --auto-close --title="Extracting \"DotNet48-Wine8-20230301.tar.zst\"" --width=500 \
             --text="Extracting at ${TEMPLATES_DIR}"
             dbug "I: Extracted DotNet48-Wine8-20230301.tar.zst"
             #rm DotNet48-Wine8-20230301.tar.zst && \
@@ -30,7 +30,7 @@ winezgui-template-download()
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        else
             killall -KILL wget
-            zenity --info --title="Download Checksum Mismatch!" --text="Retry downloading Template..."
+            ${ZENITY_CMD} --info --title="Download Checksum Mismatch!" --text="Retry downloading Template..."
        fi
   else 
        echo "E: Cannot write to ${TEMPLATES_DIR}"

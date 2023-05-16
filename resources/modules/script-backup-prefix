@@ -88,7 +88,7 @@ script-backup-prefix()
   dbug "I: Script: ${FUNCNAME[0]}: Select backup directory"
   unset TITLE
   TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  TARGET_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
   if [ -z "${TARGET_DIR}" ]; then
        dbug "I: Script: ${FUNCNAME[0]}:" \
             "Select backup directory: Cancelled!"
@@ -206,7 +206,7 @@ script-backup-prefix()
                                --exclude="registry_backup*.gz" \
                                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"    \
                                -C "${PREFIXES_DIR}" "${PREFIXNAME}" &)| \
-  zenity    --progress --pulsate --auto-close        \
+  ${ZENITY_CMD}    --progress --pulsate --auto-close        \
             --title="Creating ${PREFIXNAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
   TOOK=$(( SECONDS - ${TIMER_START} ))

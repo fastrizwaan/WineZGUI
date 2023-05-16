@@ -167,7 +167,7 @@ if [ ! -d "${PREFIXDIR}" ]; then
      echo "I: ${HEADER}: ${PREFIXNAME} not found, copying...${TEMPLATE_NAME}"
 
      (cp -rf "${TEMPLATE}" "${PREFIXDIR}" )| \
-     zenity  --progress --pulsate --auto-close --width=500 \
+     ${ZENITY_CMD}  --progress --pulsate --auto-close --width=500 \
      --title="${APP_WITH_VER} - Create Game Prefix" \
      --text="Copying template <b>${TEMPLATE_NAME}</b> to <b>${PREFIXNAME}!</b>"
 

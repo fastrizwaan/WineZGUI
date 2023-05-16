@@ -42,7 +42,7 @@ winezgui-template-clone()
   CLONE_DIR="${TEMPLATES_DIR}/${CLONE_DIR}"
   dbug "I: ${HEADER}: Copying ${SELECTED_TEMPLATE_NAME}"
    (cp -rf "${SELECTED_TEMPLATE}" "${CLONE_DIR}" )| \
-     zenity  --progress --pulsate --auto-close --width=500 \
+     ${ZENITY_CMD}  --progress --pulsate --auto-close --width=500 \
      --title="${APP_WITH_VER} - Create Game Prefix" \
      --text="Copying template <b>${TEMPLATE_NAME}</b> to <b>${SELECTED_TEMPLATE_NAME}!</b>"
 }

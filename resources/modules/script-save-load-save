@@ -126,7 +126,7 @@ script-save-load-save()
   dbug "I: ${HEADER}: Choose Backup Directory..."
   unset TITLE
   TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  TARGET_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
   
   # 6.2: If user cancels or nothing
   if [ -z "${TARGET_DIR}" ]; then
@@ -234,7 +234,7 @@ script-save-load-save()
   # 11.1 Create Backup archive and restore changes as soon as tar is done
   (${TAR_CMD} --transform s/${USER}/XOUSERXO/ -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
                                -C  "${SELECTED_SAVEDGAME}" "${SELECTED_SAVEDGAME_NAME}" &)| \
-  zenity    --progress --pulsate --auto-close        \
+  ${ZENITY_CMD}    --progress --pulsate --auto-close        \
             --title="Creating ${SELECTED_SAVEDGAME_NAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
   TOOK=$(( SECONDS - ${TIMER_START} ))

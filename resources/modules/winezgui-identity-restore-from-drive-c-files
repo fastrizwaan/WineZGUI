@@ -19,7 +19,7 @@ winezgui-identity-restore-from-drive-c-files()
   if [ -d "${1}/drive_c" ]; then
        dbug "I: ${HEADER}: found drive_c, searching... for XOUSERXO"
       (FILES_WITH_USERNAME=$(grep -r "XOUSERXO" drive_c|sort -u| cut -f1 -d ":"| tee "${1}/FILES_WITH_USERNAME.txt"))| \
-       zenity  --progress --pulsate --auto-close --title="Find \"XOUSERXO\"" --width=500 --text="Finding files with \"XOUSERXO\" in drive_c!"
+       ${ZENITY_CMD}  --progress --pulsate --auto-close --title="Find \"XOUSERXO\"" --width=500 --text="Finding files with \"XOUSERXO\" in drive_c!"
                 
        echo "files with username: ${FILES_WITH_USERNAME}"
 

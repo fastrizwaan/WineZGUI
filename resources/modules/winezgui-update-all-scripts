@@ -7,7 +7,7 @@ winezgui-update-all-scripts()
   
   OLD_HEADER=${HEADER}
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  #zenity --info --text="Work in Progress"
+  #${ZENITY_CMD} --info --text="Work in Progress"
   #return 0  
   #source "${DATADIR}/script-check-variables-loaded-or-not"
   #script-check-variables-loaded-or-not

@@ -34,7 +34,7 @@ script-create-other-shortcuts()
 
   # If already a script file exist, do no create
   if [ -f "${NEW_SCRIPT}" ]; then
-       zenity    --error --title "Script Already exist!" \
+       ${ZENITY_CMD}    --error --title "Script Already exist!" \
                  --text "Delete ${NEW_SCRIPT} to recreate it!"
        return 1
   fi

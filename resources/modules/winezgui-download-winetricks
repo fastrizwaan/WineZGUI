@@ -21,7 +21,7 @@ winezgui-download-winetricks()
        else
 
        cd "${WINEZGUIDIR}"
-       wget -c "${WINETRICKS_URL}" && zenity --info --title "Winetricks"
+       wget -c "${WINETRICKS_URL}" && ${ZENITY_CMD} --info --title "Winetricks"
        fi
     
   else

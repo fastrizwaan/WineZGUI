@@ -114,7 +114,7 @@ winezgui-template-backup()
   dbug "I: ${HEADER}: Choose Backup Directory..."
   unset TITLE
   TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
-  TARGET_DIR=$(zenity  --file-selection --title="${TITLE}" --directory)
+  TARGET_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
   
   # 6.2: If user cancels or nothing
   if [ -z "${TARGET_DIR}" ]; then
@@ -219,7 +219,7 @@ winezgui-template-backup()
   (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
                                --exclude="registry_backup*.gz" \
                                -C  "${TEMPLATES_DIR}" "${SELECTED_TEMPLATE_NAME}" &)| \
-  zenity    --progress --pulsate --auto-close        \
+  ${ZENITY_CMD}    --progress --pulsate --auto-close        \
             --title="Creating ${SELECTED_TEMPLATE_NAME} backup!" \
             --width=500 --text="${BACKUP_FILE}..."
   TOOK=$(( SECONDS - ${TIMER_START} ))

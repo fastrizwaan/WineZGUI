@@ -291,7 +291,7 @@ Recreate-Prefix-Script: use existing sha256sum from script file, useful when fil
 
 0.90.5
 
-- [x] fix zenity --error message for flatpak-spawn
+- [x] fix ${ZENITY_CMD} --error message for flatpak-spawn
 
 0.90.4
 

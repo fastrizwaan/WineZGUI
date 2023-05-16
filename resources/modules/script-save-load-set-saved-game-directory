@@ -16,7 +16,7 @@ script-save-load-set-saved-game-directory()
   # unset TITLE
   # TITLE="Choose Saved Game Directory to backup!"
   
-  # SAVED_GAME_DIR=$(zenity  --file-selection \
+  # SAVED_GAME_DIR=$(${ZENITY_CMD}  --file-selection \
   #                  --title="${TITLE}" \
   #                  --directory        \
   #                  --filename "${SAVED_GAME_PATH}")

@@ -19,7 +19,7 @@ winezgui-open-terminal()
        TEXT+="<tt>flatpak override --reset ${FLATPAK_NAME}</tt>"
        flatpak-spawn --host pwd 1>/dev/null 2>/dev/null || \
        (echo "E: $(basename ${0}): needs to access system to run gnome-terminal via flatpak-spawn";\
-        zenity --error --title="${APP_WITH_VER}: No System Access!" --text="${TEXT}" )
+        ${ZENITY_CMD} --error --title="${APP_WITH_VER}: No System Access!" --text="${TEXT}" )
        unset TEXT
 
   fi

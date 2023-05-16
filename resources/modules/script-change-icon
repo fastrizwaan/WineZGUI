@@ -8,7 +8,7 @@ script-change-icon()
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   if [ -z "${1}" ]; then
-       GET_ICON=$(zenity   --file-selection \
+       GET_ICON=$(${ZENITY_CMD}   --file-selection \
                            --file-filter=""*.png" "*.jpg" "*.svg" "*.exe" "*.ico"")
   else
        GET_ICON="${1}"
