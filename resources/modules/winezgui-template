@@ -7,7 +7,7 @@ winezgui-template()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
   unset TEMPLATE_OPTION
-  TEMPLATE_OPTION=$(zenity                                 \
+  TEMPLATE_OPTION=$(${ZENITY_CMD}                                  \
                   --title "${APP_WITH_VER} - Template"     \
                   --list --hide-header                     \
                   --width=360 --height=340                 \

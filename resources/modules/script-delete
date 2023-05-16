@@ -5,7 +5,7 @@ script-delete()
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset DEL_RESPONSE
-  DEL_RESPONSE=$( zenity \
+  DEL_RESPONSE=$(${ZENITY_CMD}  \
                --title "${PROGNAME}"                  \
                --list   --hide-header                 \
                --width=360 --height=200               \

@@ -59,7 +59,7 @@ script-backup-prefix()
 
   # 3. Suggest and Ask for wzt file name
   dbug "I: Script: ${FUNCNAME[0]}: Asking filename"
-  BACKUP_FILE=$( zenity                        \
+  BACKUP_FILE=$(${ZENITY_CMD}                         \
                  --title="${TITLE}"            \
                  --width=700 --height=30       \
                  --text="${TEXT}"              \

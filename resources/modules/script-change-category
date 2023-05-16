@@ -5,7 +5,7 @@ script-change-category()
   source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset GET_CATEGORY
-  GET_CATEGORY=$(zenity                       \
+  GET_CATEGORY=$(${ZENITY_CMD}                        \
                  --title  "Change Category!"  \
                  --height=480 --list          \
                  --radiolist --column " "     \

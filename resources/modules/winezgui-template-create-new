@@ -6,7 +6,7 @@ winezgui-template-create-new()
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset NEW_TEMPLATE
-  NEW_TEMPLATE=$( zenity                                             \
+  NEW_TEMPLATE=$(${ZENITY_CMD}                                              \
                --title "${APP_WITH_VER} - Create Template"           \
                --list   --hide-header                                \
                --width=360 --height=180                              \

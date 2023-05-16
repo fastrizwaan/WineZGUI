@@ -84,7 +84,7 @@ winezgui-template-backup()
 
   # 5.1 Suggest and Ask for template file name
   dbug "I: ${HEADER}: Asking filename"
-  BACKUP_FILE=$( zenity                        \
+  BACKUP_FILE=$(${ZENITY_CMD}                         \
                  --title="${TITLE}"            \
                  --width=700 --height=30       \
                  --text="${TEXT}"              \
