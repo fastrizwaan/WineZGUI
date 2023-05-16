@@ -553,6 +553,7 @@ if [ ! -f "${PREFIXDIR}/replaced_symlinks.txt" ]; then
      touch "${PREFIXDIR}/replaced_symlinks.txt"
 
      # Create H: for HOME Directory for Wine Explorer
+     unlink "${PREFIXDIR}/dosdevices/h:"
      ln -sf "${HOME}" "${PREFIXDIR}/dosdevices/h:"
      dbug "I: Script: Prefix: Creating H: symlink to ${HOME}"
      dbug "I: Script: Prefix: Created Prefix: ${PREFIXDIR}"
