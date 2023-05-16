@@ -102,7 +102,9 @@ rename all files to function name in smallcase like:
 - [ ] open cli in terminal (winetricks a b c d e f g)
 - [ ] check a script for older version, if it is older, ask once to update?
 
-
+0.96.2
+- [x] unlink before linking to $HOME
+- [x] use ${ZENITY_CMD} instead of zenity for silverblue or host not having zenity installed
 
 0.96.1
 
