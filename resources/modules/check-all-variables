@@ -1,6 +1,7 @@
 #check-all-variables
 check-all-variables()
 {
+  IFS=${SAVEIFS}
   ### Debug Check variables which are used in this file up to this point
   source "${DATADIR}/check-variable" || source "${WINEZGUI_SCRIPTS}/check-variable"
   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
