@@ -86,6 +86,7 @@ export BKP_EXT="wzt" # winezgui backup file extension
 #      INSTALL_TYPE="system" #FIXME why this here?
 # fi
 
+SAVEIFS=${IFS}
 
 source "${DATADIR}/check-all-variables"
 echo "-------------------------------${0}------------------------------------------"
