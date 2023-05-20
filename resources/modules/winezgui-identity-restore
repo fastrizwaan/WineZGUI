@@ -60,9 +60,10 @@ winezgui-identity-restore()
   fi
   # Recreate Links to H: link to $HOME on Restore
   dbug "I: ${HEADER}: Recreating Links to H: in ${DIRNAME} prefix"
-
+  
+  unlink "${DIRECTORY}/dosdevices/h:"
   ln -sf "${HOME}" "${DIRECTORY}/dosdevices/h:" && \
-  dbug "I: ${HEADER}: Created H: symlink ${HOME} to ${DIRNAME}/dosdevices/h:"
+  dbug "I: ${HEADER}: Created H: symlink ${HOME} to ${DIRECTORY}/dosdevices/h:"
 
 
   # For Install Type and Flatpak Name
