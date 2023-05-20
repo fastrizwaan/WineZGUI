@@ -3,7 +3,7 @@ check-all-variables()
 {
   unset IFS
   ### Debug Check variables which are used in this file up to this point
-  source "${DATADIR}/check-variable" || source "${WINEZGUI_SCRIPTS}/check-variable"
+  source "${DATADIR}/check-variable" 2>/dev/null || source "${WINEZGUI_SCRIPTS}/check-variable"
   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
   for VARIABLE in $1;
   do
