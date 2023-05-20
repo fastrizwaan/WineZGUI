@@ -3,7 +3,9 @@ winezgui-fetch-replacement-data()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  source "${DATADIR}/script-check-variables-loaded-or-not" 2>/dev/null || \
+  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  
   script-check-variables-loaded-or-not
 
   # Unset any previously initialized variables
