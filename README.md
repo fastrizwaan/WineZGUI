@@ -37,10 +37,10 @@ WineZGUI is packaged in flatpak-wine by yours truly. Please visit [flatpak-wine]
 
 Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
 
-##### Version 0.96.6 (copy paste this on a terminal)
+##### Version 0.96.7 (copy paste this on a terminal)
 
 ```
-git clone --depth 1 --branch 0.96.6 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.96.7 https://github.com/fastrizwaan/WineZGUI.git
 ./WineZGUI/flatpak-manifest/install.sh
 ```
 
@@ -57,23 +57,23 @@ flatpak's optional requirement is `gnome-terminal` if we need to access prefix u
 
 Setup is instant as it copies a few files to specific directories.
 
-##### Version 0.96.6
+##### Version 0.96.7
 
-Downoad source [WineZGUI-0.96.6.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.96.6.tar.gz) or use `git tag 0.96.6`
+Downoad source [WineZGUI-0.96.7.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.96.7.tar.gz) or use `git tag 0.96.7`
 
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.96.6.tar.gz
-tar -zxvf 0.96.6.tar.gz
-cd WineZGUI-0.96.6
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.96.7.tar.gz
+tar -zxvf 0.96.7.tar.gz
+cd WineZGUI-0.96.7
 sudo ./setup --install ; #systemwide
 ```
 
-##### git tag 0.96.6
+##### git tag 0.96.7
 
 ```
-git clone --depth 1 --branch 0.96.6 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.96.7 https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```
