@@ -78,10 +78,13 @@ script-launch()
 #   fi
   # On 1st run create shortcuts for all found exe
   if [ -f "${FOUND_EXE_FILES}" ]; then
+       dbug "script-launch: FOUND_EXE_FILES..."
        source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
        script-find-installed-exe
+
+       
   else # from 2nd run onwards, detect new exe files.
-       dbug "I: SCRIPT LAUNCH: 1st launch detected........................"
+       dbug "I: script-launch: 1st launch detected........................"
        source "${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes"
        script-create-shortcuts-for-found-exes 
   fi

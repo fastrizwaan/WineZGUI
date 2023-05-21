@@ -14,8 +14,6 @@ script-create-shortcuts-for-found-exes()
  unset LIST_OF_EXES_FOR_SHORTCUTS
  unset search_list
 
- SAVEIFS=${IFS}
- IFS=$(echo -en "\n\b")
 
  count=0
  NAMES=()
@@ -39,6 +37,9 @@ echo "$search_list"
       return 1
  fi
  # if exe_found has value, then only change exe
+ SAVEIFS=${IFS}
+ IFS=$(echo -en "\n\b")
+
  for i in $(echo ${search_list}|tr '|' '\n'|sort)
  do
      RealName=$(basename "$i")
