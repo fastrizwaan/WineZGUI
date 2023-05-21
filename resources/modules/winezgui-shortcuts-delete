@@ -6,6 +6,7 @@ winezgui-shortcuts-delete()
     
   source "${DATADIR}/script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
+  SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
 
   count=0

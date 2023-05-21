@@ -35,6 +35,8 @@ winezgui-recreate-prefix-scripts()
  echo "${PREFIXDIR} = ${SELECTED_PREFIX}"
  #find ${PREFIXDIR} -maxdepth 1 -iname "*.sh" -type f -print
  # Do not recreate _other.sh (smaller scripts)
+ SAVEIFS=${IFS}
+ IFS=$(echo -en "\n\b")
  search_list=$(find "${PREFIXDIR}" -maxdepth 1 -iname "*.sh" -type f -print \
                 2>/dev/null| sed "/_other.sh/d"| tr '\n' '|')
   exe_found=$(echo ${search_list})

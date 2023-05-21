@@ -7,7 +7,7 @@ winezgui-shortcuts-restore()
   script-check-variables-loaded-or-not
   unset COMMAND RealName RealFile count TEXT search_list SELECTED_OPTION
   unset SHOW_OPTION NAMES FILES SELECTED_OPTION SELECTED_SHORTCUT
-  
+  SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
 
   count=0
