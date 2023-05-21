@@ -4,7 +4,7 @@ script-more()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   SCRIPT_MORE_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - More" \
                               --list   --hide-header       \
@@ -25,25 +25,25 @@ script-more()
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
        dbug "I: Script: Delete... Selected!"
-       source "${WINEZGUI_SCRIPTS}/script-exe-cmdline"
+       SOURCE "script-exe-cmdline"
        script-exe-cmdline
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Set Launch Behavior" ]; then
        dbug "I: Script: Set Launch Behavior... Selected!"
-       source "${WINEZGUI_SCRIPTS}/script-more-launch-behavior"
+       SOURCE "script-more-launch-behavior"
        script-more-launch-behavior
   fi  
   
   if [ "${SCRIPT_MORE_OPTION}" = "Import Game Directory" ]; then
        dbug "I: Script: Set Launch Behavior... Selected!"
-       source "${WINEZGUI_SCRIPTS}/script-import-gamedir-into-prefix"
+       SOURCE "script-import-gamedir-into-prefix"
        script-import-gamedir-into-prefix
   fi
 
   if [ "${SCRIPT_MORE_OPTION}" = "Delete..." ]; then
        dbug "I: Script: Delete... Selected!"
-       source "${WINEZGUI_SCRIPTS}/script-delete"
+       SOURCE "script-delete"
        script-delete
   fi
 }

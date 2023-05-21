@@ -5,13 +5,19 @@
 # Creates Application shortcut when called from winezgui.
 # ============================================================================ #
 
+if [ -f "${DATADIR}/winezgui-source" ]; then
+     source "${DATADIR}/winezgui-source"
+else
+     source "${WINEZGUI_SCRIPTS}/winezgui-source"
+fi
+
 # Load file with dbug function
-source "${DATADIR}/winezgui-dbug"
+SOURCE "winezgui-dbug"
 dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 HEADER="$(basename ${0})"
 
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
  echo "*-*-*-*-*-*-*-*-*-*-*-*"
@@ -349,8 +355,14 @@ fi
 # Append rest
 echo '
 
+if [ -f "${DATADIR}/winezgui-source" ]; then
+     source "${DATADIR}/winezgui-source"
+else
+     source "${WINEZGUI_SCRIPTS}/winezgui-source"
+fi
+
 # Load file with dbug function
-source "${WINEZGUI_SCRIPTS}/winezgui-dbug"
+SOURCE "winezgui-dbug"
 
 # If Settings.yml exists, get arch value from it: win32 or win64
 if [ -f "${SETTINGS_FILE}" ]; then
@@ -374,7 +386,7 @@ LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH 
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-source "${WINEZGUI_SCRIPTS}/script-locate-exe-function"
+SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
 
 
@@ -481,59 +493,59 @@ Script_Window()
          exit 0
          
   elif [ "${SELECTION}" = "Launch..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-launch"
+         SOURCE "script-launch"
          script-launch
 
   elif [ "${SELECTION}" = "Open Other EXE..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-open-other-exe"
+         SOURCE "script-open-other-exe"
          script-open-other-exe
 
   elif [ "${SELECTION}" = "Winetricks GUI..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-winetricks-gui"
+         SOURCE "script-winetricks-gui"
          script-winetricks-gui
 
   elif [ "${SELECTION}" = "Winetricks CLI..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-winetricks-cli"
+         SOURCE "script-winetricks-cli"
          script-winetricks-cli
 
   elif [ "${SELECTION}" = "Wine Programs..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-wine-programs"
+         SOURCE "script-wine-programs"
          script-wine-programs
 
   elif [ "${SELECTION}" = "Open Shell..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-open-shell"
+         SOURCE "script-open-shell"
          script-open-shell
 
   elif [ "${SELECTION}" = "Open File Manager..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-open-file-manager"
+         SOURCE "script-open-file-manager"
          script-open-file-manager
 
   elif [ "${SELECTION}" = "Change..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-change"
+         SOURCE "script-change"
          script-change
          
   elif [ "${SELECTION}" = "Backup..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-backup"
+         SOURCE "script-backup"
          script-backup
          
   elif [ "${SELECTION}" = "Save/Load..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-save-load"
+         SOURCE "script-save-load"
          script-save-load
 
   elif [ "${SELECTION}" = "More..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-more"
+         SOURCE "script-more"
          script-more
          
   elif [ "${SELECTION}" = "About..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-about"
+         SOURCE "script-about"
          script-about
 
   elif [ "${SELECTION}" = "Help..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-help"
+         SOURCE "script-help"
          script-help
 
   elif [ "${SELECTION}" = "Quit...." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-quit"
+         SOURCE "script-quit"
          script-quit
   fi
 
@@ -547,7 +559,7 @@ if [ -f "${PREFIXDIR}/Change-Prefix-Name" ]; then
      PREFIX_NAME_TO_CHANGE="$(grep Prefix "${PREFIXDIR}/Change-Prefix-Name" \
                              |cut -f2 -d ":")"
      dbug "I: Script: Launching script-rename-prefix function (script-rename-prefix)"
-     source "${WINEZGUI_SCRIPTS}/script-rename-prefix"
+     SOURCE "script-rename-prefix"
      rm "${PREFIXDIR}/Change-Prefix-Name"
      dbug "I: Script: Change Prefix to ${PREFIX_NAME_TO_CHANGE}"
      script-rename-prefix ${PREFIX_NAME_TO_CHANGE}
@@ -564,7 +576,7 @@ if [ -f "${PREFIXDIR}/restored.txt" ]; then
      
      # Do not prompt for found new exe after restore
      # On backup bundle, gamedir is copied, so, update found_exe_files 
-     source "${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file"
+     SOURCE "script-create-found-new-exe-files-file"
      script-create-found-new-exe-files-file
      rm "${PREFIXDIR}/restored.txt"
 fi
@@ -637,19 +649,19 @@ fi
 # Handle Commandline Argument ${0} backup, ${0} launch etc.
 # Either we run with argumement from winezgui or from prefixdir manually
 if   [ "$1" = "delete" ]; then
-       source "${WINEZGUI_SCRIPTS}/script-delete"
+       SOURCE "script-delete"
        SCRIPT_DELETE
        exit 0;
 elif [ "$1" = "backup" ]; then
        cd ${PREFIXES_DIR}
-       source "${WINEZGUI_SCRIPTS}/script-backup"
+       SOURCE "script-backup"
        script-backup
        exit 0;
 elif [ "$1" = "shortcut" ]; then
-       source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
+       SOURCE "script-get-selected-exe"
        script-get-selected-exe
        # Just launching the selected exe, create desktop file and run this
-       source "${WINEZGUI_SCRIPTS}/script-create-other-shortcuts"
+       SOURCE "script-create-other-shortcuts"
        script-create-other-shortcuts
        exit 0;
 elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
@@ -659,7 +671,7 @@ elif [ "$1" = "launch" ] || [ -f "${PREFIXDIR}/launch" ] && \
        # 1. If launch file is found, and it is not running from winezgui window
        # 2. If Script is called from WineZGUI Shortcuts...
        # 3. If $LAUNCH variable is not set to False
-       source "${WINEZGUI_SCRIPTS}/script-launch"
+       SOURCE "script-launch"
        script-launch
        # Return to Game window
        # 

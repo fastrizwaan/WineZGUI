@@ -5,7 +5,7 @@ winezgui-recreate-prefix-scripts()
   ### Get Prefixdir name
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-    source "${DATADIR}/script-check-variables-loaded-or-not"
+    SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   echo "APPVERSION = $APPVERSION"
@@ -14,7 +14,7 @@ winezgui-recreate-prefix-scripts()
   
   
   if [ -z "$SKIP_ASK" ]; then
-      source "${DATADIR}/winezgui-list-available-prefixes"
+      SOURCE "winezgui-list-available-prefixes"
       winezgui-list-available-prefixes
       PREFIXNAME=$(basename ${SELECTED_PREFIX})
 
@@ -68,8 +68,7 @@ winezgui-recreate-prefix-scripts()
   IFS=${SAVEIFS}
   
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
   
   # Inform and offer to Launch

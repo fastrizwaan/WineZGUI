@@ -14,7 +14,7 @@ script-backup-bundle()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
     
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="Script: ${FUNCNAME[0]}"
   dbug "I: ${HEADER}: Checking if ${EXE_NAME} is inside a standard directory!"
@@ -51,7 +51,7 @@ script-backup-bundle()
   DO_NOT_BUNDLE_FROM+="${HOME}/Templates  ${HOME}/Videos "
 
    ### Debug Check variables which are used in this file up to this point
-   source "${DATADIR}/check-all-variables"
+   SOURCE "check-all-variables"
    echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
    check-all-variables "HEADER GAME_DIR_NAME EXE_NAME EXE_PATH EXE_FILE ROOT_DIRS MOUNTED_PARTITIONS DO_NOT_BUNDLE_FROM"
 
@@ -87,7 +87,7 @@ script-backup-bundle()
         TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
         
         ### Debug Check variables which are used in this file up to this point
-        source "${DATADIR}/check-all-variables"
+        SOURCE "check-all-variables"
         echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
         check-all-variables "EXE_FILE PREFIXDIR TOTAL_SIZE PREFIX_SIZE_IN_BYTES TOTAL_SIZE_IN_HF TEXT"
              
@@ -113,7 +113,7 @@ script-backup-bundle()
         TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
 
         ### Debug Check variables which are used in this file up to this point
-        source "${DATADIR}/check-all-variables"
+        SOURCE "check-all-variables"
         echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
         check-all-variables "GAMEDIR_DISK_USAGE_IN_HF EXE_PATH GAMEDIR_DU_IN_BYTES TOTAL_SIZE PREFIX_SIZE_IN_BYTES \
                              GAMEDIR_DU_IN_BYTES GAMEDIR_DU_IN_BYTES TOTAL_SIZE TEXT"
@@ -142,7 +142,7 @@ script-backup-bundle()
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
 
       ### Debug Check variables which are used in this file up to this point
-      source "${DATADIR}/check-all-variables"
+      SOURCE "check-all-variables"
       echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
       check-all-variables "SHORT_FLATPAK_NAME FILENAME PROGNAME APP_WITH_VER DATE BKP_EXT"
   else # for system add wine-version
@@ -155,7 +155,7 @@ script-backup-bundle()
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt
 
       ### Debug Check variables which are used in this file up to this point
-      source "${DATADIR}/check-all-variables"
+      SOURCE "check-all-variables"
       echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
       check-all-variables "PROGNAME APP_WITH_VER WINEVER DATE BKP_EXT FILENAME DATADIR"
   fi
@@ -186,7 +186,7 @@ script-backup-bundle()
   fi
 
   # Check if user entered symbols
-  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
@@ -322,16 +322,16 @@ script-backup-bundle()
       # 7.4 Preprocess
       dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
-      source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
+      SOURCE "winezgui-identity-remove"
       winezgui-identity-remove "${PREFIXDIR}"
       
       # Remove Identities from files
       # Find other files which has username in it.
-      source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files"
+      SOURCE "winezgui-identity-remove-from-drive-c-files"
       winezgui-identity-remove-from-drive-c-files "${PREFIXDIR}"
 
       # 7.5 Create wzt-info.yml required for restoring wzt file.
-      source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
+      SOURCE "winezgui-create-wzt-info"
       winezgui-create-wzt-info "${PREFIXDIR}"
       
       # 7.6 Create Bundle
@@ -366,16 +366,16 @@ script-backup-bundle()
       # 7.4 Preprocess
       dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
       cd "${PREFIXDIR}"
-      source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
+      SOURCE "winezgui-identity-remove"
       winezgui-identity-remove "${PREFIXDIR}"
       
       # Remove Identities from files
       # Find other files which has username in it.
-      source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files"
+      SOURCE "winezgui-identity-remove-from-drive-c-files"
       winezgui-identity-remove-from-drive-c-files "${PREFIXDIR}"
       
       # 7.5 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-      source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
+      SOURCE "winezgui-create-wzt-info"
       winezgui-create-wzt-info "${PREFIXDIR}"
       
       # 7.6 Create Bundle
@@ -445,11 +445,11 @@ script-backup-bundle()
   # 7.7 Restore changed values after backup
   dbug "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
 
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
+  SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${PREFIXDIR}"
 
   # Find other files which has username in it.
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore-from-drive-c-files"
+  SOURCE "winezgui-identity-restore-from-drive-c-files"
   winezgui-identity-restore-from-drive-c-files "${PREFIXDIR}"
 
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option

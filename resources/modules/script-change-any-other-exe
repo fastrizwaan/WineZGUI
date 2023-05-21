@@ -4,7 +4,7 @@
 script-change-any-other-exe()
 {
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   EXTENSIONS="*.exe *.msi"
   SELECT_EXE_FILE="$(${ZENITY_CMD} --file-filter="${EXTENSIONS}" --file-selection \

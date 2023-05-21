@@ -2,7 +2,7 @@ winezgui-open-setup-installer()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
@@ -26,7 +26,7 @@ winezgui-open-setup-installer()
   ${WINE_CMD} "$base"
   dbug "I: ${HEADER}: Open Setup Installer... Finished!"
 
-  source "${DATADIR}/winezgui-remove-wine-created-shortcuts"
+  SOURCE "winezgui-remove-wine-created-shortcuts"
   winezgui-remove-wine-created-shortcuts
   return 0
 }

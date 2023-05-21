@@ -7,7 +7,7 @@ winezgui-list-available-prefixes()
   OLD_HEADER=${HEADER}
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
@@ -53,7 +53,7 @@ winezgui-list-available-prefixes()
   IFS=${SAVEIFS}
 
 # Generate Height value
-source "${DATADIR}/winezgui-get-window-height"
+SOURCE "winezgui-get-window-height"
 winezgui-get-window-height ${#FILES[@]}
 
  # 3. Show the found exe files using zenity

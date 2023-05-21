@@ -3,8 +3,7 @@ winezgui-remove-broken-links()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not" 2>/dev/null ||\
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # If running from inside flatpak, it can't detect other links properly due to no access to other flatpak's dir ~/.var/app/<other_flatpak>

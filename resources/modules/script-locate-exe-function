@@ -10,7 +10,7 @@ script-locate-exe-function()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   # 1. If exe file not found, ask user to locate it
   if [ ! -f "${EXE_FILE}" ]; then

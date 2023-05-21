@@ -3,7 +3,7 @@ winezgui-kill-all()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Kill all: exiting ${APPNAME}!"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed

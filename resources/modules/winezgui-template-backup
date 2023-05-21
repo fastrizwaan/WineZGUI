@@ -3,13 +3,13 @@ winezgui-template-backup()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # 1.0 If No Template name is given, ask for template to backup
   if [ -z "${1}" ]; then
-       source "${DATADIR}/winezgui-list-available-templates"
+       SOURCE "winezgui-list-available-templates"
        winezgui-list-available-templates # Get SELECTED_TEMPLATE
   else
        SELECTED_TEMPLATE="${TEMPLATE}"
@@ -101,7 +101,7 @@ winezgui-template-backup()
 
 
   # Check if user entered symbols
-  source "${DATADIR}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
@@ -201,7 +201,7 @@ winezgui-template-backup()
   dbug "I: ${HEADER}: Changing Directory to ${TEMPLATES_DIR}"
   dbug "I: ${HEADER}: Launching: winezgui-identity-remove"
   
-  source "${DATADIR}/winezgui-identity-remove"
+  SOURCE "winezgui-identity-remove"
   winezgui-identity-remove "${SELECTED_TEMPLATE}"
 
   # 10.3 Create template-info.yml inside SELECTED_TEMPLATE, not needed though
@@ -266,7 +266,7 @@ winezgui-template-backup()
   # 7.7 Restore changed values after backup
   dbug "I: Backup: Template: Restoring Registry and Info files"
   cd "${TEMPLATES_DIR}"
-  source "${DATADIR}/winezgui-identity-restore"
+  SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${SELECTED_TEMPLATE}"
 
   dbug "I: Backup: Template: Created ${BACKUP_FILE} at ${TARGET_DIR}"

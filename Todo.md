@@ -89,7 +89,7 @@
 0.96.0-9
 rename all files to function name in smallcase like:
 
-- [ ] eg: source "${DATADIR}/script-check-variables-loaded-or-not"
+- [ ] eg: SOURCE "script-check-variables-loaded-or-not"
   
           Script_Check_Variables_Loaded_Or_Not() -> script-check-variables-loaded-or-not()
 - [ ] recreate all prefixes for latest version, it is a must.
@@ -123,7 +123,7 @@ rename all files to function name in smallcase like:
   - [x] rename all files to function name in smallcase like:
   
   
-  eg: source "${DATADIR}/script-check-variables-loaded-or-not"
+  eg: SOURCE "script-check-variables-loaded-or-not"
 
 
 

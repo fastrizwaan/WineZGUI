@@ -9,8 +9,7 @@ winezgui-remove-wine-created-shortcuts()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   WINE_SHORTCUT_DIR="$(realpath -m ~/.local/share/applications/wine)"
   # e.g., ~/.local/share/winezgui/npp.8.4.2.Installer.x64 for npp created by

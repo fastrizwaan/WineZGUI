@@ -3,7 +3,7 @@
 winezgui-template-download()
 {
   
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   mkdir -p "${TEMPLATES_DIR}"
   if [ -w ${TEMPLATES_DIR} ]; then
@@ -25,7 +25,7 @@ winezgui-template-download()
             dbug "I: Extracted DotNet48-Wine8-20230301.tar.zst"
             #rm DotNet48-Wine8-20230301.tar.zst && \
             dbug "I: Removed DotNet48-Wine8-20230301.tar.zst after extraction"
-            source "${DATADIR}/winezgui-template-change"
+            SOURCE "winezgui-template-change"
             winezgui-template-change
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        else

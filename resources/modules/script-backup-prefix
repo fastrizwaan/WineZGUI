@@ -12,9 +12,9 @@ script-backup-prefix()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  # needed? # source "${WINEZGUI_SCRIPTS}/winezgui-backup-restore-function"
+  # needed? # SOURCE "winezgui-backup-restore-function"
   # 1. Set Total Backup size variable
   TOTAL_SIZE=$(expr ${PREFIX_SIZE_IN_BYTES})
   TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE} | numfmt --to iec)
@@ -75,7 +75,7 @@ script-backup-prefix()
   fi
   
   # Check if user entered symbols
-  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
@@ -171,16 +171,16 @@ script-backup-prefix()
   dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
 
   # 7.2 Preprocess PREFIXDIR files (remove user name from files)
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
+  SOURCE "winezgui-identity-remove"
   winezgui-identity-remove "${PREFIXDIR}"
 
   # Remove Identities from files
   # Find other files which has username in it.
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove-from-drive-c-files"
+  SOURCE "winezgui-identity-remove-from-drive-c-files"
   winezgui-identity-remove-from-drive-c-files "${PREFIXDIR}"
 
   # 7.3 Create wzt-info.yml for restore prompt requied for restoring wzt file.
-  source "${WINEZGUI_SCRIPTS}/winezgui-create-wzt-info"
+  SOURCE "winezgui-create-wzt-info"
   winezgui-create-wzt-info "${PREFIXDIR}"
   
 
@@ -249,11 +249,11 @@ script-backup-prefix()
 
   # 7.7 Restore changed values after backup
   dbug "I: Script: ${FUNCNAME[0]}: Restoring Registry and Info files"
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
+  SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${PREFIXDIR}"
  
   # Find other files which has username in it.
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore-from-drive-c-files"
+  SOURCE "winezgui-identity-restore-from-drive-c-files"
   winezgui-identity-restore-from-drive-c-files "${PREFIXDIR}"
 
   dbug "I: Script: ${FUNCNAME[0]}: Created ${BACKUP_FILE} at ${TARGET_DIR}"

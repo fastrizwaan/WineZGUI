@@ -4,11 +4,11 @@ script-save-load-load()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   PREFIXNAME=$(basename "${PREFIXDIR}")
-  source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
+  SOURCE "script-save-load-set-saved-game-directory"
   script-save-load-set-saved-game-directory
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
@@ -92,7 +92,7 @@ script-save-load-load()
        fi # if ! [ -z "$PID_OF_TAR" ]; then
   else
        # PROCESS XO--XO variable inside prefixes and templates directory
-       source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
+       SOURCE "winezgui-identity-restore"
        winezgui-identity-restore "${SELECTED_SAVEDGAME}"
 
        # Inform on successful extraction

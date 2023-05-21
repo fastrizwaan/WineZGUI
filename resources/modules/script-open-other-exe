@@ -2,7 +2,7 @@ script-open-other-exe()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset SELECTED_OTHER_EXE
   if [ -z "${1}" ]; then
@@ -31,7 +31,7 @@ script-open-other-exe()
   # If only name, append (wine-xx)
   if   [ "${SELECTED_OTHER_EXE}" = "Installed Exe (after Setup)" ]; then
          # Call script-get-selected-exe
-         source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
+         SOURCE "script-get-selected-exe"
          script-get-selected-exe
          OTHER_EXE="${SELECTED_EXE}"
          dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
@@ -56,7 +56,7 @@ script-open-other-exe()
           ${ZENITY_CMD} --question --title="${TITLE}" --text="${TEXT}"
           ANSWER=$?
           if [ $ANSWER -eq 0 ]; then
-               source "${WINEZGUI_SCRIPTS}/script-create-other-shortcuts"
+               SOURCE "script-create-other-shortcuts"
                script-create-other-shortcuts &
           fi
   fi
@@ -72,9 +72,9 @@ script-open-other-exe()
   ${WINE_CMD} "$base"
   dbug "I: Script: Open Other EXE... Finished!"
 
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts"
+  SOURCE "winezgui-remove-wine-created-shortcuts"
   winezgui-remove-wine-created-shortcuts
-  source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
+  SOURCE "script-find-installed-exe"
   script-find-installed-exe
   unset TITLE TEXT
 }

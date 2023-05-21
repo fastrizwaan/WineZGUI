@@ -2,12 +2,12 @@ script-winetricks-gui()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
-       source "${DATADIR}/winezgui-download-winetricks"
+       SOURCE "winezgui-download-winetricks"
        winezgui-download-winetricks
   fi  
   

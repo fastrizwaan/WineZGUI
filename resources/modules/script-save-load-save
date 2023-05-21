@@ -9,14 +9,14 @@ script-save-load-save()
   #                      |cut -f2 -d ":")
   # else
   #     ${ZENITY_CMD} --info --text="Please select Saved Game directory" --title="Saved Game Directory!"
-  #     source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
+  #     SOURCE "script-save-load-set-saved-game-directory"
   #     script-save-load-set-saved-game-directory
   # fi
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   PREFIXNAME=$(basename "${PREFIXDIR}")
-  source "${WINEZGUI_SCRIPTS}/script-save-load-set-saved-game-directory"
+  SOURCE "script-save-load-set-saved-game-directory"
   script-save-load-set-saved-game-directory
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
@@ -113,7 +113,7 @@ script-save-load-save()
 
 
   # Check if user entered symbols
-  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${BACKUP_FILE}"
   
   ENTRY_CHECK=$?
@@ -212,7 +212,7 @@ script-save-load-save()
   dbug "I: ${HEADER}: Changing Directory to ${SAVEDGAMES_DIR}"
   dbug "I: ${HEADER}: Launching: winezgui-identity-remove"
   
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-remove"
+  SOURCE "winezgui-identity-remove"
   winezgui-identity-remove "${SELECTED_SAVEDGAME}"
 
   # 10.3 Create template-info.yml inside SELECTED_SAVEDGAME, not needed though
@@ -281,7 +281,7 @@ script-save-load-save()
   # 7.7 Restore changed values after backup
   dbug "I: Backup: SavedGame: Restoring Registry and Info files"
   cd "${SAVEDGAMES_DIR}"
-  source "${WINEZGUI_SCRIPTS}/winezgui-identity-restore"
+  SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${SELECTED_SAVEDGAME}"
 
   dbug "I: Backup: SavedGame: Created ${BACKUP_FILE} at ${TARGET_DIR}"

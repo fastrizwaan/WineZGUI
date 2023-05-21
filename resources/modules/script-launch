@@ -8,7 +8,7 @@ script-launch()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
   if [ -z "${1}" ]; then
@@ -59,7 +59,7 @@ script-launch()
   ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-wine-created-shortcuts"
+  SOURCE "winezgui-remove-wine-created-shortcuts"
   winezgui-remove-wine-created-shortcuts
 
   # Detect Setup or Direct Play exe
@@ -67,25 +67,25 @@ script-launch()
 #   if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
 #      [[ "${TEST_NAME}" == *"install"* ]] ; then
 #        dbug "I: Script: Launching =-= SETUP INSTALLER =-="
-#      #   source "${WINEZGUI_SCRIPTS}/script-change-exe-and-prefix"
+#      #   SOURCE "script-change-exe-and-prefix"
 #      #   script-change-exe-and-prefix
-#        source "${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes"
+#        SOURCE "script-create-shortcuts-for-found-exes"
 #        script-create-shortcuts-for-found-exes
 #   else
 #        dbug "I: Script: Launching script find exe"
-#        source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
+#        SOURCE "script-find-installed-exe"
 #        script-find-installed-exe
 #   fi
   # On 1st run create shortcuts for all found exe
   if [ -f "${FOUND_EXE_FILES}" ]; then
        dbug "script-launch: FOUND_EXE_FILES..."
-       source "${WINEZGUI_SCRIPTS}/script-find-installed-exe"
+       SOURCE "script-find-installed-exe"
        script-find-installed-exe
 
        
   else # from 2nd run onwards, detect new exe files.
        dbug "I: script-launch: 1st launch detected........................"
-       source "${WINEZGUI_SCRIPTS}/script-create-shortcuts-for-found-exes"
+       SOURCE "script-create-shortcuts-for-found-exes"
        script-create-shortcuts-for-found-exes 
   fi
 }

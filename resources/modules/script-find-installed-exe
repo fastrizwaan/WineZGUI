@@ -7,7 +7,7 @@ script-find-installed-exe()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
   NEW_FOUND_EXE_FILES="${PREFIXDIR}/new-found-exe-files.yml"
@@ -16,7 +16,7 @@ script-find-installed-exe()
   # Post 1st run, search exe files in prefixdir and add them to EXE_LIST
   dbug "I: Script: Find Exe: Searching prefix for newly installed exe files!"
 
-  source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
+  SOURCE "script-get-installed-exe-files"
   script-get-installed-exe-files
   EXE_LIST="${EXE_FILES_FOUND}"
 
@@ -44,16 +44,16 @@ script-find-installed-exe()
 
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ] ; then
-            source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
-            source "${WINEZGUI_SCRIPTS}/script-change-exe-variables"
+            SOURCE "script-get-selected-exe"
+            SOURCE "script-change-exe-variables"
             script-get-selected-exe
-            source "${WINEZGUI_SCRIPTS}/script-change-icon"
+            SOURCE "script-change-icon"
             # We do not want to see zenity dialog of icon change success
             export script-change-icon_DO_NOT_PROMPT="true"
             script-change-icon "${SELECTED_EXE}"
             # Create a file to change prefix name immediately on next launch
             # On next launch, it will change prefixdir name
-            source "${WINEZGUI_SCRIPTS}/script-create-change-prefix-file"
+            SOURCE "script-create-change-prefix-file"
             script-create-change-prefix-file
             script-change-exe-variables
        else
@@ -85,8 +85,8 @@ script-find-installed-exe()
             ANSWER=$?
             if [ ${ANSWER} -eq 0 ] ; then
                  # Prompt user to change exe
-                 source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
-                 source "${WINEZGUI_SCRIPTS}/script-change-exe-variables"
+                 SOURCE "script-get-selected-exe"
+                 SOURCE "script-change-exe-variables"
                  script-get-selected-exe
                  # And replace new list with old list
                  echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \
@@ -95,18 +95,18 @@ script-find-installed-exe()
                  # Remove the new-found-exe-files.yml file
                  rm "${NEW_FOUND_EXE_FILES}" && \
                  dbug "I: Script: Find Exe: Removed ${NEW_FOUND_EXE_FILES}"
-                 source "${WINEZGUI_SCRIPTS}/script-launch"
+                 SOURCE "script-launch"
                  script-launch "${SELECTED_EXE}"
 
                  # Disabled for 2nd time, let user use change exe manually
                  # dbug "I: Script: Find Exe: Changing icon..."
-                 # source "${WINEZGUI_SCRIPTS}/script-change-icon"
+                 # SOURCE "script-change-icon"
                  # # We do not want to see zenity dialog of icon change success
                  # export script-change-icon_DO_NOT_PROMPT="true"
                  # script-change-icon "${SELECTED_EXE}"
                  # # Create a file to change prefix name immediately on next launch
                  # # On next launch, it will change prefixdir name
-                 # source "${WINEZGUI_SCRIPTS}/script-create-change-prefix-file"
+                 # SOURCE "script-create-change-prefix-file"
                  # script-create-change-prefix-file
                  # script-change-exe-variables
             else

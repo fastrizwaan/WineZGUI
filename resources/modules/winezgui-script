@@ -2,10 +2,10 @@ winezgui-script()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   export SHOW_SCRIPT_FILE="True"
-  source "${DATADIR}/winezgui-list-available-prefix-scripts"
+  SOURCE "winezgui-list-available-prefix-scripts"
   winezgui-list-available-prefix-scripts
 
   export LAUNCH="False"

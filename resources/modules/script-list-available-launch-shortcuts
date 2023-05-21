@@ -10,8 +10,7 @@ script-list-available-launch-shortcuts()
 { 
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not" 2>/dev/null || \
-  source "${DATADIR}/script-check-variables-loaded-or-not" 
+  SOURCE "script-check-variables-loaded-or-not" 
 
   script-check-variables-loaded-or-not
   if [ -z "${1}" ]; then
@@ -68,8 +67,7 @@ script-list-available-launch-shortcuts()
   IFS=${SAVEIFS}
  
   #  Generate Height value
-  source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height" 2>/dev/null || \
-  source "${DATADIR}/winezgui-get-window-height" 
+  SOURCE "winezgui-get-window-height" 
 
   winezgui-get-window-height ${#FILES[@]}
  

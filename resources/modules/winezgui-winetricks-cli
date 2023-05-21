@@ -1,14 +1,14 @@
 winezgui-winetricks-cli()
 {
   
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
-       source "${DATADIR}/winezgui-download-winetricks"
+       SOURCE "winezgui-download-winetricks"
        winezgui-download-winetricks
   fi  
 
@@ -48,7 +48,7 @@ winezgui-winetricks-cli()
 
 
   # Check if user entered symbols
-  source "${DATADIR}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${VERBS}"
   
   ENTRY_CHECK=$?

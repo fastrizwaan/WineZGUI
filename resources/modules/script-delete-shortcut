@@ -2,7 +2,7 @@
 script-delete-shortcut()
 {
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   # Delete Shortcuts and Prefix Directory
   echo ${DESKTOPFILE}
@@ -12,8 +12,7 @@ script-delete-shortcut()
 
   dbug "I: Script: Delete: Removed broken WineZGUI .desktop links"
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
   dbug "I: Script: Delete Shortcut: Exiting!"

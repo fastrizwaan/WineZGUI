@@ -9,33 +9,33 @@ script-change-exe-and-prefix()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   # Get Selected Exe variable filled
-  source "${WINEZGUI_SCRIPTS}/script-get-selected-exe-for-prefix"
+  SOURCE "script-get-selected-exe-for-prefix"
   script-get-selected-exe-for-prefix
   dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   
   # Change Icon
   dbug "I: Script: ${FUNCNAME[0]}: Changing icon..."
-  source "${WINEZGUI_SCRIPTS}/script-change-icon"
+  SOURCE "script-change-icon"
   # We do not want to see zenity dialog of icon change success
   export script-change-icon_DO_NOT_PROMPT="true"
   script-change-icon "${SELECTED_EXE}"
   
   # Change Prefix
   dbug "I: Script: ${FUNCNAME[0]}: Create Change Prefix file."
-  source "${WINEZGUI_SCRIPTS}/script-create-change-prefix-file"
+  SOURCE "script-create-change-prefix-file"
   script-create-change-prefix-file
   
   # Create found-exe-files.yml
   dbug "I: Script: ${FUNCNAME[0]}: Created found-exe-files.yml."
-  source "${WINEZGUI_SCRIPTS}/script-create-found-new-exe-files-file"
+  SOURCE "script-create-found-new-exe-files-file"
   script-create-found-new-exe-files-file
   
   # Update files
   dbug "I: Script: ${FUNCNAME[0]}: Updating exe variables..."
-  source "${WINEZGUI_SCRIPTS}/script-change-exe-variables"
+  SOURCE "script-change-exe-variables"
   script-change-exe-variables
   # Change EXE_NAME and EXE_PATH in all the required files
   # Change Sha256sum etc.

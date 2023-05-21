@@ -4,7 +4,7 @@ winezgui-initialize-wineprefix()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
  
@@ -41,6 +41,6 @@ winezgui-initialize-wineprefix()
   fi
   
   dbug "I: ${HEADER}: Startup Checks"
-  source "${DATADIR}/winezgui-startup-checks"
+  SOURCE "winezgui-startup-checks"
   winezgui-startup-checks
 }

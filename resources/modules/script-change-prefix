@@ -13,7 +13,7 @@ script-change-prefix()
 { 
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
   # If No argument is given ask
@@ -34,7 +34,7 @@ script-change-prefix()
   fi
 
   # Check if user entered symbols
-  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${GET_PREFIX_NAME}"
   
   ENTRY_CHECK=$?
@@ -123,8 +123,7 @@ script-change-prefix()
 
   # 7.3 update icon cache and desktop menu
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
 

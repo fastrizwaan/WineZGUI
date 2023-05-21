@@ -1,9 +1,9 @@
-# source "${DATADIR}/winezgui-shortcuts-restore"
+# SOURCE "winezgui-shortcuts-restore"
 # REVIEW
 winezgui-shortcuts-restore()
 {
   
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset COMMAND RealName RealFile count TEXT search_list SELECTED_OPTION
   unset SHOW_OPTION NAMES FILES SELECTED_OPTION SELECTED_SHORTCUT
@@ -49,7 +49,7 @@ winezgui-shortcuts-restore()
   IFS=${SAVEIFS}
 
   # Generate Height value
-  source "${DATADIR}/winezgui-get-window-height"
+  SOURCE "winezgui-get-window-height"
   winezgui-get-window-height ${#FILES[@]}
   
   # 3. Show the found exe files using zenity
@@ -89,8 +89,7 @@ winezgui-shortcuts-restore()
   fi
 
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
   echo "ln -sfv ${SELECTED_SHORTCUT} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"

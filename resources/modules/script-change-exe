@@ -9,7 +9,7 @@ script-change-exe()
 {      
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset RESPONSE
   RESPONSE=$(${ZENITY_CMD} --title "Change EXE for ${PREFIXNAME}"       \
@@ -30,27 +30,27 @@ script-change-exe()
   # If only name, append (wine-xx)
   if   [ "${RESPONSE}" = "Installed Exe (after Setup)" ]; then
          # Call script-get-selected-exe
-         source "${WINEZGUI_SCRIPTS}/script-get-selected-exe"
+         SOURCE "script-get-selected-exe"
          script-get-selected-exe
          dbug "I: Script: ${FUNCNAME[0]}: ${SELECTED_EXE} Selected!"
   elif [ "$RESPONSE" = "Any other Exe" ]; then
          # script-change-any-other-exe
-         source "${WINEZGUI_SCRIPTS}/script-change-any-other-exe"
+         SOURCE "script-change-any-other-exe"
          script-change-any-other-exe
          # use locate exe
   fi
   # Change Icon
-  source "${WINEZGUI_SCRIPTS}/script-change-icon"
+  SOURCE "script-change-icon"
   # We do not want to see zenity dialog of icon change success
   export script-change-icon_DO_NOT_PROMPT="true"
   script-change-icon "${SELECTED_EXE}"
 
   # Change Prefix
-#   source "${WINEZGUI_SCRIPTS}/script-create-change-prefix-file"
+#   SOURCE "script-create-change-prefix-file"
 #   script-create-change-prefix-file
   # Update files
   # Change EXE_NAME and EXE_PATH in all the required files
   # Change Sha256sum etc.
-  source "${WINEZGUI_SCRIPTS}/script-change-exe-variables"
+  SOURCE "script-change-exe-variables"
   script-change-exe-variables
 }

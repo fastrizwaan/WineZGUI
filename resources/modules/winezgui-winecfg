@@ -2,7 +2,7 @@
 winezgui-winecfg()
 {
   
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

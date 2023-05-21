@@ -5,7 +5,7 @@ script-change-name()
 {    
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: Script: ${FUNCNAME[0]}: Name Selected!"
   # Find if PROGNAME does not have suffix (wine-XX) add it
@@ -36,7 +36,7 @@ script-change-name()
   fi
   
   # Check if user entered symbols
-  source "${WINEZGUI_SCRIPTS}/winezgui-check-entry-text"
+  SOURCE "winezgui-check-entry-text"
   winezgui-check-entry-text "${GET_PROGNAME}"
   
   ENTRY_CHECK=$?

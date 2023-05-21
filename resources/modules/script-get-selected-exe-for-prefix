@@ -3,7 +3,7 @@ script-get-selected-exe-for-prefix()
 {
  dbug "I: Script: Launched ${FUNCNAME[0]}"
    
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
  unset COMMAND
  unset count
@@ -22,7 +22,7 @@ script-get-selected-exe-for-prefix()
  # Find all exe files in drive_c Exclude windows directory,
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
- source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
+ SOURCE "script-get-installed-exe-files"
  script-get-installed-exe-files
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
@@ -59,7 +59,7 @@ script-get-selected-exe-for-prefix()
 
 
 # Generate Height value
-source "${WINEZGUI_SCRIPTS}/winezgui-get-window-height"
+SOURCE "winezgui-get-window-height"
 winezgui-get-window-height ${#FILES[@]}
 
 # if [ ${#FILES[@]} -eq 1 ]; then

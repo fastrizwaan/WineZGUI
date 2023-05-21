@@ -9,7 +9,7 @@ winezgui-update-all-scripts()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   #${ZENITY_CMD} --info --text="Work in Progress"
   #return 0  
-  #source "${DATADIR}/script-check-variables-loaded-or-not"
+  #SOURCE "script-check-variables-loaded-or-not"
   #script-check-variables-loaded-or-not
   
   echo "-=-=-=-=-=-=-=-=-=-=-=-=- LAUNCHED  ${FUNCNAME[0]} -=-=-=-=-=-=-=-=-=-=-=-=-"
@@ -27,11 +27,11 @@ winezgui-update-all-scripts()
   SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null| tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
-  source ${DATADIR}/check-all-variables 2>/dev/null || source "${WINEZGUI_SCRIPTS}/check-all-variables
+  SOURCE "check-all-variables
   check-all-variables "SEARCH_LIST PREFIXES_FOUND"
   ### Get Prefixdir name
   #dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-  source ${DATADIR}/winezgui-recreate-prefix-scripts
+  SOURCE winezgui-recreate-prefix-scripts
   for PFX in $(echo ${PREFIXES_FOUND}|tr '|' '\n'|sort);
   do
     SKIP_ASK="Y"
@@ -49,8 +49,7 @@ winezgui-update-all-scripts()
   
   
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
   
   # Inform and offer to Launch

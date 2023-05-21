@@ -2,7 +2,7 @@ script-delete()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset DEL_RESPONSE
   DEL_RESPONSE=$(${ZENITY_CMD}  \
@@ -24,19 +24,19 @@ script-delete()
   fi
   
   if   [ "${DEL_RESPONSE}" = "Delete Shortcut..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-delete-shortcut"
+         SOURCE "script-delete-shortcut"
          script-delete-shortcut
 
   elif [ "${DEL_RESPONSE}" = "Delete Script..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-delete-scriptfile"
+         SOURCE "script-delete-scriptfile"
          script-delete-scriptfile
          
   elif [ "${DEL_RESPONSE}" = "Delete Prefix..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-delete-prefix"
+         SOURCE "script-delete-prefix"
          script-delete-prefix
          
   elif [ "${DEL_RESPONSE}" = "Help..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-delete-help"
+         SOURCE "script-delete-help"
          script-delete-help # Call the function in the above file
 
   fi

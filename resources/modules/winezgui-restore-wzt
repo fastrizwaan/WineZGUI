@@ -18,7 +18,7 @@ winezgui-restore-wzt()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
@@ -94,11 +94,11 @@ winezgui-restore-wzt()
              --text="Force Extracting ${WZT_FILE}..." \
              --pulsate --auto-close)
       fi
-      source "${DATADIR}/winezgui-identity-restore-all"
+      SOURCE "winezgui-identity-restore-all"
       winezgui-identity-restore-all
 
       # Show menu after extraction
-      source "${DATADIR}/winezgui-launch"
+      SOURCE "winezgui-launch"
       winezgui-launch
       WineZGUI_Window
 
@@ -246,7 +246,7 @@ winezgui-restore-wzt()
   export PREFIXNAME="${WZT_PREFIX}"
   dbug "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
-  source "${DATADIR}/winezgui-identity-restore"
+  SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${PREFIXES_DIR}/${WZT_PREFIX}"
  
   # 6 Create desktop dir, process Info file
@@ -301,15 +301,14 @@ winezgui-restore-wzt()
 
   # 8. Update desktop menus and Icon cache
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
  
   # Find other files which has username in it.
   # Read from file
   if [ -f "${FOUND_PREFIX_DIR}/FILES_WITH_USERNAME.txt" ]; then
-       source "${DATADIR}/winezgui-identity-restore-from-drive-c-files"
+       SOURCE "winezgui-identity-restore-from-drive-c-files"
        winezgui-identity-restore-from-drive-c-files "${FOUND_PREFIX_DIR}"
   fi
   
@@ -328,7 +327,7 @@ winezgui-restore-wzt()
             exit 0
        fi # ${ZENITY_CMD} --question
   else
-       source "${DATADIR}/script-list-available-launch-shortcuts"
+       SOURCE "script-list-available-launch-shortcuts"
        script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}
        "${SELECTED_SCRIPT}" &
        exit 0

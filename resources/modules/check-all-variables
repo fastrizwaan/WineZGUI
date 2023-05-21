@@ -2,7 +2,7 @@
 check-all-variables()
 {
   ### Debug Check variables which are used in this file up to this point
-  source "${DATADIR}/check-variable" 2>/dev/null || source "${WINEZGUI_SCRIPTS}/check-variable"
+  SOURCE "check-variable"
   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
   for VARIABLE in $1;
   do

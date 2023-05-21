@@ -12,7 +12,7 @@ winezgui-create-wzt-info()
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # 1. Need full path to directory to create file in it

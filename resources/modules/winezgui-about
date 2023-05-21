@@ -2,13 +2,13 @@ winezgui-about()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-    source "${DATADIR}/script-check-variables-loaded-or-not"
+    SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # Recreate about file if not found
   if [ ! -f "${ABOUTFILE}" ]; then
        dbug "I: $(basename ${0}): About.yml not found, recreating!"
-       source "${DATADIR}/winezgui-create-about-yml"
+       SOURCE "winezgui-create-about-yml"
        winezgui-create-about-yml
   fi
 

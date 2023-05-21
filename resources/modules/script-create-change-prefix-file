@@ -3,7 +3,7 @@ script-create-change-prefix-file()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   NEW_EXE_FILE="${SELECTED_EXE}"
   NEW_EXE_NAME=$(basename "${SELECTED_EXE}")

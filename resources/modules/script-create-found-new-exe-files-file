@@ -4,10 +4,10 @@ script-create-found-new-exe-files-file()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   FOUND_EXE_FILES="found-exe-files.yml"
-  source "${WINEZGUI_SCRIPTS}/script-get-installed-exe-files"
+  SOURCE "script-get-installed-exe-files"
   script-get-installed-exe-files
   EXE_LIST="${EXE_FILES_FOUND}"
   echo "${EXE_LIST}" |sed "s|${PREFIXDIR}|\${PREFIXDIR}|g" \

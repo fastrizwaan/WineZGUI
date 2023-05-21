@@ -2,7 +2,7 @@
 script-change-arch()
 {
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   WINEARCH_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \

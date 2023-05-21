@@ -3,7 +3,7 @@ script-save-load-help()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset HELP_TEXT
   #HELP_TEXT+="Set Saved Game directory...   : Choose save game directory to backup, i.e., where game saves its settings and progress|"

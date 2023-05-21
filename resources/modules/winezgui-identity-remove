@@ -3,7 +3,7 @@ winezgui-identity-remove()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
@@ -14,18 +14,10 @@ winezgui-identity-remove()
         DIRNAME=$(basename "${1}")
   fi      
   
-  if [ -f "${DATADIR}/winezgui-fetch-replacement-data" ]; then
-       source "${DATADIR}/winezgui-fetch-replacement-data"
-  else
-       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-data"
-  fi
+  SOURCE "winezgui-fetch-replacement-data"
   winezgui-fetch-replacement-data
   
-  if [ -f "${DATADIR}/winezgui-fetch-replacement-files" ]; then
-       source "${DATADIR}/winezgui-fetch-replacement-files"
-  else
-       source "${WINEZGUI_SCRIPTS}/winezgui-fetch-replacement-files"
-  fi
+  SOURCE "winezgui-fetch-replacement-files"
   winezgui-fetch-replacement-files "${DIRECTORY}"
 
   cd "${DIRECTORY}"  
@@ -80,6 +72,6 @@ winezgui-identity-remove()
   unset WEXE WVER FILE_LIST DTARGET DSOURCE
 
 #   # Find other files which has username in it.
-#   source "${DATADIR}/winezgui-identity-remove-from-drive-c-files"
+#   SOURCE "winezgui-identity-remove-from-drive-c-files"
 #   winezgui-identity-remove-from-drive-c-files "${1}"
 }

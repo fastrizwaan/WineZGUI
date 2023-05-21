@@ -3,7 +3,7 @@ script-save-load-set-saved-game-directory()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   # SAVEDGAMEDIRFILE="${PREFIXDIR}/SavedGameDir.yml"
   # if [ -f "${SAVEDGAMEDIRFILE}" ]; then

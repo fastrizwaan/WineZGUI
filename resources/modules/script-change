@@ -3,7 +3,7 @@ script-change()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   CHANGE_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - Change!"    \
                          --window-icon="${ICON}"            \
@@ -28,29 +28,29 @@ script-change()
   dbug "I: Script: ${FUNCNAME[0]}: Selected ${CHANGE_OPTION}"
   
   if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-change-name"
+         SOURCE "script-change-name"
          script-change-name
 
   elif [ "${CHANGE_OPTION}" = "Prefix Directory Name..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-change-prefix"
+         SOURCE "script-change-prefix"
          script-change-prefix
          
   elif [ "${CHANGE_OPTION}" = "Wine Architecture..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-change-arch"
+         SOURCE "script-change-arch"
          script-change-arch
          
   elif [ "${CHANGE_OPTION}" = "Default Exe..." ]; then
-         source "${WINEZGUI_SCRIPTS}/script-change-exe"
+         SOURCE "script-change-exe"
          script-change-exe # Call the function in the above file
          
   elif [ "${CHANGE_OPTION}" = "Shortcut Icon..." ]; then
          dbug "I: Script: Shortcut Icon... Selected!"
-         source "${WINEZGUI_SCRIPTS}/script-change-icon"
+         SOURCE "script-change-icon"
          script-change-icon
          
   elif [ "${CHANGE_OPTION}" = "Application Category..." ]; then
          dbug "I: Script: Application Category... Selected!"
-         source "${WINEZGUI_SCRIPTS}/script-change-category"
+         SOURCE "script-change-category"
          script-change-category
   fi
 

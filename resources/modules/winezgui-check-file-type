@@ -2,7 +2,7 @@
 winezgui-check-file-type()
 {
   
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   if [ -z "${1}" ]; then
@@ -36,6 +36,6 @@ winezgui-check-file-type()
   fi
   HEADER="${OLD_HEADER}"
   
-  source "${DATADIR}/winezgui-open-exe"
+  SOURCE "winezgui-open-exe"
   winezgui-open-exe "${EXE_FILE}"
 }

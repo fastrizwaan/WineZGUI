@@ -2,7 +2,7 @@ winezgui-template()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
@@ -35,34 +35,34 @@ winezgui-template()
   dbug "I: ${HEADER}: ${TEMPLATE_OPTION} Selected!"
 
   if   [ "${TEMPLATE_OPTION}" = "Configure ${TEMPLATE_NAME}..." ]; then
-          source "${DATADIR}/winezgui-template-configure"
+          SOURCE "winezgui-template-configure"
           winezgui-template-configure
   elif [ "${TEMPLATE_OPTION}" = "Backup    ${TEMPLATE_NAME}..." ]; then
-          source "${DATADIR}/winezgui-template-backup"
+          SOURCE "winezgui-template-backup"
           winezgui-template-backup "${TEMPLATE}"
   elif [ "${TEMPLATE_OPTION}" = "Download  Template..." ]; then
-          source "${DATADIR}/winezgui-template-download"
+          SOURCE "winezgui-template-download"
           winezgui-template-download
   elif [ "${TEMPLATE_OPTION}" = "Create New..." ]; then
-          source "${DATADIR}/winezgui-template-create-new"
+          SOURCE "winezgui-template-create-new"
           winezgui-template-create-new
   elif [ "${TEMPLATE_OPTION}" = "Clone..." ]; then
-          source "${DATADIR}/winezgui-template-clone"
+          SOURCE "winezgui-template-clone"
           winezgui-template-clone
   elif [ "${TEMPLATE_OPTION}" = "Change..." ]; then
-          source "${DATADIR}/winezgui-template-change"
+          SOURCE "winezgui-template-change"
           winezgui-template-change
   elif [ "${TEMPLATE_OPTION}" = "Backup..." ]; then
-          source "${DATADIR}/winezgui-template-backup"
+          SOURCE "winezgui-template-backup"
           winezgui-template-backup
   elif [ "${TEMPLATE_OPTION}" = "Restore..." ]; then
-          source "${DATADIR}/winezgui-template-restore"
+          SOURCE "winezgui-template-restore"
           winezgui-template-restore
   elif [ "${TEMPLATE_OPTION}" = "Delete..." ]; then
-          source "${DATADIR}/winezgui-template-delete"
+          SOURCE "winezgui-template-delete"
           winezgui-template-delete
   elif [ "${TEMPLATE_OPTION}" = "Help..." ]; then
-          source "${DATADIR}/winezgui-template-help"
+          SOURCE "winezgui-template-help"
           winezgui-template-help
   else
        echo "E: Unknown Configure Option = ${TEMPLATE_OPTION}"

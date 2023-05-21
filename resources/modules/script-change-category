@@ -2,7 +2,7 @@ script-change-category()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
-  source "${WINEZGUI_SCRIPTS}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset GET_CATEGORY
   GET_CATEGORY=$(${ZENITY_CMD}                        \
@@ -37,8 +37,7 @@ script-change-category()
   ${DESKTOP_FILE_EDIT} --set-key="Categories" --set-value="${GET_CATEGORY}" ${DESKTOPFILE}
   
   # Clean up broken shortcuts and update shortcuts menu
-  source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-  source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
   # Inform user

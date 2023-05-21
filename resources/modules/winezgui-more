@@ -3,7 +3,7 @@ winezgui-more()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   MORE_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - More"  \
@@ -31,25 +31,25 @@ winezgui-more()
   if   [ "${MORE_OPTION}" = "File Manager..."  ]; then
          xdg-open "${WINEZGUIDIR}"
   elif [ "${MORE_OPTION}" = "Open Terminal..."  ]; then
-         source "${DATADIR}/winezgui-open-terminal"
+         SOURCE "winezgui-open-terminal"
          winezgui-open-terminal
   elif [ "${MORE_OPTION}" = "Shortcuts..."  ]; then
-         source "${DATADIR}/winezgui-shortcuts"
+         SOURCE "winezgui-shortcuts"
          winezgui-shortcuts
   elif [ "${MORE_OPTION}" = "Recreate Prefix Scripts..."  ]; then
-         source "${DATADIR}/winezgui-recreate-prefix-scripts"
+         SOURCE "winezgui-recreate-prefix-scripts"
          winezgui-recreate-prefix-scripts
   elif [ "${MORE_OPTION}" = "Update All Scripts..."  ]; then
-         source "${DATADIR}/winezgui-update-all-scripts"
+         SOURCE "winezgui-update-all-scripts"
          winezgui-update-all-scripts         
   elif [ "${MORE_OPTION}" = "Restore All Identity..."  ]; then
-         source "${DATADIR}/winezgui-identity-restore-all"
+         SOURCE "winezgui-identity-restore-all"
          winezgui-identity-restore-all
   elif [ "${MORE_OPTION}" = "Update winetricks..."  ]; then
-         source "${DATADIR}/winezgui-download-winetricks"
+         SOURCE "winezgui-download-winetricks"
          winezgui-download-winetricks
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
-         source "${DATADIR}/winezgui-more-help"
+         SOURCE "winezgui-more-help"
          winezgui-more-help
   fi
 }

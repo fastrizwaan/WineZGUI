@@ -1,0 +1,14 @@
+# Load source files either from datadir or from winezgui_scripts directory
+# Use unset DEBUG will stop messages.
+SOURCE()
+{
+  if   [ -f "${DATADIR}/${1}" ]; then
+         source "${1}"
+  elif [ -f "${WINEZGUI_SCRIPTS}/${1}" ]; then
+         source "${1}"
+  else
+         echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+         echo "Error: Can't find ${1}"
+         echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+  fi
+}

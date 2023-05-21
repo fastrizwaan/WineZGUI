@@ -4,7 +4,7 @@ winezgui-shortcuts-clean-up()
   unset SHOW_OPTION
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
@@ -41,7 +41,7 @@ winezgui-shortcuts-clean-up()
   IFS=${SAVEIFS}
 
 # Generate Height value
- source "${DATADIR}/winezgui-get-window-height"
+ SOURCE "winezgui-get-window-height"
  winezgui-get-window-height ${#FILES[@]}
 
  
@@ -54,8 +54,7 @@ winezgui-shortcuts-clean-up()
   if [ ${ANSWER} -eq 0 ]; then
        dbug "I: ${HEADER}: Deleted Broken Shortcuts!"
        # Clean up broken shortcuts and update shortcuts menu
-       source "${DATADIR}/winezgui-remove-broken-links" 2>/dev/null || \
-       source "${WINEZGUI_SCRIPTS}/winezgui-remove-broken-links"
+       SOURCE "winezgui-remove-broken-links"
        winezgui-remove-broken-links
   else
        dbug "I: ${HEADER}: Cancelled!"

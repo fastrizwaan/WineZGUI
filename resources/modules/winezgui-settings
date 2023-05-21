@@ -2,7 +2,7 @@ winezgui-settings()
  {
    HEADER="$(basename ${0}): ${FUNCNAME[0]}"
      
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
    dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
@@ -31,23 +31,23 @@ winezgui-settings()
    dbug "I: ${HEADER}: Selected ${SETTINGS_OPTION}!"
    
    if   [ "${SETTINGS_OPTION}" = "Help..." ]; then
-        source "${DATADIR}/winezgui-settings-help"
+        SOURCE "winezgui-settings-help"
         winezgui-settings-help
         
    elif [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
-        source "${DATADIR}/winezgui-settings-wine-arch"
+        SOURCE "winezgui-settings-wine-arch"
         winezgui-settings-wine-arch
         
    elif [ "${SETTINGS_OPTION}" = "Prefix Template..." ]; then
-        source "${DATADIR}/winezgui-template-change"
+        SOURCE "winezgui-template-change"
         winezgui-template-change
         
    elif [ "${SETTINGS_OPTION}" = "Launch Behavior..." ]; then
-        source "${DATADIR}/winezgui-settings-launch-behavior"
+        SOURCE "winezgui-settings-launch-behavior"
         winezgui-settings-launch-behavior
         
    elif [ "${SETTINGS_OPTION}" = "Debug Messages..." ]; then
-        source "${DATADIR}/winezgui-settings-debug-messages"
+        SOURCE "winezgui-settings-debug-messages"
         winezgui-settings-debug-messages
         
    fi

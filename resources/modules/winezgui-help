@@ -3,7 +3,7 @@ winezgui-help()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset HELP_TEXT
   HELP_TEXT+="Open Exe... : Create Exe bottle for any Setup or any exe or msi file!|"

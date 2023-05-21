@@ -3,7 +3,7 @@ winezgui-settings-wine-arch()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
     
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   CURRENT_ARCH=${WINEARCH}
@@ -56,7 +56,7 @@ winezgui-settings-wine-arch()
   
   # Update Wine arch in About.yml
   export WINE_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
-  source "${DATADIR}/winezgui-initialize-wineprefix"
+  SOURCE "winezgui-initialize-wineprefix"
   winezgui-initialize-wineprefix "${WINE_TEMPLATE}"
  
   sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
@@ -76,7 +76,7 @@ winezgui-settings-wine-arch()
           fi
   
           if [ ${ANSWER} -eq 0 ]; then
-              source "${DATADIR}/winezgui-template-change"
+              SOURCE "winezgui-template-change"
               winezgui-template-change
           fi
   

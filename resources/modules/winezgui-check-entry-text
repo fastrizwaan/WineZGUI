@@ -4,7 +4,7 @@ winezgui-check-entry-text()
 
  dbug "${FUNCNAME[0]}: Given: ${1}"
      
-  source "${DATADIR}/script-check-variables-loaded-or-not"
+  SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
  
