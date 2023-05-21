@@ -38,7 +38,7 @@ fi
 #unset WINEPREFIX # for WINEVER
 #export APPNAME=WineZGUI
 #export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-#export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons >/dev/null"
+#export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons 2>/dev/null"
 #export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
 #export WINE_CMD="$(which wine)"
 #export WINEVER="$(wine --version|cut -f1 -d " ")"
