@@ -85,7 +85,7 @@ export BKP_EXT="wzt" # winezgui backup file extension
 #      WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"  #FIXME why this here?
 #      INSTALL_TYPE="system" #FIXME why this here?
 # fi
-
+source "${DATADIR}/winezgui-source"
 SOURCE "check-all-variables"
 echo "-------------------------------${0}------------------------------------------"
 check-all-variables "AUTHOR EMAIL COPYRIGHT WEBSITE DEBUG PROCESSNAME HEADER APPNAME \
