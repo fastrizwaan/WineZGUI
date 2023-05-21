@@ -27,7 +27,7 @@ winezgui-update-all-scripts()
   SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null| tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
-  SOURCE "check-all-variables
+  SOURCE "check-all-variables"
   check-all-variables "SEARCH_LIST PREFIXES_FOUND"
   ### Get Prefixdir name
   #dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
