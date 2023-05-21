@@ -2,10 +2,10 @@
 # Use unset DEBUG will stop messages.
 SOURCE()
 {
-  if   [ -f "${DATADIR}/${1}" ]; then
-         source "${DATADIR}/${1}"
-  elif [ -f "${WINEZGUI_SCRIPTS}/${1}" ]; then
+  if   [ -f "${WINEZGUI_SCRIPTS}/${1}" ]; then
          source "${WINEZGUI_SCRIPTS}/${1}"
+  elif [ -f "${DATADIR}/${1}" ]; then
+         source "${DATADIR}/${1}"
   else
          echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
          echo "Error: Can't find ${1}"
