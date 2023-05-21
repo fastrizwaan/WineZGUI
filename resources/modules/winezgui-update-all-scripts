@@ -27,8 +27,14 @@ winezgui-update-all-scripts()
   SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null| tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
+  IFS=${SAVEIFS}
+  # check all variables can't handle space separated values when IFS is not set to default
   SOURCE "check-all-variables"
   check-all-variables "SEARCH_LIST PREFIXES_FOUND"
+
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+
   ### Get Prefixdir name
   #dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   SOURCE winezgui-recreate-prefix-scripts
