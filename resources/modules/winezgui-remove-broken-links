@@ -7,7 +7,7 @@ winezgui-remove-broken-links()
   script-check-variables-loaded-or-not
 
   # If running from inside flatpak, it can't detect other links properly due to no access to other flatpak's dir ~/.var/app/<other_flatpak>
-  if [ $(which flatpak-spawn) ]; then
+  if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then
        find ${APPLICATIONSDIR} -iname "*${FLATPAK_NAME}*" -xtype l -delete  
   else
        find ${APPLICATIONSDIR} -iname "*winezgui*" -xtype l -delete

@@ -10,7 +10,7 @@ winezgui-shortcuts-clean-up()
   IFS=$(echo -en "\n\b")
   
   # If running from inside flatpak, it can't detect other links properly due to no access to other flatpak's dir ~/.var/app/<other_flatpak>
-  if [ $(which flatpak-spawn) ]; then
+  if [ $(flatpak-spawn echo 0 2>/dev/null) ] ; then
        SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -iname "*${FLATPAK_NAME}*" -xtype l 2>/dev/null|tr '\n' '|')
   else
        SEARCH_LIST=$(find ${APPLICATIONSDIR} -maxdepth 1 -iname "*winezgui*" -xtype l 2>/dev/null|tr '\n' '|')
