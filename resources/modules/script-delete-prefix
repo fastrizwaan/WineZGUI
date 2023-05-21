@@ -10,11 +10,12 @@ script-delete-prefix()
   #dbug "I: Script: Delete: Removed ${SHORTCUT}" || \
   #echo "E: Script: Delete: Cannot Remove ${SHORTCUT} !!"
 
+  # Load winezgui-remove-broken-links before deleting the prefix
+  SOURCE "winezgui-remove-broken-links"
   rm -rf ${PREFIXDIR} && \
   dbug "I: Script: Delete: Removed ${PREFIXDIR}"
 
   # Clean up broken shortcuts and update shortcuts menu
-  SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
   dbug "I: Script: Delete: Exiting!"
