@@ -13,8 +13,6 @@ script-get-selected-exe-for-prefix()
  unset RESULT
  unset search_list
 
- SAVEIFS=${IFS}
- IFS=$(echo -en "\n\b")
 
  count=0
  NAMES=()
@@ -35,6 +33,10 @@ script-get-selected-exe-for-prefix()
              --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
       Script_Window
  fi
+
+ SAVEIFS=${IFS}
+ IFS=$(echo -en "\n\b")
+
  # if exe_found has value, then only change exe
  for i in $(echo ${search_list}|tr '|' '\n'|sort)
  do

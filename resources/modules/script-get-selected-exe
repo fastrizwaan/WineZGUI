@@ -9,8 +9,6 @@ script-get-selected-exe()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset COMMAND count SHOW_OPTION NAMES FILES RESULT search_list
-  SAVEIFS=${IFS}
-  IFS=$(echo -en "\n\b")
 
   count=0
   NAMES=()
@@ -31,6 +29,10 @@ script-get-selected-exe()
               --text "Sorry, no exe found in prefix: \"${PREFIXNAME}\""
        Script_Window
   fi
+
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+
   # if exe_found has value, then only change exe
   for i in $(echo ${search_list}|tr '|' '\n'|sort)
   do
