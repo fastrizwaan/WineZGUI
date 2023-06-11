@@ -4,13 +4,13 @@ WineZGUI is a wine frontend for playing Windows games on Linux easily. It provid
 
 ### **Facts**
 
-- 🎮 WineZGUI is a wine frontend for playing Windows games or exe files from the file manager.
+- 🍷WineZGUI is a wine frontend for playing Windows games or exe files from the file manager.
 
 - 📂 It creates application shortcuts for easier access to games.
 
 - ⚙️ WineZGUI focuses on gaming and simplifies the process of setting up prefixes.
 
-- 🔄 It allows users to backup and restore prefixes for later use.
+- 💾 It allows users to backup and restore prefixes for later use.
 
 - 📦 WineZGUI enables the creation of game bundles, which consist of a prefix and a game, for sharing with others.
 
@@ -18,6 +18,6 @@ WineZGUI is a wine frontend for playing Windows games on Linux easily. It provid
 
 - 🔧 WineZGUI can be installed through flatpak on supported Linux distributions or built and installed from source.
 
-- 🛠️ Requirements for WineZGUI include wine, winetricks, perl-image-exiftool, icoutils, and gnome-terminal, among others.
+- 📋 Requirements for WineZGUI include wine, winetricks, perl-image-exiftool, icoutils, and gnome-terminal, among others.
 
 - 🎮 XBOX compatible controllers can be used with WineZGUI by building and installing kernel drivers from a specific GitHub repository.
