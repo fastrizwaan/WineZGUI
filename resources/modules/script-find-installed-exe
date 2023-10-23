@@ -121,10 +121,7 @@ script-find-installed-exe()
   fi
   
  # Remove Tempdir contents inside drive_c/users/$USER/Temp
- if [ -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
-      rm -rf "${PREFIXDIR}/drive_c/users/${USER}/Temp/*"
-      dbug "I: Script: Find Exe: Deleted files inside drive_c/users/${USER}/Temp directory"
- else
+ if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
       mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
  fi
 
