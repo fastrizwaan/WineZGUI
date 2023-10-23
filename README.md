@@ -27,6 +27,10 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 
 ### Install WineZGUI
 
+WineZGUI is now available at flathub with limited access to filesystem.
+
+Flathub WineZGUI can only access Desktop, Documents, Downloads, Music, Pictures, Videos direcotories. To access files from other locations or other mounted partitions or drives, either copy them to the previously mentioned directories (Downloads etc.) or it needs read permission, which can be given using Flatseal app or using command line  `flatpak --user override --filesystem=host:ro io.github.fastrizwaan.WineZGUI`
+
 I highly recommend using flatpak version, because, distro based wine (wine-staging) keeps on updating and games may break every few days. Using wine stable from flathub is better or use wine stable 5.0 or 7.0 from the distro packages.
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
