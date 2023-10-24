@@ -30,7 +30,10 @@ script-launch()
        ENVIRONMENT_VARIABLE=$(grep args "${PREFIXDIR}/environment-variable.yml"|cut -f2 -d ":")
        dbug "I: Script: environment-variable=${ENVIRONMENT_VARIABLE}"
        dbug "------------------------------------------------"
-       export "${ENVIRONMENT_VARIABLE}" ; #export only when found
+       # export only when found in environment-variable.yml and not it is not empty
+       if ! [ -z "${ENVIRONMENT_VARIABLE}" ]; then
+          export "${ENVIRONMENT_VARIABLE}"
+       fi
   fi
 
   # CMDLINE exe argument 
