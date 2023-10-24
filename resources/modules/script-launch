@@ -64,7 +64,7 @@ script-launch()
   fi
 
   # 3. Launch The EXE file
-  ${ENVIRONMENT_VARIABLE}
+  export "${ENVIRONMENT_VARIABLE}"
   ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
