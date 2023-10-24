@@ -24,6 +24,14 @@ script-launch()
   cd "${exe_path}"
   dbug "I: Script: Launching ${exe_name}"
 
+  # Environment Variable to be set before launching wine + exe
+  if [ -f "${PREFIXDIR}/environment-variable.yml" ]; then
+       dbug "I: Script: found CMDLINE arguments"
+       ENVIRONMENT_VARIABLE=$(grep args "${PREFIXDIR}/environment-variable.yml"|cut -f2 -d ":")
+       dbug "I: Script: environment-variable=${ENVIRONMENT_VARIABLE}"
+       dbug "------------------------------------------------"
+  fi
+
   # CMDLINE exe argument 
   if [ -f "${PREFIXDIR}/cmdline.yml" ]; then
        dbug "I: Script: found CMDLINE arguments"
@@ -56,6 +64,7 @@ script-launch()
   fi
 
   # 3. Launch The EXE file
+  ${ENVIRONMENT_VARIABLE}
   ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu

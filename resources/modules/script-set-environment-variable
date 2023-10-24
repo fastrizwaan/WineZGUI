@@ -1,0 +1,49 @@
+# script-set-environment-variable
+script-set-environment-variable()
+{
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
+  
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  # if environment-variable.yml is found, get the args
+  if [ -f "${PREFIXDIR}/environment-variable.yml" ]; then
+       ARGS=$(grep args "${PREFIXDIR}/environment-variable.yml"|cut -f2-100 -d ":")
+  fi
+
+  # Ask for Name
+  GET_ENVIRONMENT_VAR=$(${ZENITY_CMD} --title "Set Environment Variable..."                 \
+                        --text  "Enter Environment Variable to save:"     \
+                        --entry-text "${ARGS}"       \
+                        --width=500 --entry                          )
+
+  ANSWER=$?
+  if [ ${ANSWER} -eq 1 ]; then #if user clicks cancel
+       # Return to Script window
+       dbug "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
+       return 1
+  fi
+
+  # Write to file
+  if [ -w "${PREFIXDIR}" ]; then
+       # if use deletes argument
+       if [ -z "${GET_ENVIRONMENT_VAR}" ]; then
+            if [ -f "${PREFIXDIR}/environment-variable.yml" ]; then
+                 rm "${PREFIXDIR}/environment-variable.yml"
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
+                        --text="Removed <b>${ARGS}</b>\nand environment-variable.yml"
+            fi
+            dbug "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/environment-variable.yml"
+       else #add args to environment-variable.yml
+            echo "args:${GET_ENVIRONMENT_VAR}"  > "${PREFIXDIR}/environment-variable.yml"
+            dbug "I: Script: ${FUNCNAME[0]}: Created args:${GET_ENVIRONMENT_VAR}"
+            dbug "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/environment-variable.yml"
+            if [ -f "${PREFIXDIR}/environment-variable.yml" ]; then
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
+                        --text="${GET_ENVIRONMENT_VAR}"
+            fi
+       fi
+  else
+       echo "E: Script: ${FUNCNAME[0]}: Cannot write to ${PREFIXDIR}"
+  fi
+
+} 

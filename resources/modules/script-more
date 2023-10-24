@@ -11,7 +11,7 @@ script-more()
                               --width=360 --height=240     \
                               --radiolist --column " "     \
                               --column "Action"            \
-                                     0 "Set Exe Prefix Arguments" \
+                                     0 "Set Environment Variable" \
                                      0 "Set Exe Arguments" \
                                      0 "Set Launch Behavior" \
                                      0 "Import Game Directory" \
@@ -24,10 +24,10 @@ script-more()
        return 1
   fi
 
-  if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Prefix Arguments" ]; then
+  if [ "${SCRIPT_MORE_OPTION}" = "Set Environment Variable" ]; then
        dbug "I: Script: Delete... Selected!"
-       SOURCE "script-exe-cmdline-prefix"
-       script-exe-cmdline-prefix
+       SOURCE "script-set-environment-variable"
+       script-set-environment-variable
   fi
 
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
