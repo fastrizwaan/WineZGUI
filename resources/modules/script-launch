@@ -30,6 +30,7 @@ script-launch()
        ENVIRONMENT_VARIABLE=$(grep args "${PREFIXDIR}/environment-variable.yml"|cut -f2 -d ":")
        dbug "I: Script: environment-variable=${ENVIRONMENT_VARIABLE}"
        dbug "------------------------------------------------"
+       export "${ENVIRONMENT_VARIABLE}" ; #export only when found
   fi
 
   # CMDLINE exe argument 
@@ -64,7 +65,6 @@ script-launch()
   fi
 
   # 3. Launch The EXE file
-  export "${ENVIRONMENT_VARIABLE}"
   ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
