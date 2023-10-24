@@ -11,6 +11,7 @@ script-more()
                               --width=360 --height=240     \
                               --radiolist --column " "     \
                               --column "Action"            \
+                                     0 "Set Exe Prefix Arguments" \
                                      0 "Set Exe Arguments" \
                                      0 "Set Launch Behavior" \
                                      0 "Import Game Directory" \
@@ -22,7 +23,13 @@ script-more()
        dbug "I: MORE: Cancel Selected!"
        return 1
   fi
-  
+
+  if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Prefix Arguments" ]; then
+       dbug "I: Script: Delete... Selected!"
+       SOURCE "script-exe-cmdline-prefix"
+       script-exe-cmdline-prefix
+  fi
+
   if [ "${SCRIPT_MORE_OPTION}" = "Set Exe Arguments" ]; then
        dbug "I: Script: Delete... Selected!"
        SOURCE "script-exe-cmdline"

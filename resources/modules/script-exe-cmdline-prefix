@@ -1,0 +1,49 @@
+# script-cmdline-prefix
+script-exe-cmdline-prefix()
+{
+  dbug "I: Script: Launched ${FUNCNAME[0]}"
+  
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  # if cmdline-prefix.yml is found, get the args
+  if [ -f "${PREFIXDIR}/cmdline-prefix.yml" ]; then
+       ARGS=$(grep args "${PREFIXDIR}/cmdline-prefix.yml"|cut -f2-100 -d ":")
+  fi
+
+  # Ask for Name
+  GET_CMDLINE_PREFIX=$(${ZENITY_CMD} --title "Set Exe Prefix Argument..."                 \
+                        --text  "Enter commandline exe Prefix argument to save:"     \
+                        --entry-text "${ARGS}"       \
+                        --width=500 --entry                          )
+
+  ANSWER=$?
+  if [ ${ANSWER} -eq 1 ]; then #if user clicks cancel
+       # Return to Script window
+       dbug "I: Script: ${FUNCNAME[0]}: Name: Cancelled!"
+       return 1
+  fi
+
+  # Write to file
+  if [ -w "${PREFIXDIR}" ]; then
+       # if use deletes argument
+       if [ -z "${GET_CMDLINE_PREFIX}" ]; then
+            if [ -f "${PREFIXDIR}/cmdline-prefix.yml" ]; then
+                 rm "${PREFIXDIR}/cmdline-prefix.yml"
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
+                        --text="Removed <b>${ARGS}</b>\nand cmdline-prefix.yml"
+            fi
+            dbug "I: Script: ${FUNCNAME[0]}: Deleted ${PREFIXNAME}/cmdline-prefix.yml"
+       else #add args to cmdline-prefix.yml
+            echo "args:${GET_CMDLINE_PREFIX}"  > "${PREFIXDIR}/cmdline-prefix.yml"
+            dbug "I: Script: ${FUNCNAME[0]}: Created args:${GET_CMDLINE_PREFIX}"
+            dbug "I: Script: ${FUNCNAME[0]}: Updated ${PREFIXNAME}/cmdline-prefix.yml"
+            if [ -f "${PREFIXDIR}/cmdline-prefix.yml" ]; then
+                 ${ZENITY_CMD} --info --width 300 --title="Command Line argument" \
+                        --text="${GET_CMDLINE_PREFIX}"
+            fi
+       fi
+  else
+       echo "E: Script: ${FUNCNAME[0]}: Cannot write to ${PREFIXDIR}"
+  fi
+
+} 
