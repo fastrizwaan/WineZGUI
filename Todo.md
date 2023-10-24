@@ -66,7 +66,7 @@
 
 
 0.97.14
-- [ ] CLI Argument PREFIX
+- [x] Allow Environment Variables for some older games.
 
 0.97.13
 - [x] Do not delete drive_c/users/${USER}/Temp directory (fixes kao the kangaroo error)
