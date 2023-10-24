@@ -2,7 +2,7 @@
 
 #### Wine GUI using Zenity - Play and Share!
 
-![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg)
+![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg) <a href="https://flathub.org/apps/details/io.github.fastrizwaan.WineZGUI"><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
 ![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/winezgui-0.97.12.png)
 
@@ -27,7 +27,10 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 
 ### Install WineZGUI
 
-WineZGUI is now available at flathub with limited access to filesystem.
+WineZGUI is available as a Flatpak on Flathub:
+
+<a href="https://flathub.org/apps/details/io.github.fastrizwaan.WineZGUI"><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
+
 
 Flathub WineZGUI can only access Desktop, Documents, Downloads, Music, Pictures, Videos direcotories. To access files from other locations or other mounted partitions or drives, either copy them to the previously mentioned directories (Downloads etc.) or it needs read permission, which can be given using Flatseal app or using command line  `flatpak --user override --filesystem=host:ro io.github.fastrizwaan.WineZGUI`
 
