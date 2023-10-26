@@ -198,7 +198,7 @@ echo "$search_list"
 echo "
 #!/bin/bash
 export PATH=\"${PATH}\"
-SOURCE winezgui-dbug
+source winezgui-dbug
 export APPNAME=\"${APPNAME}\"
 export FLATPAK_NAME=\"${FLATPAK_NAME}\"
 export APPVERSION=\"${APPVERSION}\"
@@ -256,7 +256,7 @@ chmod +rx "${SCRIPTFILE}"
  
  # Do no Prompt and launch
  # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400
- SOURCE script-list-available-launch-shortcuts
+ source script-list-available-launch-shortcuts
  script-list-available-launch-shortcuts ${PREFIXDIR}
  "${SELECTED_SCRIPT}" &
  exit 0
