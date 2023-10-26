@@ -2,6 +2,13 @@
 # USEFUL: this can be used for creating new scripts for exe files for a prefix
 script-create-shortcuts-for-found-exes()
 {
+  # Load file with dbug function
+  if [ -f "${DATADIR}/winezgui-source" ]; then
+     source "${DATADIR}/winezgui-source"
+  else
+     source "${WINEZGUI_SCRIPTS}/winezgui-source"
+  fi
+
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   export TEMPDIR="${WINEZGUIDIR}/tmp"
