@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg) <a href="https://flathub.org/apps/details/io.github.fastrizwaan.WineZGUI"><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
-![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/winezgui-0.97.12.png)
+![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/winezgui-0.97.14.png)
 
 ## What is WineZGUI
 
@@ -38,49 +38,29 @@ I highly recommend using flatpak version, because, distro based wine (wine-stagi
 
 #### Install WineZGUI flatpak on [supported Linux distros](https://flatpak.org/setup/)
 
-WineZGUI is packaged in flatpak-wine by yours truly. Please visit [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine)
-
-### Build and install flatpak from source
-
-Please install `flatpak-builder` in the Linux system before running these commands. Install script will install `org.freedesktop.Sdk/x86_64/21.08`and `org.winehq.Wine`
-
-##### Version 0.97.12 (copy paste this on a terminal)
-
-```
-git clone --depth 1 --branch 0.97.12 https://github.com/fastrizwaan/WineZGUI.git
-./WineZGUI/flatpak-manifest/install.sh
-```
-
-#### Development version
-
-```
-git clone https://github.com/fastrizwaan/WineZGUI.git
-./WineZGUI/flatpak-manifest/install.sh
-```
-
-flatpak's optional requirement is `gnome-terminal` if we need to access prefix using shell
+WineZGUI is packaged in flatpak-wine by yours truly. [WineZGUI Flathub](https://flathub.org/apps/details/io.github.fastrizwaan.WineZGUI) my other flatpak now deprecated [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine) 
 
 ### SETUP on a Linux system, see [Requirements](https://github.com/fastrizwaan/WineZGUI#requirements)
 
 Setup is instant as it copies a few files to specific directories.
 
-##### Version 0.97.12
+##### Version 0.97.14
 
-Downoad source [WineZGUI-0.97.12.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.97.12.tar.gz) or use `git tag 0.97.12`
+Downoad source [WineZGUI-0.97.14.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.97.14.tar.gz) or use `git tag 0.97.14`
 
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.97.12.tar.gz
-tar -zxvf 0.97.12.tar.gz
-cd WineZGUI-0.97.12
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.97.14.tar.gz
+tar -zxvf 0.97.14.tar.gz
+cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```
 
-##### git tag 0.97.12
+##### git tag 0.97.14
 
 ```
-git clone --depth 1 --branch 0.97.12 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.97.14 https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```
