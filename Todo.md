@@ -77,6 +77,11 @@
             - [ ] Check missing exe from script files, then suggest
             - [ ] Select Exe to create shortcut 
 
+0.97.14.2
+- [x] Fixed Delete .desktop file and restore from .bak file
+- [x] Delete Shortcut, create a backup .desktop.bak file
+- [x] Restore Shortcut, list *.bak files and let the user restore it.
+
 
 0.97.14
 - [x] Allow Environment Variables for some older games.
