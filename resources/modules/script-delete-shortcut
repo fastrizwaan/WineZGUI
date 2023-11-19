@@ -6,6 +6,7 @@ script-delete-shortcut()
   script-check-variables-loaded-or-not
   # Delete Shortcuts and Prefix Directory
   echo ${DESKTOPFILE}
+  cp "${DESKTOPFILE}" "${DESKTOPFILE}.bak"
   rm -fv ${DESKTOPFILE} && \
   dbug "I: Script: Delete: Removed ${DESKTOPFILE}"  || \
   echo "E: Script: Delete: Cannot Remove ${DESKTOPFILE} !!"

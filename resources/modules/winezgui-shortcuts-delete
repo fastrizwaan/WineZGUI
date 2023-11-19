@@ -84,7 +84,7 @@ winezgui-shortcuts-delete()
     DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
     rm -vf "${DELETE_SCRIPT_FILE}"
   fi
-
+  cp "${DELETE_DESKTOP_FILE}" "${DELETE_DESKTOP_FILE}.bak"
   rm -vf "${DELETE_DESKTOP_FILE}"
   # Clean up broken shortcuts and update shortcuts menu
   SOURCE "winezgui-remove-broken-links"

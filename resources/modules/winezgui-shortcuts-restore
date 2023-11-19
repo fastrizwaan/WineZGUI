@@ -17,7 +17,7 @@ winezgui-shortcuts-restore()
   # and common exe files present in Program Files directory
   # Add those files to FILES array and filenames to NAMES array
 
-  search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.desktop" \
+  search_list=$(find ${PREFIXES_DIR}/* -maxdepth 1 -iname "*.desktop.bak" \
                                        -type f -print| tr '\n' '|')
   exe_found=$(echo ${search_list})
 
@@ -91,8 +91,8 @@ winezgui-shortcuts-restore()
   # Clean up broken shortcuts and update shortcuts menu
   SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
-
-  echo "ln -sfv ${SELECTED_SHORTCUT} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
-  ln -sfv "${SELECTED_SHORTCUT}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
+  cp "${SELECTED_SHORTCUT}" "${SELECTED_SHORTCUT%.bak}"
+  echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
+  ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
   unset TEXT
 }
