@@ -92,7 +92,7 @@ winezgui-shortcuts-restore()
   SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
   cp "${SELECTED_SHORTCUT}" "${SELECTED_SHORTCUT%.bak}"
-  echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
-  ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
+  echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
+  ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
   unset TEXT
 }
