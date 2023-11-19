@@ -18,6 +18,7 @@ winezgui-more()
                         0 "Update All Scripts..."        \
                         0 "Restore All Identity..."      \
                         0 "Update winetricks..."         \
+                        0 "Import wine directory..."     \
                         0 "Help..."                      \
                  --text   "More..."                      )
 
@@ -48,6 +49,9 @@ winezgui-more()
   elif [ "${MORE_OPTION}" = "Update winetricks..."  ]; then
          SOURCE "winezgui-download-winetricks"
          winezgui-download-winetricks
+  elif [ "${MORE_OPTION}" = "Import wine directory..."  ]; then
+         SOURCE "winezgui-import-wine-directory"
+         winezgui-import-wine-directory
   elif [ "${MORE_OPTION}" = "Help..."  ]; then
          SOURCE "winezgui-more-help"
          winezgui-more-help
