@@ -68,9 +68,14 @@
 - [ ] Import Wine directory (from wine/playonlinux/bottles/etc.)
       - [ ] import directory
       - [ ] find exe files and create shortcuts
+            script-create-shortcuts-for-found-exes
 
 0.97.15
 - [ ] Fix Create Shortcuts for missing files
+      - [ ] Create .desktop file based on sh files.
+      - [ ] list all exe files, 
+            - [ ] Check missing exe from script files, then suggest
+            - [ ] Select Exe to create shortcut 
 
 
 0.97.14
