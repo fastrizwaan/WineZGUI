@@ -64,6 +64,14 @@
   
   [ ] After Recreate All Scripts, do all tests
 
+0.97.16
+- [ ] Import Wine directory (from wine/playonlinux/bottles/etc.)
+      - [ ] import directory
+      - [ ] find exe files and create shortcuts
+
+0.97.15
+- [ ] Fix Create Shortcuts for missing files
+
 
 0.97.14
 - [x] Allow Environment Variables for some older games.
