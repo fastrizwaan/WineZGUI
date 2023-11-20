@@ -715,7 +715,7 @@ echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 #dbug "I: ${HEADER}: Created ${DEXSKTOPDIR}"
 
 #ln -sf "${DESKTOPFILE}" "${DEXSKTOPDIR}/${EXE_LESS}.desktop" && \
-ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop" && \
+ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop" && \
 dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
 # Test if the app link was created sucessfully on applications menu
 if [ $? -eq 0 ]; then
