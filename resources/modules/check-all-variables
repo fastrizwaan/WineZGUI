@@ -15,7 +15,7 @@ check-all-variables()
            continue
      fi
            
-     check-variable ${0} $VARIABLE
+     check-variable "${0}" "${VARIABLE}"
   done
 
   if [ "${DEBUG}" = "Y" ]; then
