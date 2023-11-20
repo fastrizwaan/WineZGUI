@@ -15,5 +15,5 @@ winezgui-shortcuts-create()
   echo "${SCRIPT_NAME} is selected"
   # Create shortcut, but Create a copy of scriptfile and make changes in that script
   echo "trying to launch \"${SELECTED_PREFIX}/${SCRIPT_NAME} shortcut\""
-  ${SELECTED_PREFIX}/${SCRIPT_NAME} shortcut
+  ${SCRIPT_NAME} shortcut
 }
