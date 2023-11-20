@@ -10,7 +10,6 @@ script-get-installed-exe-files()
   unset EXE_FILES_FOUND
   EXE_FILES_FOUND=$(find "${PREFIXDIR}/drive_c"      \
                    -iname "windows" -prune           \
-                   -o -iname "gamedir" -prune        \
                    -o -iname "dw20.exe"              \
                    -o -iname "Rar.exe"               \
                    -o -iname "tdu2k.exe"             \
