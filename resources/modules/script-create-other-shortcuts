@@ -11,6 +11,6 @@ script-create-other-shortcuts()
   # 1. Creaet Script to launch and for .desktop file
   SOURCE winezgui-recreate-prefix-script
 
-  winezgui-recreate-prefix-script "${SELECTED_EXE}"
+  winezgui-recreate-prefix-script ${SELECTED_EXE}
 
 }
