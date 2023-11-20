@@ -2,10 +2,7 @@
 check-all-variables()
 {
   ### Debug Check variables which are used in this file up to this point
-  SOURCE "check-variable"  
-  echo "SOURCE = $SOURCE"
-  sleep 10s;
-
+  SOURCE "check-variable"
   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
   for VARIABLE in $1;
   do
@@ -15,7 +12,7 @@ check-all-variables()
            continue
      fi
            
-     check-variable "${0}" "${VARIABLE}"
+     check-variable ${0} $VARIABLE
   done
 
   if [ "${DEBUG}" = "Y" ]; then

@@ -27,18 +27,10 @@ winezgui-update-all-scripts()
   SEARCH_LIST=$(find ${PREFIXES_DIR}/* -maxdepth 0 -type d -print 2>/dev/null| tr '\n' '|')
   PREFIXES_FOUND=$(echo ${SEARCH_LIST})
 
-  echo "================================================================================="
-  echo "\${PREFIXES_DIR} ${PREFIXES_DIR}"
-  echo "PREFIXES_FOUND $PREFIXES_FOUND"
-  echo "\${SEARCH_LIST} ${SEARCH_LIST}"
-  echo "================================================================================="
-  sleep 5s;
   IFS=${SAVEIFS}
   # check all variables can't handle space separated values when IFS is not set to default
-  echo "SOURCE = $SOURCE"
-  sleep 5s;
-  SOURCE "check-all-variables"
-  check-all-variables "SEARCH_LIST PREFIXES_FOUND"
+  #SOURCE "check-all-variables"
+  #check-all-variables "SEARCH_LIST PREFIXES_FOUND"
 
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
