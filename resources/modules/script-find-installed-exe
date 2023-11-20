@@ -80,6 +80,7 @@ script-find-installed-exe()
             unset TEXT
             TEXT+="New exe files <b>found</b>, select and Launch?"
             TEXT+="\\n<i>Default exe can be set using Change Exe...</i>"
+            TEXT+="\\n<i>Shortcut to this exe can be set using WineZGUI->More->Shortcuts->Create...</i>"
             ${ZENITY_CMD} --question --title "${EXE_NAME} ${APP_WITH_VER}" \
                  --text "${TEXT}"
             ANSWER=$?
