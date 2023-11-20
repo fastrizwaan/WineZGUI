@@ -119,7 +119,7 @@ export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
 export PREFIXNAME="basename ${PREFIXDIR}"
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
-export INFOFILE="${PREFIXDIR}/Info.yml"
+export INFOFILE="${PREFIXDIR}/${EXE_LESS}_Info.yml"
 export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
 export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
 export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
@@ -194,6 +194,7 @@ fi
 
 # difference from winezgui create prefix, already PROGNAME EXISTS, so we need to recreate
 # So, let's unset PROGNAME so that program name, and icons are extracted
+SAVED_PROGNAME="${PROGNAME}"
 unset PROGNAME
 
 if [ -z "${PROGNAME}" ] ; then
@@ -727,6 +728,7 @@ fi
 ${UPDATE_ICON_CACHE} 2>/dev/null
 ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR} 2>/dev/null
 
-
+PROGNAME="${SAVED_PROGNAME}"
+export PROGNAME
 
 }
