@@ -177,6 +177,9 @@ WineZGUI_Window() # Main WineZGUI application window function
          winezgui-quit
   fi
 
+  # When program returns from script, source changes
+  source "${DATADIR}/winezgui-source"
+
   WineZGUI_Window  # After All options
 } 
 
