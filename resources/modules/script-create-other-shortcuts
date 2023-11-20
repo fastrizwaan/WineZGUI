@@ -192,6 +192,10 @@ fi
 # ANSWER=$?
 # unset TITLE TEXT
 
+# difference from winezgui create prefix, already PROGNAME EXISTS, so we need to recreate
+# So, let's unset PROGNAME so that program name, and icons are extracted
+unset PROGNAME
+
 if [ -z "${PROGNAME}" ] ; then
      # Extract icon and convert it to several png files of diferent quality,
      # Create a temporary Directory to extract icon from the exe file
