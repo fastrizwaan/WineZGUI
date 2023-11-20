@@ -10,7 +10,7 @@ winezgui-shortcuts-create()
   #
   #SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
   # find existing script files and select one of them to be used as template for new shortcut
-  SCRIPT_NAME=$(grep "export SCRIPTFILE" ${SELECTED_PREFIX}/*.sh|cut -f2 -d "="|tr '"' ' ' |head -n1)
+  SCRIPT_NAME=$(grep "Script:" ${SELECTED_PREFIX}/Info.yml|cut -f2 -d ":"|head -n1)
 
   echo "${SCRIPT_NAME} is selected"
   # Create shortcut, but Create a copy of scriptfile and make changes in that script
