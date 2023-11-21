@@ -71,11 +71,12 @@
             script-create-shortcuts-for-found-exes
 
 0.97.15
-- [ ] Fix Create Shortcuts for missing files
-      - [ ] Create .desktop file based on sh files.
-      - [ ] list all exe files, 
-            - [ ] Check missing exe from script files, then suggest
-            - [ ] Select Exe to create shortcut 
+- [x] Fix Create Shortcuts for missing files
+      - [x] Create .desktop file based on sh files.
+      - [x] list all exe files, 
+            - [x] Check missing exe from script files, then suggest
+            - [x] Select Exe to create shortcut 
+      - [x] Open Other Exe can create shortcut, which allows other exe to be imported into an existing prefix
 
 0.97.14.2
 - [x] Fixed Delete .desktop file and restore from .bak file
