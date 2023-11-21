@@ -345,7 +345,7 @@ export EXIFTOOL=\"\$(which exiftool)\"
 export BKP_EXT=\"${BKP_EXT}\"
 
 # Files
-export INFOFILE=\"${PREFIXDIR}/Info.yml\"
+export INFOFILE=\"${PREFIXDIR}/${EXE_LESS}_Info.yml\"
 export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
 export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
 export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
