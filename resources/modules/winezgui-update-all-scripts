@@ -29,8 +29,8 @@ winezgui-update-all-scripts()
 
   IFS=${SAVEIFS}
   # check all variables can't handle space separated values when IFS is not set to default
-  SOURCE "check-all-variables"
-  check-all-variables "SEARCH_LIST PREFIXES_FOUND"
+  #SOURCE "check-all-variables"
+  #check-all-variables "SEARCH_LIST PREFIXES_FOUND"
 
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
