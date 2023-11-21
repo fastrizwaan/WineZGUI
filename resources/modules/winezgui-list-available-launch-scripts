@@ -45,6 +45,12 @@ winezgui-list-available-launch-scripts()
   do
       RealFile=$(realpath -m "$i")
       RealName=$(grep "^export PROGNAME=" $i|cut -f2 -d "="|sed 's/ /\ /g')
+
+      # If RealName is empty skip adding to list
+      if [ -z "${RealName}" ]; then
+           continue
+      fi
+
       # If 1st value is empty, enable it
       if [ -z "${SHOW_OPTION}" ]; then
            SHOW_OPTION+="TRUE ${RealName}"
