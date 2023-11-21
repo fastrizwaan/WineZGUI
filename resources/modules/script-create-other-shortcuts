@@ -116,7 +116,7 @@ export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
 "
 
 # This should be existing PREFIXNAME
-export PREFIXNAME="basename ${PREFIXDIR}"
+export PREFIXNAME=$(basename "${PREFIXDIR}")
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
 export INFOFILE="${PREFIXDIR}/${EXE_LESS}_Info.yml"
