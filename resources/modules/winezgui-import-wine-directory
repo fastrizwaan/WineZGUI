@@ -135,6 +135,8 @@ winezgui-import-wine-directory()
   fi
   # Add Checksum to prefixdir as suffix here !!!
  # mkdir -p "${PREFIXDIR}"
+
+ # 4.5 copying works
   (cp -rv "${IMPORT_DIR}" "${PREFIXDIR}") |\
   ${ZENITY_CMD}  --progress --pulsate --auto-close \
               --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
@@ -142,6 +144,8 @@ winezgui-import-wine-directory()
 
   # After copying find the exes and create shortcuts.
   
+  SOURCE "script-create-shortcuts-for-found-exes"
+  script-create-shortcuts-for-found-exes 
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" --text="Copied IMPORTDIR to Prefix!"
 
 }
