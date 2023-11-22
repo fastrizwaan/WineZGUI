@@ -149,7 +149,11 @@ winezgui-import-wine-directory()
   echo "------------------------------------------------------------------------------"
   echo "EXE_INSIDE_DRIVE_C ${EXE_INSIDE_DRIVE_C}"
   echo "EXE_FILE ${EXE_FILE}"
-  sleep 5s;
+  
+
+# 4.7 create prefix using winezgui-create-prefix
+  WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
+  ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
 #### THIS PART NEEDS WORK ####
   # USE winezgui-create-prefix without the directory creation
 
