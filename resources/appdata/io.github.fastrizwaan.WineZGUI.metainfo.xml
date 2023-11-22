@@ -16,6 +16,7 @@
     <ul>
       <li>Runs windows games or exe files from file manager.</li>
       <li>Creates application shortcut for easier access.</li>
+      <li>Imports other wine directory into WineZGUI and create shortcuts for all found exes.</li>
       <li>Backup and Restore prefixes for later use.</li>
       <li>Create Game Bundles for sharing (prefix+game)</li>
     </ul>
@@ -31,6 +32,7 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2023-11-23" version="0.97.16"/>
     <release date="2023-11-21" version="0.97.15"/>
     <release date="2023-11-20" version="0.97.14.2"/>
     <release date="2023-10-24" version="0.97.14"/>

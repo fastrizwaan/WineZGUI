@@ -65,19 +65,19 @@
   [ ] After Recreate All Scripts, do all tests
 
 0.97.16
-- [ ] Import Wine directory (from wine/playonlinux/bottles/etc.)
-      - [ ] import directory
-      - [ ] find exe files and create shortcuts
+- [x] Import Wine directory (from wine/playonlinux/bottles/etc.)
+      - [x] import directory
+      - [x] find exe files and create shortcuts
             script-create-shortcuts-for-found-exes
 
       - [x] ask user to select .wine or other wine directory (playonlinux/bottles)
       - [x] Check Registry files present or not (no registry means not a wine directory)
       - [x] Find Exes in the selected directory to be used as prefix name
       - [x] Copy selected wine to Prefixes_dir with the selected_exe_name
-      - [ ] get sha256sum of the selected exe from the import dir
-      - [ ] find selected exe and match sha256sum from the prefixes_dir (as copied from import_dir) to create scriptfile
-      - [ ] Use winezgui-create-prefix without folder creation to create all imp. files like scriptfile, Info.yml, settings.yml etc.
-      - [ ] after creation of directory specific scriptfile, Create shortcuts for found exes
+      - [x] Get exe path starting from drive_c from the import_dir (%drive_c)
+      - [x] find selected exe from the prefixes_dir (as copied from import_dir) to create scriptfile
+      - [x] Use winezgui-create-prefix without folder creation to create all imp. files like scriptfile, Info.yml, settings.yml etc.
+      - [x] after creation of directory specific scriptfile, Create shortcuts for found exes
 
 0.97.15
 - [x] Fix Create Shortcuts for missing files
