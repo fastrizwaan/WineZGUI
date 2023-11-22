@@ -142,7 +142,14 @@ winezgui-import-wine-directory()
               --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
               --width=500 --title="Importing..."
 
+ # 4.6 Get exe file using drive_c/../../game.exe
+   EXE_INSIDE_DRIVE_C="${IMPORT_DIR##*drive_c/}"
+   EXE_FILE="${PREFIXDIR}/drive_c/${EXE_INSIDE_DRIVE_C}"
 
+  echo "------------------------------------------------------------------------------"
+  echo "EXE_INSIDE_DRIVE_C ${EXE_INSIDE_DRIVE_C}"
+  echo "EXE_FILE ${EXE_FILE}"
+  sleep 5s;
 #### THIS PART NEEDS WORK ####
   # USE winezgui-create-prefix without the directory creation
 
@@ -157,3 +164,5 @@ winezgui-import-wine-directory()
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" --text="Copied IMPORTDIR to Prefix!"
 
 }
+
+
