@@ -74,7 +74,10 @@
       - [x] Check Registry files present or not (no registry means not a wine directory)
       - [x] Find Exes in the selected directory to be used as prefix name
       - [x] Copy selected wine to Prefixes_dir with the selected_exe_name
-      - [ ] Create shortcuts for found exe
+      - [ ] get sha256sum of the selected exe from the import dir
+      - [ ] find selected exe and match sha256sum from the prefixes_dir (as copied from import_dir) to create scriptfile
+      - [ ] Use winezgui-create-prefix without folder creation to create all imp. files like scriptfile, Info.yml, settings.yml etc.
+      - [ ] after creation of directory specific scriptfile, Create shortcuts for found exes
 
 0.97.15
 - [x] Fix Create Shortcuts for missing files
