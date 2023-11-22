@@ -135,7 +135,7 @@ winezgui-import-wine-directory()
   fi
   # Add Checksum to prefixdir as suffix here !!!
  # mkdir -p "${PREFIXDIR}"
-  (cp -rv "${EXE_PATH}" "${PREFIXDIR}") |\
+  (cp -rv "${IMPORT_DIR}" "${PREFIXDIR}") |\
   ${ZENITY_CMD}  --progress --pulsate --auto-close \
               --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
               --width=500 --title="Importing..."
