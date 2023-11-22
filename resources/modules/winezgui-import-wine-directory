@@ -13,9 +13,11 @@ winezgui-import-wine-directory()
       Script_Window
   fi
 
-   IMPORT_BASENAME=$(basename "${IMPORT_DIR}")
+  # Get the name from full path
+  IMPORT_BASENAME=$(basename "${IMPORT_DIR}")
+  
   # 2. Check system.reg file exists
-  if [ -f ${IMPORT_DIR}/system.reg ];
+  if [ ! -f "${IMPORT_DIR}/system.reg" ];
   ${ZENITY_CMD} --error --title="Not a wine direcotry" \
                 --text="${IMPORT_BASENAME} missing system.reg which a wine prefix should have. Aborting!"
      return 1
