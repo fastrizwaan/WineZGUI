@@ -19,7 +19,7 @@ winezgui-import-wine-directory()
   # 2. Check system.reg file exists
   if [ ! -f "${IMPORT_DIR}/system.reg" ]; then
   ${ZENITY_CMD} --error --title="Not a wine direcotry" \
-                --text="${IMPORT_BASENAME} missing system.reg which a wine prefix should have. Aborting!"
+  --text="system.reg not found inside \"${IMPORT_BASENAME}\" \nA wine prefix should have system.reg!"
      return 1
   fi
 
