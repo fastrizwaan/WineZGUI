@@ -143,7 +143,7 @@ winezgui-import-wine-directory()
               --width=500 --title="Importing..."
 
  # 4.6 Get exe file using drive_c/../../game.exe
-   EXE_INSIDE_DRIVE_C="${IMPORT_DIR##*drive_c/}"
+   EXE_INSIDE_DRIVE_C="${SELECTED_EXE##*drive_c/}"
    EXE_FILE="${PREFIXDIR}/drive_c/${EXE_INSIDE_DRIVE_C}"
 
   echo "------------------------------------------------------------------------------"
