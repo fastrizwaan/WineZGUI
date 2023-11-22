@@ -151,17 +151,37 @@ winezgui-import-wine-directory()
   echo "EXE_FILE ${EXE_FILE}"
   
 
-# 4.7.1 Perhaps winezgui requires these variables
-# Files
-export INFOFILE="${PREFIXDIR}/Info.yml"
-export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
-export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
-export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
-
 # 4.7 create prefix using winezgui-create-prefix
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
   ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
 
+# 4.8 Create INFOFILE for imported wine directory
+# Create Metadata Info.yml for the prefix
+if [ ! -f "${INFOFILE}" ]; then
+     #  Insert Data into Info.yml
+     DATE=$(date +%F_%H%M)
+
+     echo "Name:${PROGNAME}"                >  "${INFOFILE}"
+     echo "Exe:${EXE_FILE}"                 >> "${INFOFILE}"
+     echo "Sha256sum:${CHECKSUM}"           >> "${INFOFILE}"
+     echo "Exe Path:${EXE_PATH}"            >> "${INFOFILE}"
+     echo "Prefix:${PREFIXNAME}"            >> "${INFOFILE}"
+     echo "Script:${SCRIPTFILE}"            >> "${INFOFILE}"
+     echo "Icon:${ICONFILE}"                >> "${INFOFILE}"
+     echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
+     echo "Created:${DATE}"                 >> "${INFOFILE}"
+     echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
+     echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
+     echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
+     echo "Install:${INSTALL_TYPE}"         >> "${INFOFILE}"
+
+     # Include flatpak id in Info.yml
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          echo "Flatpak:${FLATPAK_NAME}"    >> "${INFOFILE}"
+     fi
+     dbug "I: Script: Prefix: Created ${INFOFILE}"
+fi
 
 #### THIS PART NEEDS WORK ####
   # USE winezgui-create-prefix without the directory creation
@@ -173,7 +193,7 @@ export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
   # 5. After copying find the exes and create shortcuts.
   #### !!! This needs an already created script file, so create one then run this
 
-  # re-enable after script and info.yml is created properly by winezgui-create-prefix
+  # re-enable after script and info.yml is created properly
   #SOURCE "script-create-shortcuts-for-found-exes"
   #script-create-shortcuts-for-found-exes 
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" --text="Copied IMPORTDIR to Prefix!"
