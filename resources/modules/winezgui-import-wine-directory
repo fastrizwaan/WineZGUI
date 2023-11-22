@@ -1,0 +1,16 @@
+winezgui-import-wine-directory()
+{
+
+  
+  # 1. Ask user to select import directory from where it will copy
+  dbug "I: Script: ${FUNCNAME[0]}: Select import directory"
+  unset TITLE
+  TITLE="Choose a wine prefix directory to import into WineZGUI!"
+
+  IMPORT_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
+  if [ -z "${IMPORT_DIR}" ]; then
+      dbug "I: Script: ${FUNCNAME[0]}: Select import directory: Cancelled!"
+      Script_Window
+  fi
+
+}

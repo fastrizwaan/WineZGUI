@@ -70,6 +70,11 @@
       - [ ] find exe files and create shortcuts
             script-create-shortcuts-for-found-exes
 
+      - [x] ask user to select .wine or other wine directory (playonlinux/bottles)
+      - [ ] Find Exes in the selected directory to be used as prefix name
+      - [ ] Check Registry files present or not (no registry means not a wine directory)
+      - [ ] Copy selected wine to Prefixes_dir and Create shortcuts for found exe
+
 0.97.15
 - [x] Fix Create Shortcuts for missing files
       - [x] Create .desktop file based on sh files.
