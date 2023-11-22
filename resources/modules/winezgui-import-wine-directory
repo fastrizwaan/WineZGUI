@@ -145,25 +145,6 @@ winezgui-import-wine-directory()
  # 4.6 Get exe file using drive_c/../../game.exe
    EXE_INSIDE_DRIVE_C="${SELECTED_EXE##*drive_c/}"
    EXE_FILE="${PREFIXDIR}/drive_c/${EXE_INSIDE_DRIVE_C}"
-
-  echo "------------------------------------------------------------------------------"
-  echo "EXE_INSIDE_DRIVE_C ${EXE_INSIDE_DRIVE_C}"
-  echo "EXE_FILE ${EXE_FILE}"
-  echo "Name:${PROGNAME}"                
-     echo "Exe:${EXE_FILE}"              
-     echo "Sha256sum:${CHECKSUM}"        
-     echo "Exe Path:${EXE_PATH}"         
-     echo "Prefix:${PREFIXNAME}"         
-     echo "Script:${SCRIPTFILE}"         
-     echo "Icon:${ICONFILE}"             
-     echo "Shortcut:${DESKTOPFILE}"      
-     echo "Created:${DATE}"              
-     echo "Wine:${WINEVER}"              
-     echo "Wine Arch:${WINEARCH}"        
-     echo "WineZGUI:${APPVERSION}"       
-     echo "WineZGUI Prefix:${WINEZGUIDIR}"
-     echo "Install:${INSTALL_TYPE}"      
-sleep 15s
 # 4.7 create prefix using winezgui-create-prefix
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
   ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
@@ -175,10 +156,10 @@ INFOFILE="${PREFIXDIR}/Info.yml"
 if [ ! -f "${INFOFILE}" ]; then
      #  Insert Data into Info.yml
      SCRIPTFILE="${PREFIXDIR}/${PREFIXNAME}.sh"
-     PROGNAME=$(grep "export PROGNAME" ${SCRIPTFILE}|cut -f2 -d "=")
-     CHECKSUM=$(grep "export CHECKSUM" ${SCRIPTFILE}|cut -f2 -d "=")
-     ICONFILE=$(grep "export ICONFILE" ${SCRIPTFILE}|cut -f2 -d "=")
-     DESKTOPFILE=$(grep "export DESKTOPFILE" ${SCRIPTFILE}|cut -f2 -d "=")
+     PROGNAME=$(grep "export PROGNAME" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
+     CHECKSUM=$(grep "export CHECKSUM" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
+     ICONFILE=$(grep "export ICONFILE" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
+     DESKTOPFILE=$(grep "export DESKTOPFILE" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
      
      DATE=$(date +%F_%H%M)
 
@@ -203,6 +184,26 @@ if [ ! -f "${INFOFILE}" ]; then
      fi
      dbug "I: Script: Prefix: Created ${INFOFILE}"
 fi
+
+
+  echo "------------------------------------------------------------------------------"
+  echo "EXE_INSIDE_DRIVE_C ${EXE_INSIDE_DRIVE_C}"
+  echo "EXE_FILE ${EXE_FILE}"
+  echo "Name:${PROGNAME}"                
+     echo "Exe:${EXE_FILE}"              
+     echo "Sha256sum:${CHECKSUM}"        
+     echo "Exe Path:${EXE_PATH}"         
+     echo "Prefix:${PREFIXNAME}"         
+     echo "Script:${SCRIPTFILE}"         
+     echo "Icon:${ICONFILE}"             
+     echo "Shortcut:${DESKTOPFILE}"      
+     echo "Created:${DATE}"              
+     echo "Wine:${WINEVER}"              
+     echo "Wine Arch:${WINEARCH}"        
+     echo "WineZGUI:${APPVERSION}"       
+     echo "WineZGUI Prefix:${WINEZGUIDIR}"
+     echo "Install:${INSTALL_TYPE}"      
+sleep 15s
 
 #### THIS PART NEEDS WORK ####
   # USE winezgui-create-prefix without the directory creation
