@@ -151,9 +151,18 @@ winezgui-import-wine-directory()
   echo "EXE_FILE ${EXE_FILE}"
   
 
+# 4.7.1 Perhaps winezgui requires these variables
+# Files
+export INFOFILE="${PREFIXDIR}/Info.yml"
+export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
+export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
+export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
+
 # 4.7 create prefix using winezgui-create-prefix
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
   ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
+
+
 #### THIS PART NEEDS WORK ####
   # USE winezgui-create-prefix without the directory creation
 
@@ -163,8 +172,10 @@ winezgui-import-wine-directory()
   # then run script-create-shortcuts-for-found-exes
   # 5. After copying find the exes and create shortcuts.
   #### !!! This needs an already created script file, so create one then run this
-  SOURCE "script-create-shortcuts-for-found-exes"
-  script-create-shortcuts-for-found-exes 
+
+  # re-enable after script and info.yml is created properly by winezgui-create-prefix
+  #SOURCE "script-create-shortcuts-for-found-exes"
+  #script-create-shortcuts-for-found-exes 
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" --text="Copied IMPORTDIR to Prefix!"
 
 }
