@@ -29,7 +29,7 @@ winezgui-import-wine-directory()
 
   # 3. Find Exe in the given directory
   # script-get-selected-exe expects prefixname
-  export PREFIXNAME=${IMPORT_DIR}
+  export PREFIXDIR=${IMPORT_DIR}
   SOURCE "script-get-selected-exe"
   script-get-selected-exe
   
