@@ -33,4 +33,115 @@ winezgui-import-wine-directory()
   SOURCE "script-get-selected-exe"
   script-get-selected-exe
   
+  # 4. Copy wine directory
+
+  # 4.1 SELECTED_EXE and derived variables
+  # SELECTED EXE
+  export EXE_FILE=$(realpath -m "${SELECTED_EXE}")
+  export EXE_NAME=$(basename "${EXE_FILE}")
+  export EXE_PATH=$(dirname  "${EXE_FILE}")
+  export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
+  export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
+  export EXE_EXT="${EXE_FILE##*.}"
+  export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+  export PREFIXDIR="${PREFIXES_DIR}/${EXE_LESS}"
+  export PREFIXNAME="${EXE_LESS}"
+
+  # 4.2: Check if the winezgui prefix data directory is writable or not?
+  if [ ! -w "${PREFIXES_DIR}" ]; then
+      echo "E: Script: ${FUNCNAME[0]}: ${PREFIXES_DIR} not writable"
+      ${ZENITY_CMD} --error --no-wrap --title="Error!" \
+            --text "${PREFIXES_DIR} is not writable\nAborting import wine into prefix!"
+      return 1
+  fi
+  
+  # 4.3 Confirm
+  ${ZENITY_CMD} --question --no-wrap --title="Import ${IMPORT_BASENAME} to ${PREFIXNAME}?" \
+              --text "This will copy all files from ${IMPORT_BASENAME} to ${PREFIXNAME}\nContinue..?"
+       ANSWER=$?
+       # 1.1 If user selects no or cancels to locate exe file
+       if [ ${ANSWER} -eq 1 ]; then
+            dbug "I: Script: Import: User Cancelled!"
+            return 1  # Return to Script window
+       fi
+
+  # 4.4 TEST IMPORTDIR SIZE
+  # CHECK WINEZGUI AVAILABLE SPACE BEFORE COPYING
+  # COPY FILES AND
+  # UPDATE EXE_PATH in each script file
+  # If importdir is inside prefixdir, No need to import
+  # total size =  importdir size
+  IMPORTDIR_DISK_USAGE_IN_HF=$(du -sh "${EXE_PATH}"|cut -f1)
+  # Check du value assignment
+  if [ -z "${IMPORTDIR_DISK_USAGE_IN_HF}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: IMPORTDIR_DISK_USAGE_IN_HF not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
+  IMPORTDIR_DU_IN_BYTES=$(echo ${IMPORTDIR_DISK_USAGE_IN_HF}|numfmt --from iec)
+  # Calculate total backup size = prefix + importdir
+  TOTAL_SIZE=$(expr ${IMPORTDIR_DU_IN_BYTES})
+  TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
+
+  dbug "-----------------------------------------------------------------------------"
+
+  dbug "I: Script: ${FUNCNAME[0]}: IMPORTDIR_DISK_USAGE_IN_HF=$IMPORTDIR_DISK_USAGE_IN_HF"
+  dbug "I: Script: ${FUNCNAME[0]}: IMPORTDIR_DU_IN_BYTES=$IMPORTDIR_DU_IN_BYTES"
+  dbug "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE=$TOTAL_SIZE"
+  dbug "I: Script: ${FUNCNAME[0]}: TOTAL_SIZE_IN_HF=$TOTAL_SIZE_IN_HF"
+  
+  
+  dbug "I: Script: ${FUNCNAME[0]}: Determining available space"
+  dbug "I: Script: ${FUNCNAME[0]}: Available space is:" \
+      "${AVAILABLE_SPACE}"
+  # Check available disk space inside prefix
+  #AVAILABLE_SPACE=$(df -h "${PREFIXDIR}"|sed "s/  */ /g" \
+   #   |cut -f4 -d " "|tail -n1)
+
+  AVAILABLE_SPACE=$(df -h "${PREFIXES_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
+  # Step: Convert the above $AVAILABLE_SPACE into bytes
+
+  # for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+
+  dbug "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  dbug "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+  dbug "-----------------------------------------------------------------------------"
+  # Step 5.6: If Target directory does not have sufficient space, abort backup
+  dbug "I: Script: ${FUNCNAME[0]}: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
+        dbug "I: ${HEADER}: ${PREFIXES_DIR} has enough available disk space"
+  else
+        echo "E: ${HEADER}: ${PREFIXES_DIR} does not have free disk space!!!"
+        unset MSG
+        unset TITLE
+        TITLE="Not Enough Disk Space!"
+        MSG+="${PREFIXES_DIR} has only ${AVAILABLE_SPACE}"
+        MSG+=" "
+        MSG+="free disk space left!\n"
+        MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+        # Warn user
+        ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+        echo "E: Script: ${FUNCNAME[0]}: Not Enough Disk Space, Cancelled!"
+        return 1
+
+  fi
+  # Add Checksum to prefixdir as suffix here !!!
+ # mkdir -p "${PREFIXDIR}"
+  (cp -rv "${EXE_PATH}" "${PREFIXDIR}") |\
+  ${ZENITY_CMD}  --progress --pulsate --auto-close \
+              --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
+              --width=500 --title="Importing..."
+
+  # After copying find the exes and create shortcuts.
+  
+  ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" --text="Copied IMPORTDIR to Prefix!"
+
 }
