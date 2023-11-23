@@ -186,16 +186,16 @@ echo "$search_list"
  # do not remove 
 
  # We are deleting the script and desktop file if it has setup/install substring in it.
- TEST_NAME=$(basename "${SCRIPTFILE}"| tr [A-Z] [a-z]) # Change case to test   
- echo "===> TEST_NAME = $TEST_NAME"
- if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
-    [[ "${TEST_NAME}" == *"install"* ]] ; then
-    echo "===>"
-    echo "===> Deleted ${SCRIPTFILE}"
-    echo "===>"
-    rm "${DESKTOPFILE}" "${SCRIPTFILE}"
- fi
-sleep 5s;
+#  TEST_NAME=$(basename "${SCRIPTFILE}"| tr [A-Z] [a-z]) # Change case to test   
+#  echo "===> TEST_NAME = $TEST_NAME"
+#  if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
+#     [[ "${TEST_NAME}" == *"install"* ]] ; then
+#     echo "===>"
+#     echo "===> Deleted ${SCRIPTFILE}"
+#     echo "===>"
+#     rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+#  fi
+# sleep 5s;
 
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
@@ -273,7 +273,7 @@ sleep 5s;
  SOURCE script-list-available-launch-shortcuts
  script-list-available-launch-shortcuts ${PREFIXDIR}
  "${SELECTED_SCRIPT}" &
- exit 0
+ #exit 0
 # # Generate Height value
 # SOURCE winezgui-get-window-height
 # winezgui-get-window-height ${#FILES[@]}
