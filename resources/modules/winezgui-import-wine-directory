@@ -248,9 +248,8 @@ fi
   #### !!! This needs an already created script file, so create one then run this
 
   # To get the current scriptfile too in the list
-  rm "${PREFIXDIR}/found-exe-files.yml"
-  touch "${PREFIXDIR}/found-exe-files.yml"
-  
+  rm "${PREFIXDIR}/*found-exe*.yml"
+
   # re-enable after script and info.yml is created properly
   SOURCE "script-create-shortcuts-for-found-exes"
   script-create-shortcuts-for-found-exes 
