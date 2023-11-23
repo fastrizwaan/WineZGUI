@@ -22,7 +22,7 @@ script-create-shortcuts-for-found-exes()
  # and common exe files present in Program Files directory
  # Add those files to FILES array and filenames to NAMES array
  SOURCE script-get-installed-exe-files
- k hh9u
+ 
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
 
