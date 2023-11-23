@@ -246,9 +246,9 @@ export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
 
 # Load file with dbug function
 if [ -f \"${DATADIR}/winezgui-source\" ]; then
-   source \"${DATADIR}/winezgui-source\"
+   source \"\${DATADIR}/winezgui-source\"
 else
-   source \"${WINEZGUI_SCRIPTS}/winezgui-source\"
+   source \"\${WINEZGUI_SCRIPTS}/winezgui-source\"
 fi
 SOURCE winezgui-dbug
 
@@ -260,7 +260,7 @@ else
 fi
 " > "${SCRIPTFILE}"
 echo "
-SOURCE \script-list-available-launch-shortcuts
+SOURCE script-list-available-launch-shortcuts
 script-list-available-launch-shortcuts \${PREFIXDIR}
 \"\${SELECTED_SCRIPT}\" &
 exit 0
