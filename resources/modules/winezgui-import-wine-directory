@@ -10,7 +10,7 @@ winezgui-import-wine-directory()
   IMPORT_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
   if [ -z "${IMPORT_DIR}" ]; then
       dbug "I: Script: ${FUNCNAME[0]}: Select import directory: Cancelled!"
-      Script_Window
+      return 1
   fi
 
   # Get the name from full path
