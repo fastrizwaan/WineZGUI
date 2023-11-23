@@ -70,7 +70,8 @@
      Game-WineZGUI-0.97.15-Game-Bundle-flatpak-WineZGUI-2023-11-23_1551.wzt to
      Game-WineZGUI-0.97.15-Game-Bundle-2023-11-23_1551.wzt
 -[x] do not delete script and desktop file for import-wine-directory
--[] delete script and desktpo file for setup/installer only (use if to check for setup and install)
+-[] ask whether to delete the setup script
+-[] delete script and desktoo file for setup/installer only (use if to check for setup and install)
 0.97.16
 - [x] Import Wine directory (from wine/playonlinux/bottles/etc.)
       - [x] import directory

@@ -171,8 +171,6 @@ echo "$search_list"
       "${S_SCRIPTFILE}" &
       # Delete setup script
 
-      #### ISSUE WITH SETUP FILE VS IMPORT-GAME-DIRECTORY
-      # do not remove 
       #rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 
       # Remove empty .desktop shortcuts from applications directory
@@ -185,7 +183,14 @@ echo "$search_list"
  # Remove desktop file, perhaps user may relaunch setup
  #### ISSUE WITH SETUP FILE VS IMPORT-GAME-DIRECTORY
  # do not remove 
- #rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+
+ # We are deleting the script and desktop file if it has setup/install substring in it.
+ TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test   
+ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
+    [[ "${TEST_NAME}" == *"install"* ]] ; then
+    rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+ fi
+
 
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
