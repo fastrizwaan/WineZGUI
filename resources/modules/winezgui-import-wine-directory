@@ -137,7 +137,7 @@ winezgui-import-wine-directory()
  # mkdir -p "${PREFIXDIR}"
 
  # 4.5 copying works
-  (cp -arv "${IMPORT_DIR}" "${PREFIXDIR}") |\
+  (cp -rv "${IMPORT_DIR}" "${PREFIXDIR}") |\
   ${ZENITY_CMD}  --progress --pulsate --auto-close \
               --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
               --width=500 --title="Importing..."
