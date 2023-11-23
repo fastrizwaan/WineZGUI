@@ -56,15 +56,22 @@ winezgui-import-wine-directory()
   fi
   
   # 4.3 Confirm
-  ${ZENITY_CMD} --question --no-wrap --title="Import ${IMPORT_BASENAME} to ${PREFIXNAME}?" \
-              --text "This will copy all files from ${IMPORT_BASENAME} to ${PREFIXNAME}\nContinue..?"
+  TEXTMSG=()
+  TEXTMSG+="Importing wine directory from Bottles or PlayonLinux flatpak?\n"
+  TEXTMSG+="Press Alt+f2 or in a terminal, run:"
+  TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
+  TEXTMSG+="\n\n"
+  TEXTMSG+="This will copy all files from ${IMPORT_BASENAME} to ${PREFIXNAME}\nContinue..?"
+  ${ZENITY_CMD} --question --no-wrap \
+                --title="Import ${IMPORT_BASENAME} to ${PREFIXNAME}?" \
+                --text "${TEXTMSG}"
        ANSWER=$?
        # 1.1 If user selects no or cancels to locate exe file
        if [ ${ANSWER} -eq 1 ]; then
             dbug "I: Script: Import: User Cancelled!"
             return 1  # Return to Script window
        fi
-
+  unset TEXTMSG
   # 4.4 TEST IMPORTDIR SIZE
   # CHECK WINEZGUI AVAILABLE SPACE BEFORE COPYING
   # COPY FILES AND
