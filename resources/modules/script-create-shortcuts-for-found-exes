@@ -23,7 +23,7 @@ script-create-shortcuts-for-found-exes()
  # Add those files to FILES array and filenames to NAMES array
  SOURCE script-get-installed-exe-files
  script-get-installed-exe-files
- 
+
  EXE_LIST="${EXE_FILES_FOUND}"
  search_list=$(echo "${EXE_LIST}"|tr "\n" "|")
 
@@ -186,12 +186,16 @@ echo "$search_list"
  # do not remove 
 
  # We are deleting the script and desktop file if it has setup/install substring in it.
- TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test   
+ TEST_NAME=$(basename "${SCRIPTFILE}"| tr [A-Z] [a-z]) # Change case to test   
+ echo "===> TEST_NAME = $TEST_NAME"
  if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
     [[ "${TEST_NAME}" == *"install"* ]] ; then
+    echo "===>"
+    echo "===> Deleted ${SCRIPTFILE}"
+    echo "===>"
     rm "${DESKTOPFILE}" "${SCRIPTFILE}"
  fi
-
+sleep 5s;
 
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
