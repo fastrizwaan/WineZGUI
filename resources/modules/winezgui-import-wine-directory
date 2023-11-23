@@ -205,7 +205,7 @@ INFOFILE="${PREFIXDIR}/Info.yml"
 
 if [ ! -f "${INFOFILE}" ]; then
      #  Insert Data into Info.yml
-     SCRIPTFILE="${PREFIXDIR}/${PREFIXNAME}.sh"
+     SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
      PROGNAME=$(grep "export PROGNAME" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
      CHECKSUM=$(grep "export CHECKSUM" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
      ICONFILE=$(grep "export ICONFILE" ${SCRIPTFILE}|cut -f2 -d "="|sed "s/\"//g")
