@@ -162,22 +162,7 @@ winezgui-import-wine-directory()
 
   fi
   # Add Checksum to prefixdir as suffix here !!!
- # mkdir -p "${PREFIXDIR}"
-
- # 4.5 copying works
-  (cp -arv "${IMPORT_DIR}" "${PREFIXDIR}") |\
-  ${ZENITY_CMD}  --progress --pulsate --auto-close \
-              --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
-              --width=500 --title="Importing..."
-
- # 4.6 Get exe file using drive_c/../../game.exe
-   EXE_INSIDE_DRIVE_C="${SELECTED_EXE##*drive_c/}"
-   EXE_FILE="${PREFIXDIR}/drive_c/${EXE_INSIDE_DRIVE_C}"
-# 4.7 create prefix using winezgui-create-prefix
-  WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
-  ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
-
-# 4.8 setup/install will have 10 digit sha256sum value suffixed
+  # 4.8 setup/install will have 10 digit sha256sum value suffixed
 echo "============================================ x ========================"
 TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
 if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
@@ -197,6 +182,22 @@ else
      export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      export PREFIXNAME="${EXE_NOEXE}"
 fi
+
+ # mkdir -p "${PREFIXDIR}"
+
+ # 4.5 copying works
+  (cp -arv "${IMPORT_DIR}" "${PREFIXDIR}") |\
+  ${ZENITY_CMD}  --progress --pulsate --auto-close \
+              --text="Copying ${IMPORT_BASENAME} to ${PREFIXNAME}...!" \
+              --width=500 --title="Importing..."
+
+ # 4.6 Get exe file using drive_c/../../game.exe
+   EXE_INSIDE_DRIVE_C="${SELECTED_EXE##*drive_c/}"
+   EXE_FILE="${PREFIXDIR}/drive_c/${EXE_INSIDE_DRIVE_C}"
+# 4.7 create prefix using winezgui-create-prefix
+  WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
+  ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
+
 
 # 4.8 Create INFOFILE for imported wine directory
 # Create Metadata Info.yml for the prefix
