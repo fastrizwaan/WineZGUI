@@ -54,13 +54,32 @@ winezgui-import-wine-directory()
             --text "${PREFIXES_DIR} is not writable\nAborting import wine into prefix!"
       return 1
   fi
-  
+
+
+  # Inform user if user is trying to import from ~/.var/app (like bottles)
+  unset TEXTMSG
+  if [[ "$IMPORT_DIR" == *".var/app"* ]]; then 
+     TEXTMSG=()
+     TEXTMSG+="Importing wine directory from Bottles or PlayonLinux flatpak?\n"
+     TEXTMSG+="Press Alt+f2 or in a terminal,\nrun:\n"
+     TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
+     TEXTMSG+="\n\n"
+     TEXTMSG+="If the above permission is not given, copying will fail, continue?"
+     
+     ${ZENITY_CMD} --question --no-wrap \
+                   --title="Import ${IMPORT_BASENAME} from a flatpak app?" \
+                   --text "${TEXTMSG}"
+     ANSWER=$?
+     # 1.1 If user selects no or cancels to locate exe file
+     if [ ${ANSWER} -eq 1 ]; then
+          dbug "I: Script: Import: User Cancelled!"
+          return 1  # Return to Script window
+     fi
+  fi
+
   # 4.3 Confirm
+  unset TEXTMSG
   TEXTMSG=()
-  TEXTMSG+="Importing wine directory from Bottles or PlayonLinux flatpak?\n"
-  TEXTMSG+="Press Alt+f2 or in a terminal, run:"
-  TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
-  TEXTMSG+="\n\n"
   TEXTMSG+="This will copy all files from ${IMPORT_BASENAME} to ${PREFIXNAME}\nContinue..?"
   ${ZENITY_CMD} --question --no-wrap \
                 --title="Import ${IMPORT_BASENAME} to ${PREFIXNAME}?" \
