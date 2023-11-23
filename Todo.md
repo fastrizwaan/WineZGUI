@@ -63,7 +63,12 @@
       - [ ] run   
   
   [ ] After Recreate All Scripts, do all tests
-
+0.97.17
+- [x] On cancelling import wine directory return, do not throw error for system.reg
+- [] Add help for missing modules
+- [] Reduce Backup name from 
+     Game-WineZGUI-0.97.15-Game-Bundle-flatpak-WineZGUI-2023-11-23_1551.wzt to
+     Game-WineZGUI-0.97.15-Game-Bundle-2023-11-23_1551.wzt
 0.97.16
 - [x] Import Wine directory (from wine/playonlinux/bottles/etc.)
       - [x] import directory
