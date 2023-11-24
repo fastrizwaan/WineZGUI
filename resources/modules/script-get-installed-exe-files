@@ -28,14 +28,17 @@ script-get-installed-exe-files()
                    -o -iname "UnityCrashHand*.exe"   \
                    -o -iname "CrashReportClient.exe" \
                    -o -iname "installericon.exe"     \
-                   -o -iname "dwtrig20.exe"          \
+                   -o -iname "dwtrig*.exe"           \
+                   -o -iname "audiowaveform*.exe"    \
+                   -o -iname "ffmpeg*.exe"           \
+                   -o -iname "ffprobe*.exe"          \
                    -o -iname "dx*setup.exe"          \
                    -o -iname "*vshost.exe"           \
                    -o -iname "*mgcb.exe"             \
                    -o -iname "cls-lolz*.exe"         \
                    -o -iname "cls-srep*.exe"         \
                    -o -iname "directx*.exe"          \
-                   -o -iname "UnrealCEFSubProcess.exe" \
+                   -o -iname "UnrealCEFSubProc*.exe" \
                    -o -iname "UE4PrereqSetup*.exe"   \
                    -o -iname "dotnet*.exe"           \
                    -o -iname "oalinst.exe"           \
