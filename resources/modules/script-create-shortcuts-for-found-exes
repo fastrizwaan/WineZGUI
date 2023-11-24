@@ -171,9 +171,9 @@ echo "$search_list"
       "${S_SCRIPTFILE}" &
       # Delete setup script
       rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-      cp "${S_SCRIPTFILE}" "${SCRIPTFILE}"
-      cp "${S_DESKTOPFILE}" "${DESKTOPFILE}"
-      cp "${S_INFOFILE}" "${INFOFILE}"
+      ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
+      #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
+      ln -sf "${S_INFOFILE}" "${INFOFILE}"
       # Remove empty .desktop shortcuts from applications directory
 
       exit 0
