@@ -96,8 +96,14 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      echo "PREFIXNAME=$PREFIXNAME"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
 else
-     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
-     export PREFIXNAME="${EXE_NOEXE}"
+     x=$(sha256sum "${EXE_FILE}")
+     EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+     SHASUM10CHARS=${x:0:10}
+     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     # export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
+     # export PREFIXNAME="${EXE_NOEXE}"
 fi
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
