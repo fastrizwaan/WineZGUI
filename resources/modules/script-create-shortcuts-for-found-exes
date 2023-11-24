@@ -171,7 +171,9 @@ echo "$search_list"
       "${S_SCRIPTFILE}" &
       # Delete setup script
       rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-
+      cp "${S_SCRIPTFILE}" "${SCRIPTFILE}"
+      cp "${S_DESKTOPFILE}" "${DESKTOPFILE}"
+      cp "${S_INFOFILE}" "${INFOFILE}"
       # Remove empty .desktop shortcuts from applications directory
 
       exit 0
@@ -180,76 +182,83 @@ echo "$search_list"
  # We do not need setup file again, so remove the shortcut to the setup file
  # after a single or multiple exes found
  # Remove desktop file, perhaps user may relaunch setup
- rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-
+ # 1. removing the setup/install script and desktop file
+ rm "${DESKTOPFILE}"   "${SCRIPTFILE}"
+ # 2. Copying the last created S_Scriptfile to Scriptfile
+ cp "${S_SCRIPTFILE}"  "${SCRIPTFILE}"
+ cp "${S_DESKTOPFILE}" "${DESKTOPFILE}"
+ cp "${S_INFOFILE}"    "${INFOFILE}"
+ # 3. Remove the S_Scriptfile and S_Desktopfile (as it was already copied to Scriptfile and desktopfile)
+ rm "${S_DESKTOPFILE}"   "${S_SCRIPTFILE}"
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
 
- # Replace Script file with multiple open dialog
- # need variables from this script
-echo "
-#!/bin/bash
-export PATH=\"${PATH}\"
-export APPNAME=\"${APPNAME}\"
-export FLATPAK_NAME=\"${FLATPAK_NAME}\"
-export APPVERSION=\"${APPVERSION}\"
-export APP_WITH_VER=\"${APPNAME}-${APPVERSION}\"
-export WINEVER=\"${WINEVER}\"
-export WINEARCH=\"${WINEARCH}\"
-export PROGNAME=\"${PROGNAME}\"
-export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
-export WINEZGUIDIR=\"${WINEZGUIDIR}\"
-export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
-export PREFIXNAME=\"${EXE_LESS}\"
-export EXE_FILE=\"${EXE_FILE}\"
-export EXE_NAME=\"${EXE_NAME}\"
-export CHECKSUM=\"${CHECKSUM}\"
-export EXE_PATH=\"${EXE_PATH}\"
-export EXE_NOSP=\"${EXE_NOSP}\"
-export EXE_LESS=\"${EXE_LESS}\"
-export EXE_EXT=\"${EXE_FILE##*.}\"
-export PREFIXDIR=\"${PREFIXDIR}\"
-export WINEPREFIX=\"${PREFIXDIR}\"
-export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
-export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
-export DATADIR=\"${DATADIR}\"
-export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
-#export DEXSKTOPDIR=\"${DEXSKTOPDIR}\"
-export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
-export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
-export EXIFTOOL=\"\$(which exiftool)\"
-# winezgui backup file extension
-export BKP_EXT=\"${BKP_EXT}\"
+## NEW: Stop creating a script file with all the list.
+#  # Replace Script file with multiple open dialog
+#  # need variables from this script
+# echo "
+# #!/bin/bash
+# export PATH=\"${PATH}\"
+# export APPNAME=\"${APPNAME}\"
+# export FLATPAK_NAME=\"${FLATPAK_NAME}\"
+# export APPVERSION=\"${APPVERSION}\"
+# export APP_WITH_VER=\"${APPNAME}-${APPVERSION}\"
+# export WINEVER=\"${WINEVER}\"
+# export WINEARCH=\"${WINEARCH}\"
+# export PROGNAME=\"${PROGNAME}\"
+# export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
+# export WINEZGUIDIR=\"${WINEZGUIDIR}\"
+# export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
+# export PREFIXNAME=\"${EXE_LESS}\"
+# export EXE_FILE=\"${EXE_FILE}\"
+# export EXE_NAME=\"${EXE_NAME}\"
+# export CHECKSUM=\"${CHECKSUM}\"
+# export EXE_PATH=\"${EXE_PATH}\"
+# export EXE_NOSP=\"${EXE_NOSP}\"
+# export EXE_LESS=\"${EXE_LESS}\"
+# export EXE_EXT=\"${EXE_FILE##*.}\"
+# export PREFIXDIR=\"${PREFIXDIR}\"
+# export WINEPREFIX=\"${PREFIXDIR}\"
+# export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
+# export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
+# export DATADIR=\"${DATADIR}\"
+# export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
+# #export DEXSKTOPDIR=\"${DEXSKTOPDIR}\"
+# export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
+# export UPDATE_DESKTOP_DATABASE=\"${UPDATE_DESKTOP_DATABASE}\"
+# export EXIFTOOL=\"\$(which exiftool)\"
+# # winezgui backup file extension
+# export BKP_EXT=\"${BKP_EXT}\"
 
-# Files
-export INFOFILE=\"${PREFIXDIR}/Info.yml\"
-export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
-export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
-export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
+# # Files
+# export INFOFILE=\"${PREFIXDIR}/Info.yml\"
+# export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
+# export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
+# export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
 
 
-# Load file with dbug function
-if [ -f \"${DATADIR}/winezgui-source\" ]; then
-   source \"\${DATADIR}/winezgui-source\"
-else
-   source \"\${WINEZGUI_SCRIPTS}/winezgui-source\"
-fi
-SOURCE winezgui-dbug
+# # Load file with dbug function
+# if [ -f \"${DATADIR}/winezgui-source\" ]; then
+#    source \"\${DATADIR}/winezgui-source\"
+# else
+#    source \"\${WINEZGUI_SCRIPTS}/winezgui-source\"
+# fi
+# SOURCE winezgui-dbug
 
-# if icon is found grep it
-if [ -f \"${ICONFILE}\" ]; then
-     export ICON=\"\$(grep Icon \${DESKTOPFILE}|cut -f2 -d \"=\")\"
-else
-     export ICON="null"
-fi
-" > "${SCRIPTFILE}"
-echo "
-SOURCE script-list-available-launch-shortcuts
-script-list-available-launch-shortcuts \${PREFIXDIR}
-\"\${SELECTED_SCRIPT}\" &
-exit 0
-" >> "${SCRIPTFILE}"
+# # if icon is found grep it
+# if [ -f \"${ICONFILE}\" ]; then
+#      export ICON=\"\$(grep Icon \${DESKTOPFILE}|cut -f2 -d \"=\")\"
+# else
+#      export ICON="null"
+# fi
+# " > "${SCRIPTFILE}"
+# echo "
+# SOURCE script-list-available-launch-shortcuts
+# script-list-available-launch-shortcuts \${PREFIXDIR}
+# \"\${SELECTED_SCRIPT}\" &
+# exit 0
+# " >> "${SCRIPTFILE}"
 
 chmod +rx "${SCRIPTFILE}"
  
