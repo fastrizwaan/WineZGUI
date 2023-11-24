@@ -251,7 +251,7 @@ fi
 #  rm "${PREFIXDIR}/*found-exe*.yml"
   # Show no guarantee
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" \
-  --text "Copied $IMPORTDIR\nto $PREFIXDIR!\n<b>There is NO GUARANTEE that the IMPORTED GAME WILL WORK!"
+  --text "Copied $IMPORTDIR\nto $PREFIXDIR!\n<b>There is NO GUARANTEE that the IMPORTED GAME WILL WORK!</b>"
 
   # re-enable after script and info.yml is created properly
   SOURCE "winezgui-import-wine-create-shortcuts-for-found-exes"
