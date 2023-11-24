@@ -62,11 +62,12 @@ winezgui-import-wine-directory()
   unset TEXTMSG
   if [[ "${IMPORT_DIR}" == *".var/app"* ]] || [[ "${IMPORT_DIR}" == *"run/user"* ]] ; then
      TEXTMSG=()
-     TEXTMSG+="Importing wine directory from Bottles or PlayonLinux flatpak?\n"
+     TEXTMSG+="Importing wine directory from flatpaked Bottles or PlayonLinux or wine?\n"
      TEXTMSG+="Press Alt+f2 or in a terminal,\nrun:\n"
      TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
      TEXTMSG+="\n\n"
-     TEXTMSG+="If the above permission is not given, copying will fail, continue?"
+     TEXTMSG+="and <b>restart WineZGUI</b>!\n"
+     TEXTMSG+="If the above permission is already given, then continue, else copying will fail, continue?"
      
      ${ZENITY_CMD} --question --no-wrap \
                    --title="Import ${IMPORT_BASENAME} from a flatpak app?" \
