@@ -60,7 +60,7 @@ winezgui-import-wine-directory()
 
   # Inform user if user is trying to import from ~/.var/app (like bottles)
   unset TEXTMSG
-  if [[ "$IMPORT_DIR" == *".var/app"* ]]; then 
+  if [[ "${IMPORT_DIR}" == *".var/app"* ]] ||  if [[ "${IMPORT_DIR}" == *"run/user"* ]] ; then
      TEXTMSG=()
      TEXTMSG+="Importing wine directory from Bottles or PlayonLinux flatpak?\n"
      TEXTMSG+="Press Alt+f2 or in a terminal,\nrun:\n"
