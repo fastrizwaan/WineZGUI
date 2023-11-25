@@ -170,10 +170,12 @@ echo "$search_list"
       # Launch the single one
       "${S_SCRIPTFILE}" &
       # Delete setup script
-      rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-      ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
+      
       #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
-      ln -sf "${S_INFOFILE}" "${INFOFILE}"
+      # NOT DELETING THE SCRIPT FILE
+      #rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      #ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
+      #ln -sf "${S_INFOFILE}" "${INFOFILE}"
       # Remove empty .desktop shortcuts from applications directory
       # Remove empty .desktop shortcuts from applications directory
       find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
@@ -186,10 +188,11 @@ echo "$search_list"
  # after a single or multiple exes found
  # Remove desktop file, perhaps user may relaunch setup
  # 1. removing the setup/install script and desktop file
- rm "${DESKTOPFILE}" "${SCRIPTFILE}"
- ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
- #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
- ln -sf "${S_INFOFILE}" "${INFOFILE}"
+ # NOT DELETING THE SCRIPT FILE
+#  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+#  ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
+#  #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
+#  ln -sf "${S_INFOFILE}" "${INFOFILE}"
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
  ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
