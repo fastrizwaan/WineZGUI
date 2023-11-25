@@ -91,6 +91,9 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      SHASUM10CHARS=${x:0:10}
      export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
      export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     export ICONFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.png"
+     export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.sh"
+     export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.desktop"
      echo "x=$x"
      echo "PREFIXDIR=$PREFIXDIR"
      echo "PREFIXNAME=$PREFIXNAME"
@@ -102,16 +105,15 @@ else
      SHASUM10CHARS=${x:0:10}
      export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
      export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
+     export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
+     export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
      # export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      # export PREFIXNAME="${EXE_NOEXE}"
 fi
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
 export INFOFILE="${PREFIXDIR}/Info.yml"
-export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
-export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
-export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
-
 ICON="${ICONFILE}"
 
 # If argument is not an exe file, then quit
