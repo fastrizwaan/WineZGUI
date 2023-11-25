@@ -80,7 +80,7 @@ export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
 
 # setup.exe/installer.exe needs to have different directory
 # 
-echo "============================================ x ========================"
+echo "====================================== WINEZGUI-CREATE-PREFIX ========================"
 TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
 if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
    [[ "${TEST_NAME}" == *"install"* ]] ; then

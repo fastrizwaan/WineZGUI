@@ -63,6 +63,7 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
      export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export SCRIPT_NAME="${EXE_LESS}-${SHASUM10CHARS}.sh"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
 else
@@ -71,14 +72,14 @@ else
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
      export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export SCRIPT_NAME="${EXE_LESS}.sh"
      #export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"  
 fi
 
   # Create temporary variables for this function
   
-  SCRIPT_NAME="${EXE_LESS}.sh"
-  SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
+  export SCRIPT_FILE_TO_RUN="${WINEPREFIX_SUBDIR}/${SCRIPT_NAME}"
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
   dbug "I: ${HEADER}: Checking whether ${SCRIPT_FILE_TO_RUN} exists."
   
