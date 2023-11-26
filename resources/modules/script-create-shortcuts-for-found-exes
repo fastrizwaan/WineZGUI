@@ -59,6 +59,39 @@ echo "$search_list"
      export S_EXE_LESS=$(echo ${S_EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
      export S_EXE_EXT="${S_EXE_FILE##*.}"
      
+
+     echo "====================================== WINEZGUI-CREATE-PREFIX ========================"
+TEST_NAME=$(echo "${EXE_NAME}"| tr [A-Z] [a-z]) # Change case to test
+if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
+   [[ "${TEST_NAME}" == *"install"* ]] ; then
+     dbug "I: Script: Using sha256sum of the exe"
+     x=$(sha256sum "${EXE_FILE}")
+     EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+     SHASUM10CHARS=${x:0:10}
+     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     export ICONFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.png"
+     export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.sh"
+     export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.desktop"
+     echo "x=$x"
+     echo "PREFIXDIR=$PREFIXDIR"
+     echo "PREFIXNAME=$PREFIXNAME"
+     echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+else
+     x=$(sha256sum "${EXE_FILE}")
+     EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+     SHASUM10CHARS=${x:0:10}
+     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
+     export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
+     export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
+     # export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
+     # export PREFIXNAME="${EXE_NOEXE}"
+fi
+
      # Files
      export S_INFOFILE="${PREFIXDIR}/${S_EXE_LESS}_Info.yml"
      export S_ICONFILE="${PREFIXDIR}/${S_EXE_LESS}.png"
@@ -174,7 +207,7 @@ echo "$search_list"
       #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
       # NOT DELETING THE SCRIPT FILE
       #rm "${DESKTOPFILE}" "${SCRIPTFILE}"
-      rm "${DESKTOPFILE}"
+      rm -v "${DESKTOPFILE}"
       #ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
       #ln -sf "${S_INFOFILE}" "${INFOFILE}"
       # Remove empty .desktop shortcuts from applications directory
@@ -203,8 +236,8 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      export SCRIPT_NAME="${EXE_LESS}-${SHASUM10CHARS}.sh"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
-
-    rm "${DESKTOPFILE}"
+    DESKTOPFILE="${EXE_LESS}-${SHASUM10CHARS}.desktop
+    rm -v "${DESKTOPFILE}"
 fi
 
 #  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
