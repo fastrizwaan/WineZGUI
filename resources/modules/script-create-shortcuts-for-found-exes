@@ -174,6 +174,7 @@ echo "$search_list"
       #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
       # NOT DELETING THE SCRIPT FILE
       #rm "${DESKTOPFILE}" "${SCRIPTFILE}"
+      rm "${DESKTOPFILE}"
       #ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
       #ln -sf "${S_INFOFILE}" "${INFOFILE}"
       # Remove empty .desktop shortcuts from applications directory
@@ -188,7 +189,24 @@ echo "$search_list"
  # after a single or multiple exes found
  # Remove desktop file, perhaps user may relaunch setup
  # 1. removing the setup/install script and desktop file
- # NOT DELETING THE SCRIPT FILE
+ # If it is a setup file delete the shortcut to it
+ echo "============================================ x ========================"
+TEST_NAME=$(echo "${SCRIPTFILE}"| tr [A-Z] [a-z]) # Change case to test
+if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
+   [[ "${TEST_NAME}" == *"install"* ]] ; then
+     dbug "I: Script: Using sha256sum of the exe"
+     x=$(sha256sum "${EXE_FILE}")
+     EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
+                                                  |sed "s/\.[eE][Xx][Ee]//g")
+     SHASUM10CHARS=${x:0:10}
+     export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     export SCRIPT_NAME="${EXE_LESS}-${SHASUM10CHARS}.sh"
+     echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
+     echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+
+    rm "${DESKTOPFILE}"
+fi
+
 #  rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 #  ln -sf "${S_SCRIPTFILE}" "${SCRIPTFILE}"
 #  #ln -sf "${S_DESKTOPFILE}" "${DESKTOPFILE}"
