@@ -136,7 +136,8 @@ script-backup-bundle()
       unset FILENAME
       FILENAME+="${PROGNAME}-${APP_WITH_VER}"
       FILENAME+="-Game-Bundle-"
-      FILENAME+="${SHORT_FLATPAK_NAME}"
+      # Do not use flatpak name in wzt file
+      #FILENAME+="${SHORT_FLATPAK_NAME}"
       FILENAME+="-${DATE}"
       FILENAME+=".${BKP_EXT}"
       # Game-WineZGUI-0.87-Game-Bundle-wine-7.0-20220904_2359.wzt

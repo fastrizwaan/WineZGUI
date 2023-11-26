@@ -63,15 +63,21 @@
       - [ ] run   
   
   [ ] After Recreate All Scripts, do all tests
-0.97.17
+
+0.98.0
+- [] import wine directory with single exe
+- [] import wine directory with multiple exe
+- [] prefix dir should have sha10chars suffix for prefixdir and scriptfile
+- [] delete script and desktoo file for setup/installer only (use if to check for setup and install)
+- [] only delete script file for installer/setup to remove setup shortcut after install to reduce clutter
+
 - [x] On cancelling import wine directory return, do not throw error for system.reg
 - [] Add help for missing modules
-- [] Reduce Backup name from 
+- [x] Reduce Backup name from 
      Game-WineZGUI-0.97.15-Game-Bundle-flatpak-WineZGUI-2023-11-23_1551.wzt to
      Game-WineZGUI-0.97.15-Game-Bundle-2023-11-23_1551.wzt
+     for both bundle and prefix
 -[x] do not delete script and desktop file for import-wine-directory
--[] ask whether to delete the setup script
--[] delete script and desktoo file for setup/installer only (use if to check for setup and install)
 0.97.16
 - [x] Import Wine directory (from wine/playonlinux/bottles/etc.)
       - [x] import directory
