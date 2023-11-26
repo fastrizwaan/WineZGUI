@@ -135,7 +135,7 @@ script-backup-bundle()
       fi
       unset FILENAME
       FILENAME+="${PROGNAME}-${APP_WITH_VER}"
-      FILENAME+="-Game-Bundle-"
+      FILENAME+="-Game-Bundle"
       # Do not use flatpak name in wzt file
       #FILENAME+="${SHORT_FLATPAK_NAME}"
       FILENAME+="-${DATE}"

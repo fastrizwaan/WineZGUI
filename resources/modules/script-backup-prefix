@@ -32,7 +32,7 @@ script-backup-prefix()
        fi
        unset FILENAME 
        FILENAME+="${PROGNAME}-${APP_WITH_VER}"
-       FILENAME+="-Prefix-Backup-"
+       FILENAME+="-Prefix-Backup"
        # Do not use flatpak name in wzt file
      #   FILENAME+="${SHORT_FLATPAK_NAME}"
        FILENAME+="-${DATE}"
