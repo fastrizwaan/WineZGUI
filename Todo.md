@@ -65,19 +65,26 @@
   [ ] After Recreate All Scripts, do all tests
 
 0.98.0
+- [] TEST IMPORT AND INSTALL OF EXE and IMPORT GAMEDIR and WINE DIR import
 - [] import wine directory with single exe
 - [] import wine directory with multiple exe
+- [] create prefix with single EXE
+- [] import game dir into prefix
+- [] create prefix with installer (single exe) (sheepo)
+- [] create prefix with installer (multipe exes) (putty)
+
 - [] prefix dir should have sha10chars suffix for prefixdir and scriptfile
 - [] delete script and desktoo file for setup/installer only (use if to check for setup and install)
 - [] only delete script file for installer/setup to remove setup shortcut after install to reduce clutter
+- [] Add help for missing modules
 
 - [x] On cancelling import wine directory return, do not throw error for system.reg
-- [] Add help for missing modules
 - [x] Reduce Backup name from 
      Game-WineZGUI-0.97.15-Game-Bundle-flatpak-WineZGUI-2023-11-23_1551.wzt to
      Game-WineZGUI-0.97.15-Game-Bundle-2023-11-23_1551.wzt
      for both bundle and prefix
 -[x] do not delete script and desktop file for import-wine-directory
+
 0.97.16
 - [x] Import Wine directory (from wine/playonlinux/bottles/etc.)
       - [x] import directory
