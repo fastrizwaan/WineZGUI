@@ -236,7 +236,7 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      export SCRIPT_NAME="${EXE_LESS}-${SHASUM10CHARS}.sh"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
-    DESKTOPFILE="${EXE_LESS}-${SHASUM10CHARS}.desktop
+    DESKTOPFILE="${EXE_LESS}-${SHASUM10CHARS}.desktop"
     rm -v "${DESKTOPFILE}"
 fi
 
