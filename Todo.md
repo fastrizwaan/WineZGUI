@@ -70,7 +70,7 @@
 - [] import wine directory with multiple exe
 - [] create prefix with single EXE
 - [] import game dir into prefix
-- [] create prefix with installer (single exe) (sheepo)
+- [x] create prefix with installer (single exe) (backpack hero)
 - [x] create prefix with installer (multipe exes) (putty)
 
 - [] prefix dir should have sha10chars suffix for prefixdir and scriptfile

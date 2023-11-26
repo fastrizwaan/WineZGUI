@@ -29,7 +29,6 @@ script-get-installed-exe-files()
                    -o -iname "CrashReportClient.exe" \
                    -o -iname "installericon.exe"     \
                    -o -iname "dwtrig*.exe"           \
-                   -o -iname "audiowaveform*.exe"    \
                    -o -iname "ffmpeg*.exe"           \
                    -o -iname "ffprobe*.exe"          \
                    -o -iname "dx*setup.exe"          \
