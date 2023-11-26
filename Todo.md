@@ -71,7 +71,7 @@
 - [] create prefix with single EXE
 - [] import game dir into prefix
 - [] create prefix with installer (single exe) (sheepo)
-- [] create prefix with installer (multipe exes) (putty)
+- [x] create prefix with installer (multipe exes) (putty)
 
 - [] prefix dir should have sha10chars suffix for prefixdir and scriptfile
 - [] delete script and desktoo file for setup/installer only (use if to check for setup and install)
