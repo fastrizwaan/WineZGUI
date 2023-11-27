@@ -43,8 +43,15 @@ winezgui-recreate-prefix-scripts()
   
   if [ -z "${exe_found}" ] ; then
        ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Prefix!" \
-              --text "Prefixes directory empty.\nUse \"Open exe...\" to install!"
-       WineZGUI_Window
+              --text "Cannot find Scriptfile for the Prefix directory!"
+       #WineZGUI_Window
+       echo "ERROR: Can't get exe_found List"
+       echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+       echo "search_list = $search_list"
+       echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+       echo "exe_found = $exe_found"
+       sleep 10s;
+
   fi
   # if exe_found has value, then only change exe
   for i in $(echo ${search_list}|tr '|' '\n'|sort)
