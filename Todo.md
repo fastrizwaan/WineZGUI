@@ -65,17 +65,20 @@
   [ ] After Recreate All Scripts, do all tests
 
 0.98.0
-- [] TEST IMPORT AND INSTALL OF EXE and IMPORT GAMEDIR and WINE DIR import
-- [] import wine directory with single exe
-- [] import wine directory with multiple exe
-- [] create prefix with single EXE
-- [] import game dir into prefix
+- [] add exe folder like putty or gw3.exe and check whether it creates new shortcuts? not creating
+- [] install wzt and update and test
+- [x] TEST IMPORT AND INSTALL OF EXE and IMPORT GAMEDIR and WINE DIR import
+- [x] import wine directory with single exe
+- [x] import wine directory with multiple exe
+- [and scriptfilex] create prefix with single EXE
+- [x] import game dir into prefix (single exe) (gw3.exe)
+- [x] imort game dir with multiple exes (gw3.exe + putty directory)
 - [x] create prefix with installer (single exe) (backpack hero)
 - [x] create prefix with installer (multipe exes) (putty)
 
-- [] prefix dir should have sha10chars suffix for prefixdir and scriptfile
-- [] delete script and desktoo file for setup/installer only (use if to check for setup and install)
-- [] only delete script file for installer/setup to remove setup shortcut after install to reduce clutter
+- [x] prefix dir should have sha10chars suffix for prefixdir 
+- [x] delete script and desktoo file for setup/installer only (use if to check for setup and install)
+- [x] only delete script file for installer/setup to remove setup shortcut after install to reduce clutter
 - [] Add help for missing modules
 
 - [x] On cancelling import wine directory return, do not throw error for system.reg
