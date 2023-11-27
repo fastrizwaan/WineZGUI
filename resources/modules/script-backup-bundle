@@ -130,7 +130,7 @@ script-backup-bundle()
   if [ "${INSTALL_TYPE}" = "flatpak" ]; then
       # If "flatpak-" is not part of flatpak name
       # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
-      if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+      if [[ "$SHORT_FLATPAK_NAME" != *"flatpak-"* ]]; then
             SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
       fi
       unset FILENAME
@@ -218,7 +218,7 @@ script-backup-bundle()
   # Step 5.2 Required extension is .${BKP_EXT} i.e., .wzt, if not found add it
   dbug "I: Script: ${FUNCNAME[0]}: Given ${BACKUP_FILE}"
 
-  if ! [[ "${BACKUP_FILE}" == *".${BKP_EXT}" ]]; then
+  if [[ "${BACKUP_FILE}" != *".${BKP_EXT}" ]]; then
       BACKUP_FILE="$(echo ${BACKUP_FILE}.${BKP_EXT})"
       dbug "I: Script: ${FUNCNAME[0]}: added suffix ${BKP_EXT}"
   fi
@@ -291,7 +291,7 @@ script-backup-bundle()
 
   # 7.0
   # If gamedir is outside prefixdir, bundle the gamedir
-  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+  if [[ "${EXE_FILE}" != *"${PREFIXDIR}"* ]] ; then
       # Do not include GAMEDIR separately when it is already inside prefix
       # tar would need these 2 variables to bundle gamedir into tar archive
 
@@ -456,7 +456,7 @@ script-backup-bundle()
   # 7.8 Revert Change of EXE_FILE and EXE_PATH by Create Game Bundle Option
   # Change EXE path and name in the script and txt file for the bundle change
   # revert EXE_FILE and EXE_PATH for the gamedir which is outside prefixdir
-  if ! [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
+  if [[ "${EXE_FILE}" != *"${PREFIXDIR}"* ]] ; then
       sed "s|${GAME_EXE_PATH}|${EXE_PATH}|g; t;"  \
             -i ${PREFIXDIR}/*.txt       \
             -i ${PREFIXDIR}/*.sh        \
