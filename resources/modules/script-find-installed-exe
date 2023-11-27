@@ -78,7 +78,7 @@ script-find-installed-exe()
             dbug "I: Script: Find Exe: New exe files found!"
             # Ask use to Change the EXE for Installer
             unset TEXT
-            TEXT+="New exe files <b>found</b>, Create Shortcut for it and Launch?"
+            TEXT+="New exe files <b>found</b>, Create Shortcut for it to Launch?"
             TEXT+="\\n<i>Default exe can be set using Change Exe...</i>"
             TEXT+="\\n<i>Shortcut to this exe can be set using WineZGUI->More->Shortcuts->Create...</i>"
             ${ZENITY_CMD} --question --title "${EXE_NAME} ${APP_WITH_VER}" \
@@ -99,10 +99,19 @@ script-find-installed-exe()
 
                  # Create Shortcut for the selected exe
                  SOURCE "script-create-other-shortcuts"
-                 script-create-other-shortcuts 
-                 
-                 SOURCE "script-launch"
-                 script-launch "${SELECTED_EXE}"
+                 script-create-other-shortcuts
+
+                 # Ask whether to launch it?
+                 ${ZENITY_CMD} --question --title "${EXE_NAME} ${APP_WITH_VER}" \
+                 --text "Shortcut created for ${SELECTED_EXE_NAME}, launch?"
+                 ANSWER=$?
+                 if [ ${ANSWER} -eq 0 ] ; then
+                     SOURCE "script-launch"
+                     script-launch "${SELECTED_EXE}"
+                 else
+                     ${ZENITY_CMD} --info --title "${EXE_NAME} ${APP_WITH_VER}" \
+                     --text "Shortcut for ${SELECTED_EXE_NAME}, can be launched from menu"
+                 fi
 
                  # Disabled for 2nd time, let user use change exe manually
                  # dbug "I: Script: Find Exe: Changing icon..."
