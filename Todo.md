@@ -65,8 +65,8 @@
   [ ] After Recreate All Scripts, do all tests
 
 0.98.0
-- [] add exe folder like putty or gw3.exe and check whether it creates new shortcuts? not creating
-- [] install wzt and update and test
+- [x] add exe folder like putty or gw3.exe and check whether it creates new shortcuts? not creating
+- [x] install wzt and update and test
 - [x] TEST IMPORT AND INSTALL OF EXE and IMPORT GAMEDIR and WINE DIR import
 - [x] import wine directory with single exe
 - [x] import wine directory with multiple exe
