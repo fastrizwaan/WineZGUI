@@ -63,6 +63,28 @@
       - [ ] run   
   
   [ ] After Recreate All Scripts, do all tests
+
+0.98.3-99
+- show menu for importing wine directory
+      - [] Import Wine Directory from
+      Detect and List the directories from path into the menu
+      - Bottles (Flatpak)
+      - Lutris  (Flatpak)
+      - Playonlinux (Flatpak)
+        - System
+        - Flatpak
+      
+- arch is already taken care of by the wine directory's registry files.
+- [] import wine directory, include runner from
+      - [] bottles
+          - [] if wine directory contains bottles.yml (grep Runner bottles.yml)
+          - [] find grepped runner at ~/.var/app/com.usebottles.bottles/data/bottles/runners
+          - [] copy the runner to prefixdir
+          - [] change WINE_CMD to prefixdir/runners/runner(ge-proton8-25)/files/bin/wine
+          
+      - [] playonlinux
+        - [] just copy the wine directory as it only supports upto 7.22
+      - [] lutris
 0.98.2
  - [x] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup
 
