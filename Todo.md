@@ -63,9 +63,10 @@
       - [ ] run   
   
   [ ] After Recreate All Scripts, do all tests
+0.98.2
+ - [] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup
+ 
 0.98.1
-- [] BUG: After Backup bundle, it copies installed game into GAMEDIR (perhaps due to GAMEDIR not in prune)
-- [] Do not bundle if exe is inside prefixdir
 
 0.98.0
 - [x] add exe folder like putty or gw3.exe and check whether it creates new shortcuts? not creating
