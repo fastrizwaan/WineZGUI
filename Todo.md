@@ -64,8 +64,8 @@
   
   [ ] After Recreate All Scripts, do all tests
 0.98.2
- - [] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup
- 
+ - [x] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup
+
 0.98.1
 
 0.98.0

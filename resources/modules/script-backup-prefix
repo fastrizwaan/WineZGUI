@@ -34,7 +34,7 @@ script-backup-prefix()
        FILENAME+="${PROGNAME}-${APP_WITH_VER}"
        # if exe file is within prefix dir then it is a game bundle
        if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-           dbug "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix, changing name to backup-bundle!"
+           dbug "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix, changing name to game-bundle!"
            FILENAME+="-Game-Bundle"
        else
            FILENAME+="-Prefix-Backup"
@@ -49,7 +49,7 @@ script-backup-prefix()
        FILENAME+="${PROGNAME}-${APP_WITH_VER}"
        # if exe file is within prefix dir then it is a game bundle
        if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
-           dbug "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix, changing name to backup-bundle!"
+           dbug "I: Script: ${FUNCNAME[0]}: Game Directory inside Prefix, changing name to game-bundle!"
            FILENAME+="-Game-Bundle-"
        else
            FILENAME+="-Prefix-Backup-"
