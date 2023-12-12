@@ -11,7 +11,7 @@ winezgui-open-terminal()
 
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
-  if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
+  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f "/app/bin/wine" ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
        TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"
@@ -21,6 +21,7 @@ winezgui-open-terminal()
        (echo "E: $(basename ${0}): needs to access system to run gnome-terminal via flatpak-spawn";\
         ${ZENITY_CMD} --error --title="${APP_WITH_VER}: No System Access!" --text="${TEXT}" )
        unset TEXT
+      return 1
 
   fi
 
