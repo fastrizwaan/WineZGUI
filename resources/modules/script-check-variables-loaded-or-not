@@ -16,7 +16,7 @@ script-check-variables-loaded-or-not()
      
      # If wine command itself is not working, throw error
      if [ -z "${WINE_CMD}" ]; then
-          ${ZENITY_CMD} --error --title="Missing Wine" --text "wine is required for $APP_WITH_VER work!"
+          ${ZENITY_CMD} --error --title="Missing Wine" --text "wine is required for $APP_WITH_VER to work!"
           exit 1
      fi
 # # Working good deps check for this

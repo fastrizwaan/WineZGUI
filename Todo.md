@@ -85,6 +85,48 @@
       - [] playonlinux
         - [] just copy the wine directory as it only supports upto 7.22
       - [] lutris
+0.99.0
+- [] Support Runner
+- [] WineZGUI Main window
+      - [] Create "Runners" similar to Template if not found 
+      - [] Settings-> Runner...
+            - [] Set Runner (wine) [use Settings->Prefix Template]
+                  - [] Open Other EXE like, list installed
+            - [] Import a runner
+
+Use Info.yml to set runner, it could be absolute path, change full path to $HOME
+
+Game->Change->Runner...
+
+grep Runner from Info.yml
+
+if no Runner Specified, do not include anything
+
+if Runner is specified, set Runner: 
+
+Select Runner directory, look for Runner/bin/wine inside runner
+
+if basename="wine" or "wine64"
+runner=fullpath of wine/wine64
+fi
+
+Runner check
+1. Runners/Dirname -> get Runners/Dirname/bin/wine
+2. Runner/Dirname/bin -> get Runners/Dirname/bin/wine
+3. Runners/Dirname/bin/wine -> use it
+4. Runners/Dirname/bin/wine64 -> use it
+
+
+find all files with wine_cmd and include them for runner vscode
+
+backup-bundle should include runner if runner is specified in Info.yml
+
+WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
+
+0.98.3
+- [] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
+     for import wine directory and runners
+
 0.98.2
  - [x] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup
 
