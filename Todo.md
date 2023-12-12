@@ -126,6 +126,12 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.3
 - [] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
      for import wine directory and runners
+     -- get --filesystem wine prefix for various apps
+       - bottles
+       - heroic launcher
+       - playonlinux
+       - phonicis
+       - lutris
 
 0.98.2
  - [x] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup

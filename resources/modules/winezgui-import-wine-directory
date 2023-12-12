@@ -60,14 +60,20 @@ winezgui-import-wine-directory()
 
   # Inform user if user is trying to import from ~/.var/app (like bottles)
   unset TEXTMSG
-  if [[ "${IMPORT_DIR}" == *".var/app"* ]] || [[ "${IMPORT_DIR}" == *"run/user"* ]] ; then
+  if [ ! -r "${IMPORT_DIR}/system.reg" ]; then
+#  if [[ "${IMPORT_DIR}" == *".var/app"* ]] || [[ "${IMPORT_DIR}" == *"run/user"* ]] ; then
      TEXTMSG=()
-     TEXTMSG+="Importing wine directory from flatpaked Bottles or PlayonLinux or wine?\n"
-     TEXTMSG+="Press Alt+f2 or in a terminal,\nrun:\n"
-     TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
-     TEXTMSG+="\n\n"
-     TEXTMSG+="and <b>restart WineZGUI</b>!\n"
-     TEXTMSG+="If the above permission is already given, then continue, else copying will fail, continue?"
+     # TEXTMSG+="Importing wine directory from flatpaked Bottles or PlayonLinux or wine?\n"
+     # TEXTMSG+="Press Alt+f2 or in a terminal,\nrun:\n"
+     # TEXTMSG+="<b>flatpak --user override --filesystem=~/.var/app io.github.fastrizwaan.WineZGUI</b>"
+     # TEXTMSG+="\n\n"
+     # TEXTMSG+="and <b>restart WineZGUI</b>!\n"
+     # TEXTMSG+="If the above permission is already given, then continue, else copying will fail, continue?"
+
+     TEXTMSG+="Cannot access ${IMPORT_DIR}\n"
+     TEXTMSG+="Please run:\n"
+     TEXTMSG+="<b>flatpak --user override --filesystem=${IMPORT_DIR} io.github.fastrizwaan.WineZGUI</b>\n"
+     TEXTMSG+="and restart winezgui and import again!"
      
      ${ZENITY_CMD} --question --no-wrap \
                    --title="Import ${IMPORT_BASENAME} from a flatpak app?" \
@@ -83,7 +89,7 @@ winezgui-import-wine-directory()
   # 4.3 Confirm
   unset TEXTMSG
   TEXTMSG=()
-  TEXTMSG+="This will copy all files from ${IMPORT_BASENAME} to ${PREFIXNAME}\nContinue..?"
+  TEXTMSG+="This will copy all files from <b>${IMPORT_DIR}</b> to <b>${PREFIXNAME}</b>\nContinue..?"
   ${ZENITY_CMD} --question --no-wrap \
                 --title="Import ${IMPORT_BASENAME} to ${PREFIXNAME}?" \
                 --text "${TEXTMSG}"
