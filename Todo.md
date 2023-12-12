@@ -124,7 +124,7 @@ backup-bundle should include runner if runner is specified in Info.yml
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
 0.98.3
-- [] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
+- [x] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
      for import wine directory and runners
      -- get --filesystem wine prefix for various apps
        - bottles
@@ -132,6 +132,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
        - playonlinux
        - phonicis
        - lutris
+
+- [x] reduce 1 dialog to import directory.
 
 0.98.2
  - [x] exe inside prefix dir then name the wzt: game-bundle instead of prefix-backup

@@ -10,13 +10,14 @@
   <url type="homepage">https://github.com/fastrizwaan/WineZGUI</url>
   <description>
     <p>
-      WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows games with wine easily. It is a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity. It allows quick launching of Direct play (not installed) EXE application or game from File Manager like Nautilus and allow creating separate wine prefix for each Windows&apos; EXE binary.
+      WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows games with wine easily. It is a collection of Bash scripts for Wine Prefix Management and Linux Desktop Integration for easier wine gaming experience using Zenity.
     </p>
     <p>WineZGUI features:</p>
     <ul>
       <li>Runs windows games or exe files from file manager.</li>
       <li>Creates application shortcut for easier access.</li>
-      <li>Imports other wine directory into WineZGUI and create shortcuts for all found exes.</li>
+      <li>Separate prefix for every exe file launched with WineZGUI</li>
+      <li>Imports other wine directory from Bottles, Wine, Lutris, Heroic Launcher into WineZGUI and create shortcuts for all found exes.</li>
       <li>Backup and Restore prefixes for later use.</li>
       <li>Create Game Bundles for sharing (prefix+game)</li>
     </ul>
@@ -32,6 +33,7 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2023-12-03" version="0.98.3"/>
     <release date="2023-12-03" version="0.98.2"/>
     <release date="2023-11-30" version="0.98.1"/>
     <release date="2023-11-27" version="0.98.0"/>
