@@ -123,6 +123,10 @@ backup-bundle should include runner if runner is specified in Info.yml
 
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
+0.98.4
+- [] Do not wineboot -u if runner is used or when runner is not having wineboot
+- [] if wineboot is not found in the runner do not use wineboot (proton-ge)
+- []
 0.98.3
 - [x] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
      for import wine directory and runners
