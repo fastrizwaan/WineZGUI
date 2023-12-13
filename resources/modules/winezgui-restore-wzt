@@ -44,6 +44,12 @@ winezgui-restore-wzt()
   export WINEZGUI_TEMPDIR="${WINEZGUIDIR}/tmp"
   mkdir -p  ${WINEZGUI_TEMPDIR}
 
+
+echo "DEBUG ---------------------------------------------------------------"
+echo "${ZENITY_CMD}  --progress --pulsate --no-cancel --auto-close  \
+         --title=\"${APP_WITH_VER} - Restore... Please wait.\" \
+         --width=500 --text=\"Getting info from\n${WZT_NAME}\")"
+sleep 10s
   # 1.1  Extract Prefix Name: Get the directory name from wzt file
   # using a file PREFIX_NAME_TEMP to use progress and overcome the subshell -> parent shell variable assignment issue
   (WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/"); \
@@ -53,7 +59,7 @@ winezgui-restore-wzt()
   # 1.3 Extract wzt-info.yml file to WINEZGUI_TEMPDIR; Show progress using zenity
   ${TAR_CMD} --occurrence=1 --extract -O -f "${WZT_FILE}" ${WZT_INFO_FILE} \
   | tee ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE} &) | \
-  (${ZENITY_CMD} --progress --pulsate --no-cancel --auto-close  \
+  (${ZENITY_CMD}  --progress --pulsate --no-cancel --auto-close  \
          --title="${APP_WITH_VER} - Restore... Please wait." \
          --width=500 --text="Getting info from\n${WZT_NAME}")
 
