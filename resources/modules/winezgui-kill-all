@@ -7,7 +7,7 @@ winezgui-kill-all()
   script-check-variables-loaded-or-not
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
-  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f "/app/bin/wine" ]; then
+  if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
        unset TEXT
        TEXT+="In a terminal or Press ALT+F2, run:\n"
        TEXT+="<tt><b>flatpak kill ${FLATPAK_NAME}</b></tt>\n\n"
