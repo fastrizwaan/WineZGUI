@@ -296,8 +296,8 @@ winezgui-restore-wzt()
   ## Since mono and gecko are part of wine flatpak, we do not need to update the prefix with wine
   ## Needs testing for old wine -> new wine
   ## to fix proton-ge or other runner based games to work on restore
-  ## This command below causes wineboot to run
-  #echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
+  # this will recreate prefix scripts, search restored.txt to get the list of files
+  echo "yes" > ${FOUND_PREFIX_DIR}/restored.txt
 
   # 7. Cleanup broken links in winezgui shortcuts directory
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
