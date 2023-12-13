@@ -319,24 +319,29 @@ winezgui-restore-wzt()
   
   LAUNCH_FILE_NAME=$(basename ${FOUND_SCRIPT_FILE})
 
-  if [ -f "${FOUND_SCRIPT_FILE}" ]; then
-       # 10. Ask if the user wants to start the restored game
-       if ${ZENITY_CMD} --question --no-wrap --width=200    \
-                 --title="WineZGUI Backup Restored!" \
-                 --text="Launch: ${LAUNCH_FILE_NAME}?"
-       then
-            # Start the Game script and exit main app
-            dbug "I: ${HEADER}: Launching Script for" \
-                 "the restored game..."
-            bash ${FOUND_SCRIPT_FILE}
-            exit 0
-       fi # ${ZENITY_CMD} --question
-  else
-       SOURCE "script-list-available-launch-shortcuts"
-       script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}
-       "${SELECTED_SCRIPT}" &
-       exit 0
-  fi
+
+#   if [ -f "${FOUND_SCRIPT_FILE}" ]; then
+#        # 10. Ask if the user wants to start the restored game
+#        if ${ZENITY_CMD} --question --no-wrap --width=200    \
+#                  --title="WineZGUI Backup Restored!" \
+#                  --text="Launch: ${LAUNCH_FILE_NAME}?"
+#        then
+#             # Start the Game script and exit main app
+#             dbug "I: ${HEADER}: Launching Script for" \
+#                  "the restored game..."
+#             bash ${FOUND_SCRIPT_FILE}
+#             exit 0
+#        fi # ${ZENITY_CMD} --question
+#   else
+#        SOURCE "script-list-available-launch-shortcuts"
+#        script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}
+#        "${SELECTED_SCRIPT}" &
+#        exit 0
+#   fi
+  # Just list the script files to launch
+  SOURCE script-list-available-launch-shortcuts
+  script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}
+  "${SELECTED_SCRIPT}" &
 
 #   # Make launch default for restored app/game
 #   if [ -w "${FOUND_PREFIX_DIR}" ]; then
