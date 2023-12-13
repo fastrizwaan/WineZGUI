@@ -13,11 +13,7 @@ winezgui-identity-remove()
         DIRECTORY="${1}"
         DIRNAME=$(basename "${1}")
   fi      
-  echo "====================================================================="
-  echo "DIRECTORY = $DIRECTORY"
-  echo "DIRNAME = $DIRNAME"
-  sleep 10s
-
+  
   SOURCE "winezgui-fetch-replacement-data"
   winezgui-fetch-replacement-data
   
