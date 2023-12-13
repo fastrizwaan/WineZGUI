@@ -51,7 +51,7 @@ winezgui-restore-wzt()
   # 1.3 Extract wzt-info.yml file to WINEZGUI_TEMPDIR; Show progress using zenity
   ${TAR_CMD} --occurrence=1 --extract -O -f "${WZT_FILE}" ${WZT_INFO_FILE} \
   | tee ${WINEZGUI_TEMPDIR}/${WZT_INFO_FILE} &) | \
-  (${ZENITY_CMD} --progress --pulsate --auto-close  \
+  (${ZENITY_CMD} --progress --pulsate --no-cancel --auto-close  \
          --title="${APP_WITH_VER} - Restore... Please wait." \
          --width=500 --text="Getting info from\n${WZT_NAME}")
  
