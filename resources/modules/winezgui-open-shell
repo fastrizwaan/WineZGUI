@@ -12,7 +12,7 @@ winezgui-open-shell()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
 
  # Check if --talk-name=org.freedesktop.Flatpak is allowed
-  if [ ${INSTALL_TYPE} = "flatpak" ] && [ "${WINE_CMD}" = "/app/bin/wine" ]; then
+  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f "/app/bin/wine" ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
        TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"
@@ -25,7 +25,7 @@ winezgui-open-shell()
 
   fi
 
-  if   [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+  if   [ -f "/app/bin/wine" ] && \
        [ $(flatpak-spawn  --host which gnome-terminal) ]; then
          dbug "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
          export GNOME_TERMINAL=0 ; #Available via flatpak-spawn
@@ -47,7 +47,7 @@ winezgui-open-shell()
   fi
 
   # If found in flatpak sandbox, use flatpak-spawn
-  if [ "${WINE_CMD}" = "/app/bin/wine" ] && \
+  if [ -f "/app/bin/wine" ] && \
      [ $(flatpak-spawn --host echo 0) ]; then
        dbug "I: ${HEADER}: Opening gnome-terminal from sandbox"
        # Shell needs WINEPREFIX as we are working with wine

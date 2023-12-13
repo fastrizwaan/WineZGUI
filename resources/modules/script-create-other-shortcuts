@@ -579,8 +579,9 @@ fi
 if [ -f "${PREFIXDIR}/restored.txt" ]; then
      dbug "I: Script: Updating wine prefix on 1st run after restoring backup"
      #WINEDLLOVERRIDES="mscoree,mshtml=" \
-     WINEPREFIX=${PREFIXDIR} \
-     ${WBOOT_CMD} 2>/dev/null
+     ## Disabling wineboot for proton etc. runners
+     # WINEPREFIX=${PREFIXDIR} \
+     # ${WBOOT_CMD} 2>/dev/null
      
      # Do not prompt for found new exe after restore
      # On backup bundle, gamedir is copied, so, update found_exe_files 

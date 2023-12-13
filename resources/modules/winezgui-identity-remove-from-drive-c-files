@@ -18,7 +18,8 @@ winezgui-identity-remove-from-drive-c-files()
   if [ -d "${1}/drive_c" ]; then
        dbug "I: ${HEADER}: found drive_c, searching... for ${USER}"
       (FILES_WITH_USERNAME=$(grep -r "${USER}" drive_c|sort -u| cut -f1 -d ":"| tee "${1}/FILES_WITH_USERNAME.txt"))| \
-       ${ZENITY_CMD}  --progress --pulsate --auto-close --title="Find \"${USER}\"" --width=500 --text="Finding files with \"${USER}\" in drive_c!"
+       ${ZENITY_CMD}   --progress  --pulsate  --no-cancel  --auto-close \
+       --title="Find \"${USER}\"" --width=500 --text="Finding files with \"${USER}\" in drive_c!"
                 
        echo "files with username: ${FILES_WITH_USERNAME}"
 
