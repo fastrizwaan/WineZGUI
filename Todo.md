@@ -123,10 +123,18 @@ backup-bundle should include runner if runner is specified in Info.yml
 
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
+0.98.5
+- [] fix winetricks issue (path)
+- [] use terminal to open for winetricks cli
+- [] use dxvk and vkd3d as WineZGUI-Template
+- [] include fonts in templates
+- [] 
+
 0.98.4
-- [] Do not wineboot -u if runner is used or when runner is not having wineboot
-- [] if wineboot is not found in the runner do not use wineboot (proton-ge)
-- []
+- [x] Do not wineboot -u if runner is used or when runner is not having wineboot
+- [x] if wineboot is not found in the runner do not use wineboot (proton-ge)
+- [x] do not show cancel button for progress bar for username and xouserxo
+
 0.98.3
 - [x] allow --filesystem=bottles, playonlinux, phoenicis, wine TAKE FROM pronton-up-qt manifest
      for import wine directory and runners
