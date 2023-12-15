@@ -5,6 +5,16 @@ script-winetricks-cli()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   
+  # Create tmp directory for wget and winetricks
+  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
+       mkdir -p "${WINEZGUIDIR}/tmp"
+  fi
+
+  # Create Temp dir
+  if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
+      mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+  fi
+
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
        SOURCE "winezgui-download-winetricks"

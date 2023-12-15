@@ -10,7 +10,11 @@ winezgui-winetricks-gui()
   # Create Temp dir
   if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
       mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
-      dbug "I: Script: Find Exe: Deleted drive_c/users/${USER}/Temp directory"
+  fi
+
+  # Create tmp directory for wget and winetricks
+  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
+       mkdir -p "${WINEZGUIDIR}/tmp"
   fi
 
   ${WINETRICKS} --gui
