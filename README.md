@@ -25,11 +25,11 @@ WineZGUI (pronounced Wine-Zee-Goo-Eee) is a wine frontend for playing windows ga
 3. When the user launches the script, the exe is launched. 
 4. If it is a setup, it will detect installed exe and creates shortcuts in Games menu category.
 
-## How to run a Game or Program on another driver
+## How to run a Game or Program on another drive or directory
 
 Open your Terminal and type this:
 
-`flatpak override --user --filesystem=/path/to/your/driver io.github.fastrizwaan.WineZGUI`
+`flatpak override --user --filesystem=/path/to/your/drive io.github.fastrizwaan.WineZGUI`
 
 ### Install WineZGUI
 
