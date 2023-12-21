@@ -58,17 +58,17 @@ winezgui-template-backup()
             SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
        fi
        unset FILENAME
-       FILENAME+="template"
+       FILENAME+="Template"
        FILENAME+="-${SELECTED_TEMPLATE_NAME}-"
-       FILENAME+="${SHORT_FLATPAK_NAME}"
+       #FILENAME+="${SHORT_FLATPAK_NAME}"
        FILENAME+="-${DATE}"
        FILENAME+=".${TEMPLATE_EXT}"
        # Flatpak: template-Template_Name-flatpak-wine7-20220904.tar.zst
   else # for system add wine-version
        unset FILENAME
-       FILENAME+="template"
+       FILENAME+="Template"
        FILENAME+="-${SELECTED_TEMPLATE_NAME}-"
-       FILENAME+="${WINEVER}"
+       #FILENAME+="${WINEVER}"
        FILENAME+="-${DATE}"
        FILENAME+=".${TEMPLATE_EXT}"
        # template-Template_Name-wine-7.0-20220904.tar.zst

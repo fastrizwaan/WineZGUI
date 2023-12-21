@@ -124,11 +124,8 @@ backup-bundle should include runner if runner is specified in Info.yml
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
 0.98.5
-- [] fix winetricks issue (path)
-- [] use terminal to open for winetricks cli
-- [] use dxvk and vkd3d as WineZGUI-Template
-- [] include fonts in templates
-- [] 
+- [x] fix winetricks issue (path)
+- [x] fix minor bugs
 
 0.98.4
 - [x] Do not wineboot -u if runner is used or when runner is not having wineboot

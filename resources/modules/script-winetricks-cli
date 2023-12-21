@@ -21,7 +21,9 @@ script-winetricks-cli()
        winezgui-download-winetricks
   fi  
   
-
+  # Show debug output for winetricks command in use
+  dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - CHECK"
+  
   # Check if winetricks is available at ${WINEZGUIDIR}
   if [ -f "${WINEZGUIDIR}/winetricks" ]; then
        dbug "I: Script: Winetricks CLI: found winetricks at ${WINEZGUIDIR}!"
@@ -88,6 +90,9 @@ script-winetricks-cli()
        WTRICKS_CMD=${WINEZGUIDIR}/winetricks
        export WTRICKS_CMD
   fi
+
+  # Show debug output for winetricks command in use
+  dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - in use!"
 
   # Start of Show Progress using zenity dialog
   ( for i in ${VERBS[*]}; do

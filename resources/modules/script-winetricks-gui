@@ -5,6 +5,9 @@ script-winetricks-gui()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
+  # Show debug output for winetricks command in use
+  dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - CHECK"
+  
   # Ask user if he'd like to download latest winetricks, everytime
   if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
        SOURCE "winezgui-download-winetricks"
@@ -17,7 +20,11 @@ script-winetricks-gui()
        WTRICKS_CMD="${WINEZGUIDIR}/winetricks"
        chmod 755 "${WTRICKS_CMD}"
   fi       
-  
+
+  # Show debug output for winetricks command in use
+  dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - in use!"
+
+
   # Backup registry files before running winetricks
   DATE=$(date +%Y%m%d_%H_%M_%S)
   cd ${PREFIXDIR} && \
