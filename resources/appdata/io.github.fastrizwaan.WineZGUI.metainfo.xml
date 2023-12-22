@@ -33,6 +33,7 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2023-12-22" version="0.98.5"/>
     <release date="2023-12-03" version="0.98.4"/>
     <release date="2023-12-03" version="0.98.3"/>
     <release date="2023-12-03" version="0.98.2"/>
