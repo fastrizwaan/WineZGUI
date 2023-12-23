@@ -195,7 +195,6 @@ echo "$search_list"
 #     echo "===>"
 #     rm "${DESKTOPFILE}" "${SCRIPTFILE}"
 #  fi
-# sleep 5s;
 
  # Remove empty .desktop shortcuts from applications directory
  find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
