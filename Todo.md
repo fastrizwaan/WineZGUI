@@ -136,8 +136,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] winezgui-recreate-prefix-script 
 
 
-- [] add runner info to About.yml
-- [] Update About.yml for runner (grep Runner, not found, change Wine: -> Wine Runner:)
+- [x] add runner info to About.yml
+- [x] Update About.yml for runner (grep Runner, not found, change Wine: -> Wine Runner:)
 - [] Update About.yml for runner on change by Settings, use winezgui-template-change (search If About.yml is writable)
 
 - [-] use Info.yml get RUNNER info into recreated scripts 
