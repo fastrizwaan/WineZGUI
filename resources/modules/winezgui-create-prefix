@@ -29,6 +29,7 @@ dbug "I: ${HEADER}: Starting WineZGUI Create Script ($0)"
 if [ -z "${1}" ]; then
      dbug "I: ${HEADER}: No Arguments... bye";
 fi
+
 #unset WINEPREFIX # for WINEVER
 export APPNAME=WineZGUI
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
@@ -256,6 +257,20 @@ for SCRIPT in $(ls ${DATADIR}); do
 done
 IFS=${SAVEIFS}
 
+# If WineZGUI is using different runner, use it to create new prefixes
+# If Settings.yml exists, get RUNNER value from it
+if [ -f "${SETTINGS_FILE}" ]; then
+     export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+fi
+
+# If no runner is found in Settings, then use the system/default runner
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="$(which wine)"
+fi
+
+# Runner = wine command in a different directory
+export WINE_CMD="${RUNNER}"
+
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -348,13 +363,14 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
+export RUNNER="${RUNNER}"
 
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
       dbug "I: Script: Install type: Flatpak, Running from host!"
-      WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+      WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
       WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
       WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
@@ -374,7 +390,7 @@ else
      # flatpak install and running from shell inside flatpak winezgui
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
-          export WINE_CMD="/app/bin/wine"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="/app/bin/winetricks"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
@@ -390,7 +406,7 @@ else
      else
           # We are using non flatpak install
           dbug "I: Script: Install type: System, Running from host!"
-          export WINE_CMD="$(which wine)"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="$(which winetricks)"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
