@@ -279,7 +279,7 @@ export WINE_CMD="${RUNNER}"
 echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "3. --------------------------------------- RUNNER = $RUNNER"
 
-sleep 5s
+#sleep 5s
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT

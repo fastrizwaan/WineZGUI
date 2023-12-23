@@ -726,7 +726,7 @@ echo "\${PREFIXNAME}          ${PREFIXNAME}"
 
 echo "ln -sf \"${DESKTOPFILE}\" \"${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop\" "
 
-sleep 10s
+#sleep 10s
 
 ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop" && \
 dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
