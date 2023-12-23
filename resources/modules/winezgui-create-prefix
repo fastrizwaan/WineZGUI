@@ -36,6 +36,8 @@ export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons 2>/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database 2>/dev/null"
 export WINE_CMD="$(which wine)"
+echo "1. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "2. --------------------------------------- RUNNER = $RUNNER"
 export WINEVER="$(wine --version|cut -f1 -d " ")"
 export WTRICKS_CMD=$(which winetricks)
 export TEMPDIR="${WINEZGUIDIR}/tmp"
@@ -259,8 +261,11 @@ IFS=${SAVEIFS}
 
 # If WineZGUI is using different runner, use it to create new prefixes
 # If Settings.yml exists, get RUNNER value from it
+echo "2. --------------------------------------- SETTINGS_FILE = $SETTINGS_FILE"
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+     echo "2. --------------------------------------- WINE_CMD = $WINE_CMD"
+     echo "2. --------------------------------------- RUNNER = $RUNNER"
 fi
 
 # If no runner is found in Settings, then use the system/default runner
@@ -271,6 +276,10 @@ fi
 # Runner = wine command in a different directory
 export WINE_CMD="${RUNNER}"
 
+echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "3. --------------------------------------- RUNNER = $RUNNER"
+
+sleep 5s
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -365,16 +374,23 @@ SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
 
 # Get runner from info file
+     echo "4. --------------------------------------- WINE_CMD = $WINE_CMD"
+     echo "4. --------------------------------------- RUNNER = $RUNNER"
 
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
 fi
+     echo "5. --------------------------------------- WINE_CMD = $WINE_CMD"
+     echo "5. --------------------------------------- RUNNER = $RUNNER"
 
 if [ -z "${RUNNER}" ]; then
    export RUNNER="${RUNNER}"
 else
    export RUNNER="$(which wine)"
 fi
+
+     echo "6. --------------------------------------- WINE_CMD = $WINE_CMD"
+     echo "6. --------------------------------------- RUNNER = $RUNNER"
 
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak

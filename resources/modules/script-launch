@@ -66,8 +66,13 @@ script-launch()
             dbug "I: Script: Updated wine version to ${CURRENT_WINE_VERSION}"
        fi
   fi
+  
+
 
   # 3. Launch The EXE file
+     echo "7. --------------------------------------- WINE_CMD = $WINE_CMD"
+     echo "7. --------------------------------------- RUNNER = $RUNNER"
+
   ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
