@@ -296,6 +296,20 @@ for SCRIPT in $(ls ${DATADIR}); do
 done
 IFS=${SAVEIFS}
 
+# If WineZGUI is using different runner, use it to create new prefixes
+# If Settings.yml exists, get RUNNER value from it
+if [ -f "${SETTINGS_FILE}" ]; then
+     export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+fi
+
+# If no runner is found in Settings, then use the system/default runner
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="$(which wine)"
+fi
+
+# Runner = wine command in a different directory
+export WINE_CMD="${RUNNER}"
+
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -388,13 +402,14 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
+export RUNNER="${RUNNER}"
 
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
       dbug "I: Script: Install type: Flatpak, Running from host!"
-      WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+      WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
       WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
       WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
@@ -414,7 +429,7 @@ else
      # flatpak install and running from shell inside flatpak winezgui
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
-          export WINE_CMD="/app/bin/wine"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="/app/bin/winetricks"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
@@ -430,7 +445,7 @@ else
      else
           # We are using non flatpak install
           dbug "I: Script: Install type: System, Running from host!"
-          export WINE_CMD="$(which wine)"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="$(which winetricks)"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
@@ -571,8 +586,9 @@ fi
 if [ -f "${PREFIXDIR}/restored.txt" ]; then
      dbug "I: Script: Updating wine prefix on 1st run after restoring backup"
      #WINEDLLOVERRIDES="mscoree,mshtml=" \
-     WINEPREFIX=${PREFIXDIR} \
-     ${WBOOT_CMD} 2>/dev/null
+     ## Disabling wineboot for proton etc. runners
+     #WINEPREFIX=${PREFIXDIR} \
+     #${WBOOT_CMD} 2>/dev/null
      
      # Do not prompt for found new exe after restore
      # On backup bundle, gamedir is copied, so, update found_exe_files 
@@ -634,6 +650,7 @@ fi
      echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
      echo "Created:${DATE}"                 >> "${INFOFILE}"
      echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Runner:${RUNNER}"                >> "${INFOFILE}"
      echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
      echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
      echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
@@ -717,5 +734,6 @@ if [ $? -eq 0 ]; then
      dbug "I: ${HEADER}: Shortcut: Exe: ${EXE_NAME}"
 fi
 # Update Menu, Icon cache and Desktop shortcuts
+find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
 ${UPDATE_ICON_CACHE} 2>/dev/null
 ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR} 2>/dev/null

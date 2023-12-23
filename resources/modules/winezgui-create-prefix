@@ -697,4 +697,4 @@ fi
 # Update Menu, Icon cache and Desktop shortcuts
 find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
 ${UPDATE_ICON_CACHE} 2>/dev/null
-${UPDATE_DESKTOP_DATABASE} "${APPLICATIONSDIR}" 2>/dev/null
+${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR} 2>/dev/null
