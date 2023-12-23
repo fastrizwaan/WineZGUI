@@ -18,6 +18,7 @@ winezgui-create-about-yml()
        echo "Author:${AUTHOR}"              >> "${ABOUTFILE}"
        echo "E-mail:${EMAIL}"               >> "${ABOUTFILE}"
        echo "Wine:${WINE_CMD}"              >> "${ABOUTFILE}"
+       echo "Runner:${RUNNER}"              >> "${ABOUTFILE}"
        echo "Template:${TEMPLATE_NAME}"     >> "${ABOUTFILE}"
        echo "Wine Version:${WINEVER}"       >> "${ABOUTFILE}"
        echo "Wine Arch:${WINEARCH}"         >> "${ABOUTFILE}"
