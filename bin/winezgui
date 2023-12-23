@@ -56,7 +56,19 @@ LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH
 export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
-export WINE_CMD="$(which wine)"
+
+# If Settings.yml exists, get RUNNER value from it
+if [ -f "${SETTINGS_FILE}" ]; then
+     export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+fi
+
+# If no runner is found in Settings, then use the system/default runner
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="$(which wine)"
+fi
+
+# Runner = wine command in a different directory
+export WINE_CMD="${RUNNER}"
 export WINETRICKS="$(which winetricks)"
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
