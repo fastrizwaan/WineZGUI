@@ -125,10 +125,15 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 0.98.5.01-99-0.98.6 (runner support)
 - [-] update files having WINE_CMD with RUNNER variables (using WINE_CMD global search)
-- [x] update winezgui
+- [x] winezgui  
 - [x] winezgui-create-prefix 
 - [x] winezgui-recreate-prefix-script 
-- [] update script-create-other-shortcuts
+- [] script-create-other-shortcuts
+
+- [-] Add RUNNERS_DIR and RUNNER variable based on use by winezgui or script (using PREFIXES_DIR global search)
+- [x] winezgui
+- [x] winezgui-create-prefix 
+- [x] winezgui-recreate-prefix-script 
 
 - [-] use Info.yml get RUNNER info into recreated scripts 
 - [] recreate-prefix-script 

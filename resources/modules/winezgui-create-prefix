@@ -80,6 +80,7 @@ export EXE_EXT="${EXE_FILE##*.}"
 export EXE_NOEXE=$(echo "${EXE_NOSP}"           |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export RUNNERS_DIR="${WINEZGUIDIR}/Runners"        # Wine runners Directory
 
 # setup.exe/installer.exe needs to have different directory
 # 
@@ -298,6 +299,7 @@ export PROGNAME=\"${PROGNAME}\"
 export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
 export WINEZGUIDIR=\"${WINEZGUIDIR}\"
 export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
+export RUNNERS_DIR=\"${WINEZGUIDIR}/Runners\"
 export PREFIXNAME=\"${PREFIXNAME}\"
 export EXE_FILE=\"${EXE_FILE}\"
 export EXE_NAME=\"${EXE_NAME}\"
@@ -312,6 +314,7 @@ export APPLICATIONSDIR=\"${APPLICATIONSDIR}\"
 export WINEZGUI_SCRIPTS=\"${WINEZGUI_SCRIPTS}\"
 export DATADIR=\"${DATADIR}\"
 export SETTINGS_FILE=\"${WINEZGUIDIR}/Settings.yml\"
+
 
 #export DEXSKTOPDIR=\"${DEXSKTOPDIR}\"
 export SHORTCUT_PREFIX=\"${SHORTCUT_PREFIX}\"
