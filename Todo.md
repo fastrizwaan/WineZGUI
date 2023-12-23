@@ -54,7 +54,7 @@
       - [ ] Change Name
       - [ ] Change Icon
       - [ ] Change Prefix Dir name
-      - [ ] Open Other Exe (directplay, setup like ubisoft installer)
+      - [ ] Open Other Exe (directplay, setup like ubisoft installer)flatpak install --user https://dl.flathub.org/build-repo/72058/io.mpv.Mpv.flatpakref
       - [ ] Delete
       - [ ] Restore prefix
       - [ ] Import and run
@@ -122,6 +122,29 @@ find all files with wine_cmd and include them for runner vscode
 backup-bundle should include runner if runner is specified in Info.yml
 
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
+
+0.98.5.01-99-0.98.6 (runner support) 
+- [] wine_cmd to use runner from Settings.yml
+- [] Locate runner, if not found, update with default runner, else use RUNNER=grep from settings.yml
+- [] settings->runner...->Set Wine Runner...
+- [] dxvk vkd3d base for other runners
+- [] systemwide - winezgui
+     - [] Set runner (for all new prefixes)
+       - [] Settings.yml -> runner: fullpath to runner
+         
+     - [] Find runner and copy runner from other apps like dolphin, heroic launcher
+     - [] do winetricks dxvk vkd3d (or make it default for 0.98.6 for both wine and proton)
+     - 
+- [] scriptwise
+     - [] Change runner
+         - [] Check for dxvk & vkd3d in winetricks.log
+         - [] Get list of runners from WINEZGUIDIR/Runners and let user select one
+         - [] If not found use the winezgui-find-runners function to list runners, let user use it directly or import runner to Runners directory.
+         - [] Choose Change runner for this script only or for all scrpts inside $PREFIXDIR
+         - [] Change Info.yml or *.yml based on user's selection
+         - [] On launch check for runner existing or not, if not found tell user that it's gone, shall we use another runner or default one?
+         - [] backup prefix/bundle should import runner
+ - Import wine directory, should import runner from bottles, heroic launcher, lutris (read config files and copy)
 
 0.98.5
 - [x] create tmp directory for winetricks to work
