@@ -611,6 +611,7 @@ if [ ! -f "${INFOFILE}" ]; then
      echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
      echo "Created:${DATE}"                 >> "${INFOFILE}"
      echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Runner:${RUNNER}"                >> "${INFOFILE}"
      echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
      echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
      echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
