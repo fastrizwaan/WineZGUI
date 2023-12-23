@@ -402,8 +402,17 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
-export RUNNER="${RUNNER}"
+# Get runner from info file
 
+if [ -f "${INFOFILE}" ]; then
+     export RUNNER=$(grep runner ${INFOFILE}|cut -f2 -d ":")
+fi
+
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="${RUNNER}"
+else
+   export RUNNER="$(which wine)"
+fi
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
