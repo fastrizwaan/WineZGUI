@@ -408,9 +408,8 @@ if [ -f "${INFOFILE}" ]; then
      export RUNNER=$(grep runner ${INFOFILE}|cut -f2 -d ":")
 fi
 
+# If runner is not specified in Settings.yml then use wine
 if [ -z "${RUNNER}" ]; then
-   export RUNNER="${RUNNER}"
-else
    export RUNNER="$(which wine)"
 fi
 
