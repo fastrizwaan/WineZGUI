@@ -1,0 +1,57 @@
+winezgui-runner()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH"
+  unset RUNNER_OPTION
+  RUNNER_OPTION=$(${ZENITY_CMD}                              \
+                  --title "${APP_WITH_VER} - Runner"         \
+                  --list --hide-header                       \
+                  --width=360 --height=340                   \
+                  --radiolist --column " "                   \
+                  --column "Action"                          \
+                         0 "Set Default Runner..."           \
+                         0 "Download Runner..."              \
+                         0 "Backup..."                       \
+                         0 "Restore..."                      \
+                         0 "Delete..."                       \
+                         0 "Help..."                         \
+                  --text   "Runner... ${RUNNER_NAME} in use" )
+                        
+    # Exit if Cancel is clicked
+  if [ -z "${RUNNER_OPTION}" ]; then
+       dbug "I: ${HEADER}: Cancel Selected!"
+       return 1
+  fi
+
+  # Show What is selected     
+  dbug "I: ${HEADER}: ${RUNNER_OPTION} Selected!"
+
+  if   [ "${RUNNER_OPTION}" = "Set Default Runner..." ]; then
+          SOURCE "winezgui-runner-configure"
+          winezgui-runner-configure
+  elif [ "${RUNNER_OPTION}" = "Download Runner..." ]; then
+          SOURCE "winezgui-runner-download"
+          winezgui-runner-download
+  elif [ "${RUNNER_OPTION}" = "Backup..." ]; then
+          SOURCE "winezgui-runner-backup"
+          winezgui-runner-backup
+  elif [ "${RUNNER_OPTION}" = "Restore..." ]; then
+          SOURCE "winezgui-runner-restore"
+          winezgui-runner-restore
+  elif [ "${RUNNER_OPTION}" = "Delete..." ]; then
+          SOURCE "winezgui-runner-delete"
+          winezgui-runner-delete
+  elif [ "${RUNNER_OPTION}" = "Help..." ]; then
+          SOURCE "winezgui-runner-help"
+          winezgui-runner-help
+  else
+       echo "E: Unknown Configure Option = ${RUNNER_OPTION}"
+       exit 1
+  fi
+  
+  return 0
+} 

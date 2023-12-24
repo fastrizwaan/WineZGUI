@@ -10,12 +10,14 @@ winezgui-settings()
    unset TEXT
    TEXT+="Set..."
    unset SETTINGS_OPTION
-   SETTINGS_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER} - Settings" \
+   SETTINGS_OPTION=$(${ZENITY_CMD}                               \
+                            --title "${APP_WITH_VER} - Settings" \
                             --list   --hide-header               \
                             --width=360 --height=240             \
                             --radiolist --column " "             \
                             --column "Action"                    \
                                 TRUE "Help..."                   \
+                                   0 "Runner..."                 \
                                    0 "Wine Arch..."              \
                                    0 "Prefix Template..."        \
                                    0 "Launch Behavior..."        \
@@ -33,7 +35,11 @@ winezgui-settings()
    if   [ "${SETTINGS_OPTION}" = "Help..." ]; then
         SOURCE "winezgui-settings-help"
         winezgui-settings-help
-        
+
+   elif [ "${SETTINGS_OPTION}" = "Runner..." ]; then
+        SOURCE "winezgui-runner"
+        winezgui-runner
+
    elif [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
         SOURCE "winezgui-settings-wine-arch"
         winezgui-settings-wine-arch
