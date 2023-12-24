@@ -66,9 +66,6 @@ fi
 echo "1. ----------------------------- RUNNER:${RUNNER}"
 echo "1. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
-## if [ $(basename ${RUNNER}} = "wine" ] || if [ $(basename ${RUNNER}} = "wine64" ]; then
-##          RUNNER_NAME="$(dirname $(dirname ${RUNNER}))"
-##     fi
 
 # If no runner is found in Settings, then use the system/default runner
 if [ -z "${RUNNER}" ]; then
@@ -80,7 +77,6 @@ fi
 echo "2. ----------------------------- RUNNER:${RUNNER}"
 echo "2. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
-sleep 10s
 
 
 # Runner = wine command in a different directory
@@ -128,8 +124,9 @@ check-all-variables "AUTHOR EMAIL COPYRIGHT WEBSITE DEBUG PROCESSNAME HEADER APP
 WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
-  SELECTION=$(${ZENITY_CMD} --list --hide-header --title "${APP_WITH_VER}"    \
-                     --width=360 --height=440 --radiolist --column " " \
+  SELECTION=$(${ZENITY_CMD} --list --hide-header               \
+                     --title "${APP_WITH_VER}" --width=360     \
+                     --height=440 --radiolist --column " "     \
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \
                             0 "Launch..."                      \
