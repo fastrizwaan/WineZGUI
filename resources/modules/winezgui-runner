@@ -15,6 +15,7 @@ winezgui-runner()
                   --column "Action"                          \
                          0 "Set Default Runner..."           \
                          0 "Download Runner..."              \
+                         0 "Import Runner..."                \
                          0 "Backup..."                       \
                          0 "Restore..."                      \
                          0 "Delete..."                       \
@@ -32,10 +33,13 @@ winezgui-runner()
 
   if   [ "${RUNNER_OPTION}" = "Set Default Runner..." ]; then
           SOURCE "winezgui-runner-configure"
-          winezgui-runner-configure
+          winezgui-runner-set-default
   elif [ "${RUNNER_OPTION}" = "Download Runner..." ]; then
           SOURCE "winezgui-runner-download"
           winezgui-runner-download
+ elif [ "${RUNNER_OPTION}" ="Import Runner..." ]; then
+          SOURCE "winezgui-runner-import"
+          winezgui-runner-import
   elif [ "${RUNNER_OPTION}" = "Backup..." ]; then
           SOURCE "winezgui-runner-backup"
           winezgui-runner-backup

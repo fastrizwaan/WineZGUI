@@ -124,6 +124,17 @@ backup-bundle should include runner if runner is specified in Info.yml
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
 0.98.5.01-99-0.98.6 (runner support)
+- [] create winezgui-runner-help
+- [] create winezgui-runner-set-default
+- [] create winezgui-runner-import
+- [] create winezgui-runner-download
+    - [] Wine7
+    - [] Wine8
+    - [] Wine9
+    - [] lutris-GE-Proton-GE
+- [] create winezgui-runner-backup
+- [] create winezgui-runner-delete
+
 - [x] add winezgui->settings->runner menu
 - [x] create file winezgui-runner to list options
 - [x] Create RUNNER_NAME variable from system or foldername of the runner name 
