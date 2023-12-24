@@ -126,24 +126,25 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.5.01-99-0.98.6 (runner support)
 - [x] add winezgui->settings->runner menu
 - [x] create file winezgui-runner to list options
-- [] Create RUNNER_NAME variable from system or foldername of the runner name 
+- [x] Create RUNNER_NAME variable from system or foldername of the runner name 
      if [ $(basename ${RUNNER}} = "wine" ] || if [ $(basename ${RUNNER}} = "wine64" ]; then
           RUNNER_NAME="$(basename $(dirname $(dirname ${RUNNER})))"
      fi
 - [x] RUNNER_NAME in winezgui
 - [x] RUNNER NAME in winezgui-create-prefix
-- [] RUNNER NAME in winezgui-recreate-prefix-script 
-- [] RUNNER NAME in script-create-other-shortcuts
-- [-] update files having WINE_CMD with RUNNER variables (using WINE_CMD global search)
+- [x] RUNNER NAME in winezgui-recreate-prefix-script 
+- [x] RUNNER NAME in script-create-other-shortcuts
+- [x] update files having WINE_CMD with RUNNER variables (using WINE_CMD global search)
 - [x] winezgui  
 - [x] winezgui-create-prefix 
 - [x] winezgui-recreate-prefix-script 
-- [] script-create-other-shortcuts
+- [x] script-create-other-shortcuts
 
-- [-] Add RUNNERS_DIR and RUNNER variable based on use by winezgui or script (using PREFIXES_DIR global search)
+- [x] Add RUNNERS_DIR and RUNNER variable based on use by winezgui or script (using PREFIXES_DIR global search)
 - [x] winezgui
 - [x] winezgui-create-prefix 
 - [x] winezgui-recreate-prefix-script 
+- [x] script-create-other-shortcuts
 
 
 - [x] add runner info to About.yml

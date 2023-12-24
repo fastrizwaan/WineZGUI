@@ -104,6 +104,8 @@ export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
 export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 export EXE_EXT="${EXE_FILE##*.}"
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export RUNNERS_DIR="${WINEZGUIDIR}/Runners"
+
 
 echo "
 export EXE_FILE=$(realpath -m "$1")
@@ -113,6 +115,7 @@ export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
 export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 export EXE_EXT="${EXE_FILE##*.}"
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export RUNNERS_DIR="${WINEZGUIDIR}/Runners"
 "
 
 # This should be existing PREFIXNAME
@@ -304,6 +307,30 @@ for SCRIPT in $(ls ${DATADIR}); do
 done
 IFS=${SAVEIFS}
 
+# If WineZGUI is using different runner, use it to create new prefixes
+# If INFOFILE has runner, then use it, else try to get runner from Settings.yml
+if   [ -f "${INFOFILE}" ]; then
+       export RUNNER=$(grep Runner ${INFOFILE}|cut -f2 -d ":")
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+elif [ -f "${SETTINGS_FILE}" ]; then
+       export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+fi
+
+echo "8. ----------------------------- RUNNER:${RUNNER}"
+echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+
+# If no runner is found in Infofile or Settings, then use the system/default runner
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
+fi
+
+# Runner = wine command in a different directory
+export WINE_CMD="${RUNNER}"
+
+echo "8. ----------------------------- RUNNER:${RUNNER}"
+echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -322,6 +349,7 @@ export PROGNAME=\"${PROGNAME}\"
 export INSTALL_TYPE=\"\"${INSTALL_TYPE}\"\"
 export WINEZGUIDIR=\"${WINEZGUIDIR}\"
 export PREFIXES_DIR=\"${WINEZGUIDIR}/Prefixes\"
+export RUNNERS_DIR=\"${WINEZGUIDIR}/Runners\"
 export EXE_FILE=\"${EXE_FILE}\"
 export EXE_NAME=\"${EXE_NAME}\"
 export CHECKSUM=\"${CHECKSUM}\"
@@ -396,13 +424,32 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
 SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
+# Get runner from info file
 
+if [ -f "${INFOFILE}" ]; then
+     export RUNNER=$(grep runner ${INFOFILE}|cut -f2 -d ":")
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+fi
+
+echo "10. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "10. --------------------------------------- RUNNER = $RUNNER"
+echo "10. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
+
+# If runner is not specified in Settings.yml then use wine
+if [ -z "${RUNNER}" ]; then
+   export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
+fi
+
+echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "11. --------------------------------------- RUNNER = $RUNNER"
+echo "11. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
       dbug "I: Script: Install type: Flatpak, Running from host!"
-      WINE_CMD="flatpak run --command=wine ${FLATPAK_NAME}"
+      WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
       WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
       WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
@@ -422,7 +469,7 @@ else
      # flatpak install and running from shell inside flatpak winezgui
      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
-          export WINE_CMD="/app/bin/wine"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="/app/bin/winetricks"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
@@ -438,7 +485,7 @@ else
      else
           # We are using non flatpak install
           dbug "I: Script: Install type: System, Running from host!"
-          export WINE_CMD="$(which wine)"
+          export WINE_CMD=${RUNNER}
           export WTRICKS_CMD="$(which winetricks)"
           export WINECFG_CMD="${WINE_CMD} winecfg"
           export WEXPLORER_CMD="${WINE_CMD} explorer"
@@ -643,6 +690,7 @@ if [ ! -f "${INFOFILE}" ]; then
      echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
      echo "Created:${DATE}"                 >> "${INFOFILE}"
      echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Runner:${RUNNER}"                >> "${INFOFILE}"
      echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
      echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
      echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
