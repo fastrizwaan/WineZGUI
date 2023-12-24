@@ -131,9 +131,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
           RUNNER_NAME="$(basename $(dirname $(dirname ${RUNNER})))"
      fi
 - [x] RUNNER_NAME in winezgui
-- [] RUNNER NAME in winezgui-create-prefix
-- [] RUNNER NAME in winezgui-create-prefix
+- [x] RUNNER NAME in winezgui-create-prefix
 - [] RUNNER NAME in winezgui-recreate-prefix-script 
+- [] RUNNER NAME in script-create-other-shortcuts
 - [-] update files having WINE_CMD with RUNNER variables (using WINE_CMD global search)
 - [x] winezgui  
 - [x] winezgui-create-prefix 
