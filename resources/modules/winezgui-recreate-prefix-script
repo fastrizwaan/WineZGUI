@@ -303,18 +303,26 @@ IFS=${SAVEIFS}
 # If INFOFILE has runner, then use it, else try to get runner from Settings.yml
 if   [ -f "${INFOFILE}" ]; then
        export RUNNER=$(grep Runner ${INFOFILE}|cut -f2 -d ":")
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 elif [ -f "${SETTINGS_FILE}" ]; then
        export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
+
+echo "8. ----------------------------- RUNNER:${RUNNER}"
+echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
 # If no runner is found in Infofile or Settings, then use the system/default runner
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
 fi
 
 # Runner = wine command in a different directory
 export WINE_CMD="${RUNNER}"
 
+echo "8. ----------------------------- RUNNER:${RUNNER}"
+echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -412,12 +420,22 @@ SOURCE "script-locate-exe-function"
 
 if [ -f "${INFOFILE}" ]; then
      export RUNNER=$(grep runner ${INFOFILE}|cut -f2 -d ":")
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
+
+echo "10. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "10. --------------------------------------- RUNNER = $RUNNER"
+echo "10. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 # If runner is not specified in Settings.yml then use wine
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
 fi
+
+echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
+echo "11. --------------------------------------- RUNNER = $RUNNER"
+echo "11. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \

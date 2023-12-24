@@ -393,6 +393,7 @@ if [ -f "${SETTINGS_FILE}" ]; then
 fi
      echo "5. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "5. --------------------------------------- RUNNER = $RUNNER"
+     echo "5. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 # If runner is not specified in Settings.yml then use wine
 if [ -z "${RUNNER}" ]; then
@@ -402,6 +403,7 @@ fi
 
      echo "6. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "6. --------------------------------------- RUNNER = $RUNNER"
+     echo "6. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
