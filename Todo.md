@@ -124,6 +124,16 @@ backup-bundle should include runner if runner is specified in Info.yml
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
 0.98.5.01-99-0.98.6 (runner support)
+- [x] add winezgui->settings->runner menu
+- [x] create file winezgui-runner to list options
+- [] Create RUNNER_NAME variable from system or foldername of the runner name 
+     if [ $(basename ${RUNNER}} = "wine" ] || if [ $(basename ${RUNNER}} = "wine64" ]; then
+          RUNNER_NAME="$(dirname $(dirname ${RUNNER}))"
+     fi
+- [x] RUNNER_NAME in winezgui
+- [] RUNNER NAME in winezgui-create-prefix
+- [] RUNNER NAME in winezgui-create-prefix
+- [] RUNNER NAME in winezgui-recreate-prefix-script 
 - [-] update files having WINE_CMD with RUNNER variables (using WINE_CMD global search)
 - [x] winezgui  
 - [x] winezgui-create-prefix 

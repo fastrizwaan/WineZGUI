@@ -60,12 +60,28 @@ export ARGV="$@"
 # If Settings.yml exists, get RUNNER value from it
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+     export RUNNER_NAME=$(dirname $(dirname ${RUNNER}))
 fi
+
+echo "1. ----------------------------- RUNNER:${RUNNER}"
+echo "1. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+
+## if [ $(basename ${RUNNER}} = "wine" ] || if [ $(basename ${RUNNER}} = "wine64" ]; then
+##          RUNNER_NAME="$(dirname $(dirname ${RUNNER}))"
+##     fi
 
 # If no runner is found in Settings, then use the system/default runner
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
 fi
+
+
+echo "2. ----------------------------- RUNNER:${RUNNER}"
+echo "2. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+
+sleep 10s
+
 
 # Runner = wine command in a different directory
 export WINE_CMD="${RUNNER}"
