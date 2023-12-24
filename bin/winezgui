@@ -60,7 +60,7 @@ export ARGV="$@"
 # If Settings.yml exists, get RUNNER value from it
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
-     export RUNNER_NAME=$(dirname $(dirname ${RUNNER}))
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
 
 echo "1. ----------------------------- RUNNER:${RUNNER}"

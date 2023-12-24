@@ -128,7 +128,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] create file winezgui-runner to list options
 - [] Create RUNNER_NAME variable from system or foldername of the runner name 
      if [ $(basename ${RUNNER}} = "wine" ] || if [ $(basename ${RUNNER}} = "wine64" ]; then
-          RUNNER_NAME="$(dirname $(dirname ${RUNNER}))"
+          RUNNER_NAME="$(basename $(dirname $(dirname ${RUNNER})))"
      fi
 - [x] RUNNER_NAME in winezgui
 - [] RUNNER NAME in winezgui-create-prefix
