@@ -265,13 +265,19 @@ IFS=${SAVEIFS}
 echo "2. --------------------------------------- SETTINGS_FILE = $SETTINGS_FILE"
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+
      echo "2. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "2. --------------------------------------- RUNNER = $RUNNER"
+     echo "2. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
+
 fi
+
 
 # If no runner is found in Settings, then use the system/default runner
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
 fi
 
 # Runner = wine command in a different directory
@@ -279,6 +285,7 @@ export WINE_CMD="${RUNNER}"
 
 echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "3. --------------------------------------- RUNNER = $RUNNER"
+echo "3. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 #sleep 5s
 # Clean up variables
@@ -376,12 +383,13 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
 
-# Get runner from info file
+# Get runner from Settings.yml file because this is a fresh prefix script
      echo "4. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "4. --------------------------------------- RUNNER = $RUNNER"
 
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
      echo "5. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "5. --------------------------------------- RUNNER = $RUNNER"
@@ -389,6 +397,7 @@ fi
 # If runner is not specified in Settings.yml then use wine
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
+   export RUNNER_NAME="System Default"
 fi
 
      echo "6. --------------------------------------- WINE_CMD = $WINE_CMD"
