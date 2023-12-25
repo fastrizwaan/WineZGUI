@@ -126,7 +126,7 @@ WineZGUI_Window() # Main WineZGUI application window function
   HEADER="$(basename ${0})"
   SELECTION=$(${ZENITY_CMD} --list --hide-header               \
                      --title "${APP_WITH_VER}" --width=360     \
-                     --height=440 --radiolist --column " "     \
+                     --height=460 --radiolist --column " "     \
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \
                             0 "Launch..."                      \
@@ -134,6 +134,7 @@ WineZGUI_Window() # Main WineZGUI application window function
                             0 "Backup..."                      \
                             0 "Restore..."                     \
                             0 "Delete..."                      \
+                            0 "Runner..."                      \
                             0 "Template..."                    \
                             0 "Settings..."                    \
                             0 "Kill all..."                    \
@@ -169,7 +170,15 @@ WineZGUI_Window() # Main WineZGUI application window function
   elif [ "${SELECTION}" = "Restore..." ]; then
          SOURCE "winezgui-restore"
          winezgui-restore
-
+  
+  elif [ "${SELECTION}" = "Delete..."  ]; then
+         SOURCE "winezgui-delete-prefix"
+         winezgui-delete-prefix
+  
+  elif [ "${SELECTION}" = "Runner..." ]; then
+        SOURCE "winezgui-runner"
+        winezgui-runner
+  
   elif [ "${SELECTION}" = "Template..." ]; then
          SOURCE "winezgui-template"
          winezgui-template
@@ -181,10 +190,6 @@ WineZGUI_Window() # Main WineZGUI application window function
   elif [ "${SELECTION}" = "More..."  ]; then
          SOURCE "winezgui-more"
          winezgui-more
-
-  elif [ "${SELECTION}" = "Delete..."  ]; then
-         SOURCE "winezgui-delete-prefix"
-         winezgui-delete-prefix
 
   elif [ "${SELECTION}" = "Help..." ]; then
          SOURCE "winezgui-help"

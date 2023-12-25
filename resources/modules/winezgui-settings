@@ -17,7 +17,7 @@ winezgui-settings()
                             --radiolist --column " "             \
                             --column "Action"                    \
                                 TRUE "Help..."                   \
-                                   0 "Runner..."                 \
+                                   0 "Set Runner..."             \
                                    0 "Wine Arch..."              \
                                    0 "Prefix Template..."        \
                                    0 "Launch Behavior..."        \
@@ -36,9 +36,9 @@ winezgui-settings()
         SOURCE "winezgui-settings-help"
         winezgui-settings-help
 
-   elif [ "${SETTINGS_OPTION}" = "Runner..." ]; then
-        SOURCE "winezgui-runner"
-        winezgui-runner
+   elif [ "${SETTINGS_OPTION}" = "Set Runner..." ]; then
+        SOURCE "winezgui-runner-set-default"
+        winezgui-runner-set-default
 
    elif [ "${SETTINGS_OPTION}" = "Wine Arch..." ]; then
         SOURCE "winezgui-settings-wine-arch"
