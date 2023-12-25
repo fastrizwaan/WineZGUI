@@ -77,7 +77,7 @@
 - arch is already taken care of by the wine directory's registry files.
 - [] import wine directory, include runner from
       - [] bottles
-          - [] if wine directory contains bottles.yml (grep Runner bottles.yml)
+          - [] if wine directory contains bottles.yml (grep "Runner:"bottles.yml)
           - [] find grepped runner at ~/.var/app/com.usebottles.bottles/data/bottles/runners
           - [] copy the runner to prefixdir
           - [] change WINE_CMD to prefixdir/runners/runner(ge-proton8-25)/files/bin/wine
@@ -98,7 +98,7 @@ Use Info.yml to set runner, it could be absolute path, change full path to $HOME
 
 Game->Change->Runner...
 
-grep Runner from Info.yml
+grep "Runner:"from Info.yml
 
 if no Runner Specified, do not include anything
 

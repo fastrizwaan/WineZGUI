@@ -302,10 +302,10 @@ IFS=${SAVEIFS}
 # If WineZGUI is using different runner, use it to create new prefixes
 # If INFOFILE has runner, then use it, else try to get runner from Settings.yml
 if   [ -f "${INFOFILE}" ]; then
-       export RUNNER=$(grep Runner ${INFOFILE}|cut -f2 -d ":")
+       export RUNNER=$(grep "Runner:" ${INFOFILE}|cut -f2 -d ":")
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 elif [ -f "${SETTINGS_FILE}" ]; then
-       export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+       export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
 
@@ -419,7 +419,7 @@ SOURCE "script-locate-exe-function"
 # Get runner from info file
 
 if [ -f "${INFOFILE}" ]; then
-     export RUNNER=$(grep Runner ${INFOFILE}|cut -f2 -d ":")
+     export RUNNER=$(grep "Runner:" ${INFOFILE}|cut -f2 -d ":")
      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
 
