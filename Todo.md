@@ -128,10 +128,23 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] create winezgui-runner-set-default
 - [] create winezgui-runner-import
 - [] create winezgui-runner-download
-    - [] Wine7
-    - [] Wine8
-    - [] Wine9
-    - [] lutris-GE-Proton-GE
+    - [] Kron4ek Wine Latest
+      WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases/latest|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+      for i in $WINEBUILDS ; do echo $i; done|head -n1
+    - [] Kron4ek wine-9.0
+      WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+      for i in $WINEBUILDS ; do echo $i; done|grep -i wine-9.0|head -n1
+    - [] Kron4ek wine-8.0
+      WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+      for i in $WINEBUILDS ; do echo $i; done|grep -i wine-8.0|head -n1
+
+    - [] Kron4ek wine-proton (latest)
+         WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+         wget $(for i in $WINEBUILDS ; do echo $i; done|grep -i proton|head -n1)
+
+    - [] lutris-GE-Proton-GE (wine-ge-proton)
+         WINEGE=$(curl -s https://api.github.com/repos/GloriousEggroll/wine-ge-custom/releases/latest |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+  
 - [] create winezgui-runner-backup
 - [] create winezgui-runner-delete
 
