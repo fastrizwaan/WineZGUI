@@ -105,9 +105,12 @@ winezgui-list-available-runners()
       fi
       count=$(expr ${count} + 1)
   done
+  # proton, etc runners have bin/wine subdirectory
   if [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
        SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
-  fi
+  else #use selected runner /app/bin (1st option) which does not have bin/ subdir
+       SELECTED_RUNNER="${SELECTED_RUNNERDIR}" 
+  fi 
   echo "SELECTED_RUNNER=$SELECTED_RUNNER"
   HEADER=${OLD_HEADER}
 }
