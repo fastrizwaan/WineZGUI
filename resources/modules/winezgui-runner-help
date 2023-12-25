@@ -10,7 +10,7 @@ winezgui-runner-help()
   HELP_TEXT+="Import Runner...              : Copy a runner from Bottles, Heroic Launcher, Lutris directories.|"
   HELP_TEXT+="Backup...                     : Backup a prefix runner from a list of available installed runners. |"
   HELP_TEXT+="Restore...                    : Extract or Restore a previously backed up runner|"
-  HELP_TEXT+="Delete...                     : Delete a Prefix Runner, makes system default runner as default runner.|"
+  HELP_TEXT+="Delete...                     : Delete a Prefix Runner, if default runner is deleted, makes system wine as default runner.|"
   
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
