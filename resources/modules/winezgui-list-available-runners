@@ -1,6 +1,6 @@
 # winezgui-list-available-runners
 # Finds exe installed in drive_c by an installer
-# and set the variable SELECTED_RUNNER
+# and set the variable SELECTED_RUNNERDIR
 # FIXME  winezgui-list-available-runners
 winezgui-list-available-runners()
 {
@@ -11,7 +11,7 @@ winezgui-list-available-runners()
   script-check-variables-loaded-or-not
 
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  unset SELECTED_RUNNER RUNNERS_FOUND COMMAND count SHOW_OPTION
+  unset SELECTED_RUNNER SELECTED_RUNNERDIR RUNNERS_FOUND COMMAND count SHOW_OPTION
   unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
   
 
@@ -30,7 +30,7 @@ winezgui-list-available-runners()
   if [ -z "${RUNNERS_FOUND}" ] ; then
        ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
               --text "Sorry, no runners found in Runners directory"
-              echo SELECTED_RUNNER
+              echo SELECTED_RUNNERDIR
        unset SEARCH_LIST RUNNERS_FOUND
        IFS=${SAVEIFS}
        WineZGUI_Window
@@ -91,15 +91,18 @@ winezgui-list-available-runners()
       if [ "$i" = "${RESULT}" ]; then
            dbug "I: ${HEADER}: Selected ${i}"
            dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
-           export SELECTED_RUNNER="${FILES[${count}]}"
-           export SELECTED_RUNNER_NAME="${i}"
-           echo "Selected RUNNER = $SELECTED_RUNNER"
-           echo "SELECTED_RUNNER_NAME=$SELECTED_RUNNER_NAME"
+           export SELECTED_RUNNERDIR="${FILES[${count}]}"
+           export SELECTED_RUNNERDIR_NAME="${i}"
+           echo "Selected RUNNER = $SELECTED_RUNNERDIR"
+           echo "SELECTED_RUNNERDIR_NAME=$SELECTED_RUNNERDIR_NAME"
            echo "00002 - - - - - - - - - - - - - - - - - -"
            break
       fi
       count=$(expr ${count} + 1)
   done
-  
+  if [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
+       SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
+  fi
+  echo "SELECTED_RUNNER=$SELECTED_RUNNER"
   HEADER=${OLD_HEADER}
 }
