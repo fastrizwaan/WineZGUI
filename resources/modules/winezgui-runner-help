@@ -6,7 +6,7 @@ winezgui-runner-help()
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   HELP_TEXT+="Set Default Runner...         : Select and existing runner to be used by newly created scripts/prefixes|"
-  HELP_TEXT+="Download Runner...            : Download runners like wine 8, 9, wine-proton by Kron4ek and proton-ge by Gloriouseggroll.|"
+  HELP_TEXT+="Download Runner...            : Download runners like wine 8, 9, wine-proton by Kron4ek and wine-ge-proton by GloriousEggroll.|"
   HELP_TEXT+="Import Runner...              : Copy a runner from Bottles, Heroic Launcher, Lutris directories.|"
   HELP_TEXT+="Backup...                     : Backup a prefix runner from a list of available installed runners. |"
   HELP_TEXT+="Restore...                    : Extract or Restore a previously backed up runner|"
