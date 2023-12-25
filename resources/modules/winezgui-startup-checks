@@ -70,6 +70,7 @@ winezgui-startup-checks()
        echo "011. ========================================="
        export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+       export RUNNER="${RUNNER}/bin/wine" # append /bin/wine to the directory name
        echo "012. RUNNER =$RUNNER"
        echo "012. RUNNER_NAME=$RUNNER_NAME"
        echo "012. ========================================="
