@@ -43,6 +43,12 @@ script-launch()
        dbug "I: Script: args=${EXE_ARGUMENTS}"
   fi
 
+  if [ -f ${INFOFILE} ]; then
+      export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
+      if [ -z "${RUNNER}" ]; then
+          export RUNNER=$(grep -i "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+      fi
+  fi
   # Check for Wine version change
   CURRENT_WINE_VERSION=$(${RUNNER} --version|cut -f1 -d " ")
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
