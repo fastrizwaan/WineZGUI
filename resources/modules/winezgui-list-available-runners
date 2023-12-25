@@ -43,10 +43,13 @@ winezgui-list-available-runners()
 
       # If 1st value is empty, enable it
       if [ -z "${SHOW_OPTION}" ]; then
-           SHOW_OPTION+="TRUE \"${RealName}\""
+           SHOW_OPTION+="TRUE \"System Default\""
            SHOW_OPTION+=" "
-           NAMES+=("${RealName}")
-           FILES+=("${RealFile}")
+           # Setting 1st option as default wine
+           NAMES+=("System Default")
+           FILES+=("$(which wine)")
+           #NAMES+=("${RealName}")
+           #FILES+=("${RealFile}")
       else
            SHOW_OPTION+="0 \"${RealName}\""
            SHOW_OPTION+=" "
