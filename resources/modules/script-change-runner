@@ -1,0 +1,29 @@
+script-change-runner()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  SOURCE "winezgui-list-available-runners"
+  winezgui-list-available-runners # get SELECTED_RUNNER 
+ 
+  # If Settings.yml is writable
+  if [ -w "${INFOFILE}" ]; then
+       #IF Runner: is not found add it
+       grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
+       sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${INFOFILE}"
+       sed "s|Wine:.*|Wine:${WINE_VERSION}|g" -i "${INFOFILE}"
+       export RUNNER="${SELECTED_RUNNER}"
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+  fi
+
+  dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
+  dbug "I: ${HEADER}: Selected Runner is ${RUNNER_NAME}"
+
+  
+  TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
+            ${ZENITY_CMD} --info --text="${TEXT}" \
+            --title "${APP_WITH_VER} - Change Runner"
+  unset TEXT
+}

@@ -11,6 +11,7 @@ script-change()
                          --list      --hide-header          \
                          --radiolist --column " "           \
                          --column "Action"                  \
+                                0 "Runner..."               \
                                 0 "Shortcut Name..."        \
                                 0 "Prefix Directory Name..."\
                                 0 "Wine Architecture..."    \
@@ -27,7 +28,11 @@ script-change()
   
   dbug "I: Script: ${FUNCNAME[0]}: Selected ${CHANGE_OPTION}"
   
-  if   [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
+  if   [ "${CHANGE_OPTION}" = "Runner..." ]; then
+         SOURCE "script-change-runner"
+         script-change-runner
+
+  elif [ "${CHANGE_OPTION}" = "Shortcut Name..." ]; then
          SOURCE "script-change-name"
          script-change-name
 
