@@ -1,0 +1,31 @@
+# winezgui-runner-help
+winezgui-runner-help()
+{
+  
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HELP_TEXT+="Set Default Runner...         : Select and existing runner to be used by newly created scripts/prefixes|"
+  HELP_TEXT+="Download Runner...            : Download runners: wine 8,9, wine-proton by Kron4ek and proton-ge by Gloriouseggroll.|"
+  HELP_TEXT+="Import Runner...              : Copy runners from Bottles, Heroic Launcher, Lutris directories.|"
+  HELP_TEXT+="Backup...                     : Backup a prefix runner from a list of available installed runners. |"
+  HELP_TEXT+="Restore...                    : Extract or Restore a previously backed up runner|"
+  HELP_TEXT+="Delete...                     : Delete a Prefix Runner, makes system default runner as default runner.|"
+  
+  # Text is more, so we need to format it, with sed in pango markup
+  unset TEXT
+  TEXT="$(echo ${HELP_TEXT} \
+              |tr "|" "\n" \
+              |sed "s/https:/https|/g" \
+              |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
+              |sed "s/:/;:;/g" \
+              |column -t -s ";"      \
+              |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
+              |sed -E "s/^(.*)$/<small>\1<\/small>/" \
+              |sed "s/|/:/g" )"
+              
+  #
+  ${ZENITY_CMD} --info --no-wrap --text "${TEXT}" --title "${APP_WITH_VER} - Help!"
+  unset HELP_TEXT
+  unset TEXT
+}

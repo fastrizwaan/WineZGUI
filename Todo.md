@@ -141,7 +141,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
     - [] Kron4ek wine-proton (latest)
          WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
          wget $(for i in $WINEBUILDS ; do echo $i; done|grep -i proton|head -n1)
-
+   - [] Kron4ek needs dxvk and vkd3d
     - [] lutris-GE-Proton-GE (wine-ge-proton)
          WINEGE=$(curl -s https://api.github.com/repos/GloriousEggroll/wine-ge-custom/releases/latest |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
   

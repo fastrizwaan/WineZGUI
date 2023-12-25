@@ -19,7 +19,7 @@ winezgui-runner()
                          0 "Backup..."                       \
                          0 "Restore..."                      \
                          0 "Delete..."                       \
-                         0 "Help..."                         \
+                      TRUE "Help..."                         \
                   --text   "Runner... ${RUNNER_NAME} in use" )
                         
     # Exit if Cancel is clicked
@@ -32,7 +32,7 @@ winezgui-runner()
   dbug "I: ${HEADER}: ${RUNNER_OPTION} Selected!"
 
   if   [ "${RUNNER_OPTION}" = "Set Default Runner..." ]; then
-          SOURCE "winezgui-runner-configure"
+          SOURCE "winezgui-runner-set-default"
           winezgui-runner-set-default
   elif [ "${RUNNER_OPTION}" = "Download Runner..." ]; then
           SOURCE "winezgui-runner-download"
