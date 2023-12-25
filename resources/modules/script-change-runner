@@ -15,6 +15,13 @@ script-change-runner()
        sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${INFOFILE}"
        sed "s|Wine:.*|Wine:${WINE_VERSION}|g" -i "${INFOFILE}"
        export RUNNER="${SELECTED_RUNNER}"
+
+       echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
+       echo "RUNNER=$RUNNER"
+       echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+       echo "INFOFILE=$INFOFILE"
+       echo "WINE_VERSION=$WINE_VERSION"
+       echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
   fi
 
