@@ -48,8 +48,10 @@ winezgui-list-available-runners()
            # Setting 1st option as default wine
            NAMES+=("System Default")
            FILES+=("$(which wine)")
-           #NAMES+=("${RealName}")
-           #FILES+=("${RealFile}")
+           SHOW_OPTION+="0 \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
       else
            SHOW_OPTION+="0 \"${RealName}\""
            SHOW_OPTION+=" "
