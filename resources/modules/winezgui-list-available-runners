@@ -112,5 +112,6 @@ winezgui-list-available-runners()
        SELECTED_RUNNER="${SELECTED_RUNNERDIR}" 
   fi 
   echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+  export SELECTED_RUNNER
   HEADER=${OLD_HEADER}
 }
