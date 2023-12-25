@@ -427,7 +427,7 @@ SOURCE "script-locate-exe-function"
 # Get runner from info file
 
 if [ -f "${INFOFILE}" ]; then
-     export RUNNER=$(grep runner ${INFOFILE}|cut -f2 -d ":")
+     export RUNNER=$(grep Runner ${INFOFILE}|cut -f2 -d ":")
      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
 
