@@ -70,7 +70,12 @@ winezgui-startup-checks()
        echo "011. ========================================="
        export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-       export RUNNER="${RUNNER}/bin/wine" # append /bin/wine to the directory name
+       # If runner is not found in Settings or empty
+       if [ -z "${RUNNER}" ]; then
+            echo "13. RUNNER = $RUNNER NOT FOUND, USING DEFAULT WINE"
+            export RUNNER="$(which wine)"
+            export RUNNER_NAME="System Default"
+       fi
        echo "012. RUNNER =$RUNNER"
        echo "012. RUNNER_NAME=$RUNNER_NAME"
        echo "012. ========================================="

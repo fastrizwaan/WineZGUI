@@ -26,28 +26,8 @@ winezgui-runner-set-default()
   dbug "I: ${HEADER}: Selected Runner is ${RUNNER_NAME}"
 
   
-  # Prompt the user to change arch too if it is different from the selected one
-  if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
-       unset TEXT
-       TEXT+="Runner <b>${RUNNER_NAME}</b> is <b>${REG_ARCH}</b>, "
-       TEXT+="but WineZGUI is using ${WINEARCH}.\nChange to ${REG_ARCH}!?"
-       ${ZENITY_CMD} --question --title "${APP_WITH_VER} Change Arch!?" \
-              --text "${TEXT}"
-       ANSWER=$?
-       # If yes
-       if [ ${ANSWER} -eq 0 ]; then
-            if [ -w "${SETTINGS_FILE}" ] && [ -w "${ABOUTFILE}" ]; then
-                 sed "s|arch:.*|arch:${REG_ARCH}|g" -i "${SETTINGS_FILE}"
-                 sed "s|Wine Arch:.*|Wine Arch:${REG_ARCH}|g" -i "${ABOUTFILE}"
-                 export WINEARCH="${REG_ARCH}"
-                 dbug "I: ${HEADER}: arch changed to ${REG_ARCH}"       
-            fi
-       else # If no/cancel
-            unset TEXT
-            TEXT="Remember to change to ${REG_ARCH} for ${RUNNER_NAME}!"
-            ${ZENITY_CMD} --warning --text="${TEXT}" \
-            --title "${APP_WITH_VER} - ${RUNNER_NAME} needs ${REG_ARCH}!"
-       fi
-  fi
+  TEXT="Changed runner to ${RUNNER_NAME}!\n${SELECTED_RUNNER}"
+            ${ZENITY_CMD} --info --text="${TEXT}" \
+            --title "${APP_WITH_VER} - Set Default Runner"
   unset TEXT
 }
