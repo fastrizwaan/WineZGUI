@@ -37,7 +37,7 @@ winezgui-runner()
   elif [ "${RUNNER_OPTION}" = "Download Runner..." ]; then
           SOURCE "winezgui-runner-download"
           winezgui-runner-download
- elif [ "${RUNNER_OPTION}" ="Import Runner..." ]; then
+  elif [ "${RUNNER_OPTION}" = "Import Runner..." ]; then
           SOURCE "winezgui-runner-import"
           winezgui-runner-import
   elif [ "${RUNNER_OPTION}" = "Backup..." ]; then
