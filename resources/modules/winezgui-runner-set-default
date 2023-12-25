@@ -10,6 +10,8 @@ winezgui-runner-set-default()
  
   # If Settings.yml is writable
   if [ -w "${SETTINGS_FILE}" ]; then
+       #IF runner: is not found add it
+       grep "runner:" "${SETTINGS_FILE}" || echo "runner:${RUNNER}" >> "${SETTINGS_FILE}"
        sed "s|runner:.*|runner:${SELECTED_RUNNER}|g" -i "${SETTINGS_FILE}"
        export RUNNER="${SELECTED_RUNNER}"
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
