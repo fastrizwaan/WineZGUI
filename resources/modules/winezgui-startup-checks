@@ -65,8 +65,14 @@ winezgui-startup-checks()
        export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       echo "011. RUNNER =$RUNNER"
+       echo "011. RUNNER_NAME=$RUNNER_NAME"
+       echo "011. ========================================="
        export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+       echo "012. RUNNER =$RUNNER"
+       echo "012. RUNNER_NAME=$RUNNER_NAME"
+       echo "012. ========================================="
        export DEFAULT="${TEMPLATE}"
        export WINEPREFIX="${DEFAULT}"
 
