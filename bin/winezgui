@@ -31,7 +31,6 @@ export RUNNERS_DIR="${WINEZGUIDIR}/Runners"        # Wine runners Directory
 # Commands used by WineZGUI and Scripts
 export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons 2>/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
-export WINEVER=$(wine --version|cut -f1 -d " ")
 export WBOOT_CMD="$(which wineboot) -i"
 export ICOTOOL_CMD="$(which icotool)"
 export WRESTOOL_CMD="$(which wrestool)"
@@ -61,6 +60,8 @@ export ARGV="$@"
 export RUNNER="$(which wine)"
 export RUNNER_NAME="System Default"
 export WINE_CMD=${RUNNER} # will be changed by startup-checks
+export WINEVER=$(${RUNNER} --version|cut -f1 -d " ")
+
 export WINETRICKS="$(which winetricks)"
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"

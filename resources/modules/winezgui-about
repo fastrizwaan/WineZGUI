@@ -14,7 +14,7 @@ winezgui-about()
 
   # Update version in About
   if [ -w "${ABOUTFILE}" ]; then
-       CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
+       CURRENT_WINE_VERSION=$(${RUNNER} --version|cut -f1 -d " ")
        sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine Version:.*|Wine Version:${CURRENT_WINE_VERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine:.*|Wine Runner:${RUNNER}|g" -i "${ABOUTFILE}"
