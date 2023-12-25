@@ -57,8 +57,16 @@ export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
 
 #winezgui-startup-checks setups up runner, template, etc.
-export RUNNER="$(which wine)"
-export RUNNER_NAME="System Default"
+export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+# If runner is not found in Settings  empty
+if [ -z "${RUNNER}" ]; then
+     echo "13. RUNNER = $RUNNER NOT FOUND, USING DEFAULT WINE"
+     export RUNNER="$(which wine)"
+     export RUNNER_NAME="System Default"
+else #Runner is found and extract it's directory name for runner_name
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+fi
+
 export WINE_CMD=${RUNNER} # will be changed by startup-checks
 export WINEVER=$(${RUNNER} --version|cut -f1 -d " ")
 
