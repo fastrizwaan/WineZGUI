@@ -20,7 +20,7 @@ winezgui-runner-set-default()
   # If About.yml is writable
   if [ -w "${ABOUTFILE}" ]; then
        export RUNNER="${SELECTED_RUNNER}"
-       export RUNNER_NAME=$(basename ${RUNNER})
+       export RUNNER_NAME="${SELECTED_RUNNERDIR_NAME}"
        sed "s|Runner:.*|Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
   fi
 
