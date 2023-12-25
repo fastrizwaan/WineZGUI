@@ -108,10 +108,10 @@ winezgui-list-available-runners()
   # proton, etc runners have bin/wine subdirectory
   if [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
        SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
-       export WINE_VERSION=$(${SELECTED_RUNNER} --version)
+       export WINEVER=$(${SELECTED_RUNNER} --version)
   else #use selected runner /app/bin (1st option) which does not have bin/ subdir
        SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
-       export WINE_VERSION=$(${SELECTED_RUNNER} --version)  
+       export WINEVER=$(${SELECTED_RUNNER} --version)  
   fi 
   echo "SELECTED_RUNNER=$SELECTED_RUNNER"
   export SELECTED_RUNNER

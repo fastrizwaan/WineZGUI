@@ -22,7 +22,7 @@ winezgui-runner-set-default()
        export RUNNER="${SELECTED_RUNNER}"
        export RUNNER_NAME="${SELECTED_RUNNERDIR_NAME}"
        sed "s|Runner:.*|Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
-       sed "s|Wine Version:.*|Wine Version:${WINE_VERSION}|g" -i "${ABOUTFILE}"
+       sed "s|Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
   fi
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
