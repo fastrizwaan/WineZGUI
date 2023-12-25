@@ -58,7 +58,9 @@ export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
 
 #winezgui-startup-checks setups up runner, template, etc.
-export WINE_CMD=$(which wine) # will be changed by startup-checks
+export RUNNER="$(which wine)"
+export RUNNER_NAME="System Default"
+export WINE_CMD=${RUNNER} # will be changed by startup-checks
 export WINETRICKS="$(which winetricks)"
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"

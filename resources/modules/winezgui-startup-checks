@@ -98,6 +98,7 @@ winezgui-startup-checks()
        export WINEPREFIX="${DEFAULT}"
   fi
   
+  ### since runner is being nothing by dirname, this will be empty,, fixme
   export WINE_CMD="${RUNNER}"
   export WINETRICKS="$(which winetricks)"
   
