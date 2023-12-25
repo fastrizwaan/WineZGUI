@@ -178,9 +178,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] add both runner and runner_name to Info.yml and Settings.yml and About.yml
 - [] update runner_name and version on change of runner
 
-- [-] use Info.yml get RUNNER info into recreated scripts 
-- [] recreate-prefix-script 
-- [] script-create-other-shortcuts
+- [x] use Info.yml get RUNNER info into recreated scripts 
+- [x] recreate-prefix-script 
+- [x] script-create-other-shortcuts
 
 - [] wine_cmd to use runner from Settings.yml
 - [] Locate runner, if not found, update with default runner, else use RUNNER=grep from settings.yml
@@ -194,9 +194,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      - [] do winetricks dxvk vkd3d (or make it default for 0.98.6 for both wine and proton)
      - 
 - [] scriptwise
-     - [] Change runner
+     - [x] Change runner
          - [] Check for dxvk & vkd3d in winetricks.log
-         - [] Get list of runners from WINEZGUIDIR/Runners and let user select one
+         - [] bug: change runner does not update Info.yml's wine version. fixme.
+         - [x] Get list of runners from WINEZGUIDIR/Runners and let user select one
          - [] If not found use the winezgui-find-runners function to list runners, let user use it directly or import runner to Runners directory.
          - [] Choose Change runner for this script only or for all scrpts inside $PREFIXDIR
          - [] Change Info.yml or *.yml based on user's selection
