@@ -13,7 +13,10 @@ winezgui-list-available-runners()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   unset SELECTED_RUNNER RUNNERS_FOUND COMMAND count SHOW_OPTION
   unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
+  
 
+  echo "RUNNERS_DIR =$RUNNERS_DIR"
+  echo "========================================="
   count=0
   NAMES=()
   FILES=()
