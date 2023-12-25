@@ -38,7 +38,7 @@ winezgui-list-available-runners()
   # if RUNNERS_FOUND has value, then only change exe
   for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
   do
-      RealName=$(basename $(dirname $(dirname "$i"))) 
+      RealName=$(basename    "$i"))) 
       RealFile=$(realpath -m "$i")
 
       # If 1st value is empty, enable it
@@ -93,6 +93,9 @@ winezgui-list-available-runners()
            dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
            export SELECTED_RUNNER="${FILES[${count}]}"
            export SELECTED_RUNNER_NAME="${i}"
+           echo "Selected RUNNER = $SELECTED_RUNNER"
+           echo "SELECTED_RUNNER_NAME=$SELECTED_RUNNER_NAME"
+           echo "00002 - - - - - - - - - - - - - - - - - -"
            break
       fi
       count=$(expr ${count} + 1)
