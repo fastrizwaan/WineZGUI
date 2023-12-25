@@ -1,0 +1,99 @@
+# winezgui-list-available-runners
+# Finds exe installed in drive_c by an installer
+# and set the variable SELECTED_RUNNER
+# FIXME  winezgui-list-available-runners
+winezgui-list-available-runners()
+{
+  OLD_HEADER=${HEADER}
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset SELECTED_RUNNER RUNNERS_FOUND COMMAND count SHOW_OPTION
+  unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
+
+  count=0
+  NAMES=()
+  FILES=()
+  
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${RUNNERS_DIR}/* -maxdepth 0 -type d -print 2>/dev/null \
+              | tr '\n' '|')
+  RUNNERS_FOUND=$(echo ${SEARCH_LIST})
+
+  if [ -z "${RUNNERS_FOUND}" ] ; then
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+              --text "Sorry, no runners found in Runners directory"
+              echo SELECTED_RUNNER
+       unset SEARCH_LIST RUNNERS_FOUND
+       IFS=${SAVEIFS}
+       WineZGUI_Window
+  fi
+  # if RUNNERS_FOUND has value, then only change exe
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
+  do
+      RealName=$(basename $(dirname $(dirname "$i"))) 
+      RealFile=$(realpath -m "$i")
+
+      # If 1st value is empty, enable it
+      if [ -z "${SHOW_OPTION}" ]; then
+           SHOW_OPTION+="TRUE \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      else
+           SHOW_OPTION+="0 \"${RealName}\""
+           SHOW_OPTION+=" "
+           NAMES+=("${RealName}")
+           FILES+=("${RealFile}")
+      fi
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+  
+  # Generate Height value
+  SOURCE "winezgui-get-window-height"
+  winezgui-get-window-height ${#FILES[@]}
+
+ # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER}\" "
+  COMMAND+="--text \"${RUNNER_TYPE} Runners\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  RESULT=$(eval ${COMMAND})
+  
+  ANSWER=$?
+ 
+  if [ ${ANSWER} -eq 1 ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       WineZGUI_Window
+  fi
+  
+  if [ -z "${RESULT}" ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       WineZGUI_Window
+  fi
+
+  count=0
+  # 4. Find which file the user selected and set the selected exe into variable
+  for i in "${NAMES[@]}"; do
+      if [ "$i" = "${RESULT}" ]; then
+           dbug "I: ${HEADER}: Selected ${i}"
+           dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
+           export SELECTED_RUNNER="${FILES[${count}]}"
+           export SELECTED_RUNNER_NAME="${i}"
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
+  
+  HEADER=${OLD_HEADER}
+}

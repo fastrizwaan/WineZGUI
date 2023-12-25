@@ -57,31 +57,7 @@ export LD_LIBRARY_PATH
 export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
 
-# If Settings.yml exists, get RUNNER value from it
-if [ -f "${SETTINGS_FILE}" ]; then
-     export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
-     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-fi
-
-echo "1. ----------------------------- RUNNER:${RUNNER}"
-echo "1. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-
-
-# If no runner is found in Settings, then use the system/default runner
-if [ -z "${RUNNER}" ]; then
-   export RUNNER="$(which wine)"
-   export RUNNER_NAME="System Default"
-fi
-
-
-echo "2. ----------------------------- RUNNER:${RUNNER}"
-echo "2. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-
-
-
-# Runner = wine command in a different directory
-export WINE_CMD="${RUNNER}"
-export WINETRICKS="$(which winetricks)"
+#winezgui-startup-checks setups up runner, template, etc.
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
@@ -223,8 +199,16 @@ SOURCE "winezgui-dbug"
 SOURCE "winezgui-cli-arguments"
 winezgui-cli-arguments
 
+echo "00. ----------------------------- RUNNER:${RUNNER}"
+echo "00. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+echo "00. ----------------------------- WINE_CMD:${WINE_CMD}"
+
 SOURCE "winezgui-startup-checks"
 winezgui-startup-checks
+
+echo "01. ----------------------------- RUNNER:${RUNNER}"
+echo "01. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+echo "01. ----------------------------- WINE_CMD:${WINE_CMD}"
 
 SOURCE "winezgui-check-file-type"
 winezgui-check-file-type "${1}"

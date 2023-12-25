@@ -1,0 +1,53 @@
+winezgui-runner-set-default()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  SOURCE "winezgui-list-available-runners"
+  winezgui-list-available-runners # get SELECTED_RUNNER 
+ 
+  # If Settings.yml is writable
+  if [ -w "${SETTINGS_FILE}" ]; then
+       sed "s|runner:.*|runner:${SELECTED_RUNNER}|g" -i "${SETTINGS_FILE}"
+       export RUNNER="${SELECTED_RUNNER}"
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+  fi
+  
+  # If About.yml is writable
+  if [ -w "${ABOUTFILE}" ]; then
+       export RUNNER="${SELECTED_RUNNER}"
+       export RUNNER_NAME=$(basename ${RUNNER})
+       sed "s|Runner:.*|Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
+  fi
+
+  dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
+  dbug "I: ${HEADER}: Selected Runner is ${RUNNER_NAME}"
+
+  
+  # Prompt the user to change arch too if it is different from the selected one
+  if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
+       unset TEXT
+       TEXT+="Runner <b>${RUNNER_NAME}</b> is <b>${REG_ARCH}</b>, "
+       TEXT+="but WineZGUI is using ${WINEARCH}.\nChange to ${REG_ARCH}!?"
+       ${ZENITY_CMD} --question --title "${APP_WITH_VER} Change Arch!?" \
+              --text "${TEXT}"
+       ANSWER=$?
+       # If yes
+       if [ ${ANSWER} -eq 0 ]; then
+            if [ -w "${SETTINGS_FILE}" ] && [ -w "${ABOUTFILE}" ]; then
+                 sed "s|arch:.*|arch:${REG_ARCH}|g" -i "${SETTINGS_FILE}"
+                 sed "s|Wine Arch:.*|Wine Arch:${REG_ARCH}|g" -i "${ABOUTFILE}"
+                 export WINEARCH="${REG_ARCH}"
+                 dbug "I: ${HEADER}: arch changed to ${REG_ARCH}"       
+            fi
+       else # If no/cancel
+            unset TEXT
+            TEXT="Remember to change to ${REG_ARCH} for ${RUNNER_NAME}!"
+            ${ZENITY_CMD} --warning --text="${TEXT}" \
+            --title "${APP_WITH_VER} - ${RUNNER_NAME} needs ${REG_ARCH}!"
+       fi
+  fi
+  unset TEXT
+}

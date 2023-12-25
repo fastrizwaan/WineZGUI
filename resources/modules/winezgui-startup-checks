@@ -65,8 +65,11 @@ winezgui-startup-checks()
        export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       export RUNNER=$(grep runner ${SETTINGS_FILE}|cut -f2 -d ":")
+       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
        export DEFAULT="${TEMPLATE}"
        export WINEPREFIX="${DEFAULT}"
+
        
   fi
   
@@ -81,11 +84,16 @@ winezgui-startup-checks()
        echo "template:${WINEZGUI_TEMPLATE}" >> "${SETTINGS_FILE}"
        export TEMPLATE="${WINEZGUI_TEMPLATE}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
+       export RUNNER="$(which wine)"
+       export RUNNER_NAME="System Default"
        echo "debug:Y" >> "${SETTINGS_FILE}"
        export DEBUG="Y"
        export DEFAULT="${TEMPLATE}"
        export WINEPREFIX="${DEFAULT}"
   fi
+  
+  export WINE_CMD="${RUNNER}"
+  export WINETRICKS="$(which winetricks)"
   
   # If Settings.yml exists and arch: value do not match win32 or win64; use win64
   if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ]; then
