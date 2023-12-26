@@ -124,6 +124,8 @@ backup-bundle should include runner if runner is specified in Info.yml
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
 0.98.5.01-99-0.98.6 (runner support)
+- SCRIPT-ABOUT should use runner from info.yml and use wine-version from there.
+
 - [] create winezgui-runner-help
 - [] create winezgui-runner-set-default
 - [] create winezgui-runner-import
