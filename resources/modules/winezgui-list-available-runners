@@ -120,7 +120,15 @@ winezgui-list-available-runners()
   echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
   echo "WINEVER=$WINEVER"
   echo " x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x-x-"
-
+  
+  # if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
+  if [ -z "${WINEVER}" ] ; then
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+       --text "Could not find <b>${SELECTED_RUNNERDIR}/bin/wine</b>\nor it is not compatible!"
+       dbug "Bad Runner or not a wine file"
+       sleep 15s
+       return 1
+  fi
   sleep 15s
   export SELECTED_RUNNER
   HEADER=${OLD_HEADER}
