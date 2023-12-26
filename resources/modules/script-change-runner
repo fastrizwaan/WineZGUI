@@ -33,4 +33,6 @@ script-change-runner()
             ${ZENITY_CMD} --info --text="${TEXT}" \
             --title "${APP_WITH_VER} - Change Runner"
   unset TEXT
+  # restart Scriptfile after runner change
+  ${SCRIPTFILE} & exit 0
 }
