@@ -12,15 +12,19 @@ winezgui-runner-backup()
        SOURCE "winezgui-list-available-runners"
        winezgui-list-available-runners # Get SELECTED_RUNNER
   else
-       SELECTED_RUNNER="${RUNNER}"
+       SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
   fi
   
   # 1.1 Need this to print name of runner
-  SELECTED_RUNNER_NAME=$(basename "${SELECTED_RUNNER}")
+  SELECTED_RUNNER_NAME="${SELECTED_RUNNERDIR_NAME}"
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
   dbug "I: ${HEADER}: Runner Name: ${SELECTED_RUNNER_NAME}"
   
+  if [ "${SELECTED_RUNNER_NAME}" = "System Default" ] ; then
+       ${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="Cannot backup System Runner"
+       return 1
+  fi
   
   # 2.0 Get disk usage of runner
   DATE=$(date +'%Y%m%d')
@@ -264,7 +268,7 @@ winezgui-runner-backup()
   dbug "I: Backup: Runner: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
   # 8. Show info about created wzt file
-  ${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="${MSG[@]}"
+  ${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="${MSG[@]}"${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="${MSG[@]}"
   unset TEXT TITLE MSG
   return 0
 }
