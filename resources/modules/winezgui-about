@@ -18,6 +18,7 @@ winezgui-about()
        sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine Version:.*|Wine Version:${CURRENT_WINE_VERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine:.*|Wine Runner:${RUNNER}|g" -i "${ABOUTFILE}"
+       sed "s|^Wine Runner:.*|Wine Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
   fi
   
   # Text is more, so we need to format it, with sed in pango markup
