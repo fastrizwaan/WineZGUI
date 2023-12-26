@@ -18,18 +18,18 @@ winezgui-runner-backup()
   # 1.1 Need this to print name of runner
   SELECTED_RUNNER_NAME="${SELECTED_RUNNERDIR_NAME}"
 
-  dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
+  dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNERDIR}"
   dbug "I: ${HEADER}: Runner Name: ${SELECTED_RUNNER_NAME}"
   
   if [ "${SELECTED_RUNNER_NAME}" = "System Default" ] ; then
        ${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="Cannot backup System Runner"
        return 1
   fi
-  
+
   # 2.0 Get disk usage of runner
   DATE=$(date +'%Y%m%d')
   RUNNER_EXT="tar.zst"
-  RUNNER_SIZE_IN_HF=$(du -sh "${SELECTED_RUNNER}"|sed "s/  */ /g" \
+  RUNNER_SIZE_IN_HF=$(du -sh "${SELECTED_RUNNERDIR}"|sed "s/  */ /g" \
                        |cut -f1 -d " "| cut -f1 )
   # Check du value assignment
         if [ -z "${RUNNER_SIZE_IN_HF}" ]; then
@@ -84,7 +84,7 @@ winezgui-runner-backup()
   unset TITLE
   unset TEXT
   TITLE="Backup ${SELECTED_RUNNER_NAME} Runner!"
-  TEXT+="${RUNNER_SIZE_IN_HF} ${SELECTED_RUNNER}"
+  TEXT+="${RUNNER_SIZE_IN_HF} ${SELECTED_RUNNERDIR}"
 
   # 5.1 Suggest and Ask for runner file name
   dbug "I: ${HEADER}: Asking filename"
@@ -205,7 +205,7 @@ winezgui-runner-backup()
   dbug "I: ${HEADER}: Changing Directory to ${RUNNERS_DIR}"
 
   
-  # 10.3 Create runner-info.yml inside SELECTED_RUNNER, not needed though
+  # 10.3 Create runner-info.yml inside SELECTED_RUNNERDIR, not needed though
   
   # 11.0 Create Runner Backup file using tar and zst
   dbug "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
