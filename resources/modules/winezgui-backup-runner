@@ -199,11 +199,8 @@ winezgui-runner-backup()
   cd "${RUNNERS_DIR}"
   # 10.2 Preprocess RUNNERS_DIR files (remove user name from files)
   dbug "I: ${HEADER}: Changing Directory to ${RUNNERS_DIR}"
-  dbug "I: ${HEADER}: Launching: winezgui-identity-remove"
-  
-  SOURCE "winezgui-identity-remove"
-  winezgui-identity-remove "${SELECTED_RUNNER}"
 
+  
   # 10.3 Create runner-info.yml inside SELECTED_RUNNER, not needed though
   
   # 11.0 Create Runner Backup file using tar and zst
@@ -263,11 +260,6 @@ winezgui-runner-backup()
 
   fi
 
-  # 7.7 Restore changed values after backup
-  dbug "I: Backup: Runner: Restoring Registry and Info files"
-  cd "${RUNNERS_DIR}"
-  SOURCE "winezgui-identity-restore"
-  winezgui-identity-restore "${SELECTED_RUNNER}"
 
   dbug "I: Backup: Runner: Created ${BACKUP_FILE} at ${TARGET_DIR}"
 
