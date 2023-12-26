@@ -667,8 +667,7 @@ if [ ! -f "${PREFIXDIR}/replaced_symlinks.txt" ]; then
 fi
 
 # Create Metadata Info.yml for the prefix
-#if [ ! -f "${INFOFILE}" ]; then
-# Update Info.yml because we are recreating script
+if [ ! -f "${INFOFILE}" ]; then
      #  Insert Data into Info.yml
      DATE=$(date +%F_%H%M)
 
@@ -693,7 +692,7 @@ fi
           echo "Flatpak:${FLATPAK_NAME}"    >> "${INFOFILE}"
      fi
      dbug "I: Script: Prefix: Created ${INFOFILE}"
-#fi
+fi
 
 # Handle Commandline Argument ${0} backup, ${0} launch etc.
 # Either we run with argumement from winezgui or from prefixdir manually
