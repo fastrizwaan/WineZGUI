@@ -71,9 +71,6 @@ winezgui-runner-restore()
             WineZGUI_Window
        fi # if ! [ -z "$PID_OF_TAR" ]; then
   else
-       # PROCESS XO--XO variable inside prefixes and runners directory
-       SOURCE "winezgui-identity-restore-all"
-       winezgui-identity-restore-all
 
        # Inform on successful extraction
        dbug "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"

@@ -126,8 +126,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.5.01-99-0.98.6 (runner support)
 - SCRIPT-ABOUT should use runner from info.yml and use wine-version from there.
 
-- [] create winezgui-runner-help
-- [] create winezgui-runner-set-default
+- [x] create winezgui-runner-help
+- [x] create winezgui-runner-set-default
 - [] create winezgui-runner-import
 - [] create winezgui-runner-download
     - [] Kron4ek Wine Latest
@@ -147,8 +147,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
     - [] lutris-GE-Proton-GE (wine-ge-proton)
          WINEGE=$(curl -s https://api.github.com/repos/GloriousEggroll/wine-ge-custom/releases/latest |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
   
-- [] create winezgui-runner-backup
-- [] create winezgui-runner-delete
+- [x] create winezgui-runner-backup
+- [-] create winezgui-runner-restore (needs supporting zip files), do not 
+- [x] create winezgui-runner-delete
 
 - [x] add winezgui->settings->runner menu
 - [x] create file winezgui-runner to list options
