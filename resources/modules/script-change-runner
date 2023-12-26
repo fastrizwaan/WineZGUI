@@ -13,15 +13,7 @@ script-change-runner()
        #IF Runner: is not found add it
        grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
        sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${INFOFILE}"
-       # Update WINEVER on change of runner inside script
-
-
-echo "==================================================================================================="
-echo "==================================================================================================="
-echo "1. WINEVER=$WINEVER"
-       export WINEVER="$(${SELECTED_RUNNER} --version|cut -f1 -d " ")"
-echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
-echo "2. WINEVER=$WINEVER"       
+       # Update WINEVER on change of runner inside script    
 
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${INFOFILE}"
        export RUNNER="${SELECTED_RUNNER}"
@@ -33,6 +25,7 @@ echo "2. WINEVER=$WINEVER"
        echo "WINEVER=$WINEVER"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+       sleep 10s
   fi
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"

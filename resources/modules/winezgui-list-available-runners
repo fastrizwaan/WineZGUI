@@ -126,10 +126,8 @@ winezgui-list-available-runners()
        ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
        --text "Could not find <b>${SELECTED_RUNNERDIR}/bin/wine</b>\nor it is not compatible!"
        dbug "Bad Runner or not a wine file"
-       sleep 15s
        return 1
   fi
-  sleep 15s
   export SELECTED_RUNNER
   HEADER=${OLD_HEADER}
 }
