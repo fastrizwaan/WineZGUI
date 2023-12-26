@@ -1,0 +1,41 @@
+# winezgui-runner-delete
+winezgui-runner-delete()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  SOURCE "winezgui-list-available-runners"
+  winezgui-list-available-runners # get SELECTED_RUNNER
+  echo "I: ${HEADER}: WINEARCH=$WINEARCH"
+
+  # Ask before deleting runner
+  unset TEXT TITLE
+  TEXT+="Do you want to delete ${SELECTED_RUNNERDIR_NAME}\?"
+  TITLE+="${EXE_NAME} ${APP_WITH_VER} - Delete Runner!"
+  ${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
+  ANSWER=$?
+  if [ ${ANSWER} != 0 ] ; then
+       echo "Cancelled Deleting Runner..."
+       return 1
+  fi
+
+
+  rm -rf "${SELECTED_RUNNERDIR}" && \
+  dbug "I: ${HEADER}: Deleted ${SELECTED_RUNNERDIR}"
+  echo "${RUNNER} = ${SELECTED_RUNNER} "
+
+  if [ "${RUNNER}" = "${SELECTED_RUNNER}" ]; then
+       echo "I: ${HEADER}: Deleted in use Runner! Resetting..."
+       dbug "I: ${HEADER}: Resetting runner to System Default"
+       dbug "i: ${HEADER}: by emptying the value of runner:"
+       
+       sed "s|runner:.*|runner:|g" -i "${SETTINGS_FILE}"
+
+       # Update runner and arch from Settings.yml
+       dbug "I: ${HEADER}: Restarting ${0}"
+       # Deleting in use Runner causes issues, better restart
+       winezgui & exit 0
+  fi
+}
