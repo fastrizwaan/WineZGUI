@@ -25,7 +25,6 @@ script-change-runner()
        echo "WINEVER=$WINEVER"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
        export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-       sleep 10s
   fi
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
@@ -37,5 +36,5 @@ script-change-runner()
             --title "${APP_WITH_VER} - Change Runner"
   unset TEXT
   # restart Scriptfile after runner change
-  ${SCRIPTFILE} & exit 0
+ # ${SCRIPTFILE} & exit 0
 }
