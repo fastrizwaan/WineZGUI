@@ -10,7 +10,7 @@ winezgui-runner-delete()
   winezgui-list-available-runners # get SELECTED_RUNNER
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
 
-  if [ "${SELECTED_RUNNER_NAME}" = "System Default" ] ; then
+  if [ "${SELECTED_RUNNERDIR_NAME}" = "System Default" ] ; then
        ${ZENITY_CMD} --no-wrap --info --title="Delete Runner!" --text="Cannot Delete System Runner"
        dbug "I: $(basename ${0}):Cannot Delete System Runner"
        return 1
