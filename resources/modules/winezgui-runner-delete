@@ -10,6 +10,11 @@ winezgui-runner-delete()
   winezgui-list-available-runners # get SELECTED_RUNNER
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
 
+  if [ "${SELECTED_RUNNER_NAME}" = "System Default" ] ; then
+       ${ZENITY_CMD} --no-wrap --info --title="Delete Runner!" --text="Cannot Delete System Runner"
+       dbug "I: $(basename ${0}):Cannot Delete System Runner"
+       return 1
+  fi
   # Ask before deleting runner
   unset TEXT TITLE
   TEXT+="Do you want to delete ${SELECTED_RUNNERDIR_NAME}\?"
@@ -32,7 +37,11 @@ winezgui-runner-delete()
        dbug "i: ${HEADER}: by emptying the value of runner:"
        
        sed "s|runner:.*|runner:|g" -i "${SETTINGS_FILE}"
-
+      # update About.ymlIf About.yml is writable
+      if [ -w "${ABOUTFILE}" ]; then
+           sed "s|Runner:.*|Runner:|g" -i "${ABOUTFILE}"
+           sed "s|Wine Version:.*|Wine Version:|g" -i "${ABOUTFILE}"
+      fi
        # Update runner and arch from Settings.yml
        dbug "I: ${HEADER}: Restarting ${0}"
        # Deleting in use Runner causes issues, better restart
