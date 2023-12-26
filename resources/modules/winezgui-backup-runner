@@ -1,0 +1,280 @@
+# winezgui-backup-runner
+winezgui-runner-backup()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  
+  # 1.0 If No Runner name is given, ask for runner to backup
+  if [ -z "${1}" ]; then
+       SOURCE "winezgui-list-available-runners"
+       winezgui-list-available-runners # Get SELECTED_RUNNER
+  else
+       SELECTED_RUNNER="${RUNNER}"
+  fi
+  
+  # 1.1 Need this to print name of runner
+  SELECTED_RUNNER_NAME=$(basename "${SELECTED_RUNNER}")
+
+  dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
+  dbug "I: ${HEADER}: Runner Name: ${SELECTED_RUNNER_NAME}"
+  
+  
+  # 2.0 Get disk usage of runner
+  DATE=$(date +'%Y%m%d')
+  RUNNER_EXT="tar.zst"
+  RUNNER_SIZE_IN_HF=$(du -sh "${SELECTED_RUNNER}"|sed "s/  */ /g" \
+                       |cut -f1 -d " "| cut -f1 )
+  # Check du value assignment
+        if [ -z "${RUNNER_SIZE_IN_HF}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: RUNNER_SIZE_IN_HF not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
+
+  RUNNER_SIZE_IN_BYTES=$(echo ${RUNNER_SIZE_IN_HF}|cut -f1 -d " " \
+                          | numfmt --from iec)
+
+  dbug "I: ${HEADER}: DATE                : ${DATE}"
+  dbug "I: ${HEADER}: RUNNER_EXT          : ${RUNNER_EXT}"
+  dbug "I: ${HEADER}: RUNNER_SIZE_IN_HF   : ${RUNNER_SIZE_IN_HF}"
+  dbug "I: ${HEADER}: RUNNER_SIZE_IN_BYTES: ${RUNNER_SIZE_IN_BYTES}"
+  
+  # 3.0 Set Total Backup size variable
+  TOTAL_SIZE_IN_HF=${RUNNER_SIZE_IN_HF}
+  TOTAL_SIZE_IN_BYTES=${RUNNER_SIZE_IN_BYTES}
+
+  dbug "I: ${HEADER}: TOTAL_SIZE_IN_BYTES   : ${TOTAL_SIZE_IN_BYTES}"
+  dbug "I: ${HEADER}: TOTAL_SIZE_IN_HF      : ${TOTAL_SIZE_IN_HF}"
+  
+  # 4.0 Prepare RUNNER Name
+  # 4.1 Format filename for flatpak or system install type
+  if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+       # If "flatpak-" is not part of flatpak name
+       # like WineZGUI flatpak name: io.github.fastrizwaan.WineZGUI, add it
+       if ! [[ "$SHORT_FLATPAK_NAME" == *"flatpak-"* ]]; then
+            SHORT_FLATPAK_NAME="flatpak-${SHORT_FLATPAK_NAME}"
+       fi
+       unset FILENAME
+       FILENAME+="Runner"
+       FILENAME+="-${SELECTED_RUNNER_NAME}-"
+       #FILENAME+="${SHORT_FLATPAK_NAME}"
+       FILENAME+="${DATE}"
+       FILENAME+=".${RUNNER_EXT}"
+       # Flatpak: runner-Runner_Name-flatpak-wine7-20220904.tar.zst
+  else # for system add wine-version
+       unset FILENAME
+       FILENAME+="Runner"
+       FILENAME+="-${SELECTED_RUNNER_NAME}-"
+       #FILENAME+="${WINEVER}"
+       FILENAME+="${DATE}"
+       FILENAME+=".${RUNNER_EXT}"
+       # runner-Runner_Name-wine-7.0-20220904.tar.zst
+  fi
+
+  dbug "I: ${HEADER}: Filename Suggestion: ${FILENAME}"
+
+  # 5.0 Ask FILENAME using Zenity Entry dialog
+  unset TITLE
+  unset TEXT
+  TITLE="Backup ${SELECTED_RUNNER_NAME} Runner!"
+  TEXT+="${RUNNER_SIZE_IN_HF} ${SELECTED_RUNNER}"
+
+  # 5.1 Suggest and Ask for runner file name
+  dbug "I: ${HEADER}: Asking filename"
+  BACKUP_FILE=$(${ZENITY_CMD}                         \
+                 --title="${TITLE}"            \
+                 --width=700 --height=30       \
+                 --text="${TEXT}"              \
+                 --entry-text="${FILENAME}"    \
+                 --entry)
+
+  # 5.2: If user cancels or nothing
+  if [ -z "${BACKUP_FILE}" ]; then
+       dbug "I: ${HEADER}: Cancelled!"
+       unset BACKUP_FILE
+       unset FILENAME
+       return 1
+  fi
+
+
+  # Check if user entered symbols
+  SOURCE "winezgui-check-entry-text"
+  winezgui-check-entry-text "${BACKUP_FILE}"
+  
+  ENTRY_CHECK=$?
+  if [ ${ENTRY_CHECK} -eq 1 ]; then
+       dbug "I: Script: ${FUNCNAME[0]}: Symbols used in filename, cancelling!"
+       return 1
+  fi
+  
+  # 6.0 Ask user to select target backup directory
+  dbug "I: ${HEADER}: Choose Backup Directory..."
+  unset TITLE
+  TITLE="Choose Backup Directory for ${BACKUP_FILE}!"
+  TARGET_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
+  
+  # 6.2: If user cancels or nothing
+  if [ -z "${TARGET_DIR}" ]; then
+       dbug "I: ${HEADER}: Select backup directory: Cancelled!"
+       return 1
+  fi
+
+  # 6.2: If the target directory is not writable, inform and return
+  if [ ! -w "${TARGET_DIR}" ]; then
+       echo "E: ${HEADER}: ${TARGET_DIR} not writable"
+       ${ZENITY_CMD} --error --no-wrap --title="Backup Error!" \
+              --text "${TARGET_DIR} not writable\nAborting Backup!"
+       return 1
+  fi
+
+  # 7.0 Process Backup file name
+  
+  dbug "I: ${HEADER}: Given ${BACKUP_FILE}"
+  # 7.1 Required extension is .tar.zst , if not found add it
+  if ! [[ "${BACKUP_FILE}" == *".${RUNNER_EXT}" ]]; then
+       BACKUP_FILE="$(echo ${BACKUP_FILE}.${RUNNER_EXT})"
+       dbug "I: ${HEADER}: added suffix ${RUNNER_EXT}"
+  fi
+
+  dbug "I: ${HEADER}: Using ${BACKUP_FILE}"
+
+  # 8.0 Check available disk space in target directory before backing up
+  # to make sure that runner size < target dir for backup to start
+  dbug "I: ${HEADER}: Determining available space at ${TARGET_DIR}"
+
+  # 8.1: Get available target dir partition's available space in
+  # Human format (df -h)
+  AVAILABLE_SPACE=$(df -h "${TARGET_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
+  # 8.2: Convert the above $AVAILABLE_SPACE into bytes for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}| numfmt --from iec)
+  #RUNNER_SIZE_IN_BYTES=$(echo ${RUNNER_SIZE_IN_HF}|cut -f1 -d " "| numfmt --from iec)
+
+  dbug "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  dbug "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+
+  # 8.3: If Target directory does not have sufficient space, abort backup
+  dbug "I: ${HEADER}: Checking if size < target dir space"
+
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE_IN_BYTES} ]; then
+       dbug "I: ${HEADER}: ${TARGET_DIR} has ample disk space."
+  else
+       echo "E: ${HEADER}: Insufficient disk space at ${TARGET_DIR}!"
+       unset MSG
+       unset TITLE
+       TITLE="Not Enough Disk Space!"
+       MSG+="${TARGET_DIR} has only ${AVAILABLE_SPACE}"
+       MSG+=" "
+       MSG+="free disk space left!\n"
+       MSG+="RUNNER backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+       # Warn user
+       ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+       echo "E: ${HEADER}: Not Enough Disk Space, Cancelled!"
+       return 1
+  fi
+
+  # 9. Ask for Compression Levels
+  unset LEVEL
+  LEVEL=$(${ZENITY_CMD} --scale --value 10 --min-value 1 --max-value 19 \
+       --text "${BACKUP_FILE}" --title "Select Compression Level...")
+  # 9.1 Return if Cancel is clicked
+  if [ -z "${LEVEL}" ]; then
+       dbug "I: ${HEADER}: Cancel Selected!"
+       return 1
+  fi
+  dbug "I: ${HEADER}: Compression Level ${LEVEL} Selected!"
+
+  # 10.0 Create runner backup tar.zst file
+  # 10.1 Change directory to RUNNERS_DIR
+  dbug "I: ${HEADER}: Runner: Preparing files"
+  cd "${RUNNERS_DIR}"
+  # 10.2 Preprocess RUNNERS_DIR files (remove user name from files)
+  dbug "I: ${HEADER}: Changing Directory to ${RUNNERS_DIR}"
+  dbug "I: ${HEADER}: Launching: winezgui-identity-remove"
+  
+  SOURCE "winezgui-identity-remove"
+  winezgui-identity-remove "${SELECTED_RUNNER}"
+
+  # 10.3 Create runner-info.yml inside SELECTED_RUNNER, not needed though
+  
+  # 11.0 Create Runner Backup file using tar and zst
+  dbug "I: ${HEADER}: Creating ${BACKUP_FILE} file..."
+  dbug "I: ${HEADER}: Executing command"
+  dbug "-------------------------------------------------------------"
+  dbug "${TAR_CMD} -I \"zstd -${LEVEL} -T0\" -cf \"${TARGET_DIR}/${BACKUP_FILE}\" \
+            -C \"${RUNNERS_DIR}\" \"${SELECTED_RUNNER_NAME}\""
+  dbug "-------------------------------------------------------------"
+  # Report user the time it took to bundle
+  TIMER_START=${SECONDS}
+  # 11.1 Create Backup archive and restore changes as soon as tar is done
+  (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}"       \
+                               --exclude="registry_backup*.gz" \
+                               -C  "${RUNNERS_DIR}" "${SELECTED_RUNNER_NAME}" &)| \
+  ${ZENITY_CMD}    --progress --pulsate --auto-close        \
+            --title="Creating ${SELECTED_RUNNER_NAME} backup!" \
+            --width=500 --text="${BACKUP_FILE}..."
+  TOOK=$(( SECONDS - ${TIMER_START} ))
+  dbug "I: ${HEADER}:Time Taken: $(date -d@${TOOK} -u +%H:%M:%S)"
+
+  # 7.5 If user clicks cancel, kill tar commands
+  # zenity progress won't kill the process, so we do it
+  # find the pid of tar which is working with ${BACKUP_FILE}, else it will kill
+  # other wzt file operation like extraction and backup
+  PID_OF_TAR=$(ps -aux|grep tar|grep -i "${BACKUP_FILE}"           \
+              |sed "/.*grep -i.*/d"|sed "s/  */ /g" |cut -f2 -d " ")
+  
+  # If there is a PID_OF_TAR then we need to kill the tar command
+  if ! [ -z "${PID_OF_TAR}" ]; then
+         kill -9 ${PID_OF_TAR} \
+         && dbug "I: Backup: Runner: Cancelled! Killed tar!" \ &&
+         rm -f "${TARGET_DIR}/${BACKUP_FILE}" && \
+         dbug "I: Backup: Runner: Removed partial ${BACKUP_FILE}"
+
+       # Backup Failure Message
+       echo "===================================================="
+       unset MSG
+       MSG=("${SELECTED_RUNNER_NAME} backup cancelled!")
+  else
+       # If no pid is found, that means wzt=tar.zst is created successfully
+       dbug "I: Backup: Runner: Created ${BACKUP_FILE}, Success!"
+       # 7.6  Crate message
+       BACKUP_SIZE=$(du -sh "${TARGET_DIR}/${BACKUP_FILE}"|cut -f1)
+       # Check du value assignment
+        if [ -z "${BACKUP_SIZE}" ]; then
+            echo "-------------------- Error --------------------------"
+            echo "Error: ${FUNCNAME[0]}: BACKUP_SIZE not assigned"
+            echo "-------------------- Error --------------------------"
+        fi
+       # Backup Sucess Message
+       unset MSG
+       MSG=("<b>RUNNER: </b> ${SELECTED_RUNNER_NAME}\n")
+       MSG+="<b>Filename:</b> ${BACKUP_FILE}"
+       MSG+="\n<b>Location:</b> ${TARGET_DIR}\n"
+       MSG+="<b>Backup Size:</b> ${BACKUP_SIZE}"
+
+  fi
+
+  # 7.7 Restore changed values after backup
+  dbug "I: Backup: Runner: Restoring Registry and Info files"
+  cd "${RUNNERS_DIR}"
+  SOURCE "winezgui-identity-restore"
+  winezgui-identity-restore "${SELECTED_RUNNER}"
+
+  dbug "I: Backup: Runner: Created ${BACKUP_FILE} at ${TARGET_DIR}"
+
+  # 8. Show info about created wzt file
+  ${ZENITY_CMD} --no-wrap --info --title="RUNNER Backup!" --text="${MSG[@]}"
+  unset TEXT TITLE MSG
+  return 0
+}
+
+  
