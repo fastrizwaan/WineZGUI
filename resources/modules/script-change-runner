@@ -22,7 +22,7 @@ echo "1. WINEVER=$WINEVER"
        export WINEVER="$(${SELECTED_RUNNER} --version|cut -f1 -d " ")"
 echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
 echo "2. WINEVER=$WINEVER"       
-sleep 5s;
+
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${INFOFILE}"
        export RUNNER="${SELECTED_RUNNER}"
 
