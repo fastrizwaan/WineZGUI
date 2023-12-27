@@ -26,6 +26,10 @@ winezgui-startup-checks()
        mkdir -p "${PREFIXES_DIR}"  && \
        echo "I: ${HEADER}: Created: ${PREFIXES_DIR}"
   fi
+  if [ ! -d "${RUNNERS_DIR}" ]; then
+       mkdir -p "${RUNNERS_DIR}"  && \
+       echo "I: ${HEADER}: Created: ${RUNNERS_DIR}"
+  fi
   #  -- Handle Wine Arch... -- #
   # If Settings.yml exists and debug: is set to true
   # If Settings.yml exists, get arch value from it: win32 or win64
