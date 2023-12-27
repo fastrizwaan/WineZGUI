@@ -182,7 +182,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] Update About.yml for runner on change by Settings, use winezgui-template-change (search If About.yml is writable)
 
 - [] add both runner and runner_name to Info.yml and Settings.yml and About.yml
-- [] update runner_name and version on change of runner
+- [x] update runner_name and version on change of runner
 
 - [x] use Info.yml get RUNNER info into recreated scripts 
 - [x] recreate-prefix-script 
@@ -202,14 +202,14 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] scriptwise
      - [x] Change runner
          - [] Check for dxvk & vkd3d in winetricks.log
-         - [] bug: change runner does not update Info.yml's wine version. fixme.
+         - [x] bug: change runner does not update Info.yml's wine version. fixme.
          - [x] Get list of runners from WINEZGUIDIR/Runners and let user select one
          - [] If not found use the winezgui-find-runners function to list runners, let user use it directly or import runner to Runners directory.
          - [] Choose Change runner for this script only or for all scrpts inside $PREFIXDIR
          - [] Change Info.yml or *.yml based on user's selection
          - [] On launch check for runner existing or not, if not found tell user that it's gone, shall we use another runner or default one?
          - [] backup prefix/bundle should import runner
- - Import wine directory, should import runner from bottles, heroic launcher, lutris (read config files and copy)
+ - [] Import wine directory, should import runner from bottles, heroic launcher, lutris (read config files and copy)
 
 0.98.5
 - [x] create tmp directory for winetricks to work
