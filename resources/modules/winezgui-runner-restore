@@ -74,9 +74,17 @@ winezgui-runner-restore()
 
        # Inform on successful extraction
        dbug "I: ${HEADER}: Extracted ${TAR_FILE} Successfully!"
-       ${ZENITY_CMD} --info --title="${APP_WITH_VER} - Restore Runner!" \
-       --text="Extracted ${TAR_FILE} Successfully!" 
-  
+       ${ZENITY_CMD} --question --title="${APP_WITH_VER} - Restore Runner!" \
+       --text="Extracted ${TAR_FILE} Successfully! Would you like to set default runner?" 
+       ANSWER=$?
+       if [ "${ANSWER}" = "0" ]; then
+          SOURCE "winezgui-runner-set-default"
+          winezgui-runner-set-default
+       fi
+
   fi # [ "${ZENITY_STATUS}" = "1" ]; then
+
+
+
 }
 

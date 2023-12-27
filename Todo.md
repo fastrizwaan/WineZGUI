@@ -148,7 +148,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
          WINEGE=$(curl -s https://api.github.com/repos/GloriousEggroll/wine-ge-custom/releases/latest |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
   
 - [x] create winezgui-runner-backup
-- [-] create winezgui-runner-restore (needs supporting zip files), do not 
+- [-] create winezgui-runner-restore (needs supporting zip files), 
+- [] restore-runner, ask whether to change runner?
 - [x] create winezgui-runner-delete
 
 - [x] add winezgui->settings->runner menu
