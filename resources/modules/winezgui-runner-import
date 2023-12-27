@@ -1,4 +1,4 @@
-winezgui-import-runner()
+winezgui-runner-import()
 {
   dbug "I: Script: ${FUNCNAME[0]}: Select import directory"
   unset TITLE
