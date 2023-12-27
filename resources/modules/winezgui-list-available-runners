@@ -107,6 +107,9 @@ winezgui-list-available-runners()
   # If the wine is found inside the runnder directory then it is a valid runner
   if [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
        export SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
+  elif  [ -f "${SELECTED_RUNNERDIR}/files/bin/wine" ]; then
+        export SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
+
   else #use selected runner /app/bin (1st option) which does not have bin/ subdir
        export SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
   fi
