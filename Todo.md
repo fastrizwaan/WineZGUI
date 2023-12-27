@@ -149,7 +149,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
   
 - [x] create winezgui-runner-backup
 - [-] create winezgui-runner-restore (needs supporting zip files), 
-- [] restore-runner, ask whether to change runner?
+- [x] restore-runner, ask whether to change runner?
+- [] investigate why script-launch WINE_CMD is different from RUNNER
+     -[-] using workaround of settings WINE_CMD="${RUNNER}" till the investigation
 - [x] create winezgui-runner-delete
 
 - [x] add winezgui->settings->runner menu
