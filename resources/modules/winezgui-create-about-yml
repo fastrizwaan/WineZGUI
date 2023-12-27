@@ -17,7 +17,6 @@ winezgui-create-about-yml()
        echo "Website:${WEBSITE}"            >> "${ABOUTFILE}"
        echo "Author:${AUTHOR}"              >> "${ABOUTFILE}"
        echo "E-mail:${EMAIL}"               >> "${ABOUTFILE}"
-       #echo "Wine:${WINE_CMD}"              >> "${ABOUTFILE}"
        echo "Wine Runner:${RUNNER}"         >> "${ABOUTFILE}"
        echo "Wine Version:${WINEVER}"       >> "${ABOUTFILE}"
        echo "Template:${TEMPLATE_NAME}"     >> "${ABOUTFILE}"
