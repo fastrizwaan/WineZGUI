@@ -19,6 +19,7 @@ winezgui-runner-restore()
        return 1
   fi # -z "${TAR_FILE}"
   
+  mkdir -p "${RUNNERS_DIR}"
   cd "${RUNNERS_DIR}"
 
   # 0. Check whether WINEZGUIDIR is writable before restoring
