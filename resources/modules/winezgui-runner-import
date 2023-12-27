@@ -1,14 +1,119 @@
 winezgui-runner-import()
 {
-  dbug "I: Script: ${FUNCNAME[0]}: Select import directory"
-  unset TITLE
-  TITLE="Choose a wine prefix directory to import into WineZGUI!"
+  dbug "I: ${FUNCNAME[0]}: Select import runner directory"
+  # 1.0 get runner directory from this file:
   SOURCE "winezgui-list-importable-runners"
   winezgui-list-importable-runners || return 1
   
-  IMPORT_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
-  if [ -z "${IMPORT_DIR}" ]; then
-      dbug "I: Script: ${FUNCNAME[0]}: Select import directory: Cancelled!"
-      return 1
+
+# 2. If existing same runner directory name exists in $RUNNERS_DIR, then ask whether to overwrite?
+  if [ -d ${RUNNERS_DIR}/${SELECTED_RUNNERDIR_NAME} ];
+       unset TEXTMSG
+       TEXTMSG=()
+       TEXTMSG+="Runners Directory $SELECTED_RUNNERDIR_NAME already exists, copy and overwrite?"
+       dbug "I: $TEXTMSG"
+
+       ${ZENITY_CMD} --question --no-wrap \
+                --title="Import Runner..." \
+                --text "${TEXTMSG}"
+       ANSWER=$?
+       # 1.1 If user selects no or cancels to locate exe file
+       if [ ${ANSWER} -eq 1 ]; then
+            dbug "I: overwrite User Cancelled!"
+            return 1  # Return to Script window
+       fi
+  else # 3. if no directory with the same name exists, ask whether to start copying
+       unset TEXTMSG
+       TEXTMSG=()
+       TEXTMSG+="This will copy all files from <b>${SELECTED_RUNNERDIR}</b> to <b>${RUNNERS_DIR}</b>\nContinue..?"
+       ${ZENITY_CMD} --question --no-wrap \
+                     --title="Import Runner..." \
+                     --text "${TEXTMSG}"
+            ANSWER=$?
+            # 1.1 If user selects no or cancels to locate exe file
+            if [ ${ANSWER} -eq 1 ]; then
+                 dbug "I: Import: User Cancelled!"
+                 return 1  # Return to Script window
+            fi
+       unset TEXTMSG
+  fi
+  # 4. Check Available disk space and disk usage of the runner directory and compare
+  # total size =  importdir size
+  # 4.1 get disk usage of the selected_runnerdir
+  IMPORTDIR_DISK_USAGE_IN_HF=$(du -sh "${SELECTED_RUNNERDIR}"|cut -f1)
+  # Check du value assignment
+  if [ -z "${IMPORTDIR_DISK_USAGE_IN_HF}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: Could not get size of ${SELECTED_RUNNERDIR}"
+       echo "-------------------- Error --------------------------"
+  fi
+  IMPORTDIR_DU_IN_BYTES=$(echo ${IMPORTDIR_DISK_USAGE_IN_HF}|numfmt --from iec)
+  # Calculate total backup size = prefix + importdir
+  TOTAL_SIZE=$(expr ${IMPORTDIR_DU_IN_BYTES})
+  TOTAL_SIZE_IN_HF=$(echo ${TOTAL_SIZE}|numfmt --to iec)
+
+  dbug "-----------------------------------------------------------------------------"
+
+  dbug "I: ${FUNCNAME[0]}: IMPORTDIR_DISK_USAGE_IN_HF=$IMPORTDIR_DISK_USAGE_IN_HF"
+  dbug "I: ${FUNCNAME[0]}: IMPORTDIR_DU_IN_BYTES=$IMPORTDIR_DU_IN_BYTES"
+  dbug "I: ${FUNCNAME[0]}: TOTAL_SIZE=$TOTAL_SIZE"
+  dbug "I: ${FUNCNAME[0]}: TOTAL_SIZE_IN_HF=$TOTAL_SIZE_IN_HF"
+  
+  
+  dbug "I: ${FUNCNAME[0]}: Determining available space"
+  dbug "I: ${FUNCNAME[0]}: Available space is: ${AVAILABLE_SPACE}"
+
+  # 4.2 Check available disk space inside winezgui's runners_dir
+  AVAILABLE_SPACE=$(df -h "${RUNNERS_DIR}"|tr -s " "|tail -n1|cut -f4 -d " ")
+  #Check whether df gave a value or not
+  if [ -z "${AVAILABLE_SPACE}" ]; then
+       echo "-------------------- Error --------------------------"
+       echo "Error: ${FUNCNAME[0]}: AVAILABLE_SPACE not assigned"
+       echo "-------------------- Error --------------------------"
+  fi
+  # Step: Convert the above $AVAILABLE_SPACE into bytes
+
+  # for comparison
+  AVAILABLE_SPACE_IN_BYTES=$(echo ${AVAILABLE_SPACE}|numfmt --from iec)
+
+  dbug "I: ${HEADER}: Available space in Human: ${AVAILABLE_SPACE}"
+  dbug "I: ${HEADER}: Available space in bytes: ${AVAILABLE_SPACE_IN_BYTES}"
+  dbug "-----------------------------------------------------------------------------"
+
+  # 5. If Target directory does not have sufficient space, abort backup
+  dbug "I: ${FUNCNAME[0]}: Checking if size < target dir space"
+  if [ ${AVAILABLE_SPACE_IN_BYTES} -gt ${TOTAL_SIZE} ];then
+        dbug "I: ${HEADER}: ${RUNNERS_DIR} has enough available disk space"
+  else
+        echo "E: ${HEADER}: ${RUNNERS_DIR} does not have free disk space!!!"
+        unset MSG
+        unset TITLE
+        TITLE="Not Enough Disk Space!"
+        MSG+="${RUNNERS_DIR} has only ${AVAILABLE_SPACE}"
+        MSG+=" "
+        MSG+="free disk space left!\n"
+        MSG+="Prefix backup requires ${TOTAL_SIZE_IN_HF} free disk space."
+
+        # Warn user
+        ${ZENITY_CMD} --warning --no-wrap --title "${TITLE}" --text "${MSG}"
+        echo "E: ${FUNCNAME[0]}: Not Enough Disk Space, Cancelled!"
+        return 1
+
+  fi
+  # 6. copy with zenity progress dialog
+  (cp -arv "${SELECTED_RUNNERDIR}" "${RUNNERS_DIR}") | ${ZENITY_CMD}  --no-cancel --progress --pulsate --auto-close \
+              --text="Copying ${SELECTED_RUNNERDIR} to ${RUNNERS_DIR}...!" \
+              --width=500 --title="Importing $SELECTED_RUNNERDIR_NAME..."
+  
+  #7. Ask whether to change runner
+  
+  dbug "I: ${HEADER}: Imported ${SELECTED_RUNNERDIR_NAME} Successfully!"
+  ${ZENITY_CMD} --question --title="${APP_WITH_VER} - Import Runner!" \
+  --text="Copied ${SELECTED_RUNNERDIR_NAME} Successfully! Would you like to change runner?" 
+  
+  ANSWER=$?
+  if [ "${ANSWER}" = "0" ]; then
+     SOURCE "winezgui-runner-set-default"
+     winezgui-runner-set-default
   fi
 }
