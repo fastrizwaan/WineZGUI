@@ -1,0 +1,138 @@
+# winezgui-list-importable-runners
+# Finds exe installed in drive_c by an installer
+# and set the variable SELECTED_RUNNERDIR
+# FIXME  winezgui-list-importable-runners
+winezgui-list-importable-runners()
+{
+  OLD_HEADER=${HEADER}
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset SELECTED_RUNNER SELECTED_RUNNERDIR RUNNERS_FOUND COMMAND count SHOW_OPTION
+  unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
+  
+  # Directories to search
+  HEROIC_RUNNERS="$HOME/.var/app/com.heroicgameslauncher.hgl/config/heroic/tools/wine"
+  LUTRIS_RUNNERS="$HOME/.var/app/net.lutris.Lutris/data/lutris/runners"
+  BOTTLES_RUNNERS="$HOME/.var/app/com.usebottles.bottles/data/bottles/runners"
+  LUTRIS_LOCAL="$HOME/.local/share/lutris/runners"
+
+  echo "RUNNERS_DIR =$RUNNERS_DIR"
+  echo "========================================="
+  count=0
+  NAMES=()
+  FILES=()
+  
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${HEROIC_RUNNERS}/* ${LUTRIS_RUNNERS}/* ${BOTTLES_RUNNERS}/* ${LUTRIS_LOCAL}/* \
+  -             maxdepth 0 -type d -print 2>/dev/null | tr '\n' '|')
+  RUNNERS_FOUND=$(echo ${SEARCH_LIST})
+
+  if [ -z "${RUNNERS_FOUND}" ] ; then
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+              --text "Sorry, no runners found in Runners directory"
+              echo SELECTED_RUNNERDIR
+       unset SEARCH_LIST RUNNERS_FOUND
+       IFS=${SAVEIFS}
+       return 1
+  fi
+  # if RUNNERS_FOUND has value, then only change exe
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
+  do
+      RealName=$(basename    "$i")
+      RealFile=$(realpath -m "$i")
+
+      # If 1st value is empty, enable it and set system default
+      if [ -z "${SHOW_OPTION}" ]; then
+           SHOW_OPTION+="TRUE \"System Default\""
+           SHOW_OPTION+=" "
+           # Setting 1st option as default wine
+           NAMES+=("System Default")
+           FILES+=("$(which wine)")
+           count=$(expr ${count} + 1)
+      fi
+      # Add found directories to show options
+      SHOW_OPTION+="0 \"${RealName}\""
+      SHOW_OPTION+=" "
+      NAMES+=("${RealName}")
+      FILES+=("${RealFile}")
+      
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+  
+  # Generate Height value
+  SOURCE "winezgui-get-window-height"
+  winezgui-get-window-height ${#FILES[@]}
+
+ # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER}\" "
+  COMMAND+="--text \"${RUNNER_TYPE} Runners\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  RESULT=$(eval ${COMMAND})
+  
+  ANSWER=$?
+ 
+  if [ ${ANSWER} -eq 1 ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       return 1
+  fi
+  
+  if [ -z "${RESULT}" ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       return 1
+  fi
+
+  count=0
+  # 4. Find which RUNNER DIRECOTRY the user has selected and set the selected runner dir, name, bin/wine into variable
+  for i in "${NAMES[@]}"; do
+      if [ "$i" = "${RESULT}" ]; then
+           dbug "I: ${HEADER}: Selected ${i}"
+           dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
+           export SELECTED_RUNNERDIR="${FILES[${count}]}"
+           export SELECTED_RUNNERDIR_NAME="${i}"
+           echo "Selected RUNNER = $SELECTED_RUNNERDIR"
+           echo "SELECTED_RUNNERDIR_NAME=$SELECTED_RUNNERDIR_NAME"
+           echo "00002 - - - - - - - - - - - - - - - - - -"
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
+  # proton, etc runners have bin/wine subdirectory
+  # If the wine is found inside the runnder directory then it is a valid runner
+  if [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
+       export SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
+  else #use selected runner /app/bin (1st option) which does not have bin/ subdir
+       export SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
+  fi
+  export SELECTED_RUNNERNAME="${SELECTED_RUNNERDIR_NAME}"
+  export WINEVER=$(${SELECTED_RUNNER} --version)
+  echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+  echo " x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x-x-"
+  echo "SELECTED_RUNNERDIR=$SELECTED_RUNNERDIR"
+  echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERDIR_NAME}"
+  echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERNAME}"
+  echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
+  echo "WINEVER=$WINEVER"
+  echo " x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x-x-"
+  
+  # if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
+  if [ -z "${WINEVER}" ] ; then
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+       --text "Could not find <b>${SELECTED_RUNNERDIR}/bin/wine</b>\nor it is not compatible!"
+       dbug "Bad Runner or not a wine file"
+       return 1
+  fi
+  export SELECTED_RUNNER
+  HEADER=${OLD_HEADER}
+}

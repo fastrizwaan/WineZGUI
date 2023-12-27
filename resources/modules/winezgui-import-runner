@@ -1,0 +1,14 @@
+winezgui-import-runner()
+{
+  dbug "I: Script: ${FUNCNAME[0]}: Select import directory"
+  unset TITLE
+  TITLE="Choose a wine prefix directory to import into WineZGUI!"
+  SOURCE "winezgui-list-importable-runners"
+  winezgui-list-importable-runners || return 1
+  
+  IMPORT_DIR=$(${ZENITY_CMD}  --file-selection --title="${TITLE}" --directory)
+  if [ -z "${IMPORT_DIR}" ]; then
+      dbug "I: Script: ${FUNCNAME[0]}: Select import directory: Cancelled!"
+      return 1
+  fi
+}
