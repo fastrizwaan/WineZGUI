@@ -7,7 +7,7 @@ winezgui-runner-import()
   
 
 # 2. If existing same runner directory name exists in $RUNNERS_DIR, then ask whether to overwrite?
-  if [ -d ${RUNNERS_DIR}/${SELECTED_RUNNERDIR_NAME} ];
+  if [ -d ${RUNNERS_DIR}/${SELECTED_RUNNERDIR_NAME} ]; then
        unset TEXTMSG
        TEXTMSG=()
        TEXTMSG+="Runners Directory $SELECTED_RUNNERDIR_NAME already exists, copy and overwrite?"
