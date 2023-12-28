@@ -265,19 +265,20 @@ IFS=${SAVEIFS}
 echo "2. --------------------------------------- SETTINGS_FILE = $SETTINGS_FILE"
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-
-     echo "2. --------------------------------------- WINE_CMD = $WINE_CMD"
-     echo "2. --------------------------------------- RUNNER = $RUNNER"
-     echo "2. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
-
 fi
 
 
 # If no runner is found in Settings, then use the system/default runner
 if [ -z "${RUNNER}" ]; then
    export RUNNER="$(which wine)"
-   export RUNNER_NAME="System Default"
+fi
+
+# if runner is from local install /app/bin/wine or /usr/bin/wine etc.
+# set RUNNER_NAME
+if [ "${RUNNER}" = "$(which wine)" ]; then
+     export RUNNER_NAME="System Default"
+else #Get directory name containing bin/wine
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
 
 # Runner = wine command in a different directory
@@ -389,7 +390,13 @@ SOURCE "script-locate-exe-function"
 
 if [ -f "${SETTINGS_FILE}" ]; then
      export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+     # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
+     # set RUNNER_NAME
+     if [ "${RUNNER}" = "$(which wine)" ]; then
+          export RUNNER_NAME="System Default"
+     else #Get directory name containing bin/wine
+          export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+     fi
 fi
      echo "5. --------------------------------------- WINE_CMD = $WINE_CMD"
      echo "5. --------------------------------------- RUNNER = $RUNNER"
@@ -405,15 +412,15 @@ fi
      echo "6. --------------------------------------- RUNNER = $RUNNER"
      echo "6. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
-
+export WINE_CMD=${RUNNER}
 # If ${FLATPAK_NAME} is installed, and script created using flatpak
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
       dbug "I: Script: Install type: Flatpak, Running from host!"
-      WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
+      WINE_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME}"
       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-      WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
-      WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
+      WINECFG_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} winecfg"
+      WEXPLORER_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} explorer"
       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"

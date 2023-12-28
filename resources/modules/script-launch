@@ -43,15 +43,15 @@ script-launch()
        dbug "I: Script: args=${EXE_ARGUMENTS}"
   fi
 
-  # If Infofile exists (old scripts) and Runner: is not found add it
-  if [ -f ${INFOFILE} ]; then
-     grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
-      export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
-  fi
-  # If Runner is empty in Infofile, then get Runner info from Settings.yml
-  if [ -z "${RUNNER}" ]; then
-     export RUNNER=$(grep -i "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-  fi  
+#   # If Infofile exists (old scripts) and Runner: is not found add it
+#   if [ -f ${INFOFILE} ]; then
+#      grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
+#       export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
+#   fi
+#   # If Runner is empty in Infofile, then get Runner info from Settings.yml
+#   if [ -z "${RUNNER}" ]; then
+#      export RUNNER=$(grep -i "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+#   fi  
   # Check for Wine version change
   CURRENT_WINE_VERSION=$(${RUNNER} --version|cut -f1 -d " ")
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")

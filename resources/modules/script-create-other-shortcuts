@@ -309,25 +309,36 @@ IFS=${SAVEIFS}
 
 # If WineZGUI is using different runner, use it to create new prefixes
 # If INFOFILE has runner, then use it, else try to get runner from Settings.yml
-if   [ -f "${INFOFILE}" ]; then
-       export RUNNER=$(grep "Runner:" ${INFOFILE}|cut -f2 -d ":")
-       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-elif [ -f "${SETTINGS_FILE}" ]; then
-       export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+# === = = = = = = = Recreate Prefix script with Runner 
+# If Infofile exists (old scripts) and Runner: is not found add it
+if [ -f ${INFOFILE} ]; then
+   grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
+   export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
 fi
 
-echo "8. ----------------------------- RUNNER:${RUNNER}"
-echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-
-# If no runner is found in Infofile or Settings, then use the system/default runner
+# If Runner is empty in Infofile, then get Runner info from Settings.yml
 if [ -z "${RUNNER}" ]; then
-   export RUNNER="$(which wine)"
-   export RUNNER_NAME="System Default"
+     if [ -f "${SETTINGS_FILE}" ]; then
+          export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+     fi
+fi  
+
+# If runner is not specified in Infofile or Settings.yml then use wine
+if [ -z "${RUNNER}" ]; then
+    export RUNNER="$(which wine)"
 fi
 
+# if runner is from local install /app/bin/wine or /usr/bin/wine etc.
+# set RUNNER_NAME
+if [ "${RUNNER}" = "$(which wine)" ]; then
+     export RUNNER_NAME="System Default"
+else #Get directory name containing bin/wine
+     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+fi
 # Runner = wine command in a different directory
 export WINE_CMD="${RUNNER}"
+#/ === = = = = = = = Recreate Prefix script with Runner 
+
 
 echo "8. ----------------------------- RUNNER:${RUNNER}"
 echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
@@ -426,20 +437,35 @@ SOURCE "script-locate-exe-function"
 # LOCATE_EXE_FUNCTION required on Launch
 # Get runner from info file
 
-if [ -f "${INFOFILE}" ]; then
-     export RUNNER=$(grep "Runner:" ${INFOFILE}|cut -f2 -d ":")
+# === = = = = = = = Recreate Prefix script with Runner 
+# If Infofile exists (old scripts) and Runner: is not found add it
+if [ -f ${INFOFILE} ]; then
+   grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
+   export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
+fi
+
+# If Runner is empty in Infofile, then get Runner info from Settings.yml
+if [ -z "${RUNNER}" ]; then
+     if [ -f "${SETTINGS_FILE}" ]; then
+          export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+     fi
+fi  
+
+# If runner is not specified in Infofile or Settings.yml then use wine
+if [ -z "${RUNNER}" ]; then
+    export RUNNER="$(which wine)"
+fi
+
+# if runner is from local install /app/bin/wine or /usr/bin/wine etc.
+# set RUNNER_NAME
+if [ "${RUNNER}" = "$(which wine)" ]; then
+     export RUNNER_NAME="System Default"
+else #Get directory name containing bin/wine
      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
 fi
-
-echo "10. --------------------------------------- WINE_CMD = $WINE_CMD"
-echo "10. --------------------------------------- RUNNER = $RUNNER"
-echo "10. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
-
-# If runner is not specified in Settings.yml then use wine
-if [ -z "${RUNNER}" ]; then
-   export RUNNER="$(which wine)"
-   export RUNNER_NAME="System Default"
-fi
+# Runner = wine command in a different directory
+export WINE_CMD="${RUNNER}"
+#/ === = = = = = = = Recreate Prefix script with Runner 
 
 echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "11. --------------------------------------- RUNNER = $RUNNER"
@@ -449,10 +475,10 @@ echo "11. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 if  [ ${INSTALL_TYPE} = "flatpak" ] && \
     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
       dbug "I: Script: Install type: Flatpak, Running from host!"
-      WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
+      WINE_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME}"
       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-      WINECFG_CMD="flatpak run --command=wine ${FLATPAK_NAME} winecfg"
-      WEXPLORER_CMD="flatpak run --command=wine ${FLATPAK_NAME} explorer"
+      WINECFG_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} winecfg"
+      WEXPLORER_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} explorer"
       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
@@ -513,7 +539,6 @@ for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZE
 done
 
 # Needed for Info.yml and backup and restore function
-
 
 Script_Window()
 {
