@@ -128,23 +128,23 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default
-- [] create winezgui-runner-import
-- [] create winezgui-runner-download
-    - [] Kron4ek Wine Latest
+- [x] create winezgui-runner-import
+- [x] create winezgui-runner-download
+    - [x] Kron4ek Wine Latest
       WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases/latest|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
       for i in $WINEBUILDS ; do echo $i; done|head -n1
-    - [] Kron4ek wine-9.0
+    - [x] Kron4ek wine-9.0
       WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
       for i in $WINEBUILDS ; do echo $i; done|grep -i wine-9.0|head -n1
-    - [] Kron4ek wine-8.0
+    - [x] Kron4ek wine-8.0
       WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
       for i in $WINEBUILDS ; do echo $i; done|grep -i wine-8.0|head -n1
 
-    - [] Kron4ek wine-proton (latest)
+    - [x] Kron4ek wine-proton (latest)
          WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases|grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
          wget $(for i in $WINEBUILDS ; do echo $i; done|grep -i proton|head -n1)
-   - [] Kron4ek needs dxvk and vkd3d
-    - [] lutris-GE-Proton-GE (wine-ge-proton)
+   - [x] Kron4ek needs dxvk and vkd3d
+    - [x] not including lutris-GE-Proton-GE (wine-ge-proton)
          WINEGE=$(curl -s https://api.github.com/repos/GloriousEggroll/wine-ge-custom/releases/latest |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
   
 - [x] create winezgui-runner-backup
@@ -188,6 +188,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] recreate-prefix-script 
 - [x] script-create-other-shortcuts
 
+
+- [] BUG: updated script using default wine is not updating runner information. perhaps wine_cmd=$runner is missing
 - [] wine_cmd to use runner from Settings.yml
 - [] Locate runner, if not found, update with default runner, else use RUNNER=grep from settings.yml
 - [] settings->runner...->Set Wine Runner...
