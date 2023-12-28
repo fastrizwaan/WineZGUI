@@ -1,0 +1,48 @@
+ winezgui-runners-download-kron4ek-wine-latest()
+ {
+   SOURCE "script-check-variables-loaded-or-not"
+   script-check-variables-loaded-or-not
+
+   WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases/latest \
+                |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
+
+   KRON4EK_WINE_LATEST=$(for i in $WINEBUILDS ; do echo $i; done|head -n1)
+   KRON4EK_WINE_LATEST_NAME="$(basename ${KRON4EK_WINE_LATEST})"
+   
+   if [ -z "${KRON4EK_WINE_LATEST}" ]; then
+        ${ZENITY_CMD} --error --title="Download Failed" --text="We could not download. Please Retry downloading later..."
+        return 1
+   fi
+#   WGET_CMD ${KRON4EK_WINE_LATEST}
+
+
+  mkdir -p "${RUNNERS_DIR}"
+  if [ -w ${RUNNERS_DIR} ]; then
+       dbug "I: Downloading ${KRON4EK_WINE_LATEST}"
+       cd ${RUNNERS_DIR}
+       (wget -c ${KRON4EK_WINE_LATEST} & )| ${ZENITY_CMD} --auto-close --width=500 \
+       --progress --pulsate --title="Downloading \"${KRON4EK_WINE_LATEST}\"...";
+       
+       #TEMPLATE_CHECKSUM="4ab3761522df9bebd34966b6a6b87eefc6ca470588462cf770ba45fec108f420"
+       #DOWNLOAD_CHECKSUM=$(sha256sum "DotNet48-Wine8-20230301.tar.zst"|cut -f1 -d " ")
+
+       #dbug "I: Template Downlaod: Shasum github  : ${TEMPLATE_CHECKSUM}"
+       #dbug "I: Template Downlaod: Shasum Download: ${DOWNLOAD_CHECKSUM}"
+       
+       # Compare NEW_EXE_CHECKSUM with one existing in ${SCRIPTFILE}
+       #if [ "${TEMPLATE_CHECKSUM}" = "${DOWNLOAD_CHECKSUM}" ]; then         
+            (${TAR_CMD} -xvf ${KRON4EK_WINE_LATEST_NAME} -C ${RUNNERS_DIR};)| \
+            ${ZENITY_CMD}  --progress --pulsate --auto-close --title="Extracting \"${KRON4EK_WINE_LATEST_NAME}\"" \
+            --width=500 --text="Extracting at ${RUNNERS_DIR}"
+            dbug "I: Extracted ${KRON4EK_WINE_LATEST_NAME}"
+            #rm DotNet48-Wine8-20230301.tar.zst && \
+            dbug "I: Removed ${KRON4EK_WINE_LATEST_NAME} after extraction"
+            #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
+       #else
+       #     killall -KILL wget
+       #     ${ZENITY_CMD} --info --title="Download Checksum Mismatch!" --text="Retry downloading Template..."
+       #fi
+  else 
+       echo "E: Cannot write to ${RUNNERS_DIR}"
+  fi
+ }
