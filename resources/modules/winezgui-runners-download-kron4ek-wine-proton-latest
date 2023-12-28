@@ -20,7 +20,7 @@
        dbug "I: Downloading ${KRON4EK_PROTON_LATEST}"
        cd ${RUNNERS_DIR}
        (wget -c ${KRON4EK_PROTON_LATEST} & )| ${ZENITY_CMD} --auto-close --width=500 \
-       --progress --pulsate --title="Downloading \"c\"...";
+       --progress --pulsate --title="Downloading \"${KRON4EK_PROTON_LATEST}\"...";
        
        #TEMPLATE_CHECKSUM="4ab3761522df9bebd34966b6a6b87eefc6ca470588462cf770ba45fec108f420"
        #DOWNLOAD_CHECKSUM=$(sha256sum "DotNet48-Wine8-20230301.tar.zst"|cut -f1 -d " ")
@@ -36,8 +36,6 @@
             dbug "I: Extracted ${KRON4EK_PROTON_LATEST_NAME}"
             #rm DotNet48-Wine8-20230301.tar.zst && \
             dbug "I: Removed ${KRON4EK_PROTON_LATEST_NAME} after extraction"
-            SOURCE "winezgui-template-change"
-            winezgui-template-change
             #${ZENITY_CMD} --info --title="Download Complete!" --text="Change templates using Template->Change..."
        #else
        #     killall -KILL wget

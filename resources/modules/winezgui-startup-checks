@@ -30,6 +30,11 @@ winezgui-startup-checks()
        mkdir -p "${RUNNERS_DIR}"  && \
        echo "I: ${HEADER}: Created: ${RUNNERS_DIR}"
   fi
+  # Create tmp directory for wget and winetricks
+  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
+       mkdir -p "${WINEZGUIDIR}/tmp"
+  fi
+
   #  -- Handle Wine Arch... -- #
   # If Settings.yml exists and debug: is set to true
   # If Settings.yml exists, get arch value from it: win32 or win64
