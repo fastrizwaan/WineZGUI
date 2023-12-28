@@ -1,0 +1,54 @@
+winezgui-runner-download()
+{
+  
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  unset SELECT_RUNNER_TO_DOWNLOAD
+  SELECT_RUNNER_TO_DOWNLOAD=$( ${ZENITY_CMD} \
+                               --title "${APP_WITH_VER} - Runners"                 \
+                               --list   --hide-header                              \
+                               --width=360 --height=210                            \
+                               --radiolist --column " "                            \
+                               --column "Action"                                   \
+                                   TRUE "Kron4ek wine-proton (latest)..."          \
+                                      0 "Kron4ek Wine Latest..."                   \
+                                      0 "Kron4ek Wine-9.0 (stable)..."             \
+                                      0 "Kron4ek Wine-8.0 (stable)..."             \
+                               --text   "Runner <b>${RUNNER_NAME}</b> in use")
+
+  # Exit if Cancel is clicked
+  if [ -z "${SELECT_RUNNER_TO_DOWNLOAD}" ]; then
+       dbug "I: Runners: Cancel Selected!"
+       return 1
+  fi
+ 
+  dbug "I: ${HEADER}: Selected ${SELECT_RUNNER_TO_DOWNLOAD}!"
+ 
+ if   [ "${SELECT_RUNNER_TO_DOWNLOAD}" = "Kron4ek wine-proton (latest)..." ]; then
+        SOURCE "winezgui-runners-download-kron4ek-wine-proton-latest"
+        winezgui-runners-download-kron4ek-wine-proton-latest
+
+ elif [ "${SELECT_RUNNER_TO_DOWNLOAD}" = "Kron4ek Wine Latest..." ]; then
+        SOURCE "winezgui-runners-download-kron4ek-wine-latest"
+        winezgui-runners-download-kron4ek-wine-latest
+
+ elif [ "${SELECT_RUNNER_TO_DOWNLOAD}" = "Kron4ek Wine-9.0 (stable)..." ]; then
+        SOURCE "winezgui-runners-download-kron4ek-wine-9.0-stable"
+        winezgui-runners-download-kron4ek-wine-9.0-stable
+ 
+ elif [ "${SELECT_RUNNER_TO_DOWNLOAD}" = "Kron4ek Wine-8.0 (stable)..." ]; then
+        SOURCE "winezgui-runners-download-kron4ek-wine-8.0-stable"
+        winezgui-runners-download-kron4ek-wine-8.0-stable
+
+ fi
+ ${ZENITY_CMD} --question --title="${APP_WITH_VER} - Download Runner!" \
+  --text="Downloaded ${SELECT_RUNNER_TO_DOWNLOAD} Successfully! Would you like to change runner?" 
+  
+  ANSWER=$?
+  if [ "${ANSWER}" = "0" ]; then
+     SOURCE "winezgui-runner-set-default"
+     winezgui-runner-set-default
+  fi
+  return 0
+}

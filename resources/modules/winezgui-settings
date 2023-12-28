@@ -2,8 +2,8 @@ winezgui-settings()
  {
    HEADER="$(basename ${0}): ${FUNCNAME[0]}"
      
-  SOURCE "script-check-variables-loaded-or-not"
-  script-check-variables-loaded-or-not
+   SOURCE "script-check-variables-loaded-or-not"
+   script-check-variables-loaded-or-not
    dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
    export TEMPLATE_NAME=$(basename ${TEMPLATE})
