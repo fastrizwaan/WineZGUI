@@ -771,6 +771,33 @@ echo "StartupNotify=true"                    >> "${DESKTOPFILE}"
 echo "Terminal=false"                        >> "${DESKTOPFILE}"
 echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 
+# Update INFOFILE after creating script
+if [ -f "${INFOFILE}" ]; then
+     #  Insert Data into Info.yml
+     DATE=$(date +%F_%H%M)
+
+     echo "Name:${PROGNAME}"                >  "${INFOFILE}"
+     echo "Exe:${EXE_FILE}"                 >> "${INFOFILE}"
+     echo "Sha256sum:${CHECKSUM}"           >> "${INFOFILE}"
+     echo "Exe Path:${EXE_PATH}"            >> "${INFOFILE}"
+     echo "Prefix:${PREFIXNAME}"            >> "${INFOFILE}"
+     echo "Script:${SCRIPTFILE}"            >> "${INFOFILE}"
+     echo "Icon:${ICONFILE}"                >> "${INFOFILE}"
+     echo "Shortcut:${DESKTOPFILE}"         >> "${INFOFILE}"
+     echo "Created:${DATE}"                 >> "${INFOFILE}"
+     echo "Wine:${WINEVER}"                 >> "${INFOFILE}"
+     echo "Runner:${RUNNER}"                >> "${INFOFILE}"
+     echo "Wine Arch:${WINEARCH}"           >> "${INFOFILE}"
+     echo "WineZGUI:${APPVERSION}"          >> "${INFOFILE}"
+     echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${INFOFILE}"
+     echo "Install:${INSTALL_TYPE}"         >> "${INFOFILE}"
+
+     # Include flatpak id in Info.yml
+     if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+          echo "Flatpak:${FLATPAK_NAME}"    >> "${INFOFILE}"
+     fi
+     dbug "I: Script: Prefix: Created ${INFOFILE}"
+fi
 
 # link the launcher  file to a shortcut on applications menu.
 #mkdir -p "${DEXSKTOPDIR}" && \
