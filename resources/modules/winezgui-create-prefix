@@ -288,7 +288,6 @@ echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "3. --------------------------------------- RUNNER = $RUNNER"
 echo "3. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
-#sleep 5s
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
