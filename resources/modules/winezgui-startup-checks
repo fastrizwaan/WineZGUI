@@ -31,8 +31,9 @@ winezgui-startup-checks()
        echo "I: ${HEADER}: Created: ${RUNNERS_DIR}"
   fi
   # Create tmp directory for wget and winetricks
-  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
-       mkdir -p "${WINEZGUIDIR}/tmp"
+  if [ ! -d "${TEMPDIR}" ]; then
+       mkdir -p "${TEMPDIR}"
+       echo "----------------------- CREATED TEMPDIR -------------------"
   fi
 
   #  -- Handle Wine Arch... -- #
@@ -128,6 +129,9 @@ winezgui-startup-checks()
   export WINEVER="$(${RUNNER} --version)"
   export WINETRICKS="$(which winetricks)"
   
+  echo "1111 ---- WINE_CMD=$WINE_CMD"
+  sleep 3s
+
   # If Settings.yml exists and arch: value do not match win32 or win64; use win64
   if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ]; then
        export WINEARCH="win64"
