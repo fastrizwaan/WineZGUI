@@ -123,7 +123,22 @@ backup-bundle should include runner if runner is specified in Info.yml
 
 WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the user to download/copy runners from bottles or use proton-up to download runners or kron4
 
-0.98.5.01-99-0.98.6 (runner support)
+0.99.0
+- [] Change Winezgui menu to:
+     Open Exe...
+     Scripts...
+     Prefixes...
+     Game Bundle...
+     Shortcuts...
+     Runners...	
+     Templates...
+     Settings...
+     Kill...
+     Help...
+     About...
+     Quit...
+
+0.98.6 (runner support)
 - SCRIPT-ABOUT should use runner from info.yml and use wine-version from there.
 
 - [x] create winezgui-runner-help
@@ -150,8 +165,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] create winezgui-runner-backup
 - [-] create winezgui-runner-restore (needs supporting zip files), 
 - [x] restore-runner, ask whether to change runner?
-- [] investigate why script-launch WINE_CMD is different from RUNNER
-     -[-] using workaround of settings WINE_CMD="${RUNNER}" till the investigation
+- [x] investigate why script-launch WINE_CMD is different from RUNNER
+     -[x] using workaround of settings WINE_CMD="${RUNNER}" till the investigation
 - [x] create winezgui-runner-delete
 
 - [x] add winezgui->settings->runner menu
@@ -189,17 +204,17 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] script-create-other-shortcuts
 
 
-- [] BUG: updated script using default wine is not updating runner information. perhaps wine_cmd=$runner is missing
-- [] wine_cmd to use runner from Settings.yml
-- [] Locate runner, if not found, update with default runner, else use RUNNER=grep from settings.yml
-- [] settings->runner...->Set Wine Runner...
-- [] dxvk vkd3d base for other runners
-- [] systemwide - winezgui
-     - [] Set runner (for all new prefixes)
-       - [] Settings.yml -> runner: fullpath to runner
+- [x] BUG: updated script using default wine is not updating runner information. perhaps wine_cmd=$runner is missing
+- [x] wine_cmd to use runner from Settings.yml
+- [x] Locate runner, if not found, update with default runner, else use RUNNER=grep from settings.yml
+- [x] settings->runner...->Set Wine Runner...
+
+- x[] systemwide - winezgui
+     - [x] Set runner (for all new prefixes)
+       - [x] Settings.yml -> runner: fullpath to runner
          
-     - [] Find runner and copy runner from other apps like dolphin, heroic launcher
-     - [] do winetricks dxvk vkd3d (or make it default for 0.98.6 for both wine and proton)
+     - [x] Find runner and copy runner from other apps like dolphin, heroic launcher
+     - [x] Use wine-proton which uses system's dxvk and vkd3d (do winetricks dxvk vkd3d (or make it default for 0.98.6 for both wine and proton)
      - 
 - [] scriptwise
      - [x] Change runner
@@ -207,12 +222,12 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
          - [x] bug: change runner does not update Info.yml's wine version. fixme.
          - [x] Get list of runners from WINEZGUIDIR/Runners and let user select one
          - [] If not found use the winezgui-find-runners function to list runners, let user use it directly or import runner to Runners directory.
-         - [] Choose Change runner for this script only or for all scrpts inside $PREFIXDIR
-         - [] Change Info.yml or *.yml based on user's selection
+         - [x] Choose Change runner for this script only or for all scrpts inside $PREFIXDIR
+         - [x] Change Info.yml or *.yml based on user's selection
          - [] On launch check for runner existing or not, if not found tell user that it's gone, shall we use another runner or default one?
          - [] backup prefix/bundle should import runner
  - [] Import wine directory, should import runner from bottles, heroic launcher, lutris (read config files and copy)
-
+ - [] If no runner is found, ask whether to download
 0.98.5
 - [x] create tmp directory for winetricks to work
 - [x] fix winetricks issue (path)
