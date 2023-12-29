@@ -230,7 +230,7 @@ if [ -z "${PROGNAME}" ] ; then
      unset WARN
 
      #remove tmp directory after copying icon png
-     rm -rf "${TEMPDIR}" && \
+     rm -rf "${TEMPDIR}/*" && \
      dbug "I: ${HEADER}: Icon: Cleanup ${TEMPDIR}"
 
 
@@ -784,7 +784,7 @@ echo "Terminal=false"                        >> "${DESKTOPFILE}"
 echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 
 # Update INFOFILE after creating script
-if [ -f "${INFOFILE}" ]; then
+if [ ! -f "${INFOFILE}" ]; then
      #  Insert Data into Info.yml
      DATE=$(date +%F_%H%M)
 

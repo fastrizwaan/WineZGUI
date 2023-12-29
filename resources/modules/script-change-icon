@@ -64,7 +64,7 @@ script-change-icon()
        unset WARN
 
        #remove tmp directory after copying icon png
-       rm -rf "${TEMP_DIR}" && \
+       rm -rf "${TEMP_DIR}/*" && \
        dbug "I: Script: ${FUNCNAME[0]}: Cleanup ${TEMP_DIR}"
   elif [ "${GET_ICON_EXT}" = "ico" ]; then
          dbug "I: Script: ${FUNCNAME[0]}: .ico file selected to extract icon!"
@@ -94,7 +94,7 @@ script-change-icon()
          unset WARN
   
          #remove tmp directory after copying icon png
-         rm -rf "${TEMP_DIR}" && \
+         rm -rf "${TEMP_DIR}/*" && \
          dbug "I: Script: ${FUNCNAME[0]}: Cleanup ${TEMP_DIR}"
 
   else
