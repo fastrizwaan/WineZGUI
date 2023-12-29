@@ -130,7 +130,7 @@ winezgui-startup-checks()
   export WINETRICKS="$(which winetricks)"
   
   echo "1111 ---- WINE_CMD=$WINE_CMD"
-  sleep 3s
+
 
   # If Settings.yml exists and arch: value do not match win32 or win64; use win64
   if [ "$WINEARCH" != "win32" ] && [ "$WINEARCH" != "win64" ]; then
