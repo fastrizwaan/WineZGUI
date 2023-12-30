@@ -343,8 +343,8 @@ IFS=${SAVEIFS}
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
-echo "script-create-other-shortcuts ----3------------------------- WINE_CMD:${WINE_CMD}"
 echo "script-create-other-shortcuts ----3------------------------- RUNNER:${RUNNER}"
+echo "script-create-other-shortcuts ----3------------------------- WINE_CMD:${WINE_CMD}"
 echo "script-create-other-shortcuts ----3------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
 echo "8. ----------------------------- RUNNER:${RUNNER}"

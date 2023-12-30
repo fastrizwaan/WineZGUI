@@ -39,8 +39,8 @@ winezgui-set-wine_cmd-runner-commands()
  #export WINE_CMD="${RUNNER}"
  #/ === = = = = = = = Recreate Prefix script with Runner 
  
- echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
  echo "11. --------------------------------------- RUNNER = $RUNNER"
+ echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
  echo "11. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
  
  # If ${FLATPAK_NAME} is installed, and script created using flatpak

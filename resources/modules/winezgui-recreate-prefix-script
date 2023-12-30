@@ -332,8 +332,8 @@ IFS=${SAVEIFS}
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
-echo "winezgui-recreate-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "winezgui-recreate-prefix-script ----------------------------- RUNNER:${RUNNER}"
+echo "winezgui-recreate-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "winezgui-recreate-prefix-script ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 # Clean up variables
 unset SCRIPT_MODULES
@@ -537,8 +537,8 @@ for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZE
          fi
 done
 
-echo "${SCRIPTFILE} ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "${SCRIPTFILE} ----------------------------- RUNNER:${RUNNER}"
+echo "${SCRIPTFILE} ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "${SCRIPTFILE} ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
 

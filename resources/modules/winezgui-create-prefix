@@ -286,12 +286,12 @@ IFS=${SAVEIFS}
 
 # # Runner = wine command in a different directory
 # export WINE_CMD="${RUNNER}"
-echo "winezgui-create-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "winezgui-create-prefix-script ----------------------------- RUNNER:${RUNNER}"
+echo "winezgui-create-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "winezgui-create-prefix-script ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
-echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "3. --------------------------------------- RUNNER = $RUNNER"
+echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
 echo "3. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
 
 # Clean up variables
