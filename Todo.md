@@ -164,6 +164,8 @@ set
       - [] and use 
     -[] script-launch
 
+    -[] BUG: winever and runner not updating of EXE_Info.yml (Infofile = Info.yml, but it should also update current EXE_Info.yml)
+
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default
 - [x] create winezgui-runner-import
