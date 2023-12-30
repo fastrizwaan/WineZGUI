@@ -123,7 +123,7 @@ winezgui-fetch-replacement-data()
   fi
 
   # 15. Change /{user,app}/bin/wine -> XOWINEEXEXO and vice versa
-  WEXE=$(echo ${WINE_CMD}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g")
+  WEXE=$(echo ${WINE_CMD}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g"|sed "s/ /\\\\ /g")
   SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
 
