@@ -1,13 +1,15 @@
 #winezgui-startup-checks
 winezgui-startup-checks()
 {
+  echo "HEADER  - $HEADER"
   OLD_HEADER=${HEADER}
     
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
-
+  dbug "I: ${HEADER}: started"
+  echo "HEADER  - $HEADER"
+  echo "OLDHEADER  - $OLDHEADER"
   # Check if writable
   if [ ! -w "$(dirname ${WINEZGUIDIR})" ]; then
        echo "I: ${HEADER}: Cannot write to HOME directory. Bye!"
@@ -165,5 +167,6 @@ winezgui-startup-checks()
        winezgui-create-about-yml
   fi
 
+  dbug "I: ${HEADER}: finished"
   HEADER="${OLD_HEADER}"
 }
