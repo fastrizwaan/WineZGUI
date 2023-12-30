@@ -47,10 +47,10 @@ winezgui-set-wine_cmd-runner-commands()
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
        dbug "I: Script: Install type: Flatpak, Running from host!"
-       WINE_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME}"
+       WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
        WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-       WINECFG_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} winecfg"
-       WEXPLORER_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} explorer"
+       WINECFG_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME} winecfg"
+       WEXPLORER_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME} explorer"
        WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
        # wine winetricks icotool exiftool zenity gnome-terminal zstd"
        ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
