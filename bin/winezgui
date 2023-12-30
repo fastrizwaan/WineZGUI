@@ -61,11 +61,11 @@ source "${DATADIR}/winezgui-source"
 
 # Set dbug variable 
 SOURCE "winezgui-dbug"
-
+echo  "1st winezgui-set-wine_cmd-runner-command launch"
 # Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
-
+echo  "1st winezgui-set-wine_cmd-runner-command launch completed"
 ## / disabling for winezgui-set-wine_cmd-runner-commands
 # #winezgui-startup-checks setups up runner, template, etc.
 # export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")

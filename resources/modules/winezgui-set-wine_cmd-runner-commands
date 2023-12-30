@@ -28,7 +28,7 @@ winezgui-set-wine_cmd-runner-commands()
       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
  fi
  # Runner = wine command in a different directory
- export WINE_CMD="${RUNNER}"
+ #export WINE_CMD="${RUNNER}"
  #/ === = = = = = = = Recreate Prefix script with Runner 
  
  echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
