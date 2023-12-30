@@ -126,7 +126,7 @@ winezgui-list-available-runners()
   echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
 
   export RUNNER=${SELECTED_RUNNER}
-  
+
  # If ${FLATPAK_NAME} is installed, and script created using flatpak
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
@@ -144,7 +144,7 @@ winezgui-list-available-runners()
        ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
        TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
        WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
-       WINEVER="flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version"
+       WINEVER="$(${WINE_CMD} --version)"
        WINETRICKS="${WTRICKS_CMD}"
        export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD WINEVER WINETRICKS
        export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
