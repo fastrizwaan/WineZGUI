@@ -4,12 +4,12 @@ winezgui-cli-arguments()
   
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-
+  dbug "I: $(basename ${0}): ${FUNCNAME[0]} started"
   for i in "${ARGV}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;
      -h|--help) SOURCE "winezgui-show-help; winezgui-show-help; exit; ;;"
      esac
   done
-  dbug "I: ${HEADER}: CLI Arguments completed"
+  dbug "I: $(basename ${0}): ${FUNCNAME[0]} finished"
 }
