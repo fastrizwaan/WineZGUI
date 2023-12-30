@@ -123,12 +123,16 @@ winezgui-fetch-replacement-data()
   fi
 
   # 15. Change /{user,app}/bin/wine -> XOWINEEXEXO and vice versa
+  echo "to be comverted 1:${WINE_CMD}"
   WEXE=$(echo ${WINE_CMD}|sed "s/\\//\\\\\\//g"|sed "s/\\./\\\\./g"|sed "s/ /\\\\ /g")
+  echo "to be comverted 2:${WINE_CMD}"
   SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
 
   # 16. Change wine version
+  echo "to be comverted 1:${WVER}"
   WVER=$(echo ${WINEVER}|sed "s/\\./\\\\./g")
+  echo "to be comverted 2:${WVER}"
   SEARCH+=("${WVER}")
   REPLACE+=("XOWINEVERXO")
 
