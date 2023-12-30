@@ -1,20 +1,22 @@
 winezgui-about()
 {
-  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  dbug "I: ${HEADER}: started"
   
     SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
   # Recreate about file if not found
   if [ ! -f "${ABOUTFILE}" ]; then
-       dbug "I: $(basename ${0}): About.yml not found, recreating!"
+       dbug "I: ${HEADER}: About.yml not found, creating!"
        SOURCE "winezgui-create-about-yml"
        winezgui-create-about-yml
   fi
 
   # Update version in About
   if [ -w "${ABOUTFILE}" ]; then
-       CURRENT_WINE_VERSION=$(${RUNNER} --version|cut -f1 -d " ")
+       dbug "I: ${HEADER}: Updating About.yml."
+       CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
        sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine Version:.*|Wine Version:${CURRENT_WINE_VERSION}|g" -i "${ABOUTFILE}"
        sed "s|^Wine:.*|Wine Runner:${RUNNER}|g" -i "${ABOUTFILE}"
@@ -31,6 +33,8 @@ winezgui-about()
   |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
   |sed -E "s/^(.*)$/<small>\1<\/small>/" \
   |sed "s/|/:/g" )"
+
+  dbug "I: ${HEADER}: Showing formatted info in About.yml."
   ${ZENITY_CMD} --info --no-wrap --text "${TEXT}"
-  
+  dbug "I: ${HEADER}: finished"  
 }

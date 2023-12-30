@@ -11,7 +11,7 @@ winezgui-check-file-type()
        return 1
   fi
 
-  dbug "I: ${HEADER}: Checking ${1}"
+  dbug "I: ${HEADER}: ${1}"
   export EXE_FILE="$(realpath -m "${1}")"
   export EXE_NAME=$(basename "${EXE_FILE}")
   export EXE_PATH=$(dirname  "${EXE_FILE}")
@@ -19,13 +19,6 @@ winezgui-check-file-type()
   export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
                              |sed "s/\.[Mm][Ss][Ii]//")
   export EXE_EXT="${EXE_FILE##*.}"
-
-  dbug "I: ${HEADER}: FILE      : ${EXE_FILE}"
-  dbug "I: ${HEADER}: FILE NAME : ${EXE_NAME}"
-  dbug "I: ${HEADER}: FILE PATH : ${EXE_PATH}"
-  dbug "I: ${HEADER}: FILE NOSP : ${EXE_NOSP}"
-  dbug "I: ${HEADER}: FILE NOEXT: ${EXE_LESS}"
-  dbug "I: ${HEADER}: FILE EXTEN: ${EXE_EXT}"
 
   # some games need to cd to the dir to work
   export base=$(basename "${1}")
@@ -36,9 +29,8 @@ winezgui-check-file-type()
   if [ "${IS_EXE}" != "exe" ] && \
      [ "${IS_EXE}" != "msi" ] && \
      [ "${IS_EXE}" != "wzt" ]; then
-       echo "E: ${HEADER}: Startup: \"${EXE_NAME}\" is not an EXE file"
-       Mesg "I: ${HEADER}: Startup: Please give an exe, msi, or a wzt file."
-       dbug "I: ${HEADER}: Startup: Exiting..."
+       echo "E: ${HEADER}: \"${EXE_NAME}\" is not an EXE or MSI or WZT file"
+       dbug "I: ${HEADER}: Exiting..."
        exit 1
   fi
   dbug "I: ${HEADER}: finished"
