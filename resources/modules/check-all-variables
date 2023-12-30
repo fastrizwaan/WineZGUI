@@ -4,6 +4,7 @@ check-all-variables()
   ### Debug Check variables which are used in this file up to this point
   SOURCE "check-variable"
   echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
+  #Skip checking for flatpakid and flatpak_name in system install
   for VARIABLE in $1;
   do
      if [ "${VARIABLE}" = "FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ]; then

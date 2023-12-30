@@ -92,8 +92,10 @@ winezgui-startup-checks()
        # set RUNNER_NAME
        if [ "${RUNNER}" = "$(which wine)" ]; then
             export RUNNER_NAME="System Default"
-       else #Get directory name containing bin/wine
-            export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+       elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
+            export RUNNER_NAME=$(basename(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
+       elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
+            export RUNNER_NAME=$(basename(echo ${RUNNER}|sed "s|/bin/wine||g"))
        fi
        echo "012. RUNNER =$RUNNER"
        echo "012. RUNNER_NAME=$RUNNER_NAME"
@@ -124,12 +126,13 @@ winezgui-startup-checks()
        export WINEPREFIX="${DEFAULT}"
   fi
   
-  ### since runner is being nothing by dirname, this will be empty,, fixme
-  export WINE_CMD="${RUNNER}"
-  export WINEVER="$(${RUNNER} --version)"
-  export WINETRICKS="$(which winetricks)"
+  #WINE_CMD updated by winezgui
+  #export WINEVER="$(${WINE_CMD} --version)"
+  #export WINETRICKS="$(which winetricks)"
   
-  echo "1111 ---- WINE_CMD=$WINE_CMD"
+  echo "${FUNCNAME[0]} ---- WINE_CMD=$WINE_CMD"
+  echo "${FUNCNAME[0]} ---- WINEVER=$WINEVER"
+  echo "${FUNCNAME[0]} ---- WINETRICKS=$WINETRICKS"
 
 
   # If Settings.yml exists and arch: value do not match win32 or win64; use win64

@@ -61,63 +61,31 @@ source "${DATADIR}/winezgui-source"
 
 # Set dbug variable 
 SOURCE "winezgui-dbug"
-echo  "1st winezgui-set-wine_cmd-runner-command launch"
-# Set WINE_CMD, WINEVER, RUNNER variables
+
+# Set WINE_CMD, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
-echo  "1st winezgui-set-wine_cmd-runner-command launch completed"
-## / disabling for winezgui-set-wine_cmd-runner-commands
-# #winezgui-startup-checks setups up runner, template, etc.
-# export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-# # If runner is not found in Settings  empty
-# if [ -z "${RUNNER}" ]; then
-#      echo "13. RUNNER = $RUNNER NOT FOUND, USING DEFAULT WINE"
-#      export RUNNER="$(which wine)"
-# fi
 
-# # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-# # set RUNNER_NAME
-# if [ "${RUNNER}" = "$(which wine)" ]; then
-#      export RUNNER_NAME="System Default"
-# else #Get directory name containing bin/wine
-#      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-# fi
-
-#export WINE_CMD=${RUNNER} # will be changed by startup-checks
-#export WINEVER="$(${RUNNER} --version)"
-#export WINETRICKS="$(which winetricks)"
+WINEVER="$(${WINE_CMD} --version)"
+WINETRICKS="${WTRICKS_CMD}"
 
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
-# Shortcuts directory for winezgui scripts symbolic links
+
+# Shortcuts (.desktop files) will be installed in APPLICATIONSDIR
+# prefixed with shortcut names to manage winezgui specific shortcuts
 if [ "${INSTALL_TYPE}" = "system" ]; then 
-     #DEXSKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui)"
      SHORTCUT_PREFIX="system_winezgui"
 else 
-     #DEXSKTOPDIR="$(realpath -m ${APPLICATIONSDIR}/winezgui/${FLATPAK_NAME})"
      SHORTCUT_PREFIX="${FLATPAK_NAME}"
 fi
-#export DEXSKTOPDIR SHORTCUT_PREFIX
+
 export SHORTCUT_PREFIX
 export BKP_EXT="wzt" # winezgui backup file extension
 
-# # If prefix=nothing then install to /usr
-# if [ -z "${INSTALL_PREFIX}" ]; then
-#      INSTALL_PREFIX="/usr"
-# fi
-
-# # Flatpak Specific Commands and Variables
-# if [ "${FLATPAK}" = "true" ]; then
-#      echo setting prefix and paths for flatpak
-#      INSTALL_PREFIX="/app"
-#      TEMPDIR="\$(realpath -m \~/.var/app/${FLATPAK_NAME}/data/tmp)"
-#      WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"  #FIXME why this here?
-#      INSTALL_TYPE="system" #FIXME why this here?
-# fi
-
 SOURCE "check-all-variables"
-echo "-------------------------------${0}------------------------------------------"
+echo "-------------------------------${0}--------------------------------------"
 check-all-variables "AUTHOR EMAIL COPYRIGHT WEBSITE DEBUG PROCESSNAME HEADER APPNAME \
                 APPVERSION APP_WITH_VER DATADIR INSTALL_TYPE WINEZGUIDIR FLATPAK_NAME \
                 SETTINGS_FILE TEMPLATES_DIR PREFIXES_DIR UPDATE_ICON_CACHE \
@@ -218,22 +186,14 @@ WineZGUI_Window() # Main WineZGUI application window function
 
   WineZGUI_Window  # After All options
 } 
-
-#------------------------------- Startup -----------------------------#
+echo "-------------------------------${0}--------------------------------------"
+#----------------------------------- Startup ----------------------------------#
 
 SOURCE "winezgui-cli-arguments"
 winezgui-cli-arguments
 
-echo "00. ----------------------------- RUNNER:${RUNNER}"
-echo "00. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-echo "00. ----------------------------- WINE_CMD:${WINE_CMD}"
-
 SOURCE "winezgui-startup-checks"
 winezgui-startup-checks
-
-echo "01. ----------------------------- RUNNER:${RUNNER}"
-echo "01. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-echo "01. ----------------------------- WINE_CMD:${WINE_CMD}"
 
 SOURCE "winezgui-check-file-type"
 winezgui-check-file-type "${1}"
