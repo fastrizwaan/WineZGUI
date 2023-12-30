@@ -2,8 +2,8 @@
 winezgui-check-entry-text()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
-
   dbug "I: ${HEADER}: started"
+
   dbug "I: ${HEADER}: Given: ${1}"
      
   SOURCE "script-check-variables-loaded-or-not"

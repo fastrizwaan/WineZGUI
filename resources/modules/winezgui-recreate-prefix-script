@@ -332,6 +332,9 @@ IFS=${SAVEIFS}
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
+export WINEVER="$(${WINE_CMD} --version)"
+export WINETRICKS="${WTRICKS_CMD}"
+
 echo "winezgui-recreate-prefix-script ----------------------------- RUNNER:${RUNNER}"
 echo "winezgui-recreate-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
 echo "winezgui-recreate-prefix-script ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
@@ -524,6 +527,9 @@ SOURCE "script-locate-exe-function"
 # Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
+
+export WINEVER="$(${WINE_CMD} --version)"
+export WINETRICKS="${WTRICKS_CMD}"
 
 # Debug output for Variables created 
 for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \

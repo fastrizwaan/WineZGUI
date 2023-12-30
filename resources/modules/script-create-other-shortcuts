@@ -311,6 +311,9 @@ IFS=${SAVEIFS}
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
+export WINEVER="$(${WINE_CMD} --version)"
+export WINETRICKS="${WTRICKS_CMD}"
+
 echo "script-create-other-shortcuts - RUNNER:${RUNNER}"
 echo "script-create-other-shortcuts - WINE_CMD:${WINE_CMD}"
 echo "script-create-other-shortcuts - RUNNER_NAME:${RUNNER_NAME}"
@@ -410,6 +413,9 @@ export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 # Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
+
+export WINEVER="$(${WINE_CMD} --version)"
+export WINETRICKS="${WTRICKS_CMD}"
 
 # Debug output for Variables created 
 for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \
