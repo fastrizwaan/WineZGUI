@@ -153,6 +153,15 @@ set
 - [] Confirm, WINE_CMD, WINEVER, RUNNER, RUNNERNAME works both for flatpak or script
 - [] Bug: deleting another runner and setting System Default, won't update winever, because WineVer is used before RUNNER is assigned in 
     -[] list-available-runners
+      -[] problem: 
+           SHOW_OPTION+=" "
+           # Setting 1st option as default wine
+           NAMES+=("System Default")
+           FILES+=("$(which wine)")
+      - [] $(which wine) fails from script (but flatpak run --command=${RUNNER} io.github.fastrizwaan.WineZGUI)
+      - [] Set SYSTEM_WINE=$(which wine) in winezgui
+      - [] flatpak run --command=${SYSTEM_WINE} io.github.fastrizwaan.WineZGUI in scriptfile
+      - [] and use 
     -[] script-launch
 
 - [x] create winezgui-runner-help

@@ -315,6 +315,8 @@ export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
 export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
 
 
+export SYSTEM_WINE=\"${SYSTEM_WINE}\"
+echo \"SYSTEM_WINE=${SYSTEM_WINE}\"
 
 # if icon is found grep it
 if [ -f \"${ICONFILE}\" ]; then

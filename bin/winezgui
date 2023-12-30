@@ -56,6 +56,9 @@ export LD_LIBRARY_PATH
 export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
 
+export SYSTEM_WINE="${SYSTEM_WINE}"
+echo "SYSTEM_WINE=${SYSTEM_WINE}"
+
 # SOURCE function uses source command and try to required scripts in both DATADIR or SCRIPTDIR
 source "${DATADIR}/winezgui-source"
 
