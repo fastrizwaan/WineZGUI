@@ -3,7 +3,9 @@ winezgui-check-file-type()
 {
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  dbug "I: ${HEADER}: started"
+
   dbug "I: ${HEADER}: started"
   # If no command line argument given
   if [ -z "${1}" ]; then

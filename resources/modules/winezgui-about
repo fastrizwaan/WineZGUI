@@ -16,13 +16,17 @@ winezgui-about()
   # Update version in About
   if [ -w "${ABOUTFILE}" ]; then
        dbug "I: ${HEADER}: Updating About.yml."
-       CURRENT_WINE_VERSION=$(${WINE_CMD} --version|cut -f1 -d " ")
        sed "s|^Version:.*|Version:${APPVERSION}|g" -i "${ABOUTFILE}"
-       sed "s|^Wine Version:.*|Wine Version:${CURRENT_WINE_VERSION}|g" -i "${ABOUTFILE}"
+       sed "s|^Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
        sed "s|^Wine:.*|Wine Runner:${RUNNER}|g" -i "${ABOUTFILE}"
        sed "s|^Wine Runner:.*|Wine Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
   fi
   
+  dbug "I: ${HEADER}: Version:${APPVERSION}"
+  dbug "I: ${HEADER}: Wine Version:${WINEVER}"
+  dbug "I: ${HEADER}: Wine Runner:${RUNNER}"
+  dbug "I: ${HEADER}: Wine Runner:${RUNNER_NAME}"
+ 
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
   TEXT="$(cat ${ABOUTFILE} \
