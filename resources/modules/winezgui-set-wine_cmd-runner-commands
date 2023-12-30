@@ -70,7 +70,7 @@ winezgui-set-wine_cmd-runner-commands()
        ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
        TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
        WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
-       WINEVER="$(${WINE_CMD} --version)"
+       WINEVER="flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version"
        WINETRICKS="${WTRICKS_CMD}"
        export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD WINEVER WINETRICKS
        export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
