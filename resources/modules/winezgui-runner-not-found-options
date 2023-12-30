@@ -43,4 +43,5 @@ winezgui-runner-not-found-options()
        echo "E: Unknown Configure Option = ${RUNNER_OPTION}"
        exit 1
   fi
+  unset RUNNER_OPTION
 }
