@@ -125,6 +125,7 @@ winezgui-list-available-runners()
   echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERNAME}"
   echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
 
+  export RUNNER=${SELECTED_RUNNER}
   
  # If ${FLATPAK_NAME} is installed, and script created using flatpak
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
