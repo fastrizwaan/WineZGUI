@@ -60,6 +60,8 @@ script-launch()
        TEXTMSG+="Would you like to see <b>Runner Options</b>\?"
        unset TITLEMSG
        TITLEMSG+="<b>${APP_WITH_VER}: ${RUNNER_NAME} Not Found</b>"
+
+       # Inform and let user choose Runner options
        ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
        ANSWER=$?
        if [ ${ANSWER} -eq 0 ]; then
@@ -75,15 +77,7 @@ script-launch()
   dbug "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   dbug "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
 
-  # If Current Wine version is not found, it could mean that runner and wine is missing
-  # So, test whether runner is there are not using -f and retest if it is working with wine-version
-  # if runner is not found, inform and ask whether to change the runner
-  if [ -z "${CURRENT_WINE_VERSION}" ]; then
-      
-       
 
-  fi
-       
 
   if [ "${CURRENT_WINE_VERSION}" != "${CREATED_WINE_VERSION}" ]; then
        dbug "I: Script: Wine Version is different!"
