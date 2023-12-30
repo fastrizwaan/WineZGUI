@@ -308,47 +308,13 @@ for SCRIPT in $(ls ${DATADIR}); do
 done
 IFS=${SAVEIFS}
 
-# # If WineZGUI is using different runner, use it to create new prefixes
-# # If INFOFILE has runner, then use it, else try to get runner from Settings.yml
-# # === = = = = = = = Recreate Prefix script with Runner 
-# # If Infofile exists (old scripts) and Runner: is not found add it
-# if [ -f ${INFOFILE} ]; then
-#    grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
-#    export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
-# fi
-
-# # If Runner is empty in Infofile, then get Runner info from Settings.yml
-# if [ -z "${RUNNER}" ]; then
-#      if [ -f "${SETTINGS_FILE}" ]; then
-#           export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-#      fi
-# fi  
-
-# # If runner is not specified in Infofile or Settings.yml then use wine
-# if [ -z "${RUNNER}" ]; then
-#     export RUNNER="$(which wine)"
-# fi
-
-# # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-# # set RUNNER_NAME
-# if [ "${RUNNER}" = "$(which wine)" ]; then
-#      export RUNNER_NAME="System Default"
-# else #Get directory name containing bin/wine
-#      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-# fi
-# # Runner = wine command in a different directory
-# export WINE_CMD="${RUNNER}"
-# #/ === = = = = = = = Recreate Prefix script with Runner 
-# Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
-echo "script-create-other-shortcuts ----3------------------------- RUNNER:${RUNNER}"
-echo "script-create-other-shortcuts ----3------------------------- WINE_CMD:${WINE_CMD}"
-echo "script-create-other-shortcuts ----3------------------------- RUNNER_NAME:${RUNNER_NAME}"
+echo "script-create-other-shortcuts - RUNNER:${RUNNER}"
+echo "script-create-other-shortcuts - WINE_CMD:${WINE_CMD}"
+echo "script-create-other-shortcuts - RUNNER_NAME:${RUNNER_NAME}"
 
-echo "8. ----------------------------- RUNNER:${RUNNER}"
-echo "8. ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 # Clean up variables
 unset SCRIPT_MODULES
 unset SCRIPT
@@ -440,98 +406,6 @@ LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH 
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-SOURCE "script-locate-exe-function"
-# LOCATE_EXE_FUNCTION required on Launch
-# # Get runner from info file
-
-# # === = = = = = = = Recreate Prefix script with Runner 
-# # If Infofile exists (old scripts) and Runner: is not found add it
-# if [ -f ${INFOFILE} ]; then
-#    grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
-#    export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
-# fi
-
-# # If Runner is empty in Infofile, then get Runner info from Settings.yml
-# if [ -z "${RUNNER}" ]; then
-#      if [ -f "${SETTINGS_FILE}" ]; then
-#           export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-#      fi
-# fi  
-
-# # If runner is not specified in Infofile or Settings.yml then use wine
-# if [ -z "${RUNNER}" ]; then
-#     export RUNNER="$(which wine)"
-# fi
-
-# # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-# # set RUNNER_NAME
-# if [ "${RUNNER}" = "$(which wine)" ]; then
-#      export RUNNER_NAME="System Default"
-# else #Get directory name containing bin/wine
-#      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-# fi
-# # Runner = wine command in a different directory
-# export WINE_CMD="${RUNNER}"
-# #/ === = = = = = = = Recreate Prefix script with Runner 
-
-# echo "11. --------------------------------------- WINE_CMD = $WINE_CMD"
-# echo "11. --------------------------------------- RUNNER = $RUNNER"
-# echo "11. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
-
-# # If ${FLATPAK_NAME} is installed, and script created using flatpak
-# if  [ ${INSTALL_TYPE} = "flatpak" ] && \
-#     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
-#       dbug "I: Script: Install type: Flatpak, Running from host!"
-#       WINE_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME}"
-#       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-#       WINECFG_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} winecfg"
-#       WEXPLORER_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} explorer"
-#       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
-#       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
-#       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
-#       WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
-#       ZENITY_CMD="flatpak run --command=zenity ${FLATPAK_NAME}"
-#       EXIFTOOL_CMD="flatpak run --command=exiftool ${FLATPAK_NAME}"
-#       ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
-#       TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
-#       WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
-#       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
-#       export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
-
-# else
-#      # flatpak install and running from shell inside flatpak winezgui
-#      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-#           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
-#           export WINE_CMD=${RUNNER}
-#           export WTRICKS_CMD="/app/bin/winetricks"
-#           export WINECFG_CMD="${WINE_CMD} winecfg"
-#           export WEXPLORER_CMD="${WINE_CMD} explorer"
-#           export WBOOT_CMD="$(which wineboot) -i"
-#           export ICOTOOL_CMD="$(which icotool)"
-#           export WRESTOOL_CMD="$(which wrestool)"
-#           export ZENITY_CMD="$(which zenity)"
-#           export EXIFTOOL_CMD="$(which exiftool)"
-#           export ZSTD_CMD="$(which zstd)"
-#           export TAR_CMD="$(which tar)"
-#           export WGET_CMD="$(which wget)"
-          
-#      else
-#           # We are using non flatpak install
-#           dbug "I: Script: Install type: System, Running from host!"
-#           export WINE_CMD=${RUNNER}
-#           export WTRICKS_CMD="$(which winetricks)"
-#           export WINECFG_CMD="${WINE_CMD} winecfg"
-#           export WEXPLORER_CMD="${WINE_CMD} explorer"
-#           export WBOOT_CMD="$(which wineboot) -i"
-#           export ICOTOOL_CMD="$(which icotool)"
-#           export WRESTOOL_CMD="$(which wrestool)"
-#           export ZENITY_CMD="$(which zenity)"
-#           export EXIFTOOL_CMD="$(which exiftool)"
-#           export ZSTD_CMD="$(which zstd)"
-#           export TAR_CMD="$(which tar)"
-#           export WGET_CMD="$(which wget)"
-#      fi
-# fi
 
 # Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
@@ -548,13 +422,11 @@ for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZE
               echo "=e=e=e=e=e=e=e=e=e=e=e="
          fi
 done
-echo "script-create-other-shortcuts ----3------------------------- WINE_CMD:${WINE_CMD}"
-echo "script-create-other-shortcuts ----3------------------------- RUNNER:${RUNNER}"
-echo "script-create-other-shortcuts ----3------------------------- RUNNER_NAME:${RUNNER_NAME}"
-echo "${SCRIPTFILE} --------------------3--------- WINE_CMD:${WINE_CMD}"
-echo "${SCRIPTFILE} --------------------3--------- RUNNER:${RUNNER}"
-echo "${SCRIPTFILE} --------------------3--------- RUNNER_NAME:${RUNNER_NAME}"
-# Needed for Info.yml and backup and restore function
+
+echo "${SCRIPTFILE} (script-create-other-shortcuts) - WINE_CMD:${WINE_CMD}"
+echo "${SCRIPTFILE} (script-create-other-shortcuts) - RUNNER:${RUNNER}"
+echo "${SCRIPTFILE} (script-create-other-shortcuts) - RUNNER_NAME:${RUNNER_NAME}"
+
 
 Script_Window()
 {
@@ -841,8 +713,6 @@ echo "\${PREFIXNAME}          ${PREFIXNAME}"
 echo "\${INFOFILE}            ${INFOFILE}"
 
 echo "ln -sf \"${DESKTOPFILE}\" \"${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop\" "
-
-sleep 10s
 
 ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop" && \
 dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"

@@ -25,7 +25,7 @@ script-change-runner()
        echo "WINEVER=$WINEVER"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
        #export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-  fi
+  fi 
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
   #List available runner should set this

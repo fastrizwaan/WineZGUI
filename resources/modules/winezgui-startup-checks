@@ -90,12 +90,12 @@ winezgui-startup-checks()
        fi
        # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
        # set RUNNER_NAME
-       if [ "${RUNNER}" = "$(which wine)" ]; then
+       if   [ "${RUNNER}" = "$(which wine)" ]; then
             export RUNNER_NAME="System Default"
        elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
-            export RUNNER_NAME=$(basename(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
-       elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
-            export RUNNER_NAME=$(basename(echo ${RUNNER}|sed "s|/bin/wine||g"))
+            export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
+       elif [[ "$RUNNER" == *"/bin/wine" ]]; then
+            export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/bin/wine||g"))
        fi
        echo "012. RUNNER =$RUNNER"
        echo "012. RUNNER_NAME=$RUNNER_NAME"

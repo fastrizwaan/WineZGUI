@@ -13,6 +13,7 @@ script-launch()
   FOUND_EXE_FILES="${PREFIXDIR}/found-exe-files.yml"
   if [ -z "${1}" ]; then
        # 1. Test if the given exe exists (if not found ask user to locate it)
+       SOURCE "script-locate-exe-function"
        script-locate-exe-function
        exe_name=$(basename "${EXE_FILE}")
        exe_path=$(dirname  "${EXE_FILE}")

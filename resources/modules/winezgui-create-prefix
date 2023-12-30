@@ -262,37 +262,9 @@ for SCRIPT in $(ls ${DATADIR}); do
 done
 IFS=${SAVEIFS}
 
-## disable for settings wine_cmd
-# # If WineZGUI is using different runner, use it to create new prefixes
-# # If Settings.yml exists, get RUNNER value from it
-# echo "2. --------------------------------------- SETTINGS_FILE = $SETTINGS_FILE"
-# if [ -f "${SETTINGS_FILE}" ]; then
-#      export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-# fi
-
-
-# # If no runner is found in Settings, then use the system/default runner
-# if [ -z "${RUNNER}" ]; then
-#    export RUNNER="$(which wine)"
-# fi
-
-# # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-# # set RUNNER_NAME
-# if [ "${RUNNER}" = "$(which wine)" ]; then
-#      export RUNNER_NAME="System Default"
-# else #Get directory name containing bin/wine
-#      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-# fi
-
-# # Runner = wine command in a different directory
-# export WINE_CMD="${RUNNER}"
-echo "winezgui-create-prefix-script ----------------------------- RUNNER:${RUNNER}"
-echo "winezgui-create-prefix-script ----------------------------- WINE_CMD:${WINE_CMD}"
-echo "winezgui-create-prefix-script ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
-
-echo "3. --------------------------------------- RUNNER = $RUNNER"
-echo "3. --------------------------------------- WINE_CMD = $WINE_CMD"
-echo "3. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
+echo "winezgui-create-prefix-script - RUNNER:${RUNNER}"
+echo "winezgui-create-prefix-script - WINE_CMD:${WINE_CMD}"
+echo "winezgui-create-prefix-script - RUNNER_NAME:${RUNNER_NAME}"
 
 # Clean up variables
 unset SCRIPT_MODULES
@@ -386,96 +358,6 @@ LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH 
 export DESKTOP_FILE_EDIT=$(which desktop-file-edit)
 
-SOURCE "script-locate-exe-function"
-# LOCATE_EXE_FUNCTION required on Launch
-
-# # Get runner from Settings.yml file because this is a fresh prefix script
-#      echo "4. --------------------------------------- WINE_CMD = $WINE_CMD"
-#      echo "4. --------------------------------------- RUNNER = $RUNNER"
-
-# if [ -f "${SETTINGS_FILE}" ]; then
-#      export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-#      # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-#      # set RUNNER_NAME
-#      if [ "${RUNNER}" = "$(which wine)" ]; then
-#           export RUNNER_NAME="System Default"
-#      else #Get directory name containing bin/wine
-#           export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-#      fi
-# fi
-#      echo "5. --------------------------------------- WINE_CMD = $WINE_CMD"
-#      echo "5. --------------------------------------- RUNNER = $RUNNER"
-#      echo "5. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
-
-# # If runner is not specified in Settings.yml then use wine
-# if [ -z "${RUNNER}" ]; then
-#    export RUNNER="$(which wine)"
-#    export RUNNER_NAME="System Default"
-# fi
-
-#      echo "6. --------------------------------------- WINE_CMD = $WINE_CMD"
-#      echo "6. --------------------------------------- RUNNER = $RUNNER"
-#      echo "6. --------------------------------------- RUNNER_NAME = $RUNNER_NAME"
-
-# export WINE_CMD=${RUNNER}
-# # If ${FLATPAK_NAME} is installed, and script created using flatpak
-# if  [ ${INSTALL_TYPE} = "flatpak" ] && \
-#     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
-#       dbug "I: Script: Install type: Flatpak, Running from host!"
-#       WINE_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME}"
-#       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
-#       WINECFG_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} winecfg"
-#       WEXPLORER_CMD="flatpak run --command=${WINE_CMD} ${FLATPAK_NAME} explorer"
-#       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
-#       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
-#       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
-#       WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
-#       ZENITY_CMD="flatpak run --command=zenity ${FLATPAK_NAME}"
-#       EXIFTOOL_CMD="flatpak run --command=exiftool ${FLATPAK_NAME}"
-#       ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
-#       TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
-#       WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
-#       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
-#       export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
-
-# else
-#      # flatpak install and running from shell inside flatpak winezgui
-#      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
-#           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
-#           export WINE_CMD=${RUNNER}
-#           export WTRICKS_CMD="/app/bin/winetricks"
-#           export WINECFG_CMD="${WINE_CMD} winecfg"
-#           export WEXPLORER_CMD="${WINE_CMD} explorer"
-#           export WBOOT_CMD="$(which wineboot) -i"
-#           export ICOTOOL_CMD="$(which icotool)"
-#           export WRESTOOL_CMD="$(which wrestool)"
-#           export ZENITY_CMD="$(which zenity)"
-#           export EXIFTOOL_CMD="$(which exiftool)"
-#           export ZSTD_CMD="$(which zstd)"
-#           export TAR_CMD="$(which tar)"
-#           export WGET_CMD="$(which wget)"
-          
-#      else
-#           # We are using non flatpak install
-#           dbug "I: Script: Install type: System, Running from host!"
-#           export WINE_CMD=${RUNNER}
-#           export WTRICKS_CMD="$(which winetricks)"
-#           export WINECFG_CMD="${WINE_CMD} winecfg"
-#           export WEXPLORER_CMD="${WINE_CMD} explorer"
-#           export WBOOT_CMD="$(which wineboot) -i"
-#           export ICOTOOL_CMD="$(which icotool)"
-#           export WRESTOOL_CMD="$(which wrestool)"
-#           export ZENITY_CMD="$(which zenity)"
-#           export EXIFTOOL_CMD="$(which exiftool)"
-#           export ZSTD_CMD="$(which zstd)"
-#           export TAR_CMD="$(which tar)"
-#           export WGET_CMD="$(which wget)"
-#      fi
-# fi
-
-
-# # Needed for Info.yml and backup and restore function
-
 # Set WINE_CMD, WINEVER, RUNNER variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
@@ -491,9 +373,9 @@ for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZE
               echo "=e=e=e=e=e=e=e=e=e=e=e="
          fi
 done
-echo "${SCRIPTFILE} ----------------------------- WINE_CMD:${WINE_CMD}"
-echo "${SCRIPTFILE} ----------------------------- RUNNER:${RUNNER}"
-echo "${SCRIPTFILE} ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
+echo "${SCRIPTFILE} (winezgui-create-prefix) - WINE_CMD:${WINE_CMD}"
+echo "${SCRIPTFILE} (winezgui-create-prefix) - RUNNER:${RUNNER}"
+echo "${SCRIPTFILE} (winezgui-create-prefix) - RUNNER_NAME:${RUNNER_NAME}"
 
 Script_Window()
 {
