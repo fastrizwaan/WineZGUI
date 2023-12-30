@@ -66,8 +66,8 @@ SOURCE "winezgui-dbug"
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
-WINEVER="$(${WINE_CMD} --version)"
-WINETRICKS="${WTRICKS_CMD}"
+export WINEVER="$(${WINE_CMD} --version)"
+export WINETRICKS="${WTRICKS_CMD}"
 
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"

@@ -3,8 +3,8 @@
 # Update info only when wine is found
 winezgui-create-about-yml()
 {
-  OLD_HEADER=${HEADER}
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  dbug "I: ${HEADER}: started"
      
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
@@ -30,6 +30,7 @@ winezgui-create-about-yml()
        fi
        dbug "I: ${HEADER}: Created ${ABOUTFILE}"
   fi
-  HEADER=${OLD_HEADER}
+
+  dbug "I: ${HEADER}: finished"
   return 0
 }
