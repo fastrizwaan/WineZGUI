@@ -1,17 +1,17 @@
 # winezgui-check-file-type
 winezgui-check-file-type()
 {
-  
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  dbug "I: ${HEADER}: started"
+  # If no command line argument given
   if [ -z "${1}" ]; then
        dbug "I: ${HEADER}: No files given"
        return 1
   fi
-  OLD_HEADER="${HEADER}"
-  HEADER="$(basename ${0})"
-  dbug "I: ${HEADER}: Startup: Checking ${1}"
+
+  dbug "I: ${HEADER}: Checking ${1}"
   export EXE_FILE="$(realpath -m "${1}")"
   export EXE_NAME=$(basename "${EXE_FILE}")
   export EXE_PATH=$(dirname  "${EXE_FILE}")
@@ -19,8 +19,14 @@ winezgui-check-file-type()
   export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//" \
                              |sed "s/\.[Mm][Ss][Ii]//")
   export EXE_EXT="${EXE_FILE##*.}"
-  #WINEPREFIX_SUBDIR IS already defined in winezgui-open-exe with sha256sum, disabling it here
-  #export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_LESS}"
+
+  dbug "I: ${HEADER}: FILE      : ${EXE_FILE}"
+  dbug "I: ${HEADER}: FILE NAME : ${EXE_NAME}"
+  dbug "I: ${HEADER}: FILE PATH : ${EXE_PATH}"
+  dbug "I: ${HEADER}: FILE NOSP : ${EXE_NOSP}"
+  dbug "I: ${HEADER}: FILE NOEXT: ${EXE_LESS}"
+  dbug "I: ${HEADER}: FILE EXTEN: ${EXE_EXT}"
+
   # some games need to cd to the dir to work
   export base=$(basename "${1}")
   export dire=$(dirname  "${1}")
@@ -35,8 +41,7 @@ winezgui-check-file-type()
        dbug "I: ${HEADER}: Startup: Exiting..."
        exit 1
   fi
-  HEADER="${OLD_HEADER}"
-  
+  dbug "I: ${HEADER}: finished"
   SOURCE "winezgui-open-exe"
   winezgui-open-exe "${EXE_FILE}"
 }
