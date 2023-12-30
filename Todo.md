@@ -139,7 +139,12 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      Quit...
 
 0.98.6 (runner support)
-- SCRIPT-ABOUT should use runner from info.yml and use wine-version from there.
+- [] set WINE_CMD and get runner from winezgui-set-wine_cmd-runner-commands in
+     - [] winezgui  
+     - [] winezgui-create-prefix 
+     - [] winezgui-recreate-prefix-script 
+     - [] script-create-other-shortcuts
+     
 
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default

@@ -56,26 +56,37 @@ export LD_LIBRARY_PATH
 export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
 export ARGV="$@"
 
-#winezgui-startup-checks setups up runner, template, etc.
-export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
-# If runner is not found in Settings  empty
-if [ -z "${RUNNER}" ]; then
-     echo "13. RUNNER = $RUNNER NOT FOUND, USING DEFAULT WINE"
-     export RUNNER="$(which wine)"
-fi
+# SOURCE function uses source command and try to required scripts in both DATADIR or SCRIPTDIR
+source "${DATADIR}/winezgui-source"
 
-# if runner is from local install /app/bin/wine or /usr/bin/wine etc.
-# set RUNNER_NAME
-if [ "${RUNNER}" = "$(which wine)" ]; then
-     export RUNNER_NAME="System Default"
-else #Get directory name containing bin/wine
-     export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-fi
+# Set dbug variable 
+SOURCE "winezgui-dbug"
 
-export WINE_CMD=${RUNNER} # will be changed by startup-checks
-export WINEVER="$(${RUNNER} --version)"
+# Set WINE_CMD, WINEVER, RUNNER variables
+SOURCE "winezgui-set-wine_cmd-runner-commands"
+winezgui-set-wine_cmd-runner-commands
 
-export WINETRICKS="$(which winetricks)"
+## / disabling for winezgui-set-wine_cmd-runner-commands
+# #winezgui-startup-checks setups up runner, template, etc.
+# export RUNNER=$(grep "runner:" ${SETTINGS_FILE}|cut -f2 -d ":")
+# # If runner is not found in Settings  empty
+# if [ -z "${RUNNER}" ]; then
+#      echo "13. RUNNER = $RUNNER NOT FOUND, USING DEFAULT WINE"
+#      export RUNNER="$(which wine)"
+# fi
+
+# # if runner is from local install /app/bin/wine or /usr/bin/wine etc.
+# # set RUNNER_NAME
+# if [ "${RUNNER}" = "$(which wine)" ]; then
+#      export RUNNER_NAME="System Default"
+# else #Get directory name containing bin/wine
+#      export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
+# fi
+
+#export WINE_CMD=${RUNNER} # will be changed by startup-checks
+#export WINEVER="$(${RUNNER} --version)"
+#export WINETRICKS="$(which winetricks)"
+
 export INFOFILE="${PREFIXDIR}/Info.yml"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
@@ -104,7 +115,7 @@ export BKP_EXT="wzt" # winezgui backup file extension
 #      WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"  #FIXME why this here?
 #      INSTALL_TYPE="system" #FIXME why this here?
 # fi
-source "${DATADIR}/winezgui-source"
+
 SOURCE "check-all-variables"
 echo "-------------------------------${0}------------------------------------------"
 check-all-variables "AUTHOR EMAIL COPYRIGHT WEBSITE DEBUG PROCESSNAME HEADER APPNAME \
@@ -209,10 +220,6 @@ WineZGUI_Window() # Main WineZGUI application window function
 } 
 
 #------------------------------- Startup -----------------------------#
-# Load file with SOURCE function to load files
-source "${DATADIR}/winezgui-source"
-
-SOURCE "winezgui-dbug"
 
 SOURCE "winezgui-cli-arguments"
 winezgui-cli-arguments
