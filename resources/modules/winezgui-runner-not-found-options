@@ -1,0 +1,46 @@
+#winezgui-runner-not-found-options
+winezgui-runner-not-found-options()
+{
+  unset RUNNER_OPTION
+  RUNNER_OPTION=$(${ZENITY_CMD}                                \
+                  --title "${APP_WITH_VER} - Runner Not Found" \
+                  --list --hide-header                         \
+                  --width=360 --height=340                     \
+                  --radiolist --column " "                     \
+                  --column "Action"                            \
+                         0 "Set Default Runner..."             \
+                         0 "Download Runner..."                \
+                         0 "Import Runner..."                  \
+                         0 "Restore..."                        \
+                      TRUE "Help..."                           \
+                  --text   "Runner: ${RUNNER_NAME} was in use" )
+                        
+    # Exit if Cancel is clicked
+  if [ -z "${RUNNER_OPTION}" ]; then
+       dbug "I: ${HEADER}: Cancel Selected!"
+       return 1
+  fi
+
+  # Show What is selected     
+  dbug "I: ${HEADER}: ${RUNNER_OPTION} Selected!"
+
+  if   [ "${RUNNER_OPTION}" = "Set Default Runner..." ]; then
+          SOURCE "winezgui-runner-set-default"
+          winezgui-runner-set-default
+  elif [ "${RUNNER_OPTION}" = "Download Runner..." ]; then
+          SOURCE "winezgui-runner-download"
+          winezgui-runner-download
+  elif [ "${RUNNER_OPTION}" = "Import Runner..." ]; then
+          SOURCE "winezgui-runner-import"
+          winezgui-runner-import
+  elif [ "${RUNNER_OPTION}" = "Restore..." ]; then
+          SOURCE "winezgui-runner-restore"
+          winezgui-runner-restore
+  elif [ "${RUNNER_OPTION}" = "Help..." ]; then
+          SOURCE "winezgui-runner-help"
+          winezgui-runner-help
+  else
+       echo "E: Unknown Configure Option = ${RUNNER_OPTION}"
+       exit 1
+  fi
+}
