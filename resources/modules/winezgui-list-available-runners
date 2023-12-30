@@ -35,6 +35,23 @@ winezgui-list-available-runners()
        IFS=${SAVEIFS}
        return 1
   fi
+
+
+  # Set system wine variable using if then else, if flatpak install but script is running
+  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+        SYSTEM_WINE="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
+  else 
+      # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then 
+          export SYSTEM_WINE=${RUNNER}
+      else
+          # We are using non flatpak install
+          dbug "I: Script: Install type: System, Running from host!"
+          export SYSTEM_WINE=${RUNNER}
+      fi
+  fi
+
   # if RUNNERS_FOUND has value, then only change exe
   for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
   do
@@ -47,7 +64,7 @@ winezgui-list-available-runners()
            SHOW_OPTION+=" "
            # Setting 1st option as default wine
            NAMES+=("System Default")
-           FILES+=("$(which wine)")
+           FILES+=("${SYSTEM_WINE}")
            count=$(expr ${count} + 1)
       fi
       # Add found directories to show options
