@@ -138,13 +138,22 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-0.98.6 (runner support)
-- [] set WINE_CMD and get runner from winezgui-set-wine_cmd-runner-commands in
+0.98.6.2 (runner support) 
+set
+-[] WINE_CMD
+-[] WINEVER 
+-[] RUNNER and get runner from winezgui-set-wine_cmd-runner-commands in
+-[] RUNNERNAME
+-[]
      - [] winezgui  
      - [] winezgui-create-prefix 
      - [] winezgui-recreate-prefix-script 
      - [] script-create-other-shortcuts
-     
+- [] Delete Selected Runner
+- [] Confirm, WINE_CMD, WINEVER, RUNNER, RUNNERNAME works both for flatpak or script
+- [] Bug: deleting another runner and setting System Default, won't update winever, because WineVer is used before RUNNER is assigned in 
+    -[] list-available-runners
+    -[] script-launch
 
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default
