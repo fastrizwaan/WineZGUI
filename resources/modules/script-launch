@@ -84,7 +84,7 @@ script-launch()
 
   echo "${WINE_CMD} ${exe_name} ${EXE_ARGUMENTS}"
 
-  "${WINE_CMD}" "${exe_name}" ${EXE_ARGUMENTS}
+  ${WINE_CMD} "${exe_name}" ${EXE_ARGUMENTS}
 
   # 4. Remove wine installed shortcuts, unclutters menu
   SOURCE "winezgui-remove-wine-created-shortcuts"
