@@ -70,7 +70,9 @@ winezgui-set-wine_cmd-runner-commands()
        ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
        TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
        WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
-       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD
+       WINEVER="$(${WINE_CMD} --version)"
+       WINETRICKS="${WTRICKS_CMD}"
+       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD WINEVER WINETRICKS
        export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
  
  else
@@ -78,7 +80,7 @@ winezgui-set-wine_cmd-runner-commands()
       if [ "${INSTALL_TYPE}" = "flatpak" ]; then
            dbug "I: Script: Install type: Flatpak, Running from flatpak!"
            export WINE_CMD=${RUNNER}
-           export WTRICKS_CMD="/app/bin/winetricks"
+           export WTRICKS_CMD="$(which winetricks)"
            export WINECFG_CMD="${WINE_CMD} winecfg"
            export WEXPLORER_CMD="${WINE_CMD} explorer"
            export WBOOT_CMD="$(which wineboot) -i"
@@ -89,6 +91,8 @@ winezgui-set-wine_cmd-runner-commands()
            export ZSTD_CMD="$(which zstd)"
            export TAR_CMD="$(which tar)"
            export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
            
       else
            # We are using non flatpak install
@@ -105,12 +109,14 @@ winezgui-set-wine_cmd-runner-commands()
            export ZSTD_CMD="$(which zstd)"
            export TAR_CMD="$(which tar)"
            export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
       fi
  fi
  
  # Debug output for Variables created 
  for i in WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD ICOTOOL_CMD ZENITY_CMD \
-          EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD; do
+          EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD WINEVER WINETRICKS; do
           if [ ! -z "${i}" ]; then
                echo "Exporting: $i = ${!i}" && export $i 
           else

@@ -14,13 +14,24 @@ winezgui-runner-set-default()
        grep "runner:" "${SETTINGS_FILE}" || echo "runner:${RUNNER}" >> "${SETTINGS_FILE}"
        sed "s|runner:.*|runner:${SELECTED_RUNNER}|g" -i "${SETTINGS_FILE}"
        export RUNNER="${SELECTED_RUNNER}"
-       export RUNNER_NAME=$(basename $(dirname $(dirname ${RUNNER})))
-  fi
+  fi 
   
+  # Set runner name
+  if   [ "${RUNNER}" = "$(which wine)" ]; then
+       export RUNNER_NAME="System Default"
+  elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
+       export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
+  elif [[ "$RUNNER" == *"/bin/wine" ]]; then
+       export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/bin/wine||g"))
+  fi
+
+  # TEST WINEVER
+  if [ -z "$WINEVER" ]; then
+       $ZENITY_CMD --error --text="WineVER not found in winezgui set runner default"
+  fi
   # If About.yml is writable
   if [ -w "${ABOUTFILE}" ]; then
        export RUNNER="${SELECTED_RUNNER}"
-       export RUNNER_NAME="${SELECTED_RUNNERDIR_NAME}"
        sed "s|Runner:.*|Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
        sed "s|Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
   fi

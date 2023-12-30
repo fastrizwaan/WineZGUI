@@ -62,12 +62,9 @@ source "${DATADIR}/winezgui-source"
 # Set dbug variable 
 SOURCE "winezgui-dbug"
 
-# Set WINE_CMD, RUNNER variables
+# Set WINE_CMD, RUNNER, RUNNER_NAME, WINEVER, WINETRICKS variables
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
-
-export WINEVER="$(${WINE_CMD} --version)"
-export WINETRICKS="${WTRICKS_CMD}"
 
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
 export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
