@@ -124,9 +124,70 @@ winezgui-list-available-runners()
   echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERDIR_NAME}"
   echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERNAME}"
   echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
+
   
+ # If ${FLATPAK_NAME} is installed, and script created using flatpak
+ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       dbug "I: Script: Install type: Flatpak, Running from host!"
+       WINE_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
+       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
+       WINECFG_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME} winecfg"
+       WEXPLORER_CMD="flatpak run --command=${RUNNER} ${FLATPAK_NAME} explorer"
+       WBOOT_CMD="flatpak --command=wineboot run ${FLATPAK_NAME} -i"
+       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
+       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
+       WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
+       ZENITY_CMD="flatpak run --command=zenity ${FLATPAK_NAME}"
+       EXIFTOOL_CMD="flatpak run --command=exiftool ${FLATPAK_NAME}"
+       ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
+       TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
+       WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
+       WINEVER="flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version"
+       WINETRICKS="${WTRICKS_CMD}"
+       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD WINEVER WINETRICKS
+       export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
+ 
+ else
+      # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
+           export WINE_CMD=${RUNNER}
+           export WTRICKS_CMD="$(which winetricks)"
+           export WINECFG_CMD="${WINE_CMD} winecfg"
+           export WEXPLORER_CMD="${WINE_CMD} explorer"
+           export WBOOT_CMD="$(which wineboot) -i"
+           export ICOTOOL_CMD="$(which icotool)"
+           export WRESTOOL_CMD="$(which wrestool)"
+           export ZENITY_CMD="$(which zenity)"
+           export EXIFTOOL_CMD="$(which exiftool)"
+           export ZSTD_CMD="$(which zstd)"
+           export TAR_CMD="$(which tar)"
+           export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
+           
+      else
+           # We are using non flatpak install
+           dbug "I: Script: Install type: System, Running from host!"
+           export WINE_CMD=${RUNNER}
+           export WTRICKS_CMD="$(which winetricks)"
+           export WINECFG_CMD="${WINE_CMD} winecfg"
+           export WEXPLORER_CMD="${WINE_CMD} explorer"
+           export WBOOT_CMD="$(which wineboot) -i"
+           export ICOTOOL_CMD="$(which icotool)"
+           export WRESTOOL_CMD="$(which wrestool)"
+           export ZENITY_CMD="$(which zenity)"
+           export EXIFTOOL_CMD="$(which exiftool)"
+           export ZSTD_CMD="$(which zstd)"
+           export TAR_CMD="$(which tar)"
+           export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
+      fi
+ fi
+ 
   # Validate working runner by getting wine --version with the selected runner
-  export WINEVER=$(${SELECTED_RUNNER} --version)
   echo "WINEVER=$WINEVER"
  
   # if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
