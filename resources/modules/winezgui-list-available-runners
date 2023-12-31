@@ -38,6 +38,11 @@ winezgui-list-available-runners()
 #   fi
 # /Allowing continuing so that system runner is added to the list
 
+# If not runners are found, suggest system wine as runner
+if [ -z "${RUNNERS_FOUND}" ] ; then
+    SEARCH_LIST="${SYSTEM_WINE}"
+fi
+
 #   # Set system wine variable using if then else, if flatpak install but script is running
 #   if  [ ${INSTALL_TYPE} = "flatpak" ] && \
 #       [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
