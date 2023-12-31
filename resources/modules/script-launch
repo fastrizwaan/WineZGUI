@@ -45,35 +45,55 @@ script-launch()
   fi
 
   # Check runner whether it is present and working
-  if [ ! -f "${RUNNER}" ]; then #If runner file is not found
-       if   [ "${RUNNER}" = "${SYSTEM_WINE}" ]; then
-              export RUNNER_NAME="System Default"
-       elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
-              export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
-       elif [[ "$RUNNER" == *"/bin/wine" ]]; then
-              export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/bin/wine||g"))
-       fi
-       
-       unset TEXTMSG
-       TEXTMSG+="Runner: <b>${RUNNER_NAME}</b> is missing\n"
-       TEXTMSG+="<b>${RUNNER}</b>\n"
-       TEXTMSG+="Would you like to see <b>Runner Options</b>\?"
-       unset TITLEMSG
-       TITLEMSG+="<b>${APP_WITH_VER}: ${RUNNER_NAME} Not Found</b>"
 
-       # Inform and let user choose Runner options
-       ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
-       ANSWER=$?
-       if [ ${ANSWER} -eq 0 ]; then
-            SOURCE "winezgui-runner-not-found-options"
-            winezgui-runner-not-found-options
-       fi
+  # /app/bin/wine will always be not found by script
+  # manually test it with flatpak command
+  # If ${FLATPAK_NAME} is installed, and script created using flatpak
+ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       WINEVER_TEST="flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version"
+ else
+     # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
+           WINEVER_TEST="$(${RUNNER} --version)"
+      else
+           # We are using non flatpak install
+           dbug "I: Script: Install type: System, Running from host!"
+           WINEVER_TEST="$(${RUNNER} --version)"
+      fi
+fi
 
- fi
+# If runner fails to run then, it is absent, let's inform the user
+if [ -z ${WINEVER_TEST} ]; then
+
+     # based on runner file, set runner name for the missing runner
+     if   [ "${RUNNER}" = "${SYSTEM_WINE}" ]; then
+            export RUNNER_NAME="System Default"
+     elif [[ "$RUNNER" == *"files/bin/wine" ]]; then
+            export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/files/bin/wine||g"))
+     elif [[ "$RUNNER" == *"/bin/wine" ]]; then
+            export RUNNER_NAME=$(basename $(echo ${RUNNER}|sed "s|/bin/wine||g"))
+     fi
+     
+     unset TEXTMSG
+     TEXTMSG+="Runner: <b>${RUNNER_NAME}</b> is missing\n"
+     TEXTMSG+="<b>${RUNNER}</b>\n"
+     TEXTMSG+="Would you like to see <b>Runner Options</b>\?"
+     unset TITLEMSG
+     TITLEMSG+="<b>${APP_WITH_VER}: ${RUNNER_NAME} Not Found</b>"
+     # Inform and let user choose Runner options
+     ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
+     ANSWER=$?
+     if [ ${ANSWER} -eq 0 ]; then
+          SOURCE "winezgui-runner-not-found-options"
+          winezgui-runner-not-found-options
+     fi
+fi
   # WINE_CMD will be updated by SCRIPTFILE which is calling this function
   # Check for Wine version change
   
-  CURRENT_WINE_VERSION=$(${WINE_CMD} --version)
+  CURRENT_WINE_VERSION="$(${WINE_CMD} --version)"
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
   dbug "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   dbug "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
