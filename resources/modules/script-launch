@@ -51,7 +51,7 @@ script-launch()
   # If ${FLATPAK_NAME} is installed, and script created using flatpak
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
-       WINEVER_TEST="flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version"
+       WINEVER_TEST="$(flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version)"
  else
      # flatpak install and running from shell inside flatpak winezgui
       if [ "${INSTALL_TYPE}" = "flatpak" ]; then
@@ -65,7 +65,7 @@ script-launch()
 fi
 
 # If runner fails to run then, it is absent, let's inform the user
-if [ -z ${WINEVER_TEST} ]; then
+if [ -z "${WINEVER_TEST}" ]; then
 
      # based on runner file, set runner name for the missing runner
      if   [ "${RUNNER}" = "${SYSTEM_WINE}" ]; then
