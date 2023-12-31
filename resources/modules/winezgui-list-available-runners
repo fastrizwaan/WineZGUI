@@ -27,15 +27,16 @@ winezgui-list-available-runners()
               | tr '\n' '|')
   RUNNERS_FOUND=$(echo ${SEARCH_LIST})
 
-  if [ -z "${RUNNERS_FOUND}" ] ; then
-       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
-              --text "Sorry, no runners found in Runners directory"
-              echo SELECTED_RUNNERDIR
-       unset SEARCH_LIST RUNNERS_FOUND
-       IFS=${SAVEIFS}
-       return 1
-  fi
-
+# Allowing continuing so that system runner is added to the list
+#   if [ -z "${RUNNERS_FOUND}" ] ; then
+#        ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+#               --text "Sorry, no runners found in Runners directory"
+#               echo SELECTED_RUNNERDIR
+#        unset SEARCH_LIST RUNNERS_FOUND
+#        IFS=${SAVEIFS}
+#        return 1
+#   fi
+# /Allowing continuing so that system runner is added to the list
 
 #   # Set system wine variable using if then else, if flatpak install but script is running
 #   if  [ ${INSTALL_TYPE} = "flatpak" ] && \
