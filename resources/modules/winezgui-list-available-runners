@@ -61,18 +61,24 @@ fi
   # if RUNNERS_FOUND has value, then only change exe
   for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
   do
-      RealName=$(basename    "$i")
       RealFile=$(realpath -m "$i")
-
-      # If 1st value is empty, enable it and set system default
-      if [ -z "${SHOW_OPTION}" ]; then
-           SHOW_OPTION+="TRUE \"System Default\""
-           SHOW_OPTION+=" "
-           # Setting 1st option as default wine
-           NAMES+=("System Default")
-           FILES+=("${SYSTEM_WINE}")
-           count=$(expr ${count} + 1)
+      # if Realfile is /app/bin/wine or /usr/bin/wine set name
+      if [ "$RealFile" = "${SYSTEM_WINE}" ]; then
+           RealName="System Default"
+      else
+           RealName=$(basename    "$i")
       fi
+
+     # Not setting any runner by default
+     #  # If 1st value is empty, enable it and set system default
+     #  if [ -z "${SHOW_OPTION}" ]; then
+     #       SHOW_OPTION+="TRUE \"System Default\""
+     #       SHOW_OPTION+=" "
+     #       # Setting 1st option as default wine
+     #       NAMES+=("System Default")
+     #       FILES+=("${SYSTEM_WINE}")
+     #       count=$(expr ${count} + 1)
+     #  fi
       # Add found directories to show options
       SHOW_OPTION+="0 \"${RealName}\""
       SHOW_OPTION+=" "
