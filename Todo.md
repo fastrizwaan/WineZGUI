@@ -165,6 +165,7 @@ set
     -[] script-launch
 
     -[] BUG: winever and runner not updating of EXE_Info.yml (Infofile = Info.yml, but it should also update current EXE_Info.yml)
+    - [] Setting System Default won't work, why?
 
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default

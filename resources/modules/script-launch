@@ -72,12 +72,18 @@ script-launch()
  fi
   # WINE_CMD will be updated by SCRIPTFILE which is calling this function
   # Check for Wine version change
+  
   CURRENT_WINE_VERSION=$(${WINE_CMD} --version)
   CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
   dbug "I: Script: Created using Wine Version:${CREATED_WINE_VERSION}"
   dbug "I: Script: Current Wine Version is   :${CURRENT_WINE_VERSION}"
 
-
+  echo '--------------------------------- Wine CMD --------------------'
+  echo "WINE_CMD = $WINE_CMD"
+  echo "CURRENT_WINE_VERSION = $CURRENT_WINE_VERSION"
+  echo "CREATED_WINE_VERSION = $CREATED_WINE_VERSION"
+  sleep 5s
+  
 
   if [ "${CURRENT_WINE_VERSION}" != "${CREATED_WINE_VERSION}" ]; then
        dbug "I: Script: Wine Version is different!"
