@@ -119,7 +119,9 @@ echo "2==> SEARCH_LIST=$SEARCH_LIST"
        unset NAMES FILES COMMAND RESULT count i
        return 1
   fi
-
+  echo "0. RESULT = $RESULT"
+  echo "1. NAMES[@]} = ${NAMES[@]}"
+  echo "2. FILES[@]} = ${FILES[@]}"
   count=0
   # 4. Find which RUNNER DIRECOTRY the user has selected and set the selected runner dir, name, bin/wine into variable
   for i in "${NAMES[@]}"; do
@@ -128,9 +130,8 @@ echo "2==> SEARCH_LIST=$SEARCH_LIST"
            dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
            export SELECTED_RUNNERDIR="${FILES[${count}]}"
            export SELECTED_RUNNERDIR_NAME="${i}"
-           echo "Selected RUNNER = $SELECTED_RUNNERDIR"
-           echo "SELECTED_RUNNERDIR_NAME=$SELECTED_RUNNERDIR_NAME"
-           echo "00002 - - - - - - - - - - - - - - - - - -"
+           echo "3. Selected RUNNER = $SELECTED_RUNNERDIR"
+           echo "3. SELECTED_RUNNERDIR_NAME=$SELECTED_RUNNERDIR_NAME"
            break
       fi
       count=$(expr ${count} + 1)
