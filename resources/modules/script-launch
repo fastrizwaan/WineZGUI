@@ -86,9 +86,9 @@ if [ -z "${WINEVER_TEST}" ]; then
      ${ZENITY_CMD} --question --width 400 --title "${TITLEMSG}" --text "${TEXTMSG}"
      ANSWER=$?
      if [ ${ANSWER} -eq 0 ]; then
-          SOURCE "winezgui-runner-not-found-options"
-          winezgui-runner-not-found-options
-     fi
+          SOURCE "script-runner-not-found-options"
+          script-runner-not-found-options
+     fi 
 fi
   # WINE_CMD will be updated by SCRIPTFILE which is calling this function
   # Check for Wine version change

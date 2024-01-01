@@ -1,3 +1,4 @@
+#script-change-runner
 script-change-runner()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
