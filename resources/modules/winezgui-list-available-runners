@@ -43,7 +43,7 @@ winezgui-list-available-runners()
 
 # Add System wine to the list irrespective of found or not found
 echo "1==> SEARCH_LIST=$SEARCH_LIST"
-    SEARCH_LIST="${SYSTEM_WINE}| ${SEARCH_LIST}"
+    SEARCH_LIST="${SYSTEM_WINE}|${SEARCH_LIST}"
 #fi
 echo "2==> SEARCH_LIST=$SEARCH_LIST"
 #   # Set system wine variable using if then else, if flatpak install but script is running
