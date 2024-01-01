@@ -148,6 +148,7 @@ echo "2==> SEARCH_LIST=$SEARCH_LIST"
   else #use selected runner /app/bin (1st option) which does not have bin/ subdir
          export SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
   fi
+  
 
   export SELECTED_RUNNERNAME="${SELECTED_RUNNERDIR_NAME}"
   echo "SELECTED_RUNNER=$SELECTED_RUNNER"
@@ -158,6 +159,31 @@ echo "2==> SEARCH_LIST=$SEARCH_LIST"
   echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
 
   export RUNNER=${SELECTED_RUNNER}
+
+# Do a runner test and if runner works, then set WINEVER_TEST variable
+      # If ${FLATPAK_NAME} is installed, and script created using flatpak
+ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       WINEVER_TEST="$(flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version)"
+ else
+     # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
+           WINEVER_TEST="$(${RUNNER} --version)"
+      else
+           # We are using non flatpak install
+           dbug "I: Script: Install type: System, Running from host!"
+           WINEVER_TEST="$(${RUNNER} --version)"
+      fi
+fi
+
+#if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
+  if [ -z "${WINEVER_TEST}" ] ; then 
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Runner not working!" \
+       --text "The <b>${RUNNER}</b> is not compatible!"
+       dbug "Bad Runner or not a wine file"
+       return 1
+  fi
 
  # If ${FLATPAK_NAME} is installed, and script created using flatpak
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
