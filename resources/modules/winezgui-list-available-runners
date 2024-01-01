@@ -168,15 +168,18 @@ echo "2==> SEARCH_LIST=$SEARCH_LIST"
  if  [ ${INSTALL_TYPE} = "flatpak" ] && \
      [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
        WINEVER_TEST="$(flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version)"
+       echo "1. WINEVER_TEST=$(flatpak run --command=${RUNNER} ${FLATPAK_NAME} --version)"
  else
      # flatpak install and running from shell inside flatpak winezgui
       if [ "${INSTALL_TYPE}" = "flatpak" ]; then
            dbug "I: Script: Install type: Flatpak, Running from flatpak!"
            WINEVER_TEST="$(${RUNNER} --version)"
+           echo "2. WINEVER_TEST=$(${RUNNER} --version)"
       else
            # We are using non flatpak install
            dbug "I: Script: Install type: System, Running from host!"
            WINEVER_TEST="$(${RUNNER} --version)"
+           echo "3. WINEVER_TEST=$(${RUNNER} --version)"
       fi
 fi
 
