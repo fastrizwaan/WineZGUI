@@ -4,12 +4,15 @@
 # and gnome terminal is found on host
 winezgui-open-terminal()
 {
-  dbug "I: Script: Launched ${FUNCNAME[0]}"
-  
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}!"
+    
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
-echo "1111111111111111111111111111111111111"
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+
+ # Check if --talk-name=org.freedesktop.Flatpak is allowed
+ echo "1111111111111111111111111111111111111"
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f $(which flatpak-spawn) ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
@@ -24,61 +27,44 @@ echo "1111111111111111111111111111111111111"
   fi
 
 echo "2222222222222222222222222222222222"
-
-  if   [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
-         dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from sandbox"
-         cd "${WINEZGUIDIR}"
-         flatpak-spawn --host gnome-terminal --wait -- \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
-
-  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
-         dbug "I: Script: Open Shell: Flatpak script, xfce4-terminal running from sandbox"
-         cd "${WINEZGUIDIR}"
-         flatpak-spawn --host xfce4-terminal --disable-server -e \
-         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
-
-       # If flatpak install and script running from host
-       
-       # and gnome terminal is found
-
-  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+  if   [ -f $(which flatpak-spawn) ] && \
+       [ $(flatpak-spawn  --host which gnome-terminal) ]; then
+         dbug "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
+         export GNOME_TERMINAL=0 ; #Available via flatpak-spawn
+  elif [ "${WINE_CMD}" != "/app/bin/wine" ] && \
        [ $(which gnome-terminal) ]; then
-         dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from host"
-         gnome-terminal --wait -- \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         'export PS1="[\u@\h:\w]\$ "; cd "$1"; shift; exec bash --norc -i' \
-         sh "${WINEZGUIDIR}"
-  
-  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(which xfce4-terminal) ]; then
-         dbug "I: Script: Open Shell: Flatpak script, xfce4-terminal running from host"
-         xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
-
-       # Else it is a host install and gnome-terminal is found
-  elif [ ${INSTALL_TYPE} = "system" ] && \
-       [ $(which gnome-terminal) ]; then
-         dbug "I: Script: Open Shell: System script, gnome-terminal running from host"
-         gnome-terminal --wait -- bash -c \
-         "export PS1='[\u@\h:\w]\$ '; cd \"${WINEZGUIDIR}\"; exec bash -i"
-         # gnome terminal is not found
-
-  elif [ ${INSTALL_TYPE} = "system" ] && \
-       [ $(which xfce4-terminal) ]; then
-         dbug "I: Script: Open Shell: System script, xfce4-terminal running from host"
-         xfce4-terminal --disable-server -e \
-         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         dbug "I: ${HEADER}: Gnome-terminal found on host system"
+         export GNOME_TERMINAL=0 ; #Available on host install
   else
-         dbug "I: Script: Open Shell: Gnome-terminal not found"
-         ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
-                --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\""
+         dbug "I: ${HEADER}: Gnome-terminal not found"
+         export GNOME_TERMINAL=1 ; #Unavailable on host
+  fi
+
+echo "33333333333333333333333333333333333"
+  # Using Variable, If gnome terminal is not found inform user
+  if [ ${GNOME_TERMINAL} -eq 1 ]; then
+       ${ZENITY_CMD} --title "${SELECTION}" \
+              --width=500 --height=30 --info  \
+              --text "This feature requires \"gnome-terminal\""
+  fi
+
+echo "44444444444444444444444444444444444"
+  # If found in flatpak sandbox, use flatpak-spawn
+  if [ -f $(which flatpak-spawn) ] && \
+     [ $(flatpak-spawn --host echo 0) ]; then
+       dbug "I: ${HEADER}: Opening gnome-terminal from sandbox"
+       # Shell needs WINEPREFIX as we are working with wine
+       export WINEPREFIX=${DEFAULT}
+        flatpak-spawn --host gnome-terminal --wait --                  \
+        flatpak --command=bash run ${FLATPAK_NAME}                     \
+               -c "cd ${TEMPLATE}; export WINEPREFIX=${WINEPREFIX};    \
+                   exec bash -i"
+      
+  else # If found on host, run gnome-terminal
+       dbug "I: ${HEADER}: Opening gnome-terminal from host"
+       export WINEPREFIX=${DEFAULT}
+       gnome-terminal --wait -- bash -c "export WINEPREFIX=${WINEPREFIX}; \
+                                         cd ${TEMPLATE}; exec bash -i"
   fi
   unset TEXT
-  echo "33333333333333333333333333333333333"
-
 }
