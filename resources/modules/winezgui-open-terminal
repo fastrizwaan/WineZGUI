@@ -9,6 +9,7 @@ winezgui-open-terminal()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
+ echo "1111111111111111111111111111111111111"
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f $(which flatpak-spawn) ]; then
@@ -24,6 +25,7 @@ winezgui-open-terminal()
       return 1
 
   fi
+echo "2222222222222222222222222222222222"
 
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
@@ -79,4 +81,6 @@ winezgui-open-terminal()
                 --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\""
   fi
   unset TEXT
+  echo "33333333333333333333333333333333333"
+
 }
