@@ -12,6 +12,7 @@ winezgui-open-shell()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
 
  # Check if --talk-name=org.freedesktop.Flatpak is allowed
+ echo "1111111111111111111111111111111111111"
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f $(which flatpak-spawn) ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
@@ -25,6 +26,7 @@ winezgui-open-shell()
 
   fi
 
+echo "2222222222222222222222222222222222"
   if   [ -f $(which flatpak-spawn) ] && \
        [ $(flatpak-spawn  --host which gnome-terminal) ]; then
          dbug "I: ${HEADER}: Gnome-terminal found via flatpak-spawn"
@@ -38,7 +40,7 @@ winezgui-open-shell()
          export GNOME_TERMINAL=1 ; #Unavailable on host
   fi
 
-
+echo "33333333333333333333333333333333333"
   # Using Variable, If gnome terminal is not found inform user
   if [ ${GNOME_TERMINAL} -eq 1 ]; then
        ${ZENITY_CMD} --title "${SELECTION}" \
@@ -46,6 +48,7 @@ winezgui-open-shell()
               --text "This feature requires \"gnome-terminal\""
   fi
 
+echo "44444444444444444444444444444444444"
   # If found in flatpak sandbox, use flatpak-spawn
   if [ -f $(which flatpak-spawn) ] && \
      [ $(flatpak-spawn --host echo 0) ]; then
