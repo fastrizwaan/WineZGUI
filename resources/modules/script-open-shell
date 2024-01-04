@@ -11,7 +11,7 @@ script-open-shell()
 
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
-  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f "/app/bin/wine" ]; then
+  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f $(which flatpak-spawn) ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
        TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"
