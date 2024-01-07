@@ -284,6 +284,19 @@ script-backup-bundle()
   dbug "I: Script ${FUNCNAME[0]}: Compression Level ${LEVEL} Selected!"
 
 
+   # Bundle Runner into the wzt file as tar file
+      # if the runner is inside WINEZGUIDIR/RUNNERS
+      if [[ "${RUNNER}" == "${RUNNERS_DIR}*" ]]; then
+          tar -cvf "${PREFIXDIR}/Runner_${RUNNER_NAME}.tar" \
+              -C "${RUNNERS_DIR}" "${RUNNER_NAME}"
+      fi
+      echo "
+      ${RUNNER} == ${RUNNERS_DIR}
+      tar -cvf ${PREFIXDIR}/Runner_${RUNNER_NAME}.tar \
+              -C ${RUNNERS_DIR} ${RUNNER_NAME}
+    "
+      ls ${PREFIXDIR}
+      sleep 15s
   # 7. Create wzt = tar.zst file
   # 7.1 Change directory to PREFIXES_DIR
   cd "${PREFIXES_DIR}"
@@ -345,15 +358,6 @@ script-backup-bundle()
            TAR_CMD="$(which tar)"
       fi
 
-
-      # Bundle Runner into the wzt file as tar file
-      # if the runner is inside WINEZGUIDIR/RUNNERS
-      if [[ "${RUNNER}" == "${RUNNERS_DIR}*" ]]; then
-          tar -cf "${PREFIXDIR}/Runner_${RUNNER_NAME}.tar" \
-              -C "${RUNNERS_DIR}" "${RUNNER_NAME}"
-      fi
-      ls ${PREFIXDIR}
-      exit 0
       # Report user the time it took to bundle
       TIMER_START=${SECONDS}
       # add wzt-info.yml 1st then the prefix directory to the wzt file
