@@ -287,8 +287,8 @@ script-backup-bundle()
    # Bundle Runner into the wzt file as tar file
       # if the runner is inside WINEZGUIDIR/RUNNERS
       if [[ "${RUNNER}" == "${RUNNERS_DIR}*" ]]; then
-          tar -cvf "${PREFIXDIR}/Runner_${RUNNER_NAME}.tar" \
-              -C "${RUNNERS_DIR}" "${RUNNER_NAME}"
+          ${TAR_CMD} -cvf "${PREFIXDIR}/Runner_${RUNNER_NAME}.tar" \
+                     -C "${RUNNERS_DIR}" "${RUNNER_NAME}"
       fi
       echo "
       ${RUNNER} == ${RUNNERS_DIR}
