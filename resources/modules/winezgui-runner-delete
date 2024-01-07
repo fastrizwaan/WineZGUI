@@ -15,6 +15,11 @@ winezgui-runner-delete()
        dbug "I: $(basename ${0}):Cannot Delete System Runner"
        return 1
   fi
+
+  echo "RUNNER=$RUNNER"
+  echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+  echo "$(grep -i runner: ${SETTINGS_FILE})"
+
   # Ask before deleting runner
   unset TEXT TITLE
   TEXT+="Do you want to delete ${SELECTED_RUNNERDIR_NAME}\?"
