@@ -241,7 +241,7 @@ winezgui-restore-wzt()
   fi # [ "${ZENITY_STATUS}" = "1" ]; then
  
   # Game prefixes will have game.desktop game.sh and game.png files in it.
-  FOUND_PREFIX_DIR="${PREFIXES_DIR}/${WZT_PREFIX}"
+  FOUND_PREFIX_DIR=$(echo "${PREFIXES_DIR}/${WZT_PREFIX}"|sed "s|(|\\\\(|g"|sed "s|)|\\\\)|g"
   FOUND_DESKTOP_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.desktop"
   FOUND_SCRIPT_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.sh"
   FOUND_INFOFILE="${FOUND_PREFIX_DIR}/Info.yml"
