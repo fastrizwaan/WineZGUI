@@ -287,18 +287,15 @@ script-backup-bundle()
    # Bundle Runner into the wzt file as tar file
       # if the runner is inside WINEZGUIDIR/RUNNERS
       if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
-          ${TAR_CMD} -cvf "${TEMPDIR}/Runner_${RUNNER_NAME}.tar" \
+          ${TAR_CMD} -vf "${TEMPDIR}/Runner_${RUNNER_NAME}.tar" \
                      -C "${RUNNERS_DIR}" "${RUNNER_NAME}"
+          dbug "I: RUNNER found, bundling it"
+          dbug "I: bundle created at: ${TEMPDIR}/Runner_${RUNNER_NAME}.tar"
       fi
-      echo "
-      ${RUNNER} == ${RUNNERS_DIR}
-      tar -cvf ${TEMPDIR}/Runner_${RUNNER_NAME}.tar \
-              -C ${RUNNERS_DIR} ${RUNNER_NAME}
-    "
-      ls ${TEMPDIR}
-      sleep 15s
+
+
   # 7. Create wzt = tar.zst file
-  # 7.1 Change directory to PREFIXES_DIR
+  # 7.1 Change directory to PREFIXES_DIR${TEMPDIR}/Runner_${RUNNER_NAME}.tar
   cd "${PREFIXES_DIR}"
   dbug "I: Script: ${FUNCNAME[0]}: Processing ${EXE_NAME}"
 
@@ -363,7 +360,8 @@ script-backup-bundle()
       # add wzt-info.yml 1st then the prefix directory to the wzt file
       (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf  "${TARGET_DIR}/${BACKUP_FILE}" \
                 --exclude="registry_backup*.gz" \
-                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                 \
+                -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"                  \
+                -C "${TEMPDIR}" "Runner_${RUNNER_NAME}.tar"            \
                 -C "${PREFIXES_DIR}" "${PREFIXNAME}"                   \
                 -C "${TAR_GAME_DIR_PATH}" "./${TAR_GAME_DIR_NAME}"     \
                 --transform \
@@ -403,6 +401,7 @@ script-backup-bundle()
       (${TAR_CMD} -I "zstd -${LEVEL} -T0" -cf "${TARGET_DIR}/${BACKUP_FILE}" \
                   --exclude="registry_backup*.gz" \
                   -C "${PREFIXDIR}"  "${WZT_FILE_NAME}"      \
+                  -C "${TEMPDIR}" "Runner_${RUNNER_NAME}.tar"  \
                   -C "${PREFIXES_DIR}" "${PREFIXNAME}" &) |    \
             ${ZENITY_CMD}  --progress --pulsate --auto-close \
             --title="Creating ${PREFIXNAME} Game Bundle...!" \

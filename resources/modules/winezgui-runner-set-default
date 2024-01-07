@@ -49,7 +49,7 @@ winezgui-runner-set-default()
   "
   
   TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
-            ${ZENITY_CMD} --info --text="${TEXT}" \
+            ${ZENITY_CMD} --no-wrap --info --text="${TEXT}" \
             --title "${APP_WITH_VER} - Default Runner"
   unset TEXT
   
