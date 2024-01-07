@@ -293,7 +293,7 @@ winezgui-restore-wzt()
   done
   
   # Find runner tar inside prefix
-  RUNNER_TAR="$(find ${FOUND_PREFIX_DIR} -maxdepth 0 -type f -iname "Runner*.tar")"
+  RUNNER_TAR="$(find ${FOUND_PREFIX_DIR} -maxdepth 0 -type f -iname "Runner_*.tar")"
 
   echo "
   RUNNERS_DIR = $RUNNERS_DIR
