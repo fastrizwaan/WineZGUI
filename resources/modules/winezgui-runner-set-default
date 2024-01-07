@@ -38,7 +38,15 @@ winezgui-runner-set-default()
 
   dbug "I: ${HEADER}: Runner: ${SELECTED_RUNNER}"
   dbug "I: ${HEADER}: Selected Runner is ${RUNNER_NAME}"
-
+  export RUNNER
+  export RUNNER_NAME
+  export WINEVER
+  echo "
+  I:----Set Default Runner----
+  export RUNNER=$RUNNER
+  export RUNNER_NAME=$RUNNER_NAME
+  export WINEVER=$WINEVER
+  "
   
   TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
             ${ZENITY_CMD} --width 300 --info --text="${TEXT}" \
