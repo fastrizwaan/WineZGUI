@@ -50,7 +50,7 @@ winezgui-runner-set-default()
   
   TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
             ${ZENITY_CMD} --info --text="${TEXT}" \
-            --title "${APP_WITH_VER} - Set Default Runner"
+            --title "${APP_WITH_VER} - Default Runner"
   unset TEXT
   
   ## Restart WineZGUI to load runner from settings.yml
