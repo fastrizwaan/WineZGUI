@@ -291,7 +291,14 @@ winezgui-restore-wzt()
      ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
   done
   
-
+  # Extract Runner at RUNNERS_DIR
+  if [ -f "${FOUND_PREFIX_DIR}/Runner_"*"tar" ]; then 
+       dbug "I: found runner file: $(ls ${FOUND_PREFIX_DIR}/Runner_*.tar )"
+       ${TAR_CMD} -xf "${FOUND_PREFIX_DIR}/Runner_*.tar" -C "${RUNNERS_DIR}"
+       dbug "I: extracted... Runner"
+       mv "${FOUND_PREFIX_DIR}/Runner_*.tar" "${TEMPDIR}"
+       dbug "I: moved $(ls ${FOUND_PREFIX_DIR}/Runner_*.tar) to ${TEMPDIR}"
+  fi
   # Create a restored.text to update wineprefix
   # without mono and gecko install dialog which
   # winezgui-create-prefix checks on different versions of wine
