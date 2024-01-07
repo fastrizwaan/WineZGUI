@@ -30,17 +30,20 @@ winezgui-runner-delete()
   rm -rf "${SELECTED_RUNNERDIR}" && \
   dbug "I: ${HEADER}: Deleted ${SELECTED_RUNNERDIR}"
   echo "${RUNNER} = ${SELECTED_RUNNER} "
-
+  
+  
   if [ "${RUNNER}" = "${SELECTED_RUNNER}" ]; then
        echo "I: ${HEADER}: Deleted in use Runner! Resetting..."
        dbug "I: ${HEADER}: Resetting runner to System Default"
        dbug "i: ${HEADER}: by emptying the value of runner:"
        
-       sed "s|runner:.*|runner:|g" -i "${SETTINGS_FILE}"
+       sed "s|runner:.*|runner:${SYSTEM_WINE}|g" -i "${SETTINGS_FILE}"
+       # Update wineversion in About file
+       export WINEVER=$(${SYSTEM_WINE} --version)
       # update About.ymlIf About.yml is writable
       if [ -w "${ABOUTFILE}" ]; then
            sed "s|Runner:.*|Runner:|g" -i "${ABOUTFILE}"
-           sed "s|Wine Version:.*|Wine Version:|g" -i "${ABOUTFILE}"
+           sed "s|Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
       fi
        # Update runner and arch from Settings.yml
        dbug "I: ${HEADER}: Restarting ${0}"
