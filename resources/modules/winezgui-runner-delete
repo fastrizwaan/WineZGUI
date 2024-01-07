@@ -44,7 +44,7 @@ winezgui-runner-delete()
        echo "WINEVER = $WINEVER"
       # update About.ymlIf About.yml is writable
       if [ -w "${ABOUTFILE}" ]; then
-           sed "s|Runner:.*|Runner:|g" -i "${ABOUTFILE}"
+           sed "s|Runner:.*|Runner:System Default|g" -i "${ABOUTFILE}"
            sed "s|Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
       fi
       cat ${ABOUTFILE}
