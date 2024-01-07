@@ -23,7 +23,8 @@ winezgui-restore-wzt()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
-
+     SAVEIFS=${IFS}
+     IFS=$(echo -en "\n\b")
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if ! [ -w "${PREFIXES_DIR}" ]; then
        dbug "I: ${HEADER}: ${PREFIXES_DIR} is not writable. Aborting!"
