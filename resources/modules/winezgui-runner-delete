@@ -39,12 +39,17 @@ winezgui-runner-delete()
        
        sed "s|runner:.*|runner:${SYSTEM_WINE}|g" -i "${SETTINGS_FILE}"
        # Update wineversion in About file
-       export WINEVER=$(${SYSTEM_WINE} --version)
+       export RUNNER="${SYSTEM_WINE}"
+       export RUNNER_NAME="System Default"
+       export WINEVER="$(${SYSTEM_WINE} --version)"
+       echo "================================================"
+       echo "RUNNER=$RUNNER"
+       echo "RUNNER_NAME=$RUNNER_NAME"
        echo "SYSTEM_WINE =${SYSTEM_WINE}"
        echo "WINEVER = $WINEVER"
       # update About.ymlIf About.yml is writable
       if [ -w "${ABOUTFILE}" ]; then
-           sed "s|Runner:.*|Runner:System Default|g" -i "${ABOUTFILE}"
+           sed "s|Runner:.*|Runner:${RUNNER_NAME}|g" -i "${ABOUTFILE}"
            sed "s|Wine Version:.*|Wine Version:${WINEVER}|g" -i "${ABOUTFILE}"
       fi
       cat ${ABOUTFILE}
@@ -52,6 +57,7 @@ winezgui-runner-delete()
        # Update runner and arch from Settings.yml
        dbug "I: ${HEADER}: Restarting ${0}"
        # Deleting in use Runner causes issues, better restart
-       winezgui & exit 0
+       #winezgui & exit 0
   fi
+  
 }
