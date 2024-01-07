@@ -45,7 +45,8 @@ winezgui-restore-wzt()
   mkdir -p  ${WINEZGUI_TEMPDIR}
  
   # 1.2  Extract Prefix Name: Get the directory name from wzt file
-  (WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/"); \
+  #(WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/"); \
+  (WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|grep "/$"|head -n1|cut -f1 -d "/"); \
    echo "$WZT_PREFIX" > "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP"; \
  
   # 1.3 Extract wzt-info.yml file to WINEZGUI_TEMPDIR; Show progress using zenity
@@ -62,7 +63,7 @@ winezgui-restore-wzt()
   rm "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP"
 
   dbug "I: ${HEADER}: Prefix from ${WZT_FILE} is ${WZT_PREFIX}";
- 
+  sleep 5s
   # 1.4 If the user cancels extracting wzt-info.yml using tar xfO
   # kill tar running in background
   # If zenity returns 1 (means either cancel or other error with tar xfO)
