@@ -75,7 +75,7 @@ script-backup-bundle()
   unset DO_NOT_BUNDLE_FROM
 
 
-  # Bundle Runner into the wzt file as tar file
+   # Bundle Runner into the wzt file as tar file
       # if the runner is inside WINEZGUIDIR/RUNNERS
       if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
             PREFIX_RUNNER="${PREFIXDIR}/Runner"
@@ -93,16 +93,13 @@ script-backup-bundle()
       INFOFILE=$INFOFILE
       "
 
-      # 7.4 Preprocess
-      dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
-      cd "${PREFIXDIR}"
 
       #Remove drive_c/user/Temp/ all files
-      find drive_c/users/${USER}/Temp -type f 
-      find drive_c/users/${USER}/Temp -type f -delete
+      find "${PREFIXDIR}/drive_c/users/${USER}/Temp" -type f 
+      find "${PREFIXDIR}/drive_c/users/${USER}/Temp" -type f -delete
        
       sleep 10s;
-      
+
   # 2. Calculate Backup Size based on Gamedir whether it is in Prefix or not
   # If gamedir is inside prefixdir, total backup size will be prefix size
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
@@ -349,6 +346,10 @@ script-backup-bundle()
                                                  -i ${PREFIXDIR}/*.yml && \
       dbug "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
 
+     
+      # 7.4 Preprocess
+      dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
+      cd "${PREFIXDIR}"
       
       #remove identifiable values
       SOURCE "winezgui-identity-remove"
