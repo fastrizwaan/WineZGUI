@@ -338,8 +338,17 @@ script-backup-bundle()
       # 7.6 Create Bundle
       dbug "I: Script: ${FUNCNAME[0]}: Game Name: ${TAR_GAME_DIR_NAME}"
       dbug "I: Script: ${FUNCNAME[0]}: Creating ${BACKUP_FILE} file..."
-
-
+       
+      dbug "I: Script: ${FUNCNAME[0]}: testing for Runner use by the prefix"
+      # Bundle Runner into the wzt file as tar file
+      # if the runner is inside WINEZGUIDIR/RUNNERS
+      if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
+            PREFIX_RUNNER="${PREFIXDIR}/Runner"
+            mkdir -p "${PREFIX_RUNNER}" && dbug "---- Created ${PREFIX_RUNNER}"
+            cp -rfp  "${RUNNERS_DIR}/${RUNNER_NAME}" "${PREFIX_RUNNER}" && dbug "copied runner" && \
+            sed "s|${RUNNERS_DIR}|${PREFIX_RUNNER}|g" -i "${INFOFILE}"
+      fi
+            
       # Find Local Tar and ZSTD command
       if [ $(which tar) ] && [ $(which zstd) ]; then
            TAR_CMD="$(which tar)"
