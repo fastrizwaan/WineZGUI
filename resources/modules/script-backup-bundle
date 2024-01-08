@@ -74,6 +74,35 @@ script-backup-bundle()
 
   unset DO_NOT_BUNDLE_FROM
 
+
+  # Bundle Runner into the wzt file as tar file
+      # if the runner is inside WINEZGUIDIR/RUNNERS
+      if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
+            PREFIX_RUNNER="${PREFIXDIR}/Runner"
+            mkdir -p "${PREFIX_RUNNER}" && dbug "---- Created ${PREFIX_RUNNER}"
+            cp -rfp  "${RUNNERS_DIR}/${RUNNER_NAME}" "${PREFIX_RUNNER}" && dbug "copied runner" && \
+            sed "s|${RUNNERS_DIR}|${PREFIX_RUNNER}|g" -i "${INFOFILE}"
+      fi
+
+      echo "
+      RUNNER=$RUNNER
+      RUNNERS_DIR=$RUNNERS_DIR
+      PREFIXDIR=$PREFIXDIR
+      PREFIX_RUNNER=$PREFIX_RUNNER
+      RUNNER_NAME=$RUNNER_NAME
+      INFOFILE=$INFOFILE
+      "
+
+      # 7.4 Preprocess
+      dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
+      cd "${PREFIXDIR}"
+
+      #Remove drive_c/user/Temp/ all files
+      find drive_c/users/${USER}/Temp -type f 
+      find drive_c/users/${USER}/Temp -type f -delete
+       
+      sleep 10s;
+      
   # 2. Calculate Backup Size based on Gamedir whether it is in Prefix or not
   # If gamedir is inside prefixdir, total backup size will be prefix size
   if [[ "${EXE_FILE}" == *"${PREFIXDIR}"* ]] ; then
@@ -320,33 +349,6 @@ script-backup-bundle()
                                                  -i ${PREFIXDIR}/*.yml && \
       dbug "I: Script: ${FUNCNAME[0]}: Exe File Changed To: ${GAME_EXE_FILE}"
 
-      # Bundle Runner into the wzt file as tar file
-      # if the runner is inside WINEZGUIDIR/RUNNERS
-      if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
-            PREFIX_RUNNER="${PREFIXDIR}/Runner"
-            mkdir -p "${PREFIX_RUNNER}" && dbug "---- Created ${PREFIX_RUNNER}"
-            cp -rfp  "${RUNNERS_DIR}/${RUNNER_NAME}" "${PREFIX_RUNNER}" && dbug "copied runner" && \
-            sed "s|${RUNNERS_DIR}|${PREFIX_RUNNER}|g" -i "${INFOFILE}"
-      fi
-
-      echo "
-      RUNNER=$RUNNER
-      RUNNERS_DIR=$RUNNERS_DIR
-      PREFIXDIR=$PREFIXDIR
-      PREFIX_RUNNER=$PREFIX_RUNNER
-      RUNNER_NAME=$RUNNER_NAME
-      INFOFILE=$INFOFILE
-      "
-
-      # 7.4 Preprocess
-      dbug "I: Script: ${FUNCNAME[0]}: Preparing files"
-      cd "${PREFIXDIR}"
-
-      #Remove drive_c/user/Temp/ all files
-      find drive_c/users/${USER}/Temp -type f 
-      find drive_c/users/${USER}/Temp -type f -delete
-       
-      sleep 10s;
       
       #remove identifiable values
       SOURCE "winezgui-identity-remove"
