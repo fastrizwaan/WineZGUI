@@ -1,4 +1,4 @@
-#script-change-runner
+# script-change-runner
 script-change-runner()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
@@ -18,10 +18,11 @@ script-change-runner()
 
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${INFOFILE}"
        export RUNNER="${SELECTED_RUNNER}"
-
+       export RUNNER_NAME="${SELECTED_RUNNERNAME}"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
        echo "RUNNER=$RUNNER"
        echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+       echo "RUNNER_NAME=${SELECTED_RUNNERNAME}"
        echo "INFOFILE=$INFOFILE"
        echo "WINEVER=$WINEVER"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
