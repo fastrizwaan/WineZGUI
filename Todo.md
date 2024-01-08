@@ -138,35 +138,46 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
+0.98.6.5
+- [] When creating a prefix/game bundle, copy the runner into the prefixdir 
+     - [] script-backup-bundle
+     - [] script-backup-prefix
+     - [] different runner, change Info.yml to point Runner to PREFIXDIR/Runner directory
+
+- [] When restoring, copy the runner to RUNNERS_DIR else keep it 
+     - [] check if runner exists in RUNNERS_DIR, if found do not copy, else copy the runner
+
+     
 0.98.6.2 (runner support) 
 set
--[] WINE_CMD
--[] WINEVER 
--[] RUNNER and get runner from winezgui-set-wine_cmd-runner-commands in
--[] RUNNERNAME
--[]
-     - [] winezgui  
-     - [] winezgui-create-prefix 
-     - [] winezgui-recreate-prefix-script 
-     - [] script-create-other-shortcuts
-- [] Delete Selected Runner
-- [] Confirm, WINE_CMD, WINEVER, RUNNER, RUNNERNAME works both for flatpak or script
-- [] Bug: deleting another runner and setting System Default, won't update winever, because WineVer is used before RUNNER is assigned in 
-    -[] list-available-runners
-      -[] problem: 
+-[x] WINE_CMD
+-[x] WINEVER 
+-[x] RUNNER and get runner from winezgui-set-wine_cmd-runner-commands in
+-[x] RUNNERNAME
+-[x]
+     - [x] winezgui  
+     - [x] winezgui-create-prefix 
+     - [x] winezgui-recreate-prefix-script 
+     - [x] script-create-other-shortcuts
+- [x] Delete Selected Runner
+- [x] Confirm, WINE_CMD, WINEVER, RUNNER, RUNNERNAME works both for flatpak or script
+- [x] Bug: deleting another runner and setting System Default, won't update winever, because WineVer is used before RUNNER is assigned in 
+    -[x] list-available-runners
+      -[x] problem: 
            SHOW_OPTION+=" "
            # Setting 1st option as default wine
            NAMES+=("System Default")
            FILES+=("$(which wine)")
-      - [] $(which wine) fails from script (but flatpak run --command=${RUNNER} io.github.fastrizwaan.WineZGUI)
-      - [] Set SYSTEM_WINE=$(which wine) in winezgui
-      - [] flatpak run --command=${SYSTEM_WINE} io.github.fastrizwaan.WineZGUI in scriptfile
-      - [] and use 
-    -[] script-launch
+      - [x] $(which wine) fails from script (but flatpak run --command=${RUNNER} io.github.fastrizwaan.WineZGUI)
+      - [x] Set SYSTEM_WINE=$(which wine) in winezgui
+      - [x] flatpak run --command=${SYSTEM_WINE} io.github.fastrizwaan.WineZGUI in scriptfile
+      - [x] and use 
+    -[x] script-launch
 
     -[] BUG: winever and runner not updating of EXE_Info.yml (Infofile = Info.yml, but it should also update current EXE_Info.yml)
-    - [] Setting System Default won't work, why?
-
+    - [x] Setting System Default won't work, why?
+- [] 0.98.5.1
+     - [] bug with sheepoo restore (/var/home/rizvan/.var/app/io.github.fastrizwaan.WineZGUI/data/winezgui/Prefixes/setup_sheepo_sheepo1.1_(53923)-563828eadc)
 - [x] create winezgui-runner-help
 - [x] create winezgui-runner-set-default
 - [x] create winezgui-runner-import
