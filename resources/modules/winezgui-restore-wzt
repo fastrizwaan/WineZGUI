@@ -23,8 +23,7 @@ winezgui-restore-wzt()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
 
   cd "${PREFIXES_DIR}"
-     SAVEIFS=${IFS}
-     IFS=$(echo -en "\n\b")
+
   # 0. Check whether WINEZGUIDIR is writable before restoring
   if ! [ -w "${PREFIXES_DIR}" ]; then
        dbug "I: ${HEADER}: ${PREFIXES_DIR} is not writable. Aborting!"
@@ -46,8 +45,7 @@ winezgui-restore-wzt()
   mkdir -p  ${WINEZGUI_TEMPDIR}
  
   # 1.2  Extract Prefix Name: Get the directory name from wzt file
-  #(WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/"); \
-  (WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|grep "/$"|head -n1|cut -f1 -d "/"); \
+  (WZT_PREFIX=$(${TAR_CMD} -tf "${WZT_FILE}"|head -n2|grep "/"|cut -f1 -d "/"); \
    echo "$WZT_PREFIX" > "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP"; \
  
   # 1.3 Extract wzt-info.yml file to WINEZGUI_TEMPDIR; Show progress using zenity
@@ -60,11 +58,11 @@ winezgui-restore-wzt()
   # Zenity on Cancel sends 1 and 0 on OK
   ZENITY_STATUS=$?
 
-  WZT_PREFIX="$(cat "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP")"
+  WZT_PREFIX=$(cat "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP")
   rm "${WINEZGUI_TEMPDIR}/PREFIX_NAME_TEMP"
 
   dbug "I: ${HEADER}: Prefix from ${WZT_FILE} is ${WZT_PREFIX}";
-  sleep 5s
+ 
   # 1.4 If the user cancels extracting wzt-info.yml using tar xfO
   # kill tar running in background
   # If zenity returns 1 (means either cancel or other error with tar xfO)
@@ -242,7 +240,7 @@ winezgui-restore-wzt()
   fi # [ "${ZENITY_STATUS}" = "1" ]; then
  
   # Game prefixes will have game.desktop game.sh and game.png files in it.
-  FOUND_PREFIX_DIR=$(echo "${PREFIXES_DIR}/${WZT_PREFIX}"|sed "s|(|\\\\(|g"|sed "s|)|\\\\)|g"
+  FOUND_PREFIX_DIR="${PREFIXES_DIR}/${WZT_PREFIX}"
   FOUND_DESKTOP_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.desktop"
   FOUND_SCRIPT_FILE="${FOUND_PREFIX_DIR}/${WZT_PREFIX}.sh"
   FOUND_INFOFILE="${FOUND_PREFIX_DIR}/Info.yml"
@@ -289,34 +287,11 @@ winezgui-restore-wzt()
 
   # 6.1.2 # Find all desktop files and create shortcuts in the menu
   for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
-     BASENAME=$(basename ${i})
+     BASENAME=$(basename "${i}")
      ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
   done
   
-  # Find runner tar inside prefix
-  RUNNER_TAR=$(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "Runner_*.tar")
 
-  echo "
-  RUNNERS_DIR = $RUNNERS_DIR
-  FOUND_PREFIX_DIR=$FOUND_PREFIX_DIR
-  TAR_CMD=$TAR_CMD
-  TEMPDIR=$TEMPDIR
-  RUNNER_TAR=${RUNNER_TAR}
-"
-echo "11111111111111111111111111111"
-find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "Runner_*.tar"
-echo "22222222222222222222222222222"
-find ${FOUND_PREFIX_DIR} -maxdepth 1 -iname "Runner_*.tar"
-sleep 5s
-
-  # Extract Runner at RUNNERS_DIR
-  if [ ! -z "${RUNNER_TAR}" ]; then 
-       dbug "I: found runner file: ${RUNNER_TAR}"
-       ${TAR_CMD} -xvf "${RUNNER_TAR}" -C "${RUNNERS_DIR}"
-       dbug "I: extracted... Runner"
-       mv "${RUNNER_TAR}" "${TEMPDIR}"
-       dbug "I: moved ${RUNNER_TAR} to ${TEMPDIR}"
-  fi
   # Create a restored.text to update wineprefix
   # without mono and gecko install dialog which
   # winezgui-create-prefix checks on different versions of wine
