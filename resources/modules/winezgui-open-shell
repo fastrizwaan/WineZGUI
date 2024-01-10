@@ -13,7 +13,7 @@ winezgui-open-shell()
 
  # Check if --talk-name=org.freedesktop.Flatpak is allowed
  echo "1111111111111111111111111111111111111"
-  if [ ${INSTALL_TYPE} = "flatpak" ] && [ -f $(which flatpak-spawn) ]; then
+  if [ ${INSTALL_TYPE} = "flatpak" ] && [ $(which flatpak-spawn) ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
        TEXT+="<tt><b>flatpak override --user --talk-name=org.freedesktop.Flatpak ${FLATPAK_NAME}</b></tt>\n\n"

@@ -142,8 +142,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.6
 - [] Backward Compatibility
      - [x] insteall 0.98.5 game -> create bundle 
-
-     - [] Install 0.98.5 Games -> upgrade to 0.98.6
+     - [x] After upgrade to 0.98.6 -> create bundle from flatpak, and script
+     - [] Upgrade to 0.98.6 
+          - [x] using script update (without changing runner in winezgui)
+          - [] using script update (after changing runner in winezgui)
           - [] Check functionality of all features of Script working or not
      - [] Restore Game Bundle of 0.98.5 
           - [] Check functionality of all features of Script working or not
@@ -151,7 +153,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
           - [] Check functionality of all features of Script working or not
      - [] Restore 0.98.5 wzt bundle, then upgrade all scripts
           - [] Check functionality of all features of Script working or not
-          
+
 - [] Runner Feature
      - [] WineZGUI
           - [] Download
@@ -166,8 +168,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      - [] Delete Runner from WineZGUI and test should show runner options
      - [] Delete Runner and Backup (should warn if runner is delete/moved)
 
-
-
+- [] Do not show setup*.sh install*.sh for script --prune setup*.sh --prune install*.sh
+- [] Show WZT info in Creating dialog
+- [] Script -open shell should not show flatpak-spawn failed, bug!
 
 
 0.98.6.5
