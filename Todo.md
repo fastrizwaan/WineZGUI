@@ -170,7 +170,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [] Do not show setup*.sh install*.sh for script --prune setup*.sh --prune install*.sh
 - [] Show WZT info in Creating dialog
-- [] Script -open shell should not show flatpak-spawn failed, bug!
+- [x] Script -open shell should not show flatpak-spawn failed, bug!
+- [] WINEVER incorrect (flatpak run ..) with flatpak created script on system (visibe at create bundle wzt-info.yml)
 
 
 0.98.6.5
