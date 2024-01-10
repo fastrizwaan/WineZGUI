@@ -138,16 +138,49 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
+
+0.98.6
+- [] Backward Compatibility
+     - [x] insteall 0.98.5 game -> create bundle 
+
+     - [] Install 0.98.5 Games -> upgrade to 0.98.6
+          - [] Check functionality of all features of Script working or not
+     - [] Restore Game Bundle of 0.98.5 
+          - [] Check functionality of all features of Script working or not
+     - [] Upgrade 0.98.5 installed Game by upgrade all scripts
+          - [] Check functionality of all features of Script working or not
+     - [] Restore 0.98.5 wzt bundle, then upgrade all scripts
+          - [] Check functionality of all features of Script working or not
+          
+- [] Runner Feature
+     - [] WineZGUI
+          - [] Download
+          - [] Import
+          - [] Set Default (verify Settings.yml)
+          - [] Delete
+     - [] Script
+          - [] Change Runner
+          - [] Backup Bundle
+
+     - [] Restore Bundle
+     - [] Delete Runner from WineZGUI and test should show runner options
+     - [] Delete Runner and Backup (should warn if runner is delete/moved)
+
+
+
+
+
 0.98.6.5
-- [] When creating a prefix/game bundle, copy the runner into the prefixdir 
-     - [] script-backup-bundle
-     - [] script-backup-prefix
-     - [] different runner, change Info.yml to point Runner to PREFIXDIR/Runner directory
+- [x] When creating a prefix/game bundle, copy the runner into the prefixdir 
+     - [x] script-backup-bundle
+     - [x] if runner in Info.yml -> copy runner to PREFIXDIR/Runner
+     - [x] update Info.yml $RUNNERS_DIR/Runner -> $PREFIXDIR/Runner
+     - [x] different runner, change Info.yml to point Runner to PREFIXDIR/Runner directory
 
 - [] When restoring, copy the runner to RUNNERS_DIR else keep it 
      - [] check if runner exists in RUNNERS_DIR, if found do not copy, else copy the runner
 
-     
+
 0.98.6.2 (runner support) 
 set
 -[x] WINE_CMD
