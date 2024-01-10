@@ -40,6 +40,8 @@ winezgui-create-wzt-info()
 
   # 3. Insert Data into wzt-info.yml
   DATE=$(date +%F_%H%M)
+  CREATED_WINE_VERSION=$(grep -i "Wine:" ${INFOFILE}|cut -f2 -d ":")
+  
   echo "wzt-info.yml:"
   echo "- - - - - - - - - - - - - - - - - - - - - - - - - - -"
   echo "Name:${PROGNAME}"                |tee    "${WZT_FILE}"
@@ -47,7 +49,7 @@ winezgui-create-wzt-info()
   echo "Prefix:${DIRNAME}"               |tee -a "${WZT_FILE}"
   echo "Created:${DATE}"                 |tee -a "${WZT_FILE}"
   echo "Install:${INSTALL_TYPE}"         |tee -a "${WZT_FILE}"
-  echo "Wine:${WINEVER}"                 |tee -a "${WZT_FILE}"
+  echo "Wine:${CREATED_WINE_VERSION}"    |tee -a "${WZT_FILE}"
   echo "Arch:${WINEARCH}"                |tee -a "${WZT_FILE}"
   echo "Size:${TOTAL_SIZE_IN_HF}"        |tee -a "${WZT_FILE}"
   echo "WineZGUI:${APPVERSION}"          |tee -a "${WZT_FILE}"
