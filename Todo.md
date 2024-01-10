@@ -171,8 +171,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] Do not show setup*.sh install*.sh for script --prune setup*.sh --prune install*.sh
 - [] Show WZT info in Creating dialog
 - [x] Script -open shell should not show flatpak-spawn failed, bug!
-- [] WINEVER incorrect (flatpak run ..) with flatpak created script on system (visibe at create bundle wzt-info.yml)
-
+- [x] WINEVER incorrect (flatpak run ..) with flatpak created script on system (visibe at create bundle wzt-info.yml)
+- [] set Proton then delete, yet wine-version not updating for system default
 
 0.98.6.5
 - [x] When creating a prefix/game bundle, copy the runner into the prefixdir 

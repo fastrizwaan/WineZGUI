@@ -50,7 +50,7 @@ winezgui-runner-delete()
        # Update wineversion in About file
        export RUNNER="${SYSTEM_WINE}"
        export RUNNER_NAME="System Default"
-       export WINEVER="$(${SYSTEM_WINE} --version)"
+       export WINEVER="$(${WINE_CMD} --version)"
        echo "================================================"
        echo "RUNNER=$RUNNER"
        echo "RUNNER_NAME=$RUNNER_NAME"
