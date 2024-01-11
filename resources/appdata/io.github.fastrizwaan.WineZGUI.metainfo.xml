@@ -19,6 +19,7 @@
       <li>Separate prefix for every exe file launched with WineZGUI</li>
       <li>Imports other wine directory from Bottles, Wine, Lutris, Heroic Launcher into WineZGUI and create shortcuts for all found exes.</li>
       <li>Backup and Restore prefixes for later use.</li>
+      <li>Runners (different builds of wine like proton) can be used with prefixes</li>
       <li>Create Game Bundles for sharing (prefix+game)</li>
     </ul>
   </description>
@@ -33,6 +34,15 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-01-11" version="0.98.6"/>
+      <description>
+        <p>Runner support has been added to WineZGUI. wine-proton, and other wine runners by kron4ek can be used.</p>
+          <ul>
+            <li>Set Default Runner</li>
+            <li>Download Runner</li>
+            <li>Import Runner</li>
+          </ul>
+      </description>
     <release date="2023-12-22" version="0.98.5"/>
     <release date="2023-12-03" version="0.98.4"/>
     <release date="2023-12-03" version="0.98.3"/>
