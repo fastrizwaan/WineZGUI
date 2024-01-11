@@ -138,23 +138,23 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-0.98.7
-- [] import wine -> import runner from bottles/lutris using their settings file
+<!-- 0.98.7
+- [] import wine -> import runner from bottles/lutris using their settings file -->
 
 0.98.6
-- [] Backward Compatibility
+- [x] Backward Compatibility
      - [x] insteall 0.98.5 game -> create bundle 
      - [x] After upgrade to 0.98.6 -> create bundle from flatpak, and script
      - [x] Upgrade to 0.98.6 
           - [x] using script update (without changing runner in winezgui)
           - [x] using script update (after changing runner in winezgui)
           - [] Check functionality of all features of Script working or not
-     - [] Restore Game Bundle of 0.98.5 
-          - [] Check functionality of all features of Script working or not
-     - [] Upgrade 0.98.5 installed Game by upgrade all scripts
-          - [] Check functionality of all features of Script working or not
-     - [] Restore 0.98.5 wzt bundle, then upgrade all scripts
-          - [] Check functionality of all features of Script working or not
+     - [x] Restore Game Bundle of 0.98.5 
+          - [x] Check functionality of all features of Script working or not
+     - [x] Upgrade 0.98.5 installed Game by upgrade all scripts
+          - [x] Check functionality of all features of Script working or not
+     - [x] Restore 0.98.5 wzt bundle, then upgrade all scripts
+          - [x] Check functionality of all features of Script working or not
 
 - [x] Runner Feature
      - [x] WineZGUI
@@ -166,9 +166,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
           - [x] Change Runner
           - [x] Backup Bundle
 
-     - [] Restore Bundle
+     <!-- - [] Restore Bundle
      - [] Delete Runner from WineZGUI and test should show runner options
-     - [] Delete Runner and Backup (should warn if runner is delete/moved)
+     - [] Delete Runner and Backup (should warn if runner is delete/moved) -->
 
 - [] Do not show setup*.sh install*.sh for script --prune setup*.sh --prune install*.sh
 - [] Show WZT info in Creating dialog
