@@ -37,11 +37,6 @@
     <release date="2024-01-11" version="0.98.6"/>
       <description>
         <p>Runner support has been added to WineZGUI. wine-proton, and other wine runners by kron4ek can be used.</p>
-          <ul>
-            <li>Set Default Runner</li>
-            <li>Download Runner</li>
-            <li>Import Runner</li>
-          </ul>
       </description>
     <release date="2023-12-22" version="0.98.5"/>
     <release date="2023-12-03" version="0.98.4"/>
