@@ -97,26 +97,30 @@ BKP_EXT INSTALL_PREFIX TEMPDIR WINEZGUIDIR INSTALL_TYPE"
 WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
-  SELECTION=$(${ZENITY_CMD} --list --hide-header               \
-                     --title "${APP_WITH_VER}" --width=360     \
-                     --height=460 --radiolist --column " "     \
-                     --column "Action"                         \
-                         TRUE "Open Exe..."                    \
-                            0 "Launch..."                      \
-                            0 "Script..."                      \
-                            0 "Backup..."                      \
-                            0 "Restore..."                     \
-                            0 "Delete..."                      \
-                            0 "Runner..."                      \
-                            0 "Template..."                    \
-                            0 "Settings..."                    \
-                            0 "Kill all..."                    \
-                            0 "More..."                        \
-                            0 "Help..."                        \
-                            0 "About..."                       \
-                            0 "Quit..."                        \
-                       --text "<b>Wine GUI using Zenity...</b>")
+  SELECTION=$(${ZENITY_CMD} --list --hide-header                      \
+                            --title "${APP_WITH_VER}" --width=360     \
+                            --height=460 --radiolist --column " "     \
+                            --column "Action"                         \
+                                TRUE "Open Exe..."                    \
+                                   0 "Bundle..."                      \
+                                   0 "Script..."                      \
+                                   0 "Prefixes..."                    \
+                                   0 "Runner..."                      \
+                                   0 "Shortcuts..."                   \
+                                   0 "Template..."                    \
+                                   0 "Settings..."                    \
+                                   0 "Kill all..."                    \
+                                   0 "More..."                        \
+                                   0 "Help..."                        \
+                                   0 "About..."                       \
+                                   0 "Quit..."                        \
+                              --text "<b>Wine GUI using Zenity...</b>")
   
+  #                             0 "Launch..."                      \
+                            #   0 "Backup..."                      \
+                            # 0 "Restore..."                     \
+                            # 0 "Delete..."                      \
+
   if    [ -z "${SELECTION}" ]; then # Exit if Cancel is clicked
           echo "I: ${HEADER}: Cancel Selected. Bye!"
           exit 0
@@ -128,25 +132,25 @@ WineZGUI_Window() # Main WineZGUI application window function
          SOURCE "winezgui-open-exe"
          winezgui-open-exe
 
-  elif [ "${SELECTION}" = "Launch..."  ]; then
-         SOURCE "winezgui-launch"
-         winezgui-launch
+#   elif [ "${SELECTION}" = "Launch..."  ]; then
+#          SOURCE "winezgui-launch"
+#          winezgui-launch
 
   elif [ "${SELECTION}" = "Script..."  ]; then
          SOURCE "winezgui-script"
          winezgui-script
 
-  elif [ "${SELECTION}" = "Backup..." ]; then
-         SOURCE "winezgui-backup"
-         winezgui-backup
+#   elif [ "${SELECTION}" = "Backup..." ]; then
+#          SOURCE "winezgui-backup"
+#          winezgui-backup
 
-  elif [ "${SELECTION}" = "Restore..." ]; then
-         SOURCE "winezgui-restore"
-         winezgui-restore
+#   elif [ "${SELECTION}" = "Restore..." ]; then
+#          SOURCE "winezgui-restore"
+#          winezgui-restore
   
-  elif [ "${SELECTION}" = "Delete..."  ]; then
-         SOURCE "winezgui-delete-prefix"
-         winezgui-delete-prefix
+#   elif [ "${SELECTION}" = "Delete..."  ]; then
+#          SOURCE "winezgui-delete-prefix"
+#          winezgui-delete-prefix
   
   elif [ "${SELECTION}" = "Runner..." ]; then
         SOURCE "winezgui-runner"
