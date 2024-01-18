@@ -138,9 +138,26 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-<!-- 0.98.7
-- [] import wine -> import runner from bottles/lutris using their settings file -->
+0.98.8
+- [] import wine -> import runner from bottles/lutris using their settings file
+- [] import dxvk and vkd3d (bottles)
+    rizvan@fedora:~/WineZGUI$ cat /var/home/rizvan/.var/app/com.usebottles.bottles/data/bottles/bottles/Bottle_1/bottle.yml |grep -i vkd3d
+                         vkd3d: true
+                         VKD3D: vkd3d-proton-2.10
+    rizvan@fedora:~/WineZGUI$ cat /var/home/rizvan/.var/app/com.usebottles.bottles/data/bottles/bottles/Bottle_1/bottle.yml |grep -i dxvk
+                         DXVK: dxvk-2.3
+                         NVAPI: dxvk-nvapi-v0.6.4
+                         dxvk: true
+                         dxvk_nvapi: false
+- [] get links from lutris for the vkd3d and dxvk
+      find ~/Games -type l
+      copy following the links to the destination imported directory.
 
+0.98.7
+- [] Add konsole support for open terminal
+- [] improve Download Runner dialog
+- [] Check other dialogs and improve their info
+ 
 0.98.6
 - [x] Backward Compatibility
      - [x] insteall 0.98.5 game -> create bundle 
