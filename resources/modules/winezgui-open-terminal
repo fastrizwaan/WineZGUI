@@ -55,6 +55,13 @@ echo "2222222222222222222222222222222222"
        # and gnome terminal is found
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(which konsole) ]; then
+         dbug "I: Open Terminal: Flatpak script, konsole running from host"
+         konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+
+
+  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from host"
          gnome-terminal --wait -- \
@@ -70,6 +77,12 @@ echo "2222222222222222222222222222222222"
 
        # Else it is a host install and gnome-terminal is found
   elif [ ${INSTALL_TYPE} = "system" ] && \
+       [ $(which konsole) ]; then
+         dbug "I: Open Terminal: System script, konsole running from host"
+         konsole  -e \
+         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+
+  elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: System script, gnome-terminal running from host"
          gnome-terminal --wait -- bash -c \
@@ -84,7 +97,7 @@ echo "2222222222222222222222222222222222"
   else
          dbug "I: Open Terminal: Gnome-terminal not found"
          ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
-                --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\""
+                --text "This feature requires \"konsole\" or \"gnome-terminal\" or \"xfce4-terminal\""
   fi
   unset TEXT
   echo "33333333333333333333333333333333333"
