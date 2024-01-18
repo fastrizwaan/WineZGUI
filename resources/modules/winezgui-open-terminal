@@ -25,16 +25,8 @@ echo "1111111111111111111111111111111111111"
 
 echo "2222222222222222222222222222222222"
 
-  if   [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(flatpak-spawn --host which konsole 2>/dev/null) ]; then
-         dbug "I: Open Terminal: Flatpak script, konsole running from sandbox"
-         cd "${WINEZGUIDIR}"
-         flatpak-spawn --host konsole  -e \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
 
-  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+  if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from sandbox"
          cd "${WINEZGUIDIR}"
@@ -51,17 +43,17 @@ echo "2222222222222222222222222222222222"
          "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
          -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
+  elif   [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(flatpak-spawn --host which konsole 2>/dev/null) ]; then
+         dbug "I: Open Terminal: Flatpak script, konsole running from sandbox"
+         cd "${WINEZGUIDIR}"
+         flatpak-spawn --host konsole  -e \
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
        # If flatpak install and script running from host
        
        # and gnome terminal is found
-
-  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
-       [ $(which konsole) ]; then
-         dbug "I: Open Terminal: Flatpak script, konsole running from host"
-         konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
-
-
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from host"
@@ -76,13 +68,13 @@ echo "2222222222222222222222222222222222"
          xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
          -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
-       # Else it is a host install and gnome-terminal is found
-  elif [ ${INSTALL_TYPE} = "system" ] && \
+  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which konsole) ]; then
-         dbug "I: Open Terminal: System script, konsole running from host"
-         konsole  -e \
-         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         dbug "I: Open Terminal: Flatpak script, konsole running from host"
+         konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
+       # Else it is a host install and gnome-terminal is found
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: System script, gnome-terminal running from host"
@@ -95,10 +87,16 @@ echo "2222222222222222222222222222222222"
          dbug "I: Open Terminal: System script, xfce4-terminal running from host"
          xfce4-terminal --disable-server -e \
          "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+
+  elif [ ${INSTALL_TYPE} = "system" ] && \
+       [ $(which konsole) ]; then
+         dbug "I: Open Terminal: System script, konsole running from host"
+         konsole  -e \
+         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
   else
          dbug "I: Open Terminal: Gnome-terminal not found"
          ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
-                --text "This feature requires \"konsole\" or \"gnome-terminal\" or \"xfce4-terminal\""
+                --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\" or \"konsole\""
   fi
   unset TEXT
   echo "33333333333333333333333333333333333"
