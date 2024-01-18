@@ -154,9 +154,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
       copy following the links to the destination imported directory.
 
 0.98.7
-- [] Add konsole support for open terminal
-- [] improve Download Runner dialog
-- [] Check other dialogs and improve their info
+- [x] Add konsole support for open terminal
+- [x] improve Download Runner dialog
+- [x] Check other dialogs and improve their info
  
 0.98.6
 - [x] Backward Compatibility
