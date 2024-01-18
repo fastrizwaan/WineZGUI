@@ -25,13 +25,21 @@ script-open-shell()
   fi
 
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(flatpak-spawn --host which konsole 2>/dev/null) ]; then
+         dbug "I: Script: Open Shell: Flatpak script, konsole running from sandbox"
+         cd "${PREFIXDIR}"
+         flatpak-spawn --host konsole -e \
+         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
+         
+  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
          dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from sandbox"
          cd "${PREFIXDIR}"
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
          "export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${PREFIXDIR}"
+         sh "${PREFIXDIR}"         
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
@@ -43,6 +51,13 @@ script-open-shell()
 
        # If flatpak install and script running from host
        # and gnome terminal is found
+
+  elif [ ${INSTALL_TYPE} = "flatpak" ] && \
+       [ $(which konsole) ]; then
+         export WINEPREFIX="${PREFIXDIR}";
+         dbug "I: Script: Open Shell: Flatpak script, konsole running from host"
+         konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which gnome-terminal) ]; then
@@ -61,6 +76,14 @@ script-open-shell()
          -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
 
        # Else it is a host install and gnome-terminal is found
+  
+  elif [ ${INSTALL_TYPE} = "system" ] && \
+       [ $(which konsole) ]; then
+         dbug "I: Script: Open Shell: System script, konsole running from host"
+         export WINEPREFIX="${PREFIXDIR}";
+         konsole -e \
+         "bash -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
+
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Script: Open Shell: System script, gnome-terminal running from host"
