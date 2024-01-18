@@ -34,6 +34,10 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-01-19" version="0.98.7"/>
+      <description>
+        <p>Open Terminal/Shell now supports konsole, gnome-terminal, xfce4-terminal.</p>
+      </description>
     <release date="2024-01-11" version="0.98.6"/>
       <description>
         <p>Runner support has been added to WineZGUI. wine-proton, and other wine runners by kron4ek can be used.</p>
