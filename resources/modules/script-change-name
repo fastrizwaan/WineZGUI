@@ -65,7 +65,11 @@ script-change-name()
 
   DESKTOPFILE_NAME=$(basename ${DESKTOPFILE})
   SHORTCUT_NAME="${SHORTCUT_PREFIX}_${DESKTOPFILE_NAME}"
-  ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_NAME}"
+  
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  if [ -z "${NO_SHORTCUTS}" ]; then
+       ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_NAME}"
+  fi
   # Remove broken .desktop links
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
        dbug "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"

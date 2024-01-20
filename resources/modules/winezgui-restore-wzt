@@ -284,13 +284,14 @@ winezgui-restore-wzt()
        sed "s|Install:flatpak|Install:system|g" -i  "${FOUND_INFOFILE}"
   fi
  
-
-  # 6.1.2 # Find all desktop files and create shortcuts in the menu
-  for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
-     BASENAME=$(basename "${i}")
-     ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
-  done
-  
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  if [ -z "${NO_SHORTCUTS}" ]; then
+       # 6.1.2 # Find all desktop files and create shortcuts in the menu
+       for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
+          BASENAME=$(basename "${i}")
+          ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
+       done
+  fi
 
   # Create a restored.text to update wineprefix
   # without mono and gecko install dialog which

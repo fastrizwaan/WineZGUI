@@ -88,11 +88,14 @@ winezgui-shortcuts-restore()
        fi
   fi
 
+  cp "${SELECTED_SHORTCUT}" "${SELECTED_SHORTCUT%.bak}"
+  echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  if [ -z "${NO_SHORTCUTS}" ]; then
+       ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
+  fi
+  unset TEXT
   # Clean up broken shortcuts and update shortcuts menu
   SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
-  cp "${SELECTED_SHORTCUT}" "${SELECTED_SHORTCUT%.bak}"
-  echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
-  ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
-  unset TEXT
 }

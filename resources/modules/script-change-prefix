@@ -104,19 +104,21 @@ script-change-prefix()
    echo  "I: Script: Rename: Prefix: Renamed directory ${PREFIXNAME}" \
        "-> ${NEWPREFIXNAME}"
 
-  # 7. Create new shortcut and delete old one
-  # 7.1 link new .desktop file to DEXSKTOPDIR
-  for x in "${NEWPREFIXDIR}"/*.desktop;
-  do
-      BASENAME=$(basename "${x}")
-      #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DEXSKTOPDIR} && \
-      #rm "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" -vf 2>/dev/null
-      ln -svf "${x}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" && \
-  echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
-          "at ${APPLICATIONSDIR}" 2>/dev/null || \
-  echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
-  done
-
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  if [ -z "${NO_SHORTCUTS}" ]; then
+       # 7. Create new shortcut and delete old one
+      # 7.1 link new .desktop file to DEXSKTOPDIR
+      for x in "${NEWPREFIXDIR}"/*.desktop;
+      do
+          BASENAME=$(basename "${x}")
+          #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DEXSKTOPDIR} && \
+          #rm "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" -vf 2>/dev/null
+          ln -svf "${x}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" && \
+      echo   "I: Script: Rename: Prefix: Created shortcut for ${NEWDESKTOPFILE}" \
+              "at ${APPLICATIONSDIR}" 2>/dev/null || \
+      echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
+      done
+  fi
   # 7.2 Delete all broken links which points to winezgui game prefix
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \
   dbug "I: Script: ${FUNCNAME[0]}: Removed broken WineZGUI .desktop links"

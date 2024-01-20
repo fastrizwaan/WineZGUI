@@ -820,14 +820,17 @@ fi
 #dbug "I: ${HEADER}: Created ${DEXSKTOPDIR}"
 
 #ln -sf "${DESKTOPFILE}" "${DEXSKTOPDIR}/${EXE_LESS}.desktop" && \
-ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop" && \
-dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
-# Test if the app link was created sucessfully on applications menu
-if [ $? -eq 0 ]; then
-     dbug "I: ${HEADER}: Shortcut ${EXE_LESS}.desktop created"
-     dbug "I: ${HEADER}: Shortcut: Name: ${PROGNAME}"
-     dbug "I: ${HEADER}: Can use \"Rename...\" to change name"
-     dbug "I: ${HEADER}: Shortcut: Exe: ${EXE_NAME}"
+# If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+if [ -z "${NO_SHORTCUTS}" ]; then
+     ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop" && \
+     dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
+     # Test if the app link was created sucessfully on applications menu
+     if [ $? -eq 0 ]; then
+          dbug "I: ${HEADER}: Shortcut ${EXE_LESS}.desktop created"
+          dbug "I: ${HEADER}: Shortcut: Name: ${PROGNAME}"
+          dbug "I: ${HEADER}: Can use \"Rename...\" to change name"
+          dbug "I: ${HEADER}: Shortcut: Exe: ${EXE_NAME}"
+     fi
 fi
 # Update Menu, Icon cache and Desktop shortcuts
 find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null

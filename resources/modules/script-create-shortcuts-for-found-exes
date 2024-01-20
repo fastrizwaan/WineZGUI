@@ -179,7 +179,10 @@ fi
      
      dbug "linking desktop files"
      XBASE_FILE_NAME=$(basename "${S_DESKTOPFILE}")
-     ln -svf "${S_DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}" 
+     # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+     if [ -z "${NO_SHORTCUTS}" ]; then
+          ln -svf "${S_DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}" 
+     fi
      count=$(expr ${count} + 1)
  done
  IFS=${SAVEIFS}
