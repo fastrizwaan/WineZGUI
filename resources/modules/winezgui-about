@@ -30,6 +30,7 @@ winezgui-about()
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
   TEXT="$(cat ${ABOUTFILE} \
+  |sed "s|:$HOME|:~|g"
   |sed "s/https:/https|/g" \
   |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
   |sed "s/:/,:,/g" \
@@ -37,7 +38,7 @@ winezgui-about()
   |sed -E "s/^(.*:)/<tt><b>\1<\/b><\/tt>/" \
   |sed -E "s/^(.*)$/<small>\1<\/small>/" \
   |sed "s/|/:/g" )"
-
+  
   dbug "I: ${HEADER}: Showing formatted info in About.yml."
   ${ZENITY_CMD} --info --no-wrap --text "${TEXT}"
   dbug "I: ${HEADER}: finished"  

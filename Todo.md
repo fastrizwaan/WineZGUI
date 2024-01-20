@@ -138,7 +138,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-0.98.8
+0.98.9
 - [] import wine -> import runner from bottles/lutris using their settings file
 - [] import dxvk and vkd3d (bottles)
     rizvan@fedora:~/WineZGUI$ cat /var/home/rizvan/.var/app/com.usebottles.bottles/data/bottles/bottles/Bottle_1/bottle.yml |grep -i vkd3d
@@ -152,6 +152,14 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] get links from lutris for the vkd3d and dxvk
       find ~/Games -type l
       copy following the links to the destination imported directory.
+
+0.98.8
+- [] use ~ for $HOME in About... to save screen space
+    -[]  winezgui-about
+    -[] script-about
+- [] Update screenshots xfce and gnome
+- [] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
+- [] Enable/disable shortcuts (if ! -z $DO_NOT_CREATE_SHORTCUTS) then skip ln .desktop files
 
 0.98.7
 - [x] Add konsole support for open terminal
