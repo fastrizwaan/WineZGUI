@@ -117,7 +117,7 @@ export RUNNERS_DIR="${WINEZGUIDIR}/Runners"
 "
 
 # This should be existing PREFIXNAME
-export PREFIXNAME="basename ${PREFIXDIR}"
+export PREFIXNAME="$(basename ${PREFIXDIR})"
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
 # Files
 export INFOFILE="${PREFIXDIR}/Info.yml"
