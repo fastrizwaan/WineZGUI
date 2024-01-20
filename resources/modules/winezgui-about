@@ -30,7 +30,7 @@ winezgui-about()
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
   TEXT="$(cat ${ABOUTFILE} \
-  |sed "s|:$HOME|:~|g"
+  |sed "s|:$HOME|:~|g" \
   |sed "s/https:/https|/g" \
   |sed -E "s/([0-9]):([0-9])/\1|\2/g" \
   |sed "s/:/,:,/g" \
