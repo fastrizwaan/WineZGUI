@@ -111,7 +111,7 @@ script-change-prefix()
       # 7.1 link new .desktop file to DEXSKTOPDIR
       for x in "${NEWPREFIXDIR}"/*.desktop;
       do
-          BASENAME=$(basename "${x}")
+          BASENAME="$(basename "${x}")"
           #ln -svf "${NEWPREFIXDIR}"/*.desktop ${DEXSKTOPDIR} && \
           #rm "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" -vf 2>/dev/null
           ln -svf "${x}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}" && \
@@ -141,7 +141,7 @@ script-change-prefix()
   export DESKTOPFILE="${NEWDESKTOPFILE}"
   dbug "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
 
-  NEW_SCRIPT_FILE="${NEWPREFIXDIR}/$(basename ${SCRIPTFILE})"
+  NEW_SCRIPT_FILE="${NEWPREFIXDIR}/$(basename "${SCRIPTFILE}")"
 
 
   # 8. Launch Script from Renamed Directory

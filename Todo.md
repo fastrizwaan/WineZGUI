@@ -157,10 +157,21 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] use ~ for $HOME in About... to save screen space
     -[x]  winezgui-about
     -[x] script-about
-- [] Update screenshots to 0.98.835
-- [] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
+- [x] Update screenshots to 0.98.8
+- [x] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
 - [x] Enable/disable shortcuts (if -z $NO_SHORTCUTS) then skip ln .desktop files
 - [] test all scripts where -z "${NO_SHORTCUTS} is used
+     - [x] script-change-name
+     - [x] script-change-prefix
+     - [] script-create-other-shortcuts
+     - [x] winezgui-create-prefix
+          - [] Alert user of the shortcut was not created. use winezgui-scripts to launch scripts
+     - [] winezgui-import-wine-create-shortcuts-for-found-exes
+     - [] winezgui-recreate-prefix-script
+     - [] winezgui-restore-wzt
+     - [] winezgui-shortcuts-restore
+- [] Bug: change prefix with foldername with () won't launch
+- [x] Fix and change prefix
 - [] put a warning when shortcuts are not created
 
 0.98.7
