@@ -75,10 +75,12 @@ winezgui-startup-checks()
        if [ -w "${SETTINGS_FILE}" ]; then
        #IF runner: is not found add it
        grep "runner:" "${SETTINGS_FILE}" || echo "runner:${RUNNER}" >> "${SETTINGS_FILE}"
+       grep "no-shortcuts:" ${SETTINGS_FILE} || echo "no-shortcuts:" >> "${SETTINGS_FILE}"
        fi
-       export WINEARCH=$(grep arch    ${SETTINGS_FILE}|cut -f2 -d ":")
-       export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
-       export DEBUG=$(grep debug ${SETTINGS_FILE}|cut -f2 -d ":")
+       export WINEARCH=$(grep "arch:"    ${SETTINGS_FILE}|cut -f2 -d ":")
+       export TEMPLATE=$(grep "template:" ${SETTINGS_FILE}|cut -f2 -d ":")
+       export NO_SHORTCUTS=$(grep "no-shortcuts:" ${SETTINGS_FILE}|cut -f2 -d ":")
+       export DEBUG=$(grep "debug:" ${SETTINGS_FILE}|cut -f2 -d ":")
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
        echo "011. RUNNER =$RUNNER"
