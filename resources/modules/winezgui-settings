@@ -22,6 +22,7 @@ winezgui-settings()
                                    0 "Prefix Template..."        \
                                    0 "Launch Behavior..."        \
                                    0 "Debug Messages..."         \
+                                   0 "Disable Shortcuts..."      \
                             --text   "${TEXT}"                   )
 
    # Exit if Cancel is clicked
