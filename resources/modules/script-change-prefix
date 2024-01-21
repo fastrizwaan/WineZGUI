@@ -143,7 +143,15 @@ script-change-prefix()
 
   NEW_SCRIPT_FILE="${NEWPREFIXDIR}/$(basename "${SCRIPTFILE}")"
 
-
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+  echo "NEWPREFIXDIR=${NEWPREFIXDIR}"
+  echo "SCRIPTFILE=${SCRIPTFILE}"
+  echo "NEW_SCRIPT_FILE=${NEW_SCRIPT_FILE}"
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+  echo "x - x x - x x - x x -  x x - x x - x x - x  - "
   # 8. Launch Script from Renamed Directory
   "${NEW_SCRIPT_FILE}" &
 
