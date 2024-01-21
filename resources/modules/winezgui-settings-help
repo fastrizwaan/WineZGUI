@@ -7,10 +7,12 @@ winezgui-settings-help()
   script-check-variables-loaded-or-not
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   unset HELP_TEXT
-  HELP_TEXT+="Wine Arch...       : Set wine arch for new prefixes|"
+  HELP_TEXT+="Wine Arch...      : Set wine arch for new prefixes|"
   HELP_TEXT+="Prefix Template...: Set default prefix template for new scripts|"
   HELP_TEXT+="Launch Behavior...: Launch exe directly or show exe script window|"
   HELP_TEXT+="Debug Messages... : Set On / Off Debug message in terminal!|"
+  HELP_TEXT+="Disable Shortcuts... : Enable / Disable Shortcut Creation!|"
+
   # Text is more, so we need to format it, with sed in pango markup
   unset TEXT
   TEXT="$(echo ${HELP_TEXT}                         \

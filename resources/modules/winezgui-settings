@@ -13,7 +13,7 @@ winezgui-settings()
    SETTINGS_OPTION=$(${ZENITY_CMD}                               \
                             --title "${APP_WITH_VER} - Settings" \
                             --list   --hide-header               \
-                            --width=360 --height=240             \
+                            --width=360 --height=280             \
                             --radiolist --column " "             \
                             --column "Action"                    \
                                 TRUE "Help..."                   \
