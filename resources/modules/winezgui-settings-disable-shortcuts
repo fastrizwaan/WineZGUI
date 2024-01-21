@@ -25,6 +25,7 @@ winezgui-settings-disable-shortcuts()
           dbug "I: ${HEADER}: Enabled Shortcut Creation."
           unset NO_SHORTCUTS
           sed "/no-shortcuts:/d" -i "${SETTINGS_FILE}"
+          NO_SHORTCUTS=""
   else
           # Add no-shortcuts:Y to Settings.yml and export NO-SHORTCUTS
           if [ -w "${SETTINGS_FILE}" ]; then
