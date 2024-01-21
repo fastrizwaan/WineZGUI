@@ -159,7 +159,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
     -[x] script-about
 - [] Update screenshots xfce and gnome
 - [] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
-- [] Enable/disable shortcuts (if ! -z $DO_NOT_CREATE_SHORTCUTS) then skip ln .desktop files
+- [x] Enable/disable shortcuts (if -z $NO_SHORTCUTS) then skip ln .desktop files
+- [] test all scripts where -z "${NO_SHORTCUTS} is used
+- [] put a warning when shortcuts are not created
 
 0.98.7
 - [x] Add konsole support for open terminal
