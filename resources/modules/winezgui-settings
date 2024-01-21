@@ -55,6 +55,10 @@ winezgui-settings()
    elif [ "${SETTINGS_OPTION}" = "Debug Messages..." ]; then
         SOURCE "winezgui-settings-debug-messages"
         winezgui-settings-debug-messages
+   
+   elif [ "${SETTINGS_OPTION}" = "Disable Shortcuts..." ]; then
+        SOURCE "winezgui-settings-disable-shortcuts"
+        winezgui-settings-disable-shortcuts
         
    fi
    unset TEXT

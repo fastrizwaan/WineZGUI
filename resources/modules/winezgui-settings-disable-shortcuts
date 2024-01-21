@@ -1,0 +1,40 @@
+# winezgui-settings-disable-shortcuts
+winezgui-settings-disable-shortcuts()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  NO_SHORTCUTS_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
+                        --list   --hide-header      \
+                        --width=360 --height=240    \
+                        --radiolist --column " "    \
+                        --column "Action"           \
+                            TRUE "No"               \
+                               0 "Yes"              \
+                        --text   "Disable Shortcuts...")
+
+  if [ -z "${NO_SHORTCUTS_OPTION}" ]; then
+          dbug "I: ${HEADER}: Cancelled!"
+          return 1
+  fi
+  
+  # If user selects No, delete no-shortcuts from Settings.yml
+  if [ "${NO_SHORTCUTS_OPTION}" = "No" ]; then
+          dbug "I: ${HEADER}: Enabled Shortcut Creation."
+          unset NO_SHORTCUTS
+          sed "/no-shortcuts:/d" -i "${SETTINGS_FILE}"
+  else
+          # Add no-shortcuts:Y to Settings.yml and export NO-SHORTCUTS
+          if [ -w "${SETTINGS_FILE}" ]; then
+              echo "no-shortcuts:Y" >> "${SETTINGS_FILE}" # add to Settings
+          else
+              echo "Cannot write to ${SETTINGS_FILE}"
+          fi
+          export NO_SHORTCUTS="Y"
+          dbug "I: ${HEADER}: Shortcut creation disabled."
+  fi
+  export NO_SHORTCUTS # Apply runtime
+  return 0
+}
