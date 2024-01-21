@@ -284,13 +284,17 @@ winezgui-restore-wzt()
        sed "s|Install:flatpak|Install:system|g" -i  "${FOUND_INFOFILE}"
   fi
  
-  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
+  echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo" 
   if [ -z "${NO_SHORTCUTS}" ]; then
        # 6.1.2 # Find all desktop files and create shortcuts in the menu
        for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
           BASENAME=$(basename "${i}")
           ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
        done
+       dbug "I: Script: Shortcut is created at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
+  else 
+       dbug "I: Script: WARNING: Shortcut NOT CREATED at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
   fi
 
   # Create a restored.text to update wineprefix

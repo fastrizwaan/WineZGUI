@@ -179,9 +179,13 @@ fi
      
      dbug "linking desktop files"
      XBASE_FILE_NAME=$(basename "${S_DESKTOPFILE}")
-     # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+     # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
+  echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo" 
      if [ -z "${NO_SHORTCUTS}" ]; then
-          ln -svf "${S_DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}" 
+          ln -svf "${S_DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}"
+          dbug "I: ${HEADER}: Shortcut is created at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}"
+     else 
+          dbug "I: ${HEADER}:WARNING: Shortcut NOT CREATED at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${XBASE_FILE_NAME}"
      fi
      count=$(expr ${count} + 1)
  done

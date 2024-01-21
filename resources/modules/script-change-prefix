@@ -104,7 +104,8 @@ script-change-prefix()
    echo  "I: Script: Rename: Prefix: Renamed directory ${PREFIXNAME}" \
        "-> ${NEWPREFIXNAME}"
 
-  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
+  echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo" 
   if [ -z "${NO_SHORTCUTS}" ]; then
        # 7. Create new shortcut and delete old one
       # 7.1 link new .desktop file to DEXSKTOPDIR
@@ -118,6 +119,9 @@ script-change-prefix()
               "at ${APPLICATIONSDIR}" 2>/dev/null || \
       echo   "E: Script: Rename: Prefix: Create Shortcut Failed!!!"
       done
+      dbug "I: Script: Rename: Shortcut is created at ${SHORTCUT_PREFIX}_${BASENAME}"
+  else 
+       dbug "I: Script: Rename: WARNING: Shortcut NOT CREATED at ${SHORTCUT_PREFIX}_${BASENAME}"
   fi
   # 7.2 Delete all broken links which points to winezgui game prefix
   find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null && \

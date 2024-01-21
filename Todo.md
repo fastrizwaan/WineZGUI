@@ -157,7 +157,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] use ~ for $HOME in About... to save screen space
     -[x]  winezgui-about
     -[x] script-about
-- [] Update screenshots xfce and gnome
+- [] Update screenshots to 0.98.835
 - [] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
 - [x] Enable/disable shortcuts (if -z $NO_SHORTCUTS) then skip ln .desktop files
 - [] test all scripts where -z "${NO_SHORTCUTS} is used

@@ -717,7 +717,8 @@ echo "\${INFOFILE}            ${INFOFILE}"
 
 echo "ln -sf \"${DESKTOPFILE}\" \"${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop\" "
 
-# If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+# If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
+  echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo" 
 if [ -z "${NO_SHORTCUTS}" ]; then
      ln -sf "${DESKTOPFILE}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop" && \
      dbug "I: ${HEADER}: Symlinked ${EXE_LESS}.desktop at ${APPLICATIONSDIR}"
@@ -728,6 +729,9 @@ if [ -z "${NO_SHORTCUTS}" ]; then
           dbug "I: ${HEADER}: Can use \"Rename...\" to change name"
           dbug "I: ${HEADER}: Shortcut: Exe: ${EXE_NAME}"
      fi
+     dbug "I: ${HEADER}: Shortcut is created at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop"
+else 
+     dbug "I: ${HEADER}: WARNING: Shortcut NOT CREATED at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop"
 fi
 # Update Menu, Icon cache and Desktop shortcuts
 ${UPDATE_ICON_CACHE} 2>/dev/null

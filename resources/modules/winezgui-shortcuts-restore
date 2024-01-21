@@ -90,9 +90,13 @@ winezgui-shortcuts-restore()
 
   cp "${SELECTED_SHORTCUT}" "${SELECTED_SHORTCUT%.bak}"
   echo "ln -sfv ${SELECTED_SHORTCUT%.bak} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
-  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts 
+  # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
+  echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo"
   if [ -z "${NO_SHORTCUTS}" ]; then
        ln -sfv "${SELECTED_SHORTCUT%.bak}" "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
+       dbug "I: Script: Shortcut is created at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
+  else 
+       dbug "I: Script: WARNING: Shortcut NOT CREATED at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME%.bak}"
   fi
   unset TEXT
   # Clean up broken shortcuts and update shortcuts menu
