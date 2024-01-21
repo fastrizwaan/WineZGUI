@@ -18,32 +18,22 @@
       <li>Creates application shortcut for easier access.</li>
       <li>Separate prefix for every exe file launched with WineZGUI</li>
       <li>Imports other wine directory from Bottles, Wine, Lutris, Heroic Launcher into WineZGUI and create shortcuts for all found exes.</li>
-      <li>Imported wine directory from lutris or bottles may require <b>winetricks vkd3d dxvk</b> </li>
       <li>Backup and Restore prefixes for later use.</li>
-      <li>Runners (different builds of wine like proton) can be used with prefixes.</li>
-      <li>Create Game Bundles for sharing (prefix+game+runner).</li>
-      <li>Open Terminal/Shell supports konsole, gnome-terminal, xfce4-terminal.</li.
+      <li>Runners (different builds of wine like proton) can be used with prefixes</li>
+      <li>Create Game Bundles for sharing (prefix+game)</li>
     </ul>
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/fastrizwaan/WineZGUI/releases/download/0.98.8/winezgui-0.98.8.png</image>
+      <image>https://github.com/fastrizwaan/WineZGUI/releases/download/0.98.1/winezgui-0.98.1.png</image>
     </screenshot>
     <screenshot>
       <image>https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/Cuphead.png</image>
-    </screenshot>
-    <screenshot type="default">
-      <image>https://github.com/fastrizwaan/WineZGUI/releases/download/0.98.8/winezgui-0.98.8-about.png</image>
     </screenshot>
   </screenshots>
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
-    <release date="2024-01-21" version="0.98.8">
-      <description>
-        <p>Settings: Enable/Disable Shortcut creation for prefixes.</p>
-      </description>
-    </release>
     <release date="2024-01-19" version="0.98.7">
       <description>
         <p>Open Terminal/Shell now supports konsole, gnome-terminal, xfce4-terminal.</p>
