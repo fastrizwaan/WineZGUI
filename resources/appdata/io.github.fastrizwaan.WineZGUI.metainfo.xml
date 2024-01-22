@@ -18,11 +18,11 @@
       <li>Creates application shortcut for easier access.</li>
       <li>Separate prefix for every exe file launched with WineZGUI</li>
       <li>Imports other wine directory from Bottles, Wine, Lutris, Heroic Launcher into WineZGUI and create shortcuts for all found exes.</li>
-      <li>Imported wine directory from lutris or bottles may require <b>winetricks vkd3d dxvk</b> </li>
+      <li>Imported wine directory from lutris or bottles may require: winetricks vkd3d dxvk </li>
       <li>Backup and Restore prefixes for later use.</li>
       <li>Runners (different builds of wine like proton) can be used with prefixes.</li>
       <li>Create Game Bundles for sharing (prefix+game+runner).</li>
-      <li>Open Terminal/Shell supports konsole, gnome-terminal, xfce4-terminal.</li.
+      <li>Open Terminal/Shell supports konsole, gnome-terminal, xfce4-terminal.</li>
     </ul>
   </description>
   <screenshots>
