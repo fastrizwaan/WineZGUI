@@ -155,7 +155,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
-    -[x]  winezgui-about
+    -[x] winezgui-about
     -[x] script-about
 - [x] Update screenshots to 0.98.8
 - [x] Update metadata with konsole info and runner, import wine (install dxvk & vkd3d if required)
@@ -170,7 +170,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      - [] winezgui-recreate-prefix-script
      - [] winezgui-restore-wzt
      - [] winezgui-shortcuts-restore
-- [] Bug: change prefix with foldername with () won't launch
+- [x] Bug: change prefix name with sha256sum foldername won't launch - scriptfile name was wrongly set in winezgui-create-prefix
 - [x] Fix and change prefix
 - [] put a warning when shortcuts are not created
 
