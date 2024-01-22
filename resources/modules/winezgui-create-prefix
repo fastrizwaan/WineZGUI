@@ -310,10 +310,14 @@ export BKP_EXT=\"${BKP_EXT}\"
 
 # Files
 export INFOFILE=\"${PREFIXDIR}/Info.yml\"
-export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
-export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
-export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
+# export ICONFILE=\"${PREFIXDIR}/${EXE_LESS}.png\"
+# export SCRIPTFILE=\"${PREFIXDIR}/${EXE_LESS}.sh\"
+# export DESKTOPFILE=\"${PREFIXDIR}/${EXE_LESS}.desktop\"
 
+# Using Script and desktopfile basedon setup/install prefix 89-119 lines above
+export SCRIPTFILE=\"${SCRIPTFILE}\"
+export DESKTOPFILE=\"${DESKTOPFILE}\"
+export ICONFILE=\"${ICONFILE}\"
 
 export SYSTEM_WINE=\"${SYSTEM_WINE}\"
 echo \"SYSTEM_WINE=${SYSTEM_WINE}\"
