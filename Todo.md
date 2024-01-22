@@ -164,6 +164,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      - [x] script-change-name
      - [x] script-change-prefix
      - [] script-create-other-shortcuts
+     - [x] script-get-installed-exe-files
      - [x] winezgui-create-prefix
           - [] Alert user of the shortcut was not created. use winezgui-scripts to launch scripts
      - [] winezgui-import-wine-create-shortcuts-for-found-exes

@@ -649,7 +649,7 @@ if [ -z "${NO_SHORTCUTS}" ]; then
 else 
      dbug "I: ${HEADER}: WARNING: Shortcut NOT CREATED at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}.desktop"
      ${ZENITY_CMD} --info --title "${APP_WITH_VER} - Shortcut not created!" \
-     --text "Desktop Shortcuts (.desktop) files are not added to menu, because Shortcuts are disabled in Settings, use WineZGUI->Scripts... to launch scripts!"
+     --text "Shortcuts are disabled in Settings, use WineZGUI->Scripts... to launch scripts!"
 fi
 # Update Menu, Icon cache and Desktop shortcuts
 find ${APPLICATIONSDIR} -maxdepth 1 -iname "${SHORTCUT_PREFIX}*" -xtype l -delete 2>/dev/null
