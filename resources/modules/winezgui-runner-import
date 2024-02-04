@@ -101,7 +101,7 @@ winezgui-runner-import()
 
   fi
   # 6. copy with zenity progress dialog
-  (cp -arv "${SELECTED_RUNNERDIR}" "${RUNNERS_DIR}") | ${ZENITY_CMD}  --no-cancel --progress --pulsate --auto-close \
+  (cp -arvL "${SELECTED_RUNNERDIR}" "${RUNNERS_DIR}") | ${ZENITY_CMD}  --no-cancel --progress --pulsate --auto-close \
               --text="Copying ${SELECTED_RUNNERDIR} to ${RUNNERS_DIR}...!" \
               --width=500 --title="Importing $SELECTED_RUNNERDIR_NAME..."
   
