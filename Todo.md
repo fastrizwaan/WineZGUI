@@ -138,7 +138,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-0.98.9
+0.98.xx abandon
 - [] import wine -> import runner from bottles/lutris using their settings file
 - [] import dxvk and vkd3d (bottles)
     rizvan@fedora:~/WineZGUI$ cat /var/home/rizvan/.var/app/com.usebottles.bottles/data/bottles/bottles/Bottle_1/bottle.yml |grep -i vkd3d
@@ -152,6 +152,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] get links from lutris for the vkd3d and dxvk
       find ~/Games -type l
       copy following the links to the destination imported directory.
+
+0.98.9
+- [] fix issue with template change not applying immediately (without restarting)
+    - [] Switching templates will not work properly without restarting the app.
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
