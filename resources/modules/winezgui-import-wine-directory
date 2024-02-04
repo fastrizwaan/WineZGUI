@@ -212,15 +212,6 @@ fi
   WINEZGUI_CREATE_PREFIX="${DATADIR}/winezgui-create-prefix"
   ${WINEZGUI_CREATE_PREFIX} "${EXE_FILE}"
 
-echo "---------------------------------------------------------------------------------------------"
-
-# 4.7.1 delete shortcuts
-find "${PREFIXDIR}/drive_c/windows" -type l -delete
-
-# 4.7.2 Copy the vkd3d & dxvk links
-cp -arvL "${IMPORT_DIR}/drive_c/windows" "${PREFIXDIR}/drive_c/"
-
-echo "---------------------------------------------------------------------------------------------"
 # 4.8 Create INFOFILE for imported wine directory
 # Create Metadata Info.yml for the prefix
 
