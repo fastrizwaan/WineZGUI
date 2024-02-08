@@ -156,6 +156,13 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.9
 - [] fix issue with template change not applying immediately (without restarting)
     - [] Switching templates will not work properly without restarting the app.
+- [] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
+- [] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
+- [] Templates, Arch, changes not applied
+- [] Create 32 bit template using wineboot
+- [] Create shortcuts - should be part of script
+- [] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found
+- [] don't show annoying registry backed up message.
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
