@@ -40,6 +40,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-02-09" version="0.98.9">
+      <description>
+        <p>bug fixes: Template configure, open-shell, open-terminal, restore wzt bugs, etc. fixed</p>
+      </description>
+    </release>
     <release date="2024-01-21" version="0.98.8">
       <description>
         <p>Settings: Enable/Disable Shortcut creation for prefixes.</p>

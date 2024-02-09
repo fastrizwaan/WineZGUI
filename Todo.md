@@ -156,11 +156,11 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.99.0
 - [] Create shortcuts - should be part of script
 - [] Recreate Prefix (Use Global Runner and WineArch)
-- [] Restore, recreate-prefix-scripts breaks Wine:
-     - [] XOWINEXO on restoration uses Global wine instead of runner from wzt-info.yml
 
 0.98.9
 - TEST
+- [x] Restore, recreate-prefix-scripts breaks Wine:
+- [x] XOWINEXO on restoration uses Global wine instead of runner from wzt-info.yml
 - [x] open terminal test with 
 - [x] gnome-terminal flatpak
   - [x] WINEPREFIX
@@ -168,9 +168,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
   - [x] wine
   - [x] winetricks
 - [x] gnome-terminal system
-- [] xfce4-terminal flatpak
+- [x] xfce4-terminal flatpak
 - [x] xfce4-terminal system
-- [] konsole flatpak
+- [x] konsole flatpak
 - [x] konsole system
 
 - [x] Global not messing local templates
