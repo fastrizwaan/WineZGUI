@@ -138,12 +138,13 @@ winezgui-fetch-replacement-data()
   SEARCH+=("${WEXE}")
   REPLACE+=("XOWINEEXEXO")
 
-  # 16. Change wine version
-  echo "to be comverted 1:${WVER}"
-  WVER=$(echo ${WINEVER}|sed "s/\\./\\\\./g")
-  echo "to be comverted 2:${WVER}"
-  SEARCH+=("${WVER}")
-  REPLACE+=("XOWINEVERXO")
+# runner will break with wzt-restore, do not change wineversion
+#  # 16. Change wine version
+#  echo "to be comverted 1:${WVER}"
+#  WVER=$(echo ${WINEVER}|sed "s/\\./\\\\./g")
+#  echo "to be comverted 2:${WVER}"
+#  SEARCH+=("${WVER}")
+#  REPLACE+=("XOWINEVERXO")
 
   # Not changing user only
   #  SEARCH+=("${USER}")

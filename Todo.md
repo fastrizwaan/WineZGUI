@@ -155,6 +155,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 0.99.0
 - [] Create shortcuts - should be part of script
+- [] Recreate Prefix (Use Global Runner and WineArch)
+- [] Restore, recreate-prefix-scripts breaks Wine:
+     - [] XOWINEXO on restoration uses Global wine instead of runner from wzt-info.yml
 
 0.98.9
 - TEST
