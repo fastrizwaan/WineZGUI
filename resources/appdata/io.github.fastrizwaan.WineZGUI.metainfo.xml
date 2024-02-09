@@ -40,7 +40,7 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
-    <release date="2024-02-09" version="0.90">
+    <release date="2024-02-09" version="0.99.0">
       <description>
         <p>bug fixes: Template configure, open-shell, open-terminal, restore wzt bugs, etc. fixed</p>
       </description>
