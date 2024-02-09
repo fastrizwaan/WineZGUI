@@ -42,7 +42,7 @@ winezgui-open-terminal()
          export WINEPREFIX=${WINEPREFIX}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
-         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
          cd \"$1\"; shift; exec bash --norc -i" \
          sh "${WINEZGUIDIR}"
 
