@@ -166,7 +166,7 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] don't show annoying registry backed up message.
 - [] can't configure template, 
      - [] open shell fails
-     - [] new winetricks not used
+     - [x] new winetricks not used, now works with path
 
 - [x] Security - Fix Remove Idenity 
 - [x] system.reg:"RegOwner"="rizvan"
@@ -176,9 +176,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] Allow editing of wzt-info.yml
 - [x] xdg-open wzt-info.yml
 
-- [ ]open terminal - does not use wine runner! 
-- [] winetricks uses system wine instead of runner
-- [] use alias alias wine=${RUNNER}; alias winetricks=${WINEZGUIDIR}/winetricks
+- [x] open terminal - does not use wine runner!
+- [x] export RUNNER, TEMPLATE, etc.
+- [x] winetricks uses system wine instead of runner
+- [x] use path wine=${RUNNER}; alias winetricks=${WINEZGUIDIR}/winetricks
 
 - [x] New Template - nothing entered/cancelled creates Template which should not be the case.
 - [x] Do not allow spaces in template name

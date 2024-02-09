@@ -16,6 +16,11 @@ winezgui-winetricks-gui()
   if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
        mkdir -p "${WINEZGUIDIR}/tmp"
   fi
+  
+  # set runner and winezguidir path for wine and winetricks
+  RUNNER_PATH=$(dirname ${WINE_CMD})
+  chmod +rx ${WINEZGUIDIR}/winetricks
+  export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
 
   ${WINETRICKS} --gui
   # use this after winetricks fixes bug with arch=

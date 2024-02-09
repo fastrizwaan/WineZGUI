@@ -94,6 +94,11 @@ script-winetricks-cli()
   # Show debug output for winetricks command in use
   dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - in use!"
 
+  # set runner and winezguidir path for wine and winetricks
+  RUNNER_PATH=$(dirname ${WINE_CMD})
+  chmod +rx ${WINEZGUIDIR}/winetricks
+  export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
+  
   # Start of Show Progress using zenity dialog
   ( for i in ${VERBS[*]}; do
   

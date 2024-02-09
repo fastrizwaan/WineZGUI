@@ -72,6 +72,11 @@ winezgui-winetricks-cli()
        export WINETRICKS
   fi
 
+  # set runner and winezguidir path for wine and winetricks
+  RUNNER_PATH=$(dirname ${WINE_CMD})
+  chmod +rx ${WINEZGUIDIR}/winetricks
+  export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
+
   # Start of Show Progress using zenity dialog
   ( for i in ${VERBS[*]}; do
   

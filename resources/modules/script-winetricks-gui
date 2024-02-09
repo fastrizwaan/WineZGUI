@@ -30,8 +30,13 @@ script-winetricks-gui()
   cd ${PREFIXDIR} && \
   tar -zcvf registry_backup_${DATE}.tar.gz *.reg;
 
-  ${ZENITY_CMD} --info --title="Registry files Backed up!" \
-  --text="If winetricks messes up the prefix, restore registry files:\ncd ${PREFIXDIR};\ntar -xvf registry_backup_${DATE}.tar.gz"
+  #${ZENITY_CMD} --info --title="Registry files Backed up!" \
+  #--text="If winetricks messes up the prefix, restore registry files:\ncd ${PREFIXDIR};\ntar -xvf registry_backup_${DATE}.tar.gz"
+  
+  # set runner and winezguidir path for wine and winetricks
+  RUNNER_PATH=$(dirname ${WINE_CMD})
+  chmod +rx ${WINEZGUIDIR}/winetricks
+  export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
   
   ${WTRICKS_CMD} --gui
   # use this after winetricks fixes bug with arch=
