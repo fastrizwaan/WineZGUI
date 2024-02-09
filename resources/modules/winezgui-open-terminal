@@ -9,7 +9,6 @@ winezgui-open-terminal()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
-echo "1111111111111111111111111111111111111"
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ $(which flatpak-spawn) ]; then
        unset TEXT
        TEXT+="To allow this feature to work.\n"
@@ -23,8 +22,7 @@ echo "1111111111111111111111111111111111111"
 
   fi
 
-echo "2222222222222222222222222222222222"
-
+#
 # export WINEPREFIX=${DEFAULT}
 
 # Let user run wine (runner) and latest winetricks
@@ -34,6 +32,8 @@ echo "2222222222222222222222222222222222"
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from sandbox"
+         echo "1111111111111111111111111111111111111"
+
          cd "${WINEZGUIDIR}"
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
@@ -49,67 +49,148 @@ echo "2222222222222222222222222222222222"
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
          dbug "I: Open Terminal: Flatpak script, xfce4-terminal running from sandbox"
+         echo "2222222222222222222222222222222222"
+
          cd "${WINEZGUIDIR}"
          flatpak-spawn --host xfce4-terminal --disable-server -e \
-         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
+
+        #  flatpak-spawn --host xfce4-terminal --disable-server -e \
+        #  "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+        #  -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
   elif   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which konsole 2>/dev/null) ]; then
          dbug "I: Open Terminal: Flatpak script, konsole running from sandbox"
+         echo "33333333333333333333333333333333333"
+
          cd "${WINEZGUIDIR}"
          flatpak-spawn --host konsole  -e \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
          sh "${WINEZGUIDIR}"
-       # If flatpak install and script running from host
+
+      #    flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+      #    "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
+      #    sh "${WINEZGUIDIR}"
+      #  # If flatpak install and script running from host
        
        # and gnome terminal is found
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from host"
+         echo "44444444444444444444444444444444444"
          gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         'export PS1="[\u@\h:\w]\$ "; cd "$1"; shift; exec bash --norc -i' \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
          sh "${WINEZGUIDIR}"
   
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which xfce4-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, xfce4-terminal running from host"
-         xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         echo "55555555555555555555555555555555555"
+         xfce4-terminal --disable-server -e \
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which konsole) ]; then
          dbug "I: Open Terminal: Flatpak script, konsole running from host"
-         konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         echo "66666666666666666666666666666666666"
+         konsole -e \
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
+
+        #  "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+        #  -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
        # Else it is a host install and gnome-terminal is found
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: System script, gnome-terminal running from host"
+         echo "7777777777777777777777777777777777"
          gnome-terminal --wait -- bash -c \
-         "export PS1='[\u@\h:\w]\$ '; cd \"${WINEZGUIDIR}\"; exec bash -i"
+         "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
          # gnome terminal is not found
 
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which xfce4-terminal) ]; then
          dbug "I: Open Terminal: System script, xfce4-terminal running from host"
+         echo "88888888888888888888888888888888888"
          xfce4-terminal --disable-server -e \
-         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         bash -c \
+         "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
+
+        #  "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which konsole) ]; then
          dbug "I: Open Terminal: System script, konsole running from host"
+         echo "99999999999999999999999999999999999"
          konsole  -e \
-         "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
+         bash -c \
+         "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${WINEZGUIDIR}"
+        #  "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
   else
          dbug "I: Open Terminal: Gnome-terminal not found"
          ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
                 --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\" or \"konsole\""
   fi
   unset TEXT
-  echo "33333333333333333333333333333333333"
 
 }
