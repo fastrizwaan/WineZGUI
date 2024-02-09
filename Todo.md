@@ -159,10 +159,35 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
 - [] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
 - [] Templates, Arch, changes not applied
+- [] Winetricks in Template should use winetricks latest
 - [] Create 32 bit template using wineboot
 - [] Create shortcuts - should be part of script
 - [] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found
 - [] don't show annoying registry backed up message.
+- [] can't configure template, 
+     - [] open shell fails
+     - [] new winetricks not used
+
+- [] Security - Fix Remove Idenity 
+- [] system.reg:"RegOwner"="rizvan"
+- [] user.reg:"UserName"="rizvan"
+- [] /media/${user}
+
+- [] Allow editing of wzt-info.yml
+- [] xdg-open wzt-info.yml
+
+- [ ]open terminal - does not use wine runner! 
+- [] winetricks uses system wine instead of runner
+
+- [] New Template - nothing entered/cancelled creates Template which should not be the case.
+
+- [] chmod +x *.desktop files on recreating and creating.
+- [] on restore wzt
+- [] on create shortcut
+- [] on update all scripts
+
+- [] use Info.yml for wine, arch, template and runner
+
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
