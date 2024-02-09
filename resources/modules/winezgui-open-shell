@@ -38,7 +38,7 @@ echo "2222222222222222222222222222222222"
           export WINEARCH=${WINEARCH}  \
           export WINEPREFIX=${WINEPREFIX}; \
           export WINEZGUIDIR=${WINEZGUIDIR}; \
-          alias wine=${WINE_CMD};
+          alias wine=${WINE_CMD}; \
           if [ -f ${WINEZGUIDIR}/winetricks ]; then \
                alias winetricks=${WINEZGUIDIR}/winetricks \
           fi;
