@@ -54,7 +54,8 @@ winezgui-template-create-new()
        return 1
   fi
   
-
+  # remove starting spaces and replace space with _
+  NEW_TEMPLATE=$(echo "${NEW_TEMPLATE}"|sed "s/^ *//g"|sed "s/ /_/g")
 
   if [ -d "${TEMPLATES_DIR}/${NEW_TEMPLATE}" ]; then
        ${ZENITY_CMD} --error --title "${APP_WITH_VER}" \

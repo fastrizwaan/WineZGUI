@@ -178,8 +178,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [ ]open terminal - does not use wine runner! 
 - [] winetricks uses system wine instead of runner
+- [] use alias alias wine=${RUNNER}; alias winetricks=${WINEZGUIDIR}/winetricks
 
-- [] New Template - nothing entered/cancelled creates Template which should not be the case.
+- [x] New Template - nothing entered/cancelled creates Template which should not be the case.
+- [x] Do not allow spaces in template name
 
 - [x] chmod +x *.desktop files on recreating and creating.
 - [x] on restore wzt
@@ -187,7 +189,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] on update all scripts
 
 - [] use Info.yml for wine, arch, template and runner
-
+- [] update all *.yml when changing runner/template etc.
+- [] use prefix's settings.yml global settings.yml separately (current Info.yml as local setting and setting.yml as global setting)
+- [] do not let global setting mess up local settings and script files (runner, arch)
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
