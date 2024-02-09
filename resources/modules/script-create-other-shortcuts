@@ -704,6 +704,8 @@ fi
 # link the launcher  file to a shortcut on applications menu.
 #mkdir -p "${DEXSKTOPDIR}" && \
 #dbug "I: ${HEADER}: Created ${DEXSKTOPDIR}"
+# set x permissions
+chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}"
 
 #ln -sf "${DESKTOPFILE}" "${DEXSKTOPDIR}/${EXE_LESS}.desktop" && \
 echo "ln -sf ${DESKTOPFILE} ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${EXE_LESS}_${PREFIXNAME}.desktop" > ~/desktop.log.txt

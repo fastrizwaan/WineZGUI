@@ -152,6 +152,10 @@ script-change-prefix()
   echo "x - x x - x x - x x -  x x - x x - x x - x  - "
   echo "x - x x - x x - x x -  x x - x x - x x - x  - "
   echo "x - x x - x x - x x -  x x - x x - x x - x  - "
+
+  # set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}"
+
   # 8. Launch Script from Renamed Directory
   "${NEW_SCRIPT_FILE}" &
 

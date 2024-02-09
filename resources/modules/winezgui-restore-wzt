@@ -290,6 +290,7 @@ winezgui-restore-wzt()
        # 6.1.2 # Find all desktop files and create shortcuts in the menu
        for i in $(find ${FOUND_PREFIX_DIR} -maxdepth 1 -type f -iname "*.desktop"); do 
           BASENAME=$(basename "${i}")
+          chmod +rx "${i}"
           ln -svf $(realpath $i) "${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}";
        done
        dbug "I: Script: Shortcut is created at ${APPLICATIONSDIR}/${SHORTCUT_PREFIX}_${BASENAME}"
@@ -343,6 +344,10 @@ winezgui-restore-wzt()
 #        "${SELECTED_SCRIPT}" &
 #        exit 0
 #   fi
+
+  # set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}" "${NEWSCRIPTFILE}"
+
   # Just list the script files to launch
   SOURCE script-list-available-launch-shortcuts
   script-list-available-launch-shortcuts ${FOUND_PREFIX_DIR}

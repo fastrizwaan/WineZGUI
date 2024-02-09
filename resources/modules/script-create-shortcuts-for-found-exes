@@ -321,7 +321,8 @@ fi
 # exit 0
 # " >> "${SCRIPTFILE}"
 
-chmod +rx "${SCRIPTFILE}"
+# set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}"
  
  # Do no Prompt and launch
  # ${ZENITY_CMD} --info --text="Created shortcuts in the menu for ${EXE_NAME}" --title="Shortcuts Created!" --width=400

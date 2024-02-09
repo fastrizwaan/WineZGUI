@@ -175,6 +175,8 @@ echo "$search_list"
       # Reset PRODUCT_NAME - Exe.exe -> PRODUCT_NAME, for 1 exe only
       sed "s|export PROGNAME=.*|export PROGNAME=\"${S_PROGNAME}\"|g" -i "${S_SCRIPTFILE}"
       sed "s|Name=.*|Name=${S_PROGNAME}|g"       -i "${S_DESKTOPFILE}"
+      # set x permissions
+      chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}" "${NEWSCRIPTFILE}"
       # Launch the single one
       "${S_SCRIPTFILE}" &
       # Delete setup script

@@ -121,6 +121,8 @@ script-change-icon()
   SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 
+  #Set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}"
 
   # Inform user
   #If script-change-icon_DO_NOT_PROMPT has no value then prompt

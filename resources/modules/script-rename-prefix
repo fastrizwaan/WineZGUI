@@ -228,6 +228,8 @@ script-rename-prefix()
   export DESKTOPFILE="${NEWDESKTOPFILE}"
   dbug "I: Script: ${FUNCNAME[0]}: starting script from renamed dir"
   
+  # set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}" "${NEWSCRIPTFILE}"
   # 8. Launch Script from Renamed Directory
   "${NEWSCRIPTFILE}" &
   

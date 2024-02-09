@@ -81,6 +81,9 @@ script-change-name()
 
   ${UPDATE_DESKTOP_DATABASE} ${APPLICATIONSDIR}
   dbug "I: Script: ${FUNCNAME[0]}: Change ${PROGNAME} to ${GET_PROGNAME}"
+  
+  # set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}"
 
   # Required for instant change in the GameWindow
   export PROGNAME="${GET_PROGNAME}"

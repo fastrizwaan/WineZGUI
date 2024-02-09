@@ -181,10 +181,10 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [] New Template - nothing entered/cancelled creates Template which should not be the case.
 
-- [] chmod +x *.desktop files on recreating and creating.
-- [] on restore wzt
-- [] on create shortcut
-- [] on update all scripts
+- [x] chmod +x *.desktop files on recreating and creating.
+- [x] on restore wzt
+- [x] on create shortcut
+- [x] on update all scripts
 
 - [] use Info.yml for wine, arch, template and runner
 

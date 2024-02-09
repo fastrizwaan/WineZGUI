@@ -70,6 +70,9 @@ script-change-exe-variables()
   ####### Change Desktop file
   sed "s|Name=.*|Name=${NEW_PROGNAME}|g; t;" -i "${DESKTOPFILE}" || echo "Failed: desktop1:${NEW_PROGNAME}"
   sed "s|Keywords=.*|Keywords=winezgui; game; ${NEW_PROGNAME}|g; t;" -i "${DESKTOPFILE}" || echo "Failed: desktop2: ${NEW_PROGNAME}"
+
+  # SET x permission to desktop and script files
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}"
   # Launch Script after modification
   "${SCRIPTFILE}" &
   exit 0

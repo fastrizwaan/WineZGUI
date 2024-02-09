@@ -261,7 +261,10 @@ fi
   #### !!! This needs an already created script file, so create one then run this
 
   # To get the current scriptfile too in the list
-#  rm "${PREFIXDIR}/*found-exe*.yml"
+  #  rm "${PREFIXDIR}/*found-exe*.yml"
+
+  # set x permissions
+  chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}" "${NEWSCRIPTFILE}"
   # Show no guarantee
   ${ZENITY_CMD} --info --title="Import IMPORTDIR to Prefix" \
   --text "Copied $IMPORT_DIR\nto $PREFIXDIR!\n<b>Install dxvk and vkd3d if missing.</b>\n<b>There is NO GUARANTEE that the IMPORTED GAME WILL WORK!</b>"

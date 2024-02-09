@@ -632,6 +632,9 @@ echo "Categories=${APP_CATEGORY};"           >> "${DESKTOPFILE}"
 #mkdir -p "${DEXSKTOPDIR}" && \
 #dbug "I: ${HEADER}: Created ${DEXSKTOPDIR}"
 
+# set x permissions
+chmod +rx "${DESKTOPFILE}" "${SCRIPTFILE}" "${S_SCRIPTFILE}" "${S_DESKTOPFILE}" "${NEW_SCRIPT_FILE}" "${NEWDESKTOPFILE}" "${NEWSCRIPTFILE}"
+
 #ln -sf "${DESKTOPFILE}" "${DEXSKTOPDIR}/${EXE_LESS}.desktop" && \
 # If NO_SHORTCUTS= NOTHING/EMPTY then create shortcuts
   echo "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxo" 
