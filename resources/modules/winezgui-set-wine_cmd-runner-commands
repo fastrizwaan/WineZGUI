@@ -11,6 +11,9 @@ winezgui-set-wine_cmd-runner-commands()
  if [ ! -z "${INFOFILE}" ] && [ -f ${INFOFILE} ]; then
     grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
     export RUNNER=$(grep -i "Runner:" ${INFOFILE}|cut -f2 -d ":")
+    
+    # Set winearch so that global setting won't mess up on recreating script
+    export WINEARCH=$(grep -i "Wine Arch:" "${INFOFILE}"|cut -f2 -d ":")
  fi
  
  # If Runner is empty in Infofile, then get Runner info from Settings.yml
