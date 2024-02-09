@@ -26,7 +26,7 @@ winezgui-open-terminal()
 # export WINEPREFIX=${DEFAULT}
 
 # Let user run wine (runner) and latest winetricks
- RUNNER_PATH=$(dirname ${WINE_CMD})
+ RUNNER_PATH="$(dirname ${RUNNER})"
  chmod +rx ${WINEZGUIDIR}/winetricks
 
   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
