@@ -98,7 +98,6 @@ script-backup-bundle()
       find "${PREFIXDIR}/drive_c/users/${USER}/Temp" -type f 
       find "${PREFIXDIR}/drive_c/users/${USER}/Temp" -type f -delete
        
-      sleep 10s;
 
   # 2. Calculate Backup Size based on Gamedir whether it is in Prefix or not
   # If gamedir is inside prefixdir, total backup size will be prefix size
