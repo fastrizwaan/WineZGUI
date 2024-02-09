@@ -1,7 +1,9 @@
 # script-change-arch
 script-change-arch()
 {
-  
+
+   PREFIX_INFOFILE="${PREFIXDIR}/Info.yml"
+
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   dbug "I: Script: Launched ${FUNCNAME[0]}"
@@ -32,8 +34,9 @@ script-change-arch()
 
   # Check before writing files
   if [ -w "${SCRIPTFILE}" ] && [ -w "${INFOFILE}" ]; then
-       sed "s|export WINEARCH=.*|export WINEARCH=${WINEARCH}|g" -i ${SCRIPTFILE}
-       sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i ${INFOFILE}
+       sed "s|export WINEARCH=.*|export WINEARCH=${WINEARCH}|g" -i "${SCRIPTFILE}"
+       sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${INFOFILE}"
+       sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${PREFIX_INFOFILE}"
   else
        echo  "E: Script: ${FUNCNAME[0]}: Cannot write to ${SCRIPTFILE}"
   fi

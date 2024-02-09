@@ -9,14 +9,20 @@ script-change-runner()
   SOURCE "winezgui-list-available-runners"
   winezgui-list-available-runners || return 1 # get SELECTED_RUNNER, if it returns 1, go back
  
+  PREFIX_INFOFILE="${PREFIXDIR}/Info.yml"
   # If Settings.yml is writable
   if [ -w "${INFOFILE}" ]; then
        #IF Runner: is not found add it
        grep "Runner:" "${INFOFILE}" || echo "Runner:${RUNNER}" >> "${INFOFILE}"
        sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${INFOFILE}"
+
+       grep "Runner:" "${PREFIX_INFOFILE}" || echo "Runner:${RUNNER}" >> "${PREFIX_INFOFILE}"
+       sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${PREFIX_INFOFILE}"
        # Update WINEVER on change of runner inside script    
 
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${INFOFILE}"
+       sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${PREFIX_INFOFILE}"
+       
        export RUNNER="${SELECTED_RUNNER}"
        export RUNNER_NAME="${SELECTED_RUNNERNAME}"
        echo "change runner debug - - - - - - - - - - - - - - - - - - - - -"
