@@ -168,13 +168,13 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      - [] open shell fails
      - [] new winetricks not used
 
-- [] Security - Fix Remove Idenity 
-- [] system.reg:"RegOwner"="rizvan"
-- [] user.reg:"UserName"="rizvan"
-- [] /media/${user}
+- [x] Security - Fix Remove Idenity 
+- [x] system.reg:"RegOwner"="rizvan"
+- [x] user.reg:"UserName"="rizvan"
+- [x] /media/${user}
 
-- [] Allow editing of wzt-info.yml
-- [] xdg-open wzt-info.yml
+- [x] Allow editing of wzt-info.yml
+- [x] xdg-open wzt-info.yml
 
 - [ ]open terminal - does not use wine runner! 
 - [] winetricks uses system wine instead of runner

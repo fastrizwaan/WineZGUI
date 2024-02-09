@@ -100,6 +100,12 @@ winezgui-fetch-replacement-data()
   SEARCH+=(\"InstalledBy\"=\"${USER}\")
   REPLACE+=("XOREGINSTALLEDBYUSERXO")
 
+  SEARCH+=(\"RegOwner\"=\"${USER}\")
+  REPLACE+=("XOREGREGOWNERUSERXO")
+
+  SEARCH+=(\"UserName\"=\"${USER}\")
+  REPLACE+=("XOREGUSERNAMEUSERXO")
+
   # H. Home directory scripts and desktop file
   # 12. /home/$user
   #SEARCH+=("\/home\/${USER}")
@@ -111,6 +117,9 @@ winezgui-fetch-replacement-data()
   # 13. users/$user
   SEARCH+=("\/users\/${USER}")
   REPLACE+=("XOUSERSUSERXO")
+
+  SEARCH+=("\/media\/${USER}")
+  REPLACE+=("XOMEDIASUSERXO")
 
   # J. Variables
   # Sed can't change empty string/variables,
