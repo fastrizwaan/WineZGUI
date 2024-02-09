@@ -4,7 +4,7 @@
 
 ![](https://raw.githubusercontent.com/fastrizwaan/WineZGUI/main/assets/winezgui.svg) <a href="https://flathub.org/apps/details/io.github.fastrizwaan.WineZGUI"><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
-![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/winezgui-0.98.9.png)
+![](https://github.com/fastrizwaan/WineZGUI/releases/download/0.97.12/winezgui-0.97.14.png)
 
 ## What is WineZGUI
 
