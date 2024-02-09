@@ -122,26 +122,26 @@ flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-22.08
 
 ### Fedora 36
 
-`sudo dnf install zenity wine winetricks perl-Image-ExifTool icoutils gnome-terminal wget zstd`
+`sudo dnf install zenity wine winetricks perl-Image-ExifTool icoutils gnome-terminal wget zstd samba-winbind-clients.x86_64 samba-winbind-clients.i686`
 
-### Debian / Ubuntu
+### Debian / Ubuntu / Linux Mint
 
 ```
 sudo dpkg --add-architecture i386 && sudo apt update
-sudo apt install zenity wine wine32 wine64 winetricks libimage-exiftool-perl icoutils gnome-terminal wget zstd
+sudo apt install zenity wine wine32 wine64 winetricks libimage-exiftool-perl icoutils gnome-terminal wget zstd winbind
 ```
 
 ### Solus
 
 ```
-sudo eopkg it zenity wine wine-32bit winetricks perl-image-exiftool icoutils gnome-terminal wget zstd diffutils
+sudo eopkg it zenity wine wine-32bit winetricks perl-image-exiftool icoutils gnome-terminal wget zstd diffutils samba-devel
 ```
 
 ### Arch Linux / EndeavourOS
 
 ```
 sudo pacman -Sy zenity wine winetricks perl-image-exiftool icoutils gnome-terminal wget \
-                lib32-alsa-plugins lib32-libpulse lib32-openal zstd
+                lib32-alsa-plugins lib32-libpulse lib32-openal zstd samba
 ```
 
 #### XBOX compatible controllers
