@@ -156,12 +156,21 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 0.98.9
 - TEST
 - [] open terminal test with 
-- [] gnome-terminal flatpak
+- [x] gnome-terminal flatpak
+  - [x] WINEPREFIX
+  - [x] WINEARCH
+  - [x] wine
+  - [x] winetricks
 - [] gnome-terminal system
 - [] xfce4-terminal flatpak
 - [] xfce4-terminal system
 - [] konsole flatpak
 - [] konsole system
+
+- [] change arch must match with arch template
+     - [] startup checks should nag
+- [] change template must match with arch
+     - [] startup checks should nag
 
 - [] fix issue with template change not applying immediately (without restarting)
     - [] Switching templates will not work properly without restarting the app.
