@@ -36,12 +36,14 @@ winezgui-template-change()
        export TEMPLATE="${SELECTED_TEMPLATE}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
        export DEFAULT="${SELECTED_TEMPLATE}"
+       export WINEPREFIX="${SELECTED_TEMPLATE}"
   fi
   
   # If About.yml is writable
   if [ -w "${ABOUTFILE}" ]; then
        export DEFAULT="${SELECTED_TEMPLATE}"
        export TEMPLATE="${SELECTED_TEMPLATE}"
+       export WINEPREFIX="${SELECTED_TEMPLATE}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
        sed "s|Template:.*|Template:${TEMPLATE_NAME}|g" -i "${ABOUTFILE}"
        sed "s|Wine Prefix:.*|Wine Prefix:${DEFAULT}|g" -i "${ABOUTFILE}"
