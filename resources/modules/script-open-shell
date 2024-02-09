@@ -69,12 +69,14 @@ script-open-shell()
        [ $(which gnome-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from host"
+         cd "${PREFIXDIR}"
         #  gnome-terminal --wait -- \
         #  flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
         #  'export PS1="[\u@\h:\w]\$ "; export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
         #  sh "${PREFIXDIR}"
-        gnome-terminal --wait -- \
-        flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+         cd "${PREFIXDIR}"
+         gnome-terminal --wait -- \
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
         "export PS1='[\u@\h:\w]\$ '; \
          export WINEARCH=${WINEARCH}; \
          export WINEPREFIX=${PREFIXDIR}; \
@@ -88,6 +90,7 @@ script-open-shell()
        [ $(which xfce4-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          dbug "I: Script: Open Shell: Flatpak script, xfce4-terminal running from host"
+         cd "${PREFIXDIR}"
          xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
          -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
 
@@ -95,6 +98,7 @@ script-open-shell()
        [ $(which konsole) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          dbug "I: Script: Open Shell: Flatpak script, konsole running from host"
+         cd "${PREFIXDIR}"
          konsole -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
          -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
   
@@ -121,6 +125,7 @@ script-open-shell()
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which xfce4-terminal) ]; then
          dbug "I: Script: Open Shell: System script, xfce4-terminal running from host"
+         cd "${PREFIXDIR}"
          export WINEPREFIX="${PREFIXDIR}";
          xfce4-terminal --disable-server -e \
          "bash -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
@@ -128,6 +133,7 @@ script-open-shell()
   elif [ ${INSTALL_TYPE} = "system" ] && \
        [ $(which konsole) ]; then
          dbug "I: Script: Open Shell: System script, konsole running from host"
+         cd "${PREFIXDIR}"
          export WINEPREFIX="${PREFIXDIR}";
          konsole -e \
          "bash -c \"export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=${PREFIXDIR}; cd ${PREFIXDIR}; exec bash --norc\""
