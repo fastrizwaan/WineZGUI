@@ -153,33 +153,36 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
       find ~/Games -type l
       copy following the links to the destination imported directory.
 
+0.99.0
+- [] Create shortcuts - should be part of script
+
 0.98.9
 - TEST
-- [] open terminal test with 
+- [x] open terminal test with 
 - [x] gnome-terminal flatpak
   - [x] WINEPREFIX
   - [x] WINEARCH
   - [x] wine
   - [x] winetricks
-- [] gnome-terminal system
+- [x] gnome-terminal system
 - [] xfce4-terminal flatpak
-- [] xfce4-terminal system
+- [x] xfce4-terminal system
 - [] konsole flatpak
-- [] konsole system
+- [x] konsole system
 
-- [] Global not messing local templates
-  - [] set global 32 bit, defaut runner
-  - [] install a 32 bit app/game
-  - [] set global 64 bit, different runner
-  - [] update all scripts should not mess up 32bit install
+- [x] Global not messing local templates
+  - [x] set global 32 bit, defaut runner
+  - [x] install a 32 bit app/game
+  - [x] set global 64 bit, different runner
+  - [x] update all scripts should not mess up 32bit install
 
 - Fix open shell/terminal not using latest winetricks and Runner 
-- [] winetricks open-shell 
-- [] wine path open-shell system
-- [] wine path open-shell script
-- [] wine path open-shell flatpak
+- [x] winetricks open-shell 
+- [x] wine path open-shell system
+- [x] wine path open-shell script
+- [x] wine path open-shell flatpak
 - [x] winetricks open-terminal flatpak
-- [] winetricks open-terminal system
+- [x] winetricks open-terminal system
 - [x] wine path open-terminal flatpak
 
 
@@ -189,15 +192,14 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [x] fix issue with template change not applying immediately (without restarting)
     - [x] Switching templates will not work properly without restarting the app.
-- [] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
-- [] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
+- [x] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
+- [x] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
 - [x] Templates, Arch, changes not applied
 - [x] Winetricks in Template should use winetricks latest
-- [] Create shortcuts - should be part of script
 - [x] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found, using path
 - [x] don't show annoying registry backed up message.
-- [] can't configure template, 
-     - [] open shell fails
+- [x] can't configure template, 
+     - [x] open shell fails
      - [x] new winetricks not used, now works with path
 
 - [x] Security - Fix Remove Idenity 
@@ -221,10 +223,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [x] on create shortcut
 - [x] on update all scripts
 
-- [] use Info.yml for wine, arch, template and runner
-- [] update all *.yml when changing runner/template etc.
-- [] use prefix's settings.yml global settings.yml separately (current Info.yml as local setting and setting.yml as global setting)
-- [] do not let global setting mess up local settings and script files (runner, arch)
+- [x] use Info.yml for wine, arch, template and runner
+- [x] update all *.yml when changing runner/template etc.
+- [x] do not let global setting mess up local settings and script files (runner, arch)
 
 0.98.8
 - [x] use ~ for $HOME in About... to save screen space
