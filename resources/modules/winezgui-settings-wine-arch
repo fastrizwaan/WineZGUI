@@ -69,7 +69,7 @@ winezgui-settings-wine-arch()
   
           if [ -z "${ANSWER}" ] || [ ${ANSWER} -eq 1 ]; then
               unset TEXT
-              TEXT+="<b>Warning: All newly created prefixes will not work!!</b>"
+              TEXT+="<b>Warning: All newly created prefixes will not work!!</b>\n"
               TEXT+="Make sure to change template for ${WINEARCH} to work!"
               ${ZENITY_CMD} --warning --text "${TEXT}"
               echo "Cancelled!"

@@ -65,7 +65,7 @@ winezgui-template-change()
             fi
        else # If no/cancel
             unset TEXT
-            TEXT+="<b>Warning: All newly created prefixes will not work!!</b>"
+            TEXT+="<b>Warning: All newly created prefixes will not work!!</b>\n"
             TEXT+="Remember to change to ${REG_ARCH} for ${TEMPLATE_NAME}!"
             ${ZENITY_CMD} --warning --text="${TEXT}" \
             --title "${APP_WITH_VER} - ${TEMPLATE_NAME} needs ${REG_ARCH}!"

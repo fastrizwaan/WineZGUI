@@ -167,20 +167,25 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] konsole flatpak
 - [] konsole system
 
-- [] change arch must match with arch template
-     - [] startup checks should nag
-- [] change template must match with arch
-     - [] startup checks should nag
+- [] Global not messing local templates
+  - [] set global 32 bit, defaut runner
+  - [] install a 32 bit app/game
+  - [] set global 64 bit, different runner
+  - [] update all scripts should not mess up 32bit install
 
-- [] fix issue with template change not applying immediately (without restarting)
-    - [] Switching templates will not work properly without restarting the app.
+
+- [x] change arch must match with arch template, ask 2 times
+- [x] change template must match with arch, ask 2 times
+
+
+- [x] fix issue with template change not applying immediately (without restarting)
+    - [x] Switching templates will not work properly without restarting the app.
 - [] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
 - [] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
-- [] Templates, Arch, changes not applied
+- [x] Templates, Arch, changes not applied
 - [x] Winetricks in Template should use winetricks latest
-- [] Create 32 bit template using wineboot
 - [] Create shortcuts - should be part of script
-- [] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found
+- [x] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found, using path
 - [x] don't show annoying registry backed up message.
 - [] can't configure template, 
      - [] open shell fails
