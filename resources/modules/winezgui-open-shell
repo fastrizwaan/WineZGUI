@@ -28,15 +28,22 @@ echo "2222222222222222222222222222222222"
   export WINEPREFIX=${DEFAULT}
 
 
-
-
-  if   [ ${INSTALL_TYPE} = "flatpak" ] && \
+   if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
-         dbug "I:Open Shell for Template: Flatpak script, gnome-terminal running from sandbox"
-         cd "${WINEZGUIDIR}"
+         dbug "I: Open Terminal: Flatpak script, gnome-terminal running from sandbox"
+         cd "${TEMPLATE}"
          flatpak-spawn --host gnome-terminal --wait -- \
-         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
-         -c \"export PS1='[\u@\h:\w]\$ '; cd ${TEMPLATE}; export WINEPREFIX=${WINEPREFIX}; exec bash --norc\""
+         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${TEMPLATE}"
+
+  # if   [ ${INSTALL_TYPE} = "flatpak" ] && \
+  #      [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
+  #        dbug "I:Open Shell for Template: Flatpak script, gnome-terminal running from sandbox"
+  #        cd "${WINEZGUIDIR}"
+  #        flatpak-spawn --host gnome-terminal --wait -- \
+  #        "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+  #        -c \"export PS1='[\u@\h:\w]\$ '; cd ${TEMPLATE}; export WINEPREFIX=${WINEPREFIX}; exec bash --norc\""
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
