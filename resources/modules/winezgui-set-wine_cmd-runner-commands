@@ -1,5 +1,5 @@
 winezgui-set-wine_cmd-runner-commands()
-{ # Get runner from info file
+{ # Get runner winearch from info file
  
  # === = = = = = = = Recreate Prefix script with Runner 
  # If Infofile exists (old scripts) and Runner: is not found add it
