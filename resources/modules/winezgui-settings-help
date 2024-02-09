@@ -11,6 +11,7 @@ winezgui-settings-help()
   HELP_TEXT+="Prefix Template...: Set default prefix template for new scripts|"
   HELP_TEXT+="Launch Behavior...: Launch exe directly or show exe script window|"
   HELP_TEXT+="Debug Messages... : Set On / Off Debug message in terminal!|"
+  HELP_TEXT+="Edit WZT-Info pre Bundle... : Allow editing of WZT-Info.yml before creating Bundle..."
   HELP_TEXT+="Disable Shortcuts... : Enable / Disable Shortcut Creation!|"
 
   # Text is more, so we need to format it, with sed in pango markup

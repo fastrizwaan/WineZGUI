@@ -1,0 +1,37 @@
+winezgui-settings-set-edit-wzt-info-pre-bundle()
+{
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+  EDIT_WZT_INFO_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
+                        --list   --hide-header      \
+                        --width=360 --height=240    \
+                        --radiolist --column " "    \
+                        --column "Action"           \
+                            TRUE "No"               \
+                               0 "Yes"              \
+                        --text   "Edit WZT-Info.yml before creating Bundle...")
+
+  if [ -z "${EDIT_WZT_INFO_OPTION}" ]; then
+          dbug "I: ${HEADER}: Cancelled!"
+          return 1
+  fi
+  
+  # If user selects No, delete debug from Settings.yml
+  if [ "${EDIT_WZT_INFO_OPTION}" = "No" ]; then
+          dbug "I: ${HEADER}: Disabled."
+          unset DEBUG
+          sed "/edit_wzt:/d" -i "${SETTINGS_FILE}"
+  else
+          # Add debug:Y to Settings.yml and export DEBUG
+          if [ -w "${SETTINGS_FILE}" ]; then
+              echo "edit_wzt:Y" >> "${SETTINGS_FILE}" # add to Settings
+          else
+              echo "Cannot write to ${SETTINGS_FILE}"
+          fi
+          dbug "I: ${HEADER}: Enabled."
+  fi
+  return 0
+}

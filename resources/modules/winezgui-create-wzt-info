@@ -65,15 +65,17 @@ winezgui-create-wzt-info()
   if [ -f "${WZT_FILE}" ]; then
        dbug "I: ${HEADER}: Created ${WZT_FILE}"
   fi
- 
+  
+  EDIT_WZT=$(grep "edit_wzt:" "${SETTINGS_FILE}")
   # 7.5.5 Ask whether to edit wzt-info
-  ${ZENITY_CMD} --question --no-wrap --title="Edit wzt-info.yml?" \
-          --text "${WZT_FILE} is created, would you like edit and add other info into it?"
-   ANSWER=$?
+  #${ZENITY_CMD} --question --no-wrap --title="Edit wzt-info.yml?" \
+  #        --text "${WZT_FILE} is created, would you like edit and add other info into it?"
+  # ANSWER=$?
    # 1.1 If user selects no or cancels to locate exe file
-   if [ ${ANSWER} -eq 1 ]; then
-        dbug "I: wzt-info: User Cancelled, skipped!"
-   else 
+   #if [ ${ANSWER} -eq 1 ]; then
+   # if any value is given for edit wzt then run
+   if [ ! -z "${EDIT_WZT}" ]; then
         xdg-open "${WZT_FILE}"
+        ${ZENITY_CMD} --info --title="Editing WZT-Info.yml" --text="Click ok after editing the wzt-file, to continue creating bundle!"
    fi
 }

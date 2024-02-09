@@ -23,6 +23,7 @@ winezgui-settings()
                                    0 "Launch Behavior..."        \
                                    0 "Debug Messages..."         \
                                    0 "Disable Shortcuts..."      \
+                                   0 "Edit WZT-Info pre Bundle..."  \
                             --text   "${TEXT}"                   )
 
    # Exit if Cancel is clicked
@@ -57,6 +58,10 @@ winezgui-settings()
         SOURCE "winezgui-settings-debug-messages"
         winezgui-settings-debug-messages
    
+   elif [ "${SETTINGS_OPTION}" = "Edit WZT-Info pre Bundle..." ]; then
+        SOURCE "winezgui-settings-set-edit-wzt-info-pre-bundle"
+        winezgui-settings-set-edit-wzt-info-pre-bundle
+
    elif [ "${SETTINGS_OPTION}" = "Disable Shortcuts..." ]; then
         SOURCE "winezgui-settings-disable-shortcuts"
         winezgui-settings-disable-shortcuts
