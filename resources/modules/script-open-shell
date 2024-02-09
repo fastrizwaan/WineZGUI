@@ -9,6 +9,9 @@ script-open-shell()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
 
+  # Let user run wine (runner) and latest winetricks
+  RUNNER_PATH="$(dirname ${RUNNER})"
+  chmod +rx ${WINEZGUIDIR}/winetricks
 
   # Check if --talk-name=org.freedesktop.Flatpak is allowed
   if [ ${INSTALL_TYPE} = "flatpak" ] && [ $(which flatpak-spawn) ]; then
@@ -29,10 +32,20 @@ script-open-shell()
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
          dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from sandbox"
          cd "${PREFIXDIR}"
+        #  flatpak-spawn --host gnome-terminal --wait -- \
+        #  flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        #  "export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
+        #  sh "${PREFIXDIR}"         
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ '; export WINEPREFIX=\"${PREFIXDIR}\"; cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${PREFIXDIR}"         
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${PREFIXDIR}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${PREFIXDIR}"
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
@@ -56,11 +69,21 @@ script-open-shell()
        [ $(which gnome-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";
          dbug "I: Script: Open Shell: Flatpak script, gnome-terminal running from host"
-         gnome-terminal --wait -- \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         'export PS1="[\u@\h:\w]\$ "; export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
+        #  gnome-terminal --wait -- \
+        #  flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        #  'export PS1="[\u@\h:\w]\$ "; export WINEPREFIX=${PREFIXDIR}; cd "$1"; shift; exec bash --norc -i' \
+        #  sh "${PREFIXDIR}"
+        gnome-terminal --wait -- \
+        flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
+        "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${PREFIXDIR}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
          sh "${PREFIXDIR}"
-  
+
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which xfce4-terminal) ]; then
          export WINEPREFIX="${PREFIXDIR}";

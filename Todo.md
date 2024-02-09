@@ -173,6 +173,15 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
   - [] set global 64 bit, different runner
   - [] update all scripts should not mess up 32bit install
 
+- Fix open shell/terminal not using latest winetricks and Runner 
+- [] winetricks open-shell 
+- [] wine path open-shell system
+- [] wine path open-shell script
+- [] wine path open-shell flatpak
+- [x] winetricks open-terminal flatpak
+- [] winetricks open-terminal system
+- [x] wine path open-terminal flatpak
+
 
 - [x] change arch must match with arch template, ask 2 times
 - [x] change template must match with arch, ask 2 times
