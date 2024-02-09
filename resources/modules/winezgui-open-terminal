@@ -60,8 +60,8 @@ winezgui-open-terminal()
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
          export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         cd \"${WINEZGUIDIR}\"; exec bash --norc"
+
 
         #  flatpak-spawn --host xfce4-terminal --disable-server -e \
         #  "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
@@ -81,8 +81,7 @@ winezgui-open-terminal()
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
          export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         cd \"${WINEZGUIDIR}\"; exec bash --norc"
 
       #    flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
       #    "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
@@ -121,8 +120,7 @@ winezgui-open-terminal()
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
          export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         cd \"${WINEZGUIDIR}\"; exec bash --norc" 
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which konsole) ]; then
@@ -138,8 +136,7 @@ winezgui-open-terminal()
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
          export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         cd \"${WINEZGUIDIR}\"; exec bash --norc" 
 
         #  "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
         #  -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
@@ -169,15 +166,14 @@ winezgui-open-terminal()
 
          cd "${WINEZGUIDIR}"
          xfce4-terminal --disable-server -e \
-         bash -c \
-         "export PS1='[\u@\h:\w]\$ '; \
+         "bash -c \
+         \"export PS1='[\u@\h:\w]\$ '; \
          export WINEARCH=${WINEARCH}; \
          export WINEPREFIX=${WINEPREFIX}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
          export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         cd \"${WINEZGUIDIR}\"; exec bash --norc\""
 
         #  "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
 
