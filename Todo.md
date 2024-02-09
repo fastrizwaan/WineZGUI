@@ -138,8 +138,8 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
      About...
      Quit...
 
-0.98.xx abandon
-- [] import wine -> import runner from bottles/lutris using their settings file
+0.98.10 
+- [] import wine -> import runner, arch for playonlinux (most are 32 bit apps/games)
 - [] import dxvk and vkd3d (bottles)
     rizvan@fedora:~/WineZGUI$ cat /var/home/rizvan/.var/app/com.usebottles.bottles/data/bottles/bottles/Bottle_1/bottle.yml |grep -i vkd3d
                          vkd3d: true
@@ -154,16 +154,25 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
       copy following the links to the destination imported directory.
 
 0.98.9
+- TEST
+- [] open terminal test with 
+- [] gnome-terminal flatpak
+- [] gnome-terminal system
+- [] xfce4-terminal flatpak
+- [] xfce4-terminal system
+- [] konsole flatpak
+- [] konsole system
+
 - [] fix issue with template change not applying immediately (without restarting)
     - [] Switching templates will not work properly without restarting the app.
 - [] local Runner path and winever not updated in Info.yml, use separate yml or common Info.yml?
 - [] let prefix use single runner, and update *Info.yml with runner and winever for each prefix on bunble backup
 - [] Templates, Arch, changes not applied
-- [] Winetricks in Template should use winetricks latest
+- [x] Winetricks in Template should use winetricks latest
 - [] Create 32 bit template using wineboot
 - [] Create shortcuts - should be part of script
 - [] winetricks fails use $WINEZGUIDIR/winetricks everywhere if found
-- [] don't show annoying registry backed up message.
+- [x] don't show annoying registry backed up message.
 - [] can't configure template, 
      - [] open shell fails
      - [x] new winetricks not used, now works with path
