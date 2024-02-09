@@ -44,7 +44,7 @@ winezgui-template-change()
   dbug "I: ${HEADER}: Template: ${SELECTED_TEMPLATE}"
   dbug "I: ${HEADER}: Selected Template is ${TEMPLATE_NAME}"
   dbug "I: ${HEADER}: Default = ${DEFAULT}"
-
+  dbug "I: ${HEADER}: Wineprefix = ${WINEPREFIX}"
   
   # Prompt the user to change arch too if it is different from the selected one
   if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
