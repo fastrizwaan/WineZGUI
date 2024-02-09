@@ -94,6 +94,8 @@ winezgui-open-terminal()
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, gnome-terminal running from host"
          echo "44444444444444444444444444444444444"
+         
+         cd "${WINEZGUIDIR}"
          gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
         "export PS1='[\u@\h:\w]\$ '; \
@@ -109,6 +111,8 @@ winezgui-open-terminal()
        [ $(which xfce4-terminal) ]; then
          dbug "I: Open Terminal: Flatpak script, xfce4-terminal running from host"
          echo "55555555555555555555555555555555555"
+
+         cd "${WINEZGUIDIR}"
          xfce4-terminal --disable-server -e \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
         "export PS1='[\u@\h:\w]\$ '; \
@@ -124,6 +128,8 @@ winezgui-open-terminal()
        [ $(which konsole) ]; then
          dbug "I: Open Terminal: Flatpak script, konsole running from host"
          echo "66666666666666666666666666666666666"
+
+         cd "${WINEZGUIDIR}"
          konsole -e \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
         "export PS1='[\u@\h:\w]\$ '; \
@@ -143,6 +149,8 @@ winezgui-open-terminal()
        [ $(which gnome-terminal) ]; then
          dbug "I: Open Terminal: System script, gnome-terminal running from host"
          echo "7777777777777777777777777777777777"
+
+         cd "${WINEZGUIDIR}"
          gnome-terminal --wait -- bash -c \
          "export PS1='[\u@\h:\w]\$ '; \
          export WINEARCH=${WINEARCH}; \
@@ -158,6 +166,8 @@ winezgui-open-terminal()
        [ $(which xfce4-terminal) ]; then
          dbug "I: Open Terminal: System script, xfce4-terminal running from host"
          echo "88888888888888888888888888888888888"
+
+         cd "${WINEZGUIDIR}"
          xfce4-terminal --disable-server -e \
          bash -c \
          "export PS1='[\u@\h:\w]\$ '; \
@@ -175,6 +185,8 @@ winezgui-open-terminal()
        [ $(which konsole) ]; then
          dbug "I: Open Terminal: System script, konsole running from host"
          echo "99999999999999999999999999999999999"
+
+         cd "${WINEZGUIDIR}"
          konsole  -e \
          bash -c \
          "export PS1='[\u@\h:\w]\$ '; \
