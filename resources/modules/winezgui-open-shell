@@ -27,6 +27,8 @@ echo "2222222222222222222222222222222222"
 
   export WINEPREFIX=${DEFAULT}
 
+   RUNNER_PATH=$(dirname ${WINE_CMD})
+   chmod +rx ${WINEZGUIDIR}/winetricks
 
    if   [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
@@ -34,16 +36,14 @@ echo "2222222222222222222222222222222222"
          cd "${TEMPLATE}"
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ ';  \
-          export WINEARCH=${WINEARCH};  \
-          export WINEPREFIX=${WINEPREFIX}; \
-          export WINEZGUIDIR=${WINEZGUIDIR}; \
-          alias wine=${WINE_CMD}; \
-          if [ -f ${WINEZGUIDIR}/winetricks ]; then \
-               alias winetricks=${WINEZGUIDIR}/winetricks \
-          fi; \
-          cd \"$1\"; shift; exec bash --norc -i" \
-          sh "${TEMPLATE}"
+         "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${WINEPREFIX}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${TEMPLATE}"
 
   # if   [ ${INSTALL_TYPE} = "flatpak" ] && \
   #      [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
