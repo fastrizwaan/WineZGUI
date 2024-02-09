@@ -18,12 +18,12 @@ script-change-runner()
 
        grep "Runner:" "${PREFIX_INFOFILE}" || echo "Runner:${RUNNER}" >> "${PREFIX_INFOFILE}"
        sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i "${PREFIX_INFOFILE}"
-       sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i *_Info.yml
+       sed "s|Runner:.*|Runner:${SELECTED_RUNNER}|g" -i $(find "${PREFIXDIR}" -maxdepth 1 -type f -iname "*.yml")
        # Update WINEVER on change of runner inside script    
 
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${INFOFILE}"
        sed "s|Wine:.*|Wine:${WINEVER}|g" -i "${PREFIX_INFOFILE}"
-       sed "s|Wine:.*|Wine:${WINEVER}|g" -i *_Info.yml
+       sed "s|Wine:.*|Wine:${WINEVER}|g" -i $(find "${PREFIXDIR}" -maxdepth 1 -type f -iname "*.yml")
        
        export RUNNER="${SELECTED_RUNNER}"
        export RUNNER_NAME="${SELECTED_RUNNERNAME}"
