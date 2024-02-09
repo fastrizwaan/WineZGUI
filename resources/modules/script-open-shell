@@ -104,8 +104,18 @@ script-open-shell()
        [ $(which gnome-terminal) ]; then
          dbug "I: Script: Open Shell: System script, gnome-terminal running from host"
          export WINEPREFIX="${PREFIXDIR}";
+         cd "${PREFIXDIR}"
          gnome-terminal --wait -- bash -c \
-         "export PS1='[\u@\h:\w]\$ '; cd \"${WINEPREFIX}\"; exec bash -i"
+         "export PS1='[\u@\h:\w]\$ '; \
+         export WINEARCH=${WINEARCH}; \
+         export WINEPREFIX=${PREFIXDIR}; \
+         export WINEZGUIDIR=${WINEZGUIDIR}; \
+         export TEMPLATE=${TEMPLATE};\
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd \"$1\"; shift; exec bash --norc -i" \
+         sh "${PREFIXDIR}"
+
+         #"export PS1='[\u@\h:\w]\$ '; cd \"${WINEPREFIX}\"; exec bash -i"
          # gnome terminal is not found
 
   elif [ ${INSTALL_TYPE} = "system" ] && \
