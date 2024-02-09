@@ -251,6 +251,13 @@ winezgui-restore-wzt()
   export PREFIXNAME="${WZT_PREFIX}"
   dbug "I: ${HEADER}: Processing files inside ${WZT_PREFIX} for use!"
   
+  # Restore should get Wine version from wzt-info.yml (to keep backward compatibility)
+  # Fixes runner and wineversion error on restore
+  RESTORE_WINEVER=$(grep -i "Wine:" "${PREFIXES_DIR}/${WZT_PREFIX}/wzt-info.yml"|cut -f2 -d ":")
+  if [ ! -z "${RESTORE_WINEVER}" ]; then
+       sed "s|XOWINEVERXO|${RESTORE_WINEVER}|g" -i  $(find "${PREFIXES_DIR}/${WZT_PREFIX}" -maxdepth 1 -type f)
+  fi
+  
   SOURCE "winezgui-identity-restore"
   winezgui-identity-restore "${PREFIXES_DIR}/${WZT_PREFIX}"
  
