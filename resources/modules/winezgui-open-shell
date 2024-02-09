@@ -34,8 +34,16 @@ echo "2222222222222222222222222222222222"
          cd "${TEMPLATE}"
          flatpak-spawn --host gnome-terminal --wait -- \
          flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-         "export PS1='[\u@\h:\w]\$ ';  cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${TEMPLATE}"
+         "export PS1='[\u@\h:\w]\$ ';  \
+          export WINEARCH=${WINEARCH}  \
+          export WINEPREFIX=${WINEPREFIX}; \
+          export WINEZGUIDIR=${WINEZGUIDIR}; \
+          alias wine=${WINE_CMD};
+          if [ -f ${WINEZGUIDIR}/winetricks ]; then \
+               alias winetricks=${WINEZGUIDIR}/winetricks \
+          fi;
+          cd \"$1\"; shift; exec bash --norc -i" \
+          sh "${TEMPLATE}"
 
   # if   [ ${INSTALL_TYPE} = "flatpak" ] && \
   #      [ $(flatpak-spawn --host which gnome-terminal 2>/dev/null) ]; then
