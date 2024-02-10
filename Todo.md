@@ -156,7 +156,11 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] Create shortcuts - should be part of script
 - [] Recreate Prefix (Use Global Runner and WineArch)
 
+1.00
+- [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
+
 0.99.1
+- [x] show prefix name on backup dialog
 - [x] winezgui-backup did not load script backup, now works
 - [x] Remove sleep wait from script-launch and script-backup-bundle using winezgui-quit (when user exits, clean up the files)
      sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle")
