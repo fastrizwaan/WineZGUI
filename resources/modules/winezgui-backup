@@ -10,8 +10,14 @@ winezgui-backup()
   winezgui-list-available-prefixes
 
   # Launch Backup from the selected prefix script
-  SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
-  ${SELECTED_PREFIX}/${SCRIPT_NAME}.sh backup
+  #SCRIPT_NAME=$(basename ${SELECTED_PREFIX})
+
+  # Find 1 script file to backup
+  FOUND_FILE=$(find "${SELECTED_PREFIX}" -type f -name "*.sh" | sort -nr | head -n 1)
+  # Get realpath
+  SCRIPT_NAME=$(realpath ${FOUND_FILE})
+  # Launch Script with backup option
+  "${SCRIPT_NAME}" backup
 
   dbug "I: ${HEADER}: finished"
 }
