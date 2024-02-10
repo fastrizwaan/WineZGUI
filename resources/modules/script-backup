@@ -46,7 +46,7 @@ check-all-variables "APPNAME APPVERSION HEADER FLATPAK_NAME SHORT_FLATPAK_NAME D
                      --list   --hide-header              \
                      --width=360 --height=30             \
                      --radiolist --column " "            \
-                     --column   "Backup..."              \
+                     --column  "Backup... ${PREFIXNAME}" \
                            TRUE "Prefix Backup..."       \
                            0    "Create Game Bundle..."  \
                      --text     "<b>Backup...</b>"       )
