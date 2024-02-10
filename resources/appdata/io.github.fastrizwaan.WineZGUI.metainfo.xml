@@ -42,7 +42,7 @@
   <releases>
     <release date="2024-02-10" version="0.99.2">
       <description>
-        <p>bug fixes: open shell.</p>
+        <p>bug fixes: open shell, open-terminal fix.</p>
       </description>
     </release>
     <release date="2024-02-10" version="0.99.1">

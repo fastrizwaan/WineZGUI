@@ -161,6 +161,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 0.99.2
 - [x] open-shell not working, fixed
+- [x] xfce4-terminal flatpak/system
+- [x] gnome-terminal flatpak/system
+- [x] konsole        flatpak/system
 
 0.99.1
 - [x] show prefix name on backup dialog
