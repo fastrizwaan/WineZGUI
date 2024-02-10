@@ -44,7 +44,7 @@ winezgui-open-shell()
          export TEMPLATE=${TEMPLATE};\
          export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
          cd \"$1\"; shift; exec bash --norc -i" \
-         sh "${WINEZGUIDIR}"
+         sh "${TEMPLATE}"
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(flatpak-spawn --host which xfce4-terminal 2>/dev/null) ]; then
@@ -53,14 +53,15 @@ winezgui-open-shell()
 
          cd "${TEMPLATE}"
          flatpak-spawn --host xfce4-terminal --disable-server -e \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-        "export PS1='[\u@\h:\w]\$ '; \
+         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; \
+         export WINEPREFIX=${WINEZGUIDIR}; \
          export WINEARCH=${WINEARCH}; \
-         export WINEPREFIX=${WINEPREFIX}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
-         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"${TEMPLATE}\"; exec bash --norc"
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd ${TEMPLATE}; \
+         exec bash --norc\""
 
 
         #  flatpak-spawn --host xfce4-terminal --disable-server -e \
@@ -111,16 +112,16 @@ winezgui-open-shell()
          dbug "I: Open Terminal: Flatpak script, xfce4-terminal running from host"
          echo "55555555555555555555555555555555555"
 
-         cd "${TEMPLATE}"
-         xfce4-terminal --disable-server -e \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-        "export PS1='[\u@\h:\w]\$ '; \
-         export WINEARCH=${WINEARCH}; \
+          cd "${TEMPLATE}"
+         xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; \
          export WINEPREFIX=${WINEPREFIX}; \
+         export WINEARCH=${WINEARCH}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
-         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"${TEMPLATE}\"; exec bash --norc" 
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd ${TEMPLATE}; \
+         exec bash --norc\""
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which konsole) ]; then

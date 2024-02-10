@@ -53,14 +53,15 @@ winezgui-open-terminal()
 
          cd "${WINEZGUIDIR}"
          flatpak-spawn --host xfce4-terminal --disable-server -e \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-        "export PS1='[\u@\h:\w]\$ '; \
+         "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; \
+         export WINEPREFIX=${WINEZGUIDIR}; \
          export WINEARCH=${WINEARCH}; \
-         export WINEPREFIX=${WINEPREFIX}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
-         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"${WINEZGUIDIR}\"; exec bash --norc"
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd ${WINEZGUIDIR}; \
+         exec bash --norc\""
 
 
         #  flatpak-spawn --host xfce4-terminal --disable-server -e \
@@ -112,15 +113,15 @@ winezgui-open-terminal()
          echo "55555555555555555555555555555555555"
 
          cd "${WINEZGUIDIR}"
-         xfce4-terminal --disable-server -e \
-         flatpak --command=bash run "${FLATPAK_NAME}" --norc -c \
-        "export PS1='[\u@\h:\w]\$ '; \
-         export WINEARCH=${WINEARCH}; \
+         xfce4-terminal --disable-server -e "flatpak run --command=bash "${FLATPAK_NAME}" --norc \
+         -c \"export PS1='[\u@\h:\w]\$ '; \
          export WINEPREFIX=${WINEPREFIX}; \
+         export WINEARCH=${WINEARCH}; \
          export WINEZGUIDIR=${WINEZGUIDIR}; \
          export TEMPLATE=${TEMPLATE};\
-         export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH}; \
-         cd \"${WINEZGUIDIR}\"; exec bash --norc" 
+         export PATH=${WINEZGUIDIR}:${RUNNER_PATH}:${PATH}; \
+         cd ${WINEZGUIDIR}; \
+         exec bash --norc\""
 
   elif [ ${INSTALL_TYPE} = "flatpak" ] && \
        [ $(which konsole) ]; then
