@@ -61,7 +61,6 @@ winezgui-settings-wine-arch()
  
   sed "s|Wine Arch:.*|Wine Arch:${WINEARCH}|g" -i "${ABOUTFILE}"
   
-  for prompt_user in one two; do
   if [ "${CURRENT_ARCH}" != "${WINEARCH}" ]; then
           ${ZENITY_CMD} --question --title "${APP_WITH_VER} - Wine Arch Changed!"\
               --text "Change Prefix Template to ${WINEARCH}?"
@@ -82,6 +81,6 @@ winezgui-settings-wine-arch()
           fi
   
   fi
-  done
+
   return 0
 }

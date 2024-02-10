@@ -47,7 +47,6 @@ winezgui-template-change()
   dbug "I: ${HEADER}: Wineprefix = ${WINEPREFIX}"
   
   # Prompt the user to change arch too if it is different from the selected one
-  for prompt_user in one two; do
   if [ "${REG_ARCH}" != "${WINEARCH}" ]; then
        unset TEXT
        TEXT+="Template <b>${TEMPLATE_NAME}</b> is <b>${REG_ARCH}</b>, "
@@ -71,6 +70,5 @@ winezgui-template-change()
             --title "${APP_WITH_VER} - ${TEMPLATE_NAME} needs ${REG_ARCH}!"
        fi
   fi
-  done
   unset TEXT
 }
