@@ -159,6 +159,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 
+0.99.2
+- [x] open-shell not working, fixed
+
 0.99.1
 - [x] show prefix name on backup dialog
 - [x] winezgui-backup did not load script backup, now works
