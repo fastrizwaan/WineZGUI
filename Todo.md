@@ -153,9 +153,17 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
       find ~/Games -type l
       copy following the links to the destination imported directory.
 
-0.99.0
 - [] Create shortcuts - should be part of script
 - [] Recreate Prefix (Use Global Runner and WineArch)
+
+0.99.1
+- [x] winezgui-backup did not load script backup, now works
+- [x] Remove sleep wait from script-launch and script-backup-bundle using winezgui-quit (when user exits, clean up the files)
+     sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle")
+
+0.99.0
+- [x] update all *_Info.yml on script-change-runner
+- [x] remove sleep wait
 
 0.98.9
 - TEST

@@ -119,7 +119,9 @@ WineZGUI_Window() # Main WineZGUI application window function
   
   if    [ -z "${SELECTION}" ]; then # Exit if Cancel is clicked
           echo "I: ${HEADER}: Cancel Selected. Bye!"
-          exit 0
+          SOURCE "winezgui-quit"
+          winezgui-quit
+          #exit 0
   fi         
  
   dbug "I: ${HEADER}: ${SELECTION} Selected!" # Show What is selected
