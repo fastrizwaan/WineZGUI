@@ -8,7 +8,7 @@ winezgui-quit()
 
   # Will delete in 0.100
   # Remove sleep 5s and sleep 10s; from script-launch and script-backup-bundle
-  sed "s|  .*sleep .*s.*$||g" -i $(find " ${PREFIXES_DIR}" -iname "script-launch" -o -iname "script-backup-bundle")
+  sed "s|  .*sleep .*s.*$||g" -i $(find "${PREFIXES_DIR}" -iname "script-launch" -o -iname "script-backup-bundle")
   
 
   echo "I: winezgui-quit(): Bye! :-)"
