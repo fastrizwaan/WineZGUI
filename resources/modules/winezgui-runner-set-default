@@ -49,12 +49,12 @@ winezgui-runner-set-default()
   "
 
   # Kill wineserver, so that winetricks with new runner can work
-  wineserver -k
+  wineserver -k && dbug "I: killed wineserver"
   
   # Reinitialize the prefix with new runner
   SOURCE "winezgui-initialize-wineprefix"
   winezgui-initialize-wineprefix "${TEMPLATE}"
-  
+
   TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
             ${ZENITY_CMD} --no-wrap --info --text="${TEXT}" \
             --title "${APP_WITH_VER} - Default Runner"

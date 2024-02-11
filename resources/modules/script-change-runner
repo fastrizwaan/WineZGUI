@@ -42,7 +42,7 @@ script-change-runner()
   dbug "I: ${HEADER}: Selected Runner is ${RUNNER_NAME}"
 
   # Kill wineserver, so that winetricks with new runner can work
-  wineserver -k
+  wineserver -k && dbug "I: ${HEADER}: killed wineserver"
   
   TEXT="Changed runner to ${SELECTED_RUNNERDIR_NAME}!\n${SELECTED_RUNNER}"
             ${ZENITY_CMD} --info --text="${TEXT}" \
