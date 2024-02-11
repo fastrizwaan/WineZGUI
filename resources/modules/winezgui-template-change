@@ -8,6 +8,15 @@ winezgui-template-change()
   SOURCE "winezgui-list-available-templates"
   winezgui-list-available-templates # get SELECTED_TEMPLATE 
   
+  # If Default (WINEZGUI_TEMPLATE) is not found initialize it
+  # if system.reg not found or template does not exist, creat it.
+  if [ ! -d "${SELECTED_TEMPLATE}" ] || [ ! -f "${SELECTED_TEMPLATE}/system.reg" ]; then
+       dbug  "I: ${HEADER}: ${SELECTED_TEMPLATE} does not exist, creating..."
+       mkdir -p "${SELECTED_TEMPLATE}"
+       SOURCE "winezgui-initialize-wineprefix"
+       winezgui-initialize-wineprefix "${SELECTED_TEMPLATE}"
+  fi
+  
   # Get Arch from Registry files
   SYSTEM_REGISTRY_FILE="${SELECTED_TEMPLATE}/system.reg"
   if [ -f "${SYSTEM_REGISTRY_FILE}" ]; then

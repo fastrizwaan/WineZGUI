@@ -40,6 +40,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-02-10" version="0.99.3">
+      <description>
+        <p>bug fixes: change template system.reg not found, use runner's wineboot</p>
+      </description>
+    </release>
     <release date="2024-02-10" version="0.99.2">
       <description>
         <p>bug fixes: open shell, open-terminal fix.</p>

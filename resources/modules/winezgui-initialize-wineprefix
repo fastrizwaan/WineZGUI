@@ -9,7 +9,7 @@ winezgui-initialize-wineprefix()
 
  
   echo "I: ${HEADER}: WINEARCH=$WINEARCH"
-  if [ ! -f "${1}/Prefix_Initialized.txt" ] && [ $(which wine) ]; then
+  if [ ! -f "${1}/Prefix_Initialized.txt" ] || [ ! -f "${1}/system.reg" ]; then
        dbug "I: ${HEADER}: $(basename ${1}), winearch: ${WINEARCH}"
        # Create Prefix then delete host linked directories
        #WINEDLLOVERRIDES="mscoree,mshtml=" \

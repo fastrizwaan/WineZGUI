@@ -31,7 +31,7 @@ export RUNNERS_DIR="${WINEZGUIDIR}/Runners"        # Wine runners Directory
 # Commands used by WineZGUI and Scripts
 export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons 2>/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
-export WBOOT_CMD="$(which wineboot) -i"
+export WBOOT_CMD="$(which wineboot) -i" # will be overridden by winezgui-set-wine_cmd-runner-commands()
 export ICOTOOL_CMD="$(which icotool)"
 export WRESTOOL_CMD="$(which wrestool)"
 export ZENITY_CMD="$(which zenity)"

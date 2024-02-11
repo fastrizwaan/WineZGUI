@@ -159,6 +159,11 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 
+0.99.3
+- [x] Use Runner's wineboot instead of system's wineboot to update/initialize prefix and template
+- [x] If system.reg not found in Template update it using ${WINE_CMD} wineboot -u
+- [x] Fix system.reg not found after changing template.
+
 0.99.2
 - [x] open-shell not working, fixed
 - [x] xfce4-terminal flatpak/system
