@@ -12,6 +12,17 @@ winezgui-winetricks-cli()
        winezgui-download-winetricks
   fi  
 
+  # Create Temp dir
+  if [ ! -d "${TEMPLATE}/drive_c/users/${USER}/Temp" ]; then
+      mkdir -p "${TEMPLATE}/drive_c/users/${USER}/Temp"
+  fi
+
+  # Create tmp directory for wget and winetricks
+  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
+       mkdir -p "${WINEZGUIDIR}/tmp"
+  fi
+
+
   VERB_LIST="mfc42 xact xact_x64 gmdls \
             vcrun2003 vcrun2005        \
             vcrun2008 vcrun2010        \

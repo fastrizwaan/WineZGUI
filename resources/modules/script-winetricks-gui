@@ -13,6 +13,16 @@ script-winetricks-gui()
        SOURCE "winezgui-download-winetricks"
        winezgui-download-winetricks
   fi  
+
+  # Create Temp dir
+  if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
+      mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+  fi
+
+  # Create tmp directory for wget and winetricks
+  if [ ! -d "${WINEZGUIDIR}/tmp" ]; then
+       mkdir -p "${WINEZGUIDIR}/tmp"
+  fi
   
   # Check if winetricks is available at ${WINEZGUIDIR}
   if [ -f "${WINEZGUIDIR}/winetricks" ]; then
@@ -34,7 +44,7 @@ script-winetricks-gui()
   #--text="If winetricks messes up the prefix, restore registry files:\ncd ${PREFIXDIR};\ntar -xvf registry_backup_${DATE}.tar.gz"
   
   # set runner and winezguidir path for wine and winetricks
-  RUNNER_PATH=$(dirname ${WINE_CMD})
+  RUNNER_PATH=$(dirname ${RUNNER})
   chmod +rx ${WINEZGUIDIR}/winetricks
   export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
   

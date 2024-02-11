@@ -95,7 +95,7 @@ script-winetricks-cli()
   dbug "I: Script: ${FUNCNAME[0]}: WTRICKS_CMD=$WTRICKS_CMD - in use!"
 
   # set runner and winezguidir path for wine and winetricks
-  RUNNER_PATH=$(dirname ${WINE_CMD})
+  RUNNER_PATH=$(dirname ${RUNNER})
   chmod +rx ${WINEZGUIDIR}/winetricks
   export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
   

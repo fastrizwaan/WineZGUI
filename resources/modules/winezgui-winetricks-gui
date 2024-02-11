@@ -7,9 +7,15 @@ winezgui-winetricks-gui()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
   
+  # Ask user if he'd like to download latest winetricks, everytime
+  if [ ! -f "${WINEZGUIDIR}/winetricks" ]; then
+       SOURCE "winezgui-download-winetricks"
+       winezgui-download-winetricks
+  fi  
+
   # Create Temp dir
-  if [ ! -d "${PREFIXDIR}/drive_c/users/${USER}/Temp" ]; then
-      mkdir -p "${PREFIXDIR}/drive_c/users/${USER}/Temp"
+  if [ ! -d "${TEMPLATE}/drive_c/users/${USER}/Temp" ]; then
+      mkdir -p "${TEMPLATE}/drive_c/users/${USER}/Temp"
   fi
 
   # Create tmp directory for wget and winetricks
@@ -18,7 +24,7 @@ winezgui-winetricks-gui()
   fi
   
   # set runner and winezguidir path for wine and winetricks
-  RUNNER_PATH=$(dirname ${WINE_CMD})
+  RUNNER_PATH=$(dirname ${RUNNER})
   chmod +rx ${WINEZGUIDIR}/winetricks
   export PATH=${RUNNER_PATH}:${WINEZGUIDIR}:${PATH};
 
