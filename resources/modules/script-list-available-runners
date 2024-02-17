@@ -1,0 +1,271 @@
+# winezgui-list-available-runners
+# Finds exe installed in drive_c by an installer
+# and set the variable SELECTED_RUNNERDIR
+# FIXME  winezgui-list-available-runners
+script-list-available-runners()
+{
+  OLD_HEADER=${HEADER}
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+  unset SELECTED_RUNNER SELECTED_RUNNERDIR RUNNERS_FOUND COMMAND count SHOW_OPTION
+  unset NAMES FILES RESULT SEARCH_LIST RealFile RealName i
+  
+  # Also search runner inside prefixdir of the script
+  export LOCAL_RUNNER="${PREFIXDIR}/Runner"
+
+  echo "RUNNERS_DIR =$RUNNERS_DIR"
+  echo "========================================="
+  count=0
+  NAMES=()
+  FILES=()
+  
+  SAVEIFS=${IFS}
+  IFS=$(echo -en "\n\b")
+  SEARCH_LIST=$(find ${RUNNERS_DIR}/* ${LOCAL_RUNNER}/* -maxdepth 0 -type d -print 2>/dev/null \
+              | tr '\n' '|')
+  RUNNERS_FOUND=$(echo ${SEARCH_LIST})
+
+# Allowing continuing so that system runner is added to the list
+#   if [ -z "${RUNNERS_FOUND}" ] ; then
+#        ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+#               --text "Sorry, no runners found in Runners directory"
+#               echo SELECTED_RUNNERDIR
+#        unset SEARCH_LIST RUNNERS_FOUND
+#        IFS=${SAVEIFS}
+#        return 1
+#   fi
+# /Allowing continuing so that system runner is added to the list
+
+# If not runners are found, suggest system wine as runner
+#if [ -z "${RUNNERS_FOUND}" ] ; then
+
+# Add System wine to the list irrespective of found or not found
+echo "1==> SEARCH_LIST=$SEARCH_LIST"
+    SEARCH_LIST="${SYSTEM_WINE}|${SEARCH_LIST}"
+#fi
+echo "2==> SEARCH_LIST=$SEARCH_LIST"
+#   # Set system wine variable using if then else, if flatpak install but script is running
+#   if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+#       [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+#         SYSTEM_WINE="flatpak run --command=${RUNNER} ${FLATPAK_NAME}"
+#   else 
+#       # flatpak install and running from shell inside flatpak winezgui
+#       if [ "${INSTALL_TYPE}" = "flatpak" ]; then 
+#           export SYSTEM_WINE=${RUNNER}
+#       else
+#           # We are using non flatpak install
+#           dbug "I: Script: Install type: System, Running from host!"
+#           export SYSTEM_WINE=${RUNNER}
+#       fi
+#   fi
+
+  # if RUNNERS_FOUND has value, then only change exe
+  for i in $(echo ${SEARCH_LIST}|tr '|' '\n'|sort -u)
+  do
+      RealFile=$(realpath -m "$i")
+      # if Realfile is /app/bin/wine or /usr/bin/wine set name
+      if [ "$RealFile" = "${SYSTEM_WINE}" ]; then
+           RealName="System Default"
+      else
+           RealName=$(basename    "$i")
+      fi
+
+     # Not setting any runner by default
+     #  # If 1st value is empty, enable it and set system default
+     #  if [ -z "${SHOW_OPTION}" ]; then
+     #       SHOW_OPTION+="TRUE \"System Default\""
+     #       SHOW_OPTION+=" "
+     #       # Setting 1st option as default wine
+     #       NAMES+=("System Default")
+     #       FILES+=("${SYSTEM_WINE}")
+     #       count=$(expr ${count} + 1)
+     #  fi
+      # Add found directories to show options
+      SHOW_OPTION+="0 \"${RealName}\""
+      SHOW_OPTION+=" "
+      NAMES+=("${RealName}")
+      FILES+=("${RealFile}")
+      
+      count=$(expr ${count} + 1)
+  done
+  IFS=${SAVEIFS}
+  
+  # Generate Height value
+  SOURCE "winezgui-get-window-height"
+  winezgui-get-window-height ${#FILES[@]}
+
+ # 3. Show the found exe files using zenity
+  unset COMMAND
+  COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER}\" "
+  COMMAND+="--text \"${RUNNER_TYPE} Runners\" "
+  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
+  RESULT=$(eval ${COMMAND})
+  
+  ANSWER=$?
+ 
+  if [ ${ANSWER} -eq 1 ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       return 1
+  fi
+  
+  if [ -z "${RESULT}" ]; then
+       dbug "I: ${HEADER} Cancelled!"
+       unset SEARCH_LIST RUNNERS_FOUND SHOW_OPTION
+       unset NAMES FILES COMMAND RESULT count i
+       return 1
+  fi
+  echo "0. RESULT = $RESULT"
+  echo "1. NAMES[@]} = ${NAMES[@]}"
+  echo "2. FILES[@]} = ${FILES[@]}"
+  count=0
+  # 4. Find which RUNNER DIRECOTRY the user has selected and set the selected runner dir, name, bin/wine into variable
+  for i in "${NAMES[@]}"; do
+      if [ "$i" = "${RESULT}" ]; then
+           dbug "I: ${HEADER}: Selected ${i}"
+           dbug "I: ${HEADER}: Selected ${FILES[${count}]}"
+           export SELECTED_RUNNERDIR="${FILES[${count}]}"
+           export SELECTED_RUNNERDIR_NAME="${i}"
+           echo "3. Selected RUNNER = $SELECTED_RUNNERDIR"
+           echo "3. SELECTED_RUNNERDIR_NAME=$SELECTED_RUNNERDIR_NAME"
+           break
+      fi
+      count=$(expr ${count} + 1)
+  done
+
+  # Since we are trying to find runner and runner name (using directory)
+  # proton, etc runners have <RUNNER NAME>/bin/wine (bin/wine) 
+  # proton-ge by bottles have <RUNNER NAME>/files/bin/wine (files/bin/wine)
+
+  # If the wine is found inside the runnder directory then it is a valid runner
+  if   [ -f "${SELECTED_RUNNERDIR}/bin/wine" ]; then
+         export SELECTED_RUNNER="${SELECTED_RUNNERDIR}/bin/wine"
+         echo "1. SELECTED_RUNNER=${SELECTED_RUNNERDIR}/bin/wine"
+  elif [ -f "${SELECTED_RUNNERDIR}/files/bin/wine" ]; then
+         export SELECTED_RUNNER="${SELECTED_RUNNERDIR}/files/bin/wine"
+         echo "2. SELECTED_RUNNER=${SELECTED_RUNNERDIR}/files/bin/wine"
+  else #use selected runner /app/bin (1st option) which does not have bin/ subdir
+         export SELECTED_RUNNER="${SELECTED_RUNNERDIR}"
+         echo "3. SELECTED_RUNNER=${SELECTED_RUNNERDIR}"
+  fi
+  
+
+  export SELECTED_RUNNERNAME="${SELECTED_RUNNERDIR_NAME}"
+  echo "SELECTED_RUNNER=$SELECTED_RUNNER"
+  echo " x-x-x-x-x-x-x-x-x-x-x-x-x-xx-x-x-x-x-x-x-xx-x-x-x-x-x-x-x-x-x-x-x-x-x-x-"
+  echo "SELECTED_RUNNERDIR=$SELECTED_RUNNERDIR"
+  echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERDIR_NAME}"
+  echo "SELECTED_RUNNERNAME=${SELECTED_RUNNERNAME}"
+  echo "SELECTED_RUNNER=${SELECTED_RUNNER}"
+
+  #export RUNNER=${SELECTED_RUNNER}
+
+# Do a runner test and if runner works, then set WINEVER_TEST variable
+      # If ${FLATPAK_NAME} is installed, and script created using flatpak
+ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       WINEVER_TEST="$(flatpak run --command=${SELECTED_RUNNER} ${FLATPAK_NAME} --version)"
+       echo "1. WINEVER_TEST=$(flatpak run --command=${SELECTED_RUNNER} ${FLATPAK_NAME} --version)"
+ else
+     # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
+           WINEVER_TEST="$(${SELECTED_RUNNER} --version)"
+           echo "2. WINEVER_TEST=$(${SELECTED_RUNNER} --version)"
+      else
+           # We are using non flatpak install
+           dbug "I: Script: Install type: System, Running from host!"
+           WINEVER_TEST="$(${SELECTED_RUNNER} --version)"
+           echo "3. WINEVER_TEST=$(${SELECTED_RUNNER} --version)"
+      fi
+fi
+
+#if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
+  if [ -z "${WINEVER_TEST}" ] ; then 
+       ${ZENITY_CMD} --error --title "${APP_WITH_VER} - Runner not working!" \
+       --text "The <b>${SELECTED_RUNNER}</b> is not compatible!"
+       dbug "Bad Runner or not a wine file"
+       return 1
+  fi
+
+ # If ${FLATPAK_NAME} is installed, and script created using flatpak
+ if  [ ${INSTALL_TYPE} = "flatpak" ] && \
+     [ $(flatpak --command=echo run ${FLATPAK_NAME} 0 2>/dev/null) ]; then
+       dbug "I: Script: Install type: Flatpak, Running from host!"
+       WINE_CMD="flatpak run --command=${SELECTED_RUNNER} ${FLATPAK_NAME}"
+       WTRICKS_CMD="flatpak run --command=winetricks ${FLATPAK_NAME}"
+       WINECFG_CMD="flatpak run --command=${SELECTED_RUNNER} ${FLATPAK_NAME} winecfg"
+       WEXPLORER_CMD="flatpak run --command=${SELECTED_RUNNER} ${FLATPAK_NAME} explorer"
+       WBOOT_CMD="${WINE_CMD} wineboot -i"
+       # wine winetricks icotool exiftool zenity gnome-terminal zstd"
+       ICOTOOL_CMD="flatpak run --command=icotool ${FLATPAK_NAME}"
+       WRESTOOL_CMD="flatpak run --command=wrestool ${FLATPAK_NAME}"
+       ZENITY_CMD="flatpak run --command=zenity ${FLATPAK_NAME}"
+       EXIFTOOL_CMD="flatpak run --command=exiftool ${FLATPAK_NAME}"
+       ZSTD_CMD="flatpak run --command=zstd ${FLATPAK_NAME}"
+       TAR_CMD="flatpak run --command=tar ${FLATPAK_NAME}"
+       WGET_CMD="flatpak run --command=wget ${FLATPAK_NAME}"
+       WINEVER="$(${WINE_CMD} --version)"
+       WINETRICKS="${WTRICKS_CMD}"
+       export WINE_CMD WTRICKS_CMD WINECFG_CMD WEXPLORER_CMD WBOOT_CMD WINEVER WINETRICKS
+       export ICOTOOL_CMD ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD WRESTOOL_CMD
+ 
+ else
+      # flatpak install and running from shell inside flatpak winezgui
+      if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+           dbug "I: Script: Install type: Flatpak, Running from flatpak!"
+           export WINE_CMD=${SELECTED_RUNNER}
+           export WTRICKS_CMD="$(which winetricks)"
+           export WINECFG_CMD="${WINE_CMD} winecfg"
+           export WEXPLORER_CMD="${WINE_CMD} explorer"
+           export WBOOT_CMD="${WINE_CMD} wineboot -i"
+           export ICOTOOL_CMD="$(which icotool)"
+           export WRESTOOL_CMD="$(which wrestool)"
+           export ZENITY_CMD="$(which zenity)"
+           export EXIFTOOL_CMD="$(which exiftool)"
+           export ZSTD_CMD="$(which zstd)"
+           export TAR_CMD="$(which tar)"
+           export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
+           
+      else
+           # We are using non flatpak install
+           dbug "I: Script: Install type: System, Running from host!"
+           export WINE_CMD=${SELECTED_RUNNER}
+           export WTRICKS_CMD="$(which winetricks)"
+           export WINECFG_CMD="${WINE_CMD} winecfg"
+           export WEXPLORER_CMD="${WINE_CMD} explorer"
+           export WBOOT_CMD="${WINE_CMD} wineboot -i"
+           export ICOTOOL_CMD="$(which icotool)"
+           export WRESTOOL_CMD="$(which wrestool)"
+           export ZENITY_CMD="$(which zenity)"
+           export EXIFTOOL_CMD="$(which exiftool)"
+           export ZSTD_CMD="$(which zstd)"
+           export TAR_CMD="$(which tar)"
+           export WGET_CMD="$(which wget)"
+           export WINEVER="$(${WINE_CMD} --version)"
+           export WINETRICKS="${WTRICKS_CMD}"
+      fi
+ fi
+ 
+  # Validate working runner by getting wine --version with the selected runner
+  echo "WINEVER=$WINEVER"
+ 
+  # if runner is not found (/bin/wine) or fails due to compatiblity issues, tell user not a working runner
+  if [ -z "${WINEVER}" ] ; then
+       ${ZENITY_CMD} --error --title "${PROGNAME} - no runners found!" \
+       --text "Could not find <b>${SELECTED_RUNNERDIR}/bin/wine</b>\nor it is not compatible!"
+       dbug "Bad Runner or not a wine file"
+       return 1
+  fi
+
+  export SELECTED_RUNNER
+  HEADER=${OLD_HEADER}
+}
