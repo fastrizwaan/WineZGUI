@@ -40,9 +40,9 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
-    <release date="2024-02-11" version="0.99.4">
+    <release date="2024-02-11" version="0.99.5">
       <description>
-        <p>bug fixes: runner path, create Temp dir for winetricks, wget.</p>
+        <p>Show bundled runner inside prefix at PREFIXDIR/Runner, for change->runner option </p>
       </description>
     </release>
     <release date="2024-02-10" version="0.99.3">
