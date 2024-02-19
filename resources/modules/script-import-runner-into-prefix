@@ -1,0 +1,29 @@
+#script-import-runner-into-prefix
+script-import-runner-into-prefix()
+{
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  # 1: if runner is already inside prefixdir return
+  if [[ "${RUNNER}" == *"${PREFIXDIR}"* ]] ; then
+        dbug "I: Script: ${FUNCNAME[0]}: Runner already inside Prefix!"
+        ${ZENITY_CMD} --error --title="Import Runner" --text="Runner already inside Prefix!"
+        return 1
+  fi
+ 
+  # 2: Check if the target directory is writable or not?s
+  if [ ! -w "${PREFIXDIR}" ]; then
+      echo "E: Script: ${FUNCNAME[0]}: ${PREFIXDIR} not writable"
+      ${ZENITY_CMD} --error --no-wrap --title="Error!" \
+            --text "${PREFIXDIR} is not writable\nAborting import runner into prefix!"
+      return 1
+  fi
+
+  # if the runner is inside WINEZGUIDIR/RUNNERS
+  if [[ "${RUNNER}" == *"${RUNNERS_DIR}"* ]]; then
+        PREFIX_RUNNER="${PREFIXDIR}/Runner"
+        mkdir -p "${PREFIX_RUNNER}" && dbug "---- Created ${PREFIX_RUNNER}"
+        cp -rfp  "${RUNNERS_DIR}/${RUNNER_NAME}" "${PREFIX_RUNNER}" && dbug "copied runner" && \
+        sed "s|${RUNNERS_DIR}|${PREFIX_RUNNER}|g" -i "${INFOFILE}"
+  fi
+  ${ZENITY_CMD} --info --title="Import Runner" --text="Runner imported inside Prefix!"
+}

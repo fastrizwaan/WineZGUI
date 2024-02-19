@@ -159,10 +159,20 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 
-0.99.4
-- [] Detect if Runner dir exist in PREFIXDIR in script-change-runner
-- [] Update Runner in Runner dir into Runner list with - bundled suffix
+0.99.6
+- [] Import runner from prefixdir (search prefixdirs/Runner)
+- [] winezgui-import-runner, use search of $PREFIXES_DIR for Runners
+- [] Import runner to prefixdir
+- [] use script-import-gamedir-into-prefix
 
+0.99.5
+- [x] Detect if Runner dir exist in PREFIXDIR in script-change-runner
+- [x] need separate script-list-available-runner for script-change runner
+- [x] Update Runner in Runner dir into Runner list with - bundled suffix
+
+
+0.99.4
+- [x] bug fixes: runner path, create Temp dir for winetricks, wget.
 
 0.99.3
 - [x] Use Runner's wineboot instead of system's wineboot to update/initialize prefix and template
