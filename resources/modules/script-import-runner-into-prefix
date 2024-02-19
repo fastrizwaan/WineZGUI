@@ -10,6 +10,19 @@ script-import-runner-into-prefix()
         return 1
   fi
  
+  # Ask whether to import or not
+  unset TEXT TITLE
+  TEXT+="This will copy the ${RUNNER_NAME} in use to local ${PREFIXNAME}...\\n"
+  TEXT+="Copy runner to prefix\?"
+  TITLE+="${EXE_NAME} ${APP_WITH_VER} - Import Runner to Prefix!"
+  ${ZENITY_CMD} --question --title "${TITLE}" --text "$TEXT"
+  
+  ANSWER=$?
+  if [ ${ANSWER} -eq 1 ] ; then
+       dbug "I: Script: ${FUNCNAME[0]}: Cancelled Runner import inside Prefix!"
+       return 1
+  fi
+  
   # 2: Check if the target directory is writable or not?s
   if [ ! -w "${PREFIXDIR}" ]; then
       echo "E: Script: ${FUNCNAME[0]}: ${PREFIXDIR} not writable"
