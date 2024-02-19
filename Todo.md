@@ -159,11 +159,18 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 
+
+0.99.7
+- [] try to import system runner 
+  cp   /var/lib/flatpak/app/org.winehq.Wine/x86_64/stable-23.08/active/files ~/wine-8.0-flathub
+- [] do not copy system runner if not possible.
+
 0.99.6
-- [] Import runner from prefixdir (search prefixdirs/Runner)
-- [] winezgui-import-runner, use search of $PREFIXES_DIR for Runners
-- [] Import runner to prefixdir
-- [] use script-import-gamedir-into-prefix
+- [x] Import runner from prefixdir (search prefixdirs/Runner)
+- [x] winezgui-import-runner, use search of $PREFIXES_DIR for Runners
+- [x] Import runner to prefixdir
+- [x] use script-import-gamedir-into-prefix
+
 
 0.99.5
 - [x] Detect if Runner dir exist in PREFIXDIR in script-change-runner

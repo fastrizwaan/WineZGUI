@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2023 Asif Ali Rizvan -->
-<component>
+<component type="desktop-application">
   <id type="desktop">io.github.fastrizwaan.WineZGUI</id>
   <launchable type="desktop-id">io.github.fastrizwaan.WineZGUI.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
