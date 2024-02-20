@@ -50,23 +50,23 @@ WineZGUI is packaged in flatpak-wine by yours truly. [WineZGUI Flathub](https://
 
 Setup is instant as it copies a few files to specific directories.
 
-##### Version 0.99.4
+##### Version 0.99.6
 
-Downoad source [WineZGUI-0.99.4.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.99.4.tar.gz) or use `git tag 0.99.4`
+Downoad source [WineZGUI-0.99.6.tar.gz](https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.99.6.tar.gz) or use `git tag 0.99.6`
 
 ##### Using tar.gz
 
 ```
-wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.99.4.tar.gz
-tar -zxvf 0.99.4.tar.gz
-cd WineZGUI-0.99.4
+wget https://github.com/fastrizwaan/WineZGUI/archive/refs/tags/0.99.6.tar.gz
+tar -zxvf 0.99.6.tar.gz
+cd WineZGUI-0.99.6
 sudo ./setup --install ; #systemwide
 ```
 
-##### git tag 0.99.4
+##### git tag 0.99.6
 
 ```
-git clone --depth 1 --branch 0.99.4 https://github.com/fastrizwaan/WineZGUI.git
+git clone --depth 1 --branch 0.99.6 https://github.com/fastrizwaan/WineZGUI.git
 cd WineZGUI
 sudo ./setup --install ; #systemwide
 ```
