@@ -155,15 +155,25 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 - [] Create shortcuts - should be part of script
 - [] Recreate Prefix (Use Global Runner and WineArch)
+- permission issue (can't access /var/lib/flatpak) skip copying/backuping system runner
+- [] try to import system runner 
+  cp   /var/lib/flatpak/app/org.winehq.Wine/x86_64/stable-23.08/active/files ~/wine-8.0-flathub
+- [] do not copy system runner if not possible.
+
 
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 
 
 0.99.7
-- [] try to import system runner 
-  cp   /var/lib/flatpak/app/org.winehq.Wine/x86_64/stable-23.08/active/files ~/wine-8.0-flathub
-- [] do not copy system runner if not possible.
+- [] use --checklist to list shortcuts and multiple items
+- [] list wine runners using checklist
+- [] list shortcuts to delete with checklist
+
+
+
+
+
 
 0.99.6
 - [x] Import runner from prefixdir (search prefixdirs/Runner)
