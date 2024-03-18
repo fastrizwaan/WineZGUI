@@ -1,0 +1,18 @@
+Setup file for WineZGUI scripts
+Usage:
+./setup --install | --uninstall
+
+Options:
+-i, --install            Install WineZGUI to default prefix
+-u, --uninstall          Remove previously installed WinzeGUI
+-p, --prefix=            Install to user specified prefix
+-f, --flatpak            Install flatpak specific WineZGUI
+-d, --deps               Show runtime dependencies
+-fid=, --flatpak-id=     Use  inside flatpak-builder
+
+Examples:
+./setup --deps
+./setup --install
+./setup --install --prefix=/usr
+./setup --install --prefix=/usr/local
+./setup --install --flatpak --prefix=/app

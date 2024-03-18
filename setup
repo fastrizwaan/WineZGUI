@@ -33,6 +33,8 @@ ShowHelp ()
   echo ""
   echo "Examples:"
   echo "$0 --deps"
+  echo "$0 --install"
+  echo "$0 --install --prefix=/usr"
   echo "$0 --install --prefix=/usr/local"
   echo "$0 --install --flatpak --prefix=/app"
 
