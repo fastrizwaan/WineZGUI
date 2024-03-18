@@ -40,11 +40,21 @@ SOURCE "check-all-variables"
 echo "-------------------------------${FUNCNAME[0]}------------------------------------------"
 check-all-variables "APPNAME APPVERSION HEADER FLATPAK_NAME SHORT_FLATPAK_NAME DATE PREFIXDIR PREFIX_SIZE_IN_HF PREFIX_SIZE_IN_BYTES"
 
+# For Zenity 4
+ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+if [ "${ZENITY_VERSION}" -eq 4 ]; then
+     WINDOW_HEIGHT=300
+     WINDOW_WIDTH=500
+else
+     WINDOW_HEIGHT=30
+     WINDOW_WIDTH=360
+fi
 
   # 1. Ask user to choose prefix/bundle
   RESPONSE=$(${ZENITY_CMD}  --title "${APPNAME}-${APPVERSION}"  \
                      --list   --hide-header              \
-                     --width=360 --height=30             \
+                     --width=${WINDOW_WIDTH}             \
+                     --height=${WINDOW_HEIGHT}           \
                      --radiolist --column " "            \
                      --column   "Backup..."              \
                            TRUE "Prefix Backup..."       \

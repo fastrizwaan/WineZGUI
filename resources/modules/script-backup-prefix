@@ -70,6 +70,7 @@ script-backup-prefix()
   TITLE="Backup ${PREFIXNAME} Prefix!"
   TEXT+="${PREFIX_SIZE_IN_HF} ${PREFIXDIR}"
 
+  # Zenity 4 looks good
   # 3. Suggest and Ask for wzt file name
   dbug "I: Script: ${FUNCNAME[0]}: Asking filename"
   BACKUP_FILE=$(${ZENITY_CMD}                         \

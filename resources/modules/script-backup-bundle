@@ -192,7 +192,8 @@ script-backup-bundle()
   # For Zenity prompt
   unset TITLE
   TITLE="Creating bundle for ${PREFIXNAME}"
-
+  
+  # Zenity 4 looks good
   # 4. Ask file name for the prefix / bundle
   dbug "I: Script: ${FUNCNAME[0]}: Asking filename"
   BACKUP_FILE=$(${ZENITY_CMD}         \

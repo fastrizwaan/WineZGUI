@@ -4,11 +4,21 @@ script-more()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
   
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=500
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=240
+       WINDOW_WIDTH=360
+  fi
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   SCRIPT_MORE_OPTION=$(${ZENITY_CMD} --title "${PROGNAME} - More"     \
                               --list   --hide-header                  \
-                              --width=360 --height=240                \
+                              --width=${WINDOW_WIDTH}                 \
+                              --height=${WINDOW_HEIGHT}               \
                               --radiolist --column " "                \
                               --column "Action"                       \
                                      0 "Set Environment Variable"     \

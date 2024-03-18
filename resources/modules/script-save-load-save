@@ -96,6 +96,7 @@ script-save-load-save()
 
   # 5.1 Suggest and Ask for template file name
   dbug "I: ${HEADER}: Asking filename"
+  # Looks good for zenity 4
   BACKUP_FILE=$(${ZENITY_CMD}                         \
                  --title="${TITLE}"            \
                  --width=700 --height=30       \

@@ -4,10 +4,21 @@ script-change-category()
   
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
+
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=800
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=480
+       WINDOW_WIDTH=360
+  fi
   unset GET_CATEGORY
-  GET_CATEGORY=$(${ZENITY_CMD}                        \
+  GET_CATEGORY=$(${ZENITY_CMD} --list         \
                  --title  "Change Category!"  \
-                 --height=480 --list          \
+                 --width=${WINDOW_WIDTH}      \
+                 --height=${WINDOW_HEIGHT}    \
                  --radiolist --column " "     \
                  --column  "Categories"       \
                       0    "AudioVideo"       \

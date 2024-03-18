@@ -197,6 +197,7 @@ winezgui-open-shell()
         #  "bash -c \"export PS1='[\u@\h:\w]\$ '; cd ${WINEZGUIDIR}; exec bash --norc\""
   else
          dbug "I: Open Terminal: Gnome-terminal not found"
+         # Looks good with zenity 4
          ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
                 --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\" or \"konsole\""
   fi

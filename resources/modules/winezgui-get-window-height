@@ -12,7 +12,13 @@ winezgui-get-window-height()
       dbug "I: ${HEADER}: Provide a integer value"
   fi
   
-  HEIGHT=155 #use Height for number of elements
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       HEIGHT=300
+  else
+       HEIGHT=155
+  fi
 
   if [ ${1} -gt 2 ]; then
        HEIGHT=$(expr ${1} \* 24 + ${HEIGHT})

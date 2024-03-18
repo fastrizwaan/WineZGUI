@@ -2,10 +2,22 @@
 script-runner-not-found-options()
 {
   unset RUNNER_OPTION
+
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=500
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=340
+       WINDOW_WIDTH=360
+  fi
+
   RUNNER_OPTION=$(${ZENITY_CMD}                                \
                   --title "${APP_WITH_VER} - Runner Not Found" \
                   --list --hide-header                         \
-                  --width=360 --height=340                     \
+                  --width=${WINDOW_WIDTH}                      \
+                  --height=${WINDOW_HEIGHT}                    \
                   --radiolist --column " "                     \
                   --column "Action"                            \
                          0 "Change Runner..."                  \

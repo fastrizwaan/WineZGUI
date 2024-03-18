@@ -54,7 +54,8 @@ script-winetricks-cli()
   TITLE_TEXT="Winetricks CLI - Paste your Dlls list"
   # Remove multiple spaces from variable
   VERB_LIST=$(echo ${VERB_LIST}|sed "s/  */ /g")
-
+  
+  # Looks good with zenity 4
   VERBS=$( ${ZENITY_CMD} --title "${TITLE_TEXT}"     \
                   --width=800 --height=30     \
                   --text  "${MESSAGE}"        \

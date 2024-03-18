@@ -170,7 +170,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] list wine runners using checklist
 - [] list shortcuts to delete with checklist
 
-
+0.99.7
+- [] use proper size at 100% screen resolution
+- [] use different height and width for zenity 4 (zenity --version|cut -f1 -d ".")
 
 
 

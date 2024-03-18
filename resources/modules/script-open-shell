@@ -183,6 +183,7 @@ script-open-shell()
          cd ${PREFIXDIR}; exec bash --norc\""
   else
          dbug "I: Script: Open Shell: Gnome-terminal not found"
+         # Looks good for Zenity 4
          ${ZENITY_CMD} --title "${SELECTION}" --width=500 --height=30 --info  \
                 --text "This feature requires \"gnome-terminal\" or \"xfce4-terminal\" or \"konsole\""
   fi

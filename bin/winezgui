@@ -94,12 +94,24 @@ ZENITY_CMD EXIFTOOL_CMD ZSTD_CMD TAR_CMD WGET_CMD LD_LIBRARY_PATH PATH \
 WINE_CMD WINETRICKS ABOUTFILE APPLICATIONSDIR SHORTCUT_PREFIX \
 BKP_EXT INSTALL_PREFIX TEMPDIR WINEZGUIDIR INSTALL_TYPE"
 
+# For Zenity 4
+ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+if [ "${ZENITY_VERSION}" -eq 4 ]; then
+     WINDOW_HEIGHT=820
+     WINDOW_WIDTH=500
+else
+     WINDOW_HEIGHT=440
+     WINDOW_WIDTH=360
+fi
+
 WineZGUI_Window() # Main WineZGUI application window function
 {
   HEADER="$(basename ${0})"
   SELECTION=$(${ZENITY_CMD} --list --hide-header               \
-                     --title "${APP_WITH_VER}" --width=360     \
-                     --height=460 --radiolist --column " "     \
+                     --title "${APP_WITH_VER}"                 \
+                     --width=${WINDOW_WIDTH}                   \
+                     --height=${WINDOW_HEIGHT}                 \
+                     --radiolist --column " "                  \
                      --column "Action"                         \
                          TRUE "Open Exe..."                    \
                             0 "Launch..."                      \

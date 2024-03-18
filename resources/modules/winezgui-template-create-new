@@ -6,10 +6,22 @@ winezgui-template-create-new()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   unset NEW_TEMPLATE
-  NEW_TEMPLATE=$(${ZENITY_CMD}                                              \
+
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=340
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=240
+       WINDOW_WIDTH=360
+  fi
+  
+  NEW_TEMPLATE=$(${ZENITY_CMD}                                       \
                --title "${APP_WITH_VER} - Create Template"           \
                --list   --hide-header                                \
-               --width=360 --height=180                              \
+               --width=${WINDOW_WIDTH}                               \
+               --height=${WINDOW_HEIGHT}                             \
                --radiolist --column " "                              \
                --column "Action"                                     \
                    TRUE "Empty win32 template..."                    \
