@@ -40,7 +40,7 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
-    <release date="2024-02-11" version="0.99.9">
+    <release date="2024-03-21" version="0.99.9">
       <description>
         <p>More->Shortcuts->Delete use checklist for multiple selection.</p>
       </description>
