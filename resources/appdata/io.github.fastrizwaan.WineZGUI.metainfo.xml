@@ -44,6 +44,7 @@
       <description>
         <p>Fix Script Window Size.</p>
       </description>
+    </release>
     <release date="2024-03-21" version="0.99.9">
       <description>
         <p>More->Shortcuts->Delete use checklist for multiple selection.</p>
