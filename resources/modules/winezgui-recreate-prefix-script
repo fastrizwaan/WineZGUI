@@ -547,19 +547,18 @@ echo "${SCRIPTFILE} ----------------------------- RUNNER_NAME:${RUNNER_NAME}"
 
 # For Zenity 4
 ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
-if [ "${ZENITY_VERSION}" -eq 4 ]; then
-     WINDOW_HEIGHT=820
-     WINDOW_WIDTH=500
-else
-     WINDOW_HEIGHT=440
-     WINDOW_WIDTH=360
-fi
-
 
 Script_Window()
 {
   unset SELECTION
   # EXE handling by providing dialog
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=820
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=440
+       WINDOW_WIDTH=360
+  fi
 
   SELECTION=$(${ZENITY_CMD} --title "${PROGNAME}"       \
                      --window-icon="${ICON}"            \

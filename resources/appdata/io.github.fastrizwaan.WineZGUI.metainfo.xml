@@ -40,6 +40,10 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-03-21" version="0.99.10">
+      <description>
+        <p>Fix Script Window Size.</p>
+      </description>
     <release date="2024-03-21" version="0.99.9">
       <description>
         <p>More->Shortcuts->Delete use checklist for multiple selection.</p>

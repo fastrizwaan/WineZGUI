@@ -165,6 +165,9 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 - [] list wine runners using checklist
 
+0.99.10
+- [x] fix winezgui dialog height for Script_Window() function
+
 0.99.9
 - [x] use --checklist to list shortcuts and multiple items
 - [x] list shortcuts to delete with checklist
