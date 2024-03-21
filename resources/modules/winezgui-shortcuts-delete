@@ -17,7 +17,7 @@ winezgui-shortcuts-delete()
   # Add those files to FILES array and filenames to NAMES array
   BASENAME=$(basename "${SELECTED_EXE}"|sed 's|\.[eE][Xx][eE]||g'\
                                        |sed 's|\.[mM][Ss][iI]||g')
-  NEW_SCRIPT_FILE="${PREFIXDIR}/${BASENAME}_other.sh"
+  NEW_SCRIPT_FILE="${PREFIXDIR}/${BASENAME}_otshortcuts-deleteher.sh"
   NEW_SCRIPT_DESKTOP_FILE="${PREFIXDIR}/${BASENAME}_other.desktop"
 
 
@@ -39,7 +39,7 @@ winezgui-shortcuts-delete()
 
       # If 1st value is empty, enable it
       if [ -z "${SHOW_OPTION}" ]; then
-           SHOW_OPTION+="TRUE \"${RealName}\""
+           SHOW_OPTION+="0 \"${RealName}\""
            SHOW_OPTION+=" "
            NAMES+=("${RealName}")
            FILES+=("${RealFile}")
@@ -51,7 +51,7 @@ winezgui-shortcuts-delete()
       fi
       count=$(expr ${count} + 1)
   done
-  IFS=${SAVEIFS}
+  
   
    # Generate Height value
    SOURCE "winezgui-get-window-height"
@@ -60,33 +60,57 @@ winezgui-shortcuts-delete()
   unset COMMAND
   COMMAND+="${ZENITY_CMD} --title=\"${APP_WITH_VER} - Delete Shortcut!\" "
   COMMAND+="--text \"Delete...\" "
-  COMMAND+="--radiolist --list --width=460 --height=${HEIGHT} "
+  COMMAND+="--checklist --list --width=460 --height=${HEIGHT} "
   COMMAND+="--hide-header --column \" \" --column \"Action\" ${SHOW_OPTION}"
   SELECTED_OPTION=$(eval ${COMMAND})
   unset count
+  
+  echo ${SELECTED_OPTION}
 
+  # Question whether to delete select list of files using zenity
+  DELETE_ME=$(echo ${SELECTED_OPTION}|sed 's/|/\\n/g')
   # Delete
-  # 4. Find which file the user selected and set the selected exe into variable
-   for NAME in "${NAMES[@]}"; do
-      if [ "${NAME}" = "${SELECTED_OPTION}" ]; then
-           echo "Selected $NAME"
-           echo "File is ${NAME}"
-           export SELECTED_SHORTCUT="${FILES[count]}"
-           break
-      fi
-      count=$(expr ${count} + 1)
-  done
-  unset DELETE_DESKTOP_FILE
-  DELETE_DESKTOP_FILE=$(realpath -m "${SELECTED_SHORTCUT}")
-  # Delete other Script file
-  if [[ "${NAME}" == *"_other."* ]]; then
-    echo "$NAME has _other in it"
-    DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
-    rm -vf "${DELETE_SCRIPT_FILE}"
-  fi
-  cp "${DELETE_DESKTOP_FILE}" "${DELETE_DESKTOP_FILE}.bak"
-  rm -vf "${DELETE_DESKTOP_FILE}"
+  ${ZENITY_CMD} --question --no-wrap --title="Delete Shorcuts?" \
+                --text "${DELETE_ME}\n\nContinue..?"
+       ANSWER=$?
+       # 1.1 If user selects no or cancels to locate exe file
+       if [ ${ANSWER} -eq 1 ]; then
+            dbug "I: Delete Shortcuts: User Cancelled!"
+            return 1  # Return to Script window
+       fi
+  #SHORTCUTS_TO_DELETE=()
+  # 4. Find which file the user selected and set th e selected exe into variable
+  for i in $(echo ${SELECTED_OPTION}|tr '|' '\n'|sort)
+  do
+   
+     for NAME in "${NAMES[@]}"; do
+         if [ "${NAME}" = "${i}" ]; then
+              echo "Selected $NAME"
+              echo "File is ${NAME}"
+              #SHORTCUTS_TO_DELETE+=("${FILES[count]}")
+              #echo "${FILES[count]}"
+              mv "${FILES[count]}" "${FILES[count]}.bak"
+              break
+         fi
+         count=$(expr ${count} + 1)
+     done
+  done 
+  IFS=${SAVEIFS}
+
+  zenity --info --text="${DELETE_ME}\n\n Deleted!" --title "Deleted Shortcuts!"
+  echo "${SHORTCUTS_TO_DELETE}"
+#   unset DELETE_DESKTOP_FILE
+#   DELETE_DESKTOP_FILE=$(realpath -m "${SELECTED_SHORTCUT}")
+#   # Delete other Script file
+#   if [[ "${NAME}" == *"_other."* ]]; then
+#     echo "$NAME has _other in it"
+#     DELETE_SCRIPT_FILE=$(echo "${DELETE_DESKTOP_FILE}"|sed "s|\.desktop|\.sh|g")
+#     rm -vf "${DELETE_SCRIPT_FILE}"
+#   fi
+#   cp "${DELETE_DESKTOP_FILE}" "${DELETE_DESKTOP_FILE}.bak"
+#   rm -vf "${DELETE_DESKTOP_FILE}"
   # Clean up broken shortcuts and update shortcuts menu
+
   SOURCE "winezgui-remove-broken-links"
   winezgui-remove-broken-links
 }

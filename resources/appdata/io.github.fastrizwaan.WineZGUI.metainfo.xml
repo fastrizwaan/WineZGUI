@@ -40,6 +40,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-02-11" version="0.99.9">
+      <description>
+        <p>More->Shortcuts->Delete use checklist for multiple selection.</p>
+      </description>
+    </release>
     <release date="2024-02-11" version="0.99.6">
       <description>
         <p>Import runner to and from bundled prefix.</p>

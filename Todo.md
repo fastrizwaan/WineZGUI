@@ -163,21 +163,17 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 
 1.00
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
-
+- [] list wine runners using checklist
 
 0.99.9
-- [] use --checklist to list shortcuts and multiple items
-- [] list wine runners using checklist
-- [] list shortcuts to delete with checklist
+- [x] use --checklist to list shortcuts and multiple items
+- [x] list shortcuts to delete with checklist
 
 0.99.8
-- [x] fix window size
+- [x] fix winezgui dialog height
 
 0.99.7
 - [x] use different height and width for zenity 4 (zenity --version|cut -f1 -d ".")
-
-
-
 
 0.99.6
 - [x] Import runner from prefixdir (search prefixdirs/Runner)
