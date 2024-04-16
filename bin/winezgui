@@ -4,6 +4,10 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
+
+## ShellCheck can't read dynamic paths from `source`, so ignore them (SC1090/SC1091)
+# shellcheck source=/dev/null
+
 export AUTHOR="Mohammed Asif Ali Rizvan"
 export EMAIL="fast.rizwaan@gmail.com"
 export COPYRIGHT="GNU General Public License (GPLv3+)"
