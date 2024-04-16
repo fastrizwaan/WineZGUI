@@ -9,9 +9,9 @@ export EMAIL="fast.rizwaan@gmail.com"
 export COPYRIGHT="GNU General Public License (GPLv3+)"
 export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 # Variables
-HEADER="$(basename ${0})"
+HEADER="$(basename "${0}")"
 WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
-TEMPDIR="$(realpath -m ${WINEZGUIDIR}/tmp)"
+TEMPDIR="$(realpath -m "${WINEZGUIDIR}/tmp")"
 
 WBOOT_CMD="$(which wineboot) -i"
 ICOTOOL_CMD="$(which icotool)"
@@ -115,7 +115,7 @@ ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
 
 WineZGUI_Window() # Main WineZGUI application window function
 {
-  HEADER="$(basename ${0})"
+  HEADER="$(basename "${0}")"
   
   # For Zenity 4
   if [ "${ZENITY_VERSION}" -eq 4 ]; then
