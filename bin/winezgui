@@ -23,7 +23,7 @@ TAR_CMD="$(which tar)"
 WGET_CMD="$(which wget)"
 
 SYSTEM_WINE="$(which wine)"
-ARGV="$@"
+ARGV=("$@")
 
 export DEBUG="Y"
 export PROCESSNAME="$0"
