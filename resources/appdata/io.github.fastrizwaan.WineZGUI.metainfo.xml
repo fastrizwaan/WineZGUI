@@ -40,6 +40,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-04-17" version="0.99.11">
+      <description>
+        <p>Minor bug fixes. shellcheck winezgui thanks to sonic2kk.</p>
+      </description>
+    </release>
     <release date="2024-03-21" version="0.99.10">
       <description>
         <p>Fix Script Window Size.</p>
