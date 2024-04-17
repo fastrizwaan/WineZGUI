@@ -10,5 +10,13 @@ SOURCE()
          echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
          echo "Error: Can't find ${1}"
          echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+
+       echo "Requested ${1}"
+       ls "${WINEZGUI_SCRIPTS}"/"${1}"
+       ls "${DATADIR}"/"${1}"
+       
+       echo "${WINEZGUI_SCRIPTS}"/"${1}"
+       echo "${DATADIR}"/"${1}"
+
   fi
 }

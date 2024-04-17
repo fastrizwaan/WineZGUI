@@ -1,8 +1,12 @@
+#!/usr/bin/env bash
+
 # winezgui-cli-arguments
 winezgui-cli-arguments()
 {
   
   SOURCE "script-check-variables-loaded-or-not"
+  SOURCE "winezgui-show-help"
+
   script-check-variables-loaded-or-not
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: ${HEADER}: started"
@@ -10,7 +14,7 @@ winezgui-cli-arguments()
   for i in "${ARGV[@]}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;
-     -h|--help) SOURCE "winezgui-show-help; winezgui-show-help; exit; ;;"
+     -h|--help)    winezgui-show-help;   exit; ;;
      esac
   done
   dbug "I: ${HEADER}: finished"
