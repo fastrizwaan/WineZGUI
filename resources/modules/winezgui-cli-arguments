@@ -7,7 +7,7 @@ winezgui-cli-arguments()
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"
   dbug "I: ${HEADER}: started"
 
-  for i in "${ARGV}"; do
+  for i in "${ARGV[@]}"; do
      case ${i} in
      -v|--version) echo "${APPVERSION}"; exit; ;;
      -h|--help) SOURCE "winezgui-show-help; winezgui-show-help; exit; ;;"

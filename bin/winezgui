@@ -4,14 +4,34 @@
 # URL: https://github.com/fastrizwaan/WineZGUI
 # winezgui main program to run or create a wine prefix for a selected exe
 # ============================================================================ #
+
+## ShellCheck can't read dynamic paths from `source`, so ignore them (SC1090/SC1091)
+# shellcheck source=/dev/null
+
 export AUTHOR="Mohammed Asif Ali Rizvan"
 export EMAIL="fast.rizwaan@gmail.com"
 export COPYRIGHT="GNU General Public License (GPLv3+)"
 export WEBSITE="https://github.com/fastrizwaan/WineZGUI"
 # Variables
+HEADER="$(basename "${0}")"
+WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
+TEMPDIR="$(realpath -m "${WINEZGUIDIR}/tmp")"
+
+WBOOT_CMD="$(which wineboot) -i"
+ICOTOOL_CMD="$(which icotool)"
+WRESTOOL_CMD="$(which wrestool)"
+ZENITY_CMD="$(which zenity)"
+EXIFTOOL_CMD="$(which exiftool)"
+ZSTD_CMD="$(which zstd)"
+TAR_CMD="$(which tar)"
+WGET_CMD="$(which wget)"
+
+SYSTEM_WINE="$(which wine)"
+ARGV=("$@")
+
 export DEBUG="Y"
 export PROCESSNAME="$0"
-export HEADER="$(basename ${0})" # for Terminal Messages
+export HEADER  # for Terminal Messages
 # These values will be assigned by Setup using sed command
 export APPNAME=WineZGUI   # Application Name
 export APPVERSION="1.00"
@@ -19,9 +39,8 @@ export APP_WITH_VER="${APPNAME}-${APPVERSION}" # Example: WineZGUI-0.88
 export INSTALL_PREFIX="/usr"
 export DATADIR=/usr/share/winezgui # scripts & data dir; /usr changes to prefix
 export INSTALL_TYPE="system"
-export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
-export TEMPDIR="$(realpath -m ${WINEZGUIDIR}/tmp)"
-
+export WINEZGUIDIR
+export TEMPDIR
 export FLATPAK_NAME=""
 #/These values will be changed  by Setup using sed command
 export SETTINGS_FILE="${WINEZGUIDIR}/Settings.yml" # Settings file 
@@ -31,14 +50,15 @@ export RUNNERS_DIR="${WINEZGUIDIR}/Runners"        # Wine runners Directory
 # Commands used by WineZGUI and Scripts
 export UPDATE_ICON_CACHE="gtk-update-icon-cache -f -t ~/.local/share/icons 2>/dev/null"
 export UPDATE_DESKTOP_DATABASE="update-desktop-database"
-export WBOOT_CMD="$(which wineboot) -i" # will be overridden by winezgui-set-wine_cmd-runner-commands()
-export ICOTOOL_CMD="$(which icotool)"
-export WRESTOOL_CMD="$(which wrestool)"
-export ZENITY_CMD="$(which zenity)"
-export EXIFTOOL_CMD="$(which exiftool)"
-export ZSTD_CMD="$(which zstd)"
-export TAR_CMD="$(which tar)"
-export WGET_CMD="$(which wget)"
+export WBOOT_CMD # will be overridden by winezgui-set-wine_cmd-runner-commands()
+export ICOTOOL_CMD
+export WRESTOOL_CMD
+export ZENITY_CMD
+export EXIFTOOL_CMD
+export ZSTD_CMD
+export TAR_CMD
+export WGET_CMD
+export SYSTEM_WINE
 # LD_LIBRARY_PATH
 if [ -z "${LD_LIBRARY_PATH}" ]; then
 LD_LIBRARY_PATH+="/lib:/lib32:/lib64"; fi
@@ -54,9 +74,8 @@ LD_LIBRARY_PATH+="/usr/lib/i386-linux-gnu/wine:"
 LD_LIBRARY_PATH+="$(pwd)"
 export LD_LIBRARY_PATH
 export PATH="${PATH}:/bin:/usr/bin:/usr/local/bin:/app/bin"
-export ARGV="$@"
+export ARGV
 
-export SYSTEM_WINE="$(which wine)"
 echo "SYSTEM_WINE=${SYSTEM_WINE}"
 
 # SOURCE function uses source command and try to required scripts in both DATADIR or SCRIPTDIR
@@ -69,8 +88,9 @@ SOURCE "winezgui-dbug"
 SOURCE "winezgui-set-wine_cmd-runner-commands"
 winezgui-set-wine_cmd-runner-commands
 
+APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
 export ABOUTFILE="${WINEZGUIDIR}/About.yml"
-export APPLICATIONSDIR="$(realpath -m ~/.local/share/applications)"
+export APPLICATIONSDIR
 
 # Shortcuts (.desktop files) will be installed in APPLICATIONSDIR
 # prefixed with shortcut names to manage winezgui specific shortcuts
@@ -99,7 +119,7 @@ ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
 
 WineZGUI_Window() # Main WineZGUI application window function
 {
-  HEADER="$(basename ${0})"
+  HEADER="$(basename "${0}")"
   
   # For Zenity 4
   if [ "${ZENITY_VERSION}" -eq 4 ]; then
