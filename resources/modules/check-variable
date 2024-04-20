@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #check-variable
 check-variable()
 {
