@@ -4,17 +4,18 @@
 check-variable()
 {
   if [ $# -lt 2 ]; then 
-	echo "need 2 arguments, filename and variable to test"
+    echo "need 2 arguments, filename and variable to test"
+    return
   fi
 
-  if [ ! -z "${!2}" ]; then
-       if [ "${DEBUG}" = "Y" ]; then
-            echo "Defined: $2=${!2}"
-       else
-            echo -n "."
-       fi
+  if [ -z "${!2}" ]; then
+    echo "Error $2 not defined in $1"
+    return
+  fi
+
+  if [ "${DEBUG}" = "Y" ]; then
+    echo "Defined: $2=${!2}"
   else
-       echo "Error $2 not defined in $1"
+    echo -n "."
   fi
-
 }
