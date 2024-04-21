@@ -51,24 +51,21 @@ else
 fi
 
   # 1. Ask user to choose prefix/bundle
-  RESPONSE=$(${ZENITY_CMD}  --title "${APPNAME}-${APPVERSION}"  \
-                     --list   --hide-header              \
-                     --width=${WINDOW_WIDTH}             \
-                     --height=${WINDOW_HEIGHT}           \
-                     --radiolist --column " "            \
-                     --column   "Backup..."              \
-                           TRUE "Prefix Backup..."       \
-                           0    "Create Game Bundle..."  \
-                     --text     "<b>Backup... ${PREFIXNAME}</b>" )
+  RESPONSE=$(${ZENITY_CMD} --title "${APPNAME}-${APPVERSION}"          \
+                           --list   --hide-header                      \
+                           --width=${WINDOW_WIDTH}                     \
+                           --height=${WINDOW_HEIGHT}                   \
+                           --radiolist --column " "                    \
+                           --column   "Backup..."                      \
+                                 TRUE "Prefix Backup..."               \
+                                 0    "Create Game Bundle..."          \
+                           --text     "<b>Backup... ${PREFIXNAME}</b>" )
   # If Cancel is clicked
   if [ -z "${RESPONSE}" ]; then
        dbug "I: ${HEADER}: Cancelled!"
        unset RESPONSE
        return 1
   fi
-
-
-
 
 
   dbug "I: ${HEADER}: ${RESPONSE} Selected!"
