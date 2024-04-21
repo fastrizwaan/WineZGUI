@@ -9,12 +9,12 @@ check-all-variables()
   #Skip checking for flatpakid and flatpak_name in system install
   for VARIABLE in $1;
   do
-     if [ "${VARIABLE}" = "FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ]; then
+     if [ "${VARIABLE}" = "FLATPAK_NAME" ]       || \
+        [ "${VARIABLE}" = "SHORT_FLATPAK_NAME" ] && \
+        [ "${INSTALL_TYPE}" = "system" ]; then
           continue;
-     elif [ "${VARIABLE}" = "SHORT_FLATPAK_NAME" ] && [ "${INSTALL_TYPE}" = "system" ];then
-           continue
      fi
-           
+
      check-variable "${0}" "$VARIABLE"
   done
 

@@ -1,22 +1,21 @@
+#!/usr/bin/env bash
+
 # Load source files either from datadir or from winezgui_scripts directory
 # Use unset DEBUG will stop messages.
 SOURCE()
 {
-  if   [ -f "${WINEZGUI_SCRIPTS}/${1}" ]; then
-         source "${WINEZGUI_SCRIPTS}/${1}"
-  elif [ -f "${DATADIR}/${1}" ]; then
-         source "${DATADIR}/${1}"
-  else
-         echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
-         echo "Error: Can't find ${1}"
-         echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
-
-       echo "Requested ${1}"
-       ls "${WINEZGUI_SCRIPTS}"/"${1}"
-       ls "${DATADIR}"/"${1}"
-       
-       echo "${WINEZGUI_SCRIPTS}"/"${1}"
-       echo "${DATADIR}"/"${1}"
-
+  # If the function file is found at PREFIXDIR/winezgui-scripts
+  if [ -f "${WINEZGUI_SCRIPTS}/${1}" ]; then
+       source "${WINEZGUI_SCRIPTS}/${1}"
+       return
   fi
+  # If the function file is found at /usr/share/winezgui or /var/lib/flatpak/../.../share/winezgui
+  if [ -f "${DATADIR}/${1}" ]; then
+       source "${DATADIR}/${1}"
+       return
+  fi
+  # If not found then throw error
+  echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+  echo "Error: Can't find ${1}"
+  echo "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
 }
