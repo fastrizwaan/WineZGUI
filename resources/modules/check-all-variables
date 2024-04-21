@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #check-all-variables
 check-all-variables()
 {
@@ -13,11 +15,11 @@ check-all-variables()
            continue
      fi
            
-     check-variable ${0} $VARIABLE
+     check-variable "${0}" "$VARIABLE"
   done
 
   if [ "${DEBUG}" = "Y" ]; then
-       echo ""-----------------------------------------------------------------------------------""
+       echo "-----------------------------------------------------------------------------------"
   else
        echo ""
   fi
