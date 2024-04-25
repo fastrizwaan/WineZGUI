@@ -14,6 +14,8 @@
     </p>
     <p>WineZGUI features:</p>
     <ul>
+      <li>IMPORTANT: wine-9.0 from org.winehq.Wine needs "winetricks dxvk vkd3d"</li>
+      <li>IMPORTANT: or install other runners like wine-9.0 or proton-ge from Runner->Download Runner</li>
       <li>Runs windows games or exe files from file manager.</li>
       <li>Creates application shortcut for easier access.</li>
       <li>Separate prefix for every exe file launched with WineZGUI</li>
@@ -40,6 +42,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2024-04-25" version="0.99.12">
+      <description>
+        <p>update info about broken wine-9.0 and dxvk vkd3d from org.winehq.Wine. Use a different runner</p>
+      </description>
+    </release>
     <release date="2024-04-17" version="0.99.11">
       <description>
         <p>Minor bug fixes. shellcheck winezgui thanks to sonic2kk.</p>
