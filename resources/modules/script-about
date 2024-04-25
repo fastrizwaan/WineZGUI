@@ -8,15 +8,27 @@
 script-about()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"
-  
+
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
-  
-  unset TEXT TEXT1
-  # Replace full home path with tilde to save space. Format labels upto : with monospace and bold text and small text
-  TEXT1="$(while read -r line; do echo "$line"|sed "s|:$HOME|:~|g"|sed '0,/:/{s/:/ \`: /}'|sed -e 's/$/XX/g'|sed 's/^/<tt><b>/g'|sed "s/\`:/<\/b>\`:<small>/g"; done <  "${INFOFILE}")"
-  TEXT="$(echo "$TEXT1"|sed -e 's/XX /<\/small><\/tt>\n/g'|sed -e 's/XX/<\/small><\/tt>\n/g'|column -t -s '\`')"
 
+  unset TEXT TEXT1
+  TEXT1="$(while read -r line;             \
+           do                              \
+              echo $line                 | \
+              sed "s|:$HOME|:~|g"        | \
+              sed '0,/:/{s/:/ \`: /}'    | \
+              sed -E 's/$/XX/g'          | \
+              sed 's/^/<tt><b>/g'        | \
+              sed 's/`:/<\/b>`:<small>/g'; \
+           done <  "${INFOFILE}"           \
+          )"
+
+  TEXT="$(echo $TEXT1                        \
+         |sed -E 's/XX /<\/small><\/tt>\n/g' \
+         |sed -E 's/XX/<\/small><\/tt>\n/g'  \
+         |column -t -s '\`'                  \
+         )"
 
   ${ZENITY_CMD} --info --no-wrap --text "${TEXT}"
   unset TEXT TEXT1
