@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Show About
 # Steps
 # 1. Format yml data
