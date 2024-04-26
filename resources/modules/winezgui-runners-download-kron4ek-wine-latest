@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
  winezgui-runners-download-kron4ek-wine-latest()
  {
    SOURCE "script-check-variables-loaded-or-not"

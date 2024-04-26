@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-list-available-prefixes
 # Finds exe installed in drive_c by an installer
 # and set the variable SELECTED_PREFIX

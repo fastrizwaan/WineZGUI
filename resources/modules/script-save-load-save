@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #script-save-load-save
 #FIXME: remove identity from filename and directory names and content
 script-save-load-save()

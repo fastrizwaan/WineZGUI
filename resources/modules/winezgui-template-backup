@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-backup-template
 winezgui-template-backup()
 {

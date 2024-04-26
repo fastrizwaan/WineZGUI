@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-initialize-wineprefix
 winezgui-initialize-wineprefix()
 {

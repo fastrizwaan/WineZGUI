@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-set-wine_cmd-runner-commands()
 { # Get runner winearch from info file
  

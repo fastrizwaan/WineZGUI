@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Rename Application Name in .desktop file
 # needed by script-change-name
 

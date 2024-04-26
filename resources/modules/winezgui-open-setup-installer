@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-open-setup-installer()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"

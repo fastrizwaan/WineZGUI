@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #script-get-selected-exes-for-shortcuts
 # FIXME perhaps usable for create shortcuts / delete shortcuts
 script-get-selected-exes-for-shortcuts()

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-identity-remove-from-drive-c-files
 winezgui-identity-remove-from-drive-c-files()
 {

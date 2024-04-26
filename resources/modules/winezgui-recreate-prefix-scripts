@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-recreate-prefix-scripts
 winezgui-recreate-prefix-scripts()
 {

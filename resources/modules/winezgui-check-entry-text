@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-check-entry-text
 winezgui-check-entry-text()
 {

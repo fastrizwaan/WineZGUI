@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-download-winetricks
 winezgui-download-winetricks()
 {

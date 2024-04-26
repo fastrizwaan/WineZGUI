@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+#!/usr/bin/env bash
+
 # script-backup-bundle
 # Create Bundle from existing wine prefix
 # Steps:

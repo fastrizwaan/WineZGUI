@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Using this to find scripts where variables are not loaded.
 #script-check-variables-loaded-or-not
 script-check-variables-loaded-or-not()

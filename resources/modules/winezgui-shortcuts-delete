@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # SOURCE "winezgui-shortcuts-delete"
 # REVIEW
 winezgui-shortcuts-delete()

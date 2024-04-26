@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-script()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

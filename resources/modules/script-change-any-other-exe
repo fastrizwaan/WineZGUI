@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-change-any-other-exe function
 # This function will ask the user to select an exe file
 # and set the variable SELECTED_EXE

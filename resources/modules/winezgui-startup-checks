@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-startup-checks
 winezgui-startup-checks()
 {

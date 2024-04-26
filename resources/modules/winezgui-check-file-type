@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-check-file-type
 winezgui-check-file-type()
 {

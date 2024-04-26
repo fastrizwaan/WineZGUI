@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-identity-restore-from-drive-c-files
 winezgui-identity-restore-from-drive-c-files()
 {

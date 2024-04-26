@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-kill-all()
 {
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"

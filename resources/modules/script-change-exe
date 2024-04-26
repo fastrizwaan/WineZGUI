@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-change-exe
 # Change Default EXE for the prefix, required for installers
 # Any given exe can set to default be it from inside prefix or outside prefix

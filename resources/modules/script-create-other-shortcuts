@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-create-other-shortcuts
 # Create Shortcut function to be called from winezgui
 # to create extra .desktop shortcuts for a particular prefix

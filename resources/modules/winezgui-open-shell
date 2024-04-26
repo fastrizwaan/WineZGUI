@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #  using flatpak install and script is running from flatpak container
 # Check if it is a flatpak based script
 # Check if it is running from inside flatpak container

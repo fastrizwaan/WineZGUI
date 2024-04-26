@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # FIXME winezgui-more
 winezgui-more()
 {

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-runner-not-found-options
 script-runner-not-found-options()
 {

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-runner-import()
 {
   dbug "I: ${FUNCNAME[0]}: Select import runner directory"

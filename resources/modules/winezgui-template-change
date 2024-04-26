@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-template-change()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"

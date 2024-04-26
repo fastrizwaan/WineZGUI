@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-create-about-yml
 # Create Metadata About.yml for the default wine prefix
 # Update info only when wine is found

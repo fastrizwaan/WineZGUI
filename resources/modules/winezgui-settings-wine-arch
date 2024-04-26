@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-settings-winearch
 winezgui-settings-wine-arch()
 {

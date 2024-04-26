@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 script-change-category()
 {
   dbug "I: Script: Launched ${FUNCNAME[0]}"

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-update-all-scripts
 winezgui-update-all-scripts()
 { 

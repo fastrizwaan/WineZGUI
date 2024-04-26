@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-shortcuts-clean-up
 winezgui-shortcuts-clean-up()
 {

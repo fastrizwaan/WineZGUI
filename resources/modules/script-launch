@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Launch the Script file
 #
 # 1. Test if the given exe exists (if not found ask user to locate it)

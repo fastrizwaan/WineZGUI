@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Ask user to select an image icon or exe file to extract icon from
 # If No argument is given ask
 script-change-icon()

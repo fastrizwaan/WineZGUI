@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-remove-wine-created-shortcuts
 # Remove all .desktop files, which has WINEPREFIX value
 # Reason is to keep menus uncluttered.

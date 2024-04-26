@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-open-file-manager
 script-open-file-manager()
 {

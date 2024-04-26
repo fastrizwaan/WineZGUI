@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ##### Rename Prefix Directory ####
 # Steps:
 # 1. Ask for New Prefix Name

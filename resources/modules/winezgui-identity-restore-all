@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-identity-restore-all
 # Replace XOUSERXO XO_variable_XO to proper values for all templates and prefix dir
 winezgui-identity-restore-all()

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Variables to Change in Script file
 # 1. PROGNAME
 # 2. EXE_FILE

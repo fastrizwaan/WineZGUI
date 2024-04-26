@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 winezgui-settings-set-edit-wzt-info-pre-bundle()
 {
   HEADER="$(basename ${0}): ${FUNCNAME[0]}"

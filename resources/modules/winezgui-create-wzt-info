@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ################################################################################
 # Create wzt-info.yml yml file for WineZGUI Backup file, which will be used by
 # winezgui-restore-wzt file, to get "Size" and "Game name" from this file

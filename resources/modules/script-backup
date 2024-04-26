@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Create Backup Prefix / Game Bundle
 # winezgui-identity-remove
 # This function can create a prefix backup or a game bundle by including gamedir

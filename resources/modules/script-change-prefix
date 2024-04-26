@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ##### Rename Prefix Directory ####
 # script-change-prefix
 # Steps:

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Locate EXE, if exe file is not found on launch
 # Steps:
 # 1. If exe file not found, ask user to locate it

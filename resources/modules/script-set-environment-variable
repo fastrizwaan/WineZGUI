@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-set-environment-variable
 script-set-environment-variable()
 {

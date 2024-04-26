@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # SOURCE "winezgui-shortcuts-restore"
 # REVIEW
 winezgui-shortcuts-restore()

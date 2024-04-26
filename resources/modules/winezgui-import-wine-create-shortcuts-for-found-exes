@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-import-wine-create-shortcuts-for-found-exes
 # USEFUL: this can be used for creating new scripts for exe files for a prefix
 winezgui-import-wine-create-shortcuts-for-found-exes()

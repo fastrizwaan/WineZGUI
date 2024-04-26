@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-runner-delete
 winezgui-runner-delete()
 {

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-runner-help
 winezgui-runner-help()
 {

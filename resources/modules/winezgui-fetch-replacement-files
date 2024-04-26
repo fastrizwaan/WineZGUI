@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-fetch-replacement-files
 winezgui-fetch-replacement-files()
 { 

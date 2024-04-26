@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #winezgui-remove-broken-links
 winezgui-remove-broken-links()
 {

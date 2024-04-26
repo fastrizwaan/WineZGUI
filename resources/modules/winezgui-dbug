@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Only show debug message when DEBUG="Y" or DEBUG="anything"
 # Use unset DEBUG will stop messages.
 dbug()

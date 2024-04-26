@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-shortcuts-create
 winezgui-shortcuts-create()
 {

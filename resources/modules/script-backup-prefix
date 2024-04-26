@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # script-backup-prefix
 # Steps:
 # 1. Set Total Backup size variable

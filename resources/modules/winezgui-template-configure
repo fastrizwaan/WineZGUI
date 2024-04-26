@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # winezgui-configure
 #  WineZGUI application window function
 # FIXME winezgui-configure

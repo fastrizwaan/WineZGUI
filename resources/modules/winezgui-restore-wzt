@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ################ Restore/Extract .wzt backup/bundle ################
 # .wzt file is a tar.zst (created using ${TAR_CMD} --zstd -cvf wztfile.wzt directory)
 # see script-backup
