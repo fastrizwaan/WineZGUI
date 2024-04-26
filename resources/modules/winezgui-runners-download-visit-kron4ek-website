@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+winezgui-runners-download-visit-kron4ek-website()
+{
+   SOURCE "script-check-variables-loaded-or-not"
+   script-check-variables-loaded-or-not
+
+   xdg-open "https://github.com/Kron4ek/Wine-Builds/releases"
+
+}

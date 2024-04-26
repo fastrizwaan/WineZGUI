@@ -9,13 +9,14 @@ winezgui-runner-download()
   SELECT_RUNNER_TO_DOWNLOAD=$( ${ZENITY_CMD} \
                                --title "${APP_WITH_VER} - Runners"                 \
                                --list   --hide-header                              \
-                               --width=360 --height=210                            \
+                               --width=360 --height=410                            \
                                --radiolist --column " "                            \
                                --column "Action"                                   \
                                    TRUE "Kron4ek wine-proton (latest)..."          \
                                       0 "Kron4ek Wine Latest..."                   \
                                       0 "Kron4ek Wine-9.0 (stable)..."             \
                                       0 "Kron4ek Wine-8.0 (stable)..."             \
+                                      0 "Visit Kron4ek Website..."                 \
                                --text   "Runner <b>${RUNNER_NAME}</b> in use")
 
   # Exit if Cancel is clicked
@@ -42,6 +43,10 @@ winezgui-runner-download()
         SOURCE "winezgui-runners-download-kron4ek-wine-8.0-stable"
         winezgui-runners-download-kron4ek-wine-8.0-stable
 
+ elif [ "${SELECT_RUNNER_TO_DOWNLOAD}" = "Visit Kron4ek Website..." ]; then
+        SOURCE "winezgui-runners-download-visit-kron4ek-website"
+        winezgui-runners-download-visit-kron4ek-website
+        return 0 ; #After opening website, skip asking to change runner
  fi
  
  ${ZENITY_CMD} --question --title="${APP_WITH_VER} - Download Runner!" \
