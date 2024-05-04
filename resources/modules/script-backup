@@ -17,6 +17,9 @@ script-backup()
   unset RESPONSE
   export SHORT_FLATPAK_NAME="${FLATPAK_NAME##*.}"
   # Using Date as part of wzt backup filename
+  #
+  # DATE is used externally (such as by script-backup-prefix and script-backup-bundle), so ignore SC2034
+  # shellcheck disable=SC2034
   DATE=$(date +%F_%H%M)
 
   # 0. Get disk usage of prefix
@@ -30,7 +33,9 @@ script-backup()
        echo "-------------------- Error --------------------------"
   fi
 
-  PREFIX_SIZE_IN_BYTES=$(echo ${PREFIX_SIZE_IN_HF}|cut -f1 -d " "   \
+  # PREFIX_SIZE_IN_BYTES is used externally (such as by script-backup-prefix and script-backup-bundle), so ignore SC2034
+  # shellcheck disable=SC2034
+  PREFIX_SIZE_IN_BYTES=$(echo "${PREFIX_SIZE_IN_HF}"|cut -f1 -d " "   \
                                                   |numfmt --from iec)
   dbug "I: ${HEADER}: Prefix = ${PREFIXDIR}"
   dbug "I: ${HEADER}: Prefix size = ${PREFIX_SIZE_IN_HF}"
