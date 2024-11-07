@@ -115,7 +115,7 @@ Get [flatpak-wine](https://github.com/fastrizwaan/flatpak-wine/releases) which i
 
 ```
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-22.08
+flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-24.08
 ```
 
 ## Runtime Dependencies:
