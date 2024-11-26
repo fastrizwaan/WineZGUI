@@ -50,7 +50,7 @@ export EXIFTOOL=$(which exiftool)
 export APPVERSION="git"
 export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
-#export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
+export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 
 export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
