@@ -63,7 +63,11 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export WINEPREFIX_SUBDIR="${SINGLE_PREFIX_DIR}"
+     else 
+          export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export SCRIPT_NAME="${EXE_LESS}-${SHASUM10CHARS}.sh"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
@@ -72,7 +76,11 @@ else
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export WINEPREFIX_SUBDIR="${SINGLE_PREFIX_DIR}"
+     else 
+          export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export SCRIPT_NAME="${EXE_LESS}.sh"
      #export WINEPREFIX_SUBDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      echo "WINEPREFIX_SUBDIR=$WINEPREFIX_SUBDIR"  

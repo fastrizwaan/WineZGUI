@@ -82,6 +82,7 @@ winezgui-startup-checks()
        export TEMPLATE=$(grep "template:" ${SETTINGS_FILE}|cut -f2 -d ":")
        export NO_SHORTCUTS=$(grep "no-shortcuts:" ${SETTINGS_FILE}|cut -f2 -d ":")
        export DEBUG=$(grep "debug:" ${SETTINGS_FILE}|cut -f2 -d ":")
+       export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
        export WINEZGUI_TEMPLATE="${TEMPLATES_DIR}/WineZGUI-${WINEARCH}"
        export TEMPLATE_NAME=$(basename ${TEMPLATE})
        echo "011 NO_SHORTCUTS =$NO_SHORTCUTS"

@@ -50,7 +50,7 @@ export EXIFTOOL=$(which exiftool)
 export APPVERSION="git"
 export APP_WITH_VER="${APPNAME}-${APPVERSION}"
 export INSTALL_TYPE="system"
-export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
+#export WINEZGUIDIR="$(realpath -m ~/.local/share/winezgui)"
 export FLATPAK_NAME="io.github.WineZGUI"
 
 export DATADIR=/usr/share/winezgui    # /usr will be replaced by prefix
@@ -82,6 +82,7 @@ export EXE_EXT="${EXE_FILE##*.}"
 export EXE_NOEXE=$(echo "${EXE_NOSP}"           |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export SINGLE_PREFIX_DIR="${PREFIXES_DIR}/WineZGUI-Single-Prefix"
 export RUNNERS_DIR="${WINEZGUIDIR}/Runners"        # Wine runners Directory
 
 # setup.exe/installer.exe needs to have different directory
@@ -95,8 +96,13 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
-     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export PREFIXDIR="${SINGLE_PREFIX_DIR}"
+          export PREFIXNAME="$(basename ${PREFIXDIR})"
+     else 
+          export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+          export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export ICONFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.png"
      export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.sh"
      export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.desktop"
@@ -109,18 +115,32 @@ else
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
-     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export PREFIXDIR="${SINGLE_PREFIX_DIR}"
+          export PREFIXNAME="$(basename ${PREFIXDIR})"
+     else     
+          export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+          export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
      export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
      export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
      # export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      # export PREFIXNAME="${EXE_NOEXE}"
 fi
+
+echo "x-x-x-x-x-x-x-xx-x-x-x-x-x-x-x"
+echo "PREFIXDIR = $PREFIXDIR"
+
+
 export WINEZGUI_SCRIPTS="${PREFIXDIR}/winezgui-scripts"
+echo "WINEZGUI_SCRIPTS = $WINEZGUI_SCRIPTS"
+
 # Files
 export INFOFILE="${PREFIXDIR}/Info.yml"
 ICON="${ICONFILE}"
+
+echo "infofile = $INFOFILE"
 
 # If argument is not an exe file, then quit
 # Make it small case to compare
@@ -159,6 +179,13 @@ dbug "I: ${HEADER}: Preparing prefix for exe file"
 
 export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
 export TEMPLATE_NAME=$(basename ${TEMPLATE})
+export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
+
+
+echo "TEMPLATE = $TEMPLATE"
+echo "TEMPLATE_NAME = $TEMPLATE_NAME"
+echo "USE_SINGLE_PREFIX= $USE_SINGLE_PREFIX"
+sleep 5s
 
 # Copy the Default Prefix linked wine to avoid showing dialog
 if [ ! -d "${PREFIXDIR}" ]; then
@@ -346,6 +373,7 @@ SOURCE "winezgui-dbug"
 if [ -f "${SETTINGS_FILE}" ]; then
      export DEBUG=$(grep "debug:" ${SETTINGS_FILE}|cut -f2 -d ":")
      export NO_SHORTCUTS=$(grep "no-shortcuts:" ${SETTINGS_FILE}|cut -f2 -d ":")
+     export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
 fi
 
 # LD_LIBRARY_PATH

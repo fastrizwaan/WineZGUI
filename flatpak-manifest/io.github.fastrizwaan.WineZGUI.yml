@@ -1,11 +1,9 @@
-id: io.github.fastrizwaan.WineZGUI
-branch: '22.08'
-version: '0.92.8'
+app-id: io.github.fastrizwaan.WineZGUI
 runtime: org.freedesktop.Platform
-runtime-version: '22.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 base: org.winehq.Wine
-base-version: stable-22.08
+base-version: stable-24.08
 command: winezgui
 #rename-icon: winezgui
 #rename-desktop-file: winezgui.desktop
@@ -17,24 +15,42 @@ finish-args:
   - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
     # Need to link .desktop files
   - --filesystem=~/.local/share/applications:create
-    # Most Games write to their own directories
-  - --env=PATH=/app/bin:/usr/bin
     # Desktop shortcut runs wine script from host
-  - --talk-name=org.freedesktop.Flatpak
+  #- --talk-name=org.freedesktop.Flatpak
   - --share=ipc
   - --share=network
   - --socket=pulseaudio
-  - --socket=wayland
   - --socket=x11
   - --system-talk-name=org.freedesktop.UDisks2
   - --talk-name=org.freedesktop.Notifications
-  - --filesystem=host
-
+    # Most Games write to their own directories
+#- --filesystem=host
+  - --filesystem=xdg-desktop
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-videos
+  # WineZGUI import wine prefix: Needs access to copy games and runners from wine, bottles, playonlinux, lutris, heroic launcher data directories. 
+  # Using :ro messes up the path to /run/... instead of ~/ breaking copying
+  # flatpak bug with :ro breaks realpath.
+  - --filesystem=~/Games
+  - --filesystem=~/.wine
+  - --filesystem=~/.var/app/org.winehq.Wine/data/wine
+  - --filesystem=~/.var/app/com.usebottles.bottles/data/bottles
+  - --filesystem=~/.var/app/com.playonlinux.PlayOnLinux4/data/PlayOnLinux/wineprefix
+  - --filesystem=~/.var/app/org.phoenicis.playonlinux/.Phoenicis/containers/wineprefix
+  
 cleanup:
   - '*.a'
   - '*.la'
   - /share/doc
   - /share/man
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/cmake
+  - /share/pkgconfig
+  - /share/bash-completion
 
 inherit-extensions:
   - org.freedesktop.Platform.Compat.i386
@@ -77,8 +93,6 @@ modules:
 
   - name: icoutils
     build-options:
-      make-args: -j $FLATPAK_BUILDER_N_JOBS
-      #strip: true
       no-debuginfo: true  
     buildsystem: autotools
     sources:
@@ -95,44 +109,38 @@ modules:
     - "-des"
     - "-Duseshrplib"
     build-options:
-      make-args: -j $FLATPAK_BUILDER_N_JOBS
       cflags: "-fPIC"
       ldflags: "-fpic"
     sources:
     - type: archive
-      url: https://www.cpan.org/src/5.0/perl-5.32.0.tar.gz
-      sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
+      url: https://www.cpan.org/src/5.0/perl-5.38.0.tar.xz
+      sha256: eca551caec3bc549a4e590c0015003790bdd1a604ffe19cc78ee631d51f7072e
     - type: script
       dest-filename: configure
       commands:
       - exec ./configure.gnu $@
     post-install:
-    - chmod -R u+w /app/lib/perl5
+      - find /app/lib/perl5 -type f -exec chmod u+w {} \;
   
   - name: exiftool
     buildsystem: simple
-    build-options:
-      make-args: -j $FLATPAK_BUILDER_N_JOBS
-
     build-commands:
       - perl Makefile.PL
       - make
       - make install 
     sources:
       - type: archive
-        url: https://github.com/exiftool/exiftool/archive/refs/tags/12.57.tar.gz
-        sha256: ffc55c1177e50b819072c500cbbd0fecbb1be671584a0f43217bfba597ffa933
+        url: https://github.com/exiftool/exiftool/archive/refs/tags/12.68.tar.gz
+        sha256: 49273f93edcd32eee3725b458a2c7151d8e353281dc52bfa3d063c92962ab6d8
         
   - name: desktop-file-utils
     build-options:
-      make-args: -j $FLATPAK_BUILDER_N_JOBS
-      #strip: true
       no-debuginfo: true  
-    buildsystem: autotools
+    buildsystem: meson
     sources:
       - type: archive
-        url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.26.tar.xz
-        sha256: b26dbde79ea72c8c84fb7f9d870ffd857381d049a86d25e0038c4cef4c747309
+        url: https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.27.tar.xz
+        sha256: a0817df39ce385b6621880407c56f1f298168c040c2032cedf88d5b76affe836
 
   - name: WineZGUI
     buildsystem: simple
@@ -140,5 +148,6 @@ modules:
       - ./setup --install --flatpak --prefix=/app
     sources:
       - type: git
-        branch: ff
+        tag: 0.99.13
+        commit: 51648aa2cdc908dcca747cb040d7872dd3ab6e0d
         url: https://github.com/fastrizwaan/WineZGUI.git

@@ -8,6 +8,8 @@ winezgui-settings()
    dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
    export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
    export TEMPLATE_NAME=$(basename ${TEMPLATE})
+   export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
+   
    unset TEXT
    TEXT+="Set..."
    unset SETTINGS_OPTION
@@ -37,6 +39,7 @@ winezgui-settings()
                                    0 "Debug Messages..."         \
                                    0 "Disable Shortcuts..."      \
                                    0 "Edit WZT-Info pre Bundle..."  \
+                                   0 "Use Single Prefix for all Exes..." \
                             --text   "${TEXT}"                   )
 
    # Exit if Cancel is clicked
@@ -78,7 +81,11 @@ winezgui-settings()
    elif [ "${SETTINGS_OPTION}" = "Disable Shortcuts..." ]; then
         SOURCE "winezgui-settings-disable-shortcuts"
         winezgui-settings-disable-shortcuts
-        
+
+   elif [ "${SETTINGS_OPTION}" = "Use Single Prefix for all Exes..." ]; then
+        SOURCE "winezgui-settings-use-single-prefix-for-all-exes"
+        winezgui-settings-use-single-prefix-for-all-exes
+
    fi
    unset TEXT
    return 0

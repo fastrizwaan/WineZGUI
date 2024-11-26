@@ -17,6 +17,7 @@ script-change-prefix()
   SOURCE "script-check-variables-loaded-or-not"
   script-check-variables-loaded-or-not
   export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export SINGLE_PREFIX_DIR="${PREFIXES_DIR}/WineZGUI-Single-Prefix"
   # If No argument is given ask
   if [ -z "${1}" ]; then
       # 1. Ask for New Prefix Name if not provided by argument

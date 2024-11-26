@@ -70,8 +70,13 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
-     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export PREFIXDIR="${SINGLE_PREFIX_DIR}"
+          export PREFIXNAME="$(basename ${PREFIXDIR})"
+     else 
+          export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+          export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export ICONFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.png"
      export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.sh"
      export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}-${SHASUM10CHARS}.desktop"
@@ -79,18 +84,25 @@ if [[ "${TEST_NAME}" == *"setup"* ]]   2>/dev/null || \
      echo "PREFIXDIR=$PREFIXDIR"
      echo "PREFIXNAME=$PREFIXNAME"
      echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+
 else
      x=$(sha256sum "${EXE_FILE}")
      EXE_NOEXE=$(echo "${EXE_NOSP}"               |sed "s/\.[mM][Ss][Ii]//g"\
                                                   |sed "s/\.[eE][Xx][Ee]//g")
      SHASUM10CHARS=${x:0:10}
-     export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
-     export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     if [ -n "${USE_SINGLE_PREFIX}" ]; then # If use single prefix is defined
+          export PREFIXDIR="${SINGLE_PREFIX_DIR}"
+          export PREFIXNAME="$(basename ${PREFIXDIR})"
+     else 
+          export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}-${SHASUM10CHARS}"
+          export PREFIXNAME="${EXE_NOEXE}-${SHASUM10CHARS}"
+     fi
      export ICONFILE="${PREFIXDIR}/${EXE_LESS}.png"
      export SCRIPTFILE="${PREFIXDIR}/${EXE_LESS}.sh"
      export DESKTOPFILE="${PREFIXDIR}/${EXE_LESS}.desktop"
      # export PREFIXDIR="${PREFIXES_DIR}/${EXE_NOEXE}"
      # export PREFIXNAME="${EXE_NOEXE}"
+
 fi
 
      # Files

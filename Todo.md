@@ -165,6 +165,13 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 - [] list wine runners using checklist
 
+0.99.14
+- [ ] Settings - Use Single Prefix for all Exes
+- [ ] copy Default template to WineZGUI-Single-Prefix
+- [ ] if USE_SINGLE_PREFIX is defined (with Y); then check for WineZGUI-Single-Prefix, if exists launch exe with that prefix.
+- [ ] do no copy template if USE_SINGLE_PREFIX is defined
+- [ ] Create Prefix and Recreate prefix scripts must check for USE_SINGLE_PREFIX defined or not.
+
 0.99.10
 - [x] fix winezgui dialog height for Script_Window() function
 

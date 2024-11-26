@@ -46,19 +46,19 @@ echo \
 flatpak remove --user --all ; # Run as user
 sudo flatpak --system remote-add --if-not-exists \
 flathub https://flathub.org/repo/flathub.flatpakrepo 
-sudo flatpak --system -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
-sudo flatpak --system -y install flathub org.freedesktop.Platform/x86_64/21.08; 
-sudo flatpak --system -y install flathub org.winehq.Wine/x86_64/stable-21.08
-sudo flatpak --system -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/21.08
-sudo flatpak --system -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/21.08
+sudo flatpak --system -y install flathub org.freedesktop.Sdk/x86_64/24.08; 
+sudo flatpak --system -y install flathub org.freedesktop.Platform/x86_64/24.08; 
+sudo flatpak --system -y install flathub org.winehq.Wine/x86_64/stable-24.08
+sudo flatpak --system -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/24.08
+sudo flatpak --system -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/24.08
 #------------------------user----------------------------------------------
 flatpak --user remote-add --if-not-exists \
 flathub https://flathub.org/repo/flathub.flatpakrepo 
-flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/21.08; 
-flatpak --user -y install flathub org.freedesktop.Platform/x86_64/21.08; 
-flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-21.08
-flatpak --user -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/21.08
-flatpak --user -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/21.08
+flatpak --user -y install flathub org.freedesktop.Sdk/x86_64/24.08; 
+flatpak --user -y install flathub org.freedesktop.Platform/x86_64/24.08; 
+flatpak --user -y install flathub org.winehq.Wine/x86_64/stable-24.08
+flatpak --user -y install flathub runtime/org.freedesktop.Sdk.Compat.i386/x86_64/24.08
+flatpak --user -y install flathub org.freedesktop.Sdk.Extension.toolchain-i386/x86_64/24.08
 #------------------------user----------------------------------------------'
 
 flatpak-builder --force-clean build-dir ${APP_ID}.yml || (echo "Build failed" ; exit 1)

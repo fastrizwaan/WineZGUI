@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# winezgui-settings-use-single-prefix-for-all-exes
+winezgui-settings-use-single-prefix-for-all-exes()
+{
+  export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+  export SINGLE_PREFIX_DIR="${PREFIXES_DIR}/WineZGUI-Single-Prefix"    
+  HEADER="$(basename ${0}): ${FUNCNAME[0]}"
+    
+  SOURCE "script-check-variables-loaded-or-not"
+  script-check-variables-loaded-or-not
+  dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
+
+  # For Zenity 4
+  ZENITY_VERSION=$(${ZENITY_CMD} --version|cut -f1 -d ".")
+  if [ "${ZENITY_VERSION}" -eq 4 ]; then
+       WINDOW_HEIGHT=300
+       WINDOW_WIDTH=500
+  else
+       WINDOW_HEIGHT=240
+       WINDOW_WIDTH=360
+  fi
+
+  SINGLE_PREFIX_OPTION=$(${ZENITY_CMD} --title "${APP_WITH_VER}"   \
+                        --list   --hide-header      \
+                        --width=${WINDOW_WIDTH}     \
+                        --height=${WINDOW_HEIGHT}   \
+                        --radiolist --column " "    \
+                        --column "Action"           \
+                            TRUE "No"               \
+                               0 "Yes"              \
+                        --text   "Use a single prefix for all Exe files...")
+
+  if [ -z "${SINGLE_PREFIX_OPTION}" ]; then
+          dbug "I: ${HEADER}: Cancelled!"
+          return 1
+  fi
+  
+  # If user selects No, delete single prefix from Settings.yml
+  if [ "${SINGLE_PREFIX_OPTION}" = "No" ]; then
+          dbug "I: ${HEADER}: Disabled."
+          unset USE_SINGLE_PREFIX
+          sed "/single-prefix:/d" -i "${SETTINGS_FILE}"
+  else
+          # Add single-prefix:Y to Settings.yml and export USE_SINGLE_PREFIX
+          if [ -w "${SETTINGS_FILE}" ]; then
+              echo "single-prefix:Y" >> "${SETTINGS_FILE}" # add to Settings
+          else
+              echo "Cannot write to ${SETTINGS_FILE}"
+          fi
+          USE_SINGLE_PREFIX="Y"
+
+          # Check for WineZGUI-Single-Prefix exists, if not copy template
+          if [ ! -d "${SINGLE_PREFIX_DIR}" ]; then
+                echo "I: ${HEADER}: ${SINGLE_PREFIX_DIR} not found, copying...${TEMPLATE_NAME}"
+
+                (cp -rf "${TEMPLATE}" "${SINGLE_PREFIX_DIR}" )| \
+                ${ZENITY_CMD}  --progress --pulsate --auto-close --width=500 \
+                --title="${APP_WITH_VER} - Create Game Prefix" \
+                --text="Copying template <b>${TEMPLATE_NAME}</b> to <b>${SINGLE_PREFIX_DIR}!</b>"
+
+
+          fi
+          dbug "I: ${HEADER}: Enabled."
+  fi
+  export USE_SINGLE_PREFIX # Apply runtime
+  return 0
+}

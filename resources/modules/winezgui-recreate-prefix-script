@@ -102,6 +102,7 @@ export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
 export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 export EXE_EXT="${EXE_FILE##*.}"
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export SINGLE_PREFIX_DIR="${PREFIXES_DIR}/WineZGUI-Single-Prefix"
 export RUNNERS_DIR="${WINEZGUIDIR}/Runners"
 
 
@@ -113,6 +114,7 @@ export EXE_NOSP=$(echo ${EXE_NAME}|tr " " "_");
 export EXE_LESS=$(echo ${EXE_NOSP}|sed "s/\.[Ee][Xx][Ee]//"|sed "s/\.[Mm][Ss][Ii]//")
 export EXE_EXT="${EXE_FILE##*.}"
 export PREFIXES_DIR="${WINEZGUIDIR}/Prefixes"
+export SINGLE_PREFIX_DIR="${PREFIXES_DIR}/WineZGUI-Single-Prefix"
 export RUNNERS_DIR="${WINEZGUIDIR}/Runners" 
 "
 
@@ -171,6 +173,7 @@ dbug "I: ${HEADER}: Preparing prefix for exe file"
 
 export TEMPLATE=$(grep template ${SETTINGS_FILE}|cut -f2 -d ":")
 export TEMPLATE_NAME=$(basename ${TEMPLATE})
+export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
 
 # Copy the Default Prefix linked wine to avoid showing dialog
 if [ ! -d "${PREFIXDIR}" ]; then
@@ -411,6 +414,7 @@ SOURCE "winezgui-dbug"
 if [ -f "${SETTINGS_FILE}" ]; then
      export DEBUG=$(grep "debug:" ${SETTINGS_FILE}|cut -f2 -d ":")
      export NO_SHORTCUTS=$(grep "no-shortcuts:" ${SETTINGS_FILE}|cut -f2 -d ":")
+     export USE_SINGLE_PREFIX=$(grep "single-prefix:" ${SETTINGS_FILE}|cut -f2 -d ":")
 fi
 
 # LD_LIBRARY_PATH
