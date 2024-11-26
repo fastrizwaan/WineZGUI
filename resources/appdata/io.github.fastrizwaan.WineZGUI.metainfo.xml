@@ -45,10 +45,9 @@
   <releases>
     <release date="2024-11-26" version="0.99.14">
       <description>
-        <p>Settings->Allow Single Prefix</p>
+        <p>New Feature: Settings->Allow Single Prefix for all Exes</p>
       </description>
     </release>
-  <releases>
     <release date="2024-04-26" version="0.99.13">
       <description>
         <p>Runner->Download->Visit Kron4ek Website</p>
@@ -56,7 +55,7 @@
     </release>
     <release date="2024-04-25" version="0.99.12">
       <description>
-        <p>update info about broken wine-9.0 and dxvk vkd3d from org.winehq.Wine. Use a different runner</p>
+        <p>Update info about broken wine-9.0 and dxvk vkd3d from org.winehq.Wine. Use a different runner</p>
       </description>
     </release>
     <release date="2024-04-17" version="0.99.11">
@@ -86,27 +85,27 @@
     </release>
     <release date="2024-02-11" version="0.99.4">
       <description>
-        <p>bug fixes: runner path, create Temp dir for winetricks, wget.</p>
+        <p>Bug fixes: runner path, create Temp dir for winetricks, wget.</p>
       </description>
     </release>
     <release date="2024-02-10" version="0.99.3">
       <description>
-        <p>bug fixes: change template system.reg not found, use runner's wineboot</p>
+        <p>Bug fixes: change template system.reg not found, use runner's wineboot</p>
       </description>
     </release>
     <release date="2024-02-10" version="0.99.2">
       <description>
-        <p>bug fixes: open shell, open-terminal fix.</p>
+        <p>Bug fixes: open shell, open-terminal fix.</p>
       </description>
     </release>
     <release date="2024-02-10" version="0.99.1">
       <description>
-        <p>bug fixes: Backup... from main window, show prefixname in backup dialog.</p>
+        <p>Bug fixes: Backup... from main window, show prefixname in backup dialog.</p>
       </description>
     </release>
     <release date="2024-02-09" version="0.99.0">
       <description>
-        <p>bug fixes: Template configure, open-shell, open-terminal, restore wzt bugs, etc. fixed</p>
+        <p>Bug fixes: Template configure, open-shell, open-terminal, restore wzt bugs, etc. fixed</p>
       </description>
     </release>
     <release date="2024-01-21" version="0.98.8">
