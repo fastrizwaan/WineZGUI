@@ -166,11 +166,11 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] list wine runners using checklist
 
 0.99.14
-- [ ] Settings - Use Single Prefix for all Exes
-- [ ] copy Default template to WineZGUI-Single-Prefix
-- [ ] if USE_SINGLE_PREFIX is defined (with Y); then check for WineZGUI-Single-Prefix, if exists launch exe with that prefix.
-- [ ] do no copy template if USE_SINGLE_PREFIX is defined
-- [ ] Create Prefix and Recreate prefix scripts must check for USE_SINGLE_PREFIX defined or not.
+- [x] Settings - Use Single Prefix for all Exes
+- [x] copy Default template to WineZGUI-Single-Prefix
+- [x] if USE_SINGLE_PREFIX is defined (with Y); then check for WineZGUI-Single-Prefix, if exists launch exe with that prefix.
+- [x] do no copy template if USE_SINGLE_PREFIX is defined
+- [x] Create Prefix and Recreate prefix scripts must check for USE_SINGLE_PREFIX defined or not.
 
 0.99.10
 - [x] fix winezgui dialog height for Script_Window() function
