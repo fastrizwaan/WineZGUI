@@ -45,7 +45,7 @@
   <releases>
     <release date="2024-11-26" version="0.99.14">
       <description>
-        <p>Runner->Download->Settings:Allow Single Prefix</p>
+        <p>Settings->Allow Single Prefix</p>
       </description>
     </release>
   <releases>
