@@ -16,7 +16,10 @@
    #fi
 #   WGET_CMD ${KRON4EK_WINE_NINE_STABLE}
 
-
+  echo "###########################################"
+  echo "$KRON4EK_WINE_NINE_STABLE"
+  echo "$KRON4EK_WINE_NINE_STABLE_NAME"
+  
   mkdir -p "${RUNNERS_DIR}"
   if [ -w ${RUNNERS_DIR} ]; then
        dbug "I: Downloading ${KRON4EK_WINE_NINE_STABLE}"
