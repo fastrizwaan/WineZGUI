@@ -189,6 +189,37 @@ fi
      #ln -sf "${S_DESKTOPFILE}" "${DEXSKTOPDIR}"
      # Now using ~/.local/share/applications directory which gets updated instantly
      #
+
+############### Copy Info File
+    # Create Metadata Info.yml for the prefix
+    if [ -f "${INFOFILE}" ]; then
+         cp "${INFOFILE}" "${S_INFOFILE}"
+         #  Insert Data into Info.yml
+         DATE=$(date +%F_%H%M)
+
+         echo "Name:${S_PROGNAME}"                >  "${S_INFOFILE}"
+         echo "Exe:${S_EXE_FILE}"                 >> "${S_INFOFILE}"
+         echo "Sha256sum:${S_CHECKSUM}"           >> "${S_INFOFILE}"
+         echo "Exe Path:${S_EXE_PATH}"            >> "${S_INFOFILE}"
+         echo "Prefix:${PREFIXNAME}"              >> "${S_INFOFILE}"
+         echo "Script:${S_SCRIPTFILE}"            >> "${S_INFOFILE}"
+         echo "Icon:${S_ICONFILE}"                >> "${S_INFOFILE}"
+         echo "Shortcut:${S_DESKTOPFILE}"         >> "${S_INFOFILE}"
+         echo "Created:${DATE}"                 >> "${S_INFOFILE}"
+         echo "Wine:${WINEVER}"                 >> "${S_INFOFILE}"
+         echo "Runner:${RUNNER}"                >> "${S_INFOFILE}"
+         echo "Wine Arch:${WINEARCH}"           >> "${S_INFOFILE}"
+         echo "WineZGUI:${APPVERSION}"          >> "${S_INFOFILE}"
+         echo "WineZGUI Prefix:${WINEZGUIDIR}"  >> "${S_INFOFILE}"
+         echo "Install:${INSTALL_TYPE}"         >> "${S_INFOFILE}"
+
+         # Include flatpak id in Info.yml
+         if [ "${INSTALL_TYPE}" = "flatpak" ]; then
+              echo "Flatpak:${FLATPAK_NAME}"    >> "${S_INFOFILE}"
+         fi
+         dbug "I: Script: Prefix: Created ${S_INFOFILE}"
+    fi
+############ / Create info file complete for the new script.
      
      dbug "linking desktop files"
      XBASE_FILE_NAME=$(basename "${S_DESKTOPFILE}")
