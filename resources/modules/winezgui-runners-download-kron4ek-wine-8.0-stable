@@ -8,7 +8,7 @@ winezgui-runners-download-kron4ek-wine-8.0-stable()
 
    #KRON4EK_WINE_EIGHT_STABLE=$(for i in $WINEBUILDS ; do echo $i; done|grep -i "wine-8.0"|head -n1)
    KRON4EK_WINE_EIGHT_STABLE="https://github.com/Kron4ek/Wine-Builds/releases/download/8.0/wine-8.0-amd64.tar.xz"
-   KRON4EK_WINE_EIGHT_STABLE_NAME="$(basename ${KRON4EK_WINE_EIGHT_STABLE})"
+   KRON4EK_WINE_EIGHT_STABLE_NAME="wine-8.0-amd64.tar.xz"
    
    #if [ -z "${KRON4EK_WINE_EIGHT_STABLE}" ]; then
    #     ${ZENITY_CMD} --error --title="Download Failed" --text="We could not download. Please Retry downloading later..."
