@@ -10,10 +10,10 @@
    KRON4EK_WINE_NINE_STABLE="https://github.com/Kron4ek/Wine-Builds/releases/download/9.0/wine-9.0-amd64.tar.xz"
    KRON4EK_WINE_NINE_STABLE_NAME="$(basename ${KRON4EK_WINE_NINE_STABLE})"
    
-   if [ -z "${KRON4EK_WINE_NINE_STABLE}" ]; then
-        ${ZENITY_CMD} --error --title="Download Failed" --text="We could not download. Please Retry downloading later..."
-        return 1
-   fi
+   #if [ -z "${KRON4EK_WINE_NINE_STABLE}" ]; then
+   #     ${ZENITY_CMD} --error --title="Download Failed" --text="We could not download. Please Retry downloading later..."
+   #     return 1
+   #fi
 #   WGET_CMD ${KRON4EK_WINE_NINE_STABLE}
 
 
