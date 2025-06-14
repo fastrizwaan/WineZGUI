@@ -165,6 +165,13 @@ WineZGUI->Settings->Set runner (show runners subdirectory list) else ask the use
 - [] remove sed "s|  .*sleep .*s.*$||g" -i $(find ${PREFIXES_DIR} -iname "script-launch" -o -iname "script-backup-bundle") from winezgui-quit
 - [] list wine runners using checklist
 
+0.99.15
+- [x] Create Info file for the created scripts.
+- [x] Add working URLs for Wine Stable Runners
+     - [x] Wine 9.0
+     - [x] Wine 8.0
+-
+
 0.99.14
 - [x] Settings - Use Single Prefix for all Exes
 - [x] copy Default template to WineZGUI-Single-Prefix

@@ -3,10 +3,11 @@ winezgui-runners-download-kron4ek-wine-8.0-stable()
 {
    SOURCE "script-check-variables-loaded-or-not"
    script-check-variables-loaded-or-not
-   WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases \
+   #WINEBUILDS=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases \
                 |grep browser_download_url|grep tar|cut -f2- -d ":"|sed "s|\"||g")
 
-   KRON4EK_WINE_EIGHT_STABLE=$(for i in $WINEBUILDS ; do echo $i; done|grep -i "wine-8.0"|head -n1)
+   #KRON4EK_WINE_EIGHT_STABLE=$(for i in $WINEBUILDS ; do echo $i; done|grep -i "wine-8.0"|head -n1)
+   KRON4EK_WINE_EIGHT_STABLE="https://github.com/Kron4ek/Wine-Builds/releases/download/8.0/wine-8.0-amd64.tar.xz"
    KRON4EK_WINE_EIGHT_STABLE_NAME="$(basename ${KRON4EK_WINE_EIGHT_STABLE})"
    
    if [ -z "${KRON4EK_WINE_EIGHT_STABLE}" ]; then

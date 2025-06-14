@@ -43,6 +43,12 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2025-06-14" version="0.99.15">
+      <description>
+        <p>Creates info file along with script.</p>
+        <p>wine-9.0 and wine-8.0 download urls updated.</p>
+      </description>
+    </release>
     <release date="2024-11-26" version="0.99.14">
       <description>
         <p>New Feature: Settings->Allow Single Prefix for all Exes</p>
