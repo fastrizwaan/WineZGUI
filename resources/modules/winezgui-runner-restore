@@ -9,7 +9,7 @@ winezgui-runner-restore()
   dbug "I: $(basename ${0}): Launched ${FUNCNAME[0]}"
  
   # Ask user to select the .wzt backup file to restore
-  TAR_FILE="$(${ZENITY_CMD} --file-filter="*.zst *.gz *.bz2"      \
+  TAR_FILE="$(${ZENITY_CMD} --file-filter="*.zst *.gz *.xz *.bz2"      \
                      --file-selection                      \
                      --title="Select Prefix Runner Backup File" )"
   TAR_FILE_NAME=$(basename "${TAR_FILE}")

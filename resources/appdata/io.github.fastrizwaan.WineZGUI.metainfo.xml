@@ -43,6 +43,11 @@
   <update_contact>https://github.com/fastrizwaan/WineZGUI</update_contact>
   <translation type="gettext">WineZGUI</translation>
   <releases>
+    <release date="2026-01-16" version="0.99.16">
+      <description>
+        <p>add *.xz file to restore runner</p>
+      </description>
+    </release>
     <release date="2025-06-14" version="0.99.15">
       <description>
         <p>Creates info file along with script.</p>
